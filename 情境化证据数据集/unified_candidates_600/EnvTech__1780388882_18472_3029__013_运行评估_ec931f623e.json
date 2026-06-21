@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在旧系统切流后识解精度波动的运行评估背景下，用户与导师围绕精度波动原因排查、降级阈值与增量微调的取舍及执行动作持续沟通（7轮），其中在特征漂移原因排查部分与识解质量监察员沟通（1轮），在增量微调热更新方案部分与多谱视觉算法师沟通（1轮），并最终形成LoRA增量微调与边云热更新的闭环执行动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘上F1掉到85%了，感觉是特征漂移？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在室外转室内确实光线暗了。但具体是不是这原因，我不敢确定，我只会看接口返回的置信度分数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我该看哪些指标确认？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级阈值我熟，改个配置项就行，增量微调还得推模型，太慢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不想全量重训，怎么用特征库做增量微调热更新？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这个听起来可行，不用停服务。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 提取最近1小时PET漂移样本；2. 触发LoRA微调任务；3. 5分钟后验证增量包F1是否回升到90%以上；4. 执行边云热更新下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

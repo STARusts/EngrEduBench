@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在织合协议栈核心逻辑开发背景下，与导师围绕非协同体制下调度逻辑与事件驱动状态机设计持续沟通（5轮），其中在帧结构与调度模式部分与空口协议设计专家沟通（1轮），并最终形成包含IDLE/PROBE/CALC/WEAVE四状态及双缓冲原子下发逻辑的状态机骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按经典MAC层设计套路来就行吧？先做载波监听，信道空闲后让节点发接入请求，超表面收到请求再分配织合资源，加个退避窗口防碰撞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种情况下协议栈调度和帧结构怎么做？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是超表面一直发探测帧扫，扫到特征就让基带报上来，协议栈再下发相控码流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征事件怎么定义？感觉这块逻辑写起来很虚，没标准参考。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态就是 IDLE，PROBE，WEAVE？跳转条件是基带中断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跟前面微码的双缓冲接上。那状态机就是 IDLE 跳到 PROBE，收到中断进 CALC，寻优完进 WEAVE。WEAVE 里要锁住双缓冲发指令流，发完回 IDLE。这样逻辑就闭环了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

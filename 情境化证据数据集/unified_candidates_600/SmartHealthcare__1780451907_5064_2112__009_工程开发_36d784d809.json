@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在演进推演算法联调背景下，用户与导师围绕感知数据与模型输入的对齐、时序同步、归一化位置及丢帧容错策略持续沟通（7轮），其中在模型输入硬性约束部分与微生态算法架构师沟通（1轮），在硬件数据流格式与丢帧情况部分与软硬联调工程师沟通（1轮），并最终形成网关端转换归一化、单帧前值补偿与超限废弃窗口的联调接口协议基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序我按时间戳匹配就行。特征归一化，我直接在代码里写个归一化函数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型输入这边有啥硬性要求？比如时序和特征格式。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "硬件那边吐出来的数据流是啥格式？会丢帧吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模型要10Hz、32长度的归一化浮点数，硬件吐出来的是16位ADC值，还会偶尔丢帧抖动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "转换放网关端做吧，单片机算力不够。丢帧的话，我插值补上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就重传？不对，实时性不够。那丢帧了就直接把这个滑动窗口扔掉，不送推演？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "网关端转换，前值补偿，超限废弃窗口，我这就去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

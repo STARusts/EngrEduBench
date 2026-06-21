@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在惯量支撑响应延迟测试P99延迟超标背景下，用户与导师围绕延迟原因排查与优化方案持续沟通（7轮），其中在指令执行链路耗时排查部分与并网控制工程师沟通（1轮），在不中断任务极速降频方案部分与性能调优专家沟通（1轮），并最终确定分区缓冲方案及缓冲池容量、DVFS跃迁档位参数，准备压测。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上，序列化反序列化还有网络传输都有开销。我看代码里用的Protobuf，应该挺快。会不会是网络抖动？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抓了，并网控制模块发指令很快，但电网仿真侧收到功率变化总是慢一拍。我怀疑是时间同步协议NTP有漂移。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚测出惯量响应P99到120ms了，查了下通信没大问题，你那边能看下指令执行链路耗时分布吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不是网络慢，是算力节点执行降载太慢。任务换出加上降频操作就要快100ms。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能让算力节点不换出上下文，直接强杀任务？或者直接拉闸断电？这样最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降载太慢因为要保存上下文，能不能做到不中断任务又快速降频出力？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家提了个“分区缓冲”方案。搞一批专属核跑批任务，要惯量时只降这批核的频，不用保存上下文，5ms就能出力。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按最大扰动功率缺口除以单核极限降频功率？不对，还要考虑任务被限流后的溢出率。我得算一下稳态边界。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "缓冲池比例和DVFS跃迁档位，我这就去改配置。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

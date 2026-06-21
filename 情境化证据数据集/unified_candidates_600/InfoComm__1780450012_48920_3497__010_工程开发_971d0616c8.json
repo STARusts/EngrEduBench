@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在星载轻量调度微服务联调背景下，与导师围绕遗留代码死锁排查、IPC方案替换及日志落盘策略持续沟通（5轮），其中在微服务IPC对接与日志防磨损部分与星载软件架构师沟通（1轮），并最终形成共享内存承载无锁队列、futex通知及日志异步落盘的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图样解析服务和时序生成服务之间居然用的System V消息队列，星上哪有这开销。而且跟我写的无锁环形队列对不上，数据全丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图样解析往里写跳变指令，时序生成这边读不出来。GDB跟了一下，卡在msgsnd那里，直接死锁了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前留下的微服务通信用的SysV MSG，联调死锁了。我现在时序生成模块用的是无锁环形队列，这俩怎么接？还有星上审计日志写flash太频繁怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "futex我以前没用过，怕在星上调不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异常必须刷盘，正常状态跳变可以攒一波再写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

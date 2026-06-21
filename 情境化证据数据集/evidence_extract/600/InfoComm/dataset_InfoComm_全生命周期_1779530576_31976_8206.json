@@ -1,0 +1,529 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在微域超低时延多径聚合网络项目需求背景下，与导师围绕工控时延痛点量化、多径聚合假设验证及安全合规边界持续沟通（7轮），其中在时延忍耐极限与痛点剖析部分与工业通信产品经理沟通（1轮），并最终形成包含性能指标、核心假设与防劫持安全边界的MVP需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想是不是能把几条链路绑一起，一条卡了无缝切另一条，不用等上层重传。但我拿不准这种微秒级容陷切换到底能不能真做到零丢包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就只看过抓包数据里时延方差特别大。具体卡在哪，我只能说是抢占。要量化的话，我得去问问懂工控业务的人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工控那头对时延忍耐极限到底是多少？我们想做微秒级多径聚合，得知道目标。还有，现在的网络痛点到底是平均时延高，还是抖动大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我提个假设吧：如果在微域内用3条并行链路做时隙对齐转发，是不是能把99.9%的尾时延从毫秒级压到100微秒内？但我不会算这个概率分布，这块我缺理论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天就去翻IEEE 802.1Qbv的时间感知整形器那块，把门控开合怎么隔离突发的机制看明白。至少得弄懂怎么画时隙图，不然多径聚合的调度根本没法设计。补完的标准就是我能手画出微域多径的时隙分配草图。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "防篡改？我光顾着看时延了，这块真没想。加密不是会影响时延吗？工控网还要搞审计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那今天咱们是不是先把这些痛点边界定下来：端到端<100us，抖动<1us，核心假设是多径时隙聚合能压尾时延，还有防信令劫持的安全边界。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在工业确定性网络合规与标准准入背景下，与导师围绕标准准入、合规红线与MVP标准子集选取持续沟通（7轮），其中在微域多径聚合准入标准与合规红线部分与市场洞察分析师沟通（1轮），并最终确定MVP标准子集与FTO合规红线，补入需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规？就过个等保三级呗，以前项目都这么弄，填表过审就行了。性能达标才是硬道理吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对接PLC不是走以太网口吗？我们包转发快不就行了。标准这块我真不太熟，就听说过TSN这个词。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这种多径聚合的确定性网络，准入标准和合规红线是啥？是不是必须过什么认证？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我们是不是得把802.1那套全实现了才能卖？全做的话开发量太大了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最致命的应该是侵权那条吧，要是被诉了产品直接废了。但标准子集怎么选？我就怕选少了客户不认，选多了开发又搞不定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "容陷切换对应Qbv的调度？时间同步肯定得要，不然时隙对不上。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "MVP需求里加上：必须兼容802.1AS和Qbv子集，5G侧走R16架构。合规红线加一条：实现路径必须做FTO分析，规避TSN核心专利侵权。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我之前真没想过，差点闷头写协议了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在技术护城河与合规边界确定背景下，与导师围绕确定性网络商业模式、收费方式与买单方持续沟通（8轮），其中在定价与价值变现部分与商业架构师沟通（3轮），并最终形成主推SLA切片加容陷保障包月、补入看板需求、锁定OT买单方及界定出险基准的商业模式锚点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按端口收钱呗，或者按带宽。以前卖交换机不都这么卖，多接几根线就多收点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "产线停机亏大了，这我懂。但怎么算？我不太会弄这种账，以前都是算BOM成本加个毛利。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这多径聚合和容陷，怎么跟客户收钱？按带宽好像卖不出价。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容陷当保险卖，这客户认吗？没出事也要交钱，OT的人精着呢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跟良品率挂钩，这账算得明白吗？废品原因多复杂啊，万一他说是机械问题不是网络问题呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "保时延不超限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得切片分级好弄，配配参数就行。容陷当保险，客户可能觉得我们在坑钱，毕竟没出事也要交保费。要不就基础切片费+出险后按次收费？客户心理上好接受点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，停机一次损失比保费高多了。还是得包月。但怎么让客户觉得这钱花得值？要不给个看板？让他看到我们在底层一直在巡检和守卫，没出事是因为我们挡住了事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FTO分析肯定要花一笔钱，如果只卖基础切片，肯定回不来本。必须把容陷保险推成主推包，溢价高。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需求里要把“容陷实时状态可视化”加上，不然包月卖不动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找OT产线负责人，IT不管这事，他们只看通不通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业模式主推SLA切片加容陷保障包月；需求必须补入容陷状态看板作为交付物；买单方锁定OT产线负责人；保费定价基准是时延超限出险，不保机械精度。"
+              }
+            ]
+          },
+          {
+            "microScene": "在核心产线场景战略锚定背景下，用户与导师围绕产线场景选择、痛点匹配与需求假设验证持续沟通（7轮），其中在产线痛点分层与场景选择部分与工业通信产品经理沟通（1轮），并最终确定首打多轴协同PLC产线场景，明确避坑AGV隐私合规，计划补齐标准指标并做基线测试验证需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "运动控制就是时延卡得死，稍微抖一下设备就停机报警。机器视觉好像主要是吃带宽，时延没这么死吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你看运动控制和机器视觉，哪个更刚需咱们这种微秒级多径容陷？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "多轴协同PLC最合适，AGV有隐私坑。首打多轴协同PLC，因为对抖动零容忍，容陷能保命。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证的话，是不是得找条现网产线跑一下看效果？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对OT业务分级一知半解，平时只管调设备通不通，没管过业务指标体系。我今晚去翻一下3GPP和5G-ACIA的工业互联标准，把URLLC场景的时延可靠性指标拉个表，明天把几个关键阈值补进咱们的场景定义里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我拉完表就找两条典型PLC产线做基线时延和故障切换测试，用数据验证他们是不是真有这个痛点。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微域确定性容陷网络方案设计背景下与导师围绕多径聚合架构、对照验证变量控制及合规选路持续沟通（7轮），其中在多径聚合架构部分与网络顶层规划师沟通（1轮），用户提出架构设想、设计对照验证、补充学习标准并明确受信选路要求，最终敲定基于时隙同步的受信对称多径聚合架构要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是搞主备路径，平时走主，断了切备。或者按包哈希做ECMP负载均衡，把流量打散？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ECMP在PLC场景乱序没法用，主备切换也慢。多径聚合要配合确定性调度，架构上到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "专家说要搞对称多径聚合，把时延差对齐，还要预计算备用时隙做流表重定向。听着挺理想，但怎么保证对齐精度？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设对称多径聚合的抖动能压到5微秒内，ECMP可能几百微秒。对照设计就是同一组PLC流量，一组走带时隙对齐的聚合路径，一组走ECMP，看端到端抖动分布。如果ECMP的99.9%尾抖动大于50微秒，就说明ECMP不行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "变量控制这块我确实不熟。我对时隙感知调度的算法原理也只懂个大概，以前都是用现成的交换机配配完事。这两天我得把IEEE 802.1Qbv时间感知整流器的标准文档啃一下，特别是门控列表和时隙偏移补偿那块，看能不能直接套到多径聚合的发送调度里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链路不就是看通不通、时延多少吗？非工控节点只要能用不就行了，还能省资源。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选路不是全网乱选，只能在受信白名单链路里做聚合。那架构方向就定：基于时隙同步的受信对称多径聚合，容陷靠预计算备用时隙和流表重定向。"
+              }
+            ]
+          },
+          {
+            "microScene": "在确定性承载数据面设计背景下，用户与导师围绕微秒级时隙感知调度、多径对齐、时隙粒度定标及流表防篡改持续沟通（6轮），其中在多径时隙对齐与流交换部分与确定性调度架构师沟通（2轮），并最终形成包含螺旋微时隙、相位预偏移、无锁交换及审计留痕的5条调度设计约束主框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按TSN那套时间感知整形器做呗？给每个流分好时隙，出故障就把备用时隙顶上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差多少就等多少呗？加个缓冲？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级多径聚合，包到达有时间差，怎么搞时隙对齐和调度？TSN那套是不是废了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "相位预偏移？这咋算？还有无锁流交换，具体是啥结构？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用GCL，用螺旋微时隙。时间差不用缓冲，用相位预偏移，就是算好白名单链路时延差提前发。交换用环形队列无锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "粒度就按最小的控制周期切？比如10微秒？防篡改，加个权限校验？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 抛弃GCL，用螺旋微时隙；2. 时隙粒度按链路时延最小公倍数定；3. 多径对齐用相位预偏移，基于白名单链路时延算；4. 交换用环形无锁队列；5. 流表下发必须审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在容陷传输与高可用选路面临算力与SRAM硬限制背景下，用户与导师围绕绕开限制的选路机制持续沟通（5轮），其中在容陷切换设计部分与容陷安全设计师沟通（1轮），在路径表压缩存储部分与网络顶层规划师沟通（1轮），并最终形成预计算查表、位图编码、二次故障中断及审计留痕5条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只留主备两条路，断了直接切备路行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@容陷安全设计师 芯片算力跑不动实时重路由，SRAM不到1MB，容陷切换怎么设计？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预计算查表，不占CPU，这招行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压缩。@网络顶层规划师 预计算路径表太大SRAM放不下，怎么压缩存储？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就预计算路径，硬件状态机查表切换，表项用位图只存下一跳出端口。不占CPU，SRAM也够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下一跳挂了，再查表找备用下一跳？或者往上回溯一层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有表项下发权限，跟前面流表一样，谁配的预计算表谁负责，修改必须审计留痕，不能乱改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 抛弃实时重路由，用预计算路径；2. 硬件状态机查表驱动切换；3. 路径表位图编码，只存下一跳出端口；4. 二次故障标不可达并硬中断上送；5. 表项下发审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘网元接口与安全评估背景下，用户与导师围绕接口定义、防冲击机制、安全评估方法及审计留痕持续沟通（7轮），其中在工控微域防冲击与白名单更新部分与容陷安全设计师沟通（2轮），并形成硬件白名单物理层丢弃、带外更新、TSN状态机使能、本地审计留痕及严谨验证实验等方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口就给个以太网口，配个VLAN隔离呗。安全方面，加个ACL规则，只允许授权MAC接入，差不多了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查表有抖动那确实是个事。那我不查表？直接放行？不行，不查表更危险。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工控边缘接口既要微秒级时延又要防冲击，怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这个白名单怎么下发更新？走管控流的话，会不会影响数据面？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要用硬件白名单物理层丢弃，带外更新，还要审计留痕。这听起来比软件ACL复杂多了，但确实没查表时延。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "评估这个我得测一下。我准备搭个环境，发不同大小的包，看开了白名单和没开的时延差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量控制就是只开关白名单功能。流量模型按工控真实比例混合大包小包做随机化发送。排除干扰的话，测试时把其他无关端口全shutdown。最近我在补学TSN协议，看到802.1X端口认证机制也是基于硬件状态的，我觉得可以把它的状态机迁移过来，做边缘白名单端口的使能控制，这样验证的时候也能复用它的测试用例结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计留痕只在本地存，不上送。只存变更记录，不存业务数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边缘接口入方向硬件白名单过滤，物理层丢弃非法帧；2. 管控流与数据流物理/时分隔离，带外更新白名单；3. 白名单端口使能状态机借鉴TSN 802.1X机制；4. 审计留痕仅本地存变更记录，不上送业务数据，满足数据最小化；5. 验证实验需控制变量、随机化流量模型、隔离外部干扰。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微域超低时延网络代码开发背景下，用户与导师围绕时隙调度与聚合转发的底层机制、开发缺口及验证方案持续沟通（8轮），其中在GCL门控配置部分与确定性调度架构师沟通（1轮），在硬件卸载重排部分与转发面实现工程师沟通（1轮），并最终明确硬件GCL调度、硬件时间戳重排及软硬对照验证等开发约束与口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "调度就按时隙分呗，转发用DPDK轮询查流表，速度肯定够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时隙对齐怎么搞？我想直接软件定时器切队列。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DPDK做聚合转发行不行？包重排我写个内存队列排一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "硬件GCL得配，重排得用硬件时间戳，DPDK只能管控制面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写不了。GCL时隙计算我以前没碰过，硬件时间戳提取接口也不熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去看802.1Qbv里GCL的计算公式，然后拿DPDK的testpmd改个时间戳提取的小程序先跑通。回头把GCL计算逻辑套到现在的流表下发里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用打流仪打带时间戳的微秒周期流。一组走软调度软重排，一组走硬GCL硬重排。看收端时延抖动的CDF分布，99.9%的抖动得在5微秒以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 调度用硬件GCL，不搞软定时器；2. 聚合重排用硬件时间戳和流定序器，DPDK只下发流表；3. 验证要有软硬对照组，用微秒周期流测CDF，99.9%抖动卡5微秒。"
+              }
+            ]
+          },
+          {
+            "microScene": "在容陷探测与链路切换联调背景下，用户与导师围绕微秒级容陷探测实现、切换时序与GCL对齐及流表避让持续沟通（7轮），其中在微秒级容陷探测与时序对齐部分与容陷安全设计师沟通（1轮），在流表切换避让GCL开窗部分与转发面实现工程师沟通（1轮），并最终形成4点联调约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接写个脚本拉主备链路，用BFD测连通性，断了就切。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "微秒级BFD调不上去啊。那只能把检测做到硬件里？但具体怎么注入我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "BFD肯定不行，硬件探测具体怎么做？还有切换时序怎么对齐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撞上就丢包呗。我不太懂怎么避让，流表直接刷不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "容陷切换时如果撞上GCL开门窗口怎么处理？流表能直接刷吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 探测用带内OAM物理层帧头注入，不用BFD；2. 切换必须在GCL保护时隙执行；3. 流表用双表原子更新，切表时锁GCL寄存器；4. 探测中断优先级最高。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端拥塞压测与性能调优背景下，与导师围绕压测方案与调优策略持续沟通（3轮），其中在微秒级毛刺压测工具与流构造部分与测试与性能优化专家沟通（1轮），在DPDK轮询调优与尾部时延分析部分与测试与性能优化专家沟通（2轮），最终形成基于硬件打流、GCL时隙调优及尾部时延分布的压测调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接用iperf3打满带宽，看丢包率行不行？加个多线程打流应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级毛刺怎么打出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按线速打满呗，打到丢包为止。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最近看DPDK调优的帖子，里面说用rte_eth_rx_burst批量收包，调节轮询频率能抗突发。我准备把收包轮询频率拉高试试。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信区间？多跑几次取平均行不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 用硬件测试仪打微秒突发流和探测帧；2. 观测交换芯片缓存水位，结合GCL时隙调DPDK轮询；3. 分析尾部时延分布，不看平均看99.9%分位。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在车间现场部署验证背景下，用户与导师围绕容陷切换时延验证方案及带载测试安全持续沟通（7轮），其中在物理链路操作风险部分与现场交付工程师沟通（1轮），在信令探测帧替代拔线测试部分与容陷安全设计师沟通（1轮），并形成常规信令探测与换模空档物理拔线结合的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按脚本走呗，先打通业务，然后拔一根主用光纤，看切换时延达标没。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线现在跑着活，我能不能拔光纤测容陷？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "交付不让动物理链路，那容陷不测了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "交付说拔线要签事故单，安全说可以用探测帧代替拔线。我觉得发探测帧行，不用担责。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，Los中断耗时没算进去。那探测帧测出来的数据偏乐观。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只能找空档拔线了。平时就用探测帧测，覆盖不到的Los中断耗时，找个产线不跑活的间隙补测。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "今天下班前必须拿到换模时间表，换模那几分钟机器停着，我趁机拔线测。这事儿我得记下来，不然老忘。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微秒级抖动监控告警风暴背景下，与导师围绕阈值调整依据、真假抖动过滤手段及数据存储策略持续沟通（4轮），其中在毛刺来源与分级监控方案部分与运行监控SRE沟通（5轮），在业务容忍度与平滑窗口确认部分与产线网络运维专员沟通（2轮），并最终形成看板滑动窗口平滑、底层保留原始数据及分级存储与变更留痕策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看板上确实一堆红点。要不直接把阈值放宽点？比如从10微秒调到50微秒？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底是网络真抖了，还是探测包本身延迟了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们工控业务最多能忍多大抖动？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就难办了。SRE嫌报警多，产线怕漏报。总不能一边加阈值一边又加阈值吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "过滤假抖动是不是得看探测包的时间戳？如果在内核里排队，时间戳是不是就不准了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们监控有没有办法把内核排队时间扣掉？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这招行。运维这边能接受吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滑动窗口设多大？10个包还是100个包？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就按这个来。看板做20包滑动窗口平滑，底层留原始数据。运维这边出了停机故障，SRE配合用原始数据查。谁去改看板配置？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存多久？这数据量挺大的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。热存7天，压缩存3个月。变更记录我会让SRE提单，我审批留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在产线反馈容陷切换阈值误触发影响业务的背景下，用户与导师围绕阈值调整依据、新阈值验证与灰度方案、底层原理补学及变更合规留痕持续沟通（6轮），其中在业务体感数据获取部分与产线网络运维专员沟通（1轮），并最终形成按业务流分级设阈值、结合探测频率调整的灰度方案与变更留痕策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接把切换阈值调宽点，比如从50us放到80us，减少误切换。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线那边具体是哪些业务在抱怨？抖动多少的时候他们会卡顿？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "AGV对周期抖动敏感，质检无所谓。现在的50us统配阈值确实不合适。我想按业务流分级设阈值，AGV流维持50us甚至更严，视频流放宽到100us。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现的话，我打算在测试环境用tc弄点抖动压一下。至于外推，其他车间如果AGV多，应该能用，但如果流量模型差太多就不敢保证了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前确实只懂调接口，不懂里面探测窗口和切换的耦合关系。这几天我看了SRE给的排障手册和容陷算法设计文档，记了学习日志。我现在知道增大阈值必须同步提高探测频率，不然会漏探。这次灰度方案我就把探测频率调整加上，用新学的这招。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在变更单里写明：灰度范围仅限1号车间AGV流，新阈值60us，探测频率加倍，视频流阈值100us不变。回滚条件是AGV丢步率上升。审批后执行，所有探测日志保留备查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

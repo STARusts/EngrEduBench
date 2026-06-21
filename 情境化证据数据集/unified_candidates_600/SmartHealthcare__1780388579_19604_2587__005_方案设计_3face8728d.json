@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在免疫微态特征图谱设计背景下，用户与导师围绕图谱schema定义、动态特征需求与临床基线校准持续沟通（7轮），其中在特征工程与动态特征需求部分与算法推演工程师沟通（2轮），在基线校准与预警阈值设定部分与重症临床专家沟通（2轮），并最终形成图谱设计四条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把那些细胞因子的值抽出来，拼成个向量，丢给模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "schema我可以用JSON定义，字段就按检验科那些指标来。阈值的话，我不太清楚，网上搜搜或者用默认的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征工程这块，除了抽静态值，还要啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "滑动窗口好弄，流批架构里加个算子就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "交叉关联是啥，两个指标相除？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要加差分算子，算激增速率。还要算什么相关性。基线不能写死。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阈值咋定？不同人基线不一样，算法那边说不能写死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加协变量？就是多传几个字段进去呗。年龄，基础病。这算特征还是算阈值参数？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 图谱不能只存静态值，要有差分特征算激增速率；2. 要有交叉关联特征，算相关性；3. 基线校准必须加年龄和原发病协变量，不能写死；4. 阈值得跟着协变量动态调，防漏诊偏见。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

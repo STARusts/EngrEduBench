@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路联调与性能调优背景下，用户与导师围绕边端算力受限下OSQP求解与控制环折中、插值延拓及大扰动判断持续沟通（6轮），其中在算力折中方案部分与调度性能优化师沟通（1轮），在异步联调测试策略部分与联调与测试工程师沟通（1轮），并最终确定算法侧降维5ms交互、控制侧线性插值加限幅截断及保留大扰动触发通道的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只能把拉取周期拉长吧，比如10ms？但拉长了控制端没参考怎么跑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用上一次的值顶着？或者自己算个斜率延拓一下？但我怕延拓出去偏差太大，系统不稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ARM算力不够，1ms跑不完OSQP全量求解，控制周期50us。现在得妥协，怎么搞？拉长周期做插值行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降维求解会不会把解耦效果搞没了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能写。5ms拉一次，中间50us步长用线性插值过渡。大扰动触发全量，这个扰动怎么判？电压跌落？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在算法5ms给一次参考，控制端做插值，大扰动再触发全量。你那边怎么测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "截断好办，我加个限幅就行。不然插值算飞了IGBT直接炸。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

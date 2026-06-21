@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在风暴预警模型训练联调背景下，用户与导师围绕极度不平衡样本的损失函数、验收指标、超参设置及约束监控持续沟通（6轮），其中在不平衡样本训练策略及Focal Loss调参逻辑部分与算法推演工程师沟通（2轮），在临床漏报容忍底线部分与重症临床专家沟通（1轮），并最终形成包含Focal Loss、Recall硬约束及动态调参的联调验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个数据加载器把`getRawWithMask()`拉出来，转成Tensor喂给模型，跑几个epoch看看loss曲线降没降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标就看Accuracy吧，或者F1？临床要求我不太清楚，反正模型拟合了就行。损失函数就用交叉熵，分类问题不都上这个么。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "正负样本差几百倍，交叉熵是不是不行？验收指标看啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风暴预警漏报能接受多少？指标要求是啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说用Focal Loss，临床说Recall得0.95以上。我就把损失函数换成Focal Loss，跑的时候盯着Recall看，不到0.95就继续调参。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "gamma我随便设个2？alpha就0.5吧。0.95的约束我就在测试脚本里加个assert，过了就发版。卡在0.90的话，我就再跑几轮或者调下学习率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Focal Loss的gamma和alpha初始值怎么定？训练中途Recall卡住怎么处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法给了初始值，gamma=2，alpha=0.25。还建议加个回调，Recall不涨就自动加gamma。我这就去改训练脚本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径就是：数据走`getRawWithMask()`通道，损失函数用Focal Loss（gamma=2, alpha=0.25），训练回调里加Recall 0.95的监控，达不到就Early Stopping。还有gamma动态调整的逻辑也加进去。这就去写代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

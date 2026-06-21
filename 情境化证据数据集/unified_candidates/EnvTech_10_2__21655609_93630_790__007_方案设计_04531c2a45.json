@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在两天后评审的方案设计收尾背景下，用户与导师围绕安全高可用、降级策略、容量粗估与成本控制并对齐“最小化采集+审计留痕”持续沟通（7轮），其中在可用性分级、监控告警、降级开关与审计WORM及成本抓手部分与安全与SRE工程师沟通（2轮），并汇总形成MVP级可用性/降级矩阵与容量成本口径写入方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就照常见的云架构模板写一套，高可用就多副本，成本就先估个区间。安全就说加密、权限。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "RTO就是几分钟吧？RPO我不太会。降级就是用缓存顶住，或者先不算模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与SRE工程师 采集、预警、处方这三块，高可用要怎么分级？RTO/RPO怎么写才不挨骂？还有成本怎么控，给点能直接写进方案里的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RPO就是能丢5分钟数据那种？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计字段不能缺我懂。WORM就是不可改存储。那我就照你这个写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "审计失败就不出处方，只发通知。日志分层，审计才WORM。记下了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 大概分三级：预警99.9、采集99.5、报表99。RTO预警5到10分钟，采集半小时，报表一天。降级有：模型慢就用阈值A/B保底；遥感没更新就用上次的；网关离线就缓存补传，太久就只报离线不出处方。还有审计写失败就只通知不处方，审计日志要不可改存储。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "容量就设备数、田块数、请求数。成本就按云账单算，存储和计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "遥感就是田块越多越贵，影像越频繁越贵。时序就是点位越多、采样越快越贵。回放就是历史越长越贵。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "频率上限可以，队列排队也行，冷热分层我不太懂怎么写，先写存旧的便宜点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是核证和审计要一直能用，不然就别生成处方动作；预测挂了还能用阈值顶一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "外部依赖挂了就熔断，然后标注不确定性，不误导用户。可以。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

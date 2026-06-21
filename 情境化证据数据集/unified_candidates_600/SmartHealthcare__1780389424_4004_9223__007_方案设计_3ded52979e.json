@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在药代动力学模型接口设计背景下，用户与导师围绕接口协议、字段约束与安全校验持续沟通（6轮），其中在模型输入输出定义部分与算法工程师沟通（1轮），在序列传输协议与异步机制部分与云原生架构师沟通（1轮），并最终形成gRPC+protobuf强校验、前置合并用药拦截器及异步回调的接口定义方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接口的话，我看过网上很多Python微服务都是用FastAPI直接套个RESTful，输入就写个JSON，输出也是JSON。有没有更方便一点的开源脚手架可以直接生成这种接口？自己手写太麻烦了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "药代动力学模型这块，输入输出一般怎么定？我想用REST传JSON行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "序列数据用REST是不是不太好传？云端这块接口怎么接比较省事？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说输入得是时间序列加上一堆协变量，输出要有置信区间；云架构说用gRPC传序列比REST好，还能支持流式和异步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "gRPC听着挺高级，但我对protobuf不太熟，有没有自动转的工具？REST我比较会写。不过既然专家说序列传输gRPC好，那就gRPC吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用gRPC定义接口，protobuf强校验。输入分两块，一块是时序特征数组，一块是协变量结构体，协变量里必须有体重年龄肝肾功能。输出是剂量建议加上置信区间。异步回调。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接在输入里加个字段传过去让模型自己算行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议用gRPC+protobuf；输入包含时序特征数组和协变量（必须含肝肾指标）；合并用药高危互斥由接口拦截器前置校验拦截；输出剂量与置信区间；推理异步回调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在绿氢长时储能寻优算法工程开发背景下，用户与导师围绕算法实现路径的精度与速度冲突、验证方法及误差阈值持续沟通（5轮），其中在算法精度与Python实现部分与解耦算法工程师沟通（3轮），在边缘端时延与C++实现部分与调度性能优化师沟通（3轮），并最终形成混合架构实现路径与对照验证方法。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优算法你打算怎么实现？之前定的MPC加凸优化，直接上Python吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Python跑在边缘端，时延能达标吗？我们控制周期要求很死。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A说的精度确实是命脉，P说的时延也是硬指标。能不能先用Python跑通逻辑，再转C++？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前搞过类似移植，大概就是两边喂同一组输入，看输出差多少。但MPC这种动态寻优的，我不太清楚怎么比才科学。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但Gurobi和OSQP的结果差异，算误差的时候得有个阈值吧？这阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太懂，求解器底层的容差设置我以前都是用默认的。我得去查一下OSQP和Gurobi的收敛条件差异，还有数值计算里怎么评估截断误差放大。我今晚先看OSQP的官方文档，跑几个非线性的demo看看误差分布，明天给个初步阈值范围。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "也就是算法逻辑还是A负责，但要用C接口封装；P负责外围C++加速和通信；离线部分用Python。这样A不用重写，P也能控时延。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法实现路径：边缘端寻优核心用OSQP C接口套A的模型，外围用C++，离线参数生成用Python。验证方法：Python原型做Baseline，C++实现做Test，对比状态量范数误差。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把接口定义拉出来，A和P对齐一下内存交互方式。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

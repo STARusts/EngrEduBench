@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在寻优调度服务压测爆雷背景下，与导师围绕压测阻塞根因排查与修复方案持续沟通（7轮），其中在火焰图与反序列化耗时分析部分与性能压测优化师沟通（1轮），在寻优接口解析逻辑排查部分与寻优调度引擎师沟通（1轮），并最终确定反序列化卡死根因及强制Protobuf与线程池扩容的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是请求发太快了，机器扛不住啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "报告拉出来了，全在排队，寻优服务好像卡死了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你帮看看CPU耗在哪了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "反序列化慢？线程池满了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能数据太多解析不过来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你查查是不是这原因导致反序列化卡住了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻优侧用了JSON解析，没用Protobuf，所以线程池炸了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去跟视觉分割实现师对一下，让他输出也走Protobuf，免得这边改了那边又不对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

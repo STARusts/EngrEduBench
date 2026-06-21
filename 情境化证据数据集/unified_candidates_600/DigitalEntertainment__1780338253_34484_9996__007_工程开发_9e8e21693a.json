@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虚实视效帧级联调测试背景下，用户与导师围绕极值帧下的材质对齐、时序同步及联调方案步骤持续沟通（4轮），其中在极值帧Shader表现与深度冲突抓取部分与图形开发工程师沟通（2轮），在端到端穿模撕裂抓取与用例设计部分与联调测试工程师沟通（1轮），并最终形成包含WebXR端录入极限姿态、脚本计算冲突占比的四步联调基准流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备拿之前那段虚实互映素材，从头到尾跑一遍，看渲染出来的画面有没有明显破面或者闪烁，然后记录一下平均帧率，看QAT压缩后掉帧严不严重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时序对齐我大概知道，就是虚拟和实拍的帧得对上。但极值帧具体怎么抓我不太确定，是不是把播放速度调快一点就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "请问虚实材质映射在快速推拉镜头下，Shader那边会出现什么问题？我该怎么抓？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "法线插值这个怎么处理？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端链路里，穿模和撕裂的判定标准是什么？我怎么设计用例才能把这些极值帧捕获到？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "素材我可以用引擎的相机录一段极限运动，导出姿态序列喂进去。Debug视图的数据我直接截图存下来，肉眼比对。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一步，在WebXR端录入极限姿态序列，包含快速拉爆光照和贴边横移；第二步，引擎开启深度冲突和VSync Debug视图，渲染输出；第三步，导出Depth Buffer序列图，用脚本计算冲突像素占比和VSync偏移量；第四步，如果占比超过阈值，定位问题帧交回开发修Shader。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

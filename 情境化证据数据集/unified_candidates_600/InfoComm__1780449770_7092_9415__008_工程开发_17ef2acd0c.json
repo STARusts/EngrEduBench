@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算义共生意图路由系统架构已定背景下，用户与导师围绕语义特征提取引擎的轻量化选型、资源红线约束、蒸馏开发缺口及验证口径设计持续沟通（6轮），其中在轻量化方案选型部分与语义特征算法工程师沟通（1轮），在资源消耗卡点指标部分与性能压测调优师沟通（1轮），并最终确认TinyBERT选型、资源红线指标及对照测试验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接加载预训练的BERT模型做特征抽取，它的语义理解效果最稳，接口封装也简单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "轻量化我确实没怎么做过，只知道有剪枝和量化。资源这块我卡住了，不知道怎么往下写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "BERT在路由节点上跑不动，我们项目算力卡得很死，特征提取这块怎么做轻量化？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取引擎的资源消耗，具体要盯哪些指标才不会超15%的红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法工程师建议用TinyBERT走知识蒸馏，压测师给的红线是推理延迟10ms、显存50MB。但我没写过蒸馏代码，这块实现我搞不定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我缺模型蒸馏的训练流程搭建和损失函数定制能力。我今晚去扒HuggingFace的Trainer源码，照着TinyBERT的官方Demo跑通蒸馏流程，明天下班前我拿一个能在本地跑通的蒸馏脚本交差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得做个对照测试。拿原版BERT和蒸馏后的TinyBERT，用同一批业务流数据跑特征提取。比对两个模型的语义重要性量化得分，如果TinyBERT的打分跟原版BERT的皮尔逊相关系数大于0.9，我就认为语义没丢。同时用压测师的指标卡资源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

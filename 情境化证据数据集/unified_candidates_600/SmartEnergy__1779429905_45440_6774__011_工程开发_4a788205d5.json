@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云边联调与弱网容错背景下，用户与导师围绕云边通信同步与异步机制持续沟通（6轮），其中在数据延迟对寻优影响部分与博弈引擎开发工程师沟通（1轮），在弱网同步风险部分与边缘端开发工程师沟通（1轮），在压测极限部分与测试与性能调优师沟通（1轮），最终形成上行异步、下行QoS高优+ACK确认+超时降级的混合通信方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上MQTT呗。边缘端往上发特征数据，云往下发调度指令。断网了边缘就存本地SQLite，连上再补发。这套路我熟，工具链现成的，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果边缘特征数据有延迟，中间断了几秒再补上来，你那边的寻优还能跑不？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘弱网下同步调用不是找死吗？万一卡住了线程池不就炸了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网同步你那边能搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不矛盾了吗？云要实时同步，边要异步防卡死。总不能一边同步一边异步吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "上行特征数据量大概几秒一次，丢一两个包影响不大？下行指令如果丢了或者晚了，负荷动作就错了。所以上行异步，下行同步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果上行走MQTT异步，下行走gRPC同步，在弱网丢包30%的情况下，系统会怎样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行MQTT异步，下行也是MQTT但是带QoS=2保证到达，云端等ACK，超时就算了。边缘等不到指令就自己降级。这样云不会卡，边也不会OOM。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全同步弱网必死，全异步数据过时会导致寻优结果不可用。这种混合模式，既保证了指令下发的可靠性要求，又用超时机制避免了阻塞，边缘还能兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在知识库与随动适配高可用方案设计背景下，用户与导师围绕缓存一致性、降级触发条件、断路器阈值、审计留痕及混沌工程验证持续沟通（8轮），其中在容灾降级设计部分与高可用保障师沟通（1轮），并最终形成主从读写分离加本地快照降级、断路器跳闸及混沌工程验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个缓存就行了呗，Redis缓存一挡，主库挂了也不怕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，一致性得保证。那就强制写主库后刷缓存。缓存挂了就直连主库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "随动适配读多写少，怎么设计容灾降级？还有本地快照降级资源开销多大？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源开销200MB能接受。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件就是连不上呗。审计日志记一下降级了就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以把断路器套在知识库访问这里，连续超时3次就跳闸切快照，半开状态放少量请求探测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就测一下主库挂了能不能切快照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用混沌工程？给知识库容器注入网络分区故障，然后监控断路器指标，看降级切换耗时和演解失败率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心策略是主从读写分离加异步同步，接受1-2秒一致性窗口。异常态用断路器，根据RT和错误率跳闸，切本地快照降级。审计日志记时刻、约束版本和拓扑ID。验证用混沌工程注入网络分区，测切换耗时和失败率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

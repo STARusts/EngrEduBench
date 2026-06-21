@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在时空切片池化与动态加载背景下与导师围绕剔除策略、特效剥离时序及池化上限持续沟通（8轮），其中在空间权重剔除与跨切片特效处理部分与空间切片引擎开发沟通（2轮），最终形成八叉树加权LRU、接口回调剥离特效及显存水位强卸的池化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切片结构体直接new太碎，肯定得上对象池复用。我写个SlicePool，初始化先分配一批，用完不销毁放回池子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "踢掉最久没用的呗。LRU嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片池化踢人的策略，你那空间索引能不能直接复用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边界缝隙？网格对齐不就行了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "LRU加上距离和角度权重，用他八叉树算的。然后跨切片特效不能直接断，要在卸载前剥离，只留挂载点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我发个事件？OnSliceUnload之类的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先开个256MB？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 切片池用八叉树加权的LRU；2. 卸载时调接口剥离特效留挂载点；3. 池子上限看显存水位线，超了强卸。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

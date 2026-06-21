@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在密态跨域联合投研计算平台工程开发背景下，用户与导师围绕MPC比较算子的实现协议、定点数截断风险及验证复现机制持续沟通（7轮），其中在比较算子跨域实现协议与性能瓶颈部分与隐私计算专家沟通（1轮），并最终敲定采用乱路协议、自实现截断逻辑及明密文对照测试与失败重放机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比较算子的话，我打算直接套用现有的MPC框架里的基础组件，把接口封装一下就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "通信轮次我确实没细看，反正接口能用就行。性能不行的话，大不了我加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "比较算子在跨域网络下怎么实现比较好？直接套框架接口行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以为框架会自动处理浮点数。乱路协议我听过，但定点数截断怎么防我确实不懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得先去弄懂MPC定点数表示和截断原理。我今晚把《SecureML》那篇论文里关于定点数截断的章节啃一下，然后在本地跑一下他们开源的Python demo，把截断逻辑单步调一遍。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会在算子代码里加上截断位数的可配置项，而不是写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以对每个算子做对照测试。用同一批金融特征数据，明文跑一遍算结果，再密态跑一遍，两者的差值如果在1e-6以内就算通过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果差值超过阈值，我就把输入的密文份额和随机种子落盘到日志里，用这些数据能重放整个计算过程，定位是哪一步截断出了问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "比较算子用乱路协议，我自己实现定点数截断逻辑；测试用明密文对照，阈值1e-8，失败重放。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

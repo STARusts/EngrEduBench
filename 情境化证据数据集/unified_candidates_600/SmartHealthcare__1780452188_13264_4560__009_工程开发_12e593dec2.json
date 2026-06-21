@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在药代耦联模型开发与严苛资源约束背景下，用户与导师围绕求解器选型、精度与性能取舍及理论短板补救持续沟通（7轮），其中在非线性项保留与求解器选型部分与药代动效建模师沟通（1轮），在内存与延迟约束及差分替代方案部分与模型联调工程师沟通（1轮），并形成差分近似加步长自适应截断的折中方案与先推演后编码的验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接用Python的SciPy库，把方程组翻译过去，用odeint包跑应该就行吧"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用SciPy的odeint跑药代耦联模型，你看行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "建模师建议用RK45，但这能满足2G内存和500ms延迟吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查表法多药组合参数空间太大，肯定爆内存。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我数值分析基础不行。我今晚得把偏微分方程离散化的部分补一下，重点看步长和截断误差的关系，写几个一维的对流扩散方程差分格式跑一跑对比，把误差曲线记下来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把建模师的非线性项用差分展开，步长先取0.01试跑，如果截断误差大就缩小步长，但最小步长不能低于0.001，不然肯定超延迟。我先写个差分方程的demo，单测验证一下2G内存和500ms的边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

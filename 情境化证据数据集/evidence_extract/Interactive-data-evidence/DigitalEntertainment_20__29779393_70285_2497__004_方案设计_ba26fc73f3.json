@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在剧情图谱约束生成内容并打通风控/结算字段穿透的方案设计背景下，用户与导师围绕“生成与一致性架构”的检查环节、数据最小集合、失败分流与字段写入边界持续沟通（9轮），其中在生成工作流分步与一致性检查点设计上与AI工程负责人沟通（3轮），在A/B/C风控门禁位置与避免全量返工的分流策略上与内容治理策略师沟通（4轮），并最终整理出分步生成、双门禁校验、报告输出与结算字段由版本快照阶段补齐的要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是别前后打架吧。角色别忽然死了又活了那种。然后版本别乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "提示词加一点规则？然后审核卡一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就生成后吧，先让模型写，再检查，不行再重写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI工程负责人 生成这块怎么分步骤？每步要输入输出啥，怎么做一致性检查点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是先写提纲，再写正文。提纲先过一遍规则，省钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模块就…生成服务、一致性检查服务、然后版本库。接口就是生成请求里带 work_id/version_id，回来的时候带 report。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）就取人物设定和前面几章内容？  \n2）失败就重写。  \n3）风控…生成完就写，结算字段也一起写？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容治理策略师 风控状态 A/B/C 怎么在生成链路里卡？失败怎么分流比较省事？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "B 才能发，C 直接卡住。然后不要全重写，能补就补。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…编辑器保存的时候写？谁点确认谁就算贡献者？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以。就是生成那边别写合同信息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 生成请求要带 work_id/version_id 和节点范围。  \n2 先出提纲再出正文。  \n3 生成后要出一致性报告。  \n4 risk_status B/C 卡发布。  \n5 content_hash 要一直带着。  \n6 结算字段后面版本快照再补。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "卡发布就是发布接口检查 Version.risk_status 不是 A 就拒绝。报告里带冲突的 StoryNode 列表，还有 regenerate/patch/manual 三种建议。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在系统上线运行评估初期背景下，用户与导师围绕流转监控方案及P99延迟拆解持续沟通（3轮），其中在初期监控指标与组件取舍部分与监控告警分析师沟通（2轮），在P99延迟拆解口径部分与区块链架构师沟通（1轮），并形成基于Prometheus的基础大盘监控方案与三阶段P99拆解策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算上一套全链路可观测体系。Prometheus加Grafana只是基座，我准备接入ClickHouse做指标池，再用Flink实时计算吞吐率滑动窗口，最后引入一个Isolation Forest算法做延迟异常的根因自推理。这样能实现毫秒级异常感知。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "成本确实有，但链上流转如果出现突发延迟，传统阈值告警根本反应不过来。我担心P99突刺的时候，只看均值会掩盖问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用Flink算滑动窗口吞吐加上Isolation Forest抓延迟异常，你觉得上线第一周直接上这套可行吗？还是先砍功能？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "四个指标会不会太单薄？如果TPS低是因为排序节点卡住了呢？只看大盘我看不出根因啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我先砍掉Flink和算法，把四个大盘做出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不过P99延迟的口径我得确认一下，因为链上有背书、排序、提交好几个阶段，混在一起算没意义。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要盯流转P99延迟，这个P99是只算从SDK提交到事件监听的总时间，还是要把背书、排序、提交拆开算？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果排序P99高，可能是共识批次超时太长；如果背书P99高，可能是合约里查账逻辑慢。这样拆确实能直接定位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能查。PromQL里可以用histogram_quantile分别对背书耗时、排序耗时、提交耗时桶做计算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改Helm Values，把这三个阶段的metrics暴露出来，配上对应的记录规则。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

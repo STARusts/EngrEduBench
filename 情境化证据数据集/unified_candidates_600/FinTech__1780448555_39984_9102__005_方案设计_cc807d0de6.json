@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在气象资产数据流编排与极简算力预算约束背景下，用户与导师围绕重中间件取舍与极简微批流式架构持续沟通（5轮），其中在栅格与资产流极简编排部分与数据拓扑设计师沟通（2轮），在拉取式拓扑反压与容错部分与流式计算开发工程师沟通（1轮），并最终确定对象存储落盘加内存预过滤及扫库快照的极简编排方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然底座是微批流式，我觉得必须上Kafka做消息总线，配合Debezium捕获资产侧增量变更。气象栅格进来后用Avro Schema Registry强约束结构，防上下游污染。为了数据可溯，流里再嵌一层轻量级事件溯源，用ClickHouse存血缘关系。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ClickHouse写血缘开销不大吧？而且没有Schema Registry，气象栅格结构一变，反演算子全得崩。Debezium也是，不用CDC怎么保证资产映射表的实时性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在微批范式下，气象栅格和资产空间数据怎么编排流转才能既省钱又不丢空间反查能力？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接扫库拿快照？并发高了会不会把源库打挂？而且对象存储拉取大块栅格，延迟会不会爆？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "全在内存里建索引，OOM风险怎么控？还有Schema校验是不是可以留个最轻量的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种拉取式拓扑在流控上好不好做反压？万一对象存储那一瞬IO抖了怎么办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这套方案在资源约束下确实是最优解，把重中间件全换成了内源特性加扫库，运维负担也最低。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

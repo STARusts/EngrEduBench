@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在拟合精度与延迟性能调优背景下，与导师围绕动态分层架构、定点化误差评估、审计合规留痕及双轨制技术栈裁定持续沟通（6轮），其中在局部精细网格Cache影响部分与极限性能猎手沟通（1轮），在低维模型残差边界部分与定价模型设计师沟通（1轮），并最终形成SSE与AVX-512 IFMA双轨制架构及开发任务拆解。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全局用一套模型肯定行不通。我倾向于做动态分层：常态行情走低维参数化模型保延迟，极端跳动时局部热点切高阶样条插值保精度。架构上留出Hook。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "判定标准可以用Gamma翻转的阈值触发，上一轮压测已经定了阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们在热点行权价附近强行开局部精细网格，L3 Cache的命中率会恶化到什么程度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "低维模型在深度虚值端的拟合残差我控制不住。如果全链路走参数化低维模型，在近到期日、Gamma极大的行权价附近，残差边界能收在多少个Tick以内？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就死锁了。性能猎手说精细网格废Cache，模型设计师说低维模型废价格。我之前一直觉得SIMD向量化只能用在规整矩阵上，对稀疏的局部热点插值没啥用。昨天翻Intel的VNI指令集手册，发现AVX-512 IFMA可以直接做定点乘加融合，不需要反复搬运浮点尾数。如果我们把局部精细网格的插值系数做定点化，再用IFMA指令重算，是不是既不需要大块连续内存，又能压单步计算延迟？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定点化误差在1e-6量级，相比拟合残差可以忽略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这样架构就变成：粗网格用SSE扫连续内存保底延迟，局部热点触发后，用AVX-512 IFMA算定点插值补精度。数据分块做Cache预取对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "每次算子切换，往监控总线发一个带时间戳的枚举事件，标记当前生效的插值策略ID和残差估值。脱敏脱掉行权价，只留残差和策略ID，避免合规抓取时暴露交易意图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发任务我拆成三块：SSE主干重构、IFMA定点算子封装、策略切换Hook与审计事件埋点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

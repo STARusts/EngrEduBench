@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在潜器声光异构组网驱动与协议栈开发背景下，用户与导师围绕降级态承接、异构并发时序保证、卡点排查与验证方案持续沟通（7轮），其中在底层并发与FIFO清空机制部分与嵌入式开发工程师沟通（1轮），并最终形成RTOS互斥锁并发保护、DMA双缓冲切换及回调绑定的开发基线与5ms时序验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算光模组走SPI拿DMA发，声模组走UART。协议栈里加个判断逻辑，查上一轮那五类状态，如果是光降级态，就把光模组的SPI挂起，声模组功率拉满。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这块我确实没细想，平时单模组跑没出过问题。@嵌入式开发工程师 异构切换时底层驱动的并发和FIFO清空怎么搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只搞过单模组裸机，RTOS多任务并发这块有点虚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是异构并发下的互斥锁优先级反转问题怕搞砸了，还有降级态映射表怎么跟驱动层的回调函数绑一起没思路，之前没写过这种联动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把光模组SPI驱动改成DMA+双缓冲架构，加个完成回调试试，把状态机跟回调挂钩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以用逻辑分析仪抓SPI片选和UART使能的引脚电平。测光中断到声唤醒的间隔，阈值先卡在5ms，超过就报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "光通信一帧大概1ms，留4ms给声模组唤醒和对准，加起来5ms应该够用。如果实测声模组唤醒慢了再调阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

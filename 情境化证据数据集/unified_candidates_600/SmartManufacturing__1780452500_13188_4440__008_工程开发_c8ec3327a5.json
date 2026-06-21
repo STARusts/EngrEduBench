@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在散单潮涌订单解构微服务开发背景下，用户与导师围绕微服务边界划分、异步解耦、最终一致性事务补偿及验证设计持续沟通（6轮），其中在边界划分与异步解耦、分布式事务处理部分与订单解构开发组沟通（2轮），并形成基于DDD的接收与拆单服务边界、事件驱动解耦及Saga补偿验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按功能分模块就行了，接收模块、校验模块、拆单模块、下发模块。每个模块一个微服务，Spring Boot一套，接口互相调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我把订单接收、校验、拆单分成三个微服务，它们之间同步调用是不是会出问题？应该怎么拆边界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件驱动，就是加个MQ？那拆单失败了怎么办，事务怎么回滚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不能用@Transactional了，得用本地消息表。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块确实没写过分布式事务补偿，平时都是单库操作。我得先去学一下Saga模式怎么实现，不然代码写不出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就模拟拆单服务挂了，看补偿事件能不能把前面的状态改回来。我会写个测试用例，故意抛异常，检查订单状态是不是能回到待处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚看Seata的Saga文档和本地消息表的实现，明天上午写个Demo跑通。然后把接收和拆单的边界定下来：接收服务只管接和存，发事件；拆单服务订阅事件，拆完发分配事件。补偿逻辑写在拆单服务里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接收服务和拆单服务之间就用订单创建事件解耦，我先把这两个服务的接口定义和事件格式敲出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

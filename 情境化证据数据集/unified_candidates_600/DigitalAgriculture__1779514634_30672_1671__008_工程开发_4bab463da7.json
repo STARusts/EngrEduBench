@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在农残推演系统微服务拆分与规范制定背景下，与导师围绕服务拆分粒度、容错降级与验证口径持续沟通（6轮），其中在黑白盒模型拆分与容错部分与降解推演算法师沟通（1轮），在推演输出接口规范部分与窗口判定开发师沟通（1轮），并形成白盒/黑盒/聚合服务拆分方案及熔断降级与异步输出规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我按功能拆了，气象接入服务、算法计算服务、结果输出服务。规范就直接用公司现在的Java规范。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "黑白盒我本来想放一个服务里，反正都是算残留的。容错我就打打error日志，然后人工介入。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "黑白盒模型怎么拆服务？算力容错怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演结果输出给判定引擎，接口规范怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师说黑白盒得拆，白盒算方程，黑盒做修正，黑盒挂了就降级跑白盒。判定师说接口用异步消息，输出区间对象带置信度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级我听说过Sentinel，但针对GPU OOM的熔断配置我没写过，这块我不懂怎么搞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验证这块，拆开后怎么测降级逻辑对不对？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "微服务拆成：白盒推演服务、黑盒推演服务、推演聚合服务（负责合并结果和降级控制）。规范补充：异步事件输出、熔断降级配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚去查Sentinel自定义slot写法，明天写个单测模拟黑盒挂掉，看聚合服务降级是否生效，区间输出是不是只有白盒结果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

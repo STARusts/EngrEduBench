@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在串流与容灾降级设计背景下与导师围绕弱网串流抗性、降级策略权衡、信令处理及验证实验持续沟通（7轮），其中在弱网串流部分与串流系统设计师沟通（1轮），在软降级部分与算力调度规划师沟通（1轮），在生理信令落盘部分与隐私合规官沟通（1轮），并最终形成分级降级基线与对照实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上QUIC握手快，0-RTT能减延时。降级就丢非关键帧呗，LOD层级往下降。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极低延时串流这块，弱网下怎么抗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级呢？硬切周边全丢会不会太生硬？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "串流那边说要FEC加硬切保主视锥，调度这边说软降级加残差补偿掩盖断层。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近看SIGGRAPH 2023那篇时域上采样的论文，它用光流法做帧间插值，算力比残差网络轻。能不能用这个做过渡？算力够就软降级，不够就时域插值兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "论文里说有TensorRT加速，但我没算过边缘并发上限。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级丢帧的时候，那些多觉生理信令是不是也跟着丢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "串流用QUIC+FEC抗5%丢包；降级分两级，第一级软降级用残差补偿，第二级兜底用时域插值；生理信令降级时加密落盘不丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以做对照实验。变量设为网络丢包率从0%到20%递增，对照组是硬切方案和分级降级方案，测端到端延时和主观MOS分。如果分级降级在10%丢包率时MOS分比硬切高0.5以上，就算有效。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

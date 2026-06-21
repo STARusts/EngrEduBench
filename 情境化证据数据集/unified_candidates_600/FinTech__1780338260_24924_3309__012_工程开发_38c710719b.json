@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发熔断机制边界异常测试背景下，用户与导师围绕熔断触发后状态机转换、资金穿透风险、定价引擎重试误差及混沌工程应用持续沟通（7轮），其中在状态机测试设计与积压行情误差边界部分与量化测试工程师沟通（2轮），在风控红线与强平逻辑部分与合规风控专家沟通（1轮），并最终形成基于Chaos Mesh注入故障、覆盖强平路径及超时定价标失效的硬约束测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备写个脚本猛发订单，把熔断打出来，看看系统会不会崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "熔断一出来我就全撤了，回滚不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "熔断触发瞬间的边界测试，一般要怎么设计啊？特别是那些挂单和半成交的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风控这边，熔断时有什么红线是不能碰的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态机三条路径，熔断禁止开仓，部分成交强平。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备就按这三条路径写用例。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重试的时候引擎先停一下？或者加个锁？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了一点Chaos Mesh。可以用来搞网络故障。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Chaos Mesh的NetworkChaos，在熔断触发时把订单服务的网络断开，测撤单重试。不用自己写脚本卡网络了，复现率能稳定点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

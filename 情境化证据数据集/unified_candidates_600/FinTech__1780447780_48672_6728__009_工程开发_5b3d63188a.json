@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链属担保系统图谱分片MVP开发背景下，用户与导师围绕分片逻辑、跨分片阻尼计算及验证设计持续沟通（6轮），其中在分片算法与超级节点处理部分与图计算核心开发者沟通（2轮），并最终确定Louvain离线切分、超级节点镜像复制、同步RPC加全局累加器汇合阻尼及RTT监控的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按企业ID取模做哈希分片呗，最简单。要是热点读多，大不了加一层Redis缓存挡一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "担保圈的图怎么分片比较好？哈希切分遍历太慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "懂了，就是按业务圈子切。超级节点镜像复制，这思路类似维度表广播。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分布式图的聚合逻辑我确实没写过，不知道怎么把子图边界上的阻尼值往外推。我今晚翻一下Pregel模型的Aggregate机制，先照着写个全局累加器把跨分片的衰减值加起来试试，看能不能跑通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑完切分算法后，检查切出来的子图连通分量，看看边被切断了多少比例，比例越低说明切得越好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，加上跨分片传染路径的RTT监控。那分片方案就先定Louvain离线切分，超级节点做镜像复制，跨分片阻尼汇合先走同步RPC加全局累加器。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

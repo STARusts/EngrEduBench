@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多源异构数据融合治理背景下，用户与导师围绕边缘协议适配代价、数据融合省算力方法、特征对齐算法、验证实验设计及接口契约持续沟通（9轮），其中在边缘协议转换与轻量解析部分与工站物联适配员沟通（1轮），在数据融合与省算力策略部分与数据治理师沟通（1轮），并最终形成边缘轻量解析上报、PLA降维特征对齐、对照验证实验及IDL接口契约的定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看文献里常用Lambda架构，批处理层加速度层，统一入湖。协议层的话，全转OPC UA标准化，这样上层就同构了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "文献没细说算力开销。如果全转OPC UA太重，那就不转了？直接原始数据上报？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧老旧设备协议转换开销多大？数据融合怎么搞能在边缘省算力又不丢特征？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "网关侧不做重型OPC UA，改用轻量特征提取加Protobuf薄封装；融合的话，边缘做流式特征对齐，只传特征向量上去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近在看多模态传感器时间序列对齐的论文，里面用Dynamic Time Warping做弹性对齐。对于不同采样率的设备状态，是不是也能用DTW做弹性对齐，而不是简单线性插值？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PLA降维前置，这个能接受。但怎么验证这套边缘PLA降维加特征对齐不会丢关键散需特征？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个对照实验。控制变量是降维压缩比，实验组用PLA，对照组用均值采样。看重构误差和聚类簇内距离。样本量取历史三个月的轴承振动数据，跑功效分析看需要多大样本才能显著。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就让前端搞网关适配，我搞对齐算法，各做各的，最后联调。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，先定IDL契约。我这就去梳理特征清单。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧轻量协议解析提取关键测点，用Protobuf薄封装上报；流式特征对齐前置PLA降维，边缘只传特征向量；验证实验按对照设计跑，样本用三个月轴承振动数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在调度系统生产部署与基线设定背景下，与导师围绕资源配额依据与监控基线设定持续沟通（6轮），其中在寻优耗时基线与长尾延迟计算部分与监控指标分析师沟通（2轮），在容器资源配额与弹性伸缩配置部分与运维部署专员沟通（1轮），并最终确定部署参数与学习PromQL的SMART目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把容器资源限制调大点，之前测试环境跑调度寻优老是超时卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线不就是设个阈值嘛，超了就报警。我想把CPU limit加到8核，内存16G。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优耗时的基线数据该怎么定？我光看平均耗时好像不行，误差大的时候耗时也长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99和置信区间？这我不会算啊。我就知道在Grafana上拉个平均值。能不能直接给我个数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只会拉平均值，这算基线我搞不定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CPU和内存limit怎么配比较稳？寻优计算有时候会卡一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就8核burst，内存16G，加HPA。这我能在yaml里改。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会用PromQL算分位数，平时都是复制粘贴现成的面板。我得学一下这个语法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就这周五前，学会用PromQL写histogram_quantile，把调度引擎P95耗时和95%置信区间跑出来，存成一个Grafana变量面板，截图发你验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

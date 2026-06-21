@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在试点课堂生成反馈被投诉“有偏/不公平”的运行评估背景下，用户与导师围绕“模型偏差巡检”MVP的分组、指标阈值、告警证据与止血动作持续沟通（8轮），其中在可用日志字段与阈值/抽样复核口径上与数据分析师沟通（5轮），在抽样复核去标识化、审计留痕与留存期限边界上与合规官沟通（2轮），并形成可执行巡检规则与两周止血型成功标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把巡检做得很硬：先把所有输出按量表维度打标签，然后做分布对比，再用解释方法找出触发token和证据缺失位置。最好能做到每条反馈都有可证明的公平性评分。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分组我想用班级、老师、学科、作业类型、难度档，甚至学生历史水平段。然后看反馈的严厉程度、建议数量、是否引用了证据、是否出现“空泛评价”。抽样我倾向全量跑一遍，因为样本量小会漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 试点现有的日志和学习证据里，偏差巡检能用哪些字段做分组对照？我想做“输出质量一致性”和“反馈可操作性”的指标，但不确定数据够不够。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“学生历史水平段”拿不到？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "明白。指标上我想把“质量一致性”做成：同一 rubricId 下，不同 evidenceCount 分桶，feedbackLength、引用证据比例、重复率的分布差异；“可操作性”用 actionableStepsCount、三段结构完整率、老师编辑距离。这样够吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值我更倾向统计检验，p-value那套。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行。我还有个担心：如果 evidenceCount 很低，引用证据比例天然上不去，会把模型冤枉成“偏”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了数据分析师，试点能用的字段主要是生成请求（subject/assignmentType/rubricId/evidenceCount/modelVersion等）、输出侧（长度、三段结构完整率、actionableStepsCount、引用证据比例、重复率、风险措辞命中）、人工侧（teacherEditDistance、thumbDown、投诉三类原因）。学生历史水平段拿不到也不建议引入。  \n我倾向把“模型偏差巡检”先拆两类：  \n1）输出质量一致性：同一 subject+assignmentType+rubricId 下，按 evidenceCount 分桶，对 feedbackLength、重复率、风险措辞命中、结构完整率做分布差异；  \n2）反馈可操作性：actionableStepsCount、三段结构完整率、teacherEditDistance、thumbDown。  \n异常检测用7天基线的鲁棒阈值（IQR或均值±3σ），每周每学科抽20条极端样本做人工二级确认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "区分我想加一个“证据充分性门槛”：evidenceCount<2 的桶不看引用比例，且把异常优先归因为采集问题。动作的话，我想直接自动回滚到更稳的模型版本，或者强制temperature降到0。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规官 偏差巡检里我们会抽“极端样本”复核，还会看teacherEditDistance、thumbDown、投诉原因。异常样本我们想保留用于复盘和证据链。合规上要注意什么：留存期限、访问权限、以及能不能把生成内容+引用证据一起给复核人看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果老师投诉“偏见”，我们能不能把这条样本打上“偏差标签”长期留着训练用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "懂了，先把用途锁死在质量评估与整改证据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规官给的边界是：抽样复核只用于质量评估改进；复核包去标识化，不给studentId/teacherId明文；设“质量审核”角色并对查看全文做审计留痕；异常样本建议30天留存，想更长要审批；引用证据默认折叠，点开全文二次确认并留痕。训练用途先别碰。  \n止血动作我收敛成两类不动模型的：  \n- 降级输出形态：强制三段结构+每段最多N句，保证可读；  \n- 证据不足时不下结论，只输出“下一步需要补哪些证据/如何改作业”的建议。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压缩成版本0：  \n- 分组：subject + assignmentType + rubricId，再按 evidenceCount 分桶（0/1/2-3/4+）。  \n- 指标：结构完整率、actionableStepsCount、teacherEditDistance、thumbDown；质量一致性补充 feedbackLength、重复率、风险措辞命中。引用证据比例只在 evidenceCount≥2 的桶里看。  \n- 阈值：按7天滚动基线，用IQR做异常阈值；thumbDown用比例突增（比如超过基线2倍）提醒。  \n- 触发动作：结构完整率掉到阈值以下就强制模板；evidenceCount低且thumbDown高则提示“证据采集不足”，引导老师补采；重复率/风险措辞高则走更严格的过滤策略。  \n- 抽样：每周每学科抽20条极端样本（高编辑距离、低可操作性、引用为0但evidenceCount≥2），给质量审核角色打二级标签。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "成功标准我想设很严格：thumbDown下降50%，teacherEditDistance下降30%，并且不同evidenceCount桶之间的可操作性差异收敛到很小。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把两周目标调成“止血型”。另外告警payload带 modelVersion、promptTemplateVersion、filterFlag，这个我加进去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这版OK。就是我还想加一个“公平性评分”，但现在看确实没必要先塞进去。先按这套跑，后面真有证据再升级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

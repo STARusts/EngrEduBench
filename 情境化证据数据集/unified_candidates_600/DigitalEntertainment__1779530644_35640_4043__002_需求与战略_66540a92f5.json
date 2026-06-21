@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在跨国跨区分发合规红线划定背景下，用户与导师围绕流媒体切片合规鉴权边界及与商业分级咬合持续沟通（6轮），其中在跨区分发合规卡点与端侧防篡改校验需求边界部分与合规与鉴权架构师沟通（2轮），并最终形成门禁分级、区域播控、端侧防篡改三层鉴权架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个鉴权呗，请求切片的时候校验Token，没Token或者过期就不给数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨區域切片分發，合規怎麼卡？我本來想加個Token。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不是加个Token就完事。要跟收费等级挂钩，还要有黑名单，还要防客户端改数据。防篡改这块我不太懂，后端一般只管发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，切片鉴权得跟着商业分级走，免费切片和收费切片鉴权强度不一样。第二，区域黑名单，按区禁发切片。第三，防篡改，但我不知道端侧怎么防。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端側拼裝結果要可校驗，一般怎麼做？別說具體框架，我就想知道需求邊界。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，云端发签名，端侧算Hash，对不上就不画。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "鉴权分三层：门禁层校验付费状态对应切片等级；播控层过滤区域黑名单切片；校验层比对端侧重构Hash。只有三层都过，才允许渲染。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

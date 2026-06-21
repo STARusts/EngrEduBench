@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在图库数据灌入与联调背景下，用户与导师围绕并发写入死锁、查询超时及金融数据合规审计的软删除要求持续沟通（5轮），其中在死锁与超时根因排查部分与后端研发工程师沟通（2轮），并最终确定写入排序、加索引及软删除的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "批量写实体一直报ConstraintViolation，按理说MERGE是幂等操作，不该有唯一性冲突啊。而且跑风险传导推理的时候，几十跳的路径查询直接超时，我怀疑是图遍历的深度太深，触发了指数级膨胀。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了报错日志，里面全是DeadlockDetected。执行计划我还没看，Neo4j的Browser工具我连不上，容器端口映射没配好，我还没搞明白怎么暴露服务。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并发写入报死锁，推理查询超时，我连不上图库客户端看执行计划，您能帮我看看吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "排序能防死锁？我觉得加个重试机制是不是也行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写入这块，我在应用层把待插入的实体列表按ID排个序再传给图库。索引的话，推演是从“公司”实体的“证券代码”属性开始查的，我加在这个属性上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我测试时直接用DETACH DELETE清空。生产环境还没想，图库里的关系太复杂，物理删除会不会把别的推演链路搞断？图库数据也要做软删除吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改写入排序、加证券代码索引，还有加上软删除字段和查询过滤条件。端口映射我也按您说的试一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

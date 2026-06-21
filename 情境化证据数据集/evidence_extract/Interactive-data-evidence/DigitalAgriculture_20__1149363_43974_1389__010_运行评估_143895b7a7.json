@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在冷链鲜度风控与动态定价协同平台运行评估背景下，用户与导师围绕灰度上线分流、对照评估、回滚触发与审计留存持续沟通（7轮），其中在分流与回滚一致性上与SRE运维工程师沟通（5轮），在业务KPI分层与阈值设定上与业务分析师沟通（3轮），在定价合规护栏与留存责任上与合规与风控经理沟通（2轮），并形成可执行的灰度与回滚清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在想把灰度上线和回滚预案说清楚：怎么分流、看哪些指标、什么条件触发回滚，避免把动态定价搞出一堆投诉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先抛个粗的：先按租户灰度，挑2个试点承运商+1个渠道商，先上“风控干预+鲜度评分”，动态定价先只在一个租户开。分流就做50/50：一半走新策略，一半走老规则。回滚就是把开关关掉，策略回老规则，模型还跑但不出决策。指标我想看投诉率、毛利波动、报损率、以及接口错误率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度上线这块，如果我们有策略引擎+定价审批页+审计链路，分流和回滚你会怎么设计？我担心同批次货被切成两套策略，还有回滚后审计和已下发决策对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚条件你会怎么写？我怕大家口径不一。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "已下发的定价/补贴决策呢？回滚后会不会追溯不了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还纠结一个点：灰度期间要不要让前端给用户提示“这是试运行”？怕影响体验，但不提示又怕纠纷。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我先把技术侧记下：租户+策略域+批次粘滞、硬阈值回滚、逻辑回滚优先。我要回去跟导师把我原来的50/50改掉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我改成：灰度单位按tenant+policyDomain，然后箱码/批次hash粘滞，variant写进审计。对照组不搞同批随机，改成“租户A全量baseline、租户B canary、租户C baseline”，或者同租户内按批次hash分，但保证同批一致。指标补上系统健康：5xx、延迟、审计写入失败率、backlog、ALLOW/DENY结构。串联字段沿用 correlationId、tenantId/boxCode、bucketStart、policyId、idempotencyKey、decision/reason、riskLevel/freshnessScore/modelConf、auditWriteStatus/backlog。回滚先关动态定价域，必要时关风控干预域，最后才回滚版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用“线路/仓”维度：同租户里选一个仓或一条干线做canary，其他仓baseline。这样同一批货不会跨仓。缺点是仓之间温控条件不同，会有偏差。另一个是按“到货日”分：周一canary周二baseline，但时间因素也会偏。我不确定哪种偏差更可控。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务分析师 灰度期间我们要定义回滚/降级触发的业务阈值。动态定价和风控干预这块，你建议看哪些KPI、怎么分层对照、阈值大概怎么定才不拍脑袋？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值里“客诉率提升30%连续2小时”这种，怕试点单量小导致抖动很大，有没有更稳的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：动态定价可能引发“价格歧视”的质疑，我们需要在灰度里留什么证据？我不太确定合规要到什么程度。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师这边我带回两块：SRE给的分流/回滚分级；业务分析师给的KPI分层和阈值设定方式。我打算这样落：技术回滚用硬阈值时间窗，业务回滚用相对偏移+最小事件数；对照用同租户同仓线路内批次hash粘滞，并按品类/运输时长/温控偏离分层评估。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 灰度上线动态定价时，我们需要哪些合规护栏？特别是：哪些数据严禁用于定价、审计留存多久、谁能查、以及回滚/降级时是否要做额外留痕或客户告知？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户告知呢？我们灰度是试点客户内部先用，但末端可能看到价格变动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两件事：一是模型输入禁区，二是回滚要留足证据。输入禁区我能控制：我们只用温湿度/震动、运输时长、批次画像、库存周转这些，不碰消费者画像。证据这块，就在审计里加“输入来源摘要+规则/模型版本”，回滚再加触发人和指标快照。留存180天/2年我记住了，但成本可能会上去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分两层：常规决策审计只存必要字段（你们之前那套+版本号+variant），180天滚动；触发P0/P1或涉诉的，把关联 correlationId/boxCode/订单号 的全量输入摘要和指标快照提升到“事件包”，单独存2年。输入摘要尽量存“哈希/区间/桶”，不存原始时序明细；原始传感器时序继续按现有物联网链路保留短周期，比如30天，过期后只保统计特征。这样回看定价依据还有证据，但不会无限堆时序数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我来压缩成8条：  \n1）灰度范围：先开试点租户，策略域分开灰度，顺序是鲜度评分→风控干预→动态定价；动态定价最后且可单独关闭。  \n2）分流方式：同租户内按仓/线路限定范围，范围内按批次/箱码hash粘滞到 baseline/canary，避免同批混跑；审计写 variant。  \n3）观测串联：每次决策必带 correlationId+tenantId/boxCode+bucketStart+policyId+idempotencyKey+decision/reason+风险/鲜度分数+modelConf+auditWriteStatus+backlog。  \n4）系统硬指标（P0）：5xx、延迟、审计写入失败率、backlog堆积、错误码突增；命中时间窗直接回滚/降级。  \n5）业务伤害指标（P1）：客诉率/退货率、价格方差异常、审批超时率、履约时效；用“相对baseline偏移+最小事件数”触发，优先降级关动态定价域。  \n6）回滚动作顺序：先逻辑回滚（关policyDomain开关，返回baseline决策；模型照跑便于对照），止不住再版本回滚。  \n7）历史一致性：已下发决策不回写篡改，决策带 decisionId+variant+下游Ack；撤销走补偿流程，不靠回滚。  \n8）合规与留存：定价禁用个人敏感信息；审计分层留存——常规180天，回滚/纠纷事件包2年；回滚记录触发人、原因、命中指标快照，权限分级查询。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

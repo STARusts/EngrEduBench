@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阵元激励与声压场解算的工程开发背景下，用户与导师围绕解算选型、异构同步、HLS时序卡点及验证口径持续沟通（6轮），其中在GPU延迟与相位精度部分与阵元驱动算法工程师沟通（1轮），在驻波场断层风险部分与声场拓扑设计师沟通（1轮），并形成GPU包络查表加FPGA相位硬解算的异构方案及含频响散差的验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步打算用GPU做并行查表加轻量插值，取代原先考虑的FPGA全硬解算，这样开发快，能赶上第一轮联调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我评估过，只要把声压场流形的拓扑节点预计算好塞进显存，Kernel启动的延迟大概在微秒级，加上插值计算，单次重构应该能压在2ms以内。FPGA写RTL周期太长，万一时序收敛卡住，整个里程碑都要延后。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这确实是个盲区，调度排队毛刺如果跑到毫秒级，10ms的容错余量就不够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "GPU查表方案生成激励信号，延迟毛刺和相位精度到底稳不稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果拆开呢？GPU只负责算宏观的声压场拓扑轨迹包络，算完把相位偏移量下发给FPGA，FPGA再做高频相位调制和信号合成。这样既保住了开发效率，又解决了硬实时问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我用GPU预算下一帧的节点轨迹包络，然后一次性下发给FPGA去执行高频相位步进，驻波场流形更新的时候会不会出现节点轨迹卡顿或者断层？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我回流一下方案：GPU负责拓扑包络查表与拟合，FPGA负责高频相位调制与信号合成，中间用乒乓Buffer传递曲线系数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "FPGA侧的逻辑虽然简化了，但我对Vitis HLS的时序优化不太熟，之前只写过简单逻辑，这种带状态机的高速接口怕是综合不过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我今晚去啃Xilinx的《Vitis HLS优化指南》，重点看Array Partition和Pipeline嵌套的pragma用法，明天先用单阵元相位调制模块跑一次综合，看时序报告。如果还是不过，我就把HLS降级，只用来生成包络解析逻辑，相位调制和乒乓Buffer接口改用手写Verilog，这样虽然慢点但时序我绝对能控。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我直接把刚学的Array Partition思路用到包络系数解析的C++代码重写上，争取把查表索引的吞吐量提上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算做对照测试。用Comsol离线跑一组标准微件捕获过程的声场仿真作为Baseline，然后我的在线解算系统跑同样的输入条件，对比两者的声压节点位置。如果节点空间偏移量在5μm以内，我就认为解算精度合格。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接受修正，验证指标改为节点偏移量<10μm，对照组Comsol仿真加入±5%频响散差做蒙特卡洛跑批。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改验证脚本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我马上先去写包络查表的C++代码，顺便把HLS优化指南过一遍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在灵感回声式学习轨迹共创平台方案设计背景下，用户与导师围绕多模态轨迹数据模型的最小实体/字段、证据链可追溯与互评挂载及生命周期约束持续沟通（6轮），其中在字段集与索引/不可变事件与特征分离部分与数据架构师沟通（7轮），在同意管理/最小化采集/访问控制与审计留痕及关闭AI辅助钩子部分与合规与隐私官沟通（4轮），并收敛出V1模型骨架与关键约束及验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这一段我想先把“多模态轨迹数据模型”定下来：要能串起语音、图片、草图、短文本，还要能形成证据链。你帮我卡下边界：哪些字段必须有，哪些先别做太重？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向做一个很通用的事件模型：所有输入都归一成 event，payload 用可扩展 schema。然后用 graph 把 event 之间的关系串起来，比如“草图-语音讲解-反思文本”是同一概念的不同证据。这样检索也好做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小实体我想是：TrackSession（一次学习任务的会话）、TrackEvent（具体记录）、Artifact（媒体文件）、EvidenceLink（引用关系）、Feedback（互评/导师反馈）。关系上 TrackSession 1-N TrackEvent；TrackEvent 关联 0-1 Artifact；EvidenceLink 把 event 串成链或网；Feedback 绑定到 event 或 link。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我在设计多模态轨迹数据模型。想做 TrackSession/TrackEvent/Artifact/EvidenceLink/Feedback 这几类。你给我一版“最小字段集+关键索引建议”，尤其是证据链怎么落字段，才方便追溯和检索？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "span_anchor 这个我喜欢，能把“证据引用”锚到片段。那如果是草图上某个区域被引用，是不是 anchor 就是 bbox 坐标？音频就是 time range？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我还想加一个“embedding 向量”字段直接进 TrackEvent，方便相似检索。这样以后做跨会话推荐很爽。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我接受 feature 分离。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有事件不可变，那互评修订怎么记录？比如同伴改了评论。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心数据量爆掉。图片、音频都很大，EvidenceLink 又会很多。有没有生命周期建议？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你觉得教学侧还能接受这种“关系网”吗？会不会太复杂？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "rating 我本来想 1-5 星，做成统一量化指标，后面好算趋势。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那 Feedback 里 rating 改成可选，默认走 rubric 的维度勾选。还有一个：为了可解释，我想所有 AI 生成的 summary_text 都必须带 evidence_refs，不然不落库。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这涉及合规吧？比如 consent_ref、privacy_level 这些字段。我们前面说过“可关闭智能辅助”，是不是也要体现在 session 或 user 配置里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 多模态轨迹数据模型这块，我已经有 Session/Event/Artifact/Link/Feedback 的字段草案。你从合规角度告诉我：最小必须加哪些字段或约束，才能支撑同意管理、数据最小化、审计留痕，以及“关闭智能辅助”的选项？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "purpose_code 和 ai_assist_allowed 我能塞 Session。pii_detect_status 听起来会逼我们上内容识别组件，成本可能高，但字段先放着也行。默认关闭 location 我没意见。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规给的硬点：Session 加 purpose_code+ai_assist_allowed；Event/Artifact 标记敏感与采集模式，默认不采 location；对象都做逻辑删除审计字段；Feedback 的 visibility 独立。对我来说最纠结的是 pii_detect_status，会不会把我们拖成内容安全系统？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我把 V1 的验收点定成：1）任何证据包引用都能跳回原始片段（span_anchor 可回放）；2）AI 相关内容必须 evidence_refs 非空且可一键关闭；3）互评不出数值分；4）审计字段齐全。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这点我之前没想管，我更想做“全量语义检索”。但你说得对，成本会炸。那先定热区 90 天，feature 分离表也只对热区做。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我复述下最终我准备按这个走：实体还是五个（Session/Event/Artifact/Link/Feedback）+ 一个可选 Feature；EvidenceLink 必带 span_anchor；AI 输出必须带 evidence_refs 且受 ai_assist_allowed 控制；互评用 rubric 维度不走星级；数据生命周期先做热90天+归档回放。这样够收束了吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边端特征提取实现背景下与导师围绕算子选型、数据流缓冲区设计与验证口径持续沟通（5轮），其中在边端算力与延迟评估部分与边缘算力开发员沟通（1轮），在数据流接入与防背压部分与数据流图工程师沟通（1轮），并最终形成弃用OpenCV改用C++算子与TensorRT加速、采用零拷贝环形缓冲区及误差与漏检率验证等实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接套OpenCV的轮廓提取，力觉数据用Pandas算滑动窗口特征。网上有挺多现成的视觉处理库，调一下参数应该就能出特征。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用OpenCV提特征，边端能跑吗？延迟大概多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那数据流这边呢？我直接把数组塞进去行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "C++算子我写起来太慢了，能不能找找有没有开源的轻量视觉库？环形缓冲区，就，就开大一点？比如存100帧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没找到特别对口的。那我只能自己写C++算了，但我不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓冲区大小，是不是按控制周期的2到3倍来设？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证口径，就看提取出来的特征跟标定值差多少？误差在5%以内？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，弃用OpenCV，改用C++轻量算子拼接，核心判定逻辑手写。第二，用TensorRT加速。第三，数据流用零拷贝环形缓冲区，大小设3倍控制周期。第四，特征提取延迟必须小于2ms。第五，验证看误差和漏检率，误差小于5%，漏检率小于1%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

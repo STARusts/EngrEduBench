@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在多线态群智叙事织机系统部署上线与全链路验证背景下，与导师围绕DAG剪枝阈值误伤验证、对照实验设计及冷门分支伦理风险持续沟通（5轮），其中在分桶验证口径与统计方法部分与叙事指标看板官沟通（2轮），并最终形成包含分桶验证、冷门分支防偏见硬约束及统计补齐计划的部署验证硬规矩。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Prometheus加上Grafana搭个看板，直接监控QPS和延迟，如果P99没炸，FallbackHook也没触发，应该就说明剪枝没问题吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对照实验？就是A/B Test那种吗？网上有很多开源的AB平台，我直接调包接进去，让平台帮我算行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我看网上AB平台都能自动算P值，我直接把剪枝和非剪枝的流量分一下，平台应该能直接出结果吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前提检验这步能不能省？我就想看大盘数据掉没掉底，掉底了我就调阈值。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以把开源AB平台的SDK接进去做分流，但检验逻辑好像得自己写或者找现成的库。不过，我怎么知道哪个剧情是被\"误伤\"的？万一某个冷门分支被剪了，玩家没反馈，我咋发现？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我平时就看看QPS和报错率，这些检验方法我只听过名字没自己算过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去看《Trustworthy Online Controlled Experiments》这本书的前三章，搞懂前提检验和置信区间怎么算，然后在我们系统的看板代码里补上分桶打点和自动算P值的脚本。这周五前弄完。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，接入AB平台SDK，分桶验证，实验组0.05剪枝，对照组单线态全量；第二，概率低于0.01的冷门分支禁止剪枝，防偏见；第三，核心看分支存活率和完成率，算95%置信区间，看重叠情况；第四，我本周补齐实验统计知识并加上打点脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

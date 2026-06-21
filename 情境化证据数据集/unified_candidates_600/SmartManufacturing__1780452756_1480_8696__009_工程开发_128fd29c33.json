@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在PINN反演模型Loss收敛异常背景下，与导师围绕物理约束不可降阶红线与算力开销限制持续沟通（3轮），其中在Loss症状与动态加权实现部分与训练调优师沟通（4轮），在算子实现、GradNorm参考与降开销近似部分与算法架构师沟通（3轮），并最终形成严禁降阶物理约束、引入梯度自适应加权及一阶近似复用梯度的基线调整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是Loss震荡不收敛还是直接爆NaN了？物理约束项和数据拟合项的梯度分布查过没？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "典型的多目标优化梯度病态冲突。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "当前PINN里的热流方程偏导算子，你是硬拼接进计算图的还是用自动微分推的？梯度断流或者下溢的风险排除了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "砍物理约束等于退化成纯数据驱动，违背项目初衷。静态降权只是掩盖问题，治标不治本。必须动态平衡。你试过基于梯度的自适应加权吗？比如让两个分支的有效梯度范数在训练中对齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "具体要在哪个阶段注入梯度归一化逻辑？是在Loss backward之后、optimizer step之前做缩放？有没有什么开源的Trick或者现成的仓库能直接参考这种操作？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Modulus太重了，我们边缘端推理和训练环境吃不消。就用朴素的GradNorm思路。每个Step统计物理项和数据项的梯度L2范数，以数据项为基准，反推物理项的实时权重，强制对齐有效梯度。先跑单卡验证，避开分布式同步的坑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "训练时长增加可以接受，反演精度是核心。只要能收敛，多花点算力是值得的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能暴力翻倍。GradNorm里计算目标权重时，能不能复用当前Step已经算出的梯度？只额外算一次逆Hessian-vector积或者用一阶近似，避免为了算权重再走一次完整的前向反传？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线调整如下：第一，严禁降阶或砍除物理约束项；第二，引入基于梯度L2范数的自适应加权策略，以数据项为基准对齐物理项梯度；第三，权重计算采用一阶近似复用当前梯度，控制单Step开销增幅在15%以内。先单卡跑通验证收敛性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

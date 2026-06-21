@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在冷链鲜度风控与动态定价平台工程开发背景下，用户与导师围绕设备接入规范、清洗链路与验收口径持续沟通（5轮），其中在接入契约/幂等去重与签名设计上与物联网接入工程师沟通（3轮），在清洗规则、箱码批次映射与质量指标口径上与数据工程师沟通（3轮），并汇总形成可落地的接入字段、raw/clean分层、映射置信度与合规最小实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在卡在两件事：传感器数据乱、箱码/批次映射不稳，想先把接入规范和清洗规则定下来再写实现。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设备主要是温湿度记录仪和车载网关，有的直接MQTT上报，有的网关HTTP推。字段我先想保留：deviceId、ts、temp、rh、battery、signal、gps、shock。质量指标我想用到达率、重复率、时间漂移、缺失率四个，先把这四个跑到看板上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "ts我倾向用设备采集时间，但我担心设备时钟不准；重复率我想按(deviceId, ts)算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "箱码映射问题是：同一箱码在不同系统里写法不一致，有时候还会复用，导致我们把温度串到别的批次上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 我们现在有MQTT直连和网关HTTP两种上报。设备时钟不准、弱网重传、乱序这些在接入层通常怎么落字段、怎么保证幂等？我们想把事件时间和到达时间都保留，但去重键怎么设计更稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "seq这块我担心不少设备没有。payloadHash短窗口去重，会不会把“同温同湿、同一秒两次采样”误杀？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有签名字段sign，你们一般怎么做？我只知道要防伪造，但具体落什么不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 我们要做冷链时序数据清洗，核心是温湿度/震动+位置，后面要跟箱码/批次/订单关联。现在我遇到：设备时钟漂移、重传重复、箱码写法不一甚至复用。你能给一版清洗规则和主数据映射建议吗？最好带可验收的质量指标口径。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对齐到1分钟粒度是为了后面建特征对吧？但我们部分设备是10秒采样，会不会信息损失，尤其是开门瞬时升温。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "箱码时间窗口这块，我现在只有订单履约的节点时间，可能不精确。用“出库到签收”窗口会太宽，置信度就上不去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把两边意见拼一下：接入层统一字段，加seq/bootId优先；清洗层做两层表，分钟粒度+短期明细；箱码映射加时间窗口和置信度。还缺一块是验收：我想用数据工程师给的指标，再加一个“迟到率=late流/raw”。你看够不够，还是还要补“数据最小化/权限”这类合规点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段分级我能按：P0必需（temp/rh/time/deviceId），P1业务必要（geo、vehicleId），P2可选诊断（rssi、battery）。默认脱敏我不太确定怎么做算到位，是把geo降精度？访问留痕我们后端网关有中间件能打log，但我没写过统一审计字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我担心经纬度保留2位对路线偏航判断太粗，会影响“改线”策略触发，但我们这微场景不做策略。我先按默认2位，分钟表用降精度，raw短期存全精度，后面策略要精度再走审批开关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我按可执行的写：  \n1）接入数据统一模型：tenantId、deviceId、bootId、seq、eventTime、ingestTime、payload(temp/rh/...), traceId、sign；缺seq设备由网关补seq。  \n2）幂等去重：主键(tenantId, deviceId, bootId, seq)，兜底键加eventTime差<2s+payload一致的窗口规则。  \n3）raw层只做结构校验与拒收：签名校验失败拒收；缺必填字段进dirty流并带原因码。  \n4）clean层：乱序按eventTime入时序，迟到>24h进late流；分钟粒度聚合（中位数/95分位等）+可选minuteMaxTemp等。  \n5）缺失补全：<=5分钟插值并标记interpolated，>5分钟不补。  \n6）箱码映射：先规范化再映射，必须加时间窗口约束，输出confidence(1.0/0.8/0.5/0)。  \n7）合规最小落地：geo分钟表默认降精度，vehicleId等hash；查询接口写operatorId/role/reason审计字段且reason必填。  \n8）验收指标：到达率、去重率、时钟异常率、迟到率、映射覆盖率(conf>=0.8)、插值占比(<3%为目标先试跑)。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

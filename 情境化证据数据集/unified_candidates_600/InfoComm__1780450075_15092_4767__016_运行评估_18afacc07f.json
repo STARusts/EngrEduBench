@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在解决线上误伤背景下与导师围绕模型演化与规则迭代切入点、分域验证与结论适用边界持续沟通（5轮），其中在模型演化与规则迭代部分与系统优化专员沟通（2轮），并最终形成特征演化、规则演化与分域验证边界的三条迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然特征分不开，那就让模型再学一遍呗。我准备用GridSearchCV搜一下超参，网格设大点，总能找到更好的分割点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想靠搜超参解决，您看模型演化和规则迭代从哪下手比较好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序特征我可以用spark的滑动窗口算，不算难。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分域规则降权是啥意思？直接把阈值放宽吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时序特征我用滑动窗口搞，分域规则就是把高并发业务单独拎出来，走拟态调度验证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全量跑的。外推肯定不行，不同业务包大小分布差挺多。我得按业务类型分组，再跑一次T检验，看看是不是只有特定几类业务重叠。分组跑用pandas的groupby挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我建了个jupyter notebook，把T检验的代码和结果存进去了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前您说我只会调包不懂原理，我这两天看了下scipy.stats的源码文档，搞明白了T检验的自由度怎么算的。现在分域验证我就知道样本量不够时该怎么处理了，可以直接迁移过来用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把分组T检验的脚本写了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

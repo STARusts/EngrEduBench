@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联动适配器契约已收口后的工程开发全链路测试与压测背景下，用户与导师围绕最小可验收用例集、压测口径及互锁/降级/过期高并发稳定复现持续沟通（6轮），其中在用例与压测模型/阈值制定上与测试负责人沟通（5轮），在测试数据合规、权限隔离与审计留痕上与安全工程师沟通（2轮），并明确三组压测与自身交付边界（生成器、权限白名单、回执断言支持）。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就把链路全跑一遍，然后压一压，看 P95 在不在阈值内。互锁也顺带看下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从采集到联动执行吧。接口就…联动那个 execute。量就多发点 cmd。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 全链路测试和压测你这边要怎么定？我现在有联动的契约字段了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测模型怎么弄？我就用压测工具一直打 execute 行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值具体多少？我怕写错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那压测数据我用线上抓一点行不行，快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 压测用的数据和权限这块，有啥硬要求？我们现在站点都只写编码，EXECUTE 也卡权限。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在回执里有 actualValue。这个会不会算敏感？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把压测账号分开。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压三组：数据面上报、控制面下发、再混合一起。控制看回执 P95 800ms，错误率 0.1%。数据面看入库到可查 2s。合规就用合成数据，不用真实厂站名，账号分只读和可控两种，日志要能查 cmdId。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就…在压测里掺一些互锁条件？比如固定几个 targetTag 让它必互锁。降级就把点位缺几个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "比例就 10% 互锁，10% 过期，剩下成功。判定就看 ackCode 和 reasonCode 对不对。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，我就按 1000 次那种跑。degradeReason 也检查一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就做我这边生成器和权限白名单。脚本让测试那边来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）把 targetTag 和 cmdId 生成器给测试那边用。2）联动这块权限白名单只放沙箱 tag，压测账号拆开。3）回执解析里把 ackCode/actualValue/reasonCode、还有 EXPIRED/INTERLOCK 这些都保证能被脚本断言到。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

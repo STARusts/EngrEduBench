@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧轻量萃取模型开发背景下，用户与导师围绕轻量化方案、保真验证机制、校准集采样及算力约束持续沟通（6轮），其中在剪枝率校准与算力扣减部分与端侧轻量模型主程沟通（2轮），并最终形成分层渐进剪枝与量化校准的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接上INT8量化加通道剪枝，这俩我熟，应该能把模型压到端侧能跑的大小。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑几个测试集看精度掉多少呗。相似度0.15这个，我剪枝完重算一下特征向量的余弦相似度，只要不掉太多就行吧？算力的话，我就按Jetson的内存上限去卡，超了就再剪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种情况下，剪枝率和量化位宽怎么校准？还有端侧算力内存怎么严格扣减？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前直接上INT8确实太猛了，得先做校准才行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下午去翻一下微软NNI框架的剪枝教程，看看怎么把自定义的余弦相似度指标挂进它的回调里。校准集就用之前极弱信道压测留出来的那批多模态数据子集，正好对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "10^5级在端侧全跑一遍确实太慢，我按千分之一抽100个样本做校准行不行？跑完再随机抽几组验证一下方差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "校准集定500张，只跑关键层输出对比。那我今天的开发任务就是先搭这个基于NNI的分层渐进剪枝框架，把余弦相似度监控挂进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Jetson Nano可用内存大概4G，算力上限0.5TFLOPS。我先把这几个数写进配置文件，超了就触发INT4降级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改NNI的配置，把红线和算力上限写死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

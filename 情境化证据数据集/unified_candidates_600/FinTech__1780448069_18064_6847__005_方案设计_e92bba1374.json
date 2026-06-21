@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在抽离阻截流控网关架构设计背景下，用户与导师围绕网关抗洪峰、误伤边界控制、微秒级规则匹配与热更持续沟通（5轮），其中在抗洪峰与规则热更匹配部分与微秒级阻截网关设计师沟通（2轮），在误伤边界合规部分与极端行情合规专员沟通（1轮），并最终形成网关架构五条主轴。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关这块我打算用Seastar框架或者直接DPDK绕过内核，收到Protobuf信号后，直接查规则表，匹配到就往交易所发撤单或者限流指令。为了保证快，网关本身不落盘，全放内存。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "洪峰的话，加个令牌桶限流？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "误伤边界我不太懂，是指怕把正常交易也拦了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演信号过来如果流量炸了，网关怎么抗？我原想用令牌桶。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "P0走旁路，还要看交易所脸色降速。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻截指令发出去，万一拦错了，红线在哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关不能用令牌桶，得按预警级别分优先级，P0直接走旁路下发，其他的排队。还要看交易所回报延迟来背压。误伤方面，不能无差别熔断，得按策略簇标签定向抽离，指令上要带推演快照ID做审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则匹配我用Hash映射应该挺快的，策略簇标签直接做Key。动态加载的话，弄个后台线程定期从DB拉规则，更新到内存里？但这样可能有瞬间的不一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则热更怎么做到无锁？组合条件匹配怎么微秒级搞定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RCU和位图加速，这俩我之前没接触过，但听着能解决延迟和不一致的问题。所以网关架构就是：DPDK/Seastar接入、优先级背压（P0旁路）、RCU规则热更、位图匹配、带推演快照ID的定向指令下发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "网关主轴：1. DPDK旁路加速接入；2. 优先级背压与多级削峰（P0无条件旁路）；3. RCU无锁规则热更；4. 位图加速微秒级匹配；5. 定向策略簇抽离与快照ID挂载。这五条。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

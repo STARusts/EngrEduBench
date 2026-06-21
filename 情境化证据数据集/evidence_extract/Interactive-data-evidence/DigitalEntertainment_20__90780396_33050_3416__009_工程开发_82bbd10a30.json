@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虚拟演出低延迟互动云台的网关与协议工程开发背景下，用户与导师围绕JoinRoom超时与401“bad signature”的定位、协议字段与返回码设计及验证方案持续沟通（9轮），其中在最小可复现排查、日志字段/错误码拆分、kid验签与事件分级入口分流等实现要点上与实时网关工程师沟通（3轮），并形成四项落地改动与压测验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "握手是OK的，WS能连。JoinRoom这一步有时超时，日志里像是没拿到room state。bad signature我以为是token签名，反正就是401。分级我只接了个字段，处理上还没做差异。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时网关工程师 现在JoinRoom有时超时，有时401 bad signature。你给个排查顺序行吗？我该看哪些字段才能分清根因？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "kid我没打出来过。我们token好像是HS256？我就直接拿一个secret验的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "路由我现在是按roomId取模到固定分片，然后直接打某个上游地址列表。没做一致性哈希。房间状态存在Redis，读超时就是超时。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "队列隔离我现在只有一个channel，所有消息都进同一个处理器。要改的话我怕改动很大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。我先按你说的加字段和错误码，把token验签改成按kid取key。JoinRoom超时我先加Redis超时和返回50301，不再一直等。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两条线：  \n1）401那条可能是我写死secret，没支持kid，所以不同tenant或者换key会错。我要把401拆成40101/40103这些，然后日志里加kid、alg、exp。  \n2）超时是我把路由和Redis读都混在一起了。我要加routeShard、upstreamNode、还有把Redis读设超时，超时就50301，不要卡着。  \n验证的话…我能写两个token，一个kid=old，一个kid=new，看会不会都过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "协议上我先加：traceId、eventClass(A/B/C)、msgSeq、clientTs。返回码就按他说的那几个：40101/40102/40103、40301、40801、50301。JoinRoom响应里我加upstreamNode回显，方便看路由到哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ruleVersion我没接。我以为那是编排服务的事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就先在网关日志里加`ruleVersion`，从编排服务拉一下当前版本号，拿不到就写unknown。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先做本地缓存TTL 5秒？感觉够用。拿不到就用上一次的。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我让测试那边用固定脚本打JoinRoom，开两组：一组开ruleVersion拉取，一组关掉。看网关的JoinRoom P95延迟和错误码分布，主要看40801/50301有没有变多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四件事我先按顺序做：  \n1）网关日志补齐：traceId/connId/uid/roomId/tokenKid/alg/exp/msgSeq/clientTs/serverRecvTs/routeShard/upstreamNode/resultCode/latencyMs/ruleVersion。  \n2）返回码细分：40101/40102/40103、40301、40801、50301；把现在的“bad signature”拆开。  \n3）JoinRoom链路加硬超时：Redis读超时+最多1次快速重试，失败直接50301；路由超时走40801，并回显upstreamNode。  \n4）事件分级入口分流：A同步强校验、B同步失败返回安全态标记、C入队即ACK不阻塞。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

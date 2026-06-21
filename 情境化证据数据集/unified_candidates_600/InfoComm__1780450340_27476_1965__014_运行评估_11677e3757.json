@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在跨域调度策略迭代规划背景下与导师围绕跨AZ有状态调度、合规约束及熔断边界持续沟通（7轮），其中在状态同步编排部分与云原生编排师沟通（2轮），在信令数据合规红线部分与合规与安全审计员沟通（1轮），最终形成基于会话复制的跨域调度、脱敏与熔断策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看Grafana大盘上AZ1的CPU闲，AZ2的SMF快打满了。能不能直接配个Karmada的权重调度，把AZ2的新建会话直接甩给AZ1？这样改动最小，网上很多跨集群调度都是这么配权重的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SMF有状态，直接甩过去可能会话上下文没过来，信令就断了。那是不是得先做状态迁移？但Karmada原生的调度好像不管业务状态。这种有状态的跨区，我不太确定怎么验证，感觉只能在晚上没流量的时候试一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨AZ调度SMF这种有状态网元，怎么保证会话不断？有没有现成的Operator可以直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨AZ把SMF会话上下文复制过去，信令数据里包含用户位置和IMSI，这有合规问题吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跨AZ不能直接移Pod，得用MigrationTask配前置钩子做会话复制，等目标端Ready再让AMF重路由。然后跨区复制数据要过合规网关，SUPI必须脱敏，不然触发数据出境。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个合规网关有没有现成的K8s Admission Webhook能直接拦？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我K8s扩展机制只停留在调API的阶段，自己写Webhook逻辑有点虚。通信合规更是只知道名词。我打算这周末把K8s Operator的开发模式照着官方文档敲一遍，然后在团队Wiki上记个坑，把这次跨区脱敏的断路逻辑画个草图放上去。下次遇到类似拦截，至少知道该在控制面还是数据面写逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果AZ1本身也快满了，或者复制延迟太高，这策略肯定失效。复现的话，我可以用Prometheus查两边的CPU和复制延迟，如果延迟超过500ms就熔断。但这个500ms是我猜的，不确定对不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这轮跨域调度策略迭代，我整理几个要点：第一，跨AZ借调不用权重，改用MigrationTask加前置会话复制；第二，目标端Ready后才触发AMF重路由；第三，跨区数据流必须加SUPI脱敏，合规不通过直接断路；第四，复制延迟P99超300ms或失败率升高，触发熔断不再迁入。我先按这四个点去改编排脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

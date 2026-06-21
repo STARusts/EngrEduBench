@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在畸变推演模型工程化封装背景下，用户与导师围绕推理引擎选型、底层算子实现与量化策略持续沟通（6轮），其中在算子支持度与量化代价部分与算法工程化工程师沟通（1轮），并最终确定自定义算子拆分注册、校准集覆盖畸变工况及混精度量化的推进原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接套现成的推理引擎，比如ONNX Runtime或者TensorRT，把推演模型导出扔进去跑。手写底层算子太折腾了，框架一般自带图优化，应该能凑合用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我其实没太想清楚。我看网上人家都是这么搞的，开个最大优化档，感觉应该能压住。自己写算子我怕写错更耽误事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这畸变推演模型想直接用ONNX Runtime在边缘侧跑，时延能过吗？有没有那种一键转INT8量化的脚本？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能直接扔框架，有两个算子不认会fallback，得手写拆分注册。INT8也不行，精度掉太多，得混精度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拆算子我确实没思路，网上有没有类似的开源实现能抄一抄？校准集我就从昨天跑通的管道里随便截一段行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "没现成的啊。那我只能硬着头皮拆了。校准集我挑带畸变特征的数据段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

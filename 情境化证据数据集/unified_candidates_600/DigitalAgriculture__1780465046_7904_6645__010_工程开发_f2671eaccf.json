@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在网关与调控中枢前后端联调背景下，用户与导师围绕数据流转模式取舍、桥接方案与降级策略持续沟通（5轮），其中在前端交互诉求部分与平台开发工程师沟通（1轮），在边缘网关连接限制与MQTT参数配置部分与物联网关设计师沟通（2轮），并最终形成MQTT-WS桥接方案、降级策略及联调约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前端大屏要实时看根域水肥动态和调控指令下发状态，直觉上用WebSocket推流体验最好。但网关那边是边缘设备，长连接维护可能有压力，我还没想好怎么平衡。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@平台开发工程师 前端监控大屏对数据刷新频率和交互模式有什么硬性要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网关设计师 边缘网关维持WebSocket长连接，在咱们这种农田部署环境下可行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两边诉求完全对立。前端要WS，边缘要MQTT。折中一下，在云端加一层协议桥接层。网关侧保持MQTT上云，云端桥接层把MQTT消息转成WS推给前端。下行指令也走WS到桥接层，再转MQTT下发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟增加在几十毫秒级，对秒级调控完全可接受。成本就是一个轻量微服务。降级预案必须要有，如果WS断开，前端自动降级为HTTP短轮询，间隔拉取最近状态；如果MQTT断线，网关本地缓存指令，连上后按QoS补发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "JSON格式我来定义，字段对齐上一版架构文档。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "但MQTT的保活和QoS参数配置我不熟，得让专家给个基线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调约束确认：上行MQTT(QoS1, KeepAlive 60s, CleanSession 0)，云端MQTT-WS桥接，下行反向；前端WS断线降级HTTP 5秒轮询；网关断线本地缓存，指数退避重连。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

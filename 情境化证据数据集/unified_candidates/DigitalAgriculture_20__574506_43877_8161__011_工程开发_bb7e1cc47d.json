@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在盐胁迫自适应系统进入边云协同联调背景下，用户与导师围绕网关上报-云端策略-下发-边端执行闭环、字段收敛、幂等与合规持续沟通（7轮），其中在时间同步与离线补发设计上与边缘计算工程师沟通（2轮），在无回执场景的联调验收与链路日志串联上与测试与质量负责人沟通（2轮），并明确本轮需交付可见的联调闭环与脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都能通吧。主要就怕云端解析不上，或者下发晚了点。反正我先按字段对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我负责网关上报和接收策略吧。验的话……就看接口返回200，然后看设备有没有执行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有ts，网关取系统时间。以网关为准吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关这边时间同步怎么做？还有离线缓存补发顺序、去重key怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "clock_source我们没加过。seq我也没做持久化，就内存自增。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "is_replay也没加。那我都加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就一起加进去，不影响吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是改动少点，出问题好定位。先闭环，后面再补seq这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发营养液配方、膜的透湿参数，还有冲盐的开关。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没回执就当成功？或者超时就失败。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量负责人 联调这块，闭环通过的验收口径怎么定？比如执行器没回执时，超时阈值、重试次数，还有日志怎么串起来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "替代证据就是看EC变化。那没有流量计就只能看EC吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回去把exec_state=unknown加上报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RECV、SENT、TIMEOUT？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就…收到重复的policy_id就丢掉？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存…放内存吧，缓存个几分钟。重启就没办法了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。写一次就行，200条也不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们网关有sqlite，我就用sqlite存policy_id和时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看payload里有farm_name。那我就不打印了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）上报加clock_source和is_replay；2）策略下发这边做三态recv/dispatch/no_ack并带policy_id和gateway_msg_id；3）policy_id做本地去重落库，24小时，最多200条，还要避免写太频繁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

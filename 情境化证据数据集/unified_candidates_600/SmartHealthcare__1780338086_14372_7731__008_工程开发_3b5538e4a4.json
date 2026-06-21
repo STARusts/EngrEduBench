@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在体征特征流式提取与落盘开发背景下，与导师围绕老批处理重构、落盘脱敏合规及验证口径持续沟通（5轮），其中在流式窗口乱序与降采样策略部分与数据管线开发者沟通（2轮），并最终形成流式计算、冷热落盘、脱敏加密及对照验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "批处理拉取加关系库落盘，这在实时推演里绝对行不通。特征延迟太高，且关系库存高频波形数据会把IO打满。这老代码的核心问题是把流式体征当静态批处理玩了，且落盘没按冷热分离。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算把提取层改成纯流式计算，落盘走时序库加对象存储的双写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对于晚到的检验结果回填，流式窗口怎么处理才不会把推演特征搞乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Watermark延迟阈值设置多少合适？ICU的检验结果有时候会晚到半小时以上。另外，InfluxDB写高频波形， Downsampling策略怎么定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我对Flink最新版的窗口触发器配置不是很熟，这块我今晚得把官方文档的Event Time和Watermark章节重刷一遍，明天把迟到容忍参数配到代码里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "侧输出流处理晚到数据，这思路好，不会污染主链路。存储成本这块确实得考虑，1ms存7天也够了，推演模型其实吃1s降采样的数据就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "落盘的这些波形和检验特征，脱敏规则怎么加？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "患者ID和床号这些直接标识在落盘前必须脱敏，换成系统内部生成的匿名UUID。但这就得保证推演引擎往回映射干预指令时能还原。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设计个对照测试：同源输入一路走老批处理管线，一路走新流式管线。核心指标看特征提取端到端延迟的P99，以及晚到数据回填后的特征一致性校验。P99必须压到500ms以内，一致性校验如果出现偏差，说明窗口聚合逻辑有Bug。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，提取层重构为Flink流式计算，用Watermark加侧输出流解决乱序；第二，落盘走InfluxDB热存加S3冷存，带降采样和脱敏；第三，脱敏映射表独立加密存；第四，验证跑新老管线对照测试，卡P99延迟500ms和特征一致性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

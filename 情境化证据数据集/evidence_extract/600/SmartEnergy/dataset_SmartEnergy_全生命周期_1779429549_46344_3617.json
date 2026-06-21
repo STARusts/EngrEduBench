@@ -1,0 +1,611 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在地热采灌预警系统需求梳理背景下与导师围绕核心痛点剖析、验证假设与合规约束持续沟通（7轮），其中在冷锋前移机制与可测变量部分与地热田运营专家沟通（1轮），并最终确认采灌失衡、流量比假设与保供暖的MVP需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想搞个ICT系统动态调控抽灌流量，把热突破时间往后拖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点不就是水温降太快出力不够嘛，我之前看现场数据，回灌量一上去，出水温度马上就掉。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没细想，平时也就看看温度曲线做报警。怎么验证地质原因还是回灌原因，我不太懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现场到底卡在哪？怎么证明是回灌导致的冷锋前移而不是资源枯竭？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心不是光看水温，是看流量比和冷锋前移速度。假设是流量比低于1.5会导致冷锋前移超限。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实短板，我平时就搞搞数据接入和规则判断，热流固耦合的理论一直没搞懂。接下来两周我要把达西定律和热传导方程在地热里的应用补一下，目标是能看懂建模专家写的降阶模型公式，自己用Python跑通一个一维的简单算例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规我知道，必须100%回灌，不能抽水不回灌造成地表沉降。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想那么远，光想着保储层了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心痛点采灌失衡，验证假设流量比<1.5，合规回灌率100%且保供暖。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在储层热突破风险评估MVP制定背景下与导师围绕风险定义、量化指标与防误报策略持续沟通（5轮），其中在冷锋半路发现与现场预警指标部分与地热田运营专家沟通（1轮），在热突破预警合规提前量部分与能源合规审计师沟通（1轮），并最终确认温差缩小速率与流量比偏离度双指标及72小时触发红线的风险评估基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险量化？就看出水温度降没降呗，降太快就是风险大，直接设个阈值报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "除了看出水温度，还看啥？冷锋在半路怎么发现的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "温差缩小速率，日降0.2度。这好办，加几个测温点算差值就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热突破预警有没有规定要提前多久报？总不能快突破了才说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就输出两个数。一个是温差缩小速率，代表冷锋多快过来；一个是流量比偏离度，代表我们多失衡。只要算出来冷锋按当前速度推，72小时内会到生产井，就触发高风险。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "偏离度就是当前流量比跟1.5的差值，简单直接。温差数据抖，就，取个滑动平均？我不搞复杂的卡尔曼滤波，写不出来。就半小时均值，超了才算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "复杂的热流固耦合推演先放放，先把这俩盯住。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在采灌均衡商业模式设计背景下，与导师围绕延缓热突破变现逻辑与数据脱敏合规持续沟通（4轮），其中在延寿增值与定价模式部分与商业架构师沟通（1轮），在采灌衰减数据获取与机密性部分与地热田运营专家沟通（1轮），并最终形成主营延寿分成辅以SaaS、数据脱敏交互的商业模式基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这热突破预警系统怎么收钱合理？我本来想就按SaaS月租搞。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多采3年这数咋算出来？我写代码能算出冷锋推进时间，但这玩意怎么换算成钱我完全没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们现场那采灌衰减数据能拿出来做基线不？我们要证明系统有延寿效果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "机密数据的话，我们系统其实不用拿绝对产量，只要井口的温压时序数据做冷锋推演，这样算脱敏了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主打“延寿分成”，SaaS月租作为保底覆盖日常运维。分成比例得拿历史温压衰减曲线拟合出来，不能瞎拍脑袋。数据交互必须脱敏，只传温压不传产量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这边先把脱敏和分成算账的接口留出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在地热储层延寿调控系统合规边界摸底背景下，用户与导师围绕合规红线、预警阈值配置、极端工况验证及合规基线原则持续沟通（5轮），其中在合规约束边界与红线要求部分与能源合规审计师沟通（1轮），并形成动态下发阈值、合规限幅熔断、指令留痕审计及人工接管优先权四条合规基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "具体红线数值，是不是问场长要一份标准就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@能源合规审计师 我们要做采灌流量自动调控，合规上有什么硬杠杠？是不是只要回灌率不低于90%就行了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只盯住回灌率了，没考虑水温降速的生态限制和水权额度。我这块法规知识确实缺，得补一下本地地热矿权管理条例，特别是动态回灌率和水温降速的法定阈值怎么算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然回灌率是动态的，那咱们系统做预警阈值配置时，就不能写死，得做成可动态下发的参数，跟场站的合规指标库同步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我能在测试环境里模拟传感器数据突然变大或者变小，看看系统是不是还能卡住合规上限，不发出越界指令。但具体怎么模拟更真实，我可能还得找联调测试工程师问问。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我再加一条，刚才审计师提的人工接管优先权，也得作为基线。总结一下：第一，预警和调控阈值必须动态下发，不能写死；第二，所有自动调控指令必须过合规限幅器，超限熔断；第三，指令下发必须留痕可审计；第四，任何调控不能剥夺人工接管优先权。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在地热采灌系统井网感知架构设计背景下，与导师围绕深井通信供电方案、双链路冗余容灾及声波选型验证持续沟通（7轮），其中在深井无线冗余备用可行性部分与物联架构师沟通（1轮），并最终确定主链路为有线同轴及降级链路待验证方向，形成水槽缩比模型实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用有线方式，RS485或者以太网拉线到边缘网关。无线的话井下信号衰减太厉害，我不敢用。供电就随电缆下去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全断确实麻烦，但我没搞过井下双链路冗余，成本肯定飙升。是不是得加一套备用的？备用用无线行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "深井高温高压环境下，无线通信到底能不能做冗余备用？衰减和供电怎么解决？我主链路想用有线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主用有线，备用用低频声波或者LoRa。声波带宽太低，只能传报警，但好歹能保住人工接管的最底线依据。供电用热电偶自发电。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没底，我就知道个名字。声波在水里的衰减模型和误码率我完全不懂，这个选型我目前做不了决定。我得先去补一下声波通信在液态介质里的信道特性文档，还有工业声波Modem的选型手册，今天下午把这几个关键参数指标摸清楚，才能判断它适不适合做我们的降级通道。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在实验室水槽里搭个缩比模型。假设管道噪声主要是回灌泵的低频振动，方案A用LoRa，方案B用声波。变量就是泵的开启状态和井深模拟衰减。如果方案B在泵开启时报警到达率低于90%，那就说明声波被泵噪声盖住了，方案B不可行，只能选LoRa或者换别的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "实验设计就是：两组（声波 vs LoRa）乘以两态（泵开 vs 泵停），测到达率和延迟。声波延迟如果超过5秒置信区间，就算到达率够也淘汰。我下午去补声波机理，同时把水槽实验方案写出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在热储流固耦合模型设计背景下，用户与导师围绕在线预警的计算速度与精度持续沟通（4轮），其中在降阶方法与冷锋面精度部分与多物理场建模师沟通（2轮），在边缘侧部署算力开销部分与算法工程化工程师沟通（1轮），并最终确定离线训在线推的双轨制模型架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿TOUGH3跑呗，开源的，地热这块都用这个。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "挺慢的吧，可能得几十分钟？放云端多开几个算力节点行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热储这块降阶具体怎么弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "提取特征？那物理过程不就变黑盒了？热突破这种局部冷锋面变化那么快，用几个模态能抓得住吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "冷锋面容易抹平，得在回灌井加密模态或者搞自适应。听着有点虚，怕算不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "带自适应基函数的POD降阶模型，在边缘网关上好跑吗？吃多少算力？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "几十MB内存，微秒级，这肯定没问题。边缘侧跑得动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "离线用TOUGH3出数据，边缘用POD跑推断。回灌井冷锋面的极端工况多喂点数据补精度。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在热突破动态预警数据流设计背景下与导师围绕边缘侧算力约束下的温压特征提取方案与延迟验证持续沟通（6轮），其中在边缘低资源特征提取方案及WASM延迟吞吐验证部分与数据流架构师沟通（2轮），并最终确认采用WASM轻量流算子与共享内存直通POD模型的数据流定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就Kafka接井口数据，Flink洗一波提特征，推给模型。这套我熟，快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力太抠，跑不了Flink，有没有省资源的法子做温压数据的流式特征提取？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用Flink，用WASM跑窗口，走共享内存给POD。省内存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Rust没人会。WASM的话，以前写C的兄弟能编成wasm塞进去。选WASM吧，慢点就慢点，起码能出活。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "500ms应该够吧？WASM跑滑动窗口很快的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "WASM做温压滑动窗口，P99延迟和吞吐量能到多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说P99才12ms，吞吐单核5k，绝对够了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘流处理用WASM，共享内存给POD，P99 12ms，沙箱隔离防爆。"
+              }
+            ]
+          },
+          {
+            "microScene": "在采灌量自适应调控策略设计背景下，用户与导师围绕调控方式、合规约束处理及优化目标优先级持续沟通（4轮），其中在控制方式与代价函数选择部分与闭环控制策略师沟通（1轮），在开采量与回灌率合规红线部分与能源合规审计师沟通（1轮），并最终确定采用MPC滚动优化、合规作求解器硬约束、储层冷化做主代价函数、产能可牺牲的调控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预警了就降采灌量呗。写个查表法，温度掉多少，泵转速就降多少，最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "查表法是不是容易震荡？地热井泵阀控制一般咋做？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控的时候开采量和回灌率有没有硬规定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在MPC算完的结果上加个if，超限就不执行，行吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规肯定最高，不合规要罚款停业。寿命排第二，产能最后吧。储层冷了以后啥都没了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在MPC策略定调后的极端工况容灾设计背景下，与导师围绕边缘侧保底逻辑选型与故障注入验证方案持续沟通（8轮），其中在断感知断网下的降级模式与硬线联控机制部分与高可用保障架构师沟通（5轮），并最终形成边缘侧FSM降级保底与硬线安全阀兜底的容灾架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全挂了？那就停机呗，或者让现场值班员手动关阀门。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容灾我不太熟，就是做主备切换吗？双网关？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "深井温压传感如果全断，网关也挂了，MPC没输入，系统怎么弄？做双机热备能行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘侧自己搞一套控制逻辑？那不是跟MPC冲突了？我写边缘侧逻辑最怕状态不同步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘侧写复杂控制逻辑太容易出bug了。能不能断网时直接把阀门锁死在当前位置？这最安全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近在看一种轻量级的嵌入式规则引擎，类似Rete算法那种，我想着能不能把合规硬约束的回灌率下限写进去，当MPC断连时触发这套规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规则引擎跑起来吃内存。那就用最简单的状态机？就三个状态：正常MPC模式，降级本地模式，全手动模式。降级模式里直接查常量。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么验证这玩意儿真管用？总不能真去现场拔网线吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以写个脚本，在测试环境里随机杀掉传感进程，或者断开网关和云端的连接。看边缘侧是不是能在规定时间内，比如2秒，切到降级模式，并且回灌率输出是不是合规下限值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是断网时长和断网位置。位置分传感断、网关断、云端断。时长就模拟短时闪断和长时宕机。看边缘侧状态机切过去能不能切回来，不震荡就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我得跟硬件厂商确认阀门单作用类型，气开还是气关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "容灾方案：1. 主控MPC，心跳监测；2. 超时切边缘FSM降级，输出合规下限回灌率；3. 边缘也死则靠硬线阀门失电跳最大回灌；4. 验证用故障注入，变量是断网位置和时长，看状态切换和恢复不震荡。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在井网传感协议适配开发且边缘网关资源受限背景下，与导师围绕协议栈裁剪、业务逻辑与资源妥协、审计合规及底层验证持续沟通（7轮），其中在极限资源协议适配部分与嵌入式开发工程师沟通（2轮），并最终形成裸串口轮询、帧格式精简与审计上移的妥协方案及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现在随便一个LwIP加Modbus库就吃掉大半了。我之前在x86上跑的Demo直接交叉编译过去肯定内存溢出。要不我把采样率降一降？少传点数据不就省了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原来那一套Modbus TCP协议栈塞不下，怎么搞？能不能只编译用到的功能？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "砍掉TCP？那多节点并发查询怎么搞？我之前都是靠Socket分发处理的，现在改成串口，节点多了会不会堵死？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "裸机轮询时序控制我以前都是用现成库包着的，自己写底层状态机我怕把时序搞崩。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "验证的话，我可以用示波器抓波形看间隔，然后在网关上挂日志看收发计数。不过审计字段确实是个坑，帧格式精简不能把审计字段也丢了。要不我把操作员ID放汇聚节点补上，网关帧里只带时间戳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备写个Python脚本模拟连续发送异常温压数据，看轮询状态机会不会死锁。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对串口DMA传输的中断优先级配置不熟，之前没手动配过，容易卡死，这地方我把握不大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚看STM32 DMA手册的串口章节，把中断优先级分组和半传输中断那块啃下来。明天我先把轮询状态机的骨架写出来，把DMA接收回调套进去试跑，看看能不能把内存占用压到12M以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "妥协方案：1. 砍掉LwIP和Socket，走裸串口RS485轮询；2. 帧格式精简只留地址、温压、时间戳和CRC，操作员ID上移到汇聚节点补；3. 用DMA接收，今晚学中断配置。验证口径：注入异常高频温压数据，检查轮询状态机无死锁，收发计数一致，不丢审计字段。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在流固耦合求解器工程化及降阶模型边缘部署背景下，与导师围绕C++重写、ARM适配、浮点精度折中验证、单步耗时KPI及降级策略持续沟通（8轮），其中在矩阵运算与内存管理部分与算法工程化工程师沟通（1轮），并最终确定定长数组与NEON加速骨架、极端工况float32对照测试及50ms单步耗时指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿C++重写呗。我看了下Python原版，核心全是矩阵运算，套个Eigen库应该很快就能出个能跑的版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Python转C++到ARM上跑，矩阵运算和内存这块怎么搞比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那精度呢？Python里是float64，C++我也全用double？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就改float试试？反正差不了多少吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这我得想想。跑两组数据对比一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿建模师给的几组历史温压数据，Python跑一遍double，C++跑一遍float，看差多少。差得太多我再换回double。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就先搞个预分配内存的定长数组骨架，然后拿极端工况数据做float32对照测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "当然是越快越好，10毫秒以内？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过如果NEON实在写不顺，我能退回普通C代码吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先去写NEON intrinsics和内存池，极端工况测试集我顺道就找建模师拉一份。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在闭环联调且边缘侧资源受限背景下，与导师围绕极限资源下的全链路测试方案、核心闭环抽样风险及增量快照回滚验证持续沟通（5轮），其中在全链路测试方案部分与联调测试工程师沟通（1轮），并最终确认核心闭环全量、非关键抽样及增量快照加断点丢失注入的测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "砍一半？全量注入肯定跑不通，内存直接就爆了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预警调控全链路注入测试怎么搞？全量肯定挂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抓不出来吧，抽样的可能刚好漏了抖动的点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑一遍看能不能回到上个状态呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接。我待会去要个断点丢失的脚本桩，先把增量快照逻辑套上跑一跑。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在调度延迟优化与防抖动背景下，与导师围绕指令延迟与泵阀震荡的解决方案及参数校准持续沟通（6轮），其中在防抖动与延迟优化解法部分与性能调优专家沟通（2轮），并最终形成异步边缘下发、斜率限幅防抖与SciPy拟合前馈增益的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟的话，把下发频率调低点？防抖动我加个死区，温度变化小于0.1度就不发指令。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控指令下发链路延迟大，还有泵阀执行器容易震荡抖动，怎么搞？我加死区他说不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异步事件驱动我懂，就是把下发逻辑放边缘节点。前馈补偿和变化率限幅这个，我之前没写过这种控制器逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改下发链路改成边缘直发，然后在泵阀控制代码里加上斜率限制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5%是专家刚说的。前馈参数我寻思着跑几组历史数据试一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚学了用Python的SciPy做曲线拟合，本来拿来做测试数据平滑的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SciPy能算偏导，我直接拿它拟合稳态数据求斜率，这比手算快多了，参数也有依据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，下发链路改异步，边缘侧直发降延迟；第二，泵阀控制加斜率限制器，单次变化卡在5%以内防抖；第三，用SciPy拟合稳态工况数据算前馈增益基准，替代瞎试参数。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在地热采灌系统上线与运行评估背景下，与导师围绕部署风险控制与线上预警有效性验证持续沟通（4轮），其中在上线流程部分与系统部署工程师沟通（1轮），在预警有效性数据验证与统计偏移判断部分与运营复盘分析师沟通（2轮），并最终形成灰度发布策略与基于历史数据计算统计基线的补学验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算写个Ansible脚本全量推上去，先跑起来再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看日志啊，只要边缘网关没崩，温压数据能上来，我就认为部署成功了。预警灵不灵，得等真出事才知道吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "井网系统上线流程具体该怎么弄？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "灰度发布我懂，就是分批推嘛。回滚脚本我也留一个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预警有效性怎么用数据验证？我没法子在地里造个热突破出来啊。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "召回率和误报率我能算，就是数一数真阳性和假阳性。但你说的统计偏移我不太懂，怎么判断偏移是模型问题还是现场工况变了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "置信区间？这超出我能力圈了，我平时就写写Go服务，没搞过假设检验。我只知道把数据查出来比大小。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺这块。只会写代码跑通，不会科学验证。我这两天查查SciPy里怎么做置信区间计算，写个验证脚本，把历史预警数据跑一遍，算个基线出来。这脚本以后也能复用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先灰度推两口边缘井，留回滚脚本。同时我离线跑历史数据算基线召回率和置信区间。灰度期间如果实时预警率掉出区间，或者心跳断了，就回滚。没问题再全量推。"
+              }
+            ]
+          },
+          {
+            "microScene": "在储层温压态势全景监控背景下，用户与导师围绕群井温压梯度监控逻辑与历史数据留存策略持续沟通（7轮），其中在群井异常态势判断与高频数据存储痛点部分与生产监控值班长沟通（1轮），并最终形成群井梯度关联监控逻辑与兼顾成本合规的V形数据留存策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我加个总览页面，把所有井温度求个平均？不对，平均也没用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱系统现在大屏都是单井超限报警，这玩意儿咋监控？你们现场咋看的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看降温速率和回灌量的关系？这我懂，就是关联分析嘛。存储那边，确实全存太费钱了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全删肯定不行，万一要复盘查账呢。我能不能把实时流做关联规则，算温压梯度？历史数据就降采样存，比如一分钟存一个点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就不降采样？又费钱。那我只对报警前后那几分钟保留高频数据，平时降采样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大屏不能只看单井阈值，得加群井温压梯度关联指标，降温速率突变也算预警。历史数据存留，用V形保留，报警点前后留高频，其他降采样，只要采样率符合审计最低要求就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在热突破干预效果复盘背景下，与导师围绕系统干预归因逻辑、自然因素剥离、结论外推边界及DDL下的计算取舍持续沟通（5轮），其中在干预归因拆解与外推边界部分与运营复盘分析师沟通（1轮），并形成保净效应差值、放弃置信区间并明确仅限一期灰岩适用边界的脚本修改策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延缓效果？我看大屏上降温斜率变缓了，比没开系统那会儿好。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "剥离自然因素？我只会拉曲线对比。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "二期地质条件不一样，肯定不能直接用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "干预归因具体怎么拆？结论往外推有啥坑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "外推边界我记住了，只认一期灰岩和45度以上回灌。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双重差分，我得写脚本算对照基线。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我因果推断理论一直不行，平时就写脚本跑描述统计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先不搞复杂的置信区间计算，把净效应差值跑出来就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在就去搜Python的差分包，照着demo改"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下个月季度复盘我再把这套包吃透，加上显著性检验。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "保差值和边界声明，我这就去改脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

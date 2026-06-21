@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在微秒级抖动监控告警风暴背景下，与导师围绕阈值调整依据、真假抖动过滤手段及数据存储策略持续沟通（4轮），其中在毛刺来源与分级监控方案部分与运行监控SRE沟通（5轮），在业务容忍度与平滑窗口确认部分与产线网络运维专员沟通（2轮），并最终形成看板滑动窗口平滑、底层保留原始数据及分级存储与变更留痕策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看板上确实一堆红点。要不直接把阈值放宽点？比如从10微秒调到50微秒？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底是网络真抖了，还是探测包本身延迟了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们工控业务最多能忍多大抖动？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就难办了。SRE嫌报警多，产线怕漏报。总不能一边加阈值一边又加阈值吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "过滤假抖动是不是得看探测包的时间戳？如果在内核里排队，时间戳是不是就不准了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们监控有没有办法把内核排队时间扣掉？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这招行。运维这边能接受吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滑动窗口设多大？10个包还是100个包？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就按这个来。看板做20包滑动窗口平滑，底层留原始数据。运维这边出了停机故障，SRE配合用原始数据查。谁去改看板配置？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存多久？这数据量挺大的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。热存7天，压缩存3个月。变更记录我会让SRE提单，我审批留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

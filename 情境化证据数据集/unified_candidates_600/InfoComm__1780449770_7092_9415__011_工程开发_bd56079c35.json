@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在信令雪崩抗压调优背景下与导师围绕应对思路、Disruptor无锁与批量聚合方案、批处理阈值设定及eBPF适用边界持续沟通（8轮），其中在压测数据与锁争用分析、批处理阈值边界计算部分与性能压测调优师沟通（2轮），并最终形成极端信令雪崩调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以加个消息队列缓冲一下？把Redis的推送先放到Kafka里，消费者慢慢拉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "提速的话，推演服务那边算阈值是多线程的，是不是加机器或者加线程池？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上次压测信令突发的时候，主核的CPU占用和锁情况怎么样？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "锁争用这么严重。那把ConcurrentHashMap换成无锁的结构？或者把信令攒一批再处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "无锁队列可以用Disruptor。它内部是环形缓冲区，单生产者多消费者很契合。批处理的话，在Disruptor的消费者里，一次拉取一批信令再统一推演。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我不太会算。只能先写个死值，比如一次攒50条，跑一下看效果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来还得建模型算。那我就把批量大小设成动态的，根据当前信令积压量调整，积压多就放大批量，积压少就缩小批量保证低延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了eBPF的XDP，可以直接在网卡内核层过滤和重定向包，不用走协议栈。我想把意图信令的接收挂到XDP上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我光想着绕过内核，没在意XDP没法拆解意图字段。那我把eBPF先放放，重点把用户态的Disruptor加批量处理写好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "极端信令雪崩调优方案：主核信令接收改用Disruptor无锁环形缓冲区；消费者采用批量聚合模式，静态批量大小定为150；替换原有的ConcurrentHashMap更新逻辑，消除锁争用。预期吞吐量从2万提升至8万TPS，延迟控制在5ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

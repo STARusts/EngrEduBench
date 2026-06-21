@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农业径流营养盐预警与减量闭环系统工程开发、评审聚焦“数据采集与质控实现”背景下，用户与导师围绕采集落库/补传、质控留痕及与降级矩阵和审计字段对齐持续沟通（4轮），其中在边缘缓存补传与脏数据类型部分与物联接入工程师沟通（4轮），在数据分层表结构、qc_event字段与evidence_refs引用证据链部分与数据架构师沟通（3轮），并收敛评审口头实现要点与示例说明。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "农业径流营养盐预警与减量闭环系统这边方案基本定了，我现在要开始做工程开发里的数据采集和质控实现。我有点懵，先从哪块下手？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就传感器嘛，还有遥感，还有气象。我想着用现成的采集SDK直接全接进来，质控就用一个数据校验库，把空值、范围之类的挡掉就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点位这块我就想统一成一张表：时间、点位id、值。频率就先默认一分钟一次？缺了就补0？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联接入工程师 点位采集要做缓存补传这些，最省事的做法是什么？还有脏数据一般长啥样？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量标记我直接用 quality_flag=bad 就丢弃行不行？不想搞太多状态。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "离线超过N小时只告警不出处方，是不是就不用补传了？省点存储。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好吧。我大概记下了：ts、ingest_ts、seq、去重。还有尖峰、卡死。单位归一我有点怕搞错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 物联那边说点位上报要带 device_id/sensor_type/ts/ingest_ts/value/unit/seq/quality_flag，还要网关缓存补传，离线判定不能补0。质控得留 raw/cleaned/qc_event 三层，不要直接丢。去重用(device_id,sensor_type,ts)或加seq。单位归一放配置里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "表结构我就…raw表一张，cleaned表一张，qc_event一张。质控规则就范围校验、空值、去重、单位换算、尖峰检测。审计字段就加actor这些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "尖峰就用个现成的异常检测包，z-score那种？阈值我就默认3？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 质控这块我需要个最小能用的表和字段，你给个建议。qc_event到底记啥？evidence_refs要怎么指到raw？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MAD我没用过。是不是也能用z-score？我更熟一点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白一点了。那 tamper_hash 是不是要上链？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据架构师给了三张表：ods_sensor_raw、dwd_sensor_clean、dwd_sensor_qc_event。qc_event要有 rule_id/version、subject、ts、raw_ref、action、reason_code、evidence_refs、actor、tamper_hash。规则最小集包括 schema/range/unit/dedup/spike(差分阈值)/stuck/missing，只标记不补值。遥感过期要在特征表加 feature_stale=true，也记一个stale事件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试试：  \n1）网关离线就缓存补传，落到raw表。  \n2）cleaned表做单位换算、去重。  \n3）qc_event记规则触发。  \n4）离线超过N小时只告警不处方。  \n5）遥感过期就沿用最近影像并提示过期。  \n6）审计字段就actor啥的都写上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就按这6条背行不行？评审别问太细就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "missing就写个事件，说这分钟没收到，不给值。evidence_refs就放 raw表主键，再加个配置版本号？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方引擎链路联调测试与压测修复背景下，用户与导师围绕降级断言、request_id缓存对照、局部降级与日志合规证据持续沟通（8轮），其中在质量门禁与阈值口径部分与测试负责人沟通（2轮），并收敛明日交付的处方样例分区差异与自动化回归断言输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把链路拆成两层：一层是处方引擎的批量取数+规则评估的稳定性，另一层是执行侧（下发农机/作业接口）的吞吐和幂等。联调上我会固定一组回放数据：同一批 entity_ids，混正常 zone、缺遥感 zone、缺土壤 zone，保证每次复现一致。压测上先做 3 个档：50/200/500 RPS，看 P95、错误率、降级命中率和日志采样是否会漏关键字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "断言我先列四类：  \n1）功能：同一 request_id 内，同一 zone 的画像/观测拉取次数应为 1（按 trace/span 或计数器），不应随规则条数线性增长。  \n2）处方差异：缺遥感时，分区指标里“长势/冠层相关”的置信度字段要变成低，并且处方解释里要有“遥感缺失→使用气象/历史产量替代”的标签；缺土壤时，施肥建议要切到保守模板（比如 NPK 上限收紧、变量施肥关闭），但播期/密度这类应仍可用微气候+品种特性给出。  \n3）执行侧：同一处方下发到作业接口，重复提交同一个 execution_id 必须返回同样的结果，不产生重复作业。  \n4）合规日志：失败用例里不能把原始遥感栅格或土壤剖面明细打出来，只允许 zone_id、缺失类型、降级策略码、request_id、耗时、错误码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段级我先抓最小集合：  \n- `prescription.zones[].confidence.remote_sensing`：正常应 >0.6，缺遥感应 ==0 或 <0.2，同时 `prescription.zones[].degrade_flags` 包含 `RS_MISSING`。  \n- `prescription.zones[].fertilization.variable_rate_enabled`：缺土壤应为 `false`，并且 `fertilization.rate_limits.n_max` 低于正常 zone 的上限（同一品种同一季节下对比）。  \n- `prescription.zones[].explanations[].code`：缺遥感应出现 `RS_FALLBACK_METEO`，缺土壤应出现 `SOIL_FALLBACK_TEMPLATE`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "区分慢因子我会在联调里把外部依赖都打上分段耗时：画像、遥感、土壤、规则评估、处方组装、下发；压测看哪段占比飙升，同时结合依赖的错误率/超时率。要是画像服务慢，我至少能看到“画像耗时 P95 抬升，引擎评估段没变”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 这轮联调+压测你那边的质量门禁怎么定？我现在按字段断言降级和幂等，但担心你们对失败用例、日志字段有更硬的要求。你希望我提供哪些最小证据，才算“降级生效+日志合规+可回归”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测阈值这块我能跟着做。200 RPS P95 800ms 我担心“执行下发”那段会拖后腿，因为农机接口是外部系统，联调时延波动大。你们门禁是要求整链路都算进去，还是处方生成和执行下发分开看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 测试负责人那边给的门禁更细：三类回归断言（正常/缺遥感/缺土壤）都要自动化；压测 200RPS 10分钟 P95<800ms 错误<0.5%，500RPS 5分钟 P95<1500ms 错误<2%，降级用例混 10% 必须按 zone 局部降级；日志必须有 request_id/zone_id/degrade_flags/strategy_code/latency/error_code 且不能打原始栅格/剖面/个人信息。另一个关键点是压测可以拆 generate/execute/E2E，E2E 只在依赖正常窗口评估。你认可我按这个口径推进吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对照我做两组压测配置：A 关闭 request_id 缓存（用开关），B 开启缓存；两组同样的规则数、同样的 entity_ids，统计画像/遥感/土壤三个依赖的 QPS 和平均调用次数/请求。预期 B 组的“每请求依赖调用次数”应接近“zone 数”，而 A 组会接近“zone 数 × 规则评估次数”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "局部降级我用断言：同一个 request_id 下，正常 zone 的 `degrade_flags` 必须为空，缺失 zone 才有对应 flag；同时响应码仍是 200，只是 `warnings[]` 里列出缺失 zone 清单和策略码。这样就能看出没有全局 fail-fast。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "当前实现是 200 + warnings。之前处方引擎定义就是“能给就给”，只有 request 级参数错误才 4xx，内部依赖缺失走降级。206 我没在接口契约里看到，所以我不动它。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在日志层加一个“安全序列化”函数：对已知敏感字段（比如 `remote_sensing.raw_tiles`、`soil_profile.samples`、以及可能带 PII 的 `owner_*`）做脱敏或直接丢弃，只保留 hash/统计量；并且在联调回归里加一条负断言：扫描日志输出（按关键 key）不允许出现这些字段名。实现上我可能只覆盖我们服务的 structured log；跨服务的我只能保证我们这边不输出。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我明天给你看的内容按两块：  \n1）处方样例（同一 request_id，三个 zone）：  \n- zone_A 正常：`degrade_flags=[]`；`confidence.remote_sensing>0.6`；`fertilization.variable_rate_enabled=true`；解释里有规则命中链路（不含原始数据）。  \n- zone_B 缺遥感：`degrade_flags=[RS_MISSING]`；`confidence.remote_sensing≈0`；解释 code 含 `RS_FALLBACK_METEO`；其余比如密度/播期仍给出且与 zone_A 有差异（体现分区差异不是全抄）。  \n- zone_C 缺土壤：`degrade_flags=[SOIL_MISSING]`；`fertilization.variable_rate_enabled=false`；`rate_limits.n_max` 收紧；解释 code 含 `SOIL_FALLBACK_TEMPLATE`。  \n2）回归断言结果（自动化输出的关键信号）：  \n- 三用例都 200；warnings 对应缺失 zone；正常 zone 不被连坐降级；  \n- request_id 内 zone 画像拉取计数 ≤1；  \n- 日志包含 request_id/zone_id/degrade_flags/strategy_code/latency/error_code，且关键敏感字段名不出现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

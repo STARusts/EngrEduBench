@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在信令旁路面核心机制落地背景下，用户与导师围绕信令卸载数据流拆解、协议选型验证、合规边界及CRD纳管描述持续沟通（4轮），其中在合规边界部分与合规与数据审计师沟通（1轮），在协议选型部分与通信协议工程师沟通（1轮），并最终形成两段式接口定义、脱敏前置逻辑、SidecarSignalingRoute CRD设计及验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "信令卸载流我拆成三段：基站侧采集、旁路网元汇聚过滤、算力随调面消费。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口选型我原本想全链路对齐上一步的ServiceMesh，走gRPC。但信令包特征是极小且高频，gRPC的HTTP/2头部开销在这种场景下占比可能难以接受，容易反噬轻量化裁剪省出来的资源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开销验证我打算搭个最小环境，用信令发生仪灌包，做gRPC与原生SCTP的吞吐和CPU开销基准对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令旁路卸载时，IMSI和用户位置信息如果在旁路网元间明文流转，是不是踩红线了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脱敏必须前置在入口处。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令高频小包从基站出来，是走SCTP原生转接到旁路网元，还是包一层gRPC？哪种在风暴场景下更稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "综合两位意见，我确定接口定义分两段走。第一跳基站到旁路汇聚网元用SCTP，保持原生协议抗损，并在旁路网元入口处强制执行脱敏网关逻辑，只放行Token化标识和网格化位置。第二跳旁路到算力面，转gRPC，对齐ServiceMesh体系。这样既压了开销，又守了合规红线，架构也不撕裂。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需要定义一个`SidecarSignalingRoute` CRD。核心字段必须包含：`sctpEndpoint`（源端SCTP监听）、`grpcSink`（目的端gRPC消费）、`desensitizePolicy`（脱敏策略引用名）、`loadThreshold`（触发卸载的潮汐水位线）。控制面只下发CRD实例，数据面Sidecar按规则执行引流和脱敏，逻辑解耦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令卸载数据流与接口定义确认四点：一，数据流分两段，基站至旁路汇聚用SCTP直连，旁路至算力面转gRPC；二，数据合规边界，旁路网元入口强脱敏，IMSI哈希Token化，位置降维至网格；三，接口纳管，定义`SidecarSignalingRoute` CRD，涵盖SCTP源端、gRPC目的端、脱敏策略与潮汐触发阈值；四，验证动作，基准对比SCTP与gRPC在信令高频小包下的开销比，验证分流合理性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

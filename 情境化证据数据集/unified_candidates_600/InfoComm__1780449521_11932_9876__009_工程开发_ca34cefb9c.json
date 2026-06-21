@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在寻优模块与反演核心联调背景下，与导师围绕异常降级处理、多租户审计留痕及联调闭环持续沟通（5轮），其中在降级回调接口与审计字段设计部分与软件开发工程师沟通（1轮），并最终形成含正常流、异常回调与日志校验的三步联调方案及超时熔断策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先走通正常流，反演给阻尼值，寻优模块按梯度下降更新光路衰减补偿。异常流的话，我直接try-catch，捕获到`DivergenceException`就切到预置的安全静态阻尼表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就打一行Warn日志呗，记录下异常类型和时间戳，应该够定位问题了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优模块捕获反演变发散异常后要降级切静态表，回调接口怎么设计比较稳？审计日志需要带哪些字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "gRPC异步回调可以，结构化日志也加上。不过`original_damping_value`要额外从上下文里取，稍微有点麻烦，但能做。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "调整一下联调步骤：第一步先跑通阻尼梯度寻优的正常流；第二步注入`DivergenceException`，验证gRPC异步降级回调触发；第三步校验结构化日志里`tenant_id`、`cavity_id`和`original_damping_value`这三个字段非空且正确。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "timeout设200ms，超时直接熔断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

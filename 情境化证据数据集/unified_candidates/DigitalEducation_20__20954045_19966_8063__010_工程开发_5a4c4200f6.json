@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发的“任务工单与签核联调”背景下，用户与导师围绕工单绑定排课Session、最小接口/字段/状态机与权限审计持续沟通（7轮），其中在签核链路与归档口径上与教务流程负责人沟通（4轮），在状态流转、幂等键与评价快照契约上与后端负责人沟通（5轮），在日志可记录内容、留存期限与联调数据合规上与合规与隐私官沟通（2轮），并汇总出最小联调契约与开发门禁清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "工单就是一节实践课的一组任务？然后签核就是老师点通过。最小的话，可能有工单号、状态、谁负责、时间、附件？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先猜一下：1）创建工单；2）查询工单列表；3）签核接口；4）工单状态变更事件；5）把签核结果写到评价那边；6）撤销？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教务流程负责人 我们这边要做工单签核联调。签核链路最小怎么走？谁先签？退回和归档怎么算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "代签申请也要做吗？我以为先不做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那签核结果里需要带什么字段？比如评语、分数？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "退回给学生补证据，这个会影响排课吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "超时是怎么判？一天？两天？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最硬的我记三点：1）两级签核，企业导师先、校内教师后；2）退回有两种去向，至少动作要能区分；3）归档是校内教师签完后，再把成绩写进教务那边成功才算结束。超时48小时要能显示出来，但代签可以先不做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 工单+签核要跟排课Session联调。最小状态机怎么定？签核接口怎么做幂等，联调要注意啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "签核动作就是把状态改一下？那幂等怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那退回两种去向怎么区分？一个action够吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "联调时需要事件吗？还是同步接口就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "评价反写怎么连？是签完就写？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n- 状态先按 DRAFT/SUBMITTED/MENTOR_REVIEW/MENTOR_REWORK/TEACHER_REVIEW/TEACHER_REWORK/APPROVED/ARCHIVED 走，超时用 slaDueAt+timeoutFlag，不单独开状态。  \n- 签核记录 ApprovalRecord 单独表：approvalId、workOrderId、actorId、role、action、reworkTarget、comment、createdAt、evidenceHash/数量。幂等用 approvalId 或 clientRequestId 做唯一。  \n- 接口三块：POST /work-orders（带sessionId）；POST /work-orders/{id}/submit-evidence；POST /work-orders/{id}/approvals（签核）；再加 GET /work-orders/{id} 给联调查状态。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 工单签核联调里，我们会存审批记录和日志。哪些能记，哪些不能记？保留期限、测试数据有没有注意点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "评语也算敏感？那前端显示怎么办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保留4年这个我记住了。联调我用造数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）接口里按 role 校验：企业导师只能签 mentor 阶段，校内教师只能签 teacher 阶段；2）日志只打workOrderId和actor内部ID，不打评语和姓名；3）审批表评语字段加长度限制，导出权限先不做但至少别把评语写进审计日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

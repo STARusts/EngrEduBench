@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在DSSAT精算与智能合约联调阻塞背景下，与导师围绕阻塞点对齐、架构拆解缓冲与接口契约更新持续沟通（4轮），其中在机理模型容错与数据格式冲突部分与农学机理建模师沟通（2轮），在合约确定性与信任边界转移部分与区块链开发工程师沟通（2轮），并最终形成计算与判定分离的解耦架构及新接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "是数据格式没对齐，还是异步时序没配合好？按之前的契约，精算本来就是异步补全的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农学机理建模师 @区块链开发工程师 联调报错了？具体卡在哪个环节？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两边诉求确实冲突。建模这边要保留机理模型的容错和调参空间，合约那边要绝对确定性来保证共识。直接把精算结果塞进合约肯定行不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把“计算”和“判定”分开。精算结果不直接进合约，只把结果的哈希和置信区间上链存证。后端服务作为Oracle，监听精算完成事件，在后端把DSSAT的浮动结果映射成是否达到起赔点的布尔值，以及理算金额的整型，再喂给合约。合约只负责接收判定结论和执行转账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "农险理算本身就是保司主导的业务，我们用链是为了防线下查勘篡改和提升执行效率，不是做公链DeFi。建模师，你把每次DSSAT的调参日志、输入特征和最终结果打包做个Merkle树，根哈希上链，保司随时可以拿原始日志挑战验证。Oracle部署在保司的TEE环境里，这信任边界对保司是可接受的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "精算侧输出不变，增加 `merkle_root` 和 `confidence_interval` 两个字段。后端Oracle监听精算事件，做阈值判定和取整，调用合约接口 `trigger_claim(bool is_triggered, uint256 amount, bytes32 merkle_root)`。合约内部不再做任何浮点比较和业务判定，只做状态流转。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

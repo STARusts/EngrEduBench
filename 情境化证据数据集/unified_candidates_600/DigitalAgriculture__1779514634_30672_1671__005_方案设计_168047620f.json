@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在端云协同架构输入源梳理背景下，用户与导师围绕气象流数据与施药事件的对齐方式及数据断联缺失的质量治理持续沟通（6轮），其中在流批数据对齐部分与数据流设计师沟通（1轮），在数据断档补全部分与农艺机理审核员沟通（1轮），并最终形成多源数据融合的时空对齐与质量治理原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就做个数据清洗，然后按时间戳Join起来存到时序数据库？我看InfluxDB挺常用的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把施药记录补全成连续的？没施药就填0。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流设计师 气象流数据和施药事件怎么对齐？直接Join好像不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "气象按分钟攒一波，施药来了就插个队。端侧不存全量省空间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "缺失就插值呗，线性插值最简单，写起来快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农艺机理审核员 气象数据断了两小时，线性插值行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，气象流式分钟聚合，施药事件快照注入，不拼宽表。第二，缺失数据不用线性插值，用日变化曲线拟合补全。第三，断联超阈值推演挂起，不能硬跑。第四，端侧只留滑动窗口数据，不存全量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

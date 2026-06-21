@@ -1,0 +1,29 @@
+[
+  {
+    "domain": "校园智能垃圾分拣回收装置——基于轻量级神经网络的视觉识别与自动化控制系统",
+    "stages": [
+      {
+        "stageName": "实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「实验实现与开发过程」阶段，本段围绕模型训练展开，说明训练环境、骨干网络与迁移学习策略及参数配置，并陈述训练过程的收敛情况与最终满足边缘侧轻量化部署要求的结果。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "模型训练在搭载NVIDIA RTX 3060的服务器上进行。我们选取MobileNetV2作为骨干网络，加载ImageNet预训练权重进行迁移学习。训练参数设置为：初始学习率0.001，采用Adam优化器，Batch size设为32，总计进行150个Epoch的训练。"
+              },
+              {
+                "behaviorLabel": "数据分析",
+                "behaviorEvidence": "在训练至第65轮时，验证集Loss值稳定在0.18左右。通过TensorBoard监控训练曲线，我们发现学习率衰减策略在后期对精度提升有显著作用"
+              },
+              {
+                "behaviorLabel": "验证评估",
+                "behaviorEvidence": "最终训练出的模型权重文件仅为3.8MB，完全符合边缘侧部署的轻量化要求。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

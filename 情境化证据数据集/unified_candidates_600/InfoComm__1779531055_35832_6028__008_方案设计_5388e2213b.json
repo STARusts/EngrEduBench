@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极端丢包高可用方案设计背景下，用户与导师围绕抗丢包机制、补全验证与兜底策略持续沟通（8轮），其中在特征相关性抗丢包部分与信源信道联合编码师沟通（1轮），在极端丢包场景构造验证部分与极限环境测试工程师沟通（1轮），并形成包含交叉编码、掩码补全、时域插值兜底及算力约束的闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加前向纠错？比如喷泉码，理论上能适应任意丢包率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开销确实大。或者重传？但极端信道下重传大概率还是丢，延迟也叠加上去了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端丢包下，JSCC怎么利用特征相关性保真？不能加喷泉码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "MAE就是随机掩码然后重构，丢包确实相当于随机掩码。我想着可以在训练时模拟丢包，让模型学会从残片补全。但我还没想好掩码比例怎么定，MAE原作是75%，我们这肯定不一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑不同丢包率测一下呗，比如从10%到90%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端丢包场景怎么构造？我要测掩码补全机制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补全崩了就降级？用上一帧的残影凑合？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果交叉编码本身增加了端侧算力，端侧算力也极限了怎么办？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

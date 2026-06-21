@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估资源占空复盘与迭代规划背景下，与导师围绕非实时池外推算力占空、DDR访存冲突及多普勒频移边界持续沟通（4轮），其中在算力占空与复现边界部分与基带算力协同调度师沟通（1轮），在时延瓶颈与DDR冲突部分与性能调优专家沟通（1轮），并最终形成优化访存模式与守住2kHz截断边界的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "非实时池外推后，算力占空现在是什么情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延瓶颈呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "非实时池算力占空92%，DDR带宽卡住了，时延抖动也是因为抢DDR。外推在多普勒2kHz以上就失效。我觉得得加DDR带宽。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加带宽的话，是不是调调优先级？2kHz以上就，就截断回退？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "DDR冲突是因为访存密集，切片算力分配也得考虑访存，不能只看计算量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "2kHz以上的复现边界，迭代规划里要加一条：监控到频移超限直接触发截断，不计入占空率统计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

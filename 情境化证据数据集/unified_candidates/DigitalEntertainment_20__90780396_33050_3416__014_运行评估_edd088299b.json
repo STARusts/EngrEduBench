@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在虚拟演出低延迟互动云台灰度后的运行评估背景下，用户与导师围绕端到端互动链路拆段、关联键/维度、告警阈值与采样留存合规口径持续沟通（8轮），其中在网关可观测字段与epoch/旧事件监控部分与实时网关工程师沟通（5轮），在延迟计算口径、维度设计与合规留存/阈值制定部分与数据工程师沟通（4轮），并形成6段最小指标清单与分工草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "观众端点按钮，到网关，再到规则编排，最后到渲染端生效。大概就这些。是不是还要算 CDN？我不太确定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能先列个粗的：端到端延迟 P50/P95、消息成功率、重连次数、网关 CPU 内存。然后规则那边就看执行耗时。差不多这样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时网关工程师 现在全链路监控要做分段延迟和成功率，你们网关这段能提供什么字段和指标？trace_id/room_id 这些怎么带比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "epoch 也要带？我以为就是房间里一个版本号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解成：每个房间事件都带 epoch，网关按 epoch 做路由隔离，然后监控也按 epoch 分桶。对吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "late_event_total 我们现在没这个。那是不是要加埋点？我担心又回到开发改代码了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 全链路指标要按 room_id/epoch/开关维度看，端到端延迟要能拆段。我们怎么设计埋点和实时指标口径，才能对上 uid_hash 合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 trace_id 这种算不算可识别？我怕踩线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警阈值这块你们一般怎么定？我只知道 P95 不能太高，但具体数没底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先把我听到的带回去。有些我可能记混了。@导师 我问完了，网关说要有 event_id+room_id+epoch 透传，还要一个 late_event_total 监控旧 epoch 事件。数据那边说延迟最好用 server_e2e_ms（网关收包到客户端 ack），端上那种要采样。维度要带 room_id/epoch/三开关+平台版本地域网络。阈值先用灰度基线，再加固定红线，比如 P95 250ms、丢弃 0.1% 这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我试一下：  \n1）端侧：click_to_send_ms P95，单位 ms，维度 platform/sdk_version/net_type，阈值先不定。  \n2）上行网络：我不知道怎么量。  \n3）网关：p95_ingress_to_egress_ms、enqueue_drop_rate。  \n4）路由房间：route_miss_rate、late_event_total。  \n5）规则：rule_exec_ms P95。  \n6）下行到端：server_e2e_ms P95。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "规则超时我之前没加。这个得规则那边配合？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规我确实差点忘。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在这版指标就算“最小可用”吗？还是还要加资源类指标？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采样率我没概念。那就先 0.1%？异常再提。这个算我能推进的点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按这版去拆任务。晨会我报三条：1）指标口径和维度定了；2）网关/规则/数据/测试各自要补的点；5）采样和留存按合规做，明细 72 小时、uid 只用 hash，排查走审批。这样应该够了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

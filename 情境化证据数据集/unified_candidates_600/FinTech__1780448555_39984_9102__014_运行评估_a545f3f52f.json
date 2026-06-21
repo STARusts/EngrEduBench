@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在溢价重配时延异常归因背景下，用户与导师围绕归因定位与最小改动修复方向持续沟通（4轮），其中在数据源跳变诱因部分与风控异常猎手沟通（1轮），在算子计算热点与锁竞争瓶颈部分与性能调优专家沟通（1轮），并最终形成台风高频更新触发重配及单RegionLock竞争的归因结论与锁粒度拆分修复方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "P99飙升到800ms，说明流控反压机制失效了。现有的流式拓扑在应对这种突发洪峰时，背压传导向上游导致反演算子堆积。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "当前重配时延异常，是不是因为气象栅格数据注入频率突变，导致敞口反演结果高频刷新，触发了重配风暴？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "数据高频注入确实会导致重配风暴。现有的Flink拓扑在处理这种热点Key时，所有台风相关资产的重配请求都被路由到了同一个TaskManager，造成了局部热点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重配算子排队严重，是不是因为溢价计算模型中蒙特卡洛模拟的抽样次数设置过高，导致单次计算CPU耗时过长？要不要考虑用Off-Heap内存优化计算图，减少GC停顿？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然台风相关资产可能分布在多个计算节点上，我建议引入基于Raft协议的分布式协调服务来做全局锁管理，这样可以实现跨节点的锁排队公平性，避免单节点锁饥饿。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，引入分布式协调服务会极大增加部署复杂度和容灾排查难度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然瓶颈是单节点内的RegionLock竞争，而且是因为台风相关资产聚合在同一Region，最直接的办法是把RegionLock降级为细粒度的AssetLock，或者针对只读的溢价更新采用CopyOnWrite无锁结构，减少写锁争用。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

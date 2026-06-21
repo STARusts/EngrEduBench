@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在闭环延迟P99飙升至800ms的背景下，用户与导师围绕架构取舍与降级策略持续沟通（7轮），其中在延迟卡点与底层改造部分与闭环调控监控运维沟通（1轮），在不改底层降延迟与降级保命部分与数据流与接口工程师沟通（1轮），并最终形成保留现有链路、采用粗档位降级策略及部署全链路探针与告警的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是Kafka那块积压了？我看网上很多人遇到延迟都是调batch.size或者linger.ms，要不先试试把这两个参数改小点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们现在这个800ms延迟，你觉得最卡在哪个环节？如果只调MQ参数能压下来吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接改UDP或者GPIO？这改动量有点大吧，而且底层协议重写容易出bug。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现有的Modbus网关和MQ链路，有没有什么不改底层的办法把延迟降下来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "改UDP和刷固件风险太高，而且我也没写过底层的继电器驱动。用降级策略保命，至少不会把设备搞坏，工具链也不用换。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不我们还是先保底吧，用现有的Modbus链路，但我可以在降级策略上做点细化。比如不是直接全开，而是根据声纹强度分两档，延迟高的时候只发大档位指令。这样不用改底层，也能稍微精准一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Zipkin或者SkyWalking都有现成的采集器，我配一下就能看到各环节耗时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99超500ms触发降级，超时3秒触发看门狗重启。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

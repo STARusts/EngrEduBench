@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在群智压测与调优背景下与导师围绕百万长连接压测策略、流量模型、工具选型及验收标准持续沟通（5轮），其中在流量模型与工具选型部分与性能压测调优专家沟通（2轮），在背压机制部分与群智数据管道工程师沟通（1轮），并最终确定基于历史弹幕拟合脉冲流、采用BOOM工具及以帧率方差5为红线的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个JMeter脚本，把接口都压一遍，看QPS和响应时间，CPU超了就加机器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "随机生成一些用户ID和情绪值发过去呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "百万长连接的流量模型怎么搞？随机造数是不是不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "情绪聚合管道的背压怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要用历史弹幕拟合脉冲流量，不能随机造；还要配断线重连比例。管道那边有反压，超过80%会降采样，压测要看降采样后画面丢不丢帧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脚本让测试同学写吧，他们熟。JMeter发不了脉冲流，得写个自定义发压器？丢帧，肉眼看看不卡就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JMeter发不了脉冲流，用啥工具发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用BOOM或者自研Netty发压集群，发压端也要扩容。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我导特征数据，用BOOM压，盯帧率方差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

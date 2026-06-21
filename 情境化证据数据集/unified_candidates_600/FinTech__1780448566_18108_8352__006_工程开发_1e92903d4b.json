@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涉诈资金图构建与流式摄入联调背景下，用户与导师围绕Flink摄入方案、Exactly-once与图事务原子性保障、自定义Sink开发及验证设计持续沟通（5轮），其中在Flink写图库事务与时序对齐部分与数据流开发沟通（1轮），并形成自定义Sink（两阶段提交与Watermark对齐）及异常注入验证的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接用Flink CDC把Binlog拉过来，再配上图库自带的Sink Connector，这样写起来最快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink CDC不是自带Exactly-once吗？网上很多教程都是这么配的，直接拉Binlog写下游。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink写图库的事务和时序怎么搞，有没有现成支持两阶段提交的Connector？我不想自己写Sink，太容易出问题了，有没有封装好的包能直接用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自己写Sink好麻烦，有没有那种轻量点的框架，或者半成品的包能凑合用？实在不行我再去看看怎么写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没写过Flink的TwoPhaseCommitSinkFunction，平时都是用自带的。我今晚查一下Flink官方文档和图库的事务API，把两阶段提交的逻辑理一遍，照着官方示例改一版。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会写个单测，造几条乱序的转账流，对比一下用原版Connector和我自己写的Sink，看图库里的边和节点数对不对得上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就在commit阶段加个sleep模拟超时，看看能不能回滚干净。那我现在的联调方案就是：自己写Flink Sink，用两阶段提交保证顶点边原子写入，Watermark对齐乱序；验证就搞异常注入看图一致性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

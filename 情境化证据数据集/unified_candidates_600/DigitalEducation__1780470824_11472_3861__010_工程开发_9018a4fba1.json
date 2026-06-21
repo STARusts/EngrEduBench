@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在伴学链路代码切割完成准备压测的背景下，用户与导师围绕压测方案持续沟通（5轮），其中在压测工具与流量模型部分与全链路压测工程师沟通（1轮），在滑动窗口高并发调优部分与流式交互系统设计师沟通（1轮），并最终确认以k6打WS、泊松分布模拟脉冲、P99延迟与内存水位为核心指标的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Locust写个脚本，直接对着导学接口发并发请求，看看QPS能到多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导学链路压测怎么搞？我只会用Locust打HTTP接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "泊松分布我查一下Python库应该能写进去。但滑动窗口高并发会咋样，我不太懂，我就怕并发一高内存直接爆了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "滑动窗口聚合压测时怎么调优？我怕内存爆掉。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前压测就只看QPS和平均耗时，这块确实没搞明白。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我得去查一下k6里怎么输出P99和打内存水位日志，把这俩指标加到我的压测脚本里，不然看不出来卡顿的问题。窗口那边要加TTL清理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测工具换k6，打WS长连接。流量模型用泊松分布模拟微交互停顿和脉冲。核心验收指标看P99延迟和State内存水位，不看平均QPS。调优重点是滑动窗口的TTL清理和步长参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

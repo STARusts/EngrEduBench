@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在微塑料事件识别流程的方案设计背景下，用户与导师围绕从多源原始信号到事件分级、误报控制与记录字段口径持续沟通（9轮），其中在多源融合与置信度/RiskScore及基线口径部分与算法工程师沟通（5轮），在证据链留存、权限审计与人工复核留痕部分与合规与审计官沟通（3轮），并形成两段式识别+S1/S2/S3分级+原因码与EvidenceIndex/DecisionLog及Lab关联规则的流程定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件识别就是把传感器和视频的异常抓出来？比如浊度突然升高、雨量大，然后就算微塑料事件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分层的话……可以先规则触发，再用模型确认？必须的证据可能是实验室结果？但实验室结果很慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实时事件就是边上看到可疑就报警。核证事件就是等Lab结果回来再把事件坐实。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "疑似：下雨+浊度高。较高置信：再加上视频看到漂浮物？已核证：Lab检测到微塑料浓度超阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 多源信号怎么弄成微塑料事件？我现在只想到雨量+浊度+视频。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信度是怎么来的？我怕最后变成拍脑袋。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线怎么设？每个排口差很多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "视频不全量上云，上次定了只上截图/片段。那模型在边缘跑？还是云？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Lab结果回来后怎么跟事件对上？有时候样品时间点对不上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先采纳两段式：先高召回触发候选窗口，再做判别层给RiskScore。事件分S1/S2，S3要靠Lab或者人工复核。基线要分站点季节工况，还要记录版本号。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 事件识别这块，证据链要怎么留？尤其是视频只留片段、还有人工复核。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果有人改了事件等级，比如从S2改成S1，要怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "视频片段打码这块也算证据吗？打码后会不会影响复核？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流程我试着说：先用雨量/流量/浊度等触发候选窗口，然后在窗口内融合视频和时序异常出RiskScore，映射S1/S2。然后可能人工复核变更，最后Lab回来能把事件升到S3。字段包括EventID、时间窗、RiskScore、版本号、证据索引、决策日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原因码我不太会编太细。大概：RAIN_START、TURBIDITY_SPIKE、VIDEO_FLOATING、SENSOR_FAULT、MANUAL_CONFIRM、LAB_POSITIVE？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“LAB_BELOW_LOD”也要写进事件？我以为只有阳性才记。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白。还有个点：如果只靠浊度之类会把泥沙当成微塑料风险，误报会不会太多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据缺失率是指视频没拍到或者传感器掉线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心我写不出很正式的流程描述。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能用这套。RiskScore映射阈值是不是也要写？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行吧，这块我至少知道要写哪些字段、哪些日志要留了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

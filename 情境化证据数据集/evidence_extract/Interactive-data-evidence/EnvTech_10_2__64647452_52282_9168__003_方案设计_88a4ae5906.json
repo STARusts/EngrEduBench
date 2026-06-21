@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在循环水质数字孪生与合规管控平台方案设计背景下，用户与导师围绕多源传感数据接入架构的源分类、断网补传与可审计证据链持续沟通（7轮），其中在工业多协议分层接入与时间戳/缓存策略部分与物联网架构师沟通（4轮），在原始性防篡改、更正机制与权限留痕部分与合规与审计官沟通（4轮），并形成可画图的边缘-云接入链路与关键约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我要开始做循环水质数字孪生与合规管控平台的方案设计了，这块多源传感数据接入架构，有没有现成的标准图能直接套？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想就按网上那种IoT架构：传感器-网关-MQTT-云平台-数据库，然后就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就水质的pH、浊度、COD、氨氮，还有流量。别的先不管。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 工业现场这些传感器数据接入，直接MQTT行不行？断网咋处理？时间戳要怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就写“全部走OPC UA到云”是不是更统一？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "缓存按天存网关里可以吧？硬盘够大就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量码就是填个0/1？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分层就是边缘网关接各种协议，再发到云里统一入库。数据源分类就…仪表、PLC、水质站、人工。字段就是点位ID、时间戳、值、单位。断网就缓存补传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 接入这块要满足审计，证据链要留什么？还有权限怎么弄才算合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们如果把数据都让管理员能“编辑修正”，这样报表好看点，不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那传感器漂了，直接改历史数据不是更省事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权限这块是不是上个账号体系就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 合规那边说原始数据不能覆盖，要追加。时间要记录采集时间和入库时间，还有设备ID。配置变更要留日志，还要审批。大概就这些。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）设备到网关。2）网关到云。3）云到数据库。4）有缓存。5）有日志。6）权限控制。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

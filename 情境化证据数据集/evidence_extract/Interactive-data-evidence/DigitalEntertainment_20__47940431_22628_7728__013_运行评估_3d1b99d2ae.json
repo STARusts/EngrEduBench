@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度验证进入端到端质量监控落地背景下，用户与导师围绕观赛链路指标拆分、阈值与告警归属持续沟通（9轮），其中在端到端观测指标与阈值设定、分组维度与告警分派上向SRE运维工程师咨询（3轮），并形成最小指标集+阈值+主责协同及会话ID串联定位方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就监控延迟和卡顿吧，还有报错。都加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "播放器就看首帧时间，CDN看下载速度，转码看CPU，渲染看帧率，互动就看点击成功率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 端到端质量这块要监啥？阈值咋定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就按“基线P95+裕量”，首帧2秒预警3秒告警，延迟也来一套。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分组就按版本号和场次就行吧，省份先不弄也行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那告警就都丢给SRE值班？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE说要按四类指标：首帧、低时延、叠加正确性、互动闭环。阈值用基线P95加点裕量，首帧P95 2秒预警3秒告警。还要按场次和版本分组，告警别都给SRE，要分主责协同。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "首帧P95 2秒预警3秒告警，主责前端。卡顿率...就高了告警，主责媒体。互动RTT 500ms预警800ms告警，主责后端。叠加丢失率也告警，主责渲染。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡顿率预警0.5次每分钟，告警1次每分钟。叠加丢失率…预警1%告警3%？端到端延迟预警3秒告警4秒。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉后端也能修，就先后端吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，那就主责实时数据，后端配合。原因是中间要过事件消费。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加trace id？每段都带着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "媒体延迟就是render减ingest。叠加延迟是…事件到render。互动RTT是点击到ack。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端到端更真实，用户感觉就看这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小指标集：首帧P95（2s预警/3s告警）、卡顿率（0.5次/分钟预警、1次/分钟告警）、端到端直播延迟P95（3s预警/4s告警）、叠加渲染延迟P95先看、叠加丢失率（1%预警/3%告警）、互动RTT P95（500ms预警/800ms告警）、事件积压lag。  \n告警归属：首帧/卡顿前端和媒体链路为主，端到端延迟媒体链路主责，叠加丢失率渲染主责，互动RTT实时数据主责后端协同，SRE负责升级。  \n分组维度：场次、版本号，再加省份/运营商先做TOP聚合。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计的外部报送接口规划背景下，用户与导师围绕对外报送对象/优先级、报送模式、一致性对账与幂等回执、安全合规与敏感信息最小化持续沟通（7轮），其中在监管/园区接口常见形态与键/回执设计上与集成工程师沟通（4轮），在鉴权授权边界、签名与证据二次授权和轮换审计上与安全工程师沟通（3轮），并收敛统一报送域API+适配器的最小动作与设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "外部方我先按三类：监管报送（生态环境、碳核查/披露口径）、园区平台（集团或园区统一台账）、第三方审计机构。对象上至少有：排放/能耗汇总报表、原始监测摘要、异常审计结论、证据索引。优先级我倾向先做监管报送+园区平台，审计机构可能走“按需拉取证据索引”而不是全量推。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "骨架我先按“统一报送网关”来：内部先形成“报送包”。对外两种：监管更像批量推（按日/按月），园区可能既支持拉取也支持推。对账键：我想用“report_id + period + org_id + version”，幂等键就用report_id。回执：对方返回receipt_id和状态码，我们把receipt也进事件账本，挂根hash。安全上：监管侧走双向TLS+机构证书，园区走OAuth2或API key都行，敏感字段按最小化，附件只给索引+hash+授权短链。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@集成工程师 监管/园区这类报送接口，常见交互形态和坑是什么？我现在打算做统一报送网关+报送包，想确认：幂等/回执/对账键该怎么设计更不容易翻车。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对账没有稳定业务键，具体你建议怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "文件式那种，部分成功怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。安全上监管经常要啥？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我提炼三点：  \n1）交互形态要兼容：文件异步、同步API、对方拉取；  \n2）键拆分：业务键用于对账；传输键用于幂等/重试；  \n3）回执两段：transport_ack和biz_ack都入审计，且关联calc_version+root_hash。  \n接口形态我倾向“一套报送域API”，外部方差异用适配器层，不在核心域里分叉。证据链引用上，报送包不带附件，只带evidence_refs：每条数据行挂source_ref/对象hash/关键节点签名的索引，以及根hash（root_hash）用于外部抽查时定位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小集合我想是：  \n- 创建报送任务：提交报送范围（org/facility、period、报送类型、口径版本），返回submit_id。  \n- 获取待报送明细/打包下载：用submit_id拉取payload（或下载包地址），payload里有row_id、业务键、指标值、单位、calc_version、root_hash、evidence_refs。  \n- 提交回执：外部或适配器回传transport_ack/biz_ack，包含receipt_id、状态、错误码、失败row_id列表、对方批次号。  \n- 查询对账状态：按业务键/period查本次与对方回执的差异摘要（成功/失败/待处理计数）。  \n再补一个“撤销/作废报送”，用于口径版本变更时做冲正。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "facility_id我建议同时带internal_facility_id和external_facility_code，但对外默认只出external_facility_code；如果对方没有编码才走映射表协商。人员ID不出真实人，回执里如果需要责任人，用审计域ID或系统账号ID。错误码分三层：  \n- T类：传输/协议（签名失败、超时、格式不合法）；  \n- V类：校验（缺字段、单位不匹配、period非法）；  \n- B类：业务（口径版本不支持、数据与许可上限冲突、部分行拒收）。  \n每个错误都要能定位到row_id或submit_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "取舍是业务键里包含calc_version，这样同一period会有多条版本。对外默认“latest=true”只拿最新；对账时必须显式传calc_version，否则返回冲突提示。旧版本不删，只标记superseded_by指向新submit_id，并把冲正关系进审计事件账本，根hash可回溯到当时规则版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "控成本两点：  \n1）版本并存只在“报送域”保留结构化结果+root_hash，不重复存附件；证据还是走索引。  \n2）只对被要求重报的period保留多版本，其余按策略只保latest的报送包；历史版本只留元数据（submit_id、业务键、摘要hash、回执摘要），明细可配置保留期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 外部报送接口这块，我们想做统一报送域API+适配器。你帮我定：鉴权方式的底线、最小权限的粒度、密钥/证书轮换和审计留痕在接口层怎么设计比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "请求签名怎么做不算过度复杂？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "外部方如果要“按需查看证据”，怎么控制不被批量爬走？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳的规则是：  \n1）鉴权分层：监管双向TLS+证书；园区/第三方短期token+请求签名，所有请求带kid便于轮换审计。  \n2）授权粒度按scope：外部方+组织范围+报送类型+时间范围；每次访问记录scope和策略版本。  \n3）签名覆盖method/path/timestamp/nonce/body_hash，nonce短TTL去重，失败事件入账本但不吐敏感细节。  \n4）证据只返回evidence_ref（索引+hash+root_hash关联）；取证据需二次授权换一次性凭证+配额限制。  \n5）键与回执：业务键用于对账含calc_version；传输键submit_id/payload_hash用于幂等；回执分transport_ack和biz_ack并关联root_hash。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

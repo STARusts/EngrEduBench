@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在移动端离线训练开发背景下，用户与导师围绕离线包版本选择、校验、断点续训与补传接口及验收点持续沟通（6轮），其中在离线包结构/本地状态与事件队列方案上与移动端工程师沟通（4轮），在补传鉴权、token续期与本地加密落盘及session_token策略上与安全工程师沟通（2轮），并收敛到最小闭环交付与审计字段/422-403处理口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按链路拆三块：1）训练包下载+校验+版本选择；2）本地状态机：进度、答题、得分、断点；3）补传：把事件/结果发回去，服务端按权限/状态迁移验。验收我想用两类：弱网/断网下能完成训练并恢复；还有一条是补传后管理端能看到同一次训练的最新有效版本命中。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是移动端只认“训练包里带的published_version_id”，下载时从服务端拿到“当前有效版本”以及包的hash。离线训练就固定用这个版本，等恢复网络时补传时把version_id带上。要是服务端已经有更新版本，也不能把旧的训练硬算到新版本里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 离线训练这块你建议怎么落地？我主要想定：包结构/校验、本地进度存啥、补传事件怎么做才能断网也稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源不放URI明文这点挺关键。补传payload_hash不放payload本身，那服务端怎么还原得分？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们这期大多是安全情境选择题+流程操作题，主观题可以先不支持离线，或者离线只做“练习不计入达标”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "清理策略我倾向先做上限+最近使用，提示用户可手动清理。换机丢进度先接受。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问下：断点续训的checkpoint你们一般怎么打？每一步都写库会不会卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备采纳几条：  \n- 离线包zip里带manifest.json：published_version_id + content_struct_hash + material_manifest_hash + 资源sha256列表；资源路径只用相对路径，不落远端URI。  \n- 下载校验：先校zip整体hash，再逐文件hash，不一致直接丢弃。  \n- 断点续训：session/progress两张本地表，关键节点+定时checkpoint落盘。  \n- 补传：本地event_log append-only，恢复网络批量post；服务端对每条返回ack或422(reason_tag)/403。422进dead_letter不重试。  \n验收点我想定4个：1）断网完成训练并重启app能继续；2）包hash不一致会被拦；3）补传幂等，不会重复计分；4）服务端能按published_version_id把结果算到对应版本，不会串到最新版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等我想用event_id做去重，event_id在客户端生成UUID，服务端按(event_id, actor)做唯一约束，重复就返回已处理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计这块：服务端对补传接口也算命令，每批事件里每个事件对应一次审计记录：actor/action/from/to/result/reason_tag/changed_kinds + content_struct_hash/material_manifest_hash；不记正文和URI。客户端不写审计，只写本地事件队列。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 补传离线事件这块，鉴权和token过期怎么处理比较合适？另外本地存答题/进度有没有合规和安全底线要卡？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "session_token要在线开始才能拿到，那完全离线首次进训练怎么办？我们有场景是学生在宿舍先下包，到实验楼没网直接开练。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向第一种，给个N=24小时，预签发10个token，避免完全无凭证的离线训练被滥用。练习不计入也能做，但会引发投诉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小闭环我定三件：  \n1）离线包下载/校验/缓存：支持一个课程包，manifest校验+逐文件sha256；缓存上限先做500MB+LRU。  \n2）离线训练session：支持3类题型（单选、多选、步骤确认），断点续训（关键节点+30秒checkpoint）。  \n3）补传：事件队列批量post，能处理服务端逐条ack；遇到403停下走重新登录；遇到422按reason_tag落dead_letter并提示“本次训练不计入”。  \n测试：我会跟测试负责人定一组弱网脚本：断网/切网/时间回拨/包损坏/重复补传。覆盖至少把“approve链路命中最新有效版本”那条的审计字段校验也加进去，避免我们这边传错hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补传请求（每条event）我建议字段：  \n- event_id、session_id、published_version_id  \n- occurred_at、type（START/CHECKPOINT/ANSWER/SUBMIT）  \n- content_struct_hash、material_manifest_hash  \n- payload（只包含step_id、选项id、耗时、得分片段；不带题干，不带素材URI），payload再带payload_hash用于防篡改  \n- session_token（预签发的一次性token）  \n服务端审计记录每条事件至少要能看到：actor、action=INGEST_OFFLINE_EVENT、from/to（比如session状态in_progress->completed）、result、reason_tag、changed_kinds（progress/score/status）、content_struct_hash、material_manifest_hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今天把reason_tag枚举跟后端对齐，优先把HASH_MISMATCH、SESSION_INVALID、TOKEN_EXPIRED、STATE_CONFLICT这几类串起来；明天给你看两条：1）包校验失败的客户端行为和服务端422对应；2）补传一条SUBMIT事件，审计字段齐、且回放命中对应published_version_id，不串最新版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

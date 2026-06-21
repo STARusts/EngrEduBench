@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在随动配给决策逻辑编排背景下，用户与导师围绕配给指令下发架构调整及降级方案持续沟通（6轮），其中在配给指令下发前的合规红线校验部分与合规审计师沟通（2轮），并形成配给决策流前置校验模式及异常熔断不降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Drools规则引擎，把工单工艺配额写进去，一旦特征模型算出来快耗完了，就查配额表，调线边仓接口下发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限？MES里不是都有工单权限吗，跟着走不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配给指令下发前，除了看工单，还得校验啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我在Drools里加几个判断条件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规这边说必须先过合规网关，查资质、查限额、查环境，过了才能进我的Drools查配额。不然就熔断转人工。还得留痕。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "原来我是一把梭，现在得拆成两步。先调合规接口拿令牌，拿到令牌再进规则引擎算配额，还得存一份审计日志。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "网关挂了肯定不能发啊，万一发错出事故了。网关超时就转人工，这种涉及安全的绝不能降级成自动配给。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "配给决策流从单链路直通改成前置校验模式。第一步过合规网关，校验人员资质、配额上限和仓储环境，拿不到合规令牌就熔断转人工，网关结果强制落盘留痕；第二步才进Drools规则引擎算具体配额并下发。合规网关异常时全量熔断，不降级自动配给。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

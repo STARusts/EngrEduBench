@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在批改系统事件接入与证据链服务联调背景下，用户与导师围绕4类事件白名单接入、字段对齐、链闭合规则、trace_id截断定位、401误重试修正与联调断言持续沟通（7轮），其中在确认批改侧event_type/必填字段、签名issuer与重试语义部分与后端工程师沟通（4轮），并形成联调口径与验收断言清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我主要怕批改那边的事件类型太多，我这边 mapping 写死了就会漏。还有就是联调要抓日志，我可能只会看 kibana 按 trace_id 搜，但之前 trace_id 好像有截断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "submit_ok 有，correct_done 有，另外两个我写成了 correction_start、feedback_sent 这种名字，我不确定批改系统用的命名。我字段就是 user_id、task_id、ts、event_type、sig，然后可选 chain_id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 批改系统这次联调要发的事件类型到底有哪些？我现在白名单只想先跑 submit_ok、correct_start、correct_done、feedback_pushed 四个。你那边 event_type 字符串和必填字段能给个准话吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这字段比我想的多。event_id 我这边没加；actor_role 也没。trace_id 我之前是从 header 抠的，可能长度不稳定。occur_at_ms 我有 ts 但不是 ms。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 sig 和 sig_ts_ms 怎么来？我这边是 SDK 里签名，批改服务也会签一遍吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心我之前把 401 当成可重试，会不会在批改服务 token 失效时把队列堆满？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1) 白名单就写死这四个字符串：submit_ok、correct_start、correct_done、feedback_pushed。链外事件我就不填 chain_id，直接进基础事件存储。\n2) trace_id 我想在 kibana 里查不到的话就换用 event_id 查，或者把日志字段长度改大点？我不太确定在哪改。\n3) 失败码我把 401 从“可重试”挪到“修复后重试一次”，5xx/timeout 才走指数退避。然后联调就看队列 backlog 不涨。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这边 mapping 里做一层 alias：如果进来的有 work_id/student_id 就用它；如果是旧字段 task_id/user_id 就映射过去。course_id 我也加上。chain_hint 我先透传，chain_id 还是服务端决定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。我就在 SDK 里打印一次 trace_id len，再在网关 access log 看一次，再在服务的入参 log 看一次，三处用同一个 event_id 对齐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "断言我试试：  \n- 同一个 work_id+student_id，在 submit_ok 到 feedback_pushed 期间，所有链内事件都挂同一个 chain_id。  \n- correct_done 到了以后 chain 状态变 closed（submit_ok/timeout/cancel 规则里，这次应该是 submit_ok 触发开链，feedback_pushed 触发闭合？我不确定）。  \n- 401 只会重试一次，第二次进死信，并且不会阻塞后面的事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记住。闭合看 correct_done，feedback_pushed 不闭合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那断言变成四条：  \n1) work_id+student_id 聚合到同一 chain_id（未闭合窗口内复用）。  \n2) correct_done 触发闭合，feedback_pushed 不触发闭合。  \n3) 链内顺序：submit_ok <= correct_start <= correct_done；feedback_pushed >= correct_start。  \n4) 401 修复后只重试一次，再失败进死信，backlog 不持续增长。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实会把 payload 全打出来方便对字段。我改成只打字段名+长度，student_id/work_id 打 hash8。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就先不扩事件了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "今天我改 mapping 的 alias 和白名单，把 ms 时间和 issuer 分开；再按你说的三处长度定位 trace_id；401 这块我加个“重试计数=1”的 guard，超过就丢死信并打点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

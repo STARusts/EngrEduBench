@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在导引策略引擎联调背景下与导师围绕导引时机、心流保护与性能延迟的权衡取舍持续沟通（8轮），其中在规则引擎延迟与图推理取舍部分与算法实现极客沟通（2轮），在粗粒度导引对心流与测试影响部分与质量守门员沟通（1轮），并最终形成图推理超时截断与静默弱提示降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想找个现成的规则引擎套一下。我看网上很多人搞复杂导引逻辑都用LiteFlow，把偏差特征丢进去，编排一下规则，应该就能出动作吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想套LiteFlow做规则编排，你觉得这种方案行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "50ms确实快。但砍了图推理，导引动作会不会太糙？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极客说只用规则树能压到50ms，但导引只能给粗提示。这种粗粒度导引上线会不会出问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一边要快一边要准，这怎么弄。极客要砍图推理保50ms，质量那边说粗导引会打断心流必须带上下文。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能加个开关？正常走图推理，超时了就降级走规则树？我看网上很多高可用系统都这么搞降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看前几次请求的延迟？如果滑动窗口内平均延迟超过200ms，就触发降级开关。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就在请求进来前估算一下图的大小？或者用Sentinel之类的工具做流控？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是设个硬超时，比如150ms，没算完就直接返回兜底规则？这样不用外部开关了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就让兜底规则别弹窗。改成在侧边栏静默更新一个弱提示标签。这样就算截断猜错了，也不会弹窗干扰学生。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改LiteFlow的脚本，加上超时拦截和静默降级的组件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

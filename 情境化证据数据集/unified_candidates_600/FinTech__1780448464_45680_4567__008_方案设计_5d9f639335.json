@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极低延迟高可用评估背景下，用户与导师围绕撮合高可用架构、网络拦截机制及验证方案持续沟通（8轮），其中在撮合高可用与延迟兼顾部分与系统架构师沟通（2轮），并最终形成主推热备加硬件仲裁、RDMA同步、DPDK用户态及专用模拟器验证等设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "要保证绝对高可用，我觉得必须上Raft共识协议构建撮合集群。脑裂风险零容忍。另外，为了压榨延迟，可以在网卡层上eBPF做全链路抢跑特征预判，直接在内核态丢弃恶意包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Raft开销是有点大，但强一致性好啊。如果不用，脑裂了订单状态错乱谁负责？eBPF那边我看业界很火，Cilium都在用，延迟肯定比用户态DPDK还好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测呗。用JMeter发单，看P99延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是有没有Raft和eBPF。对照组就是普通主备加DPDK。JMeter确实粗了点，得用专用的交易模拟器，控制发包速率和抢跑订单比例。样本量至少跑够十万笔。抢跑订单要随机插入在正常流中间，不能集中发。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实有点虚。前两天看了一篇Meta关于L4负载均衡用XDP的文章，说在驱动层改包效率极高。我想着迁移过来，在XDP里剥离抢跑包。但没考虑到我们这是TCP流式订单，直接在驱动层丢包会破坏TCP状态机，接收端会狂发DupAck。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺内核网络栈的深层理解。我今晚把Linux内核`netfilter`和`tc`的源码过一遍，重点看丢包hook点。现在看，XDP预判这方案不能直接搬，风险太大，排查也难。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原计划用Raft做撮合集群强一致，导师说太重。高可用怎么搞能兼顾微秒级延迟？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那脑裂怎么防？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Fence Token加RDMA内存同步，延迟可控，逻辑也极简。Raft确实把简单问题搞复杂了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，撮合集群高可用采用主推热备加硬件仲裁，严禁引入Raft等软件共识；第二，状态同步走RDMA或共享内存，禁止WAL日志同步；第三，网络旁路用DPDK用户态，禁止eBPF内核态拦截；第四，验证方案需用专用模拟器，随机穿插抢跑单，样本量十万级，对比组只测基座算法。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

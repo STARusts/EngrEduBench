@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在蓝藻水华声光异构感知数据流架构设计背景下，与导师围绕异构数据时空对齐难点、深浅水双控对照、研究假设与推翻条件、边缘预同步及补学目标持续沟通（8轮），其中在架构选型与深水区补偿机制部分与异构数据架构师沟通（3轮），并形成边缘预同步加云端流批一体暂定方案及TPSN补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "难点不就是格式不一样？我想把声学频谱和光学光谱都序列化成JSON，丢到Kafka里，下游再消费，这样比较省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用Kafka接声光数据，这种消息队列能不能直接搞定时空对齐？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟肯定越低越好，我偏向Flink，网上案例多。但窗口对齐怎么设对照，我不太懂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设Flink能跑通低延迟对齐。如果深水区因为光弱导致光数据丢包，对齐窗口一直等，延迟爆了，就推翻了？浅水区声学数据多，可能好点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着有点复杂，能不能两边都推到边缘端先做个简单拼接再传上来？我找个边缘网关的SDK应该能干这事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不懂，我只用过NTP。水下是不是有专门的协议？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳结论：暂定方案A边缘预同步加云端流批一体，理由是深水区光弱容易丢包，流批一体的水位线能兜底，纯流式怕卡死。取舍风险：如果TPSN同步精度不够，边缘预同步就白瞎。补学目标：今晚查TPSN协议和开源实现，明天给结论。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

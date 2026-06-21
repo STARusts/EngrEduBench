@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在账本与结算最小闭环已跑通、进入联调测试与性能压测验收背景下，用户与导师围绕端到端链路异常覆盖、指标口径与字段改造持续沟通（8轮），其中在联调用例与压测硬指标部分与测试经理沟通（3轮），在现场上报节奏、乱序形态与关联字段部分与物联网集成工程师沟通（2轮），并明确upstream_event_id聚合关联、settled后更新边界与降级开关的交付要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边主要是后端接口和日志那块。能保证 request_id 都有，幂等也做了，应该就不会重复扣钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试经理 联调和压测你这边要怎么卡口？给我个大概标准就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "300 TPS 是所有站点加一起吗？我们可能没这么多吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我就按 300 TPS 去打。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "乱序聚合这块我不太懂，是不是靠时间戳拼一下就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 设备上报一般怎么个节奏？会乱序到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "local_event_id 我们现在接口里好像没强制收。我是不是让他们都带 request_id 就行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了，我回去对一下字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联调要测正常、重复、断网补发、乱序、冲正、unknown。压测就 300 TPS，P95 200ms，错率 0.1%，然后抽样对账要一致。现场说要有 local_event_id，不然乱序拼不起来。我就……把这个字段加进来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加到投放事件上报接口里，后端落账的时候用它当幂等键？不然就会一会儿变两笔，结算也乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能改后端接口校验和落库扩展字段。聚合服务我不太熟，可能要后端工程师那边一起搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口契约就加 upstream_event_id 必填。聚合逻辑就按 device_id+upstream_event_id 合并。验的话……就跑用例。压测脚本就用压测工具打 300 TPS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就……settled 之后不让更新？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，可以。settled 就不改金额，影响金额就冲正重算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级就是把报表关掉？或者把 unknown 都先存着不处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）端到端六类用例都要跑。2）重复上报同 idempotency_key 只入一次账。3）断网补发乱序也要拼成一笔，用 upstream_event_id。4）settled 后不改金额，晚到影响金额就冲正重算。5）压测 300 TPS、P95 200ms、错率 0.1%，压完抽样对账一致。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

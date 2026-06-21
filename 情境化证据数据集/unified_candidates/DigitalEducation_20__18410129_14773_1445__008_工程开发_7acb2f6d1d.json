@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课件可达性自检替代引擎MVP开发背景下，用户与导师围绕PPTX/PDF解析IR设计、检测规则框架、入库与need_review/dead_letter降级持续沟通（9轮），其中在解析字段集与失败回退部分与多媒体处理工程师沟通（4轮），在IR短TTL存储与审计合规部分与合规与隐私官沟通（2轮），并收敛可执行的实现拆分与字段/错误码口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PPT/PDF里到底怎么抽结构，怎么把检测做成统一的规则跑起来？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做个解析服务，输入就是文件路径或对象存储key，输出给检测服务一份json。json里放页、文本块、图片、表格之类。检测就遍历json跑规则。就是……不知道哪些字段必须有，哪些能先不管。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP我先做pptx和pdf。docx先放着。视频音频先别碰。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 PPTX/PDF解析要做成给检测用的json，你觉得最小字段集要啥？还有哪些坑会直接解析失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PDF里alt基本拿不到？那图片缺alt这条会不会一堆误报。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对比度用渲染图采样，是不是很慢？我们夜间窗口要吞吐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那PPTX抽文本，SmartArt那块我先不做深解析，拿不到就算元素缺失？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。结论我理解是：IR按page/element，PPTX能拿到alt和颜色就做硬规则；PDF alt不靠谱走need_review。对比度能算才算，算不了就跳或need_review。还要加parse_quality给检测降级用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "IR我想先丢对象存储，key里带task_id。DB里存个ir_ref和hash。TTL我可以配对象存储生命周期，过期自动删。hash就对json做sha256？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想写成一堆函数，遍历elements，发现就append issue。规则版本我先写死个v0.1在代码里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "need_review和dead_letter我容易搞混。比如PDF字体乱码导致文本抽出来是一堆方块，这算系统失败还是need_review？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我给parse阶段也产issue？还是只在检测阶段产？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块，我现在IR里有文本，会不会算存了敏感信息？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 IR里会含课件文本、抽出来的图片引用，我们打算短TTL放对象存储，DB只放ref和hash。审计不放内容。这样合规上还要加啥？比如权限、留存？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规冻结我之前没想过。那我先不做“申诉流程”，只是预留字段可以吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边说IR要服务端签名访问、按租户隔离；TTL默认24-72h，预留冻结字段但先不做流程；审计只写hash、页数、规则版本、need_review原因码，不写原文片段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能先做三块：  \n1）解析器：pptx/pdf转IR json，page/element两层，必带page_index、bbox、type、text或image_ref，带parse_quality；IR落对象存储，DB存ir_ref+ir_hash。  \n2）规则runner：加载几条规则（缺alt、疑似纯图片页、段落过长、标题缺失先做粗猜、对比度能算才算），输出Finding；异常进dead_letter。  \n3）入库：issue/recommendation分开存，issue里带page_index/bbox/need_review原因码，审计只存引用和版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

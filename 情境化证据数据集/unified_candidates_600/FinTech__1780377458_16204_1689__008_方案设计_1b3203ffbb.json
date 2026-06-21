@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在证绿链路与高可用评估背景下与导师围绕ZKP证明链路降级方案、降级开关与预热指标及混沌工程验证持续沟通（7轮），其中在链路容灾与降级部分与密态架构师沟通（1轮），在资源消耗与证明加速部分与性能优化攻坚手沟通（1轮），并最终形成异步证明池、配置中心下发降级、静态ESG证明预生成及混沌注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上K8s把证明节点多起几个呗？或者挂个Sentinel做熔断，网关层超时就返回失败，这种现成组件挺多的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级该怎么弄？有没有那种专门管长耗时任务的中间件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "证明节点卡死的时候，普通熔断器好像不太好用，这链路容灾该咋设计？有没有现成框架能处理这种长耗时任务降级的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "证明生成太慢拖后腿咋办？有没有那种一键加速的工具，或者我直接加机器？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不能同步等，得异步池，算不出来就降级去传统风控。还要搞预生成。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天我看个开源项目里处理异步降级的模式，好像是用个本地缓存标记位，超时就把标记位刷成降级态。这思路能套这儿吧？在信贷适配的动态折价层前面加个降级开关，ZKP超时就走静态折扣表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预热指标就看历史信贷请求频率吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就上Jmeter压测呗，多压几次看看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是注入故障呗？比如故意把证明节点杀掉，或者给网络加延迟。观察结果就是看信贷请求有没有走降级通道，还有降级切换的时间差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在端到端追溯链路集成验证背景下与导师围绕全链路联调方案、测试数据脱敏、断层定位与因果判断持续沟通（6轮），其中在TraceID注入与脱敏做法部分与链路集成测试员沟通（1轮），并最终形成包含验证步骤、脱敏规则与基于TraceID的断层定位机制的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算按顺序来，先测边缘网关采集，再测数据上链，最后测核算引擎读取。一步一步走，确保每段都不掉数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "产线真数据最真实，直接拉一部分过来测应该最快吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果不一致，我就看日志，一段一段查日志找断点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没用过分布式链路追踪，之前只做过单机应用的日志排查。这块我可能得补一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端联调怎么打链路ID？还有测试用的BMS数据怎么脱敏处理才合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前没做过链路追踪，这东西加进去会不会影响网关性能？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同时出问题我就不知道哪个是因了。可能得看时间戳，先报错的是因？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证步骤：边缘注入TraceID，透传至链上与引擎，查验Span树一致性。脱敏规则：序列号哈希化，厂商掩码，保留物性参数。断层定位：用TraceID拉取Span树，根据父子Span关系判断因果，不依赖时间戳。性能损耗：透传ID为微秒级，可接受。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

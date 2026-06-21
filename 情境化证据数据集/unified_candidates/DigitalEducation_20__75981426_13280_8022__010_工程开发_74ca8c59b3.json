@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在能力图谱平台工程开发末期全链路压测缺陷闭环背景下，用户与导师围绕ingest链路的429/500/超时复现、定位、修复与回归验收持续沟通（8轮），其中在压测采样、最小复现、对照组与验收阈值部分与测试工程师沟通（4轮），在500常见根因、分段耗时指标与审计异步化改造及合规日志边界部分与后端工程师沟通（3轮），并最终确定先加分段耗时与做对照组再决定审计改造的修复顺序与清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道该看哪个。压测一堆红的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有个是 429。还有一堆 500。还有超时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好像是 ingest 多。update 也有点。query 没咋看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 429 和 500 一堆，怎么弄？我现在要看啥才能复现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "20条要手动翻？我不太会抓 request_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 429 就是扛不住？是不是把限流调大就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值是多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我就按你说的抓一段窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看关掉审计会不会不报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 ingest 压测500和超时，常见是啥？我该先改哪里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步队列是要上新中间件吗？我不想搞新东西。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "返回码怎么搞？我现在就怕乱改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记不住这些状态名。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先分清 429 是网关还是服务。再做对照，把审计改成不阻塞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看响应里写的 rate_limited_by。还有用 request_id 看日志里谁返回的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先做分段耗时吧，不然我也不知道是不是审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我加的日志把隐私写进去了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

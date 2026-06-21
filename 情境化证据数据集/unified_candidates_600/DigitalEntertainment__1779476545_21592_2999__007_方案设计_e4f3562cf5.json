@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极低延迟与高可用评估背景下，用户与导师围绕延迟与弱网韧性冲突、FEC机制选择及验证策略持续沟通（5轮），其中在传输机制部分与泛在分发调度员沟通（1轮），在弱网测试与流分组策略部分与质量韧性测试员沟通（2轮），并最终确定UDP+FlexFEC传输、按区域静态分组及丢包验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "延迟肯定第一啊！这玩意就是图个爽，卡一下都不行。丢点包就丢呗，声景又不是银行转账，少个音符听不出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那加个重传不就完了？反正网不好就重传，网好就不加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@泛在分发调度员 怎么搞最快？@质量韧性测试员 怎么搞不崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "FEC又是啥？加冗余不就是多传数据？多传数据不就更慢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前两天翻WebRTC源码，里面有个FlexFEC，就是不用回NACK。我就把这个套进来呗？不用等重传，延迟低，又能纠错，刚好！"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "带宽肯定够，现在基站多猛啊。验证就验证呗，我跑个模拟，设个5%丢包率和20%丢包率，看能不能纠回来不就完了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就按区域分！同一个区的声景流放一组。就定FlexFEC加UDP，按区分组，跑丢包测试！"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

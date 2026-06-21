@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在微态声振系统边缘旁路部署验证背景下，用户与导师围绕OT网络零冲击保障、丢包率验证标准及阻断指令回注隔离持续沟通（7轮），其中在部署期防网络冲击与镜像口丢包确认部分与产线部署交付员沟通（1轮），在阻断指令回注网络隔离部分与产线部署交付员沟通（1轮），并最终形成加TC限流、写SNMP脚本算置信区间及走OT防火墙微隔离的验证闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用 Helm 把镜像推到边缘节点，这样比较快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我 Helm 里配了 Resource Limit，CPU 和内存都卡死了，应该不会抢主控资源吧。阻断指令我走的是独立网段，没走主控的 Profinet。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产线部署交付员 现场割接时，怎么防部署把网络搞崩啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TC 限流我搜过，命令好长，不太好配。镜像口丢包，我本机容器里也看不出来啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包率嘛，就跑个十分钟，算个平均丢包率，小于 0.1% 就算过？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算区间得自己写脚本吧，这个我不太会。P99 我倒是知道 Prometheus 能查。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我好像确实缺这块底层运维脚本的能力。我这两天先去把 Python 的 pysnmp 库翻一下，还有 TC 手册看两眼。争取下周五前，写出一个能采交换机端口计数的 SNMP 脚本，在测试床上跑通，把这个数据给到验证流程里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用 Iptables 把阻断下发端口和白名单外的流量全 DROP 掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Iptables 方案作废，走 OT 防火墙微隔离。我把这几条确认一下：第一，部署前加 TC 限流防网络冲击；第二，写 pysnmp 脚本采交换机镜像口丢包数，算置信区间验证丢包率；第三，阻断指令回注走 OT 防火墙微隔离和审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

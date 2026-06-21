@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段Flink算力受限背景下，用户与导师围绕气流与轨迹融合流的低成本替代方案、网格粒度选择及均匀与非均匀网格取舍持续沟通（6轮），其中在寻找省算力融合方式部分与轨迹融合算法主程沟通（2轮），在CFD网格粒度对齐部分与流体数字孪生设计师沟通（1轮），并最终确定采用CFD非均匀网格对齐的时空网格预聚合方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "30%？那之前想的Flink实时双流Join肯定不行，轨迹流和气流场数据量都大，直接爆内存。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "集群算力只有原计划30%，轨迹流和CFD气流场直接实时Join内存扛不住，有没有省资源的融合方式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "网格聚合？就是把经纬度转成网格ID，然后按网格ID和时间片Join？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "轨迹主程说用空间网格聚合，轨迹和气流都按网格ID和时间片Join，数据量能下来。就是精度会丢，看网格多大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "5米网格省算力，但精度太低吧？2米数据量又上去了。我不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在想用网格聚合省算力，CFD仿真输出的气流场网格一般是多大？能不能直接用你们的网格做Join？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流体那边说他们是非均匀网格，病床1米，走廊3到5米。直接用他们的网格ID做Join最省计算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "统一5米逻辑简单我后端好写，但病床1米精度就没了，院感肯定不行。还是用非均匀网格吧，复杂就复杂点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

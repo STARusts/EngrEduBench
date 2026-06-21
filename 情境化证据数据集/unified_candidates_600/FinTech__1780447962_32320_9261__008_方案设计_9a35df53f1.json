@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在流转清结算高可用评估背景下，用户与导师围绕高可用架构选型、补偿逻辑验证及审计留痕持续沟通（8轮），其中在最终一致性与补偿机制部分与分布式架构师沟通（1轮），在穿透式审计嵌入部分与链上审计师沟通（1轮），并最终形成基于Saga模式的长事务补偿、混沌工程验证及带事务ID上链的最小化审计方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多部署几个节点，搞个主备切换，应该就稳了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨合约就加锁呗，或者失败就重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "最终一致性和补偿机制这块怎么弄？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "补偿就写回滚逻辑。验证的话，跑个压测看看就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是失败发生的步位。我控制故障注入点，在Saga链条的不同环节模拟宕机，看补偿链能不能走通。样本量的话，跑个几百次差不多吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我最近看了Chaos Mesh的文档，里面提到稳态假设。我可以在清结算跑批时，用这工具随机杀掉记账服务Pod，看系统是不是能自动补偿且账平。这算个改进，把原来只看日志的被动排查，变成主动验证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "清结算Saga流程里怎么加审计留痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，清结算高可用用Saga模式做长事务补偿，链下消息加链上事件对账；第二，验证实验用混沌工程，随机杀Pod注入故障，变量是故障步位，样本量按功效分析来，验证稳态和补偿；第三，审计留痕每个Saga节点带事务ID上链，按数据最小化只存状态。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

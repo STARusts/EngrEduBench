@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在情绪轨迹编舞交互系统的情绪特征提取实现背景下，用户与导师围绕特征口径、输出节拍/窗口、降级切换、验证单测与审计串联持续沟通（10轮），其中在可落地参数与置信度/降级缓回定义上与算法工程师沟通（6轮），在日志留存与脱敏权限边界上与合规与隐私官沟通（4轮），并明确特征输出字段与本周最小闭环交付清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这阶段要把情绪特征提取先跑起来，先做“情绪特征提取实现”，我现在有点不确定从哪里下手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输出就 valence、arousal、heat 这些吧，频率就…跟直播帧率差不多？延迟就越低越好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…每秒 10 次？窗口 1 秒？延迟 200ms 以内？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "范围就 0 到 1？heat 也是 0 到 1。平滑就做个 EMA。置信就…看人脸检测置信度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在要把情绪特征提取写进系统里，你给我一个线上能用的口径：valence/arousal/heat 的范围、刷新频率、窗口、EMA 怎么设，还有置信度怎么算，降级时怎么缓回中性？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了，就是 5Hz 输出，短窗 400ms 长窗 2s，然后混一下。conf 也是加权。降级 N<30 就 valence/arousal 直接空，只留 heat。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小闭环就是先做 face 一路，能出 v/a/heat/conf。验证就…看曲线别抖，然后跟手工标注对一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标准差阈值…0.2？断流回中性就 5 秒内到 0.1 以内？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我按 std<0.1、|v|<0.15、a 在 0.2 到 0.4 这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可能会先存一下方便看问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我这边要做情绪特征提取实现，线上日志我想打点方便调试。哪些字段能落？valence/arousal/heat/conf 这种能不能存？保留多久，权限怎么卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是不存原始，只存 1 秒桶的均值分位这种，7 天自动删，权限也收紧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trace_id 就每次生成一个？然后一直传下去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征包就是：room_id hash、seq、gen_ts、valence、arousal、heat、conf、degrade_level？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加 r_face 和 N？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "收到，我就照这个字段做，单测也按 std<0.1、断流回中性这些写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）把特征结构体和序列化搞定；2）把 EMA 和缓回逻辑做了；3）把两条回放验证写成单测跑起来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

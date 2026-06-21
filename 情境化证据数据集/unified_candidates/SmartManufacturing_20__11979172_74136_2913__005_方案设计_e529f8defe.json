@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在GPU平台上实现微米级缺陷1kHz闭环视觉检测的方案设计背景下，用户与导师围绕ViT可行性、实时性抖动、验证实验与部署迁移持续沟通（8轮），其中在Transformer工业端约束与工程化替代路径上与视觉算法工程师沟通（2轮），并收敛为RepVGG+特征融合金字塔方案及验收指标与接口细化方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我认为传统的卷积神经网络在捕捉全局特征上已经遇到瓶颈，很难彻底解决精密校准中的非均匀光照干扰。既然硬件性能给够了，我主张直接上Vision Transformer架构，利用它的自注意力机制来精准定位微弱划痕。虽然计算开销大，但精度上限绝对是目前最高的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以尝试Swin Transformer或者精简后的MobileViT。我算过，如果通过TensorRT进行算子融合和INT8量化，单帧耗时有希望压下来。不过我确实还没在Preempt-RT环境下实测过它的吞吐量稳定性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@视觉算法工程师，我们这个自适应光学平台对缺陷识别有极高精度要求，但我发现传统的ResNet等网络在处理波前畸变后的图像时容易误报。我倾向用Transformer类架构提升模型泛化力，但在毫秒级约束下，你觉得这是否太激进？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我引入分层滑动窗口或者局部注意力机制呢？或者像FastViT那样，通过结构重参数化把Transformer的逻辑在推理阶段还原回CNN？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "虽然我很想尝试纯Transformer，但考虑到首代产品的交付死线和硬件吞吐压力，我准备采用“改进型RepVGG主干 + 特征融合金字塔”的方案。RepVGG在推理时可以等效为简单的3x3卷积，极其适合我们选定的显卡进行算子级优化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备设计一组消融实验。变量设为不同的注意模块位置和感受野大小。我会设置三个对照组：标准洁净环境、强振动偏移环境、以及模拟波前畸变环境。如果改进后的CNN在F1-score上能和Transformer模型持平，且耗时稳定在0.4ms以内，我们就定这套方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "是的，我会采用ONNX统一导出接口。这样即便未来客户为了省钱要求换成更低端的国产加速卡，我们也不需要重写底层推理逻辑，只需重新做模型量化即可。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "视觉算法选型结论如下：第一，采用重参数化CNN作为主干网络，通过RepVGG结构确保硬件推理效率；第二，在颈部网络引入通道注意力机制，专门应对复杂光环境下的特征提取；第三，使用检测头解耦方案降低推理复杂度；第四，验收标准定为1024分辨率下推理延迟低于0.5ms，漏检率低于0.1%。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去细化算法模块与实时控制内核之间的数据交换协议。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把图像预处理算子封装进CUDA流，尽量利用GPU的并行能力把这部分时间抹平。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在评痕流式采集架构设计背景下与导师围绕流式管道构建、推拉模式取舍、背压降级策略及架构约束持续沟通（10轮），其中在采集拓扑抗峰值与实时性部分与数据流设计专家沟通（1轮），并最终形成推主拉辅降级、P99延迟50ms及带版本号审计等5条架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用消息队列接一下，先存起来，后面再处理。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，要实时。那就直接推给反演模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评痕数据流拓扑怎么设计才能抗峰值又实时？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就推模式吧，延迟低。背压的话，加机器就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个，我不太会设计验证动作。Flink状态后移这块我也不熟，得补补课。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看Flink的State Backend文档，把状态容错机制弄明白，看怎么配合漂移感知的反演窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是数据流速，看推模式在峰值流速下延迟会不会飙升。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟不超过100毫秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，Kafka接评卷行为；第二，Flink做实时特征提取；第三，推模式为主拉模式降级；第四，P99延迟50ms。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第五，特征输出带算法版本号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

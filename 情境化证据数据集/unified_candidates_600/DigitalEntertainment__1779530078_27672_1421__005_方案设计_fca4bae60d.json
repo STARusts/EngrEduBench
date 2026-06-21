@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在微剧共创资产轻量化确权流转与合规方案设计背景下，用户与导师围绕碎片化创作轻量化上链确权、流转机制及合规拦截持续沟通（7轮），其中在轻量化确权与流转机制部分与铸产协议设计师沟通（2轮），在违规内容上链拦截部分与合规审查官沟通（1轮），并形成存证分离、幕级聚合、Merkle Path流转及先审后上加熔断机制的闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按常规ERC-721标准，把剧情片段元数据打包，通过IPFS算CID，然后铸造成NFT。如果嫌慢可以走Layer2或者侧链，理论吞吐量够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "存证分离就是链下存数据链上存哈希。状态聚合，是，是把多次操作合并？像Rollup那种？但确权需要唯一性，合并了怎么证明某个分支是我创的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微剧共创资产确权，如果用存证分离加状态聚合，合约标准该怎么改？用户高频产生的分支怎么低成本确权？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幕级聚合，Merkle Root。这样单个微操作只在链下有记录，链上只认Root。那流转呢？如果我只想卖我在这个幕里的某个特定分支设定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心是不每个操作都上链。按幕聚合，一幕结束算个Merkle Root，一次上链。链下存具体内容，流转时提供Path验证状态位。这样Gas省了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "内容审核在链下做？上链前过一遍风控？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用户共创内容混合AIGC，如果用Hash上链确权，遇到违规内容怎么处理？链上不可篡改没法删。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，存证分离，链下对象存内容，链上只存Hash。第二，幕级聚合，一幕一Merkle Root，降频铸造。第三，细粒度流转靠Merkle Path验证状态位。第四，合规先审后上，合约内置熔断机制锁死违规资产流转。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

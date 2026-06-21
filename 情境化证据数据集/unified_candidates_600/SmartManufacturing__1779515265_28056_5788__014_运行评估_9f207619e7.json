@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估排程降级与复盘归因设计背景下，用户与导师围绕工业排程降级策略、触发阈值、复盘算力消耗与责任边界持续沟通（5轮），其中在工业排程降级方式部分与动态调度算法师沟通（1轮），并最终形成两级策略退化、异步转储离线回放及降级豁免标记的降级复盘方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用Spring Cloud Sentinel做熔断降级，配个QPS限流规则，排程接口超时或者报错就直接fallback返回空。复盘的话，用ELK查一下报错日志的时间段就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线排程降级一般怎么搞？有没有类似Hystrix那种能直接套的降级框架？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师讲不能用现成熔断框架，得写策略退化，分两级，一级变FIFO，二级转人工。复盘要孪生回放快照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "退化逻辑我只能硬编码试试。阈值的话，刚才定的GED偏离率80%触发一级，死锁等待超5分钟触发二级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力这块我确实没想。是不是回放的时候得限制CPU核数？责任的话，转人工了应该就是车间调度员负责了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级复盘方案就是：分两级退化，一级FIFO二级人工；阈值按偏离率和死锁时长；复盘用异步转储加离线孪生回放快照；降级自动发通知并标记豁免。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

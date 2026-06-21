@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在拖拽拼装交互流设计背景下，与导师围绕多模态素材状态同步与版权校验拦截点持续沟通（4轮），其中在异步校验嵌入与操作增量丢弃逻辑部分与前端交互架构师沟通（2轮），并最终形成交互流与合规流基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拖拽拼装的核心是状态管理。我打算用CRDT处理多人协同的冲突，前端画布用状态机控制拖入、对齐、释放。视频段落体积大，预览时用抽帧降质策略，只渲染关键帧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不过视频粗切后，内部的时间戳锚点和细切文本怎么视觉对齐，还得想想。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我光想协同了，没把合规校验流融进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拖拽流中怎么嵌入段落级存证哈希的异步校验，既不阻断操作又不违背合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不过回滚的时候，如果和CRDT的协同冲突处理搅在一起，Undo栈会不会特别复杂？比如两个老师同时拖入同一段未授权视频，回滚逻辑怎么和CRDT的Op流结合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "未授权素材根本不该污染协同状态。如果版权校验失败，直接丢弃这个拖拽操作增量，不让它进入CRDT的Op流，是不是更干净？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前序定的视频粗切内部时间戳锚点，交互上怎么体现局部替换？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "交互流基线暂定这三条：1. 乐观UI加异步校验，校验失败直接丢弃Op不入CRDT流，保证协同状态纯净；2. 视频预览走WebWorker抽帧降质，不卡主线程；3. 粗切视频内部关键帧锚点与细切文本做吸附对齐，支持局部替换。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

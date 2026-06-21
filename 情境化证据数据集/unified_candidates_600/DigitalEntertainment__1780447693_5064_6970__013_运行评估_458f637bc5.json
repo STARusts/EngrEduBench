@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在跨端调质编排系统全链路部署验证背景下，用户与导师围绕验证逻辑设计、IO争用与资源配额瓶颈、HPA分组对比及能力短板补充持续沟通（5轮），其中在并发压测资源配额与HPA策略部分与云原生部署专员沟通（2轮），并最终形成基于队列深度HPA策略的分组压测验证方案与内存防泄漏观测点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "部署验证不能只看链路通不通，得把调质指令流下发到渲染出帧的端到端延迟分布跑出来，证明真机环境下时序一致性是稳的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备分两步。第一步先跑空载编排流，确认资材入流、合规边审、调质指令下发的拓扑不丢事件；第二步注入上次回归出的那批带法线连续性前置校验的资材，压测移动端渲染帧率。但我担心合规边审和沙箱解析的I/O争用会卡住指令下发时序，导致P99延迟超标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资材入流和沙箱解析是拆成两个独立Service的。如果第二步压测我注入500并发资材请求，合规边审的Pod配额和沙箱解析的CPU Limit现在能抗住吗？会不会因为Limit打满导致调质指令下发延迟P99超500ms？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前的假设是I/O争用是主因，现在看是计算资源Limit配额不合理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要验证这个结论，我需要做分组对比：一组维持静态配额，一组开启HPA。两组各跑30分钟压测，收集指令下发延迟的样本。如果HPA组P99延迟均值比静态组低200ms以上，且95%置信区间不重叠，才能证明HPA有效且延迟下降不是随机波动。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我其实对K8s HPA在GPU密集型编排流下的扩缩容延迟没底，之前也没用过Prometheus的Custom Metrics Adapter做GPU利用率触发。这是我目前做部署验证明显的短板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来的目标是：2周内，在沙箱环境完成3种HPA策略（基于CPU/基于GPU利用率/基于指令队列深度）在模拟500并发下的压测，记录扩缩容响应延迟数据，并整理成调优SOP。当前部署验证，我先用云原生部署专员提供的默认HPA模板跑分组对比，拿到基线结论。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署验证的第一轮，我们就确认：1. 采用基于队列深度的HPA策略应对并发；2. 验证目标是HPA组指令下发延迟P99比静态组低200ms且置信区间不交叠；3. 重点观测container_memory_working_set_bytes防泄漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

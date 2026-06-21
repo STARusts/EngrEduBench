@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧部署性能超标且需限期联调的背景下，用户与导师围绕模型量化、算子融合、知识蒸馏与子图裁剪方案持续沟通（5轮），其中在量化精度掉点与算子融合工作量评估部分与端侧部署工程师沟通（1轮），并最终形成INT8混合精度加ORTModule蒸馏加子图裁剪配合L2范数校验的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备全图上INT4量化，再手写几个自定义算子把Attention融合进去，彻底重写前向传播逻辑，这样推理速度至少翻4倍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "INT4量化在农艺数值上到底掉点有多严重？手写算子融合的工作量是不是评估少了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混合精度加子图裁剪能接受。但知识蒸馏我之前只做过推理，没搞过训练微调那一套，现学PyTorch的蒸馏逻辑肯定来不及。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我昨晚刚好在查ONNX Runtime的更新日志，发现它的ORTModule Training API支持在推理图上直接插梯度节点做微调蒸馏，不需要转成PyTorch重写Loss。我可以把这个迁移过来，用大模型做Teacher，ORTModule直接训Student，这样我不需要重写训练脚本，工作量能砍掉一半。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在裁剪后，对保留的核心处方子图跑一次L2范数对比测试。如果裁剪前后的节点Embedding距离大于0.05，说明剪掉的关键邻居太多，推理上下文丢失，必须回退保留更多跳数。这个阈值是基于之前防幻觉测试的误差容忍度算出来的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改导出脚本和蒸馏配置。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

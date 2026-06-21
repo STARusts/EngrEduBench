@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在衰减推演引擎接入真实链路且边缘算力受限背景下，用户与导师围绕接口交互模式与HIS审计留痕需求持续沟通（6轮），其中在输入流聚合与输出流事件驱动设计部分与流规约设计师沟通（2轮），在解决HIS安全确认与算力冲突部分与流规约设计师沟通（2轮），并最终形成非对称降级接口契约方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个API呗，把衰减轨迹和残差打包成JSON发过去，他们自己解析。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算力不够？那就少推几次？或者把JSON弄短点，字段少写几个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口契约咋弄才不炸网关？是不是把字段弄少点？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没报警也可能是坏了。那咋办？还是得一直发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "医院那边说要是没数据发过去，他们分不清是安全还是死机了。算力又不够，咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "平时就30秒发一次心跳，带个均值和健康位。超限了才发全量轨迹。这样医院知道没消息就是好消息，算力也省了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "进温迹数据是5秒攒一波算，出结果分两种，没超限就30秒发个简短心跳，超限了才把全量轨迹发出去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

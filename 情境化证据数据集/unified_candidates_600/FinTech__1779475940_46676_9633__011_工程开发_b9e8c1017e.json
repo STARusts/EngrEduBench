@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳数据防篡改攻防与压测资源受限背景下，用户与导师围绕攻击面收缩、时序漂移低成本验证、平缓漂移盲区妥协及压测脱敏落实持续沟通（5轮），其中在时序漂移防篡改验证部分与安全攻防专家沟通（1轮），并最终形成跳变点抽样验收标准、Mock脱敏方案及P0级Tech Debt排期策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算收缩攻击面，只打核心链路：物联数据上链前的注入攻击和智能合约的重入攻击。压测也只压存证接口的并发上限。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "针对物联设备时序漂移的防篡改校验，在有限算力下，有没有低成本的验证手段或者抽样策略？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "脱敏提醒及时，我本来准备用生产脱敏副本来压。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近刚学了Chaos Mesh做网络层故障注入，可以把时序延迟和包丢失直接在Sidecar层模拟，不用改业务代码，压测构建效率应该能提不少，我准备用这个替代部分脚本压测。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "平缓漂移的话，相邻时间戳差分值都在阈值内，抽样就全漏了。我理解这种低成本方案只能防住\"粗粒度篡改\"，对\"精细伪造\"无能为力。在当前资源下，只能接受这个风险敞口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收标准定为：跳变点抽样对粗粒度篡改拦截率>99%，且存证接口TPS在资源减半下不低于1500。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测数据全用Mock工厂生成，字段结构一致但值全是随机数，跑完即焚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "平缓漂移防御作为P0级Tech Debt记录到Jira，下个Sprint优先排期。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

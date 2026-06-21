@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在替代内容生成与检测issue联调背景下，用户与导师围绕issue到生成再回写的映射、幂等、失败/跳过状态及审计留痕持续沟通（10轮），其中在幂等键、请求/回写字段结构与预算降级上与NLP生成工程师沟通（4轮），并确定仅对NR_PDF_ALT_UNKNOWN生成ALT_TEXT、保留page_index+bbox定位与gen_history两版痕迹的MVP链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在是要把检测的issue喂给生成，然后把生成结果挂回去？我有点担心对不上区域。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用issue里page_index和bbox直接传给生成，生成结果也带同样的page_index和bbox回来。然后我们写回时按issue_id覆盖同一个字段。要是生成失败，就把issue标need_review？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "生成失败我可以写个状态，像gen_status=FAILED，然后错误码先放文本？幂等我想用issue_id做key，生成服务那边如果收到同一个issue_id就返回已生成的内容。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@NLP生成工程师 现在联调替代内容生成：我们从检测issue带page_index+bbox过来。你们生成侧怎么做幂等？同一个issue重复请求怎么避免重复生成？还有回写结果你们希望的字段结构是啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "input_hash是你们算还是我算？我这边拿得到原文片段，但图像指纹我拿不到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回写结构呢？我怕前端不好展示。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "gen_quality这个我理解是给人看的，不影响检测那边的need_review？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图片bytes走接口会不会很大？我们夜间资源紧张时就会跳过对比度规则，生成也要降级吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了NLP生成这边：幂等建议resource_id+issue_id+input_hash，input_hash他们根据evidence+prompt_version/rule_version算。请求字段要带resource_id/issue_id/issue_type/page_index/bbox，还有evidence（文本片段或图片URL/bytes）。回写他们给最小结构：gen_status、gen_type、gen_payload、gen_quality(OK/NEED_HUMAN_EDIT)、input_hash、gen_model、gen_error_code（四个枚举）。另外建议带gen_budget做轻量模式。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想issue里原来就有page_index和bbox，就不动。生成结果回写时只更新gen_*字段。前端定位用issue的定位字段，不靠生成结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向覆盖，省事。历史存多了我怕库膨胀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两版我能做。就是issue里加个gen_history数组，最多2条，存input_hash、gen_type、gen_quality、gen_payload摘要、created_at。payload全文还是放当前版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先做NR_PDF_ALT_UNKNOWN对应的图片/图表缺少替代文本，生成ALT_TEXT。还有NR_TEXT_EXTRACT_LOW这种我不确定要不要做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是应该在调用前就过滤？不调用生成，issue里gen_status留空？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@NLP生成工程师 我们这边编排层想加个状态SKIPPED，表示压根没调用生成（比如issue_type不支持或预算LOW）。你们那边枚举能加吗？不行的话我就只在issue侧写，不走你们返回。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我业务层自己写SKIPPED。错误码我也写GEN_UNSUPPORTED，但统计要剔除。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）只对NR_PDF_ALT_UNKNOWN触发生成ALT_TEXT；NR_TEXT_EXTRACT_LOW先不生成，其它一律SKIPPED。  \n2）请求带resource_id/issue_id/issue_type/page_index/bbox/evidence(URL或文本片段)，幂等靠他们算的input_hash；我们回写只更新gen_*，定位字段不动。  \n3）issue里保留最近两次生成痕迹：gen_history最多2条，存hash、时间、类型、质量和payload摘要；当前版本放完整gen_payload。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

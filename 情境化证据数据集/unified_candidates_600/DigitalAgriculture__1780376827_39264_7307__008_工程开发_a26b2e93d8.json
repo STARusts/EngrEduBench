@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在采集模块工程任务拆解背景下，与导师围绕拆解粒度、降采样归属及带宽验证设计持续沟通（7轮），其中在硬件驱动与ISP调优部分与嵌入式开发主管沟通（1轮），在算法数据格式与降采样要求部分与多模态算法设计师沟通（1轮），并最终形成4个子任务的拆解方案与验证demo设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想按硬件分，摄像头一组，麦克风一组。摄像头就是调用V4L2拿YUV数据，麦克风用ALSA拿PCM。然后写个多线程分别拉流，塞进共享内存给后面的推理模块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我目前想的就是V4L2和ALSA拉流，但导师提了ISP参数和夜间红外噪点，这块任务怎么拆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "采集模块输出的数据格式，你们算法侧有什么要求？之前定的降维脱敏，对原始采样有啥限制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得降采样放采集模块不太好吧？采集就该出原始数据，降采样放后面预处理模块做不是更清晰吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "内存拷贝瓶颈我确实没测过。我只写过x86上的多线程拉流，ARM板子上的ISP和内存带宽优化我没搞过，这块我可能拆不明白。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找两篇Rockchip RK3588 ISP调优的文档看，然后在板子上写个简单的V4L2拉流加格式转换的demo，用perf测一下不同分辨率下memcpy的耗时。如果确实差几倍，我就把降采样拆进采集模块里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写两个对照组。一组拉1080P原始帧直接memcpy到下一模块；另一组在拉流后用RGA硬件做降采样到640x480再给下一模块。记录同样帧数下两者的CPU占用率和处理总耗时。阈值就定CPU占用率不超过30%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采集模块拆成4个子任务：1. Sensor驱动与V4L2/ALSA初始化；2. ISP与音频前端处理，含夜间3A策略和硬件降噪；3. 硬件降采样与格式转换，出640x480 YUV420SP 10fps和16kHz 16bit PCM；4. 拉流中断重连与共享内存输出。降采样放采集模块，带宽和CPU占用的验证我跑完demo再补数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

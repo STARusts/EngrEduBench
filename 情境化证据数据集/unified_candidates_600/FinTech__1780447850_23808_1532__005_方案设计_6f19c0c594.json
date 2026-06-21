@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微额跨境反演系统总体架构设计背景下，与导师围绕架构选型、算力约束、流图对齐及证据链导出持续沟通（5轮），其中在算力瓶颈与写放大部分与图计算架构师沟通（1轮），并最终确立增量图加热点常驻与统一Changelog证据链导出的架构基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想法是全量内存图加高频流式反演，做到毫秒级潜伏链路追踪，彻底压榨出反演的实时性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "扩展性可以用分布式图切分解决，成本不是现阶段重点。极致的反演速度才能捕捉蚂蚁搬家的瞬时暗流。我假设全量内存图在3个月数据规模内，端到端反演延迟能压在50ms内，对照组是增量图计算加近线流处理。如果全量图假设成立，就不该为省资源牺牲实时性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全量内存图加高频流式反演，对比增量图加近线流处理，在千亿级资金网络上做实时反演，算力瓶颈具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳增量图加热点常驻的方案，长尾边落盘确实能解决写放大和内存爆炸。但流处理降级微批我保留意见，反演实时性必然打折扣。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对动态图流联合调度的底层机制还不熟，增量图状态和流算子怎么对齐Checkpoint，这块是我当前的设计短板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去研读SIGMOD上近三年关于Dynamic Graph Streaming的论文，重点看增量图状态与流算子的Exactly-once对齐机制。一周内输出一份针对反演算子的验证结论，直接迁移到我们的流图联合调度设计里，确保微批反哺不丢事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流处理侧用Flink的State Backend生成Changelog，图侧的增量更新也写入同一Changelog流。下游合规审查模块消费这个流做证据留痕，直接利用框架的Barrier机制对齐，既不拖慢反演主链路，又满足审计留痕要求。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

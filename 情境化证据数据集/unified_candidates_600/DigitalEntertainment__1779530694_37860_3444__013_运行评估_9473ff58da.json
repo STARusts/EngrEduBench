@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度上线盯盘背景下，用户与导师围绕情感保真度监控指标与告警规则持续沟通（7轮），其中在告警防扰民及异常跳变率聚合口径部分与运维与可观测性专家沟通（2轮），在保真度异常判定逻辑部分与情感交互测试工程师沟通（1轮），并最终形成无意图异常跳变率与跨端对齐度延迟的告警底线规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我弄了个Grafana面板，P99延迟那些常规的都加了。情感偏移度我直接把状态机输出的score打到Prometheus里了，看曲线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就设了阈值呗，大于0.8就报警。超过就算保真度出问题了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘告警怎么配不扰民，我现在的情感score直接设阈值感觉会炸。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "滑动窗口斜率？Prometheus里得自己写Recording Rule，有点麻烦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测试那边，状态跳变频率多少算异常？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了，不能只看数值，得看有没有触发源。这意图识别结果怎么打到大盘里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "把单点阈值去掉。换成跳变频率，还得看意图。跨端对齐度延迟也加上。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，总跳变数减去有意图触发的，再除以总交互数？我不太确定这聚合逻辑咋写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "无意图触发的异常跳变率，这指标聚合口径咋弄？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "好，这个能套公式。告警就配这个率大于5%报警。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对齐度延迟，之前说P99是500ms，超过就报？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "无意图异常跳变率>15%，跨端对齐度延迟>1s报警。单点阈值去掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

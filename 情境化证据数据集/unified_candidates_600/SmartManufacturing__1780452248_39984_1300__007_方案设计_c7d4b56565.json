@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计的容灾与高可用评估背景下，用户与导师围绕自愈系统容灾设计持续沟通（7轮），其中在云边断网保底部分与系统架构师沟通（1轮），并最终形成边端脱网自治、状态机增量快照与恢复验证、降级误阻断审计留痕的容灾设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做主备切换吧，双机热备，挂了直接切备用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云边断网了，边端规则引擎怎么保底？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重启了就重跑呗，从正常状态开始。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那重启后得恢复现场。把状态存下来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "前两天刚补了嵌入式实时库的状态快照机制，用增量检查点代替全量日志。我觉得可以迁移过来，把六态状态机的每次流转做增量快照存到NVM里，重启直接加载最新检查点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本模拟断电重启，看能不能恢复到最近的状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误阻断日志也得存本地，断网不能传云端就先存边端，网络好了再补传。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

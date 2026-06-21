@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在自适应课件编排系统方案设计收口背景下，用户与导师围绕教师预览/课堂投放两条数据流的数据最小化、解释分层、留存与审计及权限矩阵持续沟通（8轮），其中在合规边界与敏感数据处理上与合规与隐私官沟通（4轮），在RBAC+ABAC落地、角色集与跨校隔离上与系统架构师沟通（3轮），并形成关键数据对象清单与数据流+权限设计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我倾向做成“全链路事件溯源”，所有输入、策略命中、渲染素材、解释分项都串成一条Trace，然后给教师端、教研端、运维端都能查。权限上用ABAC，属性包括学校、班级、课程、设备profile、无障碍标签。这样后续扩展策略也不用改太多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预览流我觉得得有：课件原稿结构、素材清单、教师选择的教学目标标签、学生端设备情况、注意力状态。课堂投放现场就读package，附带可选回退列表，最好还能查到当时策略命中的理由，便于老师临场决定。解释与版本我想教师能看“为什么这样编排”，教研能看更多，甚至能回放完整快照。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 注意力状态、设备信息、无障碍标签这些在教师预览/课堂投放里怎么用才合规？能不能把“策略命中理由”给教师看？留存和审计一般怎么做才不踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果不采集注意力，系统怎么“自适应”？只靠设备profile会不会太弱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "策略命中理由给教师看呢？会不会泄露学生信息？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那课堂投放现场，如果老师想知道回退为什么出现，是不是只能看到“触发了回退原因码X”，不要看到任何学生侧信号？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规这边基本是：注意力/情绪这类别采，或者用会话内的交互聚合桶替代，还尽量端上处理不出端；无障碍需求最好也只传“桶化声明”，后端不存明文；教师看到的解释要去个人化，只讲设备桶、课件特征、策略版本、动作依据；审计要记访问者、资源、权限、降级原因码、版本号。留存方面请求体/快照短一点，审计日志长一点但也要脱敏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我列个主干：1）OrchestrationRequest（输入请求，包含课件结构摘要、目标标签、设备桶、无障碍桶、会话桶）；2）Plan（编排计划，动作序列+理由分项）；3）Package（渲染后的可投放包）；4）StrategySnapshot（策略/模板快照，短留存）；5）ExplainView（给教师看的解释视图）；6）AuditLog（审计）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 我们在感官负担自适应课件编排系统里做数据流与权限设计。你建议的最小角色集、对象级权限边界、以及跨校/跨班隔离怎么做比较稳？我之前想上ABAC全套，担心过度了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "具体到动作呢？比如Plan、Package、Explain这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跨校隔离就靠租户ID硬隔离？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据流上，两条链路怎么落到权限上？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我准备把Trace拆掉：不做全链路可回放的原始事件串。改成三层：业务对象层（Request摘要/Plan/Package/ExplainView），审计层（访问与降级原因码、版本号），再加一个聚合指标层（给教研看）。权限上用RBAC做角色主干，tenant+课程/班级做ABAC门闩。SystemOperator只能看脱敏审计和队列状态，不碰课件内容。Teacher看ExplainView但不看StrategySnapshot和原始请求体。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "进库的我想只留：tenant_id、course_id、class_id、teacher_id、content_hash、content_structure_summary（比如页数、组件类型计数）、device_bucket、accessibility_bucket、policy_version_requested、timestamp。会话桶比如停留时长桶、频繁回退桶，尽量不落库，只用于当次生成/回退判断，最多写成“触发回退原因=ENGAGEMENT_BUCKET_HIGH”这种原因码进审计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有可能。那content_hash改成“课件版本ID+随机salt”的派生键，只在本租户内可比对；跨租户不共享salt，避免全局碰撞关联。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我按5块说：  \n1）关键数据对象：TeachingAssignment；OrchestrationRequest（仅桶化摘要）；Plan；ExplainView（去个人化）；Package+PackageManifest；StrategySnapshot（短留存受控）；AuditLog；AggregatedMetrics。  \n2）两条数据流：教师预览=同步GeneratePlan+轻量渲染，产出Plan/ExplainView；课堂投放=提前异步GeneratePackage，课堂端只读Package并做选择/回退，上报仅成功/失败/原因码，不做现场重渲染。  \n3）权限模型：RBAC主干（Teacher/Researcher/SchoolAdmin/SystemOperator/ServiceAccount），ABAC门闩（tenant硬隔离 + 课程/班级域约束）。Teacher不能读原始请求体与StrategySnapshot；SystemOperator只看脱敏审计与队列态。  \n4）解释分层：教师端只看指标分项与动作依据（引用课件特征、设备桶、策略版本、原因码）；教研看聚合指标与抽样脱敏Plan；任何个体状态不出端或不落库。  \n5）留存与审计：Request摘要与StrategySnapshot短留存；AuditLog较长留存但脱敏，必须记录访问者/资源/权限判定、策略/模板版本、降级与回退原因码、回退是否成功。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

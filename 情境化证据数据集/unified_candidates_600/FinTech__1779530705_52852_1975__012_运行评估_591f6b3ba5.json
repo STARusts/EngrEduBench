@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估大模型推理性能监控背景下，用户与导师围绕摒弃微服务指标、确立大模型专属监控口径及降级策略持续沟通（7轮），其中在核心监控指标部分与运维监控工程师沟通（2轮），在显存打满降级机制部分与运维监控工程师沟通（1轮），最终形成包含首Token耗时、TPS、KV Cache利用率的监控口径与排队超时降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在Grafana配了面板。就盯P99延迟和QPS。P99超过3秒我就发报警给群里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "3秒是以前微服务的标准。大模型这块我不太懂具体怎么算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大模型推理的耗时和吞吐量应该盯什么指标？我之前看P99和QPS好像不对。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那KV Cache利用率要多高才算正常？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不看P99和QPS了。改盯首Token耗时、TPS和KV Cache利用率。利用率超过90%就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "首字等待，1秒？TPS我不太清楚多少算卡。显存满了是不是就限制并发不让新请求进来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "显存如果满了怎么降级？不能直接崩吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控口径：核心盯首Token耗时（阈值500ms）、TPS（阈值30 token/s）、KV Cache利用率（阈值90%）。降级策略：利用率超90%后新请求进队列，排队超30秒直接返回系统繁忙提示，不接收新请求。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

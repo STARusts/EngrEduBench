@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘防碰撞算法选型背景下，用户与导师围绕大田多机防碰撞算法选型及安全包络阈值确定方式持续沟通（5轮），其中在多机防碰撞算法选型部分与防碰撞算法设计师沟通（1轮），在安全包络阈值计算依据部分与防碰撞算法设计师沟通（1轮），并最终排除视觉方案，确定基于CTRV轨迹预测与动态安全包络椭圆的防碰撞基线及动态阈值计算策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接上视觉检测，用YOLO算距离，网上开源代码多，或者直接用ROS里的costmap，调包比较快，不用自己造轮子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大田多机编队防碰撞，如果不用视觉，一般用什么算法？有没有那种比较方便调用的现成库？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这自己写会不会太麻烦？能不能在ROS的costmap基础上改改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CTRV就是匀速转弯模型吧？算轨迹应该不费算力，比YOVO轻多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "安全包络椭圆的大小怎么定？这个阈值要是定错了容易误报，农机手肯定要骂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "安全包络椭圆的阈值怎么定？有没有经验值可以直接套上去用？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这还得标定土壤啊？有没有更简单点的方法，比如就按车型给个固定值？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法基线就是：主防线用CTRV轨迹预测加动态安全包络椭圆，阈值按制动距离公式算，要根据土壤附着系数动态调，不用视觉。ROS的costmap也不用了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

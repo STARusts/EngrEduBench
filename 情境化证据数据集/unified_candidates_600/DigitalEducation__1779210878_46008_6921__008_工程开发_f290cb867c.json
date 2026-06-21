@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在众包教案演化系统并发基线敲定背景下，用户与导师围绕演化树节点模型、合并接口设计、与Yjs结合及互斥修改拦截持续沟通（6轮），其中在节点模型与合并接口设计部分与众包系统设计师沟通（1轮），在持久化选型与互斥拦截实现部分与后端开发主程沟通（1轮），并最终确认演化树核心逻辑基线、验证方案与补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用图数据库存节点呗，接口照着Git那套写，commit, merge, checkout。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就存个parentId。入参传两个分支ID，出参返回新commit ID。Yjs的话，我在接口里调一下它的merge方法不就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "演化树节点模型和合并接口怎么搞？跟Yjs怎么结合？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要加State Vector字段，合并时算公共祖先。我大概懂了，冲突标记也要返回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这Yjs应该处理不了吧？我还没想那么细。验证我就写个单测跑一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "演化树用Neo4j还是MySQL？互斥修改在接口层怎么拦？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Pre-merge Hook这种拦截器我没写过，CTE递归查询我也只会最简单的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚去看TypeORM的Entity Subscriber文档，看怎么写Hook。然后写个脚本造两条互斥修改的分支数据，跑一下Merge接口，看返回是不是拦截报错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演化树基线：MySQL邻接表+存State Vector+Pre-merge Hook拦截；验证：造互斥数据测Hook拦截；今晚补学：TypeORM Entity Subscriber和CTE递归。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

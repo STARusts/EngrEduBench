@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计频响安全与通信保障评估背景下，用户与导师围绕gRPC流防篡改方案选择、断连降级策略及benchmark验证实验设计持续沟通（9轮），其中在防篡改方案部分与通信安全专家沟通（1轮），在断连保底策略部分与云边协同架构师沟通（1轮），并最终形成SM3 HMAC防篡改与边缘网关接管降级的安全通信约束及验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "安全的话，套一层TLS加密不就行了？通信保障，我看网上好多人用MQTT，QoS开到2，肯定能送到吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那gRPC流的安全怎么做？有没有一键开启的包？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@通信安全专家 gRPC流防篡改，有没有现成拦截器或者中间件能直接挂上去的？不想手写太多逻辑。@云边协同架构师 信道断了的话，怎么保底比较省事？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TLS复用感觉更通用点，我倾向用TLS复用，毕竟框架都自带。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚看了个电网调频安全规范，里面提了一嘴用国密SM3做HMAC，说比RSA快多了。我寻思能不能把SM3套进来试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个benchmark？就写个脚本，发一千个包，看看耗时？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果SM3的P99确实低，我就用SM3 HMAC。边缘降级那边，就按网关接管减载来做。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "安全用SM3 HMAC签名防篡改，前提是benchmark验证P99延迟达标；通信保障用轻量心跳，断线触发条件是连续3次超时或校验失败，边缘网关接管执行本地减载。MQTT和重TLS不考虑了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

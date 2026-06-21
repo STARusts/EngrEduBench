@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发联调压测与回归测试收尾背景下，用户与导师围绕端到端压测入口/指标、回归门禁与三段定位规则持续沟通（10轮），其中在压测路径拆分与R1-R10硬门禁及阈值制定上与测试工程师沟通（5轮），在审计日志最小化、权限隔离与TTL留存策略上与安全与隐私工程师沟通（4轮），并明确按P1-P4构造压测流量并把回归落到CI执行。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按接口全链路压一下，看延迟和报错率。然后回归就把之前那两套反穿越测试再跑一遍，应该就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入口就从事件流开始吧，把 event_code 拉高频一点，然后把 flow、ph、temp 这些也跟着写入。查询也压一点点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行，我去问。你想我重点问时延预算还是用例覆盖？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 现在联调到压测回归这块，你这边建议怎么设计？我需要一份必须自动跑的回归清单，还有压测指标怎么定比较靠谱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些我都收下。压测阈值这块你建议怎么给？我怕我定太松被你们喷，定太紧又过不了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "懂了，我就先跑一轮基线，再用 1.5 倍。R1 到 R10 我照着加进回归。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回归就放 CI 里，每次合并都跑。失败了就看日志定位到 R 几。然后按路径分三段去查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "观测信号…就用 trace_id？还有 event_code 对应的处理耗时。然后策略输出那边看 dose_setpoint 的延迟。验真看 audit_ref 查出来是不是全。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 压测和回归会产生很多审计日志和证据链数据，我们怎么做最小化、权限隔离、留存策略？要哪些是必须写的，哪些能脱敏或采样？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。那我回归里加一条“测试标识必填”，还有越权读取要失败。TTL 也加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一件，我找数据工程师把测试标识字段加到数据模型里，跟 audit_ref 绑定，防止混到生产证据链。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第二件，我跟测试工程师把 R1-R10 变成 CI 里必跑，然后失败就按三段：采集段看 collect_ts 到入库时间差、模型段看事件处理耗时、验真段看 audit_ref 链是否断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第三件，跟安全这边确认压测账号权限和 TTL，至少让压测数据 14 天自动清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就…把 is_backfill 随机打 10%？然后 seq 做点倒序，再把 collect_ts 随机延迟几秒。丢包就把部分事件不发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我就按 P1-P4 来，比例也用你这套，不自己乱改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就先盯 R2 和 R3，挂了先按采集/模型/验真三段去查，BACKFILL 就用 is_backfill 和评估对比那套结果来证明。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在声纹译动实时配音变声服务台的方案设计背景下，用户与导师围绕流式语音合成链路拆分、Segment切分/取消/重合成、缓存与后处理位置及延迟指标口径持续沟通（10轮），其中在数据留存与合规红线部分与合规与版权经理沟通（3轮），并收敛出默认无状态的总体架构模块与TTFB/连续性/端到端基线指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先卡在“流式语音合成总体架构”这块：实时边播边合成到底怎么拆，延迟指标怎么定才靠谱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想的是：前端把文本一段段丢上来，后端TTS流式吐音频chunk，前端就边收边播。然后变声也插在后面一层，把chunk再处理一下发回去。延迟就……用户点播放到听到声音，1秒以内？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分段我就按句号切？缓存就是前端先攒个两三秒再播，避免断断续续。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Segment长度怎么定？我怕太短，模型老起停；太长，改一字就得重来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "取消就是前端发个cancel给服务端？局部重合成就是同一个segmentId+version++？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能画成：文本切分器 -> 合成调度器 -> TTS引擎 -> 音频后处理 -> 流式输出。前端就是：请求 -> 收流 -> jitter buffer -> 播放。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志肯定会有吧，不然排障不了。音频chunk我觉得可以暂存内存，别写盘。文本我也不想存，但不存就没法复现问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与版权经理 流式语音合成这块，哪些能存、哪些不能存？比如文本、生成的音频chunk、音色参数、请求日志这些，留存底线和红线分别是什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果用户就是要“云端工程协作”，他想让团队成员能回放之前合成的版本，这就得存音频了吧？不存就很难协作。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "日志里完全不放文本，那我定位不了“某句合成崩了”啊，只剩segmentId我也看不懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边的点有点硬：默认不长期留文本和生成音频，chunk只能链路内暂存不能落对象存储；日志要脱敏，不能放原文和音频，只能放segmentId、耗时、模型版本、token数、文本hash这类；角色包参数算敏感要加密+可删除；导出/删除要审计留痕。还有机构可以配留存周期，但得是显式配置。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把服务拆成两条：合成服务本身尽量无状态，Segment内容只在请求里带；需要排队的话就只存segmentId和一些统计，不存原文。音频就走流式返回，后端不把chunk写盘。要存素材就走单独“素材库服务”，用户点保存才进去，而且带TTL策略。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "审计不能删这点我之前没想过。那用户说要删，我怎么解释？审计留着不算“留原音频”吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那指标口径这块，你刚说TTFB和不卡顿要分开。我们定多少？我只敢拍1秒内开声。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "卡顿率我怎么测？前端上报吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那现在总体架构我能收敛成几块：网关鉴权、文本切分、合成调度、TTS引擎、后处理、流式输出、素材库（可选保存）、审计与脱敏日志、QoE上报。对吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

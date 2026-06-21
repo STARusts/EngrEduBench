@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估缩放异常漂移排查背景下，与导师围绕扩容后时延飙升的归因与验证口径持续沟通（3轮），其中在漂移溯源与冷启动假设部分与SRE稳定性值守沟通（1轮），在调度模型残差发散与预热折损部分与弹性调度算法工程师沟通（1轮），并形成基于新Pod冷启动指标与模型残差曲线的闭环验证方案及修改调度模型参数的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我刚才在 Grafana 上看曲线，确实一扩容就抖。是不是咱们压测时没把链路追踪开全？如果有 Jaeger 这种工具，是不是就能直接定位到是哪个微服务卡住了？有没有更方便一点的办法能一眼看出根因？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上扩容后时延飙升，大盘上 Pod 状态都是 Ready 的，这种漂移一般怎么溯源？有没有什么现成的监控面板能直接查出来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那调度模型这边是不是算错了？能不能在编排层加个注解，或者改改 Ingress 配置，让流量晚点打过去？我看网上很多人都是用预热注解搞定的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着能不能直接改改 K8s 的 readinessProbe，加个 initialDelaySeconds，让新 Pod 晚点 Ready，这样流量不就晚点进来了？大盘应该就不抖了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以用 Prometheus 查新 Pod 启动后前 10 秒的请求速率和错误率，再对比老 Pod。如果新 Pod 前 10 秒全是超时或者 5xx，就能证明是预热没完。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我再写个 PromQL，专门筛 pod_age < 10s 的 Pod 的指标，跟老 Pod 做对比。如果确实是冷启动问题，我就得去改调度模型的预热折损参数了，这好像没法靠调工具配置兜底了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

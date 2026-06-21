@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在沼气站预测-优化算法方案设计背景下，用户与导师围绕产气预测目标/窗口、特征与质量码/延迟处理、以及预测结果驱动柔性调度与最小验证口径持续沟通（9轮），其中在预测目标与评估口径部分与算法工程师沟通（1轮），在调度硬约束与安全边界部分与环境工艺顾问沟通（1轮），并形成两档预测+降级路径+调度约束与验证动作的方案框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就预测 biogas_flow 吧，然后根据预测值去调发电功率，尽量别放空。感觉就这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间就按 60s 对齐的做吧。ch4_pct 也可以一起。质量码就过滤掉不好的就行，delay_flag 就先不管？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 预测这块你建议怎么定？要预测哪些指标、预测多长时间，还有质量码怎么处理比较靠谱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是要预测两档，短期和中期。质量码不用删光，留着当特征。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "模型就用 LSTM 这种吧，时序不是都用这个。复制就把模型直接搬过去用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征就用 digester_temp、digester_ph、feed_mass，再加 gas_holder_pressure。还有 gen_active_power 也加上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境工艺顾问 调度这块有哪些硬约束？比如投料、储气压力、放空、发电这些有什么不能碰的线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概就是压力别超，pH温度别乱，放空少点，发电别老开关。h2s 高就少发电？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把 h2s_ppm 当成限制条件，超过就不让策略太激进。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟就先等数据补齐？或者就用上一条数据顶着。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就记成两套模型，一套复杂一套简单，弱网走简单的。这个我能在任务板上拉两条泳道，让算法和工艺的人各认一条，免得互相等。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿历史数据跑一遍，看预测误差小不小，然后看看优化出来的策略有没有放空变少。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

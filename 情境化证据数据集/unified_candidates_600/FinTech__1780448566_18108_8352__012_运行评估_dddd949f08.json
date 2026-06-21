@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行期核心指标监控背景下，与导师围绕阻截率与误杀率的业务口径、合规红线及熔断降级逻辑持续沟通（5轮），其中在业务口径定义部分与业务运营分析师沟通（1轮），在误杀率合规红线与降级处置部分与反诈合规架构师沟通（1轮），并最终形成监控口径、告警阈值及降级留痕规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Grafana拉大盘呗。阻截率就是阻断数除以总交易量，误杀率就是申诉通过数除以阻断数。我看网上好多人都是这么配的，PromQL套一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务口径咋定？阻截率和误杀率直接拿总数除行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分母得换，实时算误杀不行。那我PromQL里分母改成命中数，误杀率加个时间窗口偏移？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误杀率超多少算违规？需要设熔断吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "千分之五，还得降级。所以Grafana大盘得加个AlertManager告警，超0.5%就触发降级熔断。分母用命中图径账户数，误杀率用T+1滑动窗口算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阻截率分母用命中图径账户数，误杀率用T+1滑动窗口算，告警阈值0.5%。超阈值系统降级只预警不阻断，误杀记录要审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

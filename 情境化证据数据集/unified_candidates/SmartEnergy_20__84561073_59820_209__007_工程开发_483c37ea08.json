@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多能互补系统工程开发背景下，用户与导师围绕负荷预测模型因数据量上来需做分布式并行训练、排查梯度同步与成本权衡持续沟通（5轮），其中在并行方案选择与通信拓扑/加速比评估部分与AI算法工程师沟通（2轮），并最终明确采用PyTorch DDP在三节点集群验证并监控All-reduce耗时后编写环境初始化脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接找个那种支持分布式的框架包，像Spark或者Ray之类的，把我们现在的模型代码套进去，改几个分布式参数应该就能跑起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……多开几个计算节点试试？我看网上说分布式框架会自动处理这些分发任务，我不觉得这块会有多复杂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI算法工程师 刚才导师让我来问问，咱们这个负荷预测模型并行化，有没有什么现成的插件能直接挂上去？我就想让它跑得快点，别老是报错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你的意思是说用DDP比较方便，不用改太多逻辑对吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就选DDP了。反正现在大家好像都用这个，生态比较好，去GitHub上找个Demo改改就能用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先在小集群上跑跑看。如果Batch Size调大点能跑通，就先这么凑合。至于成本，大不了我晚上夜深人静的时候挂脚本跑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把那几个Master地址和进程号配一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

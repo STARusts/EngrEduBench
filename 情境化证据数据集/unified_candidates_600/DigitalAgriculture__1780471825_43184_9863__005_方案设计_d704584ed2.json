@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在果园水肥感知与微灌系统架构设计背景下与导师围绕边缘弱网算力约束与云端过度设计持续沟通（4轮），其中在边缘与云端技术选型部分与农业系统架构师沟通（2轮），并最终形成基于ARM网关与轻量时序库的云边架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上云原生架构，边缘网关跑K3s，数据用Flink做流批一体处理，这样扩展性最强，以后加传感器不用改底座。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力这块我确实没细算，只知道现在网关都是ARM架构。边缘侧轻量级流处理除了Flink还有啥我也不太确定。我得去查一下边缘网关的算力基准和轻量流处理框架的对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想在果园边缘网关部署K3s和轻量级Flink处理多模态感知数据，实现云边流批一体，这方案在农田环境下可行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那云端呢？云端总可以上Kafka+Flink了吧，数据量大了不好处理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我接受边缘侧的方案，但云端我还是想保留Flink，万一以后要接气象站大流数据呢？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "就是觉得扩展性好，以后不用改代码。但确实目前只为苹果园验证，上Flink集群运维成本也高，而且我也不会运维。行，云端也砍掉，就用时序库加微灌决策服务。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘侧：ARM网关+Docker+MQTT+SQLite断网缓存；云端：时序库+微灌决策引擎。感知数据流：传感器上报MQTT到网关，网关断网存本地SQLite，复网续传云端时序库，决策引擎直接读时序库出指令。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

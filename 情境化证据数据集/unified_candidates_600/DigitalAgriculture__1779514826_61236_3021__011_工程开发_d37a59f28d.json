@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在飞控板算力受限需将模型推理延迟从230ms压至50ms以内的背景下，用户与导师围绕模型精简方案、量化策略选择及兜底妥协路径持续沟通（6轮），其中在极限算力下的模型精简与量化方法部分与嵌入式开发工程师沟通（2轮），并最终形成混合量化加查表替代及降分辨率兜底的优化路径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "230ms。板子太拉了，一跑推理CPU直接拉满。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咋砍？能直接剪枝剪一半吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "查表替代是啥意思？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接全量化，应该能快很多吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以只对卷积层做INT8，全连接层留着FP16。我试着把这套迁移过来，"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "刚才光想着一刀切省事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果还超，我就把输入点云分辨率降一档，从64线抽稀到32线。牺牲点边缘特征换取算力，反正冠层内部流场变化没那么精细。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改模型导出脚本，加上查表逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

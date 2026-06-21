@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联调压测与容灾演练背景下，用户与导师围绕互动选择接口的高并发一致性、性能与故障注入验收清单持续沟通（7轮），其中在压测模型与验收口径上与测试负责人沟通（2轮），在指标埋点与故障开关注入步骤上与SRE运维工程师沟通（2轮），在快速失败错误码与写库超时配置上与后端负责人沟通（2轮），并确定压测比例/并发、故障演练步骤及日志脱敏与错误码改动方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重复吧。还有就是点两下变两条。扣费…我们这步不扣费啊。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找前端？还有测试？对齐…就是参数对不对，返回码对不对，日志别爆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测要怎么搞？我接口就一个POST一个GET，你要打多少？怎么才算过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "1万session我没法造吧。还有P95我也不知道怎么看。我们直接看接口通不通不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我大概懂。就是打很多GET，然后夹一点POST。双击就是同一个session连打两次POST。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是9比1，GET多。并发200和1000。然后看POST别出现奇怪错误码，GET要快点。日志别把token打出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 容灾演练要我做啥？我就一个服务，能关掉再开吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我服务里没事件总线吧。就写库。`DEPENDENCY_UNAVAILABLE`我们之前没定义。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测10分钟。然后开DB慢，再开DB挂。看P99，错误率。然后恢复看回不回。还有日志别带手机号。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第3条我不会统计。第5条我也不知道怎么快速失败，我就等DB报错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "grep我会。hash我不会做。直接搜sessionId不行吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，我让他加个字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 压测容灾那边说要依赖挂了快速失败，还要个`DEPENDENCY_UNAVAILABLE`。我们现在只有那几个码，能加吗？超时我也不懂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就加个超时配置？200还是500我也不知道选哪个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳：加`DEPENDENCY_UNAVAILABLE`，写库超时先500ms可配；压测按9比1跑200和1000；日志里不打session原文，改打caseId和traceId。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

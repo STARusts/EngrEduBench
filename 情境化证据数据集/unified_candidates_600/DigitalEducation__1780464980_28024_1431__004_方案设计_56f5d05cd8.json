@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在AI边界与卡点识别方案设计背景下，用户与导师围绕代写判定特征、卡点逻辑、灰度区介入度及双通道特征可行性持续沟通（11轮），其中在卡点与代写行为差异部分与认知科学研究员沟通（1轮），在特征提取与组合实时性部分与算法工程师沟通（2轮），并最终形成行为与语义双通道特征集、卡点结构体及轻量化约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可以算文本的perplexity，AI生成的通常比较低且平滑。然后卡点的话，看停顿时间，停顿超过某个阈值就算卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查词典是主动检索，等AI是被动等待。那是不是得看输入事件？如果停顿后直接贴了一大段高质量文本，就是AI？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@认知科学研究员 从认知建构角度看，真实的卡点和AI代写的行为模式差异在哪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 修改密度这个特征，在流式数据里好提吗？还有perplexity实时算的开销会不会太大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不能只看停顿，要看修改动作和输入节奏。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心特征集：输入间隔方差、退格键频次、替换跨度。卡点判定逻辑：方差突变且退格频次高，认为是真实卡点；间隔均匀且无修改，认为是AI代写嫌疑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "语音输入的特征是长句一次性注入，跟键盘敲击不一样。翻译软件贴过来这种，算合规工具辅助还是算越界？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度区的话，是不是可以设置一个“AI介入度”评分，而不是一刀切的0和1？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "因子1：片段覆盖度，就是AI生成文本占当前段落的比重。因子2：修改衰减率，贴上来后有没有人工润色修改。因子3：输入节奏异常分。三个加权求和算介入度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个没数据我也定不准。是不是得先标一批数据跑基线？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "出口就是输出一个结构体：{卡点位置, 卡点类型(如逻辑推演/词汇匮乏), AI介入度评分}。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，这好像确实断了。键盘退格多只能说明在改，不知道为啥改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 如果把文本语义特征（比如论据连贯性得分）和键盘行为特征拼在一起，实时性还能保证吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拼起来延迟可控，就是小模型得轻量化。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。双通道特征：行为加语义；输出：卡点结构体；约束：语义模型轻量、低延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

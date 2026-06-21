@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在证据链服务核心开发背景下，用户与导师围绕trace_id边界、链内/链外事件划分及失败码端侧策略持续沟通（8轮），其中在标识设计与chain生命周期落地上与后端工程师沟通（4轮），在错误码最小分类与time skew校正上与安全工程师沟通（2轮），并形成端侧上报字段与失败处理mapping及最小验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我现在就是每次打开作业详情页就 new 一个 trace_id，然后页面里所有事件都带着。问题是提交作业会跳转好几个页面，trace_id 就断了。我就想是不是用现成的链路追踪库自动搞定，但端上又不太好接。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉跟 hw_id 绑定最稳，因为我们最后也是按 hw_id 查。但有些行为不是某个作业，比如进入班级作业列表，这些事件硬塞 hw_id 也不对。然后失败码我也纠结：现在服务端返回 400/500，我端侧只能重试或丢弃，没法细分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 trace_id 这块你们服务端准备怎么搞？我端上现在只会 new 一个随机串，跨页面就断。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那端上还需要自己生成 chain_id 吗？我怕两边对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“未闭合”的判断是靠啥？就靠时间窗口吗？比如学生开着作业不动半小时。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "失败码你们希望我端上怎么处理？我现在就遇到 400 也会重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 失败码里哪些要区分？我端上想简单点，不想搞一堆分支。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "time skew 还要校正？我还以为服务器直接忽略就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概听下来是：trace_id 其实更多是排障用，不一定跨页面。真正串证据链的是服务端 chain_id，按 hw_id+user_id+提交尝试来建。然后失败码要分三类：直接丢、退避重试、修复后再试一次。这样端上分支就少点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想就都不进证据链服务了？或者硬给个 hw_id=0 之类的占位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，我只要端上不用改太多。就是 event_name 白名单你们给我一份，我按它打点更稳。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就定成“一次用户操作流”，比如从点进作业详情到退出详情，这段内尽量保持同一个 trace_id。跳页面如果还能拿到就沿用，拿不到就换新的。我不保证跨 app 重启，也不保证跨天。主要用于把一坨事件串起来排查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想做一个 mapping 表：  \n- http 2xx：ack 删除  \n- http 5xx/超时/断网：重试（指数退避，批次可降到 5 条）  \n- http 4xx：默认丢弃，但 401 先刷新 token 再试一次  \n- body code：E_RATE_LIMIT 也当可重试，但退避更久；E_TIME_SKEW 就用 server_ts 算 offset，修一次再发；E_SCHEMA_INVALID/E_SIG_INVALID/E_POLICY_REJECT 直接丢并记 last_error_code。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能在本地造一组事件，occur_ts 故意偏 10 分钟，然后看服务端回 E_TIME_SKEW 后我修 offset，再发一遍，最后查链内事件排序是不是按修正后的时间排对了。再加一个 case：同一 trace_id 里两条事件间隔 1 秒，修正后间隔还在。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对 E_TIME_SKEW 和 401 我给事件加一个 retry_once 标记，写在本地队列的 metadata 里，触发过一次就不再走修复重试，直接按不可重试处理或者走普通退避。这样不会卡住队列。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

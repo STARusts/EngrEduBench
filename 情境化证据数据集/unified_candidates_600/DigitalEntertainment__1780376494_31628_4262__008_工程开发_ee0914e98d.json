@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流控逻辑与事件引擎实现背景下，用户与导师围绕高并发状态流转、事件分发及快照策略持续沟通（6轮），其中在状态流转与回滚部分与时序拓扑编排师沟通（1轮），在事件分发无锁实现与快照保留部分与核心引擎实现攻坚者沟通（2轮），并最终形成流控引擎的四条核心实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Petri网建个时空状态变迁模型，把多用户并发事件映射成Token流动，能保证死锁检测和因果序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用个图结构存状态节点，然后加个互斥锁防并发冲突？具体用什么锁我还没想好，可能就pthread_mutex？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用Petri网，多用户并发触发状态变迁，因果序怎么保证？还有事件回滚怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "事件分发呢？不用锁怎么把事件分发给各个执行节点？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "因果序，是不是在事件入队的时候排个序？重放开销，如果冲突多确实会崩，是不是得限制并发度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "快照保留怎么搞？全放内存肯定OOM。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "CAS和乐观锁我得多看看API文档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

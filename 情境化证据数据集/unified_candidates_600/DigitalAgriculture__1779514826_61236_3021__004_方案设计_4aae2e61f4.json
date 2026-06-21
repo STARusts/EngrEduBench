@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在冠层气动解析感知架构设计背景下，用户与导师围绕激光与视觉融合方案、边缘算力约束及MVP架构确定持续沟通（6轮），其中在融合对照假设部分与点云算法工程师沟通（1轮），在边缘功耗与延迟评估部分与边缘计算架构师沟通（1轮），并最终确定基于决策级融合的MVP架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算边缘端直接上激光雷达加双目，Jetson做点云解算，直接出流变特征。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "激光看深度，视觉看纹理，我直觉上觉得特征级融合最好，精度高。算力的话，Orin应该够吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就知道弱光下激光肯定比视觉稳，但怎么量化对比我没思路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征级融合和决策级融合，这俩对照实验怎么搞？变量怎么控？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Orin跑特征级融合，功耗和延迟能达标吗？我们要求作业时候不能断通讯，也不能过热迫降。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以特征级融合精度好，但机器会热死；决策级融合慢点但省电。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不懂模型量化和算力裁剪，这块我得补课。我打算这两天把TensorRT的官方文档过一遍，再看看Jetson的算力分布表，先在板子上跑个量化demo摸个底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "MVP架构：1. 传感器端激光加双目并行输入；2. 边缘端Jetson跑决策级融合，轻量提取流变特征；3. 冠层整体风场推演和靶窗推演放云端；4. 边云低延迟同步保通讯不断。这样功耗可控，算力也够。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

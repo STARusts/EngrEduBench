@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在冷链物联边缘网关采集与上链开发背景下，用户与导师围绕断网续传、交叉编译、上链接口规范及弱网验证持续沟通（9轮），其中在断网本地续传与重试机制部分与边缘网关开发工程师沟通（2轮），在上链接口必填字段部分与接口与数据流设计师沟通（1轮），并形成SQLite持久化、退避重试、Payload补元数据及tc弱网验证的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "书上都说用MQTT，断网就等重连呗，QoS设成1或者2。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序就加个时间戳。重连后按时间戳顺序发不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "冷藏车断网半小时，本地续传怎么搞才不会写穿Flash？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那上链失败重试呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "交叉编译报错就看报错日志搜StackOverflow呗。退避阈值我设个1分钟总行了吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没搞过ARM交叉编译，之前都在x86上跑。我这两天先把Buildroot工具链跑通，写个SQLite的demo在树莓派上验证一下WAL模式性能。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就按标准JSON发呗，温湿度加上设备ID。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关上链接口需要哪些字段？我只采了温湿度和设备ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还要制冷剂类型和功率，这网关还得存配置表啊。UTC毫秒我懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我写个测试脚本，把网关网线拔了，往里灌10万条温湿度数据，看SQLite有没有写穿，然后再插网线，看云端收到的数据条数对不对，时间戳是不是顺序的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用tc加延迟，监控缓存增长率和上链TPS，如果缓存涨得比上链快就是不行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

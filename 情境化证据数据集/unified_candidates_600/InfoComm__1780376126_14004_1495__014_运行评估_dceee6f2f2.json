@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在光电链路异常归因与自愈策略制定背景下，用户与导师围绕异常定界、归因逻辑串联、自愈重试参数设定及归因工具选型持续沟通（10轮），其中在光电混合态异常定界部分与运行监控分析师沟通（1轮），并最终形成基于INT与OAM的归因逻辑及芯片流表自愈判定原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延突增肯定就是异常了。如果是电层队列积压，看入出时间戳差值就能定界到具体节点。自愈的话，把流调度到备用链路就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果光路重建成功了，时延应该降回来。没降回来就是故障。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "光电链路时延抖得厉害，INT遥测只有时间戳，怎么区分是光路闪断还是电层调度不过来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控分析师说光层要看OAM数据，电层看缓存。自愈的话，闪断重路由，硬故障锁电层。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先看光层OAM有没有告警。有告警就是光路问题，尝试重路由；没告警就看电层缓存，缓存满了就是电层拥塞。光路重路由失败就算硬故障，切电层。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重试次数设3次比较保险。间隔的话，光模块恢复一般要毫秒级，间隔设5毫秒？不行，5毫秒对微秒级网络太长了，业务早就抖得没法用了。要不设100微秒？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我得去查光模块厂商的恢复时间规格书。查完再定。但不同厂商规格不一样，这参数怎么配？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个Python脚本解析告警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "归因逻辑下放到芯片流表。那OAM告警也要转成流表触发条件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 触发源：INT时延超阈值。2. 归因：查光层OAM，有则定界光路，无则查电层缓存。3. 自愈：光路闪断触发芯片流表重路由；硬故障触发流表锁定电层备用路径。重试参数先用厂商保守规格基线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

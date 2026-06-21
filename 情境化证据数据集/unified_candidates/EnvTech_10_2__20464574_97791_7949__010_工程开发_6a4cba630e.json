@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发末期全链路压测与验收背景下，用户与导师围绕拆分链路压测口径、KPI定义、故障注入与合规审计要求持续沟通（9轮），其中在压测矩阵/取样与回放一致性判据部分与测试工程师沟通（4轮），在日志脱敏、最小权限与审计留痕基线部分与安全与隐私工程师沟通（2轮），并形成可执行的验收清单与待核对字段/阈值任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把链路拆成三段测：边缘采集/对齐、云端反演+核算、工作台回放和导出。压力口径我想用两个维度：吞吐（每秒对齐后的点数/事件数）和端到端时延（source_ts 到建议落库/可查询）。过线条件：时延 P95 不超过我们现在报警阈值的一半？这个我不确定，得跟测试对一下现有阈。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对齐错误率我想定义成：同一 run_id 回放时，align_ts 对齐到的 source_ts 桶如果发生跨桶漂移，就计错。具体是：原始回放结果里每条记录的 (edge_seq, source_ts, align_ts) 形成基准，再跑一遍对比，hash 不一致比例。故障注入点：断网导致 ingest_ts 堆积；PLC 延迟抖动导致 plc_lag_sec 过阈；风速卡常数触发 wind_speed_stuck；相机过曝/污染触发 sensor_health_flags。压力上再叠加“异常风暴”，让分类树高频触发。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你希望矩阵按“工厂数/相机数/采样频率”这种维度展开，还是按“链路组件”展开？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 我这边要做全链路压测验收，主要卡 source_ts 对齐和 run_id 回放一致性。你那边建议的压测矩阵怎么定？尤其端到端 KPI 取样、故障注入自动化、以及回放一致性你们常用啥判据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放一致性里，核算输出一致性如果涉及浮点和因子版本，会不会每次都差一点？你们通常 epsilon 怎么给？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障负载你说的控 PLC 模拟器延迟分布，我现在只能在我们的联调环境里调一个固定延迟+抖动，分布不太会配。你能给个够用的分布模板吗？别太学术，我只要能覆盖 plc_lag_sec 过阈和回落。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：异常率 A 你们怎么设？如果 A 太高，分类树一直跑，CPU 可能被吃光，看不出真实链路瓶颈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我理解。先不把降级写成必过项，除非后端已经做了。那我回去跟导师对齐 KPI 口径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从测试那拿到矩阵建议：按站点 N、相机 C、有效帧率 F、异常率 A 组合三组负载（基准/峰值/故障）。端到端时延取样用 suggest_commit_ts - source_ts，P50/P95/P99；回放一致性同 run_id 重放，两次结果关键字段确定性比对：source_ts/align_ts/edge_seq、分类结果、flux/ci95/quality、核算 kgCO2e；浮点允许 epsilon（相对 1e-6 或绝对 1e-3，取决于单位量级）。PLC 延迟给了三段式模板+突刺，验收看 plc_lag_sec 触发率和回补后对齐漂移。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在云端落库那边有 ingest_ts、align_ts，核算引擎输出里我记得有 calc_ts 或 emit_ts，我不确定名字。这个我需要跟后端确认一下字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能拆三件：1）我去找后端把 final_store_ts 字段名定下来，并确认它是服务端生成还是沿用上游时间；2）我把对齐错误语义指标补上：按 source_ts 分桶的点数偏差率；3）和测试对齐负载参数范围：N/C/F 的具体数值。字段名我今天拉后端一起过一遍。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只顾着对齐和性能，日志合规没细想清楚。我去问安全怎么卡基线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 压测和回放会打很多链路日志、还要导出审计材料。我们现在日志里可能带站点 ID、设备序列号、甚至坐标。开发期验收你建议怎么做“最小权限/脱敏/审计留痕”的检查点？给几个能落地的规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“输入摘要+版本+输出摘要”，对齐链路里我能用 (source_ts, edge_seq, payload_hash) 这种。盐的管理是不是要上密钥系统？这块我可能搞不定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把这三条变成验收点：模拟标识、分权、hash 摘要+版本。回去跟导师合并进矩阵。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，安全那边给了压测验收的合规基线：压测数据必须用模拟站点标识，真实企业名/坐标不能进日志和导出；run_id 回放要读写分权并记录导出审计；审计日志只存输入/输出摘要 hash + 规则/因子版本，不存敏感原文。验收上可以抽查日志无明文字段、以及越权访问 run_id 必须失败并落审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给一版能跑的清单，你看有没有硬伤：  \n1）基准/峰值/故障三组负载：规模维度 N 站点、C 相机/站、F 帧率、A 异常率（1%/10%为必跑，30%做探索）。  \n2）端到端时延：抽样 1% 记录，t = final_store_ts - source_ts（final_store_ts 以核算结果表落库时间字段为准），输出 P50/P95/P99，峰值负载下 P95 不超过约定阈值（阈值我跟测试一起填具体数）。  \n3）回放一致性：同 run_id 重放两次，source_ts/align_ts/edge_seq、分类结果、flux/ci95/quality、核算 kgCO2e 比对一致；浮点用 epsilon（相对 1e-6 或绝对 1e-3，按单位定）。  \n4）对齐正确性：以 source_ts 为基准对齐；对齐错误语义指标=按 source_ts 分桶的点数偏差率，超过阈值判失败；对齐链路必须能区分 ingest_ts 堆积导致的错配，并在日志/工作台可定位。  \n5）故障注入：断网回补、PLC 延迟三段式+突刺、风速卡常数、相机过曝/污染；验收项包含 plc_lag_sec 超阈触发、wind_speed_stuck 和 sensor_health_flags 触发、回补后分类结果稳定且可复现。  \n6）资源与稳定：峰值+故障叠加时服务无崩溃，错误率（请求/任务失败）低于阈值；边缘侧缓存不爆（以本地队列长度/占用上限为判据）。  \n7）合规/审计：压测数据去标识化；run_id 回放读写分权；导出与越权尝试有审计记录；审计日志仅存 hash 摘要+规则/因子版本，抽查无明文站点名/坐标/序列号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

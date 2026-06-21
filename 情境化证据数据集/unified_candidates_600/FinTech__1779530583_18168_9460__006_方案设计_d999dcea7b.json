@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在疏导策略引擎接口契约设计背景下，用户与导师围绕接口异步解耦、字段定义、权限感知与合规审计持续沟通（4轮），其中在流式接口标准与版本兼容部分与数据流与契约工程师沟通（1轮），在触发字段与权限变更部分与规则引擎开发工程师沟通（1轮），并最终敲定基于Kafka与Avro的异步契约及核心触发与审计字段要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我寻思直接用JSON Schema做校验，然后RESTful POST把异常报文推给引擎。这样联调起来最快，工具也熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流式策略引擎的接口契约怎么定？版本兼容怎么控？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "说是不能用REST推，得用Kafka Topic当接口，格式换成Avro，跟之前的Schema Registry联动做版本控制。我大概懂了，就是还是走消息队列解耦呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎触发疏导需要哪些字段？通道权限变了契约怎么感知？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则引擎那边说要trace_id、卡点ID、金额这些。权限变更加个版本号字段比对，还要加审计字段防乱疏导。我这就把这几个字段加到Avro结构里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口契约要点：1. 异步解耦，用Kafka Topic做输入输出；2. 格式用Avro，走Schema Registry管版本兼容；3. 触发必传字段：trace_id、blocked_node_id、amount、channel_type；4. 权限管控加channel_acl_version比对；5. 审计必传项：操作人、疏导时间戳、原通道、目标通道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

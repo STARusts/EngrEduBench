@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在票据图谱系统生产部署前运行评估背景下，用户与导师围绕图谱数据合规边界、架构拆分、审计留痕及脱敏后性能验证方法持续沟通（10轮），其中在跨企业图谱数据合规要求部分与金融合规师沟通（1轮），并最终形成包含架构拆分、审计上链及A/B测试验证指标的生产部署验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Jenkins打镜像，然后Helm直接推到生产K8s集群里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存了票面全量信息啊，承兑人、收款人、金额、还有关联的发票号。为了穿透查询快，我都放Neo4j的节点属性里了。访问控制我加了Spring Security，应该够安全了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种跨企业查图谱的情况，监管具体是怎么要求的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哈希映射？那我如果业务还要看票面详情怎么办？全脱敏了前端没法展示啊。有没有那种既能脱敏又能偶尔看明文的现成框架？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开的话，我可以用Neo4j存哈希值和关系，明文放MySQL，查图谱只返回ID，再去MySQL按权限拉？这样改动好像还能接受，不用重写调度逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我加个Spring拦截器写日志表？或者用SkyWalking这种APM工具自带的链路记录？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我调整方案：图谱只存哈希和关系，明文走权限接口，审计日志推到咱们现有的联盟链上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把原方案和脱敏方案各跑一万次，看穿透成功的数量和耗时。如果成功率差不多，就算过了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实在数据验证这块很缺，平时都靠工具出个大概数，碰到这种要统计证明的就懵了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算这周末先看两篇关于图谱属性加密的论文，然后学一下Apache Commons Math里的统计包，自己写个T检验的计算类，把这个A/B验证的脚本补上。目标是在下周三前，能跑出带置信区间的验证报告，再申请上线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "生产部署前必须改架构：Neo4j只存哈希脱敏字段与关系，票面明文拆回关系库按权限拉取；审计日志上链防篡改。验证方式：10%流量A/B测试，观测穿透匹配率（95% CI下界>=原方案98%）和P99延迟，用自研统计脚本出报告。达标后再全量推生产。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

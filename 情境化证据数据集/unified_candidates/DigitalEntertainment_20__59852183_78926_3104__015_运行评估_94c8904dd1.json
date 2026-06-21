@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估需完善线上告警“第一跳定位+应急预案”背景下，用户与导师围绕P0/P1定位顺序、止血动作与预案模板持续沟通（9轮），其中在P0分类与处置开关上与SRE运维负责人沟通（2轮），在数据回放事件分层与丢弃留证策略上与数据工程师沟通（2轮），并形成可落地的预案条目与最小模板。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就点开告警看日志呗。先把服务重启一下，不行就回滚。别搞太复杂，我就想别半夜被叫。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "完成率掉了？那就把地图服务扩容。或者缓存清一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发没发生就是用户没走到。回传丢了就是网络差。口径变了就是你们改代码了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维负责人 P0响了到底先看啥？给我个最短流程，别一堆理论。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就写：P0就回滚，不行再扩容。触发异常就让客户端更新。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行。  \n1）加载挂了：先看5xx是不是一起涨，再看CDN，再看是不是刚发的版本。  \n2）触发不对：看崩溃，再看定位权限，再看触发上报有没有掉。  \n3）回放坏了：看接入有没有丢，看队列堆没堆，再看埋点是不是改了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就把回放关了呗，别让用户看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结局那个算关键。别的随便？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 事件优先级怎么分？我要写个丢弃/限流的应急做法，别整太细。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "degrade_flag是要我改代码吗？我不想动一堆。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发条件：入湖延迟很高或者丢弃率高。  \n第一跳：看接入QPS/丢弃、队列堆积、埋点版本变没变。  \n止血：只保结局和关键任务，别的采样或者丢。  \n升级：叫你们SRE和值班的。  \n留证：记一下降级开始结束，还有丢了哪些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "授权也要记？我以为只是数据用来分析。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，就把授权事件放最优先。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就照这模板塞进去，别让我再想“为什么”。只要能按步骤点就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在闪崩场景下阻截网关微秒级指令下发调优背景下，用户与导师围绕网关延迟瓶颈定位、旁路方案代价评估及基线压测设计持续沟通（9轮），其中在内核协议栈延迟瓶颈部分与微秒级阻截网关设计师沟通（1轮），在DPDK资源代价与轻量级替代方案部分与全链路压测调优师沟通（2轮），并最终形成以XDP为起点的基线压测方案与切DPDK的降级标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下发指令不就是序列化发出去吗？我觉得可能是序列化太慢，或者规则引擎到网关这步网络IO有延迟。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "发数据肯定要走内核协议栈吧？我觉得可能是内核处理TCP连接那块慢，如果连接多的话。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关下发指令要微秒级，内核协议栈是不是太慢？有没有别的办法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "绕过内核，直接操作网卡？这听起来改动挺大，是不是只能这么干？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太懂DPDK，是不是要独占CPU核？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果上DPDK做网关下发，资源消耗是不是很大？有没有不这么极端的方案先试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "eBPF加XDP？这比纯DPDK轻量吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可以先试XDP，不用独占核，资源占用小，做基线压测看P99能不能进10微秒。不行再上DPDK。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是下发方式，一组走普通内核栈，一组走XDP。看P99延迟和CPU占用率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用沙箱注入历史闪崩数据，打满网关的接收端？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照组标准内核栈和XDP，打线速回放。看P99、丢包率和软中断。不达标就换DPDK。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "domain": "数字视界导航：分布式搜索引擎在信息检索中的前沿技术",
+    "stages": [
+      {
+        "stageName": "第三章 系统实现与部署",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 系统实现与部署」阶段，本段以「3.1视频结构化预处理部分」为题，依次说明关键帧提取、目标检测、特征提取及搜索引擎添加索引四个模块的输入与输出参数，详细描述各模块的接口规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "方案设计",
+                "behaviorEvidence": "①关键帧提取模块\n输入参数说明：\n参数 | 是否必选 | 类型 | 说明\nvideo_dir | 是 | str | 待处理视频路径\nframe_dir | 是 | str | 分帧结果保存路径\n输出参数说明：\n参数 | 是否必选 | 类型 | 说明\nNone | - | - | -\n②目标检测模块\n输入参数说明：\n参数 | 是否必选 | 类型 | 说明\nframe_dir | 是 | str | 分帧结果保存路径\ndetector_model_path | 是 | str | 目标检测模型的权重文件路径\n输出参数说明:\n参数 | 是否必选 | 类型 | 说明\ndetect_results | 是 | dict | 目标检测结果，格式为： dict.keys : 关键帧名称（视频序号_帧序号） dict.values: 目标检测框（左上、右下两点坐标）\n③特征提取模块\n输入参数说明：\n参数 | 是否必选 | 类型 | 说明\nframe_dir | 是 | str | 分帧结果保存路径\nmodel_path | 是 | str | 特征提取模型的权重文件路径\ndetect_results | 是 | dict | 目标检测结果，格式为： dict.keys : 关键帧名称（电影序号_帧序号） dict.values: 目标检测框（左上、右下两点坐标）\n输出参数说明:\n参数 | 是否必选 | 类型 | 说明\nfeature_with_info | 是 | list | 包含检测目标的特征向量及相关信息，格式为list [dict1,dict2,.....]， dict.keys: 电影序号_帧序号_类别序号_目标检测框序号-目标检测框信息 dict.values: list形式的特征向量\n④搜索引擎添加索引模块\n输入参数说明：\n参数 | 是否必选 | 类型 | 说明\nfeature | 是 | list | 特征向量\nimage_info | 是 | str | 图片信息，包括电影id，帧id，类别id，目标检测框 id\nbbox | 是 | list | 目标检测的坐标信息，格式为[x1,y1,x2,y2]\n输出参数说明:\n参数 | 是否必选 | 类型 | 说明\nNone | - | - | -"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

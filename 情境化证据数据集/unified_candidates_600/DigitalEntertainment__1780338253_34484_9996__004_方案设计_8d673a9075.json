@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异构资产光流映射接口定义背景下，用户与导师围绕NeRF与Mesh求交对齐、管线统一及算力与高光误差取舍持续沟通（6轮），其中在求交结果对齐与Specular误差评估部分与算法工程师沟通（2轮），在管线统一封装部分与数据流设计专家沟通（1轮），并最终形成NeRF输出等效面元、适配器封装及Specular降级妥协的光流映射方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算按资产类型分两个接口，Mesh走传统光线追踪，NeRF走体素采样，然后在渲染管线上加个判断分支。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "穿透这块我确实没细想。NeRF没显式几何，光线进去就是累积采样，它和Mesh的求交结果对不上，没法往下走着色管线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "NeRF和Mesh求交结果怎么对齐？返回结构怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果NeRF输出等效面元，数据流管线能统一吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说NeRF要输出等效面元近似法线，数据流说加适配器统一封装HitResult。这方案管线能跑通，加适配器也不影响原有Mesh流程。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力开销我确实没算进去。高光穿帮这块我不懂怎么量化，反正近似法线肯定不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "等效面元近似在Specular反射下误差多大？加高光修正项算力开销多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加30%算力边缘肯定爆。我倾向在映射层做降级，NeRF资产的强Specular光流转Diffuse。损失点高光细节，但帧率保住了，管线也能统一。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

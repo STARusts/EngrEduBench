@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阈值告警最小链路端到端压测与缺陷修复背景下，用户与导师围绕压测分段、观测点与验收口径及合规守门规则持续沟通（8轮），其中在压测模型与对账方法上与测试工程师沟通（4轮），在证据链字段白名单、日志扫描与审计留痕检查上与安全工程师沟通（2轮），并收敛压测指标与P0/P1缺陷分类。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用 JMeter 压接口吧。指标…就 TPS 200？差不多就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志我就看报错就行。trace 我没配过，就看接口返回 200 吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是…要有那三个 id，然后 evidence 里面别放 raw 的内容。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就造点超标数据，缺口就先不测了吧，反正都能出告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测怎么配？给个现成模板，直接能跑那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "队列堆积是看 Kafka 积压吗？我们不是用…反正消息队列有就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就按你说的比例弄。原因码准确率我怎么测？我就看返回里有没有那俩字符串。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抽样 200 条也太多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三段就是上报、告警、工单证据。看 P95、成功率、还有队列 lag。缺陷点…可能证据写入慢，然后链路 id 串不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "grep 一下 raw_packet 字段？日志里搜到就算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 压测时候怎么防止 evidence 里混进 raw 包？检查口径给个简单的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "白名单这个我没做过。现在接口已经返回了 evidence_id 和 archive_uri，应该没事吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对抗样本我不会造，我就正常压。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先压上报吧，上报量最大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P0 就是系统挂了？P1 就是慢点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 写入错误率小于…0.1。2 写入 P95 800ms。3 告警 P95 3s。4 工单成功率 99.5。5 关联率 99。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记住了，就用随机数生成。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

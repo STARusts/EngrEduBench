@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多跳弹性回传数据面流控设计背景下，用户与导师围绕算力时延约束、流控表更新触发与信令复用持续沟通（7轮），其中在流控方案落地部分与中继协议栈开发者沟通将MDP退化为查表及簇头离线算表（4轮），并最终形成基于查表、队列积压触发与信令通道复用的流控机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前面簇头不是管路由嘛，发现断路就发更新，换条路走不就完了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链路闪断包堵了咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算矩阵？解方程？节点上那点算力能干这活？时延不得炸了？这哪写得出来。根本没法落地。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就那种最简单的，看ACK速率，慢了就降速，或者漏桶限流。反正不能跑复杂数学。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算矩阵肯定不行，时延压不住。单跳响应百微秒内，只能查表。你这MDP能不能退化为查表？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降就降吧，先能跑起来再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就簇头算表，节点查表流控。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "要不就和前面波束追踪的残差预测周期绑一起？都是簇头在管，反正残差超阈值了就重算呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就流控表单独触发，看队列长度。超阈值就向簇头请求新表。复用下发通道省信令开销。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "弹性回传数据流控：基于有限状态机查表，簇头离线预计算，队列积压超阈值触发更新，信令下发复用路由通道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

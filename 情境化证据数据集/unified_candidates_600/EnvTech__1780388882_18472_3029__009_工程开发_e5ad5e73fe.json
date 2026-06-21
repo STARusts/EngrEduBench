@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在多模识解模型极限吞吐压测方案设计背景下，与导师围绕真实时序模拟、精度退化观测及开发成本权衡持续沟通（5轮），其中在压测流量构造部分与性能优化攻坚手沟通（2轮），在精度退化观测部分与多谱视觉算法师沟通（1轮），最终确定多进程共享内存推流与在线金标比对的压测策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿一批历史固废光谱数据，写个多线程脚本一直往模型里灌，看QPS和延迟就行了吧？工具的话，JMeter或者Locust都可以。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "长尾材质和精度掉底这块我确实没想过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "显存打爆的话，我就加个限流。但怎么模拟真实物理时序我不太确定，之前都是用离线数据集跑的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么构造符合谱仪真实帧率的压测流量？我原来想用Locust直接发HTTP请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高压下模型精度的退化怎么观测？我只看了推理延迟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测流量不能用Locust，得用C++按分拣带速度生成泊松分布帧流，直接推内存。精度方面，要在压测流里插金标集，监控F1-score跌落和异常ID，不能只看QPS。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开发成本确实高，我C++写不了太复杂的。能不能退一步，用修改后的边缘驱动直接回放真实录像？录像本身就带时序。金标集比对能不能在压测结束后离线做，不占边缘算力？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测流量用多进程共享内存按泊松分布推帧，模拟峰值压力。在线穿插金标集比对F1-score，GPU利用率和显存也加上监控。离线回放只做基线对照。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

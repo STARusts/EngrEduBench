@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度期5%流量进入的运行评估背景下，用户与导师围绕串流质量感知与异常监控的搭建持续沟通（4轮），其中在轻量化监控方案部分与运维监控哨兵沟通（1轮），并最终形成基于Prometheus与AlertManager的四核心指标监控及告警规则方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算引入Flink做实时流计算，把端侧的触觉反馈延迟、云端算力池水位、网络协议栈重传率全部做实时Join。再部署一套开源APM，把全链路Trace打穿。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink的运维确实要专人，但如果不做实时Join，异构指标对齐会有延迟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "现阶段资源有限，灰度期上这么重确实有风险。我去问问监控哨兵，看灰度期怎么轻量化落地。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期我们到底需要盯哪些核心指标？怎么用最轻的方式实现秒级异常捕获？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我建议在指标采集端还是留一个Flink的Sink接口，方便以后做流式扩展，只需要加个配置就行，不费事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度期监控大盘核心指标就这四个。告警规则：建连成功率低于99.9%触发P1告警；P99串流延迟大于20ms触发P1；解码异常率超0.1%触发P2；JND失调率突增触发P2。告警通道直接拉群发飞书。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

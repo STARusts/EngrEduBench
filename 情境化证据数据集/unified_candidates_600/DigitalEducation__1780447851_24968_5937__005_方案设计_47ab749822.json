@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在失误微势测度算法选型背景下，用户与导师围绕跨模态特征提取、防误报、阈值逻辑及边缘算力约束持续沟通（6轮），其中在跨模态架构与防误报部分与算法设计者沟通（2轮），在微势与红线阈值判定逻辑部分与教研督导沟通（1轮），并最终形成1D-ResNet+Attention架构、马氏距离变化率输出及云端下发逆矩阵的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "测度微势，我目前想了两条路。一条是传统时序匹配，比如DTW或HMM，优点是可解释性强，教研好接受；另一条是深度学习，1D-CNN或LSTM提特征。但DTW计算量随序列长度平方增长，边缘侧20ms窗口实时跑不现实；LSTM能捕捉时序依赖，但模型稍大点边缘侧算力就扛不住。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误报率这块确实没细想，只顾着算力去了。如果误报多，学员体验会很差，甚至产生抵触。算法得对正常生理震颤有容忍度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在边缘侧是20ms滑动窗口，sEMG降到50Hz。要测度肌电和姿态的跨模态失误微势，我原本想用LSTM，但怕算力不够且容易误报。有没有更合适的架构？怎么区分正常发力震颤和微势偏差？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1D-ResNet加Channel Attention，计算图确实比LSTM好裁剪。Focal Loss压制混淆样本这个思路好，我之前只想着改网络结构。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得这个路子可行，比硬上LSTM省算力，Attention机制也能体现肌电和姿态的协同重要性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在算法准备输出一个失误概率分布，需要您这边的阈值标准。微势纠偏的触发阈值，和之前提的红线熔断，在判定逻辑上有什么区别？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "综合下来，我准备这么定：测度算法主架构选1D-ResNet+Channel Attention，损失函数用Focal Loss压制震颤；模型输出目标调整为马氏距离变化率，由教研督导提供标准动作流形参数；微势触发看变化率是否超限，红线触发看单点绝对值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "协方差求逆确实有风险，尤其端侧浮点算力弱。我们可以把协方差矩阵对角化近似，或者让云端定期算好逆矩阵下发给边缘侧作为参数，边缘侧只做向量内积。云端下发更稳妥。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

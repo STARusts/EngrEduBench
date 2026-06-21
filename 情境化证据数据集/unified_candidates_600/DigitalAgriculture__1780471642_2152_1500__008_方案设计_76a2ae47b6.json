@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在冷链车高并发容灾设计背景下，用户与导师围绕容灾评估、降级恢复机制及混沌工程压测验证持续沟通（5轮），其中在容灾底线指标与压测观测设定部分与高可用评估师沟通（2轮），并最终形成边缘保预警本地续传、云端异步降级的容灾策略及压测验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高并发容灾，从架构视角看是反脆弱设计。我设想可以用Sentinel做网关限流熔断，云端入口加消息队列削峰填谷。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，确实没想周全。不能简单丢数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种冷链车弱网叠加并发脉冲的场景，容灾底线和指标怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那降级恢复呢？总不能一直延后吧，恢复阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最近我在看混沌工程白皮书，里面提到爆炸半径控制。我们可以把演练范围圈定在边缘网关这一层，控制故障注入的半径，避免把云端数据库也搞挂了。然后做对照实验，一组开降级开关，一组不开，看预警丢失率差异。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发量用Jmeter脚本模拟冷藏车群发，逐步加压到理论峰值的1.5倍。控制变量就是降级开关，因变量是预警延迟和上链TPS。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过样本量，跑几轮合适我拿不准，一般压测跑3轮取均值？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧保预警本地续传，云端异步存证降级。压测验收口径是预警延迟小于100ms，上链TPS允许降级，但缓冲区溢出率必须为0。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

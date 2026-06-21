@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在系统运行评估出现画像偏移告警背景下，用户与导师围绕告警排查思路、窗口对齐根因及验证方案持续沟通（4轮），其中在告警指标解读部分与运维监控工程师沟通（1轮），在窗口截断根因及修改方案部分与数据流架构师沟通（2轮），并最终形成基于脱敏数据造数据跑对照实验的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是我Prometheus的报警阈值设太低了？我看网上帖子说流计算偏移率一般设5%就行，我给改成8%是不是就全绿了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控大盘上这堆红色指标具体啥意思啊？有没有一键导出异常原因的插件或者现成面板？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那是不是加几台机器扩容下就行了？或者我直接把Flink的并行度调大点，多给点算力应该就消化了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "窗口对齐是啥？我用的Flink默认的滚动窗口，就5分钟滑一次，网上demo都这么写的，直接套过来的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "会话窗口？Flink里有这个API吗？能不能直接调个包改下配置文件就行？我不想重写逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能不能在测试环境造点假数据，故意让签发集中在一块，看看是不是还会截断？要是截断就说明真是窗口的问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我去拿时间差数据，然后写个脚本造数据跑对照。先不改代码了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

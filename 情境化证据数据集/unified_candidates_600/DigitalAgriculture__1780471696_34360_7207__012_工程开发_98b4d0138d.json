@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路性能压测与排障背景下，用户与导师围绕网关极限负载下的算力隔离与优先级冲突持续沟通（4轮），其中在压测执行与结果分析部分与系统测试工程师沟通（2轮），在线程调度排查与cgroup配置部分与边缘端开发工程师沟通（2轮），在图像解码卸载可行性部分与算法部署优化师沟通（1轮），并最终形成基于cgroup的算力隔离方案及压测结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先构造极限并发场景：50个菇房同时上报视觉数据，叠加环控指令高频下发，同时触发断网恢复后的日志重传。核心观测点就是网关CPU占用率和MQTT心跳丢包率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测脚本和流量注入工具目前就绪了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放宽心跳只是掩盖问题，CPU打满才是根因。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关侧的线程调度有没有问题？视觉前处理和MQTT收发是不是在抢同一个CPU核心的资源？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "能不能把图像解码也卸载到NPU，或者用网关自带的硬件解码器？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "当前网关的算力边界就是单核处理不了“视觉+重传+控制”并发。必须做算力隔离。图像解码绑到另一个核上比较麻烦，限制它的CPU时间片更可控。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果用cgroup把视觉前处理进程的cpu.cfs_quota_us设低，强制让出主核时间给MQTT，理论上可行。我得现查一下嵌入式环境的cgroup接口是否完整。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你在网关上开一下cgroup的cpu子系统，把视觉处理进程加进去。我查一下quota参数怎么配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把视觉进程的cpu.cfs_quota_us设为50000，周期cpu.cfs_period_us是100000，也就是限制它最多用50%的单核算力。这样MQTT和环控至少有50%的余量，心跳应该能稳住。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "450ms对采收预测来说还能接受，毕竟菇房巡检频率是分钟级的，不是毫秒级。心跳丢了可是要命的，会导致环控中断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这个压测结果说明，在当前硬件条件下，用cgroup做算力隔离是必须的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我们就按这个结论更新压测报告，把cgroup配置写进部署手册。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

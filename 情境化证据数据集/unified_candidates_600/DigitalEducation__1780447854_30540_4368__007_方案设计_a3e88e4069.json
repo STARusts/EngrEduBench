@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在无碍媒体转译接口设计背景下，用户与导师围绕异构输出处理、接口设计思路及核心字段定义持续沟通（6轮），其中在输出结构设计部分与多模态转译算法设计师沟通（1轮），在端侧渲染数据需求部分与包容性前端开发专家沟通（1轮），并最终形成输入归一化、输出协议化的接口思路及核心字段定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得应该做一层统一的抽象接口。用泛型或者模板方法模式，把不同模态的转译器都收拢到同一个基类下，对外暴露统一的translate方法，这样路由层调用起来最干净。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个问题。返回体如果都用Object的话，前端还得做类型推断，容易出错。具体怎么处理这种异构输出，我没什么把握。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法侧这边，如果路由分过来图文和语音两种任务，转译接口的输出结构要怎么设计才能既不影响算法灵活性，又方便上层统一调用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果转译接口吐出来的是这种带协议头但负载结构不同的流，你们端侧渲染接起来会卡吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "渲染上下文和兜底标识，这俩确实得加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不做强结构统一了，改用协议约束。输入侧把原始流和设备上下文打包，输出侧返回模态标识、流类型、分片信息、算力预估和兜底标识。具体负载随模态变化。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "入参：feature_vector（特征向量），render_context（渲染上下文），task_id。出参：modality_type（模态标识），stream_format（流类型），chunk_meta（分片信息），resource_cost（算力预估），fallback_flag（降级标识），payload（实际负载）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "入参render_context补上user_accessibility_profile，出参把resource_cost改成compute_weight。其他字段不动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

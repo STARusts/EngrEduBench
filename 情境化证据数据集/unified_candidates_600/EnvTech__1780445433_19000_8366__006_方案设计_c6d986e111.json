@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在异构感知设备接口规范设计背景下，与导师围绕数据接入协议、字段裁剪、合规边界及脱敏策略持续沟通（5轮），其中在窄带场景协议与清洗流设计部分与数据流设计师沟通（1轮），并最终形成包含双栈协议、二进制编码、特征提取、降采样及区域化脱敏的五点接口规范大框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着用现成的物联网网关，设备直连MQTT，数据全量打成JSON推上来，后端再解析。这样开发最快，现成SDK多。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "带宽这块我确实没细算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不同厂商的话，我加个设备ID，后端写if-else分发解析？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规风险是指啥？数据不都是我们要的吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在设备多，我想直接MQTT全量推JSON，但好像窄带扛不住，不同厂商格式也不统一，这接口规范怎么定比较好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心字段就是推演模型输入要用的呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "脱敏的话，加噪会不会影响位置精度？我们推演要算污染羽流轨迹，位置偏了可能算不准。抹除的话，只留个区域编号行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口规范核心就这五点：1.窄带CoAP/宽带MQTT双栈；2.数据编码用Protobuf；3.网关层提取特征字段（按模型输入清单定）；4.支持降采样配置；5.坐标转区域编号脱敏。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "特征字段我得跟推演模型对一下输入项。降采样可以做成网关端的配置项。我这就去改接口设计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

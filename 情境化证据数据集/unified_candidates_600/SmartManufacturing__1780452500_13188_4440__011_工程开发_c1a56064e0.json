@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在散单潮涌系统极端单压背景下，与导师围绕压测场景构造、CPU抢占验证与拒绝策略兜底持续沟通（5轮），其中在场景构造与边界指标分析部分与极限压测官沟通（2轮），并形成Mock长耗时注入、Jmeter洪峰乱序心跳、Arthas监控及Redis重路由兜底的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Jmeter照着接口压呗，把并发线程数调高点，看看AbortPolicy报不报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端单压场景怎么造？要打爆业务池还要保心跳。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我代码里没有长耗时单的逻辑，正常散单处理都很快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加Mock比较快，我直接在业务Task里加个Thread.sleep(500)模拟耗时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结果的话，我看日志里有没有“订单重路由”的记录，有就是正常流控。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不应该啊，心跳池优先级高，CPU不应该抢不过。会不会是上下文切换太多？我最近刚好学了Arthas的thread命令，可以用它看下死锁和线程状态。迁移过来应该能看清是不是CPU抢占了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Arthas thread -n 3 看最耗CPU的线程，如果都是业务池的，那就是CPU抢占。如果是别的，就得再查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重路由代码我写了，捕获RejectExecutionException后，把订单推到Redis的待重试队列里，有个定时任务捞出来重新分配。只要Redis不挂，单子就不会丢。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

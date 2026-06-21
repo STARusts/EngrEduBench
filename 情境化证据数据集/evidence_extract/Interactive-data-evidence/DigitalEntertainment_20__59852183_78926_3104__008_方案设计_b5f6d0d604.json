@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在织梦漫游叙事地图服务系统方案设计的高可用与容灾评估背景下，用户与导师围绕故障分级、RTO/RPO、降级清单与演练验收持续沟通（6轮），其中在HA目标与幂等写入/演练写法上与SRE运维负责人沟通（3轮），在审计日志与授权数据容灾一致性上与隐私与安全工程师沟通（2轮），并最终确认分级指标、降级策略与稳定性提示码等结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最怕就服务器挂了吧。多开几台就行了，别单点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须活着…就是用户能进地图、能走剧情、能播放音频。编辑器就先不管。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维负责人 说下高可用容灾要写啥，给个能抄的版本，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RPO 就是丢多少数据对吧？那就写 0 呗，最保险。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就都写成“允许丢 30 秒”，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等写入是啥？我只想写“重复提交忽略”这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心链路 99.9 可用性；RTO 十分钟；RPO 三十秒。降级就是编辑器关掉，先保播放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与安全工程师 审计日志容灾要咋写？能不能也按低优先级丢点？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "授权状态回滚我没想过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我写成“授权表不能丢”就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我大概听到了：审计日志别乱丢，授权状态也得保。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 播放端触发要保；2 状态写入要保；3 静态资源走缓存；4 编辑器停；5 埋点延迟上报；6 审计日志…单独存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "音频就静音继续走文字？地图瓦片没了就用纯列表节点模式，别显示地图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个限流？超了就先不写库。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，就写个“延迟写入”，提示码随便给个 429？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "没异议。就按这四条写，快点过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

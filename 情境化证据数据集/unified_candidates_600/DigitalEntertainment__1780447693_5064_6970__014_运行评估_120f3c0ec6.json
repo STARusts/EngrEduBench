@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估流量切入背景下，用户与导师围绕渲染帧率与调质耗时监控体系铺排、卡顿根因区分及编译降级策略持续沟通（6轮），其中在跨端基线拉齐与调质链路耗时拆解埋点部分与渲染可观测专家沟通（2轮），并最终形成核心指标集与Fallback至有效Shader Cache的降级逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算拆成两层看：端侧重帧率稳定性和着色器编译耗时，云端重编排下发延迟和重映射计算耗时。关键是怎么把这两层的耗时用同一个TraceId串起来，不然出了抖动很难定界。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值确实不能一刀切。算力崩和算法卡的区分，光靠业务日志不够，得看底层指标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨端基线差异大，阈值怎么定合理？另外帧率暴跌时，怎么通过埋点快速区分是算力瓶颈还是调质重映射导致的卡顿？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这三个耗时指标，是不是得跟帧率指标打平，放在同一个时间窗口里做聚合？不然微秒级的编译耗时和毫秒级的帧率对齐会有偏差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控体系这样铺：1. 耗时拆解埋三个点（反序列化、PBR重映射、着色器编译），用1秒滑动窗口对齐帧率极值；2. 跨端阈值不拉齐绝对值，按端侧P95/P99分设基线；3. 长期存储只留分位值，Trace采样。这样帧率抖动就能直接定位到是编译Jank还是算力崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果某类资材频繁触发编译，说明它的材质变异组合没命中缓存。运维闭环可以加个降级策略：编译耗时超过阈值P99时，直接Fallback到默认Lambertian着色，先保帧率，再异步重试编译。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实，Lambertian太硬了。更平滑的做法是Fallback到前一次成功编译的着色器缓存版本，虽然材质参数不是最新的，但视觉过渡平滑，帧率也保住了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心指标集：帧率P95、调质三段耗时（反序列化/重映射/编译）P99。降级逻辑：编译耗时超P99阈值，Fallback至上一版有效Shader Cache。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

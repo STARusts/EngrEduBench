@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在采集链路进入高并发性能调优背景下，用户与导师围绕P99延迟与链路瓶颈定位、改造与验证方法持续沟通（6轮），其中在堆硬件可行性与非阻塞IO/Netty优化方向上与系统架构师沟通（1轮），在零拷贝改造效果对比与控制变量测试口径上与自动化测试工程师沟通（1轮），并最终明确保留DirectBuffer零拷贝、启用Netty对象池与批量异步写入等组合方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接把后台那个处理线程池调大一倍，再给Redis多拨点内存。现在的服务器资源又没跑满，堆硬件就能解决的事，没必要搞太复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没看那么细，反正在本地跑几个包挺快的。我觉得就是数据库写入慢了点，大不了我把日志级别调高，少打点日志就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 导师说我堆硬件不行，非要让我问你那个什么缓冲区的。我觉得现在代码逻辑挺顺的，直接多开几个并发处理不就行了？异步弄多了反而容易丢包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反正你的意思就是我得去改那个Netty的配置呗？行吧，我回去跟导师说。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以试着把现在的解析逻辑改成零拷贝模式，看看能不能把延迟压下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接改了代码跑一遍压测不就知道了。我估摸着改完以后，吞吐量起码能翻一倍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@自动化测试工程师 帮我跑个对比测试。我把解析层换成DirectBuffer了，你看看现在的P99和吞吐量是不是比之前强多了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先按我学的那个，保留DirectBuffer的零拷贝解析，然后把SQL写入改成批量提交模式。既然解析快了，我就把批量提交的阈值从50条提到200条。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在衰变溯演算法工程化背景下与导师围绕微服务部署、轨迹数据隐私合规与数据最小化原则持续沟通（6轮），其中在轨迹必要性及脱敏重训可行性部分与衰变机理建模师沟通（2轮），在轨迹脱敏工程实现部分与算法工程化工程师沟通（1轮），并最终做出合规优先取舍，形成边缘脱敏与接口约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "封装成镜像呗。之前建模师不是给了Python脚本嘛，我直接拿Docker包一下，起个Flask接收温湿度就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "轨迹也要喂？我以为只要温湿压就行。隐私这块我不太懂，不乱存不就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型推演是不是必须得吃高精度轨迹？只用温湿压行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "建模那边说必须得要轨迹，但导师说直接传有隐私风险。工程上咋处理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定不能踩合规红线吧，上线了出事谁担得起。我选边缘脱敏，传区段编码。误差大点就大点，总比被查封强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果只用大区编码代替经纬度，模型能跑吗？得重新调参吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定在网关侧做轨迹脱敏，转成大区编码再上云。推理服务只拿编码和温湿压。模型那边得重新用脱敏数据集训一版。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这边就把Flask接口的入参Schema改了，把lat和lon字段删掉，换成region_code。推理镜像的启动脚本我也加上校验，如果检测到明文经纬度直接报错拒绝启动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

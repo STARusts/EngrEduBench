@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在瞬清引擎与溯鉴图算子联调背景下，与导师围绕图算子超时熔断的降级缓冲承接、残缺数据补全触发策略及硬超时处理持续沟通（7轮），其中在超时熔断机制与部分结果截断数据结构部分与溯鉴图算子工程师沟通（1轮），并最终确定软超时部分结果接存与双条件补全、硬超时失败入审核的降级缓冲对接逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把他们给的接口文档过一遍，然后写个Mock服务跑一下基本的数据格式，看能不能通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时的话，我这边就直接断开重试？降级缓冲我之前是按瞬清侧的写法设计的，图算子那边抛异常我还真没细想怎么接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边查询超时是怎么熔断的？如果只查出来一部分路径，返回格式长啥样？我降级缓冲得知道怎么接。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我降级缓冲就把这个`truncated_paths`先存起来，等后面再补全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "溢出我没考虑。补全触发的话，就等下一次同一个账户有新交易进来的时候，顺带把之前残缺的路径再查一遍？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对接逻辑确认为：图算子软超时1.5秒，我接`is_partial`标记；降级缓冲只存`truncated_paths`；补全触发用双条件，缓冲区超100条或者距首次截断超5分钟，强制异步补全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "硬超时报错的话，我降级缓冲记一条错误日志，把请求参数存下来，标记为`query_failed`，不触发补全，直接推给人工审核队列。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

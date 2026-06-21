@@ -1,0 +1,25 @@
+[
+  {
+    "domain": "基于改进Mask R-CNN的工业零件智能分拣系统",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与开发过程」阶段，本段围绕系统集成联调展开，说明通过模型格式转换与算子融合优化降低推理时延，并记述优化ROS节点消息队列以解决机械臂动作滞后与指令丢失问题的调试过程。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "我们将训练好的模型导出为ONNX格式，并利用TensorRT 8.0库进行FP16量化加速。在调试推理接口时发现，原始PyTorch模型的单张图像处理耗时高达120ms，无法匹配传送带0.3m/s的移动速度。通过编写TensorRT C++部署插件，并针对ResNet结构进行算子融合优化，成功将推理时延降至45ms。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "针对联调中发现的机械臂动作滞后问题，我们优化了ROS节点的消息队列缓存，将Buffer Size从1提升至10，彻底解决了因网络波动导致的指令丢失Bug。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

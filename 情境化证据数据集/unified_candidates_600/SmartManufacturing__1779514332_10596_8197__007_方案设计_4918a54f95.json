@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在旁路拦截与高可用架构设计背景下，用户与导师围绕拦截部署、Bypass机制、降级策略与验证方案持续沟通（7轮），其中在串联部署与硬件Bypass部分与高可用架构规划师沟通（2轮），在降级放行边界部分与零信任系统架构师沟通（1轮），并形成串联加硬件Bypass架构、灰度降级策略及含OT协议五元组的故障验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "拦截动作直接下发给核心交换机做acl阻断？高可用就做双机热备，主挂了备切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工控环境里怎么搞拦截又不怕自己挂掉？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用串联加硬件Bypass的方案？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实有点虚。之前我看了一些DPDK和eBPF的资料，知道用户态收包快，但软件Bypass状态保持没看懂。最近在补Linux内核网络栈的文档，只记住了要避免内核态切换，但具体怎么做主备状态同步还没理清。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果引擎过载，那拦截模块就直接放行，不拦截了，只做审计记录。保证产线不断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "测的话，就拔拔网线，看看切过去要多久，丢多少包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "进程崩溃可以用kill -9杀主进程，网络风暴用打流工具发广播包。断电就只能真拔电源了。控制变量就是每次只触发一种故障，流量保持产线峰值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果信任评估引擎过载，降级放行的阈值怎么定？全放行是不是太危险了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构用串联加硬件Bypass，正常走DPDK快速路径，断电直通；引擎过载时P99超5ms触发降级，高危阻断常规放行；验证方案就是模拟三种故障，加对照组，测恢复时间和丢包。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证流量用真实OT协议报文，包含五元组。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

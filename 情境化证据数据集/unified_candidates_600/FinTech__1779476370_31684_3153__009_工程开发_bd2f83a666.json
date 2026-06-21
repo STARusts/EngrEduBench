@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨模态数据融合系统适配器开发背景下，用户与导师围绕异构数据时空对齐、验证口径、解析失败复现及合规授权持续沟通（7轮），其中在异构解析与清洗规范部分与数据适配器开发沟通（1轮），并最终形成补学动作、Token校验熔断逻辑及适配器开发四点约束基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算卫星数据用GDAL解析，能耗数据用Flink流式接。时空对齐就按时间戳截取，空间对齐把经纬度映射到网格。隔离基线的话，我在适配器里加上限流注解就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "卫星影像和能耗时序流在适配器里怎么解析清洗？时空对齐的具体策略是什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差率我就比对对齐后的时间戳差值和空间距离。解析失败复现，我还没想好，可能打日志看看？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对GeoSpark的时空Join算子不熟，验证口径也定不下来。我现在去查GeoSpark的SpatialRangeJoin文档，写个本地测试脚本跑几条样本算距离误差，然后把报文落盘逻辑加到适配器的异常处理里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我以为那是数据接入层的事。我适配器里只管解析。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加上Token校验和熔断逻辑。分工上，我负责把解析、对齐、校验和熔断逻辑写完，联调测试工程师负责后面的边界注入测试，我周三前给接口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 卫星提多边形，能耗插值，按过境时间和围栏对齐；2. 脏数据按阈值标脏和丢弃；3. 适配器入口加授权Token校验和熔断；4. 验证用GeoSpark算距离误差，解析失败要落盘上下文复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

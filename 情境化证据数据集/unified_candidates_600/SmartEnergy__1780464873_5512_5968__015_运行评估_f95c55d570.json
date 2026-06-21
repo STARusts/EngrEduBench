@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估指标监控背景下，与导师围绕源荷频移核心指标、看板维度拆分及告警策略持续沟通（6轮），其中在指标定义与时序聚合降维部分与运行监控分析师沟通（2轮），并最终形成三项核心指标、动态基线与差分对照差值双告警规则及看板拆分方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看频移收敛时间呗，刚才不是说95%要在200ms内。我就把接口耗时打点到Prometheus，配个Grafana面板，超过200ms就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拆维度？按微网ID分就行了吧？每个微网一个看板。不过Prometheus存这些业务字段有点麻烦，标签太多会炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来只打算打点耗时，他说还要看触发频次、疏导成功率这些。另外时序数据标签太多怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算了，我先把这三个指标加上，拓扑隔离组ID做标签。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线怎么算？直接设个固定阈值？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三个指标：频移触发深度、疏导成功率、态射匹配耗时。告警用动态基线，7天同时段3-Sigma。标签用拓扑隔离组ID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "差值超限？这有点麻烦啊，Prometheus里跨组算差值得写自定义PromQL。不过确实更准。那就加一条差值告警规则。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指标就是频移触发深度、疏导成功率、态射匹配耗时，全部按拓扑隔离组ID打标签。告警规则两条：第一，疏导成功率动态基线下界告警；第二，实验组与对照组的频移深度差值超过阈值告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

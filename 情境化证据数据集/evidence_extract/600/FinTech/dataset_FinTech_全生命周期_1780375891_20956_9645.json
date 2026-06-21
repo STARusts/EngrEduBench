@@ -1,0 +1,506 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在微流暗证跨境结算系统需求梳理背景下，与导师围绕微额结算痛点、ZKP适用逻辑与核心假设持续沟通（5轮），其中在成本结构与ZKP商业可行性部分与金融产品架构师沟通（1轮），并最终锁定方案假设与补齐净额清算知识的后续任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ZKP可以隐藏金额，这样就能省下合规审查的费用吧？流计算可以算得快一点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微额结算里头到底哪块成本最要命？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "架构师说主要是固定费和T+2汇损。ZKP验证费不能超过0.1美元。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心假设是，用批量净额结算把固定手续费降下来，ZKP用来证明余额没问题。只要手续费降到1%以下就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找一些历史交易数据跑一下，看看打包后手续费摊薄到多少。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太懂。我这两天去学一下双边净额清算，看懂资金怎么轧差，下周能把流程图画出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微额跨境结算系统隐私与合规论证背景下，用户与导师围绕ZKP隐私保护与监管穿透的矛盾、披露底线及电路审计开销持续沟通（10轮），其中在反洗钱合规红线部分与合规与审计专员沟通（1轮），在监管披露底线部分与金融产品架构师沟通（1轮），在ZKP电路开销部分与密码学工程师沟通（1轮），并最终形成三条隐私结算合规边界基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，ZKP就是加密嘛，数据都藏好了，隐私保护到位了，合规应该更好过吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "就是不能全藏起来，得给监管留口子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这系统用ZKP做跨境结算余额隐私，反洗钱那边会卡我们什么？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨境微额结算，监管最少得看我们啥数据？既要合规又不能把商户底裤看光。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电路里加个监管公钥验证视图，支持阈值触发式审计，证明开销会超0.1美元吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加15%到20%，还在上限内，能接受。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 不能全加密，得给监管看；2. 微额要简化报备，但异常要能解密；3. 电路加监管公钥，开销加20%。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 遵循FATF旅行规则，交易需具备监管可穿透性；2. 采用阈值触发式审计，满足微额简化报备与异常溯源；3. ZKP电路需预留监管公钥验证视图，且证明开销增量控制在20%以内，总开销不超0.1美元。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨境微额动态对冲商业模型闭环推演背景下，与导师围绕对冲成本边界、池化逻辑与回测验证持续沟通（7轮），其中在微额对冲池化闭环部分与金融产品架构师沟通（1轮），在滑点容忍度最小回测验证部分与量化策略研发沟通（1轮），并最终形成池化净额加阈值触发与tick回测正收益验证底线80%两条战略基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以做高频微对冲，积少成多，量上去了应该能覆盖掉手续费吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微额对冲做池化的话，商业上怎么闭环？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "滑点容忍度这块最小验证动作是什么？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂滑点成本模型。我今晚把高频微滑点控制的论文看两篇，更新到我阅读笔记里，明天重新算一下阈值。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在流算汇率预测架构设计背景下与导师围绕模型选型延迟约束、对照实验假设设计与Flink状态容错短板补齐持续沟通（7轮），其中在算子部署与模型选型部分与流计算架构师沟通（1轮），并最终提出对照实验假设、明确补学计划并锁定架构候选方案与验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用Flink做流计算，然后接个LSTM模型预测汇率，把结果推给对冲引擎。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟是个问题，我之前没细算。那是不是得换个轻量级模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink加LSTM延迟可能扛不住，这块算子部署和模型选型怎么搞比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A是Flink内嵌FTRL，快但特征难搞；B是XGBoost异步，慢点但特征好。我觉得方案A快，好像挺适合我们。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的假设是：在50ms对冲窗口内，方案B的15ms延迟不会导致对冲滑点超过阈值。对照组就是方案A。我拿历史tick数据跑这两种的回测，看正收益率和滑点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Flink算子状态这块我只写过简单的计数，FTRL权重更新和Checkpoint的交互我确实没搞懂，怕写出来权重丢掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这两天去看Flink官方文档里关于Keyed State和Function State的章节，再找两个开源的Flink ML在线学习例子跑一下。3天内把权重更新的状态容错逻辑摸清，写个Demo验证Checkpoint恢复后权重不丢。"
+              }
+            ]
+          },
+          {
+            "microScene": "在零知证明电路与数据流衔接设计背景下，用户与导师围绕ZKP电路选型、证明耗时、合规审计及见证传递持续沟通（6轮），其中在电路选型与见证传递部分与密码学工程师沟通（1轮），在审计粒度与存证锚点部分与合规与审计专员沟通（1轮），并最终确定ZKP选PLONK、流算仅收布尔信号、见证走加密MQ及合规锚点触发前生成四条架构规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ZKP把余额包起来，流算那边拿个证明验证一下就行了，数据流就负责把这个证明传过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电路选型怎么搞？微额结算对性能要求挺高的，我们要把证明耗时压下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "零知证明把余额全遮了，审计那边怎么过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "密码学那边说用PLONK，给流算传布尔信号；合规说不能全遮，留个哈希锚点，执行前打上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "因为业务变动多，Groth16每次都要Setup太麻烦，PLONK通用性好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网络抖动就重试呗，锚点就在流算里加个算子打上去。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨境微流暗证系统底层账本拓扑设计背景下，用户与导师围绕跨链拓扑选型、法域隔离约束与路由容错机制持续沟通（5轮），其中在跨链拓扑选型与合规评估部分与跨链协议工程师沟通（1轮），并最终确立主链存证与侧链法域物理隔离、禁用通用桥及MQ死信异步重放的四条底线要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄个通用跨链桥把各条链连起来就行，现在Cosmos那种IBC协议挺成熟的，直接用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨境账本拓扑怎么搞，直接用跨链桥连行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个重试机制？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维护成本这块，我我我不太清楚怎么控。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主链存证，侧链按法域隔离，中继路由，配合MQ异步，还有逻辑隔离物理部署。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端汇震容灾设计背景下与导师围绕容灾架构取舍、降级合规收口及混沌工程验证持续沟通（9轮），其中在流计算与ZKP容灾取舍部分与高可用架构师沟通（3轮），并最终形成同城多活加异地冷备方案、降级窗口收口策略及分阶段混沌验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接上异地多活，保证全链路高可用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多副本同步一下状态？保证最终一致就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端汇震下，流计算和ZKP模块的容灾怎么做取舍？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，有风险。那还是A方案强一致多活吧？这样没滑点也没裸奔。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，那就B方案。滑点和裸奔风险只能先接受了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只能选B方案同城多活加异地冷备。汇震时流计算降级快照对冲，ZKP异步补证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补证的时候补上审计日志？反正最后是一致的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近刚好在看Chaos Mesh的文档，里面有金融流计算的故障注入案例。我们可以用混沌工程来测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "注入网络断开和CPU打满。指标就是看能不能切到快照对冲，还有补证能不能在时间内完成。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 容灾选B方案同城多活加异地冷备；2. 汇震降级策略是流计算切快照，ZKP异步补证；3. 降级窗口期加标记，补证超时直接回滚；4. 用混沌工程分三阶段注入验证，补证成功率卡100%。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在证明电路编码与形式验证背景下，与导师围绕范围检查电路写法、形式验证口径与工具链集成持续沟通（8轮），其中在范围检查与验证属性部分与密码学工程师沟通（1轮），并最终确定显式二进制拆分电路、picus验证工具及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个判断条件呗，大于0就行。然后形式验证用circom跑一下看看报不报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有限域里确实不能直接比大小。验证口径，就是看约束满不满足？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@密码学工程师 余额范围检查电路怎么写才不会在有限域出问题？形式验证具体要验什么属性？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "位数就64位吧，跟普通int一样。集成，我就写个脚本跑一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "位数可能得再算算。picus输入格式我不太熟，之前没用过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这就去看picus的官方文档和circom的rangecheck例子，照着写个demo跑通，再回来定位数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，显式拆分，picus查under-constrained，位数先64再调。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在流式对冲合约核心实现背景下与导师围绕对冲与ZKP验证结合、状态更新及无效交易处理持续沟通（9轮），其中在算法输出与状态更新部分与流计算架构师沟通（1轮）、与量化策略研发沟通（1轮），在无效交易存证部分与合规与审计专员沟通（1轮），最终形成无锁聚合、单笔兼容预留钩子及Reject存证的三条约束写入规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接在合约里调验证接口，然后更新余额呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能应该还行吧，原子性就加锁。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滑动窗口聚合，每秒上百次，不能加锁，要确定性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加锁了，批量触发ZKP。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就聚合证明吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢掉就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "无效交易链上存证怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能丢，要留哈希和原因码，要有无状态日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滑动窗口聚合，无锁；单笔兼容，预留钩子；Reject走日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨链联调测试背景下，用户与导师围绕异构账本状态验证、失败复现机制及日志脱敏持续沟通（6轮），其中在异构状态对照验证与中继异常存证闭环部分与跨链协议工程师沟通（1轮），在跨链调试日志脱敏与审计闭环部分与合规与审计专员沟通（1轮），并最终形成三个联调硬约束写入测试脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Fabric和以太坊怎么验证状态一致？中继挂了存证怎么闭环？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨链调试日志有敏感信息吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，比对以太坊的MPT根和Fabric的哈希；第二，回滚时以太坊写Cancel存证和Fabric的Reject用流水号绑定；第三，日志不能有明文，只留流水号状态码，两边闭环。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微额密集并发性能调优背景下，与导师围绕ZKP与流计算混合部署的瓶颈定位、池化隔离、背压协同及调优硬约束持续沟通（7轮），其中在瓶颈定位部分与性能调优专家沟通（1轮），在背压协同部分与流计算架构师沟通（1轮），并形成包含池化隔离、动态窗口与微批处理的调优硬约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，那我就加几台机器，把线程池调大点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优专家 微额密集并发下，ZKP和流计算混合部署的瓶颈怎么定位？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分成两个池子。保护的话，流量大就排队？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流计算架构师 微对冲流的背压机制怎么和ZKP证明速率协同？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看了一篇讲Reactor模型的博文，好像也能用在这，异步非阻塞嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着ZKP生成证明的时候，不阻塞流计算的线程。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那看来Reactor只能用在流计算的IO等待上，ZKP这块还得靠池化隔离和动态窗口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测结果怎么看？TPS跑到多少算调好了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，ZKP和流计算线程池物理隔离；第二，流计算侧用动态滑动窗口做背压，看ZKP积压量；第三，压测要把非线性延迟拐点推到TPS 5万以后；第四，流计算IO等待那块用Reactor非阻塞。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在跨域结算节点部署验证背景下，用户与导师围绕验证指标、延迟假设检验方法及审计留痕持续沟通（8轮），其中在跨域部署监控指标部分与DevOps工程师沟通（1轮），在跨域一致性验证部分与跨链协议工程师沟通（1轮），用户咨询硬指标、确认需补齐双样本T检验脚本并最终对齐四条部署验证收口标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看看有没有报错日志，然后跑几笔跨链转账，成功不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 跨域节点的部署监控怎么看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，P99延迟分时段采。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@跨链协议工程师 跨域一致性怎么验？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白了，看高度差和验证成功率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一段时间，看看平均值是不是在正常范围里？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不会算这个。我得补一下统计验证的方法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚找两篇关于微服务延迟假设检验的实践文章看，明天用Python写个脚本，把咱们压测的延迟样本导进去算一下置信区间和P值，跑通为止。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收到，延迟检验、高度差、验证率、审计留痕，四条。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微对冲引擎上线滑点偏离回测的运行评估背景下，用户与导师围绕滑点异常根因定位、降级修复方案及监控熔断规则持续沟通（7轮），其中在滑点归因数据部分与业务运营分析师沟通（1轮），在延迟放大滑点机制部分与量化策略研发沟通（1轮），并最终形成延迟超限转限价单降级方案与滑点熔断规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务运营分析师 这周对冲滑点异常是怎么回事？有没有具体数据？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@量化策略研发 汇率源延迟是怎么把滑点放大的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分析师说非活跃时段滑点到了1.2%，量化说延迟超200ms还在发市价单，没降级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不就把算法容忍度调大点？或者非活跃时段干脆不对冲了，省得亏滑点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟一超200ms就告警？"
+              }
+            ]
+          },
+          {
+            "microScene": "在异常汇变熔断复盘背景下，用户与导师围绕资金滞留根因与整改方案持续沟通（7轮），其中在汇率源延迟与对冲日志部分与量化策略研发沟通（1轮），在资金滞留审计定性部分与合规与审计专员沟通（1轮），并最终形成包含二次汇率校验、动态撤单回滚或转单及链上存证的整改清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@量化策略研发 昨晚那次异常汇变，汇率源延迟具体是多少？对冲算法那边有日志吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计专员 限价单没成交导致资金滞留，这个审计上算什么问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "昨晚是C国法币流动性差，汇率延迟350ms，限价单没成交锁了2万U。合规说这算结算中断，有洗钱嫌疑，得加撤单机制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个撤单机制呗，限价单挂太久就撤掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回滚吧，结算失败总比洗钱嫌疑好。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "所以整改就是四条：一是限价单超时触发二次汇率校验；二是偏移超基线则撤单回滚；三是汇率回落则转市价单；四是所有兜底动作上链存证原因。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段ZKP证明耗时飙升导致结算吞吐下降的背景下，用户与导师围绕隐私开销与吞吐平衡、16位精度溢出风险验证及闭环动作持续沟通（5轮），其中在ZKP电路瓶颈与降精度可行性部分与密码学工程师沟通（2轮），在流计算反压问题部分与性能调优专家沟通（1轮），并最终记录学习日志、计划编写溢出边界测试脚本并复述闭环动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得是不是证明生成太慢了，要么把零知识证明的复杂度降一降，要么就多加几台生成证明的服务器？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底是电路哪块最耗时？流计算那边的吞吐卡在哪了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备把精度从64位砍到16位，这样约束少了一半，流计算就不堵了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "微额一般不会超16位吧？大不了超了再拆单。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实在边界分析上老出错。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我记到学习日志里了，目标是今晚写一个16位溢出边界测试脚本。我打算在脚本里模拟合并对冲的金额累加，看看具体在哪个数值触发溢出，然后把结果带回来改电路。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先跑溢出边界脚本确认16位行不行，溢出率低于万分之一就让密码学切电路精度，性能调优看反压。闭环就是证明耗时降40%且无反压告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在支付链路异常溯源系统核心代码开发背景下，用户与导师围绕图库并发控制机制与并发验证方式持续沟通（6轮），其中在图数据库原生并发控制与状态机绑定部分与图谱核心开发主程沟通（1轮），并最终形成采用JanusGraph顶点属性CAS更新替代外部锁、同图事务内完成状态变更与边写入及多线程单测验证并发冲突的实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图库我选JanusGraph，边写入走Kafka流式消费。并发这块，我习惯用Redis分布式锁，拿到锁再写节点状态。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "图事务提交失败会回滚，锁提前释放确实会出问题。我平时都是写关系型数据库加Redis锁，图数据库这块的并发控制没搞过。我得去补一下JanusGraph的事务和锁机制"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JanusGraph并发写边怎么保证状态一致？我本来想加Redis锁，但导师说锁和图事务生命周期不一致会出事。这块你们平时怎么处理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "CAS更新？就是把节点当前状态作为条件去更新下一个状态对吧？如果条件不匹配事务直接失败回滚。那我不加Redis锁了，改用顶点属性CAS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用JMeter起多个线程并发调接口写同一个节点，看有没有脏数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个单测，起两个线程同时读一个节点的状态并尝试CAS更新，断言只有一个线程能更新成功，另一个抛出异常或更新失败。这样就能复现并发冲突了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实现要点：1. 图库选JanusGraph，并发控制用顶点属性CAS，不加外部锁；2. 状态机驱动和边写入必须在同一个图事务内；3. 验证方式写多线程单元测试复现并发冲突，断言CAS成功与失败的比例。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

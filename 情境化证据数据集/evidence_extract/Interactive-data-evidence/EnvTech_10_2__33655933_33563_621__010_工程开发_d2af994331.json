@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在风险计算服务与策略引擎联调验证背景下，用户与导师围绕unknown不误触发联动、接口契约字段可验证性、reason_codes语义稳定与debug排查持续沟通（9轮），其中在unknown/degraded动作矩阵与硬拦reason_codes定义上与控制策略工程师沟通（2轮），在unknown误触发根因定位与字段解析/默认值上与后端开发工程师沟通（2轮），并收敛action_eligible契约与三条联调断言标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把风险计算的输出拆成两路：一路是风险分和主污染物给策略引擎，另一路是可信度状态给一个门禁。门禁规则是 risk_status!=normal 就直接不让下发控制动作。证明的话，我准备做几组输入让它稳定进入 unknown，然后看策略引擎的决策结果是不是空动作或者显式禁止。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "门禁我倾向放在策略引擎侧，因为它决定动作，越靠近动作越安全。接口契约里我会让 risk_status、reason_codes 成为必填字段。联调验证上，我让策略引擎把 decision.explain 里回显 risk_status 和 reason_codes，至少能从响应里看到为什么没动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，这里我不完全确定。我理解 unknown 是硬拦，degraded 可能允许保守动作，比如开到最小新风或者只提示不联动。优先级我目前是：fail/乱序 这种导致 unknown；low_conf 或缺失部分字段可能 degraded。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制策略工程师 联调里 risk_status=unknown/degraded 时，你们动作怎么处理？reason_codes 哪些必须硬拦、哪些允许保守联动？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "degraded 的“关键污染物存在且 risk_score 有值”这条，我现在能保证 primary_pollutant 总会出吗？如果关键污染物都缺失，我会给 unknown 并 reason_codes=missing_key_pollutant。这个跟你说的 no_primary_pollutant 类似，我可以对齐命名。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕字段冗余：risk_status 已经表达了。action_eligible 会不会跟 risk_status 冲突？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我采纳两点：unknown 硬拦任何联动；degraded 允许最小可逆动作但要排除几类 reason。  \n我倾向在风险计算输出里加 action_eligible（默认 false），生成规则：  \n- risk_status=unknown => action_eligible=false  \n- risk_status=normal => true  \n- risk_status=degraded => 只有在 primary_pollutant 非空、risk_score 是有效数值，且 reason_codes 不包含 sensor_fail/window_gap/ts_out_of_order/risk_score_nan/no_primary_pollutant 才 true，否则 false  \n策略引擎联调验证：它只看 action_eligible 决定是否下发控制请求；并在响应里回显 action_eligible、risk_status、reason_codes，便于测试断言。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这边打算输出两个层级：  \n- risk_status：已经折叠了优先级（unknown > degraded > normal）  \n- reason_codes：输出全集，不排序也行，但我会保证包含关键硬拦码时，risk_status 一定是 unknown 或 action_eligible=false。也就是策略引擎不需要读优先级，只要读 action_eligible；reason_codes 主要用于解释和联调用例断言。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选排序，按严重度降序固定顺序：hard_block 类（fail/out_of_order/window_gap/no_primary）在前，soft 类（low_conf/partial_missing）在后。这样响应稳定，测试也好写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并列时我现在是按加权分最高的作为 primary_pollutant，如果权重分一样就按预设优先级（比如 PM2.5 > CO2 > TVOC > HCHO）。我会把这个优先级写死在风险计算侧，保证 deterministic。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第一可能是策略引擎还在用 risk_score 阈值触发，没接 action_eligible。第二是我们接口里 action_eligible 默认 true 或字段缺失被当 true。第三是 risk_status 被我们算成 degraded 但其实应该 unknown，比如 out_of_order 没被识别出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 联调里出现 unknown 还下发联动的情况。你帮我确认三点：action_eligible/risk_status 字段是否稳定传到策略引擎？缺字段时默认值是什么？策略引擎触发条件现在到底看哪个字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回到导师这边：根因定位为策略引擎枚举解析失败导致 unknown 被回退成 normal，从而触发。修复方案有两个：  \nA）策略引擎修解析：支持小写，或严格解析失败就直接 hard block（更安全）。  \nB）风险计算服务先按它的旧枚举输出大写，临时兼容。  \n我倾向 A 为主，B 作为短期止血兼容一周。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我做双向兼容：风险计算输出 risk_status 增加一个字段 risk_status_raw，继续保留小写标准字段，同时加 risk_status_compat=\"UNKNOWN|DEGRADED|NORMAL\" 给策略引擎先用。等他们改解析后删 compat。  \n同时在策略引擎侧加一条安全兜底：只要解析失败或字段缺失，直接当 unknown + 不下发。这样就算我们字段变动也不误触发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，action_eligible 解决了解析大小写问题，策略引擎也不用解析 risk_status。那我把兼容范围收敛成：新增 action_eligible（必填），并要求策略引擎：缺失/非布尔 => false。risk_status 仍用于展示和解释，不参与触发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我不会在 reason_codes 里放原始 ID，只放枚举码。需要定位就用 trace_id 关联日志，但 trace_id 也用随机 UUID，不带业务含义。房间/设备信息留在内部日志里，且只在开发环境开启详细日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条断言：  \n1）当 risk_status=unknown 时，风险计算输出 action_eligible=false；策略引擎响应中必须回显“未下发控制”的原因包含 action_eligible=false，并且不产生任何设备控制请求。  \n2）当 risk_status=degraded 且 reason_codes 不含硬拦码、primary_pollutant 非空、risk_score 有效时，action_eligible=true，策略引擎仅允许最小可逆动作（新风小幅上调/净化器低档），不会出现关新风类动作。  \n3）reason_codes 输出顺序固定且为枚举码，不包含房间号/设备号等标识；策略引擎可按集合包含断言验证 hard_block 码出现时 action_eligible 必为 false。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

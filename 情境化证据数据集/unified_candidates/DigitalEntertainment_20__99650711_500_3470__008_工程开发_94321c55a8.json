@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在AIGC镜头可信剪辑协作台进入工程开发、用户负责“素材指纹与溯源实现”背景下，用户与导师围绕指纹计算节点、溯源事件链与最小可验证交付持续沟通（7轮），其中在入库可用特征与强/弱指纹方案部分与媒体处理工程师沟通（5轮），并收敛到两层指纹+哈希链事件表+校验接口的实现口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在卡住了：指纹到底要怎么做，先写哪块？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就都有吧。剪辑师拖进来一堆，可能是实拍，也可能是AI生成的图或者视频。然后我们会切镜头。大概这样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能。我就是不知道指纹是md5还是啥，直接对文件算哈希？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@媒体处理工程师 指纹这块你们入库能给我啥？我就想知道能直接算啥值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就对代理文件算sha256？就稳定了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "关键帧怎么选？我怕每次抽的不一样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "镜头检测我们不是还没写完吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我溯源怎么串起来？就是存个表？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 媒体处理说两层指纹：原文件sha256，还有内容弱指纹用pHash/音频指纹。关键帧先用每2秒，后面镜头切点首帧再切换，指纹要带版本号别覆盖。关系要存asset到segment。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是导出、删除、证据变更那种。那我就每次操作写一条日志？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "哈希链就是一条接一条？prev_hash是上一个事件的hash？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那event_type有哪些？我怕我漏。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审批那块不是上个场景说过吗？我现在也要做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那存储会不会很大？每个动作都一条。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那弱指纹要存多少？每2秒抽一帧会很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "digest是把一堆pHash拼一起再sha？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这周要交付到什么程度？我怕做不完。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校验接口就是GET一下返回true/false？还要返回事件列表？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就照这三条做。还有个事：AI生成素材的溯源是不是要接外部水印？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我最后确认下，我现在要做的就是：两层指纹+事件链+校验接口。对吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把事件类型按这几个写死，抽帧先2秒一帧，后面再改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

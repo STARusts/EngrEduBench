@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在衍生资产与微权合约联动背景下，与导师围绕生成侧与链上确权打通、异步上链时序补偿及失败数据清理持续沟通（4轮），其中在异步上链与状态同步部分与链上微权合约师沟通（1轮），并最终形成事件驱动、状态机管理及Failed数据定时清理的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我初步想法是在算子输出结果后，直接同步调合约的mintDerivative方法，把衍生特征、Seed和父代ID打包传过去，拿到TxHash更新本地状态就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生成侧产出衍生资产后，如果直接同步调合约上链，耗时和阻塞扛不住。想改成异步，但中间状态怎么管？上链失败怎么补偿？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算子产出后先落库Pending，发MQ。合约侧消费上链，成功抛Event回调改Confirmed。失败重试3次，超限改Failed并告警。分润比例在生成侧算好，作为参数塞进mint交易里，不在合约里做复杂计算，省Gas。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "留库但设TTL，比如7天后异步清理，避免直接删导致审计断线。恶意失败靠前置校验拦，算子产出前做轻量预检，不合规的不发MQ，直接丢弃。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

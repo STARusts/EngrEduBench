@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度流量切入背景下与导师围绕资金流转监控大盘分层、指标归因与熔断阈值持续沟通（8轮），其中在监控分层与审计穿透部分与链路监控与审计专员沟通（2轮），在微涨归因与熔断阈值部分与资金安全与熔断师沟通（1轮），并形成三层大盘方案、业务单号审计索引及基线对比熔断策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看合约Event呗，Prometheus配个捞取规则，TransferEvent成功了就算过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计？加个TraceID不就完了嘛，日志里带上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资金流转监控大盘要盯哪几层指标？还有审计留痕，我加了TraceID还不够吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想着看链上Event。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那审计穿透，是不是得把业务单号也塞到Event参数里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链路层我肯定能兜，合约执行耗时我加个Histogram打点就行。业务流转层，状态机那是@状态机与账本总设 的事，我得找他要打点数据。账底层对账，这得看资金安全那边的对账脚本跑出来推给Prometheus的数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三个Row呗，上面业务，中间链路，下面账本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看哪个指标红了呗。预言机回调延迟红了就是预言机，合约执行红了就是合约。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链路层P95延迟如果都微涨，怎么判断是谁拖慢了谁？熔断阈值怎么定比较稳？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大盘分三层：业务流转层盯状态机，链路层盯预言机和合约，账底层盯对账。链路层要加历史P95基线叠加。审计穿透得把业务单号塞进Event做索引。熔断红线是合约延迟超基线150%持续3分钟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

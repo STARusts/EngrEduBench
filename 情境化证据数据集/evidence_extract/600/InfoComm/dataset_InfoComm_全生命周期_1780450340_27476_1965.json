@@ -1,0 +1,538 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网弹性缩放编排系统立项背景下，用户与导师围绕核心网潮汐痛点、信令风暴局部热点与资源错配、时空流形模式可预测性验证持续沟通（5轮），其中在信令风暴冲击微服务特征部分与信令流分析师沟通（1轮），并最终锚定痛点为时空局部热点与资源错配，确立研究假设与学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在核心网流量潮汐特别严重，微服务有时候闲得发慌，有时候信令一冲就崩。我想能不能搞个系统，自动感知这些涌动，然后弹性扩缩容。最好能基于K8s的HPA机制，或者接个Prometheus，配配规则就能用，这样上手最快。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有状态的，有没有开源的Operator可以直接套？我看网上有些StatefulSet的调度器，能不能直接拿来改改？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令风暴冲击微服务具体是啥样？有没有现成的特征库或者规则集，我能直接导进去做触发条件的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那这种局部热点，我能不能直接在入口做限流？把打爆SMF的流量扔掉，或者降级，这样就不需要搞复杂的弹性推演了吧？限流工具好找啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时都是看监控大盘，指标涨了就触发扩容，没想过验证什么时空模式。这种信令推演的原理我不太懂，也不知道怎么设计验证实验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我去查查GTP-C协议在切换场景下的报文规律，还有eBPF怎么抓内核信令的。两周内，我得能把信令风暴的时序特征画出来，证明它不是纯随机的，这样才有做推演的前提。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微服务缩放合规审查背景下与导师围绕弹性缩放与信令采集的合规风险及架构边界持续沟通（4轮），其中在跨AZ数据驻留与采集最小化部分与合规与安全审计员沟通（1轮），提出脱敏与引擎拦截方案并经讨论调整，最终锚定采集端字段级丢弃与编排端省界约束两条需求红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得只要上云的时候用那种带等保认证的容器平台，应该就没事吧？或者把信令数据脱敏一下，网上都有现成的脱敏工具包，直接调就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨可用区缩放数据驻留怎么合规？信令采集最小化原则是啥？有没有现成规则能直接配上的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能存全量报文，只能抓特征，跨省不能乱跑。那我让探针只拿头部信息？这种规则手写太容易漏了，有没有什么策略引擎能自动拦截跨省调度请求的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "架构上保证就是，探针采集的时候，在内核态直接把IMSI这些字段丢掉，只把切换时序和负载指标传上来？跨AZ缩放的话，我加个硬性约束，检测到目标节点跨省就直接拦截扩容请求，只在省内弹。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在弹性编排系统商业模式推演背景下与导师围绕计费模式冲突、交付边界与定价锚点持续沟通（7轮），其中在核心网计费模式部分与产品经理沟通（1轮），在成本对冲与ROI部分与运营能效分析师沟通（1轮），并最终形成废止License、采用基础包加弹性保障订阅、锚定跨区容量承诺的推演结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收钱？就卖给省公司呗，按传统的软件授权费收，看他们网元节点数或者服务器CPU核数卖License。我看以前通信软件投标都是这么搞的，直接套过来就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哎，是哦，缩下去License就不好算了。要不按缩放动作的次数收？就像云上Serverless那种，按调用次数计费，我看网上很多容器平台都开始推这种模式了，直接复用这套规则应该很方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按缩放次数收费是不是会炸？核心网这种重保障场景，商业模式怎么定客户才不骂娘？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种基础包加订阅的模式，咱们自己成本能打平吗？特别是跨AZ借调的时候，带宽和异构算力开销肯定很大，别最后咱们倒贴钱。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基础包加订阅，听着像卖保险。客户能认这种说法吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "交付边界不是软件本身，是不宕机的底线。日常潮汐在省内自己弹，突发风暴才跨区弹。客户掏钱买的是跨区弹的时候有资源能接住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定价锚点得定在跨区借调的容量承诺上限上。比如我们承诺能扛住平时3倍的突发信令，就收这个档位的订阅费。平时缩下去的部分不收钱。"
+              }
+            ]
+          },
+          {
+            "microScene": "在定义信令风暴韧性指标背景下，用户与导师围绕指标业务化定义、基线数据提取与脱敏约束持续沟通（6轮），其中在韧性指标与基线提取部分与信令流分析师沟通（2轮），在数据脱敏与采样合规部分与合规与安全审计员沟通（1轮），并最终形成包含业务时延、扩缩容滞后、状态机挂起率及脱敏无偏采样基线的韧性指标约束定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "扛住就是服务不挂吧。我平时用Prometheus看容器重启次数和CPU，没OOM Kill就算有韧性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业界一般怎么定信令风暴的韧性指标？有没有那种封装好的业务指标库？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解滞后时间就是风暴来了到新Pod Ready的时间差。但这几个指标怎么揉成一根“韧性线”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风暴的基线数据怎么弄？能不能直接拿JMeter这种压测工具跑一把当基线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我如果只提取信令的消息类型和时延，不拿IMSI，是不是就合规了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "采样偏见这块我确实没考虑到。我之前只想着怎么快点亮指标。我觉得我在5G信令状态机和合规采样这块缺得比较多。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算这周末把3GPP TS 29.5xx系列协议里的注册和会话建立流程画一遍，再看两篇信令脱敏的开源实现案例，然后回来把“状态机挂起率”加到韧性指标里，同时把采样逻辑加上去重和哈希脱敏的约束。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "业务时延、扩缩容滞后、状态机挂起，基线用脱敏话单无偏采样。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网涌动感知探针架构设计背景下，用户与导师围绕探针选型约束、架构冲突与折中方案持续沟通（7轮），其中在协议解析与性能开销部分与探针开发工程师沟通（2轮），在数据脱敏与合规部分与合规与安全审计员沟通（2轮），并最终形成内核态自研解析脱敏与用户态开源汇聚的折中架构及四项核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接复用开源的eBPF采集框架，比如Pixie那种，挂上去就能抓信令，省得自己从头写底层采集逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开源框架都有现成的仪表盘，抓包过滤也全，应该够用吧？顶多我再加几行正则把手机号抹掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "开源eBPF库直接挂载到AMF/SMF容器上抓信令，这方案可行吗？我看网上很多云原生监控都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那脱敏呢？开源框架带的过滤规则，我把IMSI字段屏蔽掉，应该就合规了吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量拷贝不行，解析还得自己写，这开源框架岂不是一点用都没有？这也太麻烦了，有没有稍微改改就能用的折中办法？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设方案A是开源框架加Lua插件做脱敏，方案B是自研eBPF核心解析模块。关键变量是单板CPU开销增幅和信令解析漏包率。如果方案A的CPU开销增幅超过基线15%，或者漏包率大于0.1%，就否决A选B？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就起两个Pod，一个跑开源版，一个跑自研版，用压测工具打点SIP注册信令，看看监控曲线。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实只调过封装好的API，底层Map机制和3GPP加密细节我不熟。我这两天得去补一下eBPF的Perf Buffer与Hash Map的差异文档，还有TS 33.501里SUCI的加密流程，不然脱敏逻辑肯定写不对。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开源框架的汇总和导出模块挺成熟的，解析和脱敏必须自研。能不能在内核态用自研eBPF做协议解析和脱敏，只把特征指标通过Map传到用户态，用户态再用开源框架的汇聚模块做聚合上报？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定这个架构方向。内核态自研解析脱敏，用户态开源汇聚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，采集必须内核态无侵入挂载；第二，协议解析与脱敏逻辑自研，明文信令禁止出宿主机；第三，用户态复用开源聚合模块；第四，CPU开销增幅基线约束在15%以内。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨区缩放资源编排模型设计背景下与导师围绕核心网有状态网元调度、缩放决策模型与合规拦截持续沟通（5轮），其中在状态迁移痛点与算存分离部分与云原生编排师沟通（1轮），在跨区借调数据合规与路由重定向部分与可用区协同规划师沟通（1轮），并最终敲定算存分离、推演驱动与合规拦截三个核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨区的话，K8s不是有Federation v2嘛，直接套这个是不是就行了？或者用现成的多集群调度器，比如Karmada，我看网上好多人搞多集群都用这个。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态迁移这块，Karmada好像也支持自定义调度插件，能不能写个插件把状态同步的逻辑塞进去？就，用那种通用的CRD定义一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "核心网网元跨区调度，如果硬套Karmada这种多集群调度器，状态迁移那块是不是很难搞？有没有方便点的现成方案？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "建议算存分离，无状态计算单元跨区漂。那计算单元这块，是不是还是能用Karmada调度？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就设个阈值呗？本地CPU超了就往远端扩。或者用那种强化学习的框架，自动训练一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨AZ借调资源的时候，信令数据出境合规怎么管？路由重定向是不是很麻烦？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那这编排模型是不是还得加个合规拦截的逻辑？"
+              }
+            ]
+          },
+          {
+            "microScene": "在信令无损切换接口定义背景下，用户与导师围绕接口方案选型、字段定义与验证维度设计持续沟通（6轮），其中在应用层状态迁移与跨区一致性风险部分与核心网架构师沟通（2轮），在基础设施层透明接管方案部分与可用区协同规划师沟通（1轮），并最终形成基于应用层Relocation接口的切换约束与三维度正交验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉用K8s原生的Service机制配合ReadinessGate就能搞定吧？缩容前把Pod标记为不可用，新Pod起来后流量自然就切过去了，这样最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种情况下，切换接口到底该怎么定义啊？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听起来网关层接管更方便啊，不用改业务代码，直接底下发包搞定。不过跨区的时候连接状态能同步准吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "其实我最近在补3GPP TS 23.502的AMF Relocation流程，发现标准里也是要求应用层先做N1N2Message Transfer把状态转过去，再改路由。如果用底层透明接管，可能跟3GPP的标准接口对不上，后面合规审计可能过不了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有风险。底层接管的话，信令的流转路径绕过了微服务自身的日志，审计留痕就断了。如果出了用户投诉，根本查不到Context是在哪一步丢的。还是得走应用层的Relocation接口，虽然开发量大了点，但状态一致性有业务层Ack保底，审计也完整。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口定义就按架构师说的那三个字段，再加一个AuditTraceId字段，强制要求迁移过程带上审计追踪ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组的话一组用应用层Relocation接口，一组用底层网关接管？然后看丢包率？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证维度有三个：接口机制（应用层迁移 vs 底层接管）、涌动强度（低负载 vs 风暴阈值边缘）、迁移模式（同步阻塞 vs 异步非阻塞）。指标看切换时延和信令丢失率。必须保证在风暴阈值边缘，异步非阻塞的应用层迁移丢失率也是0才算通过。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网流特征采集代理开发背景下，用户与导师围绕技术选型、内核态零拷贝与脱敏方案、eBPF验证器边界与背压机制持续沟通（5轮），其中在内核态无侵入采集与零拷贝部分与探针开发工程师沟通（1轮），在信令流IMSI脱敏合规部分与合规与安全审计员沟通（1轮），并最终敲定基于Cilium eBPF与RINGBUF的技术栈及补学验证任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接拿Prometheus的node_exporter改一改，再套个网上现成的BCC脚本抓包，这样拼起来应该很快能出活。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至于GTP和SIP解析，我可以把报文拷贝到用户态，用scapy或者dpdk拆解，虽然慢点，但采集代理嘛，功能先跑通再说。反正只要不丢包就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "内核态无侵入采集具体怎么搞？网上那些BCC脚本是不是全废了？GTP和SIP的解析如果不在用户态做，在内核态写eBPF C代码太复杂了吧，有没有什么框架能自动生成？还有map怎么零拷贝？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令流里肯定有IMSI，我抓包的时候怎么脱敏？在内核态eBPF里做字符串替换是不是会严重影响性能？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "探针开发说可以用Cilium的eBPF库，自己写解析逻辑，用RINGBUF做零拷贝。审计员说eBPF里只提取TEID和信令类型，不拿IMSI，用户态用哈希加盐脱敏。所以我不改node_exporter了，直接基于Cilium写个插件，应该比较方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指令数限制我还没测，我以前只写过简单的网络过滤脚本。RINGBUF丢包这个，我查下文档看看有没有配置能防丢包。验证的话，我就在容器里打点流量看看CPU占用行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今天重点补两块：一是eBPF verifier的指令数和栈空间限制，我写个GTP-U变长头解析的测试程序，跑在内核5.15+上，看verifier报错红线在哪；二是RINGBUF的背压，我写个用户态故意睡眠的消费线程，制造积压，看内核态bpf_ringbuf_reserve的返回值是不是EAGAIN，然后加丢弃计数器。我把这两个实验结果记在开发日志里。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在核心网微服务负载推演算法实现背景下，与导师围绕算法选型、在线推演实现、衰减因子校准及K8s交互持续沟通（5轮），其中在算子选择与降级策略、FTRL裸实现与衰减因子校准部分与弹性调度算法工程师沟通（2轮），并最终形成基于Go裸写FTRL、指数衰减校准、超时切静态规则及K8s Scale API防抖的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用Python的scikit-learn套个时间序列模型，比如ARIMA或者Prophet，把采集来的QPS和CPU利用率丢进去预测。这样比较快，网上例子多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "核心网这种突发场景，时间序列预测不管用，该用什么模型？滑动窗口多大合适？算力不够时怎么降级？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得FTRL我可以用TensorFlow的TF Estimator API包一下，这样比较省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "衰减因子我就设0.9或者0.95？网上一般这么设。如果TF不行，那我用啥？难道自己手写矩阵运算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减因子怎么校准？FTRL裸实现怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能拉大框架，得自己写Go维护权重向量。衰减因子得跑实验，用不同半衰期对历史数据做回放，看扩缩容滞后。我准备用Go写FTRL核心，然后造几组不同半衰期的实验跑回放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放数据就用上一步eBPF采集存下来的RINGBUF数据。和K8s交互，我输出一个扩缩容期望副本数，通过K8s client-go调Scale API。不过如果短时间内频繁扩缩，会不会造成Pod抖动？"
+              }
+            ]
+          },
+          {
+            "microScene": "在容器弹性调度联调测试背景下，用户与导师围绕推演引擎与K8s调度器对接方案及联调压测验证持续沟通（5轮），其中在有状态跨AZ场景下KEDA适用性部分与云原生编排师沟通（1轮），在核心网信令风暴压测与故障注入部分与性能压测专家沟通（1轮），并最终确定采用Kubebuilder构建Custom Controller对接会话迁移，以及使用TRex与Chaos Mesh进行压测与降级验证的联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接用K8s原生的HPA机制。把推演引擎算出来的期望副本数当成自定义指标暴露给Prometheus，然后配个Prometheus Adapter，HPA不就能自动根据我们算出来的数去扩缩了吗？这样不用自己写Controller去调API了，省事点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "冲突的话，我可以把HPA的行为配置成直接透传？或者，网上说KEDA性能更好，支持事件驱动，能不能直接用KEDA？把推演结果当成事件触发KEDA缩放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "KEDA能直接用吗？还是得自己写Controller？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说必须自己写Custom Controller，KEDA管不了有状态网元的会话迁移。所以只能自己写Controller去Watch推演结果，然后调Scale API和会话迁移接口了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写K8s Controller有没有现成的脚手架或者代码生成工具？我不想从零手写Informer和Workqueue那些逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测的话，我打算用Locust写脚本，模拟大量SIP或GTP信令并发打进去，然后观察Prometheus上的扩缩容指标和Pod数量变化。Locust挺方便的，Python写脚本也快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Locust打不了SCTP和PFCP，这种压测应该怎么构造？有没有现成的核心网信令压测工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调这块，我不用KEDA了，用Kubebuilder生成Custom Controller脚手架，自己写调谐逻辑对接会话迁移。压测用TRex打SCTP/GTP风暴，并且加上Chaos Mesh注入故障，专门测推演超时降级到静态水位的情况。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端信令风暴压测调优背景下与导师围绕级联雪崩复现、临界点判定与防抖、降级验证及验收口径持续沟通（7轮），其中在级联雪令涌动构造与降级兜底部分与性能压测专家沟通（2轮），并最终形成极端压测调优验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极限压测？我就把TRex的发包速率拉到最大，打到CPU跑满或者Pod OOM被杀不就行了？网上的压测教程基本都是这么干的，调大并发数看什么时候挂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "想打出AMF到SMF到UPF的级联雪崩，TRex这边有什么好用的模板或者现成脚本吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来是打Attach和Paging的混合风暴。那我回去改改TRex的lua脚本，把这两种信令按比例混发。只要把UPF流表打满，就能测出临界点了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前写Controller逻辑时，只要推演输出要扩，我就直接发扩容请求，没考虑过时指标的问题。这算是我知识上的盲区。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看KEDA源码时，发现它里面用了个滑动窗口算法来做指标平滑，好像能解决这种抖动问题。我能不能把滑动窗口的逻辑抠出来，套在我的Controller里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "削掉尖峰反而更危险了。那滑动窗口不能直接用，我得改。如果在窗口里加一个极值检测，如果峰值超过阈值，不管窗口均值多低，都立刻触发扩容？这样既防了抖动，又不会漏掉尖峰。我这就去改Controller的调谐逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推演超时就切静态水位。如果UPF流表满了，推演肯定也会超时，应该能自动触发降级吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用TRex构造Attach和Paging混合风暴，专门测UPF流表容量极限；第二，Controller调谐逻辑里加上带极值检测的防抖，防止过时指标导致振荡；第三，压测时必须验证UPF流表打穿、推演超时后，能不能平滑降级到静态水位。如果这三点都过了，极端压测就算调通了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网灰度部署背景下，用户与导师围绕监控看板指标选择、数据有效性验证及统计分析方法持续沟通（6轮），其中在看板指标选取部分与SRE稳定性值守沟通（1轮），并最终确定自写PromQL构建看板及基于Pandas的统计对比验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "官方模板里有 CPU/内存利用率，还有 HPA 的扩缩事件，我加几个 Panel 应该就够用了吧？我看网上很多云原生项目都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度部署的监控看板，是不是套用 Grafana 现成的 K8s 大盘就行？还是得自己写 PromQL？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看来现成大盘套不上。推演残差和端到端时延分布，我得去查一下我们 Adapter 暴露的指标名，然后在 Grafana 里拼出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就盯着看板，如果没报红，然后缩放也正常触发了，应该就说明没问题吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "统计检验这块我不太熟，平时都是看图说话。置信区间和方差比较，我只会用 Python 算一些简单的，Prometheus 里怎么做对照我不确定有没有现成插件能直接算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺运行数据统计分析的能力，只会看面板曲线，不懂怎么用统计学方法证明指标有效。我接下来得补这块，这周内我要学会用 Pandas 对比 Prometheus 导出的灰度和压测基线数据，写出时延 P99 和残差方差的对比脚本，跑出置信区间结果，不能只靠肉眼看图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先拼 PromQL 拿到数据，再写脚本做统计对比验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估缩放异常漂移排查背景下，与导师围绕扩容后时延飙升的归因与验证口径持续沟通（3轮），其中在漂移溯源与冷启动假设部分与SRE稳定性值守沟通（1轮），在调度模型残差发散与预热折损部分与弹性调度算法工程师沟通（1轮），并形成基于新Pod冷启动指标与模型残差曲线的闭环验证方案及修改调度模型参数的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我刚才在 Grafana 上看曲线，确实一扩容就抖。是不是咱们压测时没把链路追踪开全？如果有 Jaeger 这种工具，是不是就能直接定位到是哪个微服务卡住了？有没有更方便一点的办法能一眼看出根因？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上扩容后时延飙升，大盘上 Pod 状态都是 Ready 的，这种漂移一般怎么溯源？有没有什么现成的监控面板能直接查出来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那调度模型这边是不是算错了？能不能在编排层加个注解，或者改改 Ingress 配置，让流量晚点打过去？我看网上很多人都是用预热注解搞定的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着能不能直接改改 K8s 的 readinessProbe，加个 initialDelaySeconds，让新 Pod 晚点 Ready，这样流量不就晚点进来了？大盘应该就不抖了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以用 Prometheus 查新 Pod 启动后前 10 秒的请求速率和错误率，再对比老 Pod。如果新 Pod 前 10 秒全是超时或者 5xx，就能证明是预热没完。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我再写个 PromQL，专门筛 pod_age < 10s 的 Pod 的指标，跟老 Pod 做对比。如果确实是冷启动问题，我就得去改调度模型的预热折损参数了，这好像没法靠调工具配置兜底了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在信令处理能效基线核验背景下，用户与导师围绕基线核算口径、指标切分粒度及PromQL关联计算持续沟通（5轮），其中在能效核算口径与资源归因部分与运营能效分析师沟通（1轮），并最终确定按AMF和SMF微服务接口粒度核验稳态单核吞吐基线及PromQL计算方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接在Grafana大盘上拉一下CPU利用率和消息吞吐量，跟设计文档里的基线值比一比，差得不多就算达标了吧？有没有那种一键对比的插件？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能写个Python脚本把所有信令的P99时延平均一下，再跟基线比？或者网上有没有现成的Dashboard JSON能直接导入搞定的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令处理能效基线具体怎么算？有没有现成的公式或者工具能一键把基线对比报告导出来？我不想一个个去扒数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "做资源归因听起来好麻烦啊，能不能就用Node级别的CPU指标除以Node上的信令总数凑合一下？这样PromQL好写多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先弄AMF和SMF吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么在Prometheus里把特定接口的CPU时间和信令数乘除起来啊？我只会拉单独的指标，这种关联计算没做过。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域调度策略迭代规划背景下与导师围绕跨AZ有状态调度、合规约束及熔断边界持续沟通（7轮），其中在状态同步编排部分与云原生编排师沟通（2轮），在信令数据合规红线部分与合规与安全审计员沟通（1轮），最终形成基于会话复制的跨域调度、脱敏与熔断策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看Grafana大盘上AZ1的CPU闲，AZ2的SMF快打满了。能不能直接配个Karmada的权重调度，把AZ2的新建会话直接甩给AZ1？这样改动最小，网上很多跨集群调度都是这么配权重的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SMF有状态，直接甩过去可能会话上下文没过来，信令就断了。那是不是得先做状态迁移？但Karmada原生的调度好像不管业务状态。这种有状态的跨区，我不太确定怎么验证，感觉只能在晚上没流量的时候试一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨AZ调度SMF这种有状态网元，怎么保证会话不断？有没有现成的Operator可以直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨AZ把SMF会话上下文复制过去，信令数据里包含用户位置和IMSI，这有合规问题吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跨AZ不能直接移Pod，得用MigrationTask配前置钩子做会话复制，等目标端Ready再让AMF重路由。然后跨区复制数据要过合规网关，SUPI必须脱敏，不然触发数据出境。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个合规网关有没有现成的K8s Admission Webhook能直接拦？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我K8s扩展机制只停留在调API的阶段，自己写Webhook逻辑有点虚。通信合规更是只知道名词。我打算这周末把K8s Operator的开发模式照着官方文档敲一遍，然后在团队Wiki上记个坑，把这次跨区脱敏的断路逻辑画个草图放上去。下次遇到类似拦截，至少知道该在控制面还是数据面写逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果AZ1本身也快满了，或者复制延迟太高，这策略肯定失效。复现的话，我可以用Prometheus查两边的CPU和复制延迟，如果延迟超过500ms就熔断。但这个500ms是我猜的，不确定对不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这轮跨域调度策略迭代，我整理几个要点：第一，跨AZ借调不用权重，改用MigrationTask加前置会话复制；第二，目标端Ready后才触发AMF重路由；第三，跨区数据流必须加SUPI脱敏，合规不通过直接断路；第四，复制延迟P99超300ms或失败率升高，触发熔断不再迁入。我先按这四个点去改编排脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边云协同控制接口设计背景下，与导师围绕接口协议选型与载荷封装持续沟通（6轮），其中在网关资源上限与弱网协议适配部分与边缘计算设计师沟通（2轮），并最终确定MQTT+JSON及HMAC签名的轻量级接口基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然是边云协同，接口层必须具备双向流控和服务发现能力。我建议上 gRPC 双向流，原生支持服务端推送，再配上 Protocol Buffers 做序列化，带宽占用极低。网关侧我们跑个 Envoy Sidecar 做流量治理，这样断网重连、负载均衡都能托管，比写一堆重试逻辑优雅多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在的 ARM 芯片性能溢出得很，稍微选个高配型号加个内存条就撑住了。而且 gRPC 的多路复用长连接比 MQTT 那种心跳频繁的协议省电多了，长痛不如短痛，架构先进最重要。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们网关主控打算用哪个型号？内存和算力能跑 Envoy 代理和 gRPC 框架吗？如果不行，最少能支持什么级别的协议栈？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "256KB？这就很难受了，gRPC 确实没戏。那如果我们在云端做一层 BFF 网关，把 gRPC 转成 CoAP 下发呢？CoAP 支持可靠传输，且报文头极小，我觉得比 MQTT 更适合资源受限环境。另外为了防指令篡改，我打算在 CoAP 载荷里套一层自定义的 COSE 结构，再叠加 DTLS 做全链路加密。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "刚才确认了，网关只有 256K 内存，gRPC 和 Envoy 跑不了。CoAP 的话专家说 4G 环境下 UDP 不可靠，容易被基站限流。所以还是得退回 MQTT。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然 DTLS 握手耗电且容易死机，那 COSE 也砍掉，用简单的 HMAC-SHA256 做指令防篡改签名就行。不过我还是想在 Payload 里用 CBOR 替代 JSON，二进制格式更紧凑，解析速度也快，能进一步压缩功耗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "微灌指令字段就那么几个，JSON 肉眼可读，出问题抓包也好查。那就定 MQTT + JSON，Topic 按网关 SN 隔离，Payload 包含指令码、水肥配比、执行时长、时间戳和 HMAC 签名。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在链上流转链路可观测性建设背景下，用户与导师围绕业务语义透传与合规脱敏持续沟通（7轮），其中在业务Trace与链上事件关联部分与运维监控工程师沟通（1轮），在合约事件参数设计与敏感字段脱敏部分与联盟链协议工程师沟通（2轮），并最终形成基于事件触发与业务库反查的可观测性方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上套件呗。链上装个Hyperledger Explorer看区块，微服务这边挂个Jaeger做分布式追踪，再配个Grafana大盘，基本上就全可视了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这，确实看不出来。Jaeger只能看接口延时，业务语义它不懂。Explorer也就是个基础浏览器。要看清业务，是不是得自己写解析逻辑？这太麻烦了，有没有那种带业务解析的现成插件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "运维大哥，业务Trace怎么跟链上区块关联？链工大哥，合约事件怎么抛才能让监控抓到票据拆分这种业务含义？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是把业务字段塞到合约事件里，然后在Grafana画图。我回去改改合约代码，多加几个event参数就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哎呀，我我我没想到这茬。链上数据确实公开。那这咋办？有没有那种自动给事件脱敏的工具包？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的那些字段，如果是明文带在事件里，是不是就违规了？有没有办法既能被监控抓，又不泄露明文？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链上事件不能传明文，只能传TraceID和票据ID的哈希。监控端拿到哈希后，通过权限接口去业务库拉明文做展示。这样链上不泄露，监控还能看懂业务。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，底层用Jaeger加Explorer兜底看延时和区块；第二，合约事件只发信号，传TraceID和脱敏哈希，绝不传金额明文；第三，Grafana大盘按业务语义聚合，数据源是事件触发的业务库反查，按拆分率、流转耗时画图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

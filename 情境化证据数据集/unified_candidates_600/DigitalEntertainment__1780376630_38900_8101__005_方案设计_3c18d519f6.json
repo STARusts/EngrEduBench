@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨链流转网关数据流设计背景下，用户与导师围绕合规校验编排、交互时序与异常回滚机制持续沟通（5轮），其中在数据流架构设计部分与跨链网关架构师沟通（1轮），在合规报文数据限制部分与文娱数资合规师沟通（1轮），并最终明确双轨异步流转、报文数据最小化与超时回滚三条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接套现成的跨链桥，像LayerZero那种，发个Transaction过来，Relayer转过去就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规校验加进去的话，流转不就变慢了吗？这个我没细想过，是不是要搞异步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "里面还要插合规校验，这数据流该怎么设计才不会卡死？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规校验这块，跨域流转的报文里要带什么数据？直接把原图或者大视频传过去让风控判不是更准吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关要拆两条线，一条管链上资产锁定铸造，一条管链下合规校验。报文不能传原图，只能传特征哈希和CID，说是什么数据最小化。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时序就是：1. 用户发起跨域请求；2. 网关在源链把资产Lock；3. 网关把特征哈希和CID推给风控；4. 风控返回通过；5. 网关在目标链Mint新资产。如果风控说不行，网关就去源链调Unlock把资产退回来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双轨异步、报文精简、超时回滚，我按这三条去画数据流图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

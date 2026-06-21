@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在评卷数据管道联调背景下，用户与导师围绕双轨脱敏流式管道落实、Schema兼容性排障及联调底线持续沟通（6轮），其中在双轨数据乱序关联与Schema对齐部分与流式计算开发工程师沟通（1轮），并形成Schema演进补齐策略及三条联调底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Flink接Kafka把数据拉过来，留痕的话就在数据里加个审计字段一块儿往下发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分两个流，然后再Join起来。偏移量直接当字段带着走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink接Kafka处理双轨脱敏数据，Schema对齐怎么做？乱序情况下两条轨怎么关联？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "失败了就报错重启呗。我之前确实没处理过这种流式Schema兼容性问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把Confluent的Schema演进和兼容性规则看一遍，写个包含向前向后兼容的Producer和Consumer demo跑通，然后在咱们管道接入层加一个Schema校验拦截器，版本不兼容直接拒绝消费并告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

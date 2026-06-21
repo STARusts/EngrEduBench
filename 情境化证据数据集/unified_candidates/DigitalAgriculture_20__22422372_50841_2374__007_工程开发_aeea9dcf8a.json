@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在任务编排服务进入工程开发并与移动端、结算联调背景下，用户与导师围绕联调范围、最小闭环、状态机与验收口径持续沟通（10轮），其中在幂等键/事件记录/409冲突处理部分与后端工程师沟通（3轮），在核验凭证摘要字段、假数据与必测用例及测试数据脱敏部分与测试工程师沟通（1轮），并形成两天P0/P1联调清单与验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边主要是编排接口：创建日计划、触发编排、查询任务列表、锁定/释放任务。下游一个是移动端拉任务，一个是结算服务拿已完成任务算钱。最小闭环我想先做“触发编排→生成任务→移动端能看到”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态我记得是：未分派、已分派、进行中、已完成、已核验？改状态的，派工是编排服务，开始/完成是移动端，核验是移动端加物联网凭证。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等我还没加，我以为用任务ID就行，但重复提交会把状态又改一遍。我不太确定要怎么写才算正确。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 任务编排服务跟移动端联调时，任务状态更新这块，幂等一般怎么做？幂等键放哪比较合适？还有状态更新你们习惯用PUT直接改还是追加事件？冲突要怎么回给移动端？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我这边要加一张去重表和一张事件表？我担心改动有点大。能不能先只做去重，不搞事件表？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "409返回 allowedActions 这个我能照做。Idempotency-Key 是前端生成UUID就行？过期时间设多久？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备采纳三点：一是移动端回写带Idempotency-Key，服务端落去重表，48小时过期；二是状态更新时插一条task_event最小字段，task表还保留当前status；三是状态不允许就回409，带currentStatus和allowedActions。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小闭环我改成：1触发编排生成任务并分派；2移动端拉到任务；3移动端回写开始、完成；4服务端记录事件并更新状态；5结算服务能按地块+日期拉到“已核验”的任务做试算。核验这一步我还没讲清，算移动端回写核验动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "凭证我想先传照片ID和定位点？但照片ID怎么来我没想好，是不是直接传base64先凑合？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 任务编排服务跟移动端联调，核验凭证这块我们不想传大文件。联调阶段你建议凭证怎么做假数据？还有回写幂等、409冲突这些，你们准备怎么测，最少要覆盖哪些用例？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "最后一条我之前没想到，我们联调环境好像有人会拿真实号码做测试。那我需要去提醒一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核验payload最小字段我按测试说的：evidenceType、evidenceRefs、evidenceHash、capturedAt、deviceId，gps可选。错误码：400缺字段，409状态冲突返回currentStatus和allowedActions。幂等重复就200返回第一次结果。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我排一下：\nP0（今天）：触发编排生成任务；移动端拉任务；开始/完成回写带Idempotency-Key；事件表最小插入；409返回结构对齐。  \nP1（明天）：核验回写带凭证摘要字段；结算服务按条件拉已核验任务试算；补400/401/403/409用例跑通。  \nP2（后面）：去重过期清理、并发压测、争议状态先占位不联调。\n另外我会在群里说测试数据别用真实手机号，给一份假数据规则。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

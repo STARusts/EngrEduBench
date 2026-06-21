@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在全息演艺流控数据流设计背景下，用户与导师围绕数据流选型、流控网关落地及群智规模自适应降频持续沟通（7轮），其中在情绪驱动渲染流控架构与低延迟高吞吐权衡部分与全息流控设计师沟通（2轮），并最终形成四条流控数据流设计基线及网关接口定义方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Kafka。之前做日志收集都用的这个，吞吐量大，云端的频谱数据直接丢Kafka，渲染节点订阅就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对哦，Kafka是有延迟。那就换成Redis Pub/Sub？或者直接WebSocket推？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在要把云端合成的群体情绪频谱推给全息渲染集群，我本来想用Kafka或者Redis，这种场景一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "UDP不怕丢包吗？渲染如果丢了一帧指令不就卡了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端频谱出来后，先进流控网关，网关负责把频谱指令通过UDP推给渲染集群。网关里要加序列号和插值，还要监控网络，如果卡了就发兜底指令。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没想。那网关还得知道现场人数？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，云端到渲染走UDP或QUIC直推，不用Kafka攒批；第二，流控网关做序列校验和插值平滑，只取最新状态；第三，网关要有降级熔断，网络抖动时切本地预设舞美；第四，降频策略要根据群智规模动态调整，防抖动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨网关数据同步架构设计背景下，用户与导师围绕同步方式、一致性、异常恢复、防重幂等及敏感数据脱敏持续沟通（8轮），其中在跨网关同步架构部分与系统架构师沟通（1轮），在异常兜底与防重逻辑部分与后端联调工程师沟通（1轮），并最终确认事件驱动、断点续传、全链路幂等和脱敏上链四条硬性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就搞个网关服务呗，链上链下互相调接口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "确实，那就异步。用个MQ发消息，发完就不管了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一致性肯定要保证的，就，最终一致吧。加个重试就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这块想用MQ加重试，你觉得行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是事件驱动，上链听业务事件，下链听区块事件，加个全局ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，重启了就重新订阅呗？合约那边，我传参带上ID应该就认吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关重启丢回调，还有合约怎么校验ID，这俩异常咋处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对，偏移量续传，合约建映射表，链下加防重表。这样就不会重了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "敏感的就不传呗，或者加密？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，事件驱动，断点续传，全链路幂等，还有脱敏上链。就这几条。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

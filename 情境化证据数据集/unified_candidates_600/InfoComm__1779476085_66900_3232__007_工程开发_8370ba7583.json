@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光场编解码核心模块开发与边缘端部署背景下，用户与导师围绕张量分解算子落地、能力缺口补齐及验证口径设定持续沟通（5轮），其中在边缘端部署卡点部分与光场编码系统架构师沟通（1轮），并最终确认补学TRT插件与C++算子重写、单测编写，以及验证实验基线、观测指标与工程约束阈值。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了文献，用Tucker分解压缩光场矩阵，理论上压缩比很高。直接用PyTorch的接口把张量搭出来就行吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "延迟这块我没细算过，只推算了FLOPs。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种张量分解的模型，部署到边缘端到底会卡在哪？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只会用Python搭网络，C++和CUDA这块我不太熟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是只能把计算图导出ONNX再让TensorRT优化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我确实得补一下底层算子实现。我这两天看两个东西，一是TRT的自定义插件注册机制，二是咱们的核心收缩算子怎么用C++重写。我写个单算子测试先跑通，把调试日志记下来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设计个对照实验。基线是未优化的原生PyTorch模型，实验组是TRT优化后的引擎。自变量就是输入光场的视角数，观测指标选编解码端到端延迟和重构的PSNR。如果延迟降了但PSNR掉太多也不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全息重构PSNR不能低于35dB，不然视点跳变太明显。延迟的话，单帧解码得压在5ms以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步我要补学TRT插件和C++算子重写，写单测。验证实验基线是原生模型，实验组是优化模型，观测延迟和PSNR，阈值5ms和35dB。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

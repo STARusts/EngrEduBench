@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端热波冲击熔断逻辑开发背景下，用户与导师围绕熔断触发特征、退坡算法与恢复条件持续沟通（7轮），其中在梯度退坡策略与误判率及恢复条件部分与异构容灾评估师沟通（3轮），并形成基于声压焓流乘积触发、指数退避退坡及方差达标恢复的熔断控制方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "温度飙得太高就直接断开连接呗，写个阈值判断，超了就关阀门，保护设备。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回火压力这块我不太懂，硬切会有这么大影响？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端热波冲击的时候，谐振腔要是稳不住，熔断怎么搞？直接关阀门行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那代码里怎么判断退坡速率？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看分布式限流的时候学了指数退避算法，是不是能套这儿？声压越大，退坡间隔越长，慢慢把阀门关死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "也是指数探测？先开一点点，没震荡再开大点。不过这块我不太确定，热波冲击的持续时间怎么预估？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "方差低于阈值，还得连续3个周期。这条件挺严苛的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发看声压和焓流变化率乘积超包络线；退坡用指数退避算法控制阀门关断速率；恢复得连续3个周期声压方差达标才能探测。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改Worker里的熔断控制模块，加上这几个逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "日志级别我调细点，把声压采样值也打进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

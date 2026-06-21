@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在“镜头可信+协作台”方案设计背景下，用户与导师围绕权限拆分、审计留痕与高可用降级持续沟通（8轮），其中在授权模型与日志防篡改部分与安全工程师沟通（1轮），在可用性目标、冗余与降级策略部分与SRE运维工程师沟通（2轮），并整理可直接入章的权限原则/必审计事件/高可用要点及权限矩阵与审批链图要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分管理员、剪辑、审片三种吧。管理员全能，剪辑改素材，审片只能看和打标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "素材就读写删导出。镜头就差不多。项目也是。版本就…读写？日志我感觉也能给管理员看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 权限这块我们要写方案，RBAC还是ABAC？审计要记哪些，日志怎么不被改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记住了：RBAC主，ABAC补条件。日志放不可变的存储，追加写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审批就导出要审批，删除也要。二次验证就是发短信？必须事件就是审片结论提交、导出、角色变更。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 高可用这块要怎么写？目标写什么，怎么冗余，挂了怎么降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RTO/RPO我老是分不清，是不是一个是恢复时间一个是丢数据多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "权限原则：RBAC加ABAC，导出删除要审批，敏感素材限制，管理员少给。  \n审计事件：登录失败、角色变更、导出、审片提交、镜头标注改、风险标签覆盖。  \n高可用：核心链路要快恢复，服务多实例，审计写入用队列缓冲，检测挂了就人工。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就照这三段抄进章节。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审批链要不要画图？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

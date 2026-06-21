@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路压测与延时优化背景下，与导师围绕压测流量构造、延时预算拆分、eBPF观测权限风险及超限降级策略持续沟通（4轮），其中在压测模型与延时漏斗拆解部分与链路压测优化工程师沟通（1轮），并最终形成端到端延时拆解预算、压测验收标准及超限降级切流策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算分三段压：信令接入层、战局重构渲染层、流媒体分发层。重点是渲染层，刚才联调给了2ms的余量，如果渲染层吃不掉，分发层再快也没用。我想先摸清单节点的极限QPS，再拼全链路。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "预算拆分我之前按3:4:3分，但缺乏数据支撑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边需要一套贴合电竞信令特征的压测模型，还有端到端延时的漏斗拆解方案，传统tcpdump抓包太粗了，有没有更细粒度的观测手段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我比较认同这个拆解，渲染15ms比较紧，刚才联调的2ms余量得全压在这。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "专家提到的eBPF观测，我上周刚补了BCC工具链的用法，刚好可以迁移过来，替换掉我们原来基于tcprstat的观测脚本，内核态采集能避开上下文切换的误差，压测数据会更准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "权限这块我确实没细查，我只顾着提升观测精度了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "生产集群是4.14内核，部分CO-RE特性可能跑不起来。如果为了压测去升内核或者开特权，风险太大，合规那边也过不了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测验收标准我明确一下：P99端到端延时<50ms，P99.9允许抖到80ms但不触发级联雪崩，超限自动切导播流。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去更新压测脚本，把eBPF先用入预发环境。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

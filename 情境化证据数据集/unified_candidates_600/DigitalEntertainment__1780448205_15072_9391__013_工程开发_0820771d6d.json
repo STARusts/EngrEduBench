@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端姿态物理穿透修复背景下，用户与导师围绕穿透工程解法与数据脱敏持续沟通（5轮），其中在穿透边界确认部分与物理仿真测试员沟通（1轮），在大深度穿透解法与SDF开销部分与求解引擎开发者沟通（2轮），并最终形成SDF粗筛加XPBD投影修正及数据脱敏的修复策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "从理论上讲，连续碰撞检测CCD能防止穿透。或者增加布料质点的刚度惩罚，让它在靠近碰撞体时产生强排斥力。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抬手和深蹲的穿透，具体发生在哪些帧？穿透深度大概多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测试说穿透深度最深有8cm，CCD算不动，刚度惩罚又太硬，工程上现在怎么修这种穿透？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "XPBD投影加粗筛。我之前看SIGGRAPH去年一篇关于SDF预计算做实时碰撞的论文，刚好这两天在复现它的核心逻辑。是不是可以把躯干预计算一个SDF场，穿透发生时直接用SDF值判断内外，比遍历网格快多了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以只对主躯干胶囊体生成低精度SDF，四肢这种高频变形区还是用距离约束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "省掉了穿透质点与三角面的求交遍历。质点坐标代进SDF直接出符号距离，小于0就是穿透。对于这种8cm大穿透，用SDF做一次粗筛再进XPBD投影，迭代次数至少能砍一半，移动端帧率能稳住。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没注意。直接拿原始顶点跑肯定不行。测试给的数据集我得先过一遍特征混淆，把生物特征标识抹掉再进求解器。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先补SDF生成模块，再改XPBD投影，测试数据我会加上脱敏预处理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

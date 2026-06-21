@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨端跨域信令与数据流方案设计背景下，与导师围绕信令分发协议、数据流隔离及协议适配层落地协同持续沟通（7轮），其中在跨域分发策略与弱网协议部分与边云协同规划师沟通（1轮），在多模态设备协议规约与适配部分与多模态接口定义师沟通（1轮），并最终形成跨域信令分发与数据流设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘节点到设备端，我用gRPC双向流推，设备回调用HTTP。数据流就存Redis，快一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现场网络可能断，加重试。设备跑不了gRPC，套个网关转协议。Redis抖动，那就换别的库，或者加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边云协同规划师 跨域信令分发怎么搞？gRPC行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多模态接口定义师 设备端协议怎么定？各种声光电设备协议都不一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "连接迁移，就自动重连呗。前端那边，我写好SDK他们调用就行了，不管他们能不能接住，反正接口我定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我得找前端和厂商对齐一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据流那边，回流状态用什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令分发云端到边缘用QUIC，边缘到设备降级WebSocket；边缘加协议适配层；信令和数据流物理隔离，数据回流走Kafka。我得找前端定SDK。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 信令主干用QUIC，边缘到设备降级WebSocket；2. 边缘部署协议适配层，对上统一时序接口，对下转DMX512等；3. 信令流与数据流物理隔离，状态回流走Kafka；4. 适配层开发需与前端及设备厂商对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

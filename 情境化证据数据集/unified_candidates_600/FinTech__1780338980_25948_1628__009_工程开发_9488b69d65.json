@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在隐私验真联调与测试背景下，用户与导师围绕联调策略、Mock与真实MPC环境切换及审计埋点设计持续沟通（4轮），其中在MPC计算Mock风险与审计合规部分与隐私计算工程师沟通（2轮），在分层联调与主流程解耦部分与测试联调专家沟通（1轮），并形成双Profile环境隔离、主干先通后旁路接入真实隐私节点及接口层强制定义审计埋点的联调策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨机构隐私验真这块，我能不能直接用FATE或者SecretFlow的现成SDK包一层？联调的话，先把接口对上，数据我用Mock框架造一下，这样跑得快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨机构黑名单核查这块，如果联调时我用Mock挡板把你们的MPC计算结果固定返回，会不会有问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "隐私计算那边说不能Mock，那联调怎么推进？等他们环境起起来，我们后端和链上的测试不就全卡住了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分两套环境听起来挺麻烦的，有没有那种框架能一键在Mock和真实环境之间切换的？我不想改代码重新编译。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得测试专家说的分层有道理，但我还是想偷个懒。能不能用Spring的Profile，搞个`mock-privacy`和`real-privacy`两个配置？主干联调默认切Mock，跑通了再切Profile连真实MPC节点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我让挡板也返回加密后的错误码格式吧。不过隐私计算那边说的审计日志，Mock环境肯定没有。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Profile管环境切换，主干联调先Mock，旁路专门跑真实MPC。审计埋点我写在接口实现类里，切真实环境时自动激活。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

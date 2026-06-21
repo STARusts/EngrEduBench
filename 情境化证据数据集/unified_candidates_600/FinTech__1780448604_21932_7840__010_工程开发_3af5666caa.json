@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发撮合性能调优与漏洞修复背景下，用户与导师围绕延迟毛刺与漏洞修复方案持续沟通（3轮），其中在延迟瓶颈排查部分与撮合熔断策画师沟通（1轮），在漏洞注入点确认部分与攻防渗透猎手沟通（1轮），并最终形成锁重构、反序列化白名单等调优修复范围及eBPF追踪验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟毛刺严重，我打算把撮合核心全部用FPGA重写，通过硬件加速绕过JVM的GC停顿；漏洞方面，前面加一层基于零信任架构的API网关，所有请求先过网关做WAF清洗和鉴权，彻底隔离业务层。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "目前压测TPS到5万时P99延迟会飙到200ms，是锁竞争太狠还是内存分配太碎？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那几个高危漏洞具体是什么情况？是SQL注入还是越权？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前把问题想偏了。撮合那边不用FPGA，改OrderBook的锁机制，换成无锁队列加CAS；反序列化加白名单，越权补断言。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近刚好在学eBPF，可以直接用eBPF挂载uprobe在撮合引擎的用户态函数上，动态追踪锁竞争和内存分配延迟，不用改业务代码就能定位毛刺源。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优范围：1. 撮合核心OrderBook锁重构，替换为细粒度无锁队列+CAS自旋；2. 内存池预分配Order对象；漏洞修复：1. JSON反序列化入口开启白名单Filter；2. 挂单状态更新接口补充Owner断言校验；3. 所有关键操作补齐审计日志防抵赖。验证标准：eBPF追踪锁竞争耗时<5ms，P99延迟<50ms，漏洞扫描0高危。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

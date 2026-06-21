@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在循环水质数字孪生+合规管控平台运行评估背景下，用户与导师围绕监控看板必盯指标、SLO门槛与越线后现场/平台归因持续沟通（7轮），其中在SLO与告警分级上与SRE运维工程师沟通（3轮），在合规看板证据口径与raw_packet一票否决呈现上与合规与审计官沟通（2轮），并口头确认首页6指标、P0处置与判别分支。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板就盯告警数吧，越少越好。SLO我直接写99.9可用性，模板里都有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据链路就…延迟、丢包？孪生就是预测准不准。合规就是别超标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 SLO你给我一套能抄的，指标名字也给出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SLO都写这么多啊。能不能就99.9一个？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那告警等级怎么分？我直接全P1？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 看板上合规要放啥？就放“超标次数”行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "raw_packet那个我记住了，>0就回滚。其余两个我有点乱，hash链我也不太懂。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把这些都堆到首页看板得了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "首页6个…就按刚才抄：写入成功率、freshness；推理延迟、推理成功率；审计写入成功率、raw_packet次数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看…device_offline_count？离线多就是现场问题，不多就是平台问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记成“离线-现场、积压-平台、缺失-解析”。差不多吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就这样：  \n- 首页盯6个：ingest_success_rate≥99.5、freshness_p95≤120s、infer_latency_p95≤800ms、infer_success_rate≥99、audit_write_success_rate≥99.9、raw_packet_violation_count=0。  \n- P0是raw_packet和审计连续失败。  \n- freshness坏了先按离线/积压/缺失三分支猜原因。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

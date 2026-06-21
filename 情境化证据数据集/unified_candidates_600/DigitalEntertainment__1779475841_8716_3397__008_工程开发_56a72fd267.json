@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在弹幕情绪共振引擎联调开发背景下，用户与导师围绕NLP推理架构选型及验证方案持续沟通（7轮），其中在流式侧解耦与反压约束部分与流式计算架构师沟通（1轮），在算法侧低延迟约束与取舍部分与语义算法工程师沟通（2轮），并最终形成基于AsyncIO外部调用并预留本地降级口的技术栈与压测验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "塞进去吧？感觉快一点，省得网络传输开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink算子里直接跑NLP模型，还是异步调外部服务？我想直接塞里面，你觉得行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构师说必须异步调外部服务解耦，你们这边能接受吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说必须异步调服务解耦，算法说内嵌模型才能保证50毫秒延迟。两边都有道理，我该听谁的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就各写一版，跑一下看看哪个好？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对Flink AsyncIO调Triton服务这块的排障确实不太熟，怕写出来测不准。我得先补一下AsyncIO反压机制和Triton动态Batch的调优文档，列个学习清单，搞懂再测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用线上回放的历史峰值弹幕流，分别压测内嵌ONNX和异步Triton两种模式。主要看P99延迟是不是真的超过50毫秒，还有吞吐量掉不掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果吞吐高很多，延迟超一点点，我觉得可以接受？50毫秒是不是卡太严了？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

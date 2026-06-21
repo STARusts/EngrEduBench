@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在演释大模型微调与部署背景下，用户与导师围绕LoRA微调、数据构造、部署框架选型、显存配置及数据合规持续沟通（8轮），其中在数据构造与部署选型部分与多模态算法工程师沟通（1轮），在数据版权清洗部分与合规与版权专员沟通（1轮），并形成LoRA微调、结构化合规数据与vLLM部署的开发思路及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上用LoRA微调最合适，参数高效，冻结基座模型只训练低秩矩阵，能快速适配咱们的剧情语境。数据集就用清洗过的剧本语料。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据格式，我看过论文，一般得把图谱节点上下文拼进Prompt。部署框架，我只会写PyTorch的model.load，线上高并发推理肯定不行，这块我不太懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们用LoRA微调，数据怎么拼？线上推理用啥框架能扛住动态推理的延迟要求？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，我还没细想，以为开源剧本就没事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "vLLM的显存分配参数比如gpu_memory_utilization我还没实操过，多卡张量并行也不熟。我记下今晚补学vLLM的官方文档，重点看PagedAttention的显存配置和tensor_parallel_size参数，明天先在开发机跑通单卡部署验证一遍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微调用的剧本语料，怎么确认没有版权问题？开源的也不能直接用吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "微调用LoRA，数据必须是自有IP或商用授权的剧本，按节点ID、路径、情绪、对白这四个字段构造JSONL，并且带上来源留痕。部署用vLLM，配合之前的KV Cache复用。显存配置我今晚补学。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

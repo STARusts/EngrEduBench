@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在RIS盲区自愈与高可用方案设计背景下，与导师围绕自愈闭环机制、触发防抖与验证严谨性持续沟通（9轮），其中在自愈闭环状态机定义部分与系统方案设计师沟通（1轮），在触发判据与防抖机制部分与运维监控分析师沟通（1轮），并形成基于滑窗检测与查表降级重构的盲区自愈方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就搞个心跳检测呗，不通了就重启波束。K8s不都这么干吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就测RSRP，低了就查表。刚才不是有查表吗，我直接套过来用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统方案设计师 自愈闭环怎么做？有没有现成模板？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就定-100dBm。查表降级，我刚才学了，就在重构那一步用查表呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我没想到。那就加个限流，1秒只准自愈1次。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "误判肯定不好，波束乱跳业务就断了。那就不处理了，宁可漏掉也不误判。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控分析师 触发判据和防抖怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 用SINR和RSRP滑窗检测，连续N个TTI低才触发，加置信度窗口防误判；2. 触发后用查表降级算相移重构波束；3. 重构后看RSRP回来没，对比不自愈的情况。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

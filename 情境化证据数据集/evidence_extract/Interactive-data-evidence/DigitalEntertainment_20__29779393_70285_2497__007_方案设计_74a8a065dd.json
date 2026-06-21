@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在共创剧情平台方案设计收尾的分账结算数据链路设计背景下，用户与导师围绕结算锚点、触发点与关键ID贯通持续沟通（8轮），其中在分账口径与退款调整规则部分与商业化策略经理沟通（3轮），在内容-交易-结算三段字段与存证/审核状态对接部分与数据架构师沟通（3轮），并形成以发行快照锚定、对账与调整不断链及版本必填门禁的链路要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从订单开始？用户付钱，然后就按比例打给作者们。差不多就到打款结束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "作品ID、订单ID、用户ID。还有作者ID？渠道ID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按作品吧，不然版本太多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业化策略经理 分账结算这块，一般怎么算？就按订单金额乘比例吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "退款冲正是说退了就回滚之前的钱？那如果已经打给作者了咋办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "贡献分配是按字数吗？还是按谁点了发布？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我们分账结算要追溯的话，链路字段要怎么串？我怕漏ID。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`evidence_ref`是放链接吗？直接存原文不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那结算要读审核库？还是直接读状态字段就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主键就用`release_snapshot_id`串内容到订单，再串到结算批次。触发点是订单支付成功，然后等到结算周期做批量。还有遇到`SETTLEMENT_FREEZE`就先不打款。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加`adjustment`表？把退款都记进去，下期扣。对账就用`channel_order_id`对上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第4条，我老记不住这么多version，可能漏填。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去跟内容治理那边确认“哪些审核状态会触发冻结”，再跟商业化确认退款窗口和调整项类型，按你这6条走。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在推演精度验证与边界测试背景下，与导师围绕极端气象构造、误差适用边界、内存监控及误差放大处理持续沟通（7轮），其中在极端气象场构造部分与测试验证工程师沟通（1轮），并形成包含极端气象覆盖、VOCs/NOx过渡区验证、Valgrind内存监控及置信度降级标记的验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单测全绿了。边界测试我写了几个高浓度VOCs的用例，跑出来误差大概8%"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我数据里好像没这种极端的，平时测试都是正常天气。这种情况下模型会怎样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边界压测的极端气象场怎么构造？我平时只用真实历史数据跑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要自己造数据。静风逆温和极端湿热，记下了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差应该是观测数据本身的噪声吧？适用边界我确实没细想，感觉VOCs浓度只要不超量程就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上次查除零风险时，我学了用Valgrind跑内存泄漏检测，当时挺好使的。这种极端输入的压测，确实容易触发没预料的内存暴增，我把Valgrind集成到边界测试脚本里，边跑边盯内存，应该能抓出隐患。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就跑几组VOCs/NOx在过渡区的极端用例，如果误差超过15%，我就把置信区间标出来，提示用户这时候结果只能参考，不能直接用来下发调度指令。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

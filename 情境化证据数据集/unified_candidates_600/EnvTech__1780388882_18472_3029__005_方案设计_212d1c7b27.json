@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在特征级拼接架构敲定背景下，用户与导师围绕特征喂入方式与边云数据流转持续沟通（7轮），其中在特征图回传需求部分与多谱视觉算法师沟通（1轮），在带宽与合规约束部分与数据拓扑设计师沟通（1轮），并权衡冲突设计双通道数据流折中方案，明确流转契约形成基线设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拼接完直接打平过全连接层呗。数据流就边缘算完把结果往云端推，简单直接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征拼接后怎么喂模型？还有数据流怎么设计？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "中间特征图传回云端，这流转能跑通吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师要传特征图做复训，拓扑师说带宽扛不住还涉密，只能传Embedding和Label。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得拓扑师说得有道理，带宽成本太高了，而且涉密确实麻烦。但全传Label的话，模型漂移了云端不就瞎了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实时走Embedding和Label，然后单独开个小通道传特征图？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按比例采样？比如千分之一？实时主通道只推Embedding和Label满足脱敏和带宽约束，异步副通道按低频采样把少量特征图回传云端做漂移检测。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "主通道推：物料ID、时间戳、预测Label、Embedding向量、置信度。副通道触发条件：置信度低于阈值0.6时强制采样，或者正常帧1000:1随机采样，回传对应帧的原始特征图和中间Attention权重。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

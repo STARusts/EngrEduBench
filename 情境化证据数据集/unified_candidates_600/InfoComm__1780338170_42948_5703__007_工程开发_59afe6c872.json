@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨域南向接口联调与适配背景下，用户与导师围绕工具链冲突导致反序列化失败的破局方案与性能风险持续沟通（5轮），其中在YANG转protobuf字段丢失与扁平化适配部分与切片控制开发主管沟通（2轮），在底层环境升级风险与reserved字段读取部分与协议栈开发工程师沟通（2轮），并形成应用层适配与编译宏隔离脏代码的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "昨天持续集成流水线红了，切片控制器下发的配置到协议栈那边反序列化失败，查了发现是数据模型对不齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定义本身没问题，是模型转换工具链出了岔子。我们用openconfig的YANG转protobuf，但协议栈那边依赖的生成插件版本太老，导致新增的时敏流特征字段在生成代码时被丢弃了。我对这种跨语言的编译依赖排障不在行，得让两边主程直接碰。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们用的pyang插件版本是多少？协议栈那边反馈反序列化丢失了时敏流的抖动容忍度字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "为什么还卡在protoc 3.6？不支持nested message，跨域信令解析就残缺，联调根本推不动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬推环境升级肯定不行，会拖垮整个联调里程碑。换个思路，在应用层做适配。你在控制器序列化前加一层扁平化逻辑，如果探测到对端是老版本protoc，把nested的时敏流特征字段打平，塞进顶层的reserved字段里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先保联调！脏代码用编译宏隔离，打上deprecated标签，生命周期只到下个迭代。对端打平后，你这边解析就简单了，直接从reserved字段读取，不需要改protoc版本，能不能跑通？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能守住。打平逻辑只是结构体重排，没有动态内存分配，耗时在纳秒级。协议栈从reserved取值也是O(1)查表。比起跨域信令的网络传输时延，这个插桩开销可以忽略。风险可控，就这么定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

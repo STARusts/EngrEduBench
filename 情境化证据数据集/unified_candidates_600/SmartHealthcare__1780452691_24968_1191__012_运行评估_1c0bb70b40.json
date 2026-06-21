@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度放量假阳性监控归因背景下，用户与导师围绕监控指标构建、误伤归因与闭环策略持续沟通（8轮），其中在拦截复核与归因标签部分与拦截归因标注员沟通（1轮），在心内科禁忌绝对化误判部分与临床药师沟通（1轮），并形成按科室与标签分维度监控及归因驱动图谱补充与离线验证的闭环策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看Grafana面板上配个告警规则行不行？就那种，拿拦截总数减去申诉通过数，除以总数，搞个假阳性率曲线出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把拦截日志导出来，用Kibana过滤一下状态码？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上拦截的那些处方，你们怎么判断它是假阳性？归因标签都打些啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还得看申诉文本啊。那我写个正则匹配关键词，自动打标签？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标注员说“未识别合理联用”占比挺高的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心内科那边申诉特别多，是不是有些中西药合用的禁忌咱们给绝对化了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "懂了，是缺了病种维度的豁免逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控指标得拆，不能只看全院假阳性率，得按科室和归因标签分维度看。归因标签要把“缺乏慢病合理联用上下文”加进去，作为主要假阳性源。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "得把心内科的慢病常规联用特征补进图谱里，给那条禁忌边加上条件豁免属性。不过这个改动挺大的，我得先跑个离线验证，看看补上豁免后，真阳性率会不会掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

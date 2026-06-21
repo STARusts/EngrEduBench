@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在云侧热场反演算法选型背景下，用户与导师围绕开源PINN风险与折中方案持续沟通（4轮），其中在PINN收敛性及Modulus框架部署部分与算法设计师沟通（3轮），在工艺误差允许范围部分与粉冶工艺分析师沟通（1轮），并最终确定云侧用Modulus定制PINN、边端用蒸馏小模型的反演算法选型方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云侧算力足，我想着直接上主流的深度学习框架，比如PyTorch，找个现成的反演网络微调一下。网上有不少热传导PINN的代码库，拿来改改应该挺快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没细测，我看论文里很多人用PINN做反演都说效果还行。就是调参可能有点玄学。有没有更方便一点的办法，比如封装好一点的AutoML工具自动搜参？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现成的PINN库做热场反演，在我们这种生坯密度梯度特别大的情况下，会不会不好收敛？有没有开箱即用的改进版？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从工艺角度看，热场反演的误差允许范围是多少？是不是必须得非常准？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法设计师说通用PINN反演会局部震荡，工艺那边说震荡超±5℃就废。看来直接套开源PINN确实有风险。那我们是不是得自己从头写一个反演算法？有没有那种既有物理约束，又不用从零写底层的折中方案？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "支持自定义约束投影的框架，我了解过NVIDIA的Modulus，它专门做物理机器学习的，内置了很多PINN算子，还能加边界约束。用这个算不算折中？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "刚才边端方案才定了不用重型依赖。那Modulus只能在云侧训练和全量反演用。边端还是得蒸馏出小模型。蒸馏的话，精度掉得厉害吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就这么干。云侧重计算，边端重实时。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "反演算法选型定了：云侧全量反演用NVIDIA Modulus定制PINN，融入工艺边界硬约束；边端用蒸馏小模型做局部预判。不再找纯黑盒调包方案。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

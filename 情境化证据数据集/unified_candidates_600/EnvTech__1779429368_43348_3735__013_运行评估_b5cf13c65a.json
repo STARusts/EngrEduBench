@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度部署运行评估背景下，用户与导师围绕拦截率与能耗达标情况及Flink架构扩展可行性持续沟通（4轮），其中在实时曲线与Flink接入评估部分与指标监控分析师沟通（1轮），在能耗偏高根因定位部分与异常复盘专家沟通（1轮），并最终形成暂缓Flink、将待机占空比纳入核心监控并排查降档代码的决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现有的Prometheus+Grafana监控套件对于靶向拦截系统来说太基础了。我提议引入Flink做实时流特征提取，配合图神经网络模型预测拦截率衰减趋势，实现动态阈值自适应，避免固定阈值告警的误报漏报。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在大盘上拦截率和药剂能耗的实时曲线怎么样？我准备加的Flink流式预测模块，你们觉得能接进现在的看板吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink架构我先保留设计文档。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能耗这块，会不会是旁路监听引入了额外延迟，导致靶向控制指令下发滞后，吸附塔多投了药？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吨水电耗偏高15%，拦截率正常。我怀疑是旁路监听延迟导致控制超调，能帮忙拉一下PLC指令下发时间戳和执行器响应日志对齐看看吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "满功率待机？工控联调时没测这个边界吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在的决策点明确了：监控看板先不加Flink流计算，把电氧化槽待机占空比作为核心监控指标单独拎出来，设个硬阈值告警。然后我去查底层驱动逻辑的待机降档代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

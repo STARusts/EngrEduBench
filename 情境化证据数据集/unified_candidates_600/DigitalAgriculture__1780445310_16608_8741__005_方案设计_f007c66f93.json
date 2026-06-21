@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在基线架构敲定PG+AGE后的本体建模与选型背景下，用户与导师围绕OWL重逻辑与扁平Schema选型、工程约束与合规风险的权衡持续沟通（4轮），其中在AGE下重逻辑本体的性能与维护坑部分与知识图谱架构师沟通（2轮），并最终形成放弃OWL、采用扁平Schema加规则外置及入图前校验拦截的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然项目核心是处方寻优，本体必须足够精细才能支撑复杂推理。我倾向用Protégé建OWL本体，把作物、病害、农药的继承体系和属性约束做严密。比如\"水稻-稻瘟病-三环唑\"这条链，OWL能保证推理的语义完备性，不会漏掉适用的场景。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维护成本可以靠后续自动化抽取补。OWL转属性图虽然有损，但核心的继承关系和互斥约束可以保留下来，推理引擎做适配就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想在AGE里保留OWL的复杂继承和约束来保推理完备性，具体在性能和维护上会有什么坑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "扁平Schema层级太浅，比如不同分蘖期的水稻用药量差异很大，光靠3层实体怎么区分？不过规则外置倒是可以考虑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "属性存状态，逻辑外置。但我还是觉得Schema太松散，缺乏形式化校验，万一抽取出错直接导致处方开错，合规风险太大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "死线卡得死，只能妥协。本体建模方向就定扁平Schema，核心实体不超3层，属性存动态特征，规则逻辑解耦外置。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "但我会在数据入图前加一层校验拦截，补上形式化校验的短板，防止脏数据进图导致处方跑偏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

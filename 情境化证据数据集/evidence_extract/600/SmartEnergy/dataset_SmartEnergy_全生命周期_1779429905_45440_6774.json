@@ -1,0 +1,652 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在柔性负荷调度系统立项背景下，用户与导师围绕调频痛点剖析、可调容量测算与激励验证持续沟通（7轮），其中在痛点边界与补偿逻辑部分与电力市场分析师沟通（1轮），在容量池真实底数部分与需求侧管理规划师沟通（1轮），并确认动态测算与双源覆盖约束，制定建模补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在电网调频痛点很明显，硬切负荷用户体验差，响应越来越慢，而且装传感器采数据隐私全漏。我打算从聚合总线提取特征，零侵入搞定状态感知，再套个博弈论做动态激励，让负荷自己趋利响应。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "慢就是因为用户被硬切不舒服，下次就不响应了。容量的话，我觉得只要激励给够，空调和充电桩随便调。我之前用Python跑过几个节点的历史数据，感觉潜力很大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现行调频辅助服务市场里，柔性负荷响应慢到底卡在哪？补偿机制能包住我们的博弈激励成本吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "空调和充电桩这些柔性负荷，到底能挤出多少容量？我之前看数据觉得挺多，但分析师说成本覆盖有问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "调频痛点主要是AGC延迟导致反向调节被扣钱，还有里程拆分难。容量也不是我想的那么多，充电桩只有15%-20%是真实可调的，还得看状态。所以非侵入感知确实是前提，不然不知道谁可切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是，如果我不硬切，而是给一个跟电价挂钩的动态激励信号，用户响应率会提高。但我现在不知道怎么算这个激励信号的最优解，我只会写Python调现成库跑数据，不懂怎么建调频容量响应的统计模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这两周要去补需求响应的统计建模方法，重点是学怎么把用户舒适度约束和调频容量耦合起来做回归分析。我会在本周五前跑通一个基于公开数据集的基线模型，拿MAE作为评价指标，如果MAE小于0.15，就算我补到位了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在非侵入感知与调频容量基线背景下，与导师围绕隐私泄露风险与合规取舍持续沟通（6轮），其中在用电特征提取合规红线部分与隐私合规审计师沟通（1轮），用户提出边缘聚合与即焚方案，最终锁定感知特征边缘计算、单态用完即焚、云端只收聚合容量的合规边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "非侵入不就是不打扰用户吗？数据传云端加个密不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私合规审计师 合规上对用电特征提取有什么死规定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只能出容量结果，不能出电器分解结果？那我这非侵入负荷分解（NILM）算法的输出不就废了一半？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果只出容量，我可以在边缘端把分解结果聚合成容量包再上送，云端只看容量池。这样云端不知道谁开了什么，只知道这个节点现在有50kW空调可调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧特征不存盘，算完容量直接覆盖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘算，不存底，只传容量包。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在非侵入感知商业可行性论证背景下与导师围绕调频补偿收益、用户接受度与成本回收持续沟通（3轮），其中在调频补偿与考核机制部分与电力市场分析师沟通（1轮），在入户施工与运维隐性成本部分与需求侧管理规划师沟通（1轮），并最终形成准确率底线、成本回收期与隐私换入户三大商业硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "非侵入本来就便宜，就一个总线采集器，不用每个电器装传感器。给点电费折扣用户肯定愿意装。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我没细算。调频补偿现在啥行情我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这种提供秒级调频容量的，电网能给到啥价？准确率低会不会被扣钱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "免费给用户装总线采集器，他们一般肯不肯？维护成本高不高？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "情况比想的差。电网要求准确率必须过85%，不然要扣钱。用户这边入户施工费高，还怕设备费电和掉线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "准确率得靠算法调，这块我得盯死。成本的话，施工费没法省，只能把硬件成本压到最低，设备尽量免维护，搞个看门狗远程重启。还有，得拿前一步的隐私合规去说服用户，只传容量不传明细，不偷数据，打消顾虑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在商业可行性约束背景下，用户与导师围绕博弈激励市场机制规划持续沟通（12轮），其中在防虚报容量与风险准备金比例部分与电力市场分析师沟通（2轮），在用户补贴发放形式部分与需求侧管理规划师沟通（1轮），并最终形成基于非侵入识别的阶梯电费抵扣加违约追溯惩罚及10%风险准备金兜底的激励机制主线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最直接的，给钱呗。电网下发调频补贴，平台抽个成，剩下的发给用户。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就测呗。不对，不能入户加传感器，只能靠非侵入识别。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电网调频里怎么防止用户虚报容量骗补贴？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "VCG听着就难算。阶梯出清我熟，好弄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用户喜欢怎么拿补贴？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "电费抵扣，阶梯出清。这俩好弄。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就用阶梯出清算补贴，然后直接抵扣电费。VCG那种太复杂，先不搞。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防不住，但可以设个惩罚嘛。虚报了扣他信用分，下次不给派单。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是。那就把VCG里的惩罚逻辑拿过来，不用全算。只要虚报被识别出来，不仅这单不给钱，还要倒扣之前的抵扣额度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "85%识别率就是抓违约的底气。非侵入识别出他没真调，就罚；识别不出，就当真调了给抵扣。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，我没想到。平台兜底吧，不然电网不干。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预留一点可能还好，毕竟违约的应该不多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，按15%的误判率留？感觉有点多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "10%还能接受，不至于把回本周期拖太长。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "认。阶梯抵扣，追溯惩罚，10%准备金。"
+              }
+            ]
+          },
+          {
+            "microScene": "在激励机制主线已定、需精准画像匹配抵扣与预判违约的背景下，用户与导师围绕高耗能柔性负荷画像维度、数据来源、最小验证动作及违约风险维度持续沟通（8轮），其中在柔性画像维度与需求挖掘方式部分与需求侧管理规划师沟通（1轮），并形成包含可切负荷占比、中断时长、爬坡率与违约概率的画像核心维度及验证样本分类口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前跑现场，感觉那些大电解铝厂最合适，他们用电猛，一调就是大容量。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那像商场空调负荷？或者有蓄冷罐的厂子？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高耗能里面哪些算柔性？这画像得刻画啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是得先找不同行业的各一家，装个采集器测几天？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "班制我不太懂，之前只管过设备端采集，没管过厂区排班。这块我得补一下，不然画像打不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我找规划师要两份多晶硅和冷库的典型排班负荷曲线看看，把爬坡率和班制停机的关系理一理，再套到画像维度里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "之前有追溯惩罚，那得看他们历史履约率，或者设备老旧度？设备老容易掉线违约。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "画像核心维度：可切负荷占比、最大中断时长、恢复爬坡率、响应违约概率。数据从总线形态挖。最小验证先按热惯性和冷储能两类，各抽3个样本看总线。排班和爬坡的关系我后续找规划师补学。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在柔性负荷非侵入感知系统方案设计背景下，用户与导师围绕高频采样合规风险与低频精度不足的矛盾、边缘端加噪折中架构及差分隐私验证假设持续沟通（5轮），其中在合规红线部分与隐私合规审计师沟通（1轮），在低频算法可行性与差分隐私参数设定部分与算法设计师沟通（2轮），并确定边缘端提特征就地加噪的架构方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先弄非侵入负荷分解算法这块，我打算直接上高频采样加深度学习，精度肯定拉满。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "非侵入不是就不装子表了吗，怎么还泄露？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频采电流波形到底触哪条红线了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1Hz能干啥？啥也分解不出来啊。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不就死胡同了嘛。一边要降频，一边要精度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "差分隐私我之前没用过，特别是加噪后模型怎么训我完全没概念。我得去补一下这块，看看别人怎么在NILM里加DP的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设加噪后F1-score下降不超过5%就能用？对照组就是不加噪的。如果加了噪，验证集上空调的F1掉到0.6以下，就说明这路不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "epsilon我看着设吧，先试0.1和1.0两个极端。那我先去查差分隐私结合NILM的论文，看特征提取层怎么加噪，回头把加噪模块塞到边缘端去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘端提特征，就地加噪，再传云端做博弈。"
+              }
+            ]
+          },
+          {
+            "microScene": "在海量柔性负荷意图博弈方案设计背景下，用户与导师围绕多智能体拓扑组织、分层拓扑交互接口与聚合规则持续沟通（6轮），其中在海量Agent拓扑取舍部分与系统架构师沟通（2轮），并最终敲定按负荷类型边缘聚合的分层拓扑及接口字段约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上K8s起一堆Pod当Agent呗，一个充电桩一个Agent，互相发消息博弈。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没细算。几十万是有点多，可能消息总线扛不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几十万Agent全分布式是不是会崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那资源上是不是省不少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说不能用全分布式，得用分层。边缘聚合同类负荷变虚拟Agent，云端跟虚拟Agent博弈。说这样省带宽，好维护，就是边缘端得加聚合逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "往上应该传聚合后的可调容量和意愿报价，往下传激励价格信号。接口用gRPC推流吧，比HTTP快，适合这种实时博弈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按地域吧，同小区的放一起，网络延迟低。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回头把边缘端的聚合模块加到架构图里。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在边缘算力与带宽受限背景下与导师围绕激励信号防篡改与弱网时序编排持续沟通（6轮），其中在轻量防篡改部分与数据安全架构师沟通（1轮），在弱网时序解耦部分与系统架构师沟通（1轮），并最终取舍形成HMAC签名与TTL兜底方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力弱那就别加密了，直接发激励价格信号，边缘收到就执行，时序用轮询拉取。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力带宽都不够，激励信号防篡改怎么搞最省？时序同步也不能太重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弱网确实容易断，超时阈值我真不知道定多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网下本地超时阈值没法定，控制时序怎么编排稳一点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "HMAC密钥被扒风险确实有，但比明文好多了，算力也扛得住。先上HMAC加TTL吧，密钥泄露后面再想办法。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在边云协同高可用与安全评估背景下与导师围绕容灾架构、断网恢复、数据合规及密钥风险验证持续沟通（7轮），其中在容灾与状态同步部分与系统架构师沟通（2轮），在聚合电流合规部分与隐私合规审计师沟通（1轮），并最终形成同城双活、轻量快照、指令脱敏及零信任实验验证的落盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高可用的话，云端搞个主备双机，边缘端断网就按最后收到的策略跑。安全评估就查查HMAC有没有漏校验的地方。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算云端主备，边缘断网就按老策略跑，重连再同步。这样行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘快照轻量化具体怎么做？裁剪的话会不会丢关键状态？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘快照裁剪我怕出bug，能不能不存快照，重连直接全量拉取？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "设备失控风险大，调频考核直接挂。快照裁剪出bug大不了降级到安全态。还是存快照吧，我按他说的只存矩阵和档位。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们提取聚合总线电流特征做非侵入感知，这数据合规吗？会不会侵犯用户隐私？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天我补学零信任架构，里面说“持续认证”可以代替单次密钥。之前遗留的HMAC密钥分发风险，是不是也能用零信任的思路，每次交互都校验设备身份，就不怕密钥被扒了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算做个对比实验。控制变量是认证方式，一组HMAC，一组零信任轻量级令牌。观测边缘CPU占用率和内存峰值。如果零信任内存占用超了边缘网关限制的30%，就还是用HMAC。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "云端用同城双活，边缘用轻量化快照只存矩阵和档位做断网恢复。安全红线是云端下发指令禁止带设备反查标识。HMAC密钥风险后续用零信任令牌实验验证，看算力开销再定。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知模型边缘网关部署遭遇OOM、延迟与量化精度崩塌背景下，用户与导师围绕算子兼容性与混合量化实践持续沟通（4轮），其中在算子与量化冲突处理部分与边缘端开发工程师沟通（2轮），并最终确定换用NCNN、配置层间混合量化及日志脱敏，准备编写验证demo。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用的是ARM Cortex-A53的网关，内存就64MB。算法组给的Seq2Seq感知模型，我直接转TFLite跑，一启动就OOM。偶尔没OOM的时候，推理一帧要800多毫秒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用TFLite自带的INT8全量化。转是转出来了，但精度掉得没法看，F1直接掉到0.4以下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怀疑是有些算子没对齐，但查日志没查出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TFLite在A53上跑Seq2Seq，INT8量化精度崩了，算子也报错，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "混合量化我之前只用过TFLite的PTQ一把梭，分层配置没搞过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去看看NCNN的文档，找找分层量化的配置写法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去扒一下NCNN源码里的pnnx示例，照着改一个混合量化的配置文件。先拿一个小的特征提取子网试跑，在网关上打点看内存和耗时。今天下午下班前必须把demo跑出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的动作就是：1. 放弃TFLite，换NCNN；2. 衡量混合量化配置；3. 日志脱敏。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发背景下，用户与导师围绕意图博弈调度核心逻辑、寻优与状态机解耦及约束域处理持续沟通（5轮），其中在寻优引擎工程化部分与博弈引擎开发工程师沟通解耦方式与动作空间定义（2轮），并最终确定调度流、寻优器与约束域三个核心模块的类图与接口定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把激励规则写死，电价低于阈值就充电，高于就放电。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "寻优部分，能不能直接拿个现成的强化学习库套一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接拿现成RL库套，行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "解耦，就是把寻优单独拎出来做个微服务？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个Scheduler类，里面调Optimize方法？状态裁剪就是加个if判断SOC上下限？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可行域边界我确实没想过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我现在先不管训练细节，把调度流和寻优接口的类图定下来，约束域用惩罚函数加进寻优目标里，这样行吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把Scheduler、Optimizer和ConstraintDomain这三个类的输入输出定好，流转写进状态机。"
+              }
+            ]
+          },
+          {
+            "microScene": "在云边联调与弱网容错背景下，用户与导师围绕云边通信同步与异步机制持续沟通（6轮），其中在数据延迟对寻优影响部分与博弈引擎开发工程师沟通（1轮），在弱网同步风险部分与边缘端开发工程师沟通（1轮），在压测极限部分与测试与性能调优师沟通（1轮），最终形成上行异步、下行QoS高优+ACK确认+超时降级的混合通信方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上MQTT呗。边缘端往上发特征数据，云往下发调度指令。断网了边缘就存本地SQLite，连上再补发。这套路我熟，工具链现成的，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果边缘特征数据有延迟，中间断了几秒再补上来，你那边的寻优还能跑不？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘弱网下同步调用不是找死吗？万一卡住了线程池不就炸了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网同步你那边能搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不矛盾了吗？云要实时同步，边要异步防卡死。总不能一边同步一边异步吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "上行特征数据量大概几秒一次，丢一两个包影响不大？下行指令如果丢了或者晚了，负荷动作就错了。所以上行异步，下行同步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果上行走MQTT异步，下行走gRPC同步，在弱网丢包30%的情况下，系统会怎样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行MQTT异步，下行也是MQTT但是带QoS=2保证到达，云端等ACK，超时就算了。边缘等不到指令就自己降级。这样云不会卡，边也不会OOM。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全同步弱网必死，全异步数据过时会导致寻优结果不可用。这种混合模式，既保证了指令下发的可靠性要求，又用超时机制避免了阻塞，边缘还能兜底。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端工况压测与延迟调优背景下，用户与导师围绕压测方案、延迟指标与降级底线持续沟通（6轮），其中在压测模型与核心指标部分与测试与性能调优师沟通（1轮），在寻优精度与调优红线部分与博弈引擎开发工程师沟通（1轮），并最终形成分布式压测方案、P99延迟2秒红线及降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用JMeter多线程模拟几万个充电桩并发上报，把云端的CPU和内存打满，看QPS和报错率行不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "柔性负荷高并发加边缘重连风暴这种极端工况，压测模型怎么搞？光看QPS好像不够。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "火焰图之前只看过皮毛，没实操排查过。我这就去补一下怎么用perf抓on-cpu火焰图，刚好可以用来找博弈引擎里的热点函数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟高的话，我就在网关层加限流，或者给博弈引擎加机器节点扩容。底线就是系统不能报错崩溃呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果为了降延迟砍寻优迭代次数，精度下降能不能接受？这个调优底线怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2.1秒说明系统刚好踩在红线边缘，现网稍微有点抖动，就很可能大面积触发降级，收益会受损。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "整理一下当前确认的点：1. 压测用分布式集群加潮汐流量模型，重点盯P99延迟和重连风暴；2. 调优底线P99<2秒，超时触发博弈引擎从纳什均衡降级为贪心近似；3. 延迟排查用刚学的on-cpu火焰图抓热点函数。我去准备压测脚本和降级开关。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在柔性负荷非侵入感知与意图博弈调度系统灰度部署背景下，用户与导师围绕分桶策略、收益统计口径与数据合规持续沟通（5轮），其中在分桶策略部分与运维交付工程师沟通（1轮），在收益因果推断部分与业务运营专家沟通（1轮），在特征向量落盘脱敏部分与隐私合规审计师沟通（1轮），并形成按站点分桶、DID统计、差分隐私脱敏及降级监控的灰度方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备切5%的流量进去跑跑看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按充电桩ID尾号分桶呗，尾号0-4走新系统，5-9走老系统。对比两边的响应率和收益就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维交付工程师 现网分桶怎么搞才科学？我按尾号分被否了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务运营专家 那统计口径呢？两边的收益差怎么算才不是噪声？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我大概明白就是要把大盘趋势剔除掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就拉站点ID、响应容量、收益金额呗。合规方面，我们是非侵入感知，不拿单桩细粒度数据应该没事吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私合规审计师 灰度落盘的感知特征向量要怎么脱敏？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "说实话刚才DID那套我没太听懂，只会跑脚本拉数，不会算显著性。这两天我得补一下统计检验的课，今晚先看个DID的入门视频，明天试着用Python写个p值计算的小脚本验证下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去改分流脚本，按站点切，特征落盘加上脱敏算子，监控大屏加上降级触发率。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估大盘观测背景下，用户与导师围绕感知掉点与收益虚高的根因排查、拦截合规风险及监控复盘口径持续沟通（5轮），其中在异常根因分析与拦截策略部分与业务运营专家沟通（2轮），最终放弃调阈值与拉黑，确定补充特征漂移率与时序分布监控并在灰度桶落盘。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感知准确率从92%掉到85%了，博弈收益又虚高，比基线高了快20%。我寻思着，是不是把感知告警阈值调低点，收益阈值调高点，把异常毛刺过滤掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘掉点跟收益虚高咋回事？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降温加个特征？套利加个校验脚本？但这套利校验我不太会写，平时就写写分流脚本，这种业务逻辑我不太懂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误伤就加白名单呗，或者直接拉黑那些响应太快的聚合商，先拦截了再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知监控加上气温和特征漂移率？套利复盘看时序分布，不搞拉黑。我就在大屏加这几个指标，先在灰度桶里跑跑看分布？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去改大屏配置，加上漂移率和时序分布字段，灰度桶日志落盘。"
+              }
+            ]
+          },
+          {
+            "microScene": "在空调集群激励响应率掉底的异常归因背景下，用户与导师围绕异常原因排查与修复方案持续沟通（4轮），其中在指标维度拆解部分与业务运营专家沟通（1轮），在特征升级合规影响部分与隐私合规审计师沟通（1轮），并最终形成灰度桶回滚新特征及基线漂移修正的操作口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看时序图就是信号发晚了，或者特征漂移没识别出来。我打算直接把空调的激励单价提一档，拉一波响应试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成本确实是个事。那我再加几条日志，看看他们收到信号没？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务运营专家 空调集群激励响应率掉底，一般怎么拆原因？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私合规审计师 昨天感知特征升级，有没有可能把用户权限搞没了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查清了，不是钱的事。是昨天新特征提取触发了合规熔断，权限被收回了。还有基线漂移算错容量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回滚我用灰度桶的A/B实验工具，把新特征提取的开关关掉，切回旧特征，先看这几个严苛地区的权限恢复率。基线漂移这块，大屏上不是有漂移率指标吗，我把它加到基线修正公式里，动态调一下可调容量的预期值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去灰度桶改配置，关开关加修正系数，跑完看权限和响应率。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估反馈与迭代路标制定背景下，与导师围绕误切投诉的体验与合规风险、灰度结论外推边界持续沟通（6轮），其中在误切体验感知部分与交互体验分析师沟通（1轮），在误切合规风险部分与隐私合规审计师沟通（1轮），并反思工程规范缺口，确认居民场景外推、补全决策溯源日志与增加策略可解释性的迭代路标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看工单系统里，严苛地区那边空调模式被误切的投诉少了一些，但还有零星几个。是不是基线修正系数还得再调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你看这几条误切工单，用户到底在闹啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加说明？那我在APP上弹个窗告诉他们“这是为了调频赚了电费”行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误切空调模式这种，合规那边卡得严吗？就几个投诉而已。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "日志里只有策略ID和下发时间，决策依据没存。这块我之前写代码的时候偷懒了，没加。合规整改我得赶紧补上，这算是我个人在工程规范上的缺口，我记到学习日志里，以后写调度逻辑必须把决策上下文一并落库。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我现在就在大屏上加个“决策溯源”字段，把博弈收益和用户偏好的权重展示出来，这样既能合规，又能给用户看解释。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对哦，工业负荷基线波动大得多，现在的修正系数肯定不够。所以这结论只能外推到居民场景，工业场景得单独设对照组复现。复现步骤就是：先圈定工业样本，打上特征标签，跑基线修正，看响应率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "确认。居民场景外推、补溯源日志、加可解释性。我这就去改日志打印逻辑和前端接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

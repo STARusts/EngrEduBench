@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在资产碎化铸造合约架构设计背景下，用户与导师围绕合约选型、合规穿透及补学计划持续沟通（7轮），其中在状态机设计部分与智能合约架构师沟通（2轮），在合规数据上链边界部分与资产合规架构师沟通（1轮），并最终放弃模板套壳，确定采用分离式状态机与链下预言机签名方案，明确核心状态定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接用 OpenZeppelin 的 ERC1155 模板改，它自带批量操作，把资产的各种属性塞进 Metadata，再用个 TransparentUpgradeableProxy 套一层方便以后改。我看网上很多 RWA 项目都是这么搞的，挺省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "穿透审查的话，加个白名单映射不就行了？冻结条件就在 Proxy 里加个修饰符。应该能凑合吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组？我就比一下部署一次花多少 Gas 呗。高频变更的话，Proxy 套壳直接改逻辑地址不就好了，升级成本肯定低啊。这还能被推翻？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碎化铸造这块，有没有现成的状态机开源库可以直接用？我看网上有人用 ERC721 套 ERC20，这种模式靠不靠谱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自己写状态机啊，那多麻烦。分离式的话，跨合约调用 Gas 费会不会很高？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规穿透这块，资产持有人变更的 KYC 数据，直接存到合约的 Mapping 里是不是最方便？查询也快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是链上只存个哈希，真查去链下搞。预言机签名我见过有些模板可以用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不坚持了，专家说 Proxy 套壳改存储会出事，合规也不好弄。那就用分离式状态机加链下预言机签名吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "分离式状态机我之前没自己搭过，心里有点没底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这两天去翻一下 Solidity 里的 State Machine 设计模式，重点看 Diamond Proxy 的多切面存储怎么隔离状态。我争取周末前把碎化状态流转的 UML 图画出来，到时候发给架构师看能不能走通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心状态就是未碎化、部分碎化、全额碎化、合规冻结这四个。部分碎化下要记录已碎化比例，合规冻结状态下所有流转接口阻断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

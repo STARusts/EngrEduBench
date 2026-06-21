@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度期间站点A产气预测MAPE从12%升至28%且无延迟/缺失告警背景下，用户与导师围绕异常定义、影响范围、对照取证与调度止损持续沟通（11轮），其中在误差变差成因与线上快速验证上与算法工程师沟通（2轮），在工艺/进料变化与仪表口径核查取证上与环境工艺顾问沟通（1轮），并落实切基线与采纳率归零、预警阈值提前及台账/标定证据清单与合规记录要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "单位应该不会变吧。那我就看下采集时间戳对不对，再看一下气体流量的数值有没有跳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 MAPE突然变差但数据没缺失，一般是啥原因？线上怎么证实？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那要不要直接重训一版模型顶上去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是先查版本、看残差图、看 PSI，然后再决定要不要重训。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…先核对模型版本和特征版本，做残差曲线，看是不是突然跳。再看 PSI，尤其进料、温度、pH 这些。然后标签对齐别错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能就发电计划不准，储气罐满了或者不够用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境工艺顾问 站点A这两天预测误差突然变大，但数据不缺失。工艺上一般会有什么变化？怎么确认是工艺变了还是仪表/口径变了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "报…标定时间、改过的参数、还有进料来源是不是换了。再给我 CH4、H2S 走势？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先别用预测了？用保守一点的策略，少发点电，多留余量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先把站点 A 的调度切到基线规则，采纳率先 0。储气上限预警提前一点，比如离上限 10% 就报警？审批就…你来批。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "都按你这套来。我先把站点 A 采纳率关掉，阈值提前，然后去要台账和标定记录。只写 tenant_hash。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "台账…进料吨数、TS/VS、补碱记录。标定记录…标定时间、温压补偿参数有没有改。图就是残差随时间，还有 PSI 的图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

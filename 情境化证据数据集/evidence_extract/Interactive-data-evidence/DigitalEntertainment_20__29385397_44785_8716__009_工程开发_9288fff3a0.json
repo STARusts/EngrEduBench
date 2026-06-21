@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在剧情服务上线前缓存加速与联调排障背景下，用户与导师围绕旧剧情片段偶发与延迟飙高问题持续沟通并落定埋点、复现与修复方案（8轮），其中在policy_version解析链路、缓存key规范与避免双查部分与后端负责人沟通（6轮），并最终确认缓存key改造、解析缓存、结构化日志与singleflight压测验证的交付清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是缓存没跟版本走。可能 key 里没带 policy_version 或者 base_version，就被复用到旧的了。延迟飙高也可能是缓存穿透，直接打到生成服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了下我们接口返回里有 audit_no 和 policy_version，是服务端算的。请求里我带了 client_observed_policy_version。日志里我只加了 room_id、node_id、branch_id、base_version。没加 cache_hit。可能不够。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加个字段 cache_status：HIT/MISS/BYPASS，然后再加 miss_reason：KEY_MISS、EXPIRED、VERSION_MISMATCH。版本判定我把 resolved_policy_version 打出来，再打 cache_key。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我想用请求里带的 base_version…但 base_version 是前端配置版本，不等于运行时 policy_version。那就得先 resolve 一次，至少拿到服务端权威的 policy_version 才能拼 key。这里我有点卡。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 policy_version 是怎么 resolve 的？我们缓存 key 到底该用啥字段，才能既不返旧内容又不多查一次？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "branch_state_hash 要把“已选分支、变量”都塞进去？那 key 很容易爆炸吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "旧片段的问题更像是 VERSION_MISMATCH。是不是我们之前 key 只用了 room_id + node_id，没带 policy_version，导致发布后还命中老的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "稳定序列化我用 Jackson 的话要配一下，我不太确定默认是不是稳定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有 TTL 你说 L1 1~3s，L2 30~120s。我们互动剧场里观众点选很密，TTL 会不会把“上一秒的输出”卡住，导致观众看到不跟手？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问了后端。他们说运行缓存必须用 policy_version（服务端权威）+ branch_state_hash。branch_state_hash 需要稳定序列化再 hash，变量做白名单，不然命中率崩导致穿透。还有策略解析结果也要单独缓存，key 用 policy_id+publish_version 或 audit_no，避免每次查发布记录。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以在同一 room_id 下做一次发布，然后立刻用旧的 branch_id 请求，看是不是还能命中旧 key。再用压测工具并发打同一 state，看延迟是不是抖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在响应里回显 resolved_policy_version 和 cache_status，再把 cache_key_hash 也回显到 debug header？只在 debug 环境开。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我为了排查，把 prompt 片段打过两行……那我得删掉，改成打 prompt_hash 和 input_event_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算统一结构化日志：  \n- trace_id、room_id、request_id  \n- resolved_policy_version、audit_no  \n- cache_domain：POLICY_RESOLVE / STORY_OUTPUT  \n- cache_level：L1/L2/NONE  \n- cache_status：HIT/MISS/BYPASS + miss_reason  \n- state_hash、key_hash  \n- latency_ms 分段：resolve_ms、cache_ms、gen_ms  \n原文不打，只打 input_hash。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "旧片段：修 key，把 policy_version 和 state_hash 加进去；发布后要主动失效旧 key？我不确定要不要做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "600ms 可能是命中率低导致穿透。我把 state 序列化稳定化，变量白名单收紧。然后加一个“单飞”锁：同一个 key 同时只允许一个请求去生成，其余等结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超过 80ms 就直接走“返回上一帧可播放片段”吗？但我们没这块。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我用 wrk 做两组：稳定序列化前后；再对比加 singleflight 前后。指标就看 p95、cache_hit_rate、gen_qps。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。base_version 我只留在前端冲突检测那条线上，运行缓存不碰它。日志里我把 prompt 原文删掉，用 hash。singleflight 的阈值我先按 50ms 做，压测结果出来再问你要不要调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

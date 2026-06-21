@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在焓漏反演引擎端云协同压测背景下，用户与导师围绕压测数据构造、性能瓶颈定位与架构解耦持续沟通（8轮），其中在压测数据模型构建部分与端云协同测试工程师沟通（1轮），在延迟飙升根因定位部分与异态根因溯源专家沟通（1轮），并最终形成基于Kafka消息队列的求解任务解耦方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就Locust起几百并发，直接怼云端反演接口呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "随机造呗，温度压力流量随便填个数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测反演引擎，数据怎么造？我打算随机填。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时序流态？这Locust里得写自定义发包逻辑了，挺费事。行，我按拓扑结构造一组时序数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改了，压上了。但并发一拉高，反演接口延迟直接飙到好几秒，还一堆超时报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演接口压测延迟飙升超时，是云侧算力不够吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "矩阵求解阻塞主线程？这算法底层我不熟啊，这怎么破？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "把求解任务扔给后端Worker算？用消息队列解耦，接口只管接数据扔MQ，Worker算完回调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "反演接口收完数据发个Kafka消息，Worker消费算完写库，前端轮询结果。这样主线程就不卡了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

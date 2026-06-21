@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在忆流状态机与剧情寻址端侧开发且算力内存受限背景下，与导师围绕GNN寻址替代、状态机退化及效果验证持续沟通（5轮），其中在端侧资源受限退化设计部分与忆流架构师沟通（1轮），并最终形成FSM退化为EDFSM、寻址退化为预计算加HNSW的方案及以命中率85%和无死锁为红线的对照测试口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上图神经网络的表征能力最强，能捕捉长短期记忆的深层关联。如果算力不够，是不是可以降低GNN的迭代轮数？比如从3轮降到1轮。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "状态机和寻址这块怎么退化？书上没讲过这种极端限制下的图计算怎么做。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预计算特征库加HNSW，这个是不是就类似KV缓存查表？把热点剧情向量提前算好存下来，用Key去取？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只手写过GNN的前向传播逻辑，向量检索库我只知道HNSW的跳表原理，没真在端侧用过FAISS调参。这块我确实卡住了，我今晚得把FAISS的HNSW接口文档和EDFSM的开源实现过一遍，明天把退化原型跑出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以做对照测试。同样的忆流状态输入，一组走完整GNN和FSM，一组走HNSW加EDFSM。观测指标看剧情寻址命中率，也就是用户选到的剧情是不是我们推荐的Top-K。还有状态机覆盖率，看EDFSM能不能响应所有合法事件。如果命中率低于85%或者出现状态机死锁，就说明退化太狠了不能上线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，状态机从FSM退化为EDFSM，只维护激活边。第二，寻址从GNN退化为预计算加HNSW向量检索。第三，今晚补学FAISS的HNSW接口和EDFSM实现，迁移过来做端侧原型。第四，验证做对照测试，核心看寻址命中率85%以上和状态机无死锁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

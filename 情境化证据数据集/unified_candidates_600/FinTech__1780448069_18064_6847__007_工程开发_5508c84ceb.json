@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演引擎算子编码联调背景下，用户与导师围绕跨语言联调死锁定位、方案冲突评估、能力补学及验证口径持续沟通（7轮），其中在并发同步与JNI打断Cache Line问题部分与传染图谱算子开发沟通（1轮），在跨语言数据传输与共享内存替代方案部分与阻截流控规则引擎开发沟通（1轮），并最终确定共享内存RingBuffer方案、补学计划、验证口径及三方分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图算子那边算完传染路径，要把同调微势的分数推给规则引擎做条件匹配。但现在规则引擎那边说收不到更新，图算子那边又说发出来了。两边互相甩锅，我也看不出是谁的问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图算子是用C++写的，并发同步好像是用的某种内存屏障，具体我不太懂。规则引擎那边是Java写的，动态加载用的热替换。两边的内存模型都不一样，我根本没法查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边图状态并发同步到底怎么写的？规则引擎那边一直读不到最新的同调分数，是不是你内存没刷出去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是你这边为了快没用强一致，然后Java那边调JNI把你缓存打乱了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算子那边说你JNI回调打断了他们的Cache Line，导致读旧值。你们能不能不在热路径上搞JNI？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算子那边不想被JNI打断，规则引擎那边要共享内存传FlatBuffer。我该怎么定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏向共享内存，感觉这样快一点。但共享内存的并发控制我不熟，怕写出来更难调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚把之前买的《C++并发编程实战》那本书的共享内存章节看一遍，再把你们之前写的POSIX共享内存样例代码跑一下，看看怎么用RingBuffer实现无锁读。明天我尝试把两边接口改成基于共享内存的RingBuffer，这样应该能把JNI的开销干掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我让仿真沙箱发两组历史闪崩数据，一组走JNI，一组走共享内存。对比一下规则引擎收到同调分数的P99延迟，还有图算子那边的CPU Cache Miss率。如果P99降了，Cache Miss没涨，就算通过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认三点：1.算子侧写FlatBuffer到共享内存RingBuffer；2.规则引擎侧无锁读RingBuffer；3.我定Schema和同步原语，今晚补学完明天出初版。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

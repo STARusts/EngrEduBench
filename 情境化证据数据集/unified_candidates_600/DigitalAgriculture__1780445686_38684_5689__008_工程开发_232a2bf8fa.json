@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在机组协同避障联调与测试背景下与导师围绕多机避障死锁解除、随机退避风险、接口对齐与参数初值确定持续沟通（6轮），其中在冲突解除机制部分与任务调度算法工程师沟通（2轮），在仿真注入条件部分与仿真与联调测试工程师沟通（1轮），并最终形成采用势场法加令牌环、修改回调接口及查手册算初值的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Gazebo跑一下机组模型，看看避障逻辑能不能走通，别撞一块就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "死锁我还没细想，觉得优先级高的先走就行。拓扑冲击也不太清楚怎么模拟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多机避障冲突怎么解除？现在代码里是按机组优先级硬抢的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "势场法加令牌环，这改动量不小啊。能不能在优先级基础上加个随机退避时间凑合一下？赶进度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那仿真里怎么注入这种冲突？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窄道高并发会抖动，指令风暴，保不住排涝时效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把避障算子的输入输出接口改了，加上令牌请求和释放回调，然后挂到之前写的LAR位置更新钩子上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

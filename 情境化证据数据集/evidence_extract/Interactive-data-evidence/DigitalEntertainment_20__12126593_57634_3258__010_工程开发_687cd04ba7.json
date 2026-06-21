@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在播放器侧对“剧透防护策略”做埋点闭环与联调落地背景下，用户与导师围绕最小事件模型、字段白名单、关联键与合规边界持续沟通（10轮），其中在事件与字段口径上与数据产品经理沟通（2轮）、在segment_id可用性与回调点/执行确认上与音视频工程师沟通（2轮），并收敛为事件与字段清单及两条联调用例验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它做成一套“播放会话追踪”体系，所有事件都挂在 session_id 下，然后每次策略下发也做一次全量快照上报。这样以后做漏斗/归因也方便。事件我初步想：play_start、segment_enter、risk_prompt_show、risk_prompt_click、unlock_attempt、unlock_success、seek、exit。口径我有点担心多端不一致，所以想搞个端侧埋点SDK统一封装。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我想把策略引擎返回的 risk_level、reason_codes、hit_rules（命中的规则ID列表）都带上，再加一个 policy_version。segment_enter…我倾向按语义段，后端不是有语义分段ID吗，就用 segment_id。\n成本这块，我觉得可以做批量上报+压缩，或者只在策略触发时上报快照，其他走轻量事件。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据产品经理 播放器这边要做“剧透防护策略”的埋点联调，你这边建议的最小事件模型是什么？哪些字段允许上报、哪些别上？我们现在想把策略下发和用户反馈闭环起来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code 只上一个主原因会不会丢信息？我们策略引擎可能多个 reason_codes 同时命中。我本来想上数组，方便后面做文案归因。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@音视频工程师 播放器接策略联调这块，我想做 segment_enter 之类的事件。但我不确定播放器什么时候能拿到语义段ID，或者至少能拿到时间段边界。你们通常有哪些回调点能挂埋点？策略执行结果怎么确认？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "定频 position update 如果不打，会不会没法算触发前后停留时长？我还想着把每个用户的观看轨迹做个“时序事件流”，后面就能重放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向做两套：联调期打详细debug事件流，线上保留最小三类事件；同时把 segment_id 作为可选字段，有就带，没有空。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "策略下发响应里我可以让后端带一个 trace_id，播放器上报时把 trace_id 原样回传。或者我在客户端生成一个 apply_id，每次收到策略就生成，回传给后端，后端也打日志。感觉 apply_id 更像业务ID。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我定一下字段白名单：policy_apply 带 trace_id、policy_id、policy_version、risk_level、primary_reason_code、apply_result（ok/degraded/failed）、playhead_ms；prompt_expose 带 expose_type（mask/toast/banner）、playhead_ms；prompt_action 带 action（close/continue/unlock/learn_more）、from_expose_type、playhead_ms。segment_id 有就加。seek 单独事件还需要吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "常见坑我猜有：\n- 策略到了但遮罩没出：可能 apply_result 应该 degraded\n- 遮罩出了但立刻消失：可能状态机抖动/重复 apply\n- 用户点了解锁但没跳转：prompt_action 有点击但没对应 paywall_show\n- seek 后策略没重新评估：seek 事件后没有新的 policy_apply\n我可以用 trace_id + play_session_id 串起来看时序。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前确实想把提示文案id也打上，方便对齐文案版本。那这个算不算敏感？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕后面不同端各自加字段越滚越大。我能不能现在就定义一个 protobuf schema，把字段固定住，客户端埋点就生成结构化数据，后面扩字段走版本号？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我给个清单：\n1）事件三类为主：policy_apply、prompt_expose、prompt_action，外加 seek。其它都不做。\n2）必带关联键：trace_id（后端生成透传）+ play_session_id；用户标识只传 hash。\n3）主时间口径：playhead_ms；segment_id 可选字段，有就带。\n4）policy_apply 额外字段：apply_result=ok/degraded/failed，失败不伪装成曝光。\n5）联调验收：用同一 trace_id 在后端日志看到判定→在端侧看到 policy_apply→若需遮罩则必须出现 prompt_expose；用户点解锁要有 prompt_action 且能串到 paywall（如果没串上，算bug）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

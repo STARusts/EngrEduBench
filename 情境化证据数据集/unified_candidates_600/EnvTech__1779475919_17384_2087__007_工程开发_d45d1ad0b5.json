@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在地境感知边端插件开发与联调背景下，与导师围绕异构源时序对齐、序列化选型及联调验证持续沟通（9轮），其中在边端算力与序列化格式部分与边端感知开发组长沟通（1轮），在标准信号Mock模块部分与链路联调测试工程师沟通（1轮），并最终形成改用Protobuf-c、环形缓冲区对齐及注入标准信号反向校验的开发确认点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我计划分三步，先把地磁和微流的采集驱动写完，然后写eDNA生化的，最后统一写个协议转换接口把数据包抛给反演求解器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端节点算力够不够？三个源的数据打包发给反演模块，用JSON格式行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "环形缓冲区和时间戳对齐我懂。但二进制格式我只用过JSON，Protobuf-c没写过，不知道怎么编译。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我这就去查Protobuf-c在Cortex-M上的内存占用文档和交叉编译方法。今天下午写个Demo测试一下序列化地磁数据的耗时，如果小于5ms就用它。我会在开发日志里把对比结果记下来，然后把接口代码改成Protobuf。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是我在边端手动注入一组已知特征的标准信号源，然后看反演引擎收到的数据包，反解出来对比原始信号。误差要在设定阈值内才算通过。地磁和微流的相对误差不能超过1%，生化特征值不能丢包。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端联调的时候，你那边有标准信号发生器的Mock模块吗？我需要用来做注入校验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边端序列化弃用JSON，改用Protobuf-c，下午写Demo测耗时补学。2. 用环形缓冲区和时间戳做异构数据对齐。3. 联调验证不看点灯，用暗羽探针模拟器注入标准信号做反向校验，误差红线1%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

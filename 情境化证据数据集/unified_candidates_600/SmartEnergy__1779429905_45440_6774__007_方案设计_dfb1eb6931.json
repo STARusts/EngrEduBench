@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘算力与带宽受限背景下与导师围绕激励信号防篡改与弱网时序编排持续沟通（6轮），其中在轻量防篡改部分与数据安全架构师沟通（1轮），在弱网时序解耦部分与系统架构师沟通（1轮），并最终取舍形成HMAC签名与TTL兜底方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力弱那就别加密了，直接发激励价格信号，边缘收到就执行，时序用轮询拉取。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力带宽都不够，激励信号防篡改怎么搞最省？时序同步也不能太重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弱网确实容易断，超时阈值我真不知道定多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网下本地超时阈值没法定，控制时序怎么编排稳一点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "HMAC密钥被扒风险确实有，但比明文好多了，算力也扛得住。先上HMAC加TTL吧，密钥泄露后面再想办法。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

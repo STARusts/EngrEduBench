@@ -1,0 +1,73 @@
+{
+  "input_path": "E:\\DESTTOPLater\\EBGEDUbench\\情境化证据数据集\\context_extract\\SmartHealthcare_20\\dataset_SmartHealthcare_全生命周期_1775819710_63412_4807.json",
+  "output_path": "E:\\DESTTOPLater\\EBGEDUbench\\情境化证据数据集\\evidence_extract\\SmartHealthcare_20\\dataset_SmartHealthcare_全生命周期_1775819710_63412_4807.json",
+  "created_at_utc": "2026-04-13T07:18:08.720104+00:00",
+  "calls": 19,
+  "parsed_ok_calls": 11,
+  "failed_calls": 6,
+  "fatal_error": null,
+  "items": [
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#2",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#3",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#4",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "方案设计",
+      "microScene": "方案设计#1",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "方案设计",
+      "microScene": "方案设计#2",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "工程开发",
+      "microScene": "工程开发#1",
+      "error": "parsed_json_ok_but_no_evidence_list",
+      "raw_response_text_head": "```json\n{\n  \"domain\": \"智慧医疗\",\n  \"stage\": \"工程开发\",\n  \"unitIndex\": \"工程开发#1\",\n  \"microSceneSummary\": \"围绕智慧医院无菌配送数字孪生三维环境开发，团队从“CAD平面图拉伸快速建模”转向“激光点云采集 + 校准(BIM/模型修正)”，并确定以西侧无菌走廊为试点做CAD模型与实扫点云模型的碰撞/急停风险对比验证，最终提交验证报告。\",\n  \"roles\": [\n    { \"role\": \"human\", \"description\": \"开发执行者/学生，起初倾向简化建模，后接受点云方案并制定学习计划\" },\n    { \"role\": \"导师\", \"description\": \"提出精度约束与工程化交付要求，推动验证与时间节点\" },\n    { \"role\": \"数字孪生工程师\", \"description\": \"明确误差影响与点云必要性，建议做对比验证实验\" }\n  ],\n  \"keyDecisions\": [\n    \"放弃纯CAD拉伸的低精度方案\",\n    \"采用激光雷达点云采集，并用于修正/校准模型（提到用于修正BIM模型）\",\n    \"选择“西侧无菌走廊”作为首个采集与对比验证区域\",\n    \"以仿真中AGV路径表现（急停/避障触发、路径偏移、碰撞风险）作为对比指标\"\n  ],\n  \"engineeringRequirements\": {\n    \"precisionTarget\": \"±2 cm（无菌区通行性要求）\",\n    \"failureThresholdMentioned\": \"模型误差 > 5 cm 可能导致路径规划锁死/避障急停频发\",\n    \"criticalDimensions\": [\"自动门高度\", \"走廊宽度\", \"不规则拐角几何\", \"装修后"
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "工程开发",
+      "microScene": "工程开发#2",
+      "error": "parse_model_output_json_failed",
+      "raw_response_text_head": "## 微场景（工程开发#2）要点抽取（仅基于该 data 数组）\n\n### 1) 已达成的关键结论/决策\n- **调度链路从“数据库/接口轮询”转向“消息队列异步分发”**，避免高并发下无效请求占用内网带宽。\n- 构建**中心化任务管理服务（Task Manager）**统一做：任务入队、优先级计算、分发与回收。\n- **每台机器人必须维护状态机（FSM）**，用明确的状态/事件驱动替代大量 if-else。\n- **实时状态建议落 Redis**（便于高频读写、分布式一致读取）。\n\n### 2) 调度平台核心能力清单（从对话需求反推）\n- **多机器人任务分配**：支持并发任务、机器人抢占/领取、执行回报。\n- **任务优先级机制**：不同任务类别有权重（如“手术急件”最高，“常规耗材”较低），且支持插队/抢占策略。\n- **拥塞资源协调**：如“狭窄无菌货梯”这类关键资源需要调度侧避免多机互卡（死锁/活锁）。\n- **状态可追溯**：机器人“暂停后继续”“阻塞后恢复”需要记住上下文与进度。\n\n---\n\n## 3) 三个核心逻辑状态：触发条件大纲（按导师要求整理）\n> 这里把“任务等级 / 执行中 / 异常阻塞”作为调度核心抽象；实现时可拆更细，但先把触发事件定义清楚。\n\n### A. 任务等级（Task Priority / Level）\n**触发：任务创建/变更时计算或重算**\n- 触发事件\n  - 新任务进入系统（手术急件、冷链药品、常规耗材等）\n  - 任务 SLA 临近超时（需要提升优先级/告警）\n  - 任务被人工加急/降级\n  - 关键资源拥塞（例如货梯排队过长时，某些任务可被策略性提升/延后）\n- 输出结果\n  - 生成可比较的优先级值（权重 + 时间衰减/老化等），进入优先队列\n  - 可选：标记是否允许抢占低优先级任务\n\n### B. 执行中（Exec",
+      "raw_response_json_head": "{'id': 'chatcmpl-34d21fc6-3b71-49bb-aaae-7b7db91cc15c', 'object': 'chat.completion', 'created': 1776064484, 'model': 'gpt-5.2', 'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': '## 微场景（工程开发#2）要点抽取（仅基于该 data 数组）\\n\\n### 1) 已达成的关键结论/决策\\n- **调度链路从“数据库/接口轮询”转向“消息队列异步分发”**，避免高并发下无效请求占用内网带宽。\\n- 构建**中心化任务管理服务（Task Manager）**统一做：任务入队、优先级计算、分发与回收。\\n- **每台机器人必须维护状态机（FSM）**，用明确的状态/事件驱动替代大量 if-else。\\n- **实时状态建议落 Redis**（便于高频读写、分布式一致读取）。\\n\\n### 2) 调度平台核心能力清单（从对话需求反推）\\n- **多机器人任务分配**：支持并发任务、机器人抢占/领取、执行回报。\\n- **任务优先级机制**：不同任务类别有权重（如“手术急件”最高，“常规耗材”较低），且支持插队/抢占策略。\\n- **拥塞资源协调**：如“狭窄无菌货梯”这类关键资源需要调度侧避免多机互卡（死锁/活锁）。\\n- **状态可追溯**：机器人“暂停后继续”“阻塞后恢复”需要记住上下文与进度。\\n\\n---\\n\\n## 3) 三个核心逻辑状态：触发条件大纲（按导师要求整理）\\n> 这里把“任务等级 / 执行中 / 异常阻塞”作为调度核心抽象；实现时可拆更细，但先把触发事件定义清楚。\\n\\n### A. 任务等级（Task Priority / Level）\\n*"
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "工程开发",
+      "microScene": "工程开发#5",
+      "error": "parsed_json_ok_but_no_evidence_list",
+      "raw_response_text_head": "<think>**Structuring metrics for healthcare testing**\n\nI should respond with something minimal but useful. It seems I need to acknowledge limitations while also providing useful information. I'll focus on extracting relevant pressure testing acceptance criteria and metrics from the conversation. I need to deliver this in Chinese and concisely without roleplay. I plan to craft the output to include key metrics and structured knowledge based on the dataset provided by the user, ultimately delivering a JSON format containing those metrics.**Designing testing metrics for engineers**\n\nI need to outline the key actors involved—mentor, human, test engineer, and digital twin engineer. Key metrics to consider include concurrency at 50 requests/robots, P99 latency under 2 seconds, and other performa"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段的“处方建议与解释链路”设计背景下，用户与导师围绕处方输出分层、证据结构、质量原因码与裁决原因码打通及可读性控制持续沟通（7轮），其中在处方结构与阈值口径/风险措辞部分与农业业务顾问沟通（2轮），在数据最小化、分权与审计留痕部分与合规与数据治理官沟通（2轮），并形成可写入方案的关键字段与分层清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向把处方输出拆两层：一层是“建议本体”（动作+剂量/时机+适用条件），另一层是“解释包”。解释包里要强制带 quality_snapshot 摘要，不然用户看到建议但不知道数据是不是刚经历 quarantine 或低置信融合。原因码这块，我想做两段映射：质量 reason_codes → 证据可用性标签；再从可用性标签 → 解释话术模板的选择。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我先按“可审计”和“可读”两套视图规划，同一份解释包分层展示。  \n对外（农户/田管）：建议标题、优先级、推荐动作、执行窗口、预计收益/风险提示、核心依据3条以内。  \n对内（农艺师/运营）：证据列表（传感/遥感/农事记录/人工巡田）、每条证据的时间戳和空间范围、融合后的关键指标值、阈值/规则命中情况、质量摘要（比如低新鲜度、云遮挡、设备漂移）。  \n触发点我想两类：事件触发（如播种后第X天、施肥后回访窗口、极端天气预警）和状态触发（TwinState 指标越界或趋势异常）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "收益我不做绝对增产承诺，先给“预期影响方向+置信等级”。口径上分三类：减损（病虫害/倒伏/缺水）、节本（肥药水用量）、用工效率（巡田次数）。每条建议只允许绑定一种主收益口径，避免叠加夸大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "证据结构我想用统一的 EvidenceItem：source_type、source_id、time_range、geo_scope（田块/子地块/像元聚合）、metric_name、metric_value、unit、baseline（对照值/历史中位）、confidence、quality_flags、reason_codes、link_to_raw（追溯用）。解释链路就是把多个 EvidenceItem 组成 EvidenceSet，再由一个 DecisionTrace 指向“触发条件+适用条件+排除条件”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "长度控制：对外只呈现 Top3 证据，排序规则是“与建议因果最相关 × 置信度 × 新鲜度”，并且强制包含一条质量提示（如果存在关键缺陷）。对内可展开全部证据和冲突项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "冲突这块我不在这里定裁决算法，但解释链路要能表达“为什么没采信某证据”：给每条 EvidenceItem 一个 status：accepted / downweighted / rejected，并要求写 decision_reason_code。这个 decision_reason_code 之后由你说的“冲突裁决+融合策略”来产出；当前先把字段预留，映射框架先搭出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先给四类裁决原因码：  \n1）时效类：STALENESS、LATE_ARRIVAL，典型来源是入口/入库新鲜度差；  \n2）一致性类：CROSS_SOURCE_CONFLICT（跨源冲突）、TEMPORAL_BREAK（时间断裂）；  \n3）可信度类：SENSOR_DRIFT、CALIBRATION_MISSING、REMOTE_SENSING_CLOUDY、MODEL_UNCERTAIN；  \n4）适用条件类：OUT_OF_GROWTH_STAGE、POST_RAIN_WINDOW_ONLY 这类“阈值带适用条件标签”不满足。  \n映射逻辑：quality reason_codes 主要落到1/3类；而适用条件来自业务规则标签；一致性类来自融合/裁决环节生成。解释模板依据是“裁决原因码 + 用户角色”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业业务顾问 处方建议在田间管理里通常用什么结构表达？解释部分农户最在意哪几类依据？另外阈值或规则命中该怎么说才不显得“拍脑袋”，以及有哪些措辞容易引发纠纷需要避免？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值来源这块，如果我们既有默认包又有农场校准和重点地块特例，解释里应该怎么展示优先级？我担心用户会质疑“怎么同样指标不同地块标准不一样”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我吸收三点，落字段：  \n1）处方本体增加字段：target（地块/作物）、action、dosage、timing_window、followup_check（复核点+时间）。  \n2）解释包的阈值呈现：DecisionTrace 里加 reference_standard：standard_level（plot/farm/default）、standard_source（规范/试验站/历史校准）、safe_range_text（面向外层的区间描述），内层可带 safe_range_value。  \n3）风险措辞约束：每条建议加 language_policy：禁止词（保证/必然）、允许词（预计/可能/建议），以及 diagnosis_policy（病虫害默认不下结论，用“疑似/风险上升+巡田确认”）。这些更像产品/合规约束，但我先在解释链路里留口径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 处方建议的解释链路里，我们会带 evidence 列表、质量标记、以及 link_to_raw 追溯。这里数据最小化怎么定边界？对外/对内的权限分层怎么设计才合规？审计留痕建议记哪些关键动作？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对外不暴露第三方影像链接我能理解。那我们解释里要不要显示“使用了某某卫星/供应商”的字样？一方面透明，一方面可能触发合同限制。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给一版可写进方案设计的要点清单：  \n1）链路分层：处方输出=Prescription（动作）+ExplainPackage（解释）；ExplainPackage 分 PublicExplain / InternalExplain 两视图，基于权限控制。  \n2）核心结构：EvidenceItem（统一证据条目）→ EvidenceSet（证据集合）→ DecisionTrace（触发条件/适用与排除/阈值呈现/采信状态）。EvidenceItem 必带 confidence、quality_flags、reason_codes、time_range、geo_scope。  \n3）质量打通：ExplainPackage 强制携带 TwinState.quality_snapshot 摘要；每条证据标记 accepted/downweighted/rejected，并预留 decision_reason_code，用于后续融合裁决生成。  \n4）可读性控制：PublicExplain 仅展示 Top3 证据（相关性×置信×新鲜度排序）+ 必要质量提示；InternalExplain 可展开全证据与冲突项。  \n5）阈值与标准来源：DecisionTrace 增加 reference_standard（plot>farm>default）、standard_source（规范/试验站/历史校准）、safe_range_text（外层口径），避免直接抛生硬数值。  \n6）处方表达：固定“对象-动作-剂量/强度-时机-复核点”，并为病虫害类建议设置 diagnosis_policy：默认“风险上升+巡田确认”，禁用保证性措辞。  \n7）合规与审计：PublicExplain 做数据最小化（不含个人信息、不提供第三方原始影像链接）；InternalExplain 才允许 link_to_raw、许可与合同标识；审计记录查看/导出/分享、规则或标准修改、人工覆盖，并带处方版本/证据版本/quality_snapshot版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "相关性先不引入复杂模型，定义成“建议类型→关键指标映射表”产生的权重，例如灌溉建议优先看土壤含水与蒸散/高温风；追肥建议看长势指数趋势与叶色/氮素 proxy。后续如果要升级到学习型排序再另开评审，但当前按可配置映射表做可解释排序。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

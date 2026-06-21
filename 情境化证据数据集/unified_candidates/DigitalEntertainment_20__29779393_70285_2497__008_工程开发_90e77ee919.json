@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在叙境生成式剧情共创与版权结算系统的工程实现背景下，用户与导师围绕图谱编辑器如何产出draft/快照、版本库如何原子冻结graph/content/rights三类version并满足结算门禁持续沟通（7轮），其中在版本对象建模、快照引用与hash/并发控制部分与数据架构师沟通（7轮），并敲定MVP全量压缩快照、体积上限与权限/错误码及接口字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "叙境生成式剧情共创与版权结算系统现在要开始写实现了，我被分到图谱编辑器与版本库这块，但我没想明白版本库怎么落到代码里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在理解就是，点保存就存一份。然后版本号就加一？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三个……我记得有个结算版本？还有剧情版本？第三个忘了。是不是渠道版本？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺……关联？就是要把三种版本连上？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个字段？`status=draft/snapshot`。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕快照太多，占空间。每次都存全量图谱吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没概念。就，应该不会太大吧？一个故事几十个节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 版本库这块要怎么设计？我只知道要有 graph/content/rights 三个 version，还要快照不可变。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "快照里存压缩 JSON 就行？那 graph_version 这些怎么生成，直接自增？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 rights_version 也要 hash？我以为就一个配置表 id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我懂一半。快照生成时，把三个 hash 都算出来，然后塞到 Snapshot 里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原子性是要用事务吧？我不太会处理跨表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那编辑器要传很多东西吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据架构师说版本库要分 draft 和 snapshot，快照里把 graph/content/rights 都冻结，而且要算 hash。快照生成最好一个事务里写，前端只传 draft_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先全量吧。增量我怕写错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "上限……1MB？随便定个？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。错误码我加上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason 我就写死成“publish”可以吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可能会忘了 rights_version，觉得反正结算那边再查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能做到。我就按你说的报错。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，我照这 5 条做。结算门禁那句 `VERSION_MISSING` 我也不会动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多级确权链路联调优化背景下，用户与导师围绕链上链下状态同步与异常处理方案持续沟通（4轮），其中在Saga补偿与Mesh排障可行性部分与联调测试工程师沟通（1轮），并最终确定砍掉Saga和Service Mesh，采用本地消息表与链上事件驱动FSM的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备引入Seata的Saga模式，加上Service Mesh做流量染色，方便联调时把链路追踪和灰度分流统一起来。另外链上事件和链下读模型分离，用CQRS加Event Sourcing，这样查询性能也高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Seata Saga可以定义补偿动作，如果是链上流转失败，我可以发一笔反向冲销交易。Service Mesh虽然重，但后续要是节点扩容到几十个，没有流量治理会很乱。不过补偿交易确实容易产生脏数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种Saga补偿加上Mesh，联调排障会不会很难搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "链上出块延迟把Saga的同步超时机制搞废了。反向冲销也是坑，链上不能随便加反向交易，合规审计通不过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Service Mesh这块，如果不用，跨服务调用链路追踪怎么保证？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "链下用本地消息表加定时重试，保证最终一致性；链上合约改成事件驱动的有限状态机，只推进状态不回滚。网关层透传TraceID。这样联调只要关注重试幂等和状态机流转。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去跟合约开发对齐一下FSM的事件枚举，还有重试上限的配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "本地消息表这块我直接用数据库事务保证消息和业务操作的原子性，避免二次投递。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

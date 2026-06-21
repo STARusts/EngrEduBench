@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在非标资产链上确权哈希锚定代码编写背景下，与导师围绕哈希防碰撞、Merkle树构造、重放验证及测试口径持续沟通（10轮），其中在底层数据拼接与防碰撞部分与区块链核心研发沟通（1轮），并最终形成Merkle叶子构造、签名排序、随机盐及四组对照测试的实现口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算个Hash存上去呗，多签的话我再加个字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "包含吧，都包进去肯定没错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "非标资产哈希锚定这块，底层数据怎么拼？防碰撞怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把签名放叶子节点里算哈希。重放验证，我再看看。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Merkle证明这块我确实有点懵，我马上去翻之前项目的Merkle验证代码，照着改一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加几组：正常资产、超长描述的、带特殊字符的、签名顺序打乱的，看算出来的Root对不对，失败就抛异常回滚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Merkle叶子按固定顺序放属性哈希，签名集排序后单独入树，Root混入随机盐防彩虹表。测试覆盖正常、超长、特殊字符和签名乱序四组，乱序那组要测排序后再算。失败就回滚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

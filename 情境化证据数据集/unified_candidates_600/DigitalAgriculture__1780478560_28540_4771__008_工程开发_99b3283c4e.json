@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农田暗管排盐系统固件开发背景下，用户与导师围绕电导采集的极化效应、温漂处理及数据包合规设计持续沟通（6轮），其中在GPS坐标明文上传合规性部分与合规与安全审计师沟通（1轮），在电导采集驱动与防极化机制部分与嵌入式开发工程师沟通（1轮），并形成交流激励防极化与边缘侧脱敏上传的修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网上有现成的ADS1115驱动库，直接调库读差分电压就行，几行代码的事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极化是啥？温漂我加个DS18B20读温度不就行了。数据包我就把设备ID、GPS坐标和ADC值直接打包发MQTT，云端绑定设备看地图多方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我把设备ID和农田GPS直接发MQTT，云端好绑定看图，这有啥问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我直接用网上的ADS1115库读电导，加个温度传感器，行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说要脱敏，不能传坐标。嵌入式说通用库不行，探头会坏，得写交流激励和补偿算法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "交流激励时序我确实没写过，不懂怎么控制GPIO翻转频率。我马上把交流激励的时序代码例子加到今天的学习清单里，去CSDN找STM32的PWM交流激励例程，看懂了就迁移过来改GPIO。补偿算法先找个线性的凑合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "隐私我就不传真实坐标了，传个编号让云端自己映射。极化这块，我不用通用库了，换成交流激励，时序我找找有没有能抄的PWM配置。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

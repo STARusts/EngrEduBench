@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涉氢系统端云联调背景下，用户与导师围绕安全降级逻辑与时延毛刺分析持续沟通（6轮），其中在断连降级与指令防误发部分与安全容错架构师沟通（1轮），在状态切换时延定位与埋点分析部分与测试与联调工程师沟通（1轮），并确定安全降级优先、引入混沌工程与埋点，形成测试优先级安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能好说，我直接用Locust压一下调度接口，看QPS能不能撑住产注峰值。安全的话，我加个鉴权拦截器，防一下越权访问应该就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延毛刺我还没想过。断连的话，我，就，就直接报错返回呗？还能咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉氢系统端云联调的安全测试重点看啥？断连降级具体怎么测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用Locust只测过接口吞吐，混沌工程注入网络分区这块我没搞过。不过我前两天刚学了Python的Chaos Toolkit，正好能写网络中断的实验配置。我这就把这套工具用进来，给边缘端写个断网实验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看它有没有在规定时间内切过去呗。抖动大，就，就是网络不好吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网切本地模式这操作，时延毛刺怎么抓？光看平均时间感觉不够。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改边缘端代码加埋点，然后跑Chaos实验。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "安全降级逻辑最重要，先改心跳超时和本地模式切换。然后加埋点，跑混沌实验看时延。最后再用Locust压接口吞吐。Locust压测我熟，半天就能搞定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

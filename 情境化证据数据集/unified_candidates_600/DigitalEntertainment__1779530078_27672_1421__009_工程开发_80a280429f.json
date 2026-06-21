@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链上共创资产确权流转背景下，用户与导师围绕铸产合约可升级性、分润逻辑与合规不可变性的取舍持续沟通（7轮），其中在Proxy模式合规风险部分与合规审查官沟通（1轮），在动态分润重入风险与权重打包省Gas部分与智能合约工程师沟通（2轮），并形成铸造不可变、分润链下算链上核总额的折中方案及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得理论上用ERC1155做多资产实例比较好，配合Proxy代理模式实现可升级，分润逻辑写在Proxy里，通过Hook回调实现动态分润，这样后续规则变了也不用重新部署。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用Proxy模式做铸产合约，分润逻辑用Hook回调动态执行，这样好升级。你们看这方案有坑吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规说不能乱改，工程师说重入风险大还费Gas。我之前的Proxy方案好像走不通了。是不是得把分润逻辑拆出来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就铸造合约保持不可变，确权用ERC721。分润比例在铸造时写死在合约里，不能改了。这样合规和安全都满足，就是不够灵活。如果后续要调整，只能重新铸造？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多方共创存比例小数点精度有问题，存权重好点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多方共创如果存权重，怎么省Gas？用Packing打包存地址行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "工程师说用Bytes32打包存地址和权重，分润具体算放链下，链上只校验总额。我觉得这个折中可以，确权不可变，分润计算放链下降低Gas和重入风险，链上只管总额划拨。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

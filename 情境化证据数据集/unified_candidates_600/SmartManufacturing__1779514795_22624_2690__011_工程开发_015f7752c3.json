@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在装配指引端到端集成验证背景下，用户与导师围绕防呆机制、异常阻断与验收标准持续沟通（5轮），其中在防呆交互闭环部分与交互体验规划师沟通（1轮），在端到端异常流测试部分与质量测试专员沟通（1轮），并最终形成扫码锁死、异常熔断锁死及接口带时间戳的三个验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我用Postman跑一遍，然后前端用AR SDK渲染一下，能出图就行。防呆的话，加个非空判断够不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防呆闭环具体指什么？有没有现成的组件能直接套？我想着加个弹窗提示错误应该就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端验证怎么搞？我平时就测测接口返回码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规划师说要搞扫码校验锁死，不能弹窗。测试专员说要造脏数据和丢包，看降级。我回去加个扫码校验逻辑，然后造点坏数据试试？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个真没想过。硬件没响应我就一直等着呗，还能咋办？丢包的话，我之前只会写普通的超时重试，没处理过这种半死不活的状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨天看Resilience4j的文档刚好有状态机模式，我是不是可以用它的CircuitBreaker把扫码接口包一层？如果连续超时就直接熔断，返回“设备离线”锁死界面？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一点扫码锁死我来写状态校验。第二点网络异常，我用Resilience4j熔断后返回特定错误码，前端配合锁死。第三点AR延迟，这个我不熟，前端测吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 扫码不一致强制锁死；2. 异常熔断并锁死操作；3. 接口带时间戳供前端算延迟。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改接口，加上Resilience4j熔断和时间戳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

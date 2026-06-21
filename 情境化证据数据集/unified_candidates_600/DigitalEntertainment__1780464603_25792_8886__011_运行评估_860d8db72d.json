@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估期潮汐吞吐与跃迁延时监控体系搭建背景下，用户与导师围绕监控指标取舍与工程约束持续沟通（5轮），其中在毫秒级毛刺捕捉与趋势预判方案部分与观测监控专家沟通（2轮），并最终确认P99延时直方图、滑动窗口吞吐曲线与Flink背压率三项看板指标及自定义Exporter补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算引入eBPF做内核级无侵入抓包，精确计算每一次拓扑跃迁从指令下发光阵到渲染生效的微秒级延迟。另外，传统的时序数据对潮汐的形态表达太弱了，我想在监控链路里前置一个轻量级图神经网络，实时预测未来5秒的潮汐吞吐趋势，这样大盘能直接展示预测曲线，比只看历史数据高级得多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心诉求是延迟足够精准、吞吐能提前感知。如果只靠Metrics拉取，间隔至少也是秒级，光阵跃迁卡顿个几百毫秒，大盘上根本看不出来毛刺。eBPF能抓到纳秒级事件，GNN能补齐预测能力，架构上看这两者结合才是闭环。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用eBPF抓内核事件算跃迁延迟，再挂个GNN做潮汐吞吐预测。现有Prometheus拉取Metrics的方式太粗糙，怎么解决毫秒级毛刺捕捉和趋势预判的问题？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滑动窗口坡度能反映瞬间冲击吗？如果用户交互瞬间打满，窗口还没滑过去，报警就已经滞后了。GNN预测至少能提前预热光阵资源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我只用过现成的Exporter，自定义开发规范还没看过，得去补一下Prometheus Client Java的文档，特别是Histogram桶边界定义那块。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "专家说得有道理，eBPF确实太重了，我忽略了它对Node的CPU占用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我还是觉得大盘上只放P99和QPS不够直观，我想加一个“拓扑活跃熵”指标，用多维向量表示当前光阵各节点的激活状态，这样一眼就能看出光阵重构的密集度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实，配报警阈值还得重新拟合数据分布，运维也看不懂这向量含义，等于加了个花瓶指标。算了，砍掉。监控还是得回归到能直接关联根因的标量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认这三项：1. 跃迁端到端延时P99直方图，用算子打标和渲染回传算差值；2. 潮汐吞吐量滑动窗口实时曲线，捕捉陡增坡度；3. 上周定的Flink背压率。这周除了看Flink Metric文档，还得把Prometheus Client的自定义埋点逻辑跑通，保证这两个核心指标能准时推到大盘上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

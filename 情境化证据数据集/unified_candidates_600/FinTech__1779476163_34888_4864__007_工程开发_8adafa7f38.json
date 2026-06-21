@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在数字法币流转归集引擎合约拆解与规范制定背景下，用户与导师围绕合约拆解原则、存储防冲突与升级验证持续沟通（6轮），其中在数据逻辑分离与存储槽防冲突部分与核心合约研发工程师沟通（1轮），在升级验证对照测试设计部分与状态机与账本总设沟通（1轮），并最终形成数据逻辑分离、强制EIP-1967及静态检查与主网fork快照对比的合约拆解与验证规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算按业务模块直接拆，归集合约、触发行合约、熔断合约，都写成独立的大合约。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "状态共享我直接用内部函数调用，把触发和归集逻辑写在一个大合约里最方便，跨合约调用还省gas。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据怎么分离我有点没底，尤其是账本状态如果拆出去，归集逻辑读余额会不会很麻烦？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只写过简单的Solidity，这种可升级架构的存储布局没实操过，这块我得先补一下，不然存储槽冲突肯定炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合约拆解怎么搞？我想把归集和账本拆开，但不知道存储槽对齐怎么保证，怕覆盖了余额数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这个拆法比大合约靠谱，我采信这个。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规范就定必须用EIP-1967吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "升級合约前后怎么验证账本没乱？单元测试好像测不出存储槽冲突。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前没写过这种验证脚本，只能先记下来，照着OpenZeppelin的升级插件和Slither配一下试试，刚好学学怎么做存储布局校验。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

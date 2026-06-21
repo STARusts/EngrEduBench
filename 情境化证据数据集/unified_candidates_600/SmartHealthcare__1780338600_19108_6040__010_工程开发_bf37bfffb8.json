@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在院感气溶胶播散系统流场推演引擎核心实现背景下，用户与导师围绕LBM流场实现、降级机制及验证口径持续沟通（3轮），其中在复杂边界处理与验证设计部分与流体力学建模师沟通（1轮），在GPU加速SoA数据布局与核函数划分部分与仿真引擎开发沟通（1轮），并最终确定LBM算子分裂、Zou-He边界、SoA双Kernel加速及双重验证的实现路线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算用LBM（Lattice Boltzmann Method）做流场计算，它天生适合并行，能卡住实时性要求。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耦合我打算用算子分裂法，流场算一步，粒子跟着走一步。降级切换我准备加个残差监控，发散了就切ONNX。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LBM在病房这种复杂边界里，风口入流和墙壁反射怎么处理最稳？验证这块怎么设计才严谨？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "LBM核心步要是全在CPU跑肯定慢，我需要上GPU。但我现在对CUDA里怎么高效组织LBM的网格数据很懵，之前写AoS（Array of Structures）在GPU上带宽太差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LBM碰撞和迁移步，用SoA（Structure of Arrays）重写的话，内存对齐和核函数划分怎么做最顺？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实在GPU显存访存优化这块卡住了，只会写简单核函数，不懂怎么用nsys分析带宽瓶颈。我今晚得把SoA重构的论文和CUDA Best Practices Guide过一遍，明早用nsys跑个基准测试，把Global Load Efficiency调到80%以上再往下推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "圆柱绕流我设定L2范数残差低于1e-6且连续50步不反弹，就算稳态收敛。示踪剂对比，因为实测数据本身有传感器误差，我设定计算浓度曲线与实测曲线的皮尔逊相关系数大于0.85，且峰值时间差在2秒内，就算校准通过。一旦L2残差爆了或者相关系数掉出容差带，立刻触发降级切ONNX。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去重构LBM数据布局，先把SoA的内存分配器和双Kernel框架搭出来，跑通圆柱绕流基线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

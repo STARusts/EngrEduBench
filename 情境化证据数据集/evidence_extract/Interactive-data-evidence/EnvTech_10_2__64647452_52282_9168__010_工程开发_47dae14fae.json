@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在告警联动工单联调以实现端到端闭环背景下，用户与导师围绕唯一标识、审计留痕、版本上下文与失败兜底持续沟通（6轮），其中在接口字段与幂等设计上与后端工程师沟通（5轮），在联调用例与合规断言上与测试工程师沟通（3轮），并确认最小联调口径与必过用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就照网上那种告警转工单的模板啊。告警一出来就create工单，状态流转，最后close。应该差不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "唯一标识…就用alarm_id？状态留痕就是每次更新都记日志。失败就重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 告警联动工单要怎么接？给个接口和字段，越简单越好。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是直接在告警代码里写个HTTP请求去建工单就行？source_event_id就塞alarm_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等我就加个redis锁？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了点。那证据链是不是也不用管，反正你们有service？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 联调要测啥？给我几个用例就行，我照着跑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用例有点多。我先跑用例1和2可以吗？其它后面补。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原始包我又没用到，应该不会回吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时就console一下看看值……那我不打了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概就是：告警触发时生成alarm_event_id，然后调用工单POST建单。要传source_event_id。重复就别建两次。还有证据链要写三种事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本字段就从告警里带过去，rule_version_id、model_version那些。失败兜底…就请求失败再发一次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以吧。就是加个字段，然后写个定时任务扫FAILED。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我想省事直接把payload放comment里看着方便……算了不放。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）告警每次触发生成alarm_event_id，不用可能变的alarm_id。  \n2）建工单POST带source_event_id=alarm_event_id，workorder_type固定ALARM_DISPOSAL。  \n3）幂等靠workflow按source_event_id唯一，不成功就别重复建多个。  \n4）证据链写ALARM_TRIGGERED、WORKORDER_CREATED、WORKORDER_ACTION三类，带rule_version_id、model_version、feature_snapshot_hash和measurement_ref。  \n5）measurement_id没有就用(raw_packet_hash, device_id, point_id, ts)并标MEASUREMENT_ID_MISSING。  \n6）联动失败记link_status=FAILED，定时重试但限次数和时间窗，别把raw包正文回传。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

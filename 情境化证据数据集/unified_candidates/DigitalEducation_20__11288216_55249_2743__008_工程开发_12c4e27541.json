@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在剧本式学习编排引擎进入工程开发、需落地脚本执行引擎的背景下，用户与导师围绕事件驱动状态机的代码拆分、幂等乱序重试、审计与留存口径持续沟通（7轮），其中在幂等键选择与乱序/并发处理上与后端工程师沟通（3轮），在日志分表、字段最小化与留存/脱敏要求上与数据治理官沟通（1轮），并形成MVP模块边界与验收口径的一页执行规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我准备进入工程开发，先把脚本执行引擎的主流程跑起来。现在卡在“事件驱动 + 状态机”这块，落到代码层怎么拆比较稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在有两种拆法：  \nA）把脚本编译成一个“状态图”，执行时只跑图；事件来了就查当前节点、匹配转移、产出动作。  \nB）不做编译，脚本就是一堆 step 列表，执行时按 stepType 调 handler，handler 里自己决定要不要推进。  \n我倾向 A，感觉可测；但担心实现重，时间不够。B快，但后面容易长出一堆 if。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件我想统一成：eventId、traceId、actor、classSessionId、timestamp、eventType、payload。  \n去重我准备用 eventId 做幂等；但离线补发的话 eventId 是端生成，可能会撞或者重发，我不太确定怎么更稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 幂等和乱序这块你建议怎么搞？事件端上生成 eventId 靠谱吗？重试失败要怎么保证状态机不跑偏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果选“弱顺序”，返回可重试错误，那端要一直重发会不会把服务打爆？我们课堂高峰可能同一节课几十个学生一起点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "串行化我能接受，至少 MVP 稳。那 A 方案“编译状态图”是不是就更值了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问了后端工程师：建议用“双层幂等键”，transportId 去重复包，semanticKey 防重发变包；乱序别硬重排，先做“弱顺序”：状态不满足就临时拒绝，带 retryAfter；永久拒绝走我们定的 scope/role/policy/expired。并发上建议按 classSessionId 串行执行，保证状态一致。执行引擎可以先做轻量编译：把脚本编成 step->transition 表，别一开始就做复杂图优化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想这样：默认按 classSessionId 串行，但实现上不是单线程，是“每个课节一个执行队列/锁”。不同课节并行没问题。  \n审计我会做最小字段集合：who/what/which/when/where/result + 授权依据；正文不落，只落摘要/引用ID。  \n性能担心的话，我先把审计写成异步队列？但这会不会影响“高风险动作必须审计”这个硬口径。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "周期紧，我选 1：高风险动作同步写审计，其他异步。高风险动作就是之前说的跳步/强控、导出复盘、批量拉取作品。同步写审计的量其实不大，主要是老师端触发，不是每个学生都触发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模块我拆四块：  \n1）ScriptCompiler：脚本 -> step/transition 表（带校验，比如不存在的 stepId 直接拒绝）。  \n2）Executor：按 classSessionId 获取锁/队列，读取当前 state，消费 event，跑 transition。  \n3）ActionDispatcher：把“下一步动作”发到终端/资源服务（先只做 stub + 记录）。  \n4）AuditWriter：高风险同步写最小审计字段，其他异步。  \n验收我定三条：  \n- 幂等：同一 semanticKey 重放 10 次，state 不变、动作不重复落库；  \n- 乱序：提前到的事件返回临时拒绝+retryAfter，不会推进到非法状态；  \n- 权限拒绝：scope/role/policy/expired 四类都能打到统一错误码，并且高风险拒绝也要审计 result=deny。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在代码里做两层保护：  \n- 事件日志 payload 做白名单字段映射，只留必要键；  \n- 审计里只存资源ID/摘要hash，不允许存作品正文。留存周期我不太会定，先按产品/治理给的来，代码里做可配置 TTL 和归档开关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 审计日志和执行事件这两类数据，建议留存多久？字段层面哪些要脱敏、哪些必须禁止落库？我们准备做 TTL 可配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 治理官给的底线我记下来了：event/audit 分表；event 只留处理结果和白名单 payload；audit 记录 who/what/which/when/where/result + 授权依据（含委派记录ID）；敏感信息一律内部ID，IP 至少掩码/哈希；留存建议 event 7-30 天、audit 180-365 天，具体听学校；作品正文/音视频原文这些禁止落库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这轮就按这几条定：  \n- 执行模型：脚本先轻量编译成 step/transition 表；事件驱动状态机，合法转移统一校验；  \n- 一致性：按 classSessionId 做队列/锁串行执行，同课节内保证状态不被并发打穿；  \n- 幂等/乱序：transportId + semanticKey 双层幂等；弱顺序策略，前置不满足返回临时拒绝+retryAfter；  \n- 权限与审计：拒绝原因码统一 scope/role/policy/expired；高风险动作（跳步/强控、导出复盘、批量拉取作品）同步写审计，且不落作品正文，只落摘要/资源ID；  \n- 数据留存：event/audit 分表，event 短留存、audit 长留存，TTL 可配置。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

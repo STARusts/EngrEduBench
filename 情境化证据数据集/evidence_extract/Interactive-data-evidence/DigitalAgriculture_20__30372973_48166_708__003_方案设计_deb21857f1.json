@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农产品合规模块化溯源与营养标签生成平台方案设计背景下，用户与导师围绕批次事件数据模型的批次边界/事件清单/最小字段持续沟通（8轮），其中在事件通用字段与混批拆批建模上与数据架构师沟通（4轮），在返工与关键变更审计口径上与行业合规经理沟通（1轮），并形成MVP实体-事件类型分组-批次规则与字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "批次边界我先按“同一配方、同一生产线、同一天”这样行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "批次ID我想用“工厂ID+日期+流水号”。主体就工厂、合作社、检测机构、电商。跨主体…我不太会挂，是不是全都塞进批次表里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 批次事件数据模型怎么起步？我现在只知道要有批次ID和时间线，但混批/拆批这种我没底。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件通用字段那堆我能理解一半。prev_event_hash是一定要做吗？我怕复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "LOT_MERGE/LOT_SPLIT我记住了。那营养标签那块事件也放这里吗，比如“配方变更”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据Evidence是存文件吗？比如检测报告PDF。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。大概思路是：Actor、Lot、Evidence拆开；事件表有一套通用字段（event_id/type/time、actor_id、lot_id、source_ref、数量单位、附件证据）。混批拆批用LOT_MERGE、LOT_SPLIT事件来表达。哈希链先不强做，先做prev_event_id和审计日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须有我先写：原料入库、投料、生产完成、包装、出库、发运、质检结果、召回。可选：温湿度、库存盘点、退货、销毁。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我分组试下：  \n- 采购：RAW_RECEIPT（原料收货），字段加supplier_actor_id、material_code、batch_no（供应商批号）。  \n- 生产：INGREDIENT_CONSUME（投料）加recipe_version、input_lot_id；PROCESS_COMPLETE（加工完成）加output_quantity；PACK (包装)加package_spec、label_template_version？  \n- 检测：TEST_REQUEST、TEST_RESULT，字段加lab_actor_id、test_items、result、report_evidence_id。  \n- 流通：SHIP（发运）加to_actor_id、logistics_no；RECEIVE（到货）加from_actor_id。  \n- 召回：RECALL_INIT、RECALL_DISPOSE。  \n- 标签：LABEL_PUBLISH、LABEL_VOID。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "新开批次：换配方版本就开新批次；原料供应商批号变了也开；同一SKU跨天生产也开。沿用：同配方同原料批号同产线当日就沿用。返工我不确定算不算新批次。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业合规经理 返工、换原料、换包装这些在追溯里哪些算关键变更？我在定批次边界规则，怕踩审计点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "关键变更里“过敏原引入”我之前没想到。那我回去把批次规则补上：过敏原相关的变更一定要新批次或LOT_MERGE拆出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规经理的意思是：供应商/原料批号变、配方版本变、过敏原相关变更、以及返工混入不同lot，都算关键变更，要么新批次要么用批次关系事件表达；包材批号变化不强制新批次但要有事件记录。标签发布要带适用范围和作废留痕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我按MVP说：  \n1）实体：Actor（主体）、Lot（批次）、Item（SKU）、Evidence（证据指针）。  \n2）事件类型（分组）：  \n- 采购：RAW_RECEIPT  \n- 生产：INGREDIENT_CONSUME、PROCESS_COMPLETE、PACK  \n- 检测：TEST_REQUEST、TEST_RESULT  \n- 流通交接：SHIP、RECEIVE  \n- 批次关系：LOT_MERGE、LOT_SPLIT（返工混批也走这里或单独LOT_REWORK）  \n- 召回：RECALL_INIT、RECALL_DISPOSE  \n- 标签：LABEL_PUBLISH、LABEL_VOID  \n3）批次边界规则：换配方版本/关键原料来源或批号/引入或替换过敏原/跨天生产 => 新lot；包材变化不新开但记事件；返工如果混入不同lot => 产生新的输出lot并记录LOT_MERGE或LOT_REWORK。  \n4）事件最小字段（通用）：event_id、event_type、event_time+recorded_time、actor_id、lot_id、source_ref、quantity+uom、to/from_actor（交接类）、attachments指向Evidence；可选prev_event_id用于顺序与审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

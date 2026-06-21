@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在高并发流转性能优化与排障背景下与导师围绕性能瓶颈判断、过度设计规避及SLA定调持续沟通（5轮），其中在锁竞争与IO瓶颈治理部分与性能优化攻坚手沟通（3轮），并最终形成基于Disruptor低冲突、异步批量日志与G1调优的优化定调及SLA边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我压了一轮，Actor状态机流转在并发过万时TP99毛刺非常严重。我准备引入Hazelcast做分布式内存网格，把流转上下文全部移到堆外，并且用CQRS重构流转写入链路，读写彻底解耦，这样能最大化吞吐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "火焰图显示确实有锁竞争，但我认为Java的StampedLock优化空间有限。另外，我最近在深度研究io_uring，想把流转日志和事件提交全部改成io_uring异步提交，这应该能大幅降低系统调用和CPU开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "目前流转Actor在处理跨链回调时，内部状态更新用的ReentrantLock，压测下TP99到了200ms，我想换无锁队列或者上Hazelcast，你觉得呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查下代码。确实是Disruptor的发布策略配置有问题，等多生产者导致等待。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "另外日志这块，我之前看过mimalloc的分配策略，能减少内存碎片，是不是也能提升流转上下文对象分配速度？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我改了Disruptor的等待策略为yielding，日志改成批量异步。压测结果：TPS从2k涨到8k，TP99降到了50ms。但并发到1.5万时，TP99又飙到150ms，且伴随Young GC停顿。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这GC停顿是测量误差还是真的瓶颈？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我分析了GC日志，确实，流转上下文在等跨链回调时存活时间超过了Young GC周期，晋升了。我准备把上下文存储从堆内移到堆外，用DirectByteBuffer绕过GC。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑了10轮，1.5万并发下TP99在140ms-160ms波动，95%置信区间大约在[145, 155]ms。误差来源主要是跨链中继的网络延迟抖动和偶发的Mixed GC。当前优化在1.2万并发下边界很稳，超过1.5万如果网络抖动大，还是会劣化。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我收回Hazelcast和CQRS的方案。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终优化定调：Disruptor多生产者低冲突等待、流转日志异步批量刷盘、G1大页配合Eden区扩容。SLA卡在1.2万并发TP99<50ms，超出部分依赖跨链中继稳定性。io_uring作为后续储备观察。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在夜间红外降噪背景下，与导师围绕保边去噪方案、域偏移处理、对照实验与算力评估持续沟通（7轮），其中在保边去噪、域偏移补充及边端耗时评估部分与算法调优攻坚手沟通（4轮），并形成导向滤波预处理加伪红外增强及对照实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接套个高斯滤波或者中值滤波呗，OpenCV几行代码的事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘模糊确实是个问题。那我不在原图洗，丢给模型让它自己学去噪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "夜间红外图噪点太重，高斯滤波会糊，加模型分支又怕算力不够，这咋整？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bbox偏移确实麻烦。这咋评估？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "训练集和推理域不一致了。那我是不是得重新标一波夜间数据？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对抗训练太复杂了，我搞不定。风格迁移生成假图来训，这个能做。那就选导向滤波预处理加上伪红外数据增强训练？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑两组对照。一组原图直接推，一组导向滤波后推。看虚警率降没降。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导向滤波在Nano上跑，一般耗时多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "20ms能接受。参数我做成配置文件下发。那就定导向滤波预处理，参数可配，加上伪红外数据增强训模型。对照实验看虚警率和耗时。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把滤波模块写好，接进流水线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

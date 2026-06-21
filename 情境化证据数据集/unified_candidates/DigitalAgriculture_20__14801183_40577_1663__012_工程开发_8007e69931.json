@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在林间微气候菌菇决策网工程开发收尾背景下，用户与导师围绕端到端压测与回归的覆盖点、验收口径、合规日志与资源上限持续沟通（11轮），其中在压测分层/故障注入/回归准入与样例集设计部分与测试工程师沟通（4轮），并最终形成混合压测+回归集+校验断言+脱敏日志+双档设备压测的行动清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就压接口吧，QPS 拉高一点，看不看 500 错。用现成压测工具跑一圈就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟就看接口返回时间。字段完整性就对下 JSON schema。降级触发…我不太会造这种数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 端到端压测和回归要怎么做？我想简单点，直接压接口行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "混合流量我能用 k6 这种直接写脚本吗？故障注入是不是得搞网络工具，我怕配不起来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回归集要多少条？我怕搞太大跑不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那字段齐全率我用 JSON schema 校验就可以吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是别只压接口。要混合“上报+建议”，再搞些坏数据，比如缺字段、时间乱。回归就固定一批样例，主要看硬闸门别出强动作，还有字段要全。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）P95 不要太慢。2）别 500。3）字段别丢。4）闸门别漏。5）低置信度别乱给动作。差不多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "E 我可能会漏，我压测一般就开 debug 打全量日志，方便看问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把日志级别调高一点别输出 body？或者把 evidence 只取前几十个字。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源开销就是看 CPU、内存曲线？我能接个 APM 看图就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改模型、改规则、改接口字段？改前端是不是也要？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是同一时间给两个互斥动作？比如同时“补水”和“覆膜”？我不太确定互斥列表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会按这个造。就是我造输入的时候，不知道特征字段要填啥，之前后端还没给我最终字段名。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）写混合压测脚本，上报和建议一起打。2）做 30-50 条回归样例，带硬闸门和低置信度。3）加 schema 校验和业务断言，字段和强动作限制。4）日志别打全量，evidence 脱敏。5）跑 500/2000 两档看 P95 和资源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

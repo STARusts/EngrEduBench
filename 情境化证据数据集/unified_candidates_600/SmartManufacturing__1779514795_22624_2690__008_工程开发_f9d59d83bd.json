@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在CMM测量接口与数据入库联调背景下，用户与导师围绕数据时序对齐、异常断连处理、重传去重及验证逻辑持续沟通（7轮），其中在CMM数据吐出节奏与报错状态码部分与测控接口开发员沟通（1轮），并形成监听完成事件、拦截异常、Mock验证及硬指标卡控的动作清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接用OPC UA的现成SDK去订阅，然后入库就丢给InfluxDB，它自带时间序列，应该很省事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "中间态我还真没想，我以为订阅就能拿到完整结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CMM测完一个件，数据到底是怎么发的？我用OPC UA订阅能拿到完整数据吗？仪器报错状态码是啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就在回调里加个判断，收到完成标志再拼数据，报错就标记无效。不过这个状态拦截逻辑有没有现成的状态机库可以借用？自己写感觉容易漏状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我需要去查一下OPC UA在弱网下的重传机制，看看报文头里有没有唯一标识。我今晚把这块的协议文档看一遍，把重试的参数和报文结构搞懂，顺便写个调试日志记录下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备写个Mock脚本，模拟发10批正常数据，5批报错数据，再故意发3批重复数据。然后查InfluxDB，看正常数据是不是10条，报错的全打上无效标签，重复的一条都没进去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "指标就是入库完整率和重复率。正常批次完整率必须100%，重复率必须是0。报错批次的有效数据率应该是0。阈值的话，我就按这几个硬指标卡，差一条就算不过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 今晚补学OPC UA重传与报文结构，写调试日志；2. 改回调逻辑，只抓MeasurementComplete事件，加状态拦截；3. 写Mock脚本，覆盖正常、报错、重传三种case，验证入库完整率和重复率必须达标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

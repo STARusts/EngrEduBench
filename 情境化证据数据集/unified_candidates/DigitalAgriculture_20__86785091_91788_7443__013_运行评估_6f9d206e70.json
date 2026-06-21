@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段建设质量命中率监控看板背景下，用户与导师围绕命中率口径拆分、分母边界、分桶原因、告警阈值与排查路径持续沟通（7轮），其中在状态字段与分桶口径落地部分与数据架构师沟通（4轮），在告警窗口/低流量保护与指标预聚合部分与SRE运维工程师沟通（5轮），并收敛为看板指标定义、最小面板集合、告警引用、统一排查顺序及隐私展示边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是…有质量结果的单子占比？比如有重叠漏作、速度这些算出来了，就算命中。没算出来就是没命中。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看板上可以做三段堆叠？比如“终端无数据”“数据不完整”“规则失败”。我有点不确定怎么判断“数据不完整”，是不是看字段是不是空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 质量命中率看板要分桶，线上能拿到哪些状态字段来判断：数据没到/数据不够/规则没产出？口径怎么定比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可核验窗口是指什么？我怕大家各说各的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 BUCKET_A 里“结束后X分钟”这个 X 取多少？我感觉 10 分钟？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "导师，我从数据架构师那拿到一个口径：分母用“进入可核验窗口”的单子（结束事件或超时关单 + coverage_ratio>=0.8 作为条件之一），分子是有 quality_decision_final 且 decision_code 不是 UNKNOWN。分桶用 NO_INGEST/INSUFFICIENT_DATA/RULE_TIMEOUT_OR_ERROR/UNKNOWN_RESULT/HIT。还有 X 分钟的窗口建议先 40 分钟别用 10。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我以为分母越干净越好，不然命中率会很低…但你意思是低也要暴露出来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那看板上命中率就会受弱网影响很大。是不是要再做一个“规则命中率”，只看数据够的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用 Prometheus 的告警模板，像：E2E 命中率低于 95% 持续 15 分钟就报警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 质量命中率看板要上告警：E2E质量命中率、规则产出率。告警窗口、低流量保护、分组维度建议怎么定？还有 NO_INGEST 的 X 分钟怎么拿 P95 来定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rolling 2 小时有点长，我怕发现晚了。能不能同时加个 30 分钟的快速报警？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那看板分组你觉得必须有哪些？我怕维度太多 Grafana 很卡。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预聚合是要做新的指标表吗？这块我不太敢拍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "导师，SRE 这边建议告警少而准：  \n- Paging：E2E 命中率按 tenant_id+region 聚合，作业高峰 rolling 2h < 92% 且 job_end_count>=200；  \n- Paging：NO_INGEST 占比按 tenant_id+device_model，rolling 1h > 8% 且样本>=200；  \n- 预警：rolling 30min < 88% 且样本>=80，只发群不电话。  \n另外 X 分钟写成 ingest_sla_min 参数，用端到入湖延迟 P95+裕度估，跟固件版本有关。看板维度建议 tenant_id/region/qc_rule_version/device_model/firmware_version，避免 Grafana 现算全量明细，要用预聚合计数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径我先说：E2E 命中率=到达结束/超时的任务里，有最终质量判定且不是 UNKNOWN 的占比；再加一个规则产出率=有 qc_run_end 的占比。面板最小集合就是总体趋势 + 分桶堆叠 + 按租户区域 TopN。排查路径…先看 NO_INGEST 再看规则超时？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住了。就是 TOTAL_END 不剔数据差的，分桶把差的露出来。还有排查顺序得写死，别每次瞎猜。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就写成“默认不展示 driver_id，追溯查明细要走权限和审计”。这样可以吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

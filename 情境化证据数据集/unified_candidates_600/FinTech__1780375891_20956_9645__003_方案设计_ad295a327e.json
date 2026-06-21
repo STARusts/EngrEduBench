@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在流算汇率预测架构设计背景下与导师围绕模型选型延迟约束、对照实验假设设计与Flink状态容错短板补齐持续沟通（7轮），其中在算子部署与模型选型部分与流计算架构师沟通（1轮），并最终提出对照实验假设、明确补学计划并锁定架构候选方案与验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用Flink做流计算，然后接个LSTM模型预测汇率，把结果推给对冲引擎。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟是个问题，我之前没细算。那是不是得换个轻量级模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink加LSTM延迟可能扛不住，这块算子部署和模型选型怎么搞比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A是Flink内嵌FTRL，快但特征难搞；B是XGBoost异步，慢点但特征好。我觉得方案A快，好像挺适合我们。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的假设是：在50ms对冲窗口内，方案B的15ms延迟不会导致对冲滑点超过阈值。对照组就是方案A。我拿历史tick数据跑这两种的回测，看正收益率和滑点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Flink算子状态这块我只写过简单的计数，FTRL权重更新和Checkpoint的交互我确实没搞懂，怕写出来权重丢掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这两天去看Flink官方文档里关于Keyed State和Function State的章节，再找两个开源的Flink ML在线学习例子跑一下。3天内把权重更新的状态容错逻辑摸清，写个Demo验证Checkpoint恢复后权重不丢。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

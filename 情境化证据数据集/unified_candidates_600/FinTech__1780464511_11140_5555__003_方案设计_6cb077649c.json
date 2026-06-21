@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在银企信贷联邦融通引擎选型背景下，用户与导师围绕联邦方向、加密选型、算力成本与网络延迟验证持续沟通（7轮），其中在纵向特征对齐与PSI策略部分与联邦算法架构师沟通（1轮），在重计算场景低耗时加密方案部分与密码学底座研发沟通（1轮），并暂定纵向联邦+三方SS+KKRT-PSI选型，计划补齐SPDZ公式并跑延迟对照组验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "银行出流水，税务出特征，是不是只能纵向？对齐样本怎么搞快一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拒贷诊断要算很多特征，Paillier太慢，三方闭环下有没有快一点的方案？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "纵向联邦，PSI用KKRT。加密换秘密共享，专家说算得快，而且我们刚好三方，适合MPC。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设专线延迟在20ms内SS可用，50ms以上就退化。我搭两组对照，一组模拟20ms一组模拟50ms，跑一次拒贷诊断的全链路耗时。如果50ms下耗时比HE还长，就证明SS不能用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实只懂调FATE的SS接口，底层通信轮数怎么算我不明白。我今晚去查SPDZ协议的文档，把带宽和延迟的估算公式搞懂，明天把公式带进来算一下理论阈值，这样就知道50ms下耗时上限是多少了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

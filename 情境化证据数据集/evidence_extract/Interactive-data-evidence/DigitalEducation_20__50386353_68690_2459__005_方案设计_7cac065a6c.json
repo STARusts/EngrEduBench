@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课堂端云协同强提示仅服务节奏流程且不传原始音视频的方案设计背景下，用户与导师围绕多模态端侧采集→原子事件→触发摘要的数据流、时间对齐、最小采集与隐私硬约束持续沟通（11轮），其中在事件时间口径与迟到处理部分与数据治理负责人沟通（3轮），并形成事件分层、切窗与质量旗标及出端聚合边界的定案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：麦克风、摄像头、还有答题器这种先采，然后端侧直接跑模型，把结果变成事件。事件再发到云上做汇总。可我卡在“多模态怎么对齐”，时间戳到底信谁的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "音频能出“老师在讲/学生在说”的段，还有关键词。视频能出举手、走动这种？答题是提交、正确率。设备是网络抖动、投屏开始结束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关键词我想做成只保留词表里的，比如“作业”“考试”，别整段转写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "例子的话，比如 1 分钟内检测到学生说话比例上升，就 event_type=audio_talk_ratio，scope=class，统计量=rate，窗口=1min。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点混。那音频那边原子事件就是“speaker_turn”这种？摘要才是 ratio？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。那时间戳还是信端侧系统时间？设备多了会漂吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 端侧多模态事件的时间字段怎么定？比如音频turn、举手、答题提交，这些 event_time 用什么时钟；如果不同设备时间不一致怎么办；摘要窗口怎么切；还有事件晚到怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那摘要用 ingest_time 切窗，就不怕时钟漂移？但这样 event_time 不是没用了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "迟到不回填，会不会统计不准？比如 1 分钟内的举手被漏了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。还有隐私这块，我之前说关键词词表，算不算可行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，原子事件都带 event_time 和 ingest_time。实时摘要按 ingest_time 开窗，event_time 主要给回放和同设备对齐。第二，跨设备只做弱对齐，用 heartbeat 估偏移，偏得离谱就打标不硬校。第三，晚到事件有个预算，超过了不回填实时摘要，只留给回放；摘要里带质量旗标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧事件里不允许有 student_id？只允许 class_scope 的聚合？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能接受。但 group 是啥？小组还是座位区？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那多模态采集这块，端侧到底采什么原始数据？我怕采太多，后面被说过度采集。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "音频：短时帧特征；视频：关键点或者人框；板书/课件：翻页、白板笔划事件；答题：提交事件；设备：网络质量、投屏状态。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我现在有点纠结：音频要点提取如果只输出 topic 枚举，会不会太粗，提示就不准了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行。我怕团队有人又想做“自动点评学生回答”，到时候数据流又变了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第三条里的“晚到不回填”我记住了。quality_flags 这块我之前没想到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接下来是不是要把 event_type 的集合细化？我先别自己瞎写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

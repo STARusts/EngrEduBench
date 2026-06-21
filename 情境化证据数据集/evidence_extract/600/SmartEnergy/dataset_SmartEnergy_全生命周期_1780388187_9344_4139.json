@@ -1,0 +1,643 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在氢网微渗声纹侦定与产注协配系统需求梳理背景下，用户与导师围绕微渗痛点假设、产注失衡机制与合规边界持续沟通（7轮），其中在涉氢合规红线与数据采集边界部分与氢能合规师沟通（2轮），在产注失衡核心痛点与商业闭环部分与能源商业分析师沟通（1轮），并最终明确信噪比可检假设、合规红线与最小商业闭环约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个氢网微渗声纹侦定与产注协配系统。现在氢气管网微渗太难查了，而且产气和注气经常对不上，我就想用声纹去抓漏，然后顺便把产注调度给配平了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "难测不就是漏得小查不出来嘛，声纹能听见。产注失衡就是气多气少对不上。合规不就是防爆吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉氢微渗监测的合规红线具体有哪些？是不是只要防爆就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏这块，是不是把非目标频段滤掉就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产注失衡痛点到底卡在哪？我只知道现场经常气不够注或者气放空。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "所以得加个价格激励？行，我回头把调度逻辑加上这块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是声纹特征比底噪明显呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我确实不太懂，我就知道拿麦克风录然后算频谱。流体发声机制这块我缺理论，接下来两周我得补一下流体泄漏声学基础，至少搞懂微渗射流的频域特征，不然信噪比阈值我没法定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "假设是：背景底噪60dB时，微渗声纹信噪比大于5dB可定位。约束是：响应时间小于10秒，且必须物理遮蔽非授权区，调度必须带价格激励。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "遮蔽是红线，没得谈。激励可以先做最简单的阶梯气价联动，跑通闭环就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在产注失衡业务链路拆解背景下，用户与导师围绕链路断点、声纹侦定与协配系统的业务切入点及部署约束持续沟通（5轮），其中在产注两端数据卡点与调度时延部分与能源商业分析师沟通（1轮），并最终明确链路断点、系统切入点及待验证的部署运维约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "制氢厂那边产多了没地方存，只能排空，加氢站又经常断气。链路的话，现在好像都是打电话调度吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产注两端现在业务链路是咋走的？数据卡在哪？调度时延有多大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要就是制氢厂DCS和管网SCADA不通，导致制氢那边瞎产，加氢站缺气只能干等。人工调度太慢，小时级的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "声纹发现漏了，肯定得赶紧补气或者降压吧。运维体系接不接得住，这我倒没问，应该能接吧，就是装几个传感器的事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切入两点：一是边缘声纹感知结果要能实时修正管网模型，二是云端协配要直连制氢DCS和注端计划，替代人工电话。"
+              }
+            ]
+          },
+          {
+            "microScene": "在声纹侦测可行性论证背景下，用户与导师围绕市场买单逻辑与涉氢防爆合规持续沟通（6轮），其中在市场商业逻辑部分与能源商业分析师沟通（1轮），在涉氢防爆合规红线部分与氢能合规师沟通（1轮），并最终形成声纹侦测可行性结论（市场依赖TCO优势验证，技术依赖本安防爆认证获取）。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能测出微渗肯定有市场啊，现在都是人工拿仪器巡，效率低，我们弄成自动的，客户肯定买账。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防爆？传感器不就一拾音器嘛，外头加个厚防爆壳不就完了，现场都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "客户买单的点到底在哪？就是替代人工吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防爆怎么弄？套金属防爆壳行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本安型我听过，Ex ia这个标准细节没碰过。所以就是必须拿这个证才能装？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能光看设备便宜，还得算传感器能用几年、维护几次，省下来的停检费得比这些总花费多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可以做，但得满足两个硬条件：一是声纹端必须拿本安防爆认证，二是总成本得比停检损失低。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在氢能产注协同商业模式设计背景下，与导师围绕激励闭环驱动力、验证数据口径及商业模式与系统功能映射持续沟通（5轮），其中在激励机制与验证方法部分与能源商业分析师沟通（2轮），并最终形成“底层监测保本+上层协同激励”的商业模式方向及裕度管段回放验证策略，计划补充交易逻辑需求约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收钱不还是老套路嘛，卖声纹监测设备，加上每年的软件服务费。如果帮他们做产注调度，就再收个调度费。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "驱动力就是大家都不想出事啊，微渗查出来早点修，供需失衡了大家都有损失。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产注协同这块怎么搞激励闭环？还有怎么验证这模式靠谱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但这历史数据去哪找啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就找那种经常失衡的呗，这种最需要调度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容量信用是啥意思？怎么变成我们系统的需求？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "担保？这感觉像金融产品了，我们一个搞声纹和调度的系统，还要搞信用背书？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时就搞搞嵌入式和工程落地，这种交易逻辑确实绕。我记一下，这周末把分析师刚才提的几份氢能现货交易研报找出来看看，起码弄懂容量信用怎么算，还有分成比例的行业标准，不然后面需求约束我没法写，写出来也是外行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业模式定成：底层卖安全监测保本，上层协同调度靠分成和信用激励。验证就找有裕度的管段跑历史数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把分成和信用的计算口径加进需求约束里。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在氢网微渗声纹侦定系统方案设计背景下，用户与导师围绕声纹传感频响、涉氢防爆约束、边缘算力解耦架构及断网降级持续沟通（8轮），其中在微渗声纹频段与防爆硬约束部分与声纹感知架构师沟通（1轮），在边缘侧断网降级保底部分与安全容错架构师沟通（1轮），并最终形成宽频防爆传感与独立防爆网关解耦、断网本地存储与就地报警的架构选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接上现成的工业拾音器，边缘算力用树莓派4B集群，部署快，我以前都这么干。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "频响我倒没细看，之前测过水泵振动挺准的。防爆这块，加个防爆箱不就行了？树莓派功耗低，发热小。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "氢管网微渗的声纹到底在哪个频段？普通工业拾音器能不能用？还有边缘算力这块用树莓派加防爆箱在涉氢区合规吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "超声频段啊，难怪之前经验不顶用。防爆认证这块我确实没搞过，Ex d IIB T4这些标准我都没看过，完全不知道怎么选型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查GB 3836系列标准，重点看隔爆型和本安型设计要求，还有超声频段声学传感器的选型手册。这周末前把这两个文档过一遍，整理出关键参数阈值，下周一给个靠谱的选型草案。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果用防爆终端，算力合板的话，硬件成本太高，而且现场换板子麻烦。我想着边缘算力还是独立出来，放在防爆控制柜里，用带NPU的防爆级边缘网关。传感端只负责采，网关负责特征初筛。这样万一网关坏了，传感还能换，解耦一点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设一：分体式（宽频传感+防爆网关NPU），假设二：一体式防爆终端。关键变量是特征提取的端到端时延和信噪比。如果分体式因为传输线缆引入噪声导致信噪比低于一体式，或者时延超标，就推翻分体式更好的判断。我可以在实验室用模拟氢管段，分别接这两种架构跑同样的微渗信号，对比特征初筛的准确率和耗时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关做特征初筛时，如果和云端断网了，微渗数据怎么保底？总不能丢了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传感端必须选频响到100kHz的宽频声学传感器，满足Ex d IIB T4防爆；边缘算力用带NPU的防爆网关，与传感解耦；网关要有断网降级，本地存72小时特征和波形，超限就地报警。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微渗定位算法与数据流转方案设计背景下，与导师围绕定位算法选型、端云算力切分、实时性约束及断网降级策略持续沟通（8轮），其中在空间谱估计与算力切分及断网降级粗定位逻辑部分与算法定位设计师沟通（3轮），并最终形成宽带MUSIC算法选型、端云算力切分、数据流转约束及断网降级兜底策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着边缘端直接做互相关求时延差，然后打包发云端算坐标。网关有NPU，算时延应该很快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多径反射确实麻烦。那加个滤波？把多径滤掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想用互相关求时延，但说多径反射太重不能用。这玩意儿到底怎么定位？边缘和云端算力怎么分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘提时频图，云端跑MUSIC。那数据流就是边缘把时频图传上去呗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能用互相关，得用宽带MUSIC算法。边缘NPU做STFT提特征，算协方差矩阵初值，传给云端做谱峰搜索解算坐标。平时不传原始波形，报警才传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "NPU跑STFT肯定没问题，FFT有硬件加速。协方差矩阵初算也就是矩阵乘法，应该也行。云端算特征值分解，只要并发不大，实时性应该能保。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我还没细算。我估摸着矩阵维度不大，因为传感阵列就几个阵元。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "断网了确实麻烦。边缘算不了MUSIC，定位就废了。要不断网时退而求其次，边缘只做个区域初筛？根据哪个传感器能量最大，粗定在哪个管段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网降级时云端MUSIC跑不了，定位怎么保？我设想边缘根据各阵元能量大小做粗定位，判定微渗在哪个管段，这个逻辑可行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "断网降级用能量粗定位兜底。边缘提特征时顺带算各通道短时能量，断网就比大小定管段。恢复后云端再补算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定位算法选宽带MUSIC，不用互相关。边缘NPU跑STFT提特征和算协方差初值，云端做特征值分解和谱峰搜索。数据流转平时只传特征和协方差初值，报警才传波形。断网降级时，边缘用各通道短时能量比大小做管段粗定位，特征本地存，等网络恢复云端补算。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在产注协同调度方案设计背景下与导师围绕产注协配模型约束、接口安全防护、商业激励因子及接口字段定义持续沟通（8轮），其中在模型约束与接口防护部分与协同调度设计师沟通（1轮），在商业激励因子映射部分与能源商业分析师沟通（1轮），并最终敲定多目标优化模型、动态激励权重及接口字段结构。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漏了就停注呗，压力不够就开大点。接口就传个开关指令，JSON格式，让云端发下去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这我没想过。防伪造的话，加个Token？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产注协配模型怎么建，接口怎么防伪造。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是不能硬开硬关，要算个最优解。接口得加流水号、校验、双因子和熔断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "目标是压力波动小、缺口小、成本低。约束是压力和流量上限。双因子就是得两个人确认吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "商业激励？这跟接口有关系吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度模型里的商业激励怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是看谁贵、谁重要来排优先级。这因子算出来给调度模型用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指令ID、目标站ID、动作类型（开/关/调）、目标值、流水号、时间戳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，还得加激励因子、压力上下限、校验码。回执是下游返回的，也要定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清楚了，模型算最优解，接口带这些字段，回执超差就熔断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在涉氢管网高可用容错与安全评估背景下，用户与导师围绕防爆等级、云边断连降级策略、漏报误报权衡及降级验证持续沟通（6轮），其中在防爆等级与断连降级部分与安全容错架构师沟通（1轮），并最终形成防爆iaC T4认证、四步降级梯度及漏报零容忍的容错设计基准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网就重试呗，重试几次不行就切备用节点，双机热备。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "漏报肯定不行，炸了赔不起，那就宁可误报停机，也要先保安全？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘设备是不是必须上最高防爆？云边断连后边缘侧怎么保安全？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近在补学IEC 61508功能安全标准，里面提到过安全仪表系统的降级运行，是不是可以设个“带病运行期”，锁定后给个窗口期观察，超时再彻底停？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SIL这块我还没吃透，只会套个概念。验证的话，就拔网线模拟断网呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级梯度就是：协配正常 -> 网络降级限流 -> 置信度低或断连就地锁定 -> 锁定超时强停。这样误报停气时间可控，不会一锁定就死等。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涉氢场站边端声纹采集与降噪开发背景下，用户与导师围绕录音合规、VAD算力与漏报风险、RTOS调度及备选方案持续沟通（6轮），其中在录音合规与脱敏部分与氢能合规师沟通（1轮），在VAD算力影响与硬件滤波成本部分与边缘端开发工程师沟通（2轮），并最终形成硬件带通滤除人声、软件高频降噪、禁存原音的决策及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "想直接套SpeexDSP的降噪库，先把环境底噪压下去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降噪不就是把噪声去掉吗，人声也当噪声滤了不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉氢场站边端声纹采集，录音带上人声有啥问题？我后面算法再滤不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻断人声频段，得加VAD吧？这就费算力了。边端MCU跑VAD会不会把采样周期拉长？漏报零容忍可是底线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加VAD存原声要炸，加了VAD又怕漏包。我在RTOS里怎么排优先级才稳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡在不知道怎么在I2S DMA半满中断里插VAD处理，还不影响主循环搬数据。我只会裸机思维，RTOS任务调度这块没弄过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去翻FreeRTOS的官方例程，专门看Stream Buffer和中断优先级那章。今晚跑通一个DMA+VAD的demo，测一下中断延迟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "备选方案：不用VAD，硬件上直接加个带通滤波器，把300Hz到3400Hz人声频段物理切掉，只留高频微渗特征。这样软件零负担。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "软件实在抠不出算力，就只能硬件抗。合规红线不能碰，漏报也不能有。那就硬切频段，牺牲点全频带特征提取的精度，保命要紧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策：ADC采集后，硬件带通滤除人声频段，软件侧只做高频带降噪，禁止存储原始全频带音频。验证口径：对比硬切前后微渗高频特征的信噪比损失，只要定位误差在5%内就认。我现在去写带通ADC的配置代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微渗特征提取与定位联调背景下，与导师围绕特征维度对齐、算力与特征阶数平衡及联调方案持续沟通（7轮），其中在特征需求与算力优化部分与定位算法工程师沟通（2轮），并最终形成降采样提13阶MFCC及TDOA时标的联调方案与验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按之前设计的，C结构体直接序列化推过去，里面塞了高频能量值和时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还没全跑通，算法那边刚联调就报错，说特征维度不够，没法算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我边端现在只推高频能量值和时间戳，你们定位模块吃得下吗？报错说维度缺。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MFCC？边端算力刚砍了全频带，再算MFCC会不会又爆了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "注入脚本我用pytest写一个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我试试只算前8阶MFCC，省点乘法器周期。时标我加上。脚本就用pytest挂个mock数据源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没算过依据，先试8阶吧，反正大不了再改。定位误差5%以内是红线，我盯着就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降采样率提13阶，这招行。我改改滤波后处理逻辑，把采样率砍一半再算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端滤波后，降采样率提13阶MFCC，打上TDOA时标，用gRPC推给算法端。联调用pytest注入微渗样本，验收标准定位误差小于5%。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在产注协配调度引擎代码落地背景下与导师围绕规则引擎选型、动态安全红线注入、合规审计留痕及验证方式持续沟通（7轮），其中在流式计算动态基线与审计逻辑部分与调度引擎工程师沟通（1轮），并最终确定自研轻量规则树、Kafka落库带签名审计及边界单测验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Flink接产注两端的实时数据流，直接算差值，差值超限就触发规则下发调度指令。代码架子我已经搭了一半，就是规则匹配这块有点卡。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Drools呗？之前项目用过，把安全阈值写死在drl文件里，满足条件就发指令，挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计就打日志呗？Drools我也只是会写基础规则，动态红线怎么注入我不太懂，审计留痕除了日志还能咋弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩在代码层面怎么串起来？Drools能搞动态参数吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Calcite我没用过，自己写规则树感觉容易出bug。Drools我熟啊，能不能还是用Drools，我把规则预编译好放内存里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我自己写规则树吧，这样热更新就是替换实例，不会卡主流程。虽然测试用例我得写全点，但性能我能把控。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "操作人签名是机器自动发的指令，签什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个单测，用pytest造几组超限的产注差值数据，把动态红线通过接口传进去，看规则树能不能正确触发指令并拿到Kafka的落库回执。"
+              }
+            ]
+          },
+          {
+            "microScene": "在涉氢系统端云联调背景下，用户与导师围绕安全降级逻辑与时延毛刺分析持续沟通（6轮），其中在断连降级与指令防误发部分与安全容错架构师沟通（1轮），在状态切换时延定位与埋点分析部分与测试与联调工程师沟通（1轮），并确定安全降级优先、引入混沌工程与埋点，形成测试优先级安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能好说，我直接用Locust压一下调度接口，看QPS能不能撑住产注峰值。安全的话，我加个鉴权拦截器，防一下越权访问应该就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延毛刺我还没想过。断连的话，我，就，就直接报错返回呗？还能咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉氢系统端云联调的安全测试重点看啥？断连降级具体怎么测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用Locust只测过接口吞吐，混沌工程注入网络分区这块我没搞过。不过我前两天刚学了Python的Chaos Toolkit，正好能写网络中断的实验配置。我这就把这套工具用进来，给边缘端写个断网实验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看它有没有在规定时间内切过去呗。抖动大，就，就是网络不好吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网切本地模式这操作，时延毛刺怎么抓？光看平均时间感觉不够。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改边缘端代码加埋点，然后跑Chaos实验。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "安全降级逻辑最重要，先改心跳超时和本地模式切换。然后加埋点，跑混沌实验看时延。最后再用Locust压接口吞吐。Locust压测我熟，半天就能搞定。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在氢网微渗声纹系统现网部署与端侧验证背景下，用户与导师围绕工况覆盖、定量验证方法、验证效率与统计短板持续沟通（6轮），其中在统计分析标准与验收口径部分与现网交付工程师沟通（2轮），并最终确定多工况部署计划、采用非参数检验快速验证闭环及统计能力补齐目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就准备选一段高压管段，把盒子绑上去听。之前实验室里信噪比都大于15dB，现场应该也差不多吧。工具我都准备好了，用Ansible批量推边缘端的配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证明有效？我就看能不能检出微渗信号呗。如果能检出，就说明位置对。如果检不出，我就换个位置再试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现网端侧验证声纹特征提取，置信区间怎么算？验收口径是啥？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按这个口径写个Python脚本算一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕算错了位置白装了，想自己写靠谱点。不过你说得对，时间不够。那我先用SciPy的stats模块凑合算一下，只要效应量达标就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个T检验的前提检验，正态性怎么判断？数据量不够怎么办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果数据量不够做T检验，最小样本量要多少？或者用Mann-Whitney U检验的话，怎么定验收阈值？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我发现自己对这种统计验证方法完全不熟，只会看波形图，根本不知道怎么证明结论有效。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来两周，每天花1小时看SciPy的统计文档，把假设检验和效应量的API跑一遍，写5个测试用例，集成到我们的验证工具链里。这样下次我就能自己定验收口径了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三个管段，用Ansible推配置，跑完数据用Mann-Whitney U检验算P值和效应量。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微渗定位系统在线运行且波形抖动背景下，用户与导师围绕定位精度CEP95与响应延迟P99的评估及滤波方案权衡持续沟通（6轮），其中在告警阈值与验收标准配置部分与运行监控专员沟通（1轮），在边缘侧算力开销与卡尔曼滤波影响评估部分与定位算法工程师沟通（1轮），并最终决定采用一阶指数平滑方案，配置Prometheus告警规则与Grafana面板。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想是不是得在边缘侧加个卡尔曼滤波把毛刺压一压。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看个平均值，误差平均0.8米左右。但那些毛刺看着难受，不压掉怕引发误报，产注调度那边一收到误报就乱调阀门。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CEP95这个指标Prometheus里没现成的聚合函数啊，我得自己写PromQL算分位数。响应延迟我也只看了平均的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘上定位误差和响应延迟的告警阈值，咱们以前定的是多少？现在误差毛刺多，要不要调？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算出来了，CEP95是1.62米，超了0.1米多。P99延迟185毫秒，勉强卡在边缘。误差超了，我还是觉得得加滤波，不然这指标过不了验收。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力这块我没细算，反正芯片还有点余量。丢帧倒是没想过，我只想着把曲线画好看点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧现在跑定位解算CPU占用多少？我如果加个卡尔曼滤波，会不会把延迟拉高或者搞丢帧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "一阶指数平滑？那滞后性会不会很大？定位偏了跟不上怎么办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那先上一阶指数平滑试试。我把Prometheus告警规则加上：CEP95超过1.5米就P2告警，P99超过200毫秒P1告警。Grafana面板我加个分位数图。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "平滑系数先设0.2，我去改边缘侧配置，然后刷新大盘看效果。"
+              }
+            ]
+          },
+          {
+            "microScene": "在产注协配成功率跌穿红线复盘背景下，用户与导师围绕失败根因分析与换站重试策略持续沟通（6轮），其中在失败case特征分类部分与产注运营复盘师沟通（1轮），在换站重试对管网水力稳定性影响部分与协同调度设计师沟通（1轮），并最终形成换站重试加冷却的处理策略及配置修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "掉底基本都在晚高峰，好像是注氢端拒收的多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要是产源波动和注氢中断，还有点声纹误判。都是握手超时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加超时太拖沓了，我直接在调度引擎加重试，失败就换下一个注氢站。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "换站重试的话，短时多次重试会不会把管网压力打超？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "改调度引擎的yaml配置，重试冷却设3秒，上限设2次。Grafana加个局部压升的报警规则。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运营反馈与调度策略迭代背景下，用户与导师围绕边缘侧超时处理、配置适用边界及长期资源占用影响持续沟通（6轮），其中在边缘站超时分布与配置适用条件部分与产注运营复盘师沟通（1轮），并最终形成按网络质量分层的调度策略及弱网异步降级协配方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看Grafana上重试成功率回升了，不过边缘侧那几个站还是偶尔超时。我想把冷却时间调到5秒，上限改3次，再发一版试试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘站超时分布啥情况？现在3秒2次这配置在啥条件下才管用？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来是这样，主干网和弱网差别这么大。之前我光看大盘平均数了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "调度策略需按网络质量分层，不能一刀切。弱网站不再走同步重试，直接降级成异步消息队列，先返回接受，后台慢慢配。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "按这个方向改分流逻辑，弱网判断阈值就按rtt大于2秒来切。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

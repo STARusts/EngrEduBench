@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在真机联调跨域流态时序对不齐与时隙撞车背景下，用户与导师围绕排障思路、对端协作获取关键日志及GuardBand约束量化持续沟通（6轮），其中在跨域GCL对不齐排障切入点部分与协议栈联调专家沟通（1轮），并最终形成对齐PTP、获取对端GCL时间戳及配置GuardBand的三条排障约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我抓包看了，Commit指令发下去，本侧MAC控制器的OperState确实切过去了。但流一出网卡就乱。我怀疑是交换机那边GCL表没配好，或者它根本没按我给的时隙开门。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对端协议栈那块是另一个组负责的，我没权限看他们的状态机，我只知道我给的时间偏移量是按理论算的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域流态联调时序乱跳，我这边Commit生效了，交换机那边时隙还是对不上，一般这种排障从哪下手？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间基准没对齐的话，是不是得去调PTP？还有GuardBand具体怎么算？我代码里没留这块余量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Delta就是两端配置真正生效的时间差？我算不出来，对端不给我看他们下发配置的时序逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 两边必须统一时间基准，对齐PTP；2. 对端必须吐出GCL生效的时间戳，用来算Delta；3. 我这边出队前要加GuardBand，大于同步误差加Delta。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去查一下我们用的PHY芯片手册，上面应该有标称的PTP同步精度指标，大概几百纳秒级别？我回头确认一下具体数值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云协同压测与排障背景下，用户与导师围绕林区弱网压测方案、网关缓存边界与降采样策略持续沟通（7轮），其中在弱网模拟与断点续传测试部分与端云协同排障官沟通（2轮），并最终形成包含tc弱网模拟、水位监控降采样及Flink容错验证的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测的话，我准备用JMeter直接照着网关接口并发打流就行了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "弱网环境怎么模拟啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测怎么造弱网环境？断点续传缓存要看啥指标？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来要用tc加规则。那我就加tc。断网5分钟，如果切片多，SQLite确实可能满。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关是128M内存，SQLite我默认给了20M。临界点我没算过，平时写后端代码也不看这个。我得去查查怎么算这个写满时间，或者有没有工具能直接压出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SQLite在频繁刷盘时写入速率会断崖式下跌。如果按20M算，高并发切片大概3分钟就会满。所以我得在网关代码里加个内存水位监控，超80%就触发降采样，把VAD静音段直接扔了，只传打标段保命。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "JMeter发压，tc加30%丢包和2秒延迟。断网5分钟，看网关内存水位。超80%触发降采样，恢复网络后看续传成功率，不能丢打标数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Flink背压也加上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

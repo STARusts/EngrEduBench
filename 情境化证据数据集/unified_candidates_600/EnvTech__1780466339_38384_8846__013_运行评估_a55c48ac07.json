@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在演算中枢生产环境部署验证背景下，用户与导师围绕灰度发布、回滚条件、监控指标与统计前提检验持续沟通（7轮），其中在灰度发布与回滚策略部分与运维交付调度员沟通（1轮），在验证期核心指标与统计方法部分与生境孪生监控鹰眼沟通（2轮），并最终形成包含Canary发布、回滚硬指标及A/B对比统计前提检验的交付验证硬约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Jenkins Pipeline打包，然后K8s直接替换Pod镜像。证明好不好的话，看容器日志没报错就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想直接全量更新的，有没有方便点的灰度方案？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5%流量切分我会配，回滚条件我加上延迟P99。偏差方差突增这个我记下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "部署验证期间，监控大盘重点盯什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "95%置信区间和分组T检验？Prometheus能直接算这些吗？我平时只看聚合平均值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度用K8s Canary切5%流量，回滚看延迟和偏差方差。监控这块，不能只看平均值，得算识别率的95%置信区间，还要按水深分组做T检验，用Python算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "正态性验证我确实没考虑到，以为直接调`ttest_ind`就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对统计前提检验确实不熟，每次看网上代码都是直接调包，没管正态性。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚花2小时把scipy.stats里的正态性检验和方差齐性检验过一遍，写个验证脚本，明天早上加到部署Pipeline里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用历史基线数据跑一遍，取P95作为阈值。这样比较稳妥。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，必须Canary发布，初始流量5%；第二，回滚硬指标是P99延迟超500ms或偏差方差超历史基线P95；第三，验证期必须做A/B对比，识别率看95%置信区间下限，误报率必须按水深分组做T检验，且必须先过正态性和方差齐性前提检验。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

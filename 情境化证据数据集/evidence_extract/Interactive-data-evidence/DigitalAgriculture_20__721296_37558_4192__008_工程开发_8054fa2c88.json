@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预算受限且不加平台的工程开发背景下，用户与导师围绕数据标注单元、数据集版本切分、标注质量验收与合规访问控制持续沟通（10轮），其中在最小化版本治理设计上与数据工程师沟通（三张表+不可变目录等）（4轮），在标注指南、抽检一致性与争议样本处理上与标注与质检主管沟通（3轮），并最终复述确定低成本可用的标注与版本治理落地方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "标注这块我第一反应是搞个完整的数据湖+元数据服务，把原始帧、处理帧、标注、模型都串起来，血缘全自动那种。版本治理也顺便做成DVC一套，挺“干净”的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标什么我想分两层：一层是“等级label”，比如A/B/C或者订单等级；另一层是“缺陷属性”，像瘀伤、霉斑、虫眼这种，用于可解释。版本切的话，用dataset_version把一次抽样范围固定住，里面再按split_version固定train/val/test。质量验可能做一致性：同一批样本多标几次算kappa。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标注单元我倾向用“fruit_instance”，从连续帧里合成一个实例，避免单帧噪声。每个instance里挂一组frame_id列表、对应的calib_version、还有称重的weight_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先按frame_id做标注主键，每条标注记录带一个group_key，未来如果算法侧把多个frame聚成一颗果，就用group_key聚合。group_key可以先用“传送带lane+触发序号”凑，后面再替换成track_id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 版本治理在不加平台的情况下，最小可用怎么搞？我想要能复现抽样范围、过滤条件、校准版本这些，还要让算法能一键取到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "hash怎么做比较省事？我怕把原始文件都算一遍太慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "过滤条件里错误码黑名单是指“丢帧/重复帧/校准缺失/校准过期/称重缺失”这些都剔除？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白。我还想把split也版本化，是不是在manifest里加split_seed和split_method就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@标注与质检主管 现在要做无损分级的标注和版本治理，预算很紧。标注指南和抽检一致性，最小怎么做？争议样本怎么处理才不炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code你们常用哪些？我怕大家随便写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可疑标记会不会被大家滥用，导致争议池爆炸？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先不搞DVC那套，把dataset_version当唯一入口。split也落在sample_index里，靠seed复现。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以只版本化“索引和标注”，原始数据引用uri，不复制文件；加工后的派生数据也不复制，用派生规则+输入uri复现。算力上，抽样和生成parquet索引走离线批一次就行。还有可疑/争议池不进主训练版，减少反复回灌。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这块没想太细。能不能先用两级权限：算法组只读dataset目录；质检组可写label_index但不能动sample_index。审计就记录谁读了哪个dataset_version？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把audit_log加上。subset分配我担心会不会复杂，我想用task_id，把sample_id列表固化给每个标注任务。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "标注指南也要版本号？我怕文控又要搞大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我再加个label_version字段，跟guide_version绑定。label_payload里也可以塞一个schema_version，方便以后扩字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我给一版最小的：  \n- grade：枚举（例如 A/B/C 或 1/2/3，按标准映射后的）  \n- defect_major：枚举数组（bruise/mold/insect/rot/crack 这种，最终以质检定义为准）  \n- suspect_flag：bool  \n- suspect_reason：枚举（GLARE/OCCLUSION/BLUR/FRAME_CUT）  \n- comment：可选短文本（限长）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "默认过滤我建议：  \n- 采集错误码命中：丢帧、重复帧、校准缺失、校准过期、称重缺失 => 剔除  \n- calib_version为空或未通过版本校验 => 剔除  \n- 同一frame_id重复出现 => 只保留第一条并记warning（这条可能需要你确认）  \n- 图像尺寸/波段数不符合预期 => 剔除"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收到，那重复也进黑名单并统计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终落点我按你要求压住复杂度：  \n1）版本单位：dataset_version为唯一入口，任何样本增删改都新开版本；原始多光谱文件不复制，只引用uri，不可覆盖写。  \n2）三张表：dataset_manifest（来源/过滤条件/样本数/hash/split信息）、sample_index（sample_id=frame_id+uri+calib_version+错误码+weight_id等快照）、label_index（dataset_version+sample_id+guide_version/label_version+payload+qa状态）。  \n3）标注单元：先按frame_id标注，预留group_key做弱聚合但不承诺一果一键。  \n4）标注内容最小集：grade、defect_major(3-5类重大缺陷)、suspect_flag+suspect_reason、comment限长。  \n5）一致性与争议：每批5%-10%双人复标，记录分歧矩阵；不一致或可疑进争议池，由质检裁决并写reason_code枚举。  \n6）默认过滤：丢帧/重复帧/校准缺失/校准过期/称重缺失等错误码样本默认剔除；异常样本计数进manifest，便于对账。  \n7）合规最小化：dataset_version级ACL + task_id分发subset；audit_log记录读写；对外证据包不带可识别个人信息，站点/操作员用内部ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

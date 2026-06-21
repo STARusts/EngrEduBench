@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估中构建教师反馈闭环背景下，用户与导师围绕反馈字段、证据绑定、状态回传、阈值验证与合规治理持续沟通（7轮），其中在最小字段与证据链设计上与数据分析师沟通（3轮），在教师侧入口与状态承诺设计上与产品经理沟通（2轮），在free_text敏感信息检测、权限与留存上与数据治理官沟通（2轮），并形成可落地的闭环MVP口径与缺陷/告警接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按最省事的想法：老师在教师端点“反馈”，填问题类型+一句描述；我们后台按版本、学校、课程聚合一下，出个 Top N，然后每周发给产品和研发。大概就这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我能想到：问题类型（卡顿/学生收不到/资源打不开/流程不顺）、发生环节、严重程度、是否影响教学目标、再加截图。归因就先按问题类型去找对应的监控指标，比如“收不到”就看 delivered 相关。回传机制……在教师端给个“已受理/处理中/已解决”的状态？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 反馈要能和课堂执行对齐，你觉得最小字段集要哪些？还有怎么把“主观吐槽”变成可统计的证据链？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "引用“最近5分钟汇总摘要”这条我有点不确定，会不会太重？我们要实时算吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "symptom_code 你能给个起步枚举吗？别太多，我怕老师选不过来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 教师反馈闭环这块，老师侧要看到处理进度，但又不能太打扰，你建议怎么设计？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态里“无需修复”会不会刺激老师？感觉像被敷衍。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定一个 MVP：  \n- 反馈提交字段：symptom_code（那 8 个起步枚举）、severity(1-3)、free_text（限 200 字）。  \n- 自动带上下文：tenant_id、school_id、class_session_id、script_id/script_version、step_id/step_type、client_version、network_type。  \n- 运行摘要：直接带当前环节卡片上的 expected_cnt/received_cnt/end_reason，再加一个 delivered_rate（如果面板有）。  \n- 内部看板：按 symptom_code、script_version、client_version、network_type 分组看量和占比，并能点进去看到关联的那条环节摘要。  \n- 老师回传：四态：已收到→已定位→已修复待发布→已发布/已解释。每条给响应时限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值我先拍脑袋：同一个 symptom_code 在同一 script_version 上，一周内影响到的 class_session 数超过 5，或者 feedback 数超过 20，就拉进“本周必须处理”。归因规则先用你前面监控那条最短路径：先看 accepted 是否失败/缺失，再看 pushed vs delivered 分离，再用 error_code、client_version、network_type 分组。拍板流程：产品经理定优先级，研发给修复成本，导师你这边做最终取舍？"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "研究动作：两周内把试点学校分两组，按“每节课反馈率”和“重大 severity=3 占比”看分布，先取 P90 做告警阈值候选；再回看这些点对应的运行摘要（比如 end_reason=timeout 占比）是不是也异常，能对上就保留阈值，不对上就调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规上：反馈不带 student_id；class_session_id 也不能反查到学生名单的界面默认不开放；如果需要个人级排查，走审批+审计。老师的身份可以在反馈系统里有，但看板默认不按 teacher 维度展示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 教师反馈闭环里会有 free_text，可能夹带学生姓名等敏感信息。我们怎么做字段分级、脱敏、留存和权限，才符合校园合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "敏感检测这块我担心误杀，老师写“张三”这种会不会都被拦？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我按 6 条讲：  \n1）反馈最小字段：symptom_code(8-10枚举)+severity(1-3)+free_text(≤200)。  \n2）自动上下文：class_session_id、script_id/script_version、step_id/step_type、client_version、network_type、tenant/school。  \n3）证据绑定：随反馈保存当前环节卡片的 expected_cnt/received_cnt/end_reason（可选加 delivered_rate），用于把主观反馈对齐到执行链路。  \n4）老师侧回传：已收到→已定位→已修复待发布→已发布/已解释；每条给响应时限，必要信息（网络/版本）系统自动带出。  \n5）阈值与验证：先用经验阈值触发“必须处理”，两周内用反馈率与 severity3 的分位数（P90）校准，并用运行摘要对照验证。  \n6）合规：不采 student_id；free_text 提示不填个人信息，做高风险模式检测+掩码；聚合看板默认不展示教师/个人维度；原文隔离区 7-14 天清理，反馈掩码版留 180 天，全程审批+审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补上：symptom_code 命中阈值后自动生成缺陷候选，推到产品/研发的缺陷池；如果同时出现 delivered_rate 断崖或 timeout 激增，就同步给运维告警，但只用聚合维度，不带个人信息。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

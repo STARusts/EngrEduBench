@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在直播链路联调压测后的回放可复现实验落地背景下，用户与导师围绕“最小可复现集”、三种回放模式与验收门禁持续沟通（7轮），其中在字段最小集与验收口径上与测试工程师沟通（2轮），在字段可落范围、脱敏与保留周期上与合规与隐私官沟通（1轮），并形成最小回放包字段清单、三种回放模式及A/B/C门禁用于实现拆分。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是时间吧。还有网络抖动。反正回放就把数据录下来再播一遍，应该就能复现。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都录也行？原始和处理后都留着，回放就对一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 回放可复现实验要怎么做？需要录哪些东西才算能复现？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是把所有事件都记一遍，然后回放按 seq 重放，输出对齐就行。阈值先 5ms。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，那就两种模式，加丢弃数和队列深度。我去问合规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 回放包里能落哪些字段？我们想做可复现实验，但之前说不落弹幕原文、音频图像特征、可反查 user_id。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时间戳只能单调的，不要UTC那种。保留7天，走工单。了解。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试那边说要 replay_id、hash 的 session/room、t0、seq、单调时间、媒体时间、事件类型、聚合payload、版本、seed，再加丢弃数和队列深度。合规说不能有原文、原始特征、设备标识，id要加盐哈希，时间最好别落UTC，留7天。那我就全采纳。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "队列深度就服务端采吧，端上应该也有队列，但不一定要。随机我不确定，我们可能没有随机。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跨版本对比是指同一个回放包，用不同版本跑，看差异？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "deterministic 就按 seq 喂事件，不管时间间隔，主要看输出是不是一致。timing 就按单调时间间隔回放，看会不会因为抖动导致跳变。跨版本就是同一包换版本跑，输出差异要可解释。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "字段：replay_id；session_id_hash、room_id_hash（按天盐）；t0 单调起点；event_seq；event_ts_mono_ns；event_ts_media_ms；event_type；payload_compact（valence/arousal、置信度、人数n、窗口w、平滑开关之类）；config_version；build_fingerprint；可选 rng_seed；还有 dropped_count/reject_count；queue_depth_sample。合规：不放弹幕原文、音频图像特征、设备标识、可反查user_id，不放UTC墙钟。保留7天，工单授权访问，有审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "门禁一是同版本同包输出序列要一致，误差……就是 5ms 和 1e-4。门禁二是 timing 模式下要能复现丢弃和队列变化趋势，不然就算没复现到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跟合规对齐。还有测试做检查。采样周期 200ms 也行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧就把 render_ack 这种带 media_ms 的事件上报到回放包里？回放时让端按这个 media_ms 去对齐渲染。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "event_type 加：emotion_agg_update，choreo_cmd_out，render_ack，rule_reload。差不多。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我按这四条做。录制器和回放驱动我先照字段塞进去，比对器就按“首个分叉seq”去报。合规扫描我找合规那边确认规则。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

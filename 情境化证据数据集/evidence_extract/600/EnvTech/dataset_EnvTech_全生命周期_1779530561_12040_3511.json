@@ -1,0 +1,573 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在微域冲洗自适应调度引擎项目需求梳理背景下，用户与导师围绕业务痛点拆解、研究假设提出与反驳标准设定持续沟通（6轮），其中在微域脱盐痛点拆解部分与生态修复规划师沟通（1轮），在取水配额合规约束部分与水权合规分析师沟通（1轮），并最终明确核心痛点、合规红线、研究假设与反驳标准，制定短期学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上有不少水文模型的开源包，能不能直接拿来套一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "具体怎么定义“效果不好”，我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盐碱地漫灌在微域尺度上到底有什么问题？为什么老是返盐？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点是局部脱盐不达标引发的返盐，导致一直要反复洗，长期成本下不来。那我们做自适应调度，就是要针对微域异构去精准给水。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得就是自适应冲洗脱盐率比漫灌高吧。但具体怎么检验，我不太会设计这种实验，平时都是跑现成代码看指标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农业冲洗用水的配额具体是怎么卡的？我们做自适应调度会不会超配额？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前没想过这块。对于怎么把配额算进调度里，我完全没概念，我只会用开源调度框架的默认配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来一周先把《区域农业水权分配规范》看一遍，再自己手推一下一维水盐方程，至少弄懂边界条件怎么定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果在配额上限内，微域冲洗的吨水脱盐量比漫灌的基线数据还低，或者脱盐方差没缩小，那就说明这引擎没用。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在盐碱地修复引擎画像梳理背景下与导师围绕画像构建、兜底机制与配额红线冲突持续沟通（5轮），其中在业主决策逻辑与操作员行为惯性部分与生态修复规划师沟通（2轮），并最终形成业主合规避险与用户容错兜底的画像核心及人工接管受配额硬约束的需求定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "业主肯定是想要脱盐快、省水费；操作员就是不想太累，最好全自动，别让他去地里跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这项目面对的修复业主和现场业务用户，他们的画像到底该怎么画？有没有比较方便的分类框架？另外他们对自适应冲洗到底买不买账？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这不就推不动了吗？他们怕担责，我们这引擎不就是要替代他们经验吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以我得给他们弄个兜底开关？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就在开关里加个限额？可是加了限额兜底的时候水不够用怎么办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "业主画像：合规避险、降本增效；用户画像：容错兜底、操作极简。核心约束：人工接管和兜底模式必须受配额硬约束，不能超上限。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在水权约束与环保合规审查背景下，与导师围绕脱盐业务诉求与水权红线的冲突取舍及需求策略定义持续沟通（5轮），其中在合规底线与弹性空间部分与水权合规分析师沟通（2轮），在脱盐业务最低洗盐定额部分与生态修复规划师沟通（1轮），并最终形成配额耗尽时的双分支调度策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能直接找个现成的合规规则库套一下？我看网上有些项目是直接接政务水务API查配额的，拿过来用不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果自有配额不够冲，能不能申请临时超采？或者搞个审批流，超了就发工单让人工批？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "要是水权卡死了，水不够用，脱盐率达不到业主验收标准怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一边一滴水都不能多拿，一边少一滴水都不干活。这完全矛盾啊。能不能搞个开关，快超限的时候直接停机？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，批了也没水。那，是不是只能降目标？水不够就少冲点，告诉业主脱盐率只能做到这样？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "买水？这成本就高了啊，业主能愿意？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这得看业主愿不愿意出这笔买水钱。但我做系统，得把这两种情况都覆盖进去吧？不能直接写死一种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "水权与环保合规约束：严禁超采和超标排污。当自有配额耗尽且脱盐未达标时，系统需提供两种可选调度策略：一是停机等待配额周期刷新，二是触发水权交易购买临水指标继续冲洗。默认执行停机策略，需业主在业务配置中显式授权才可开启交易模式。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在商业闭环与运营战略规划背景下与导师围绕商业模式、数据可信度与结算指标持续沟通（6轮），其中在按效付费与数据闭环设计部分与商业模式架构师沟通（2轮），在脱盐率度量标准与基线确认部分与生态修复规划师沟通（1轮），并形成按效付费闭环、EC值结算指标及最小验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卖系统呗。把引擎包装成SaaS，按年收订阅费。网上很多农业物联网项目都是这么搞的，有个现成模板套一下就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "SaaS收年费他们可能不认，觉得是割韭菜。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想套SaaS模板，但好像走不通。这种项目一般怎么收费？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "按脱盐效果结算？听起来不错。但怎么算这个效果？数据闭环是啥意思？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说按效付费，就是按脱盐量收钱，不用SaaS了。弄个数据闭环，引擎发指令，传感器收数据，算出脱盐量直接乘单价。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用区块链！把数据上链，不可篡改。我看网上很多人这么搞，加个插件就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "系统自己调度自己算效果，业主肯定怀疑我们给自己多算。那得引入第三方？或者把计算规则公开？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "请问脱盐率度量有啥行业标准吗？我们想按效付费，怕业主不认我们的数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用EC值差值算，冲洗前定基线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "闭环就是：双方确认初始EC基线 -> 引擎调度冲洗 -> 采集冲洗后EC -> 算脱盐率 -> 乘单价结算。最小验证的话，我得找个小地块，跑一次冲洗，看看业主能不能接受这种结算方式，还有EC值测量准不准，会不会因为土壤异质性导致数据波动太大。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对这种环保项目的商业模式太不熟了，老想着卖软件。我得把“按效付费”和“基线确认机制”加到我的学习清单里，这周找几个农业水权交易的案例看看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在需求里，把“结算规则与基线管理”作为一个独立模块加进去，不能只写调度算法了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业闭环与运营战略：1. 核心模式：按效付费，不采用SaaS年费。2. 结算指标：基于冲洗前后土壤EC值（电导率）的下降率，需双方事前确认基线。3. 数据闭环：调度指令-现场动作-EC回传-效果计算-费用结算。4. 风险控制：解决“既当裁判又当运动员”的信任问题，依赖客观物理量与事前基线确认。5. 待验证：最小地块的结算流程跑通与EC数据稳定性。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在生境水盐反演调度引擎数据流架构设计背景下，用户与导师围绕架构选型、时空对齐策略及数据流闭环路径持续沟通（6轮），其中在边缘侧多源异构数据接入与弱网对齐约束部分与孪生数据架构师沟通（1轮），并最终确定边缘侧时空对齐架构及数据流闭环路径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看好多物联网开源项目都是Kafka加Flink那套，咱们是不是也能直接搬过来用？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时空对齐我确实没细想。我看网上很多就是加个时间戳传上去，在云上用数据库补齐。有没有更方便一点的办法，比如直接用TDengine自带的对齐函数？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设边缘侧做时空对齐比全传上云再对齐的延迟更低？对照组就是云端对齐，指标就看指令下发到动作的端到端延迟，还有断网恢复后的数据失步率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在边缘侧怎么处理不同采样率的传感器数据，比如EC传感器和水分传感器频率不一样，有没有轻量级的框架能直接调？现场网络经常断。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个水印机制我之前只听过名字，没具体用过，这块我确实有短板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚就去翻eKuiper的官方文档，专门看水印和乱序处理那块，争取在本地跑个流模拟迟到的demo。然后把这个机制加到我们的接入标准设计里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确定选边缘侧时空对齐。数据流闭环是这样：异构传感节点上报原始数据，边缘网关做协议解析，然后在边缘侧用eKuiper做时空对齐和打标水印，反演引擎消费对齐后的数据生成调度指令，指令下发到阀门执行，执行后的EC值回传触发结算闭环。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在反演引擎路由与调度接口设计背景下，与导师围绕路由机制与接口拆分持续沟通（6轮），其中在路由分发与接口要求部分与算法路由设计师沟通（1轮），并最终弃用API网关，确定自研基于特征与误差的路由分发及上行gRPC与下行MQTT的接口边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接复用API网关，比如Kong或者Spring Cloud Gateway，根据请求里带的地块ID，把数据转发给对应的算法服务就行。这样最省事，路由逻辑都不用自己写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态挂不住的话，我在网关后面加个Redis缓存一下前时刻的状态不就行了？反正网关只管转发，业务逻辑自己处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法这边对路由有什么要求？我想用现成的API网关做转发，加个Redis存状态，这样搞行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有类似Triton Inference Server那种现成的框架？它好像能管模型路由和gRPC接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C++写的求解器确实不好塞进去。那是不是反演接口和调度接口得拆开搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行gRPC接口里要有地块ID、时间戳、多维感知张量，还要有个字段指定当前精度需求或者模型版本？下行MQTT就是阀门开度、冲洗时长、预期脱盐率这些。路由逻辑我就按专家说的，看误差和负载来切模型。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微域孪生与边缘高可用方案设计背景下，与导师围绕弱网断网下阀控兜底与验证方案持续沟通（8轮），其中在边缘网关本地推演与状态机闭环容灾部分与边缘高可用架构师沟通（2轮），并最终形成弃用云端重连、采用边缘网关内置孪生推演与状态机闭环自治及混沌工程验证的架构决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接上云边协同架构，用K8s分发孪生模型，MQTT Broker做集群，断网了等云边一重连指令就能恢复，感觉挺省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那有没有那种一键自治的框架？我看网上KubeEdge好像有边缘自治功能，能不能直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农田断网阀控要毫秒级，云边协同来不及，怎么搞高可用？孪生推演放哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地跑孪生推演？网关那点算力够吗？状态机闭环是不是那种边边协同的容灾？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前看KubeEdge的边缘自治文档，好像也是断网自治的思路，是不是可以直接套这个方案？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这底层机制我确实没细看，光看了个名词。看来不能直接套KubeEdge。我得去查查边缘状态机怎么做无缝接管了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "认。只能在网关里写状态机了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那验证的时候，是不是拔网线试一下就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就多断几次？长短不一地断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能光靠手拔。得写脚本注入故障，跑个几十次看偏差分布，还得看不同丢包率下的状态机流转是不是还正常。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "弃用云端重连兜底，边缘网关内置轻量孪生推演与状态机闭环实现断网自治；验证采用混沌工程注入弱网故障，统计脱盐率偏差。我这就去查状态机无缝切换的写法。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在生境水盐反演调度引擎工程开发背景下，用户与导师围绕弃用云SDK与开源库、转向边缘自治与代理模型对照验证及知识补全持续沟通（7轮），其中在边缘协议解析与断网缓存部分与嵌入式通信开发者沟通（1轮），在水盐PDE代理模型与对照验证部分与反演算法工程师沟通（1轮），并最终形成轻量解析加边缘时序库、代理模型加传统求解对照及偏差阈值5%的开发决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感知网接入和反演模块，我打算直接拿现成的物联网云平台SDK拉数据，反演找个开源PDE库套一下，应该很快就能跑通。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能直接调包吗？我看网上很多人就是这么接传感器的。开源库也是，都有API了直接传参不就行了，自己写多麻烦。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂底层协议和偏微分方程推导。只会用现成框架。这我得赶紧查查怎么补这块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有轻量级的现成框架能搞定LoRa这些？我不想从零写底层代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演这块我不想手写PDE。有没有封装好的代理模型库？我直接灌入土壤参数出结果就行的那种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通信那边说用轻量解析库加本地时序库存数据，反演那边说用代理模型，但得留着传统求解做对照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑两组数据看看误差？差得不多就只用代理模型。具体阈值我真不知道怎么定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺这块。我接下来一周，每天花2小时看Richards方程的有限元解法，在Jupyter里写demo跑通；时序库这边照着TDengine边缘版文档写个写入压测脚本。"
+              }
+            ]
+          },
+          {
+            "microScene": "在软硬件联调背景下，用户与导师围绕弱网下阀控指令确定性架构与安全保护持续沟通（5轮），其中在边缘指令架构部分与边缘高可用架构师沟通（1轮），在卡死故障模拟部分与联调测试工程师沟通（1轮），并最终确认弃用EMQ直连，采用网关本地状态机闭环、5秒看门狗超时全关及电平钳位测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接上EMQ X的边缘版做MQTT下发，它自带规则引擎，反演结果一出来直接转JSON发下去，应该挺快的。我看网上好多物联网项目都是这么连设备的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，EMQ有离线消息缓存吧？等网好了再发。卡在中间的话，我可以加个心跳检测，超时就重发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网下怎么保证不卡死？用EMQ边缘版能行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写状态机好麻烦啊，有没有那种边缘侧的轻量级状态机框架？比如用Actor模型那种？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "安全态应该是全关吧，断水总比淹了强。超时，我不太清楚阀门走完全程要多久。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要写个看门狗超时保护，联调时怎么模拟阀门卡在半开状态？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我大概懂了，不能用EMQ直连，得在网关里写C或者Go的本地控制逻辑，接GPIO，自己管状态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。网关本地闭环，看门狗5秒超时全关，电平钳位测故障。我这就去翻边缘网关的GPIO文档。"
+              }
+            ]
+          },
+          {
+            "microScene": "在孪生仿真压测与性能调优背景下，用户与导师围绕边缘网关压测手段、计算瓶颈定位、精度与速度平衡及降频保底策略持续沟通（4轮），其中在压测指标采集部分与联调测试工程师沟通（1轮），在模型推理边缘优化与延迟影响边界部分与反演算法工程师沟通（1轮），并最终形成Py-Spy采样、ONNX INT8量化及P99延迟目标的调优决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我装个Locust，对着网关的调度接口发压，看看QPS和响应时间行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键出性能报告的工具？我不想自己写剖析逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关上做压测，怎么抓CPU和计算耗时？我不想装一堆乱七八糟的探针。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调那边说P99得卡2秒内。现在水盐反演模型跑一次要多久？太慢的话有啥现成的加速包没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上个项目查内存泄漏我用的Py-Spy画火焰图，挺好使的，这次直接拿过来找反演计算的GIL锁瓶颈应该也行。我把模型转ONNX，再用Py-Spy盯着，这样既能加速又能找准瓶颈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化我选INT8，精度掉个2%应该能兜住。P99如果还超2秒，我就把反演频率降一降，从每秒一次改成两秒一次，虽然慢点但不会触发5秒看门狗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改模型导出脚本。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘引擎现场部署验证背景下与导师围绕容灾、指标采集与精度检验方案持续沟通（7轮），其中在弱网指令容灾部分与边缘高可用架构师沟通（1轮），在异构节点指标采集部分与部署运维专员沟通（1轮），在精度检验口径部分与环境指标评估师沟通（1轮），并最终形成含MQTT降级、分架构镜像、边缘聚合及配对T检验的部署验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上很多边缘AI项目都用K3s，直接套这个发行版一键推过去行不行？压测都过了，部署应该很快吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "弱网的话，K3s不是自带轻量级容器网络和断点续传吗？算力波动我就用cgroup限核。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "精度验证我有点发懵，压测时说好INT8量化精度掉2%以内，到了现场真掉了我怎么发现？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "K3s在农田弱网下指令下发能保证确定性吗？现场节点部署，P99和脱盐率这些指标怎么采比较方便？有没有现成的Prometheus模板直接套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得加MQTT降级链路，还要分架构打镜像。指标用边缘Prometheus聚合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把反演结果导出来，用pandas算个差值，画个折线图看看走势？一般差别不大就放过了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "INT8量化后现场的反演精度，怎么检验才不会把噪声误判成模型劣化？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "说实话不太懂。平时算指标就用pandas求个平均数。P值和置信区间这块我不会算，也没写过这种检验脚本。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我下一轮得把这块补上。用Python的scipy.stats包，学一下怎么做T检验。目标是一周内写个自动比对脚本，输入FP32和INT8的结果，输出P值和置信区间，跑通后接入部署验证流程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边缘部署用K3s，但必须加MQTT本地降级链路保阀控指令确定性；2. 容器镜像分ARM和x86架构打；3. 指标用边缘Prometheus聚合网关，只传分位数结果；4. 反演精度验证用配对T检验，要求P>0.05且差值95%置信区间上限<2%。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估背景下，用户与导师围绕脱盐效能监控口径、水耗异常归因及合规约束持续沟通（8轮），其中在效能口径与优势流归因部分与环境指标评估师沟通（2轮），在用水配额硬约束部分与水权合规分析师沟通（1轮），并最终形成效能看累积比、异常查含水率梯度、红线卡配额、日志留快照的监控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用Grafana连Prometheus，套个时序异常检测的库，比如PyOD，看曲线就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "飙高就发告警呗。PyOD里有孤立森林算法，丢进去跑，异常了就钉钉报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱盐效能和水耗异常，业务上咋定口径？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以得加土壤含水率传感器？还是说在反演模型里算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我搞不懂优势流怎么看。能不能还是用异常检测库，把含水率数据也丢进去，让它自己找规律？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "水耗飙高的话，用水配额会不会有问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配额余量做硬约束，审计日志好办，Prometheus本身就能存数据，或者写进InfluxDB。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 脱盐效能口径用累积量算；2. 水耗异常得验证是不是优势流通道，不能光靠算法包；3. 配额余量卡死在调度引擎里；4. 审计日志不能用时序库存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对比异常微域和正常微域的含水率方差？如果方差大就是通道形成了？"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估期阀控指令下发滞后背景下，用户与导师围绕滞后溯源、超时降级止损策略及日志留痕持续沟通（6轮），其中在指令链路卡顿定位部分与异常溯源专员沟通（1轮），并最终形成500ms降级阈值、上一轮有效指令保底及审计日志字段方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看面板上延迟偶尔飙到800毫秒。是不是网络抖？加个消息队列缓冲一下行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异常溯源专员 帮忙看下指令链路呗，到底是网络卡还是算力卡？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型推理卡了？这就难办了。那要不换个小点的模型？或者加个Redis缓存推理结果？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "止损的话，那就限制推理时间？超时就别算了，直接发个默认指令？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保底指令就发上一轮的有效指令吧，反正土壤含水率变化没那么快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志留痕我就把超时时间、降级标志和实际下发值打出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果不彻底修好推理慢的问题，后续一直降级也不是事啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阈值设500ms，超过就降级。审计日志加上`is_degraded`和`fallback_cmd_id`。"
+              }
+            ]
+          },
+          {
+            "microScene": "在反演模型迭代规划与业主反馈冲洗不均匀背景下，用户与导师围绕反馈归因、局部异质性特征改造、物理机制验证方案及能力缺口持续沟通（4轮），其中在反馈归因部分与迭代产品经理沟通（1轮），在模型特征与边界修改部分与反演算法工程师沟通（1轮），并最终确定加黏土夹层特征、收缩外推边界及分区对照验证的迭代方向与学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级触发大概2%，还好。业主反馈我用Grafana看板拉了，他们主要吐槽边角脱盐率没达标，冲洗不均匀。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想着能不能用网格搜索工具把全局冲洗时长参数再扫一遍？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业主说冲洗不均匀，这到底算哪类需求？我直接改冲洗时长参数能平息投诉吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产品经理说要加局部土壤感知，模型这边是不是要加特征？有没有现成的特征工程库能直接跑这种空间异质性？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "加边界条件重解？这有点超我能力了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想着能不能找个AutoML工具自动搜一下特征组合，这样快一点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿新数据跑一下，看Loss降没降？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没太深入，之前一直用代理模型工具包，边界条件这块确实没搞懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周把Richards方程边界条件搞懂，下期写特征提取逻辑。那迭代方向就定加黏土夹层特征，收缩外推边界，验证按沙壤土和夹层分区对照来做？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在通感信道异常抖动排查背景下与导师围绕抖动归因、时延定位、排查脚本改进与适用边界持续沟通（7轮），其中在时戳错位特征点定位部分与切片测试工程师沟通（1轮），并最终修正归因误差，将queue_depth监控加入排查脚本，明确信令拥塞排查逻辑的适用边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按Jakes模型，高多普勒频移下相干时间缩短，信道快衰落肯定会导致SINR剧烈波动。是不是信道估计的插值算法没跟上衰落速度？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "差了几个时隙，如果是导频配置密度不够，信道估计滞后，也会有时延啊。或者，不对，是CSI上报周期太长？我得看看具体指标对齐情况。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SINR波动波谷和信令下发差了几个时隙，这种怎么抓特征点定位？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果是排队堵了，频控信令就滞后了，调度器拿到的是过期的CSI，所以SINR对不上时戳。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不成立了。我刚才只看了多普勒频移的理论影响，完全没考虑L1信令处理的工程瓶颈。误差就在于我把抖动全归因到物理层了，忽略了协议栈处理排队时延。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "现在把queue_depth的监控加到排查脚本里，只要depth变化率超过阈值，就判定是信令拥塞，这样能直接区分是物理层衰落还是协议栈拥塞，排查效率能提一截。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只有在高多普勒叠加通感并发的时候，信令量激增，queue_depth才可能突增。如果是单纯的环境噪声抬高，queue_depth不会变，SINR会整体下降而不是时戳错位。所以这个排查逻辑只适用于信令拥塞场景，不能外推到噪声干扰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

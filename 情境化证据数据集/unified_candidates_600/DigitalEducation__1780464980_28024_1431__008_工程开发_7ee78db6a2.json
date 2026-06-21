@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在动态支架推荐链路串联与实时联调背景下，与导师围绕支架匹配方案选型、联调接口定义及异常降级策略持续沟通（9轮），其中在向量检索链路延迟与强规则干预可行性部分与后端核心开发沟通（2轮），在卡点特征数据格式部分与算法工程师沟通（1轮），并最终确定采用Aviator表达式引擎及兜底降级逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以直接上向量检索。把支架资源向量化，然后拿卡点特征去搜最近的，这样最灵活，语义匹配度高。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟的话，Milvus查也就十几毫秒吧？强干预我还没细想，可能可以在外面加个判断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用向量检索做支架匹配，导师让我问下链路耗时和可行性。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Aviator是不是太硬了？以后支架库大了，维护规则得写死吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "后端说向量检索链路太长，延迟不可控，强规则也不好弄。他们建议用Aviator表达式引擎，本地算。但我怕规则太死板，不够智能。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们识别出来的卡点特征，是那种长文本的，还是结构化的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法输出的确实都是枚举值，没长文本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选Aviator表达式引擎。特征直接作为上下文入参，匹配规则输出支架ID。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "算法侧输出 `BlockFeature` 对象，包含 `type` 和 `level`；后端侧接收对象，跑Aviator返回 `ScaffoldPayload`，包含 `scaffoldId` 和 `renderData`；前端拿 `ScaffoldPayload` 渲染。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "构造几个典型的卡点特征，比如逻辑跳跃和概念混淆，看后端下发的支架是不是符合预期规则，前端能不能正常弹出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则未命中返回默认的鼓励提示；算法延迟超200ms，后端直接走兜底推荐逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是根据当前写作的段落主题，推一个通用的思维导图半成品，这个不需要算特征，本地缓存里拿就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

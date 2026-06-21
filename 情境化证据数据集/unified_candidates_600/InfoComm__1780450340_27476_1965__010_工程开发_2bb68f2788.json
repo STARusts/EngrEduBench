@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端信令风暴压测调优背景下与导师围绕级联雪崩复现、临界点判定与防抖、降级验证及验收口径持续沟通（7轮），其中在级联雪令涌动构造与降级兜底部分与性能压测专家沟通（2轮），并最终形成极端压测调优验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极限压测？我就把TRex的发包速率拉到最大，打到CPU跑满或者Pod OOM被杀不就行了？网上的压测教程基本都是这么干的，调大并发数看什么时候挂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "想打出AMF到SMF到UPF的级联雪崩，TRex这边有什么好用的模板或者现成脚本吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来是打Attach和Paging的混合风暴。那我回去改改TRex的lua脚本，把这两种信令按比例混发。只要把UPF流表打满，就能测出临界点了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前写Controller逻辑时，只要推演输出要扩，我就直接发扩容请求，没考虑过时指标的问题。这算是我知识上的盲区。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看KEDA源码时，发现它里面用了个滑动窗口算法来做指标平滑，好像能解决这种抖动问题。我能不能把滑动窗口的逻辑抠出来，套在我的Controller里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "削掉尖峰反而更危险了。那滑动窗口不能直接用，我得改。如果在窗口里加一个极值检测，如果峰值超过阈值，不管窗口均值多低，都立刻触发扩容？这样既防了抖动，又不会漏掉尖峰。我这就去改Controller的调谐逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推演超时就切静态水位。如果UPF流表满了，推演肯定也会超时，应该能自动触发降级吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用TRex构造Attach和Paging混合风暴，专门测UPF流表容量极限；第二，Controller调谐逻辑里加上带极值检测的防抖，防止过时指标导致振荡；第三，压测时必须验证UPF流表打穿、推演超时后，能不能平滑降级到静态水位。如果这三点都过了，极端压测就算调通了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

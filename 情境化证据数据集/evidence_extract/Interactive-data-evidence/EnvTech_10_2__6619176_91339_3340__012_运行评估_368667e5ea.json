@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在碳基土壤修复量化与信用结算系统联调压测后上线验收背景下，用户与导师围绕验收清单/判定归因、最小披露与对账一致性、审计留痕及基线冻结点与变更追溯持续沟通（13轮），其中在基线冻结字段、证据链最小集合与变更触发规则上与合规与核证负责人沟通（2轮），并收束为可执行的上线准入条件与基线固化规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "碳基土壤修复量化与信用结算系统这边联调压测跑完了，我想把“上线验收与基线固化”这块一次性收紧：验收清单、基线冻结点、以及上线后口径不漂移的证据链，今天把边界和准入阈值定死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一个草案：验收我按三条红线做门禁——幂等不产新单、replayCheck 抓 digest mismatch、最小披露不泄露明细；再加性能阈值按 P95 和 5xx 比例。基线固化我想做成“基线版本号 + 生效时间窗 + 方法学参数哈希”，上线那天把 hash 写进审计日志，后续变更只能走审批。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收清单我拆四块：1）功能链路：A-E 五个场景跑通；2）安全合规：最小披露策略在前端和接口都兜住；3）结算一致性：量化引擎输出、核证审阅页展示、结算单据三者对账一致；4）性能稳定：目标并发 30 分钟，P95、5xx 不超过阈值。失败归因用“三要素”打点：接口、request_id、期望与实际错误码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证负责人 上线验收要做“基线固化”。请你给出：1）基线必须冻结的字段清单（方法学/边界/参数/数据源版本等）；2）证据链最小集合（上线验收时必须具备哪些留痕）；3）允许变更的范围与变更触发条件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这里我理解成两层：基线冻结的是“计算规则+数据源版本+采样策略”，运营期只追加“实际数据与校准日志”。但我担心一点：设备固件版本范围写死，会不会上线后现场换一批传感器就频繁触发基线升级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我把“固件版本”从硬冻结改成“计量特性/校准规范 + 允许的型号范围”，变更走事件留痕，只有影响误差模型才触发折减或基线升级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "一致性我定义三类字段：  \n- 主键类：project_id、period_id、credit_batch_id、request_id（用于追溯）  \n- 结果类：净减排量 tCO2e、污染物去除量（如适用）、不确定性区间（上下界或置信度）、保守性折减后可签发量  \n- 规则类：methodology_version、baseline_version、calc_engine_version_hash、data_window（起止时间）、spatial_extent_id  \n判定上，结果类允许 0.5% 以内差异只针对展示端舍入；结算单据与量化引擎的“可签发量”必须字面一致，不走二次舍入。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，改成规则化：所有对账对比用同一套舍入与单位换算函数；展示端只截断/四舍五入，不参与结算字段计算。验收比对以“结算字段原值”+“hash”校验为准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小披露我做两道门：  \n1）接口级：对核证角色之外，证据明细接口一律返回 FORBIDDEN_MIN_DISCLOSURE_ONLY，并且前端映射到“仅可见摘要”页面，不能因为错误码导致页面崩。  \n2）字段级：核证角色看到的证据包也按白名单过滤，比如只给样本统计摘要、hash、时间窗，不给原始坐标/原始检测报告全文。  \n验收用例：同一 request_id，分别用“项目运营方账号”“核证账号”“审计账号”访问同一证据项，校验响应字段集合与错误码映射是否符合预期。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计日志我先定最低粒度：actor_id、role、action（view/export/approve/reject）、resource_type（evidence_summary/evidence_detail/settlement_bill）、resource_id、timestamp、request_id、decision_code（若是审批）。不记录明细内容本体，只记录索引与hash，减少泄露面。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，resource_id 用 evidence_package_id + package_version；结算单据用 bill_id + bill_version；量化用 calc_run_id。这样审计回放能定位到具体版本，不用存内容。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“首个核证包生成即冻结”，理由是：一旦开始走核证流程，就要保证证据与口径稳定；如果等到签发才冻结，中间被动变更会让争议变复杂。例外是试运行窗口，我想留 24 小时的“灰度核证”仅内部可见，不对外出具。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "切换点定义为“baseline_version=V1 标记为 ACTIVE，且核证机构账号首次审批通过的核证包之后的所有 calc_run 必须引用 V1”。灰度期间 baseline_version=V0-DRAFT，仅内部角色可读，所有 bill 状态强制 NOT_SETTLEABLE。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我收口成两组：  \n上线验收准入（必须满足）：  \n1）联调仅覆盖 A-E 五个场景全通过；压测 30 分钟稳定，P95 与 5xx 比例不超过既定阈值；缺陷按“必须修过线/可接受风险”分级，必须修项当日收口到接口、request_id、期望与实际错误码。  \n2）三条红线门禁：幂等不产新单；replayCheck 必抓 digest mismatch；最小披露下明细不外泄且 FORBIDDEN_MIN_DISCLOSURE_ONLY 映射不致页面崩。  \n3）对账一致性：project_id/period_id/credit_batch_id/request_id 一致；“可签发量”在量化引擎、核证页、结算单据字面一致；舍入仅限展示端，验收对比用统一舍入/换算函数与结果hash。  \n4）审计留痕：actor/role/action/resource_type/resource_id(含版本)/timestamp/request_id/decision_code 记录齐全，不存明细本体，只存索引与hash。  \n\n基线固化（上线冻结与变更）：  \n1）冻结字段：方法学编号/版本、核算边界与计入项、基线情景与计算路径、排放因子与GWP版本、保守性折减与不确定性规则、数据源版本（遥感产品/实验室方法标准）、采样/抽查策略版本；设备侧冻结为“允许型号范围+计量特性+校准规范”。  \n2）冻结时点：首个对外核证包生成即冻结为 baseline_version=ACTIVE；灰度期仅内部可见，结果不得结算、不得导出，bill 强制 NOT_SETTLEABLE。  \n3）变更规则：方法学/边界/因子/GWP/保守性规则变化=>基线版本升级并审批；设备更换若影响误差模型=>触发不确定性重算或保守性折减，并形成变更事件留痕，不必必然升级方法学版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

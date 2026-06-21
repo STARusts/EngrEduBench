@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在阻截决策引擎规则熔载开发背景下，与导师围绕规则求值选型、增量分发合并及防雪崩限流持续沟通（6轮），其中在规则熔载与限流实现部分与决策引擎开发沟通（2轮），在增量合并冲突与快照存储部分与决策引擎开发沟通（1轮），并最终形成Aviator求值、Broadcast增量合并、内部限流与快照落盘的开发重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看老代码是直接全量替换内存里的Map。我想着能不能直接上Drools，网上说它支持规则热更新，把算子吐出来的图特征丢进去匹配就行，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不让用Drools，这规则熔载我得自己写？有没有更方便点的方法，比如Flink CEP？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要做规则热加载，吞吐很高，Drools扛不住，Flink CEP也不对路。这块规则熔载怎么搞比较稳？还有防雪崩咋弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那限流器是不是直接用Sentinel或者Resilience4j配一下就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "增量Delta、Aviator求值、内部滑动窗口限流、版本化回滚。记下了。导师，专家说用Aviator做求值，规则更新只推增量，限流在引擎内部做。我觉得Aviator比Drools轻，应该可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "是不是可以广播流？我看Flink有BroadcastProcessFunction，把规则流广播出去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "增量的话，就在状态里把旧规则拿出来，加上新规则，再放回去？合并失败就回滚，这好像挺麻烦的。能不能还是全量广播，但是只发变化的那几条？不对，那还是增量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用增量广播，规则状态里合并增量时，如果有优先级冲突或者互斥怎么办？还有规则快照怎么存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "带时间戳合并，优先级覆盖，异常丢弃。快照定期深拷贝。导师，增量合并得按时间戳和优先级来，不能直接加。快照就定期把全量规则存一份。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，Aviator求值、Broadcast增量合并、内部限流、快照落盘。我这就去改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

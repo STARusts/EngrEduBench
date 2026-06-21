@@ -1,0 +1,644 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在潜器声光异构组网需求梳理背景下，用户与导师围绕业务痛点、异构链路切换影响、合规风险与成本约束持续沟通（6轮），其中在业务画像与切换影响部分与水下通信需求分析师沟通（1轮），在激光合规与成本部分与商业与合规评估师沟通（1轮），并形成以切换时延、安全合规与成本约束为核心的需求洞察结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个潜器声光异构组网与多径衰落抵消系统。水下多径太严重了，声学带宽又窄，我想用光通信补带宽，再搞个自适应均衡抵消多径衰落。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点就是传图慢，指令下发卡顿。潜器编队作业，声学链路一衰落就丢包，重传更慢，我就想加光链路提速。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "潜器协同观测的流量模型和切换影响是什么？我原以为就是带宽不够用，加光就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来不只是物理层多径的事，MAC层切换时延才是致命的。50ms这个假设我记下了，这确实是个硬约束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "光通信就是视距传输，容易被遮挡吧？其他没觉得有啥，光端机大不了体积大点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光组网用激光有啥合规问题？成本是不是很高？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "安全闭锁机制？我之前完全没想过伤人这事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "成本5倍也太贵了，全配光肯定不行，只能给关键节点配。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前光盯着多径抵消算法了，对业务画像和合规确实没概念，直接推肯定要出事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我得先补一下水下激光安全标准和潜器MAC层切换机制的知识，这两块我太弱了。接下来两周，我要把ITU-R关于水下光通信安全功率的建议书过一遍，再找几篇跨介质MAC切换的论文，至少弄懂切换时延的组成和功率安全阈值，把这两个坑填上。"
+              }
+            ]
+          },
+          {
+            "microScene": "在潜器协同观测业务画像梳理背景下，用户与导师围绕业务流特征、时延约束及链路策略持续沟通（6轮），其中在典型业务流分类与时延约束部分与水下通信需求分析师沟通（1轮），在协同探测流的链路切分与联合编码部分与业务架构师沟通（1轮），并最终形成三类流链路策略结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "业务流不就是发数据嘛，大包走光小包走声，这还要画？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "潜器协同观测到底有啥业务流？时延啥要求？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图象数据大走光，指令走声"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "啊这，忘了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "危险数据流怎么切？就是既要带宽又要时延那种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指令纯声，图象纯光，探测光传数据声传信令。"
+              }
+            ]
+          },
+          {
+            "microScene": "在声光异构组网合规与可行性论证背景下，用户与导师围绕光功率眼安全限制、声频段冲突及双模成本持续沟通（6轮），其中在合规红线与成本核算部分与商业与合规评估师沟通（2轮），并形成有条件可行性结论与降级预案思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业与合规评估师 导师让我问合规和成本的事，你给说说。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图象纯光，功率被限就传不远。探测流光传数据也受影响。难道又得退回去全用声？声带宽又不够，这矛盾了啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "协同观测半径一般几百米。Class 3R功率，如果水清的话，百米级应该勉强能撑住。但要是浑浊水体，光就废了，这风险挺大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规红线：近岸光功率受限，声频段要避开科考频段。成本上双模确实贵，但性能刚需只能认。可行性是有条件的：水质清澈且视距百米内，光可用；水质浑浊或远距，退回声。这条件有点苛刻。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "功率上限和频段避让是硬杠杠，水质浑浊时光链路不可靠，得有降级预案。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在声光双模系统商业化背景下，与导师围绕商业模式、演进路线及最小验证动作持续沟通（6轮），其中在水下市场付费主体与分阶段演进策略部分与商业与合规评估师沟通（1轮），并最终确立“点线面”演进路线，收敛第一阶段至光模组工程化，形成针对高端科考付费意愿的最小验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "性能好肯定有人买单吧。水下观测现在带宽太憋屈了，我们这声光异构能解决大问题，尤其是那种大潜器编队，刚需肯定在。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这声光异构系统，成本挺高的，现在想看看怎么商业化，怎么演进比较合理？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对这块没感觉，以前只管调信号。我这几天找两篇水下装备商业化案例看看，特别是那种从模组做起的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回到项目，咱们第一阶段就只做光通信模组的工程化，组网部分先放放，对吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最小验证动作，我是不是可以找几个做科考潜器的团队，拿我们现有的光通信原理样机去测一次，看他们愿不愿意在下次任务中试用并给反馈？如果能收集到3家以上的意向，就算验证？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演进路线就是“点线面”，第一阶段只做光模组，砍掉组网。商业模式先打高端科考。验证动作是拿样机找3家以上科考团队试用，必须拿到2个真实痛点反馈才算数。我记录一下，回头把看商业化案例的笔记补上，看看别人怎么找首批用户的。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在潜器声光异构组网总体架构设计背景下，与导师围绕声光切换模式、可靠性与时延权衡及信道预测缺口持续沟通（4轮），其中在切换与可靠性保障部分与网络拓扑架构师沟通（1轮），在业务时延与架构轻量化部分与水下通信需求分析师沟通（1轮），并最终形成基于信道预测的软切换架构方向及三项架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "水下光通信速率高，架构上就设计成光为主声为备，光链路断了直接切声，主备硬切换最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构上声光切换怎么做比较好？主备硬切换行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务上能接受双发选收这种架构吗？感觉太费资源了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构师说要并行冗余保可靠，需求分析师说要快速切换保时延。我就觉得主备简单好弄，现在两边说法完全反的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂多径衰落到底怎么影响切换判决。我光看光通信模组的逻辑了。我得去补一下浅海信道反演这块，看看能不能把信道状态预测加进去再做切换，不能瞎切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "目标是这周看3篇浅海多径信道预测的论文，搞懂信噪比预测窗口怎么设。如果预测到光链路快衰落了，提前发起软切换，这样既不用一直双发浪费资源，又比硬切换平滑，时延也能控住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构约束：1. 切换模式必须是基于信道预测的软切换，禁止硬切；2. 关键业务数据走声光双通道冗余，普通数据只走光；3. 切换判决输入必须包含信道反演的预测信噪比，不能只看当前链路通断状态。"
+              }
+            ]
+          },
+          {
+            "microScene": "在浅海多径信道探测与反演背景下，用户与导师围绕反演模型选择、算力约束与切换门限平衡持续沟通（6轮），其中在反演策略与算力开销部分与信道反演设计师沟通（2轮），并最终形成采用射线逼近法、算力预算200MIPS及预留3dB误差余量的探测与反演约束总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发个LFM探测信号，测多径时延和幅度，然后反演出信道冲激响应，不就能算信噪比了嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预测的话，是不是套个卡尔曼滤波就能往前推了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们潜器端算力有限，哪种反演方法能支撑信噪比预测，又不会把DSP跑满？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们板卡留给通信处理的大概还剩200MIPS。简正波肯定跑不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "射线逼近的话，多径幅度误差对信噪比预测影响大不大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那把探测频率降低点？比如2秒测一次，少算几次，省点算力，也不用切那么频繁。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就射线逼近吧，算力控制在200MIPS内，声链路占用稍微高一点就高一点，总比预测失效强。门限加3dB滞回。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 探测信号用LFM，周期1秒；2. 反演用射线逼近法，不用简正波；3. 反演算力预算不超200MIPS；4. 切换门限预留3dB误差余量，用滞回逻辑防乒乓切换。"
+              }
+            ]
+          },
+          {
+            "microScene": "在声光异构链路切换与寻径设计背景下，用户与导师围绕切换条件、降级保护与寻径机制持续沟通（8轮），其中在切换触发集与寻径MAC机制部分与异构协议栈设计师沟通（1轮），在异构双表维护与控制流开销部分与网络拓扑架构师沟通（1轮），并最终形成异构切换与寻径方案约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "切换就按信噪比吧，声通道SNR跌了就切光，光不行再回声。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "声光时延差太大，普通路由肯定废。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "光通信距离限制我确实没细算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这切换条件咋定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光链路切换除了SNR还得看啥？寻径时延差太大怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不能光看SNR，得加上距离和浊度。寻径用异构LSA，光短声长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防乒乓就用之前的滞回逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "具体开销我没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光异构寻径表怎么维护？开销多大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 切换触发看距离、浊度和速率需求；2. 寻径分声光两张子表；3. 光退声用3dB滞回防乒乓；4. 控制流开销压50Kbps内，不影响反演算力。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在物理层核心设计背景下，与导师围绕声光异构联合编码与自适应均衡机制持续沟通（5轮），其中在多径抵消与异构编码增益部分与均衡算法工程师沟通（1轮），并最终形成变步长LMS均衡、MAC层跨信道映射、光退声降级重传及算力预算四条基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "声信道多径重，我打算声用LDPC抗衰，光用RS码纠突发。均衡就上LMS算法，通用好调，DSP里跑着省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多径抵消咋整？联合编码又怎么搞出增益？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说LMS得换成变步长LMS或者RLS，RLS算力吃不消就选变步长。编码要在MAC层做，声光包互为冗余。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长因子，就根据信噪比动态调呗，信噪比低步长小点？光断了重传，就全压给声链路发呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力预算我不太确定DSP能剩多少，时延的话，均衡收敛得压在几十毫秒内吧？降级重传这块我确实没细想，得找搞协议的定一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 均衡用变步长LMS，步长因子挂钩反演特征值扩散度；2. 联合编码在MAC层跨信道映射，声光包互为冗余；3. 光退声重传做降级选择，不保全量；4. 均衡加编码算力开销压在DSP总预算40%内。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在抗毁拓扑与关键接口设计背景下，与导师围绕水下抗毁拓扑K值选取与验证、接口LQE字段设计及状态机状态定义持续沟通（9轮），其中在抗毁拓扑结构部分与网络拓扑架构师沟通（1轮），并最终形成K-连通拓扑与接口状态机设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口这块我熟，就在MAC层上面加个声光状态机，声断切光，光断切声，拓扑的话，多连几条边不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想多连边，他说开销大，到底咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按2-连通设计，接口加个LQE字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2-连通应该够吧，浅海掉2个节点概率挺小了。LQE我给8个bit，1秒刷一次。最近我看了一篇水下FANET拓扑自愈的论文，它里面用局部重构代替全局重算，我觉得可以搬过来，省算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我跑个仿真，随机删节点看连通率。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我就按区域删，一次删一个簇。如果2-连通扛不住区域失效，我就把K提到3。局部重构那块我也加上去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就16bit，跟反演那边对齐。所以拓扑就2-连通起步，仿真不行就3-连通，接口状态机加上LQE上报和局部重构触发信号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "声通光断、光通声断、声光双通、声光双断、重构中。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，漏了。加上声降级态和光降级态。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在潜器声光异构组网驱动与协议栈开发背景下，用户与导师围绕降级态承接、异构并发时序保证、卡点排查与验证方案持续沟通（7轮），其中在底层并发与FIFO清空机制部分与嵌入式开发工程师沟通（1轮），并最终形成RTOS互斥锁并发保护、DMA双缓冲切换及回调绑定的开发基线与5ms时序验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算光模组走SPI拿DMA发，声模组走UART。协议栈里加个判断逻辑，查上一轮那五类状态，如果是光降级态，就把光模组的SPI挂起，声模组功率拉满。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这块我确实没细想，平时单模组跑没出过问题。@嵌入式开发工程师 异构切换时底层驱动的并发和FIFO清空怎么搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只搞过单模组裸机，RTOS多任务并发这块有点虚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是异构并发下的互斥锁优先级反转问题怕搞砸了，还有降级态映射表怎么跟驱动层的回调函数绑一起没思路，之前没写过这种联动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把光模组SPI驱动改成DMA+双缓冲架构，加个完成回调试试，把状态机跟回调挂钩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以用逻辑分析仪抓SPI片选和UART使能的引脚电平。测光中断到声唤醒的间隔，阈值先卡在5ms，超过就报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "光通信一帧大概1ms，留4ms给声模组唤醒和对准，加起来5ms应该够用。如果实测声模组唤醒慢了再调阈值。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在浅海多径衰落抵消算法开发背景下，与导师围绕LMS算法收敛失败、算力约束及变步长方案持续沟通（6轮），其中在LMS不收敛与NLMS替换部分与均衡算法工程师沟通（1轮），在定点DSP除法限制与无除法变步长方案部分与均衡算法工程师沟通（1轮），并最终形成采用SVSLMS算法及调整抽头与训练序列的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "均衡器收敛特别慢，抵消完信噪比反而降了。我用的LMS，步长调了好几个都不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看LMS简单，算力小。步长设小了不收敛，设大了直接发散，卡住了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LMS跑不通，步长怎么调都不对，时延扩展大怎么办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抽头数我按单径设的，就16个。训练序列用的短帧头。换NLMS是吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "板子DSP算力挺紧张的。抽头加到64可能勉强能跑，但NLMS每次要算归一化除法，定点DSP除法太慢了，周期根本不够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DSP除法太慢，NLMS跑不动，有没有不要除法的变步长？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SVSLMS，加减移位就行。抽头先64，训练序列加长。"
+              }
+            ]
+          },
+          {
+            "microScene": "在SVSLMS基线敲定后代码联调背景下，用户与导师围绕跨介质切换断流原因及修复方案持续沟通（7轮），其中在MAC层队列卡包与状态机死锁排查部分与异构协议栈设计师沟通（2轮），在对端超时重连机制确认部分与声光联调测试员沟通（1轮），并最终形成切换触发MAC层flush、发送中止指示与状态机复位的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是我这边均衡器初始化没跑完，抽头系数乱了？或者声学驱动没起来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异构协议栈设计师 切光转声断流，导师说是状态卡死，你看下日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我在底层驱动里加个清空缓存的指令行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异构协议栈设计师 在切换函数里直接把MAC队列flush掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要在协议栈加flush，重置状态机。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "截断的话，对端不知道发完了，会一直等ACK吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@声光联调测试员 协议栈加flush截断发包，对端超时重连能正常触发吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切声链路本来就是光链路断了才切的，本来就断流了，5秒应该能接受吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在湖试环境多径衰落致均衡器发散背景下，用户与导师围绕算法替换、定点补偿、发散防护及MAC层联动持续沟通（9轮），其中在LMS失效边界与NLMS替换部分与均衡算法工程师沟通（2轮），并形成换用NLMS、定点补偿、复位联动MAC层flush的改动清单与验证步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了下波形，抽头系数跑飞了。应该是步长参数设大了，我打算把LMS的步长从0.01调到0.005再跑一遍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长小了收敛慢但不会跑飞啊。水池里多径就几条，湖里反射多，我猜步长小点更稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固定步长LMS在时延扩展大的时候是不是肯定会崩？现在步长0.01，我想改小点，但又怕跟踪不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "归一化步长？就是NLMS？算力会不会比LMS大很多？我们DSP资源挺紧的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "固定步长肯定不行，得换NLMS。专家说只多一点算力，主要是除法精度要注意。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定点除法我之前没搞过。验证的话，我昨晚正好翻了几篇水声信号处理的文献，看到有人用归一化最小均方误差配合功率估计做定点补偿，我打算把这招直接搬过来，在除法前加个抖动注入试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没全验证，但我可以先在仿真脚本里跑一组最差多径时延，看看信噪比恶化多少dB。如果恶化不超过2dB，我就敢往板上刷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个看门狗？系数连续三次超限就强制复位抽头寄存器。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我没想到。复位时均衡器输出全是乱码，MAC层应该立马触发flush吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "中断优先级这块我懂，声接收中断必须低于定时器中断，之前在水池里调过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动清单：1. 均衡算法从LMS换NLMS，步长归一化；2. 加定点除法抖动补偿，仿真验证恶化小于2dB才上板；3. 均衡系数发散超限触发抽头复位，同时联动MAC层发flush中止指示。验证步骤：先跑定点仿真，再刷板看DSP负载和中断时序，最后湖试看误码率曲线。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在潜器声光异构组网系统外场标定与部署验证背景下，用户与导师围绕历史标定数据有效性验证与探测策略修订持续沟通（4轮），其中在标定数据分布特性与置信度分析部分与通信质量监控师沟通（3轮），在声学探测信号合规边界与功率限制部分与部署运维工程师沟通（2轮），并形成基于非参数检验的数据验证流程与合规探测策略，计划补充自动化检验脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在是不是直接去海域标定多径基准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信噪比均值看着还行啊，都在15dB以上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑个t检验看看这两期数据有没有显著差异？差异大就废掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前那批外场信噪比数据，我打算直接跑t检验看差异，导师说不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我回去跑一遍K-S检验，确认分布类型。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这数据集是别人采的，我直接用会不会有问题？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "标定的时候要发大功率声学探测信号，这片海域有没有什么限制？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "标定发探测信号的时候，声源级能开多大？会不会打到海豚什么的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "165dB的话，探测距离得缩水，多径反演精度肯定下降啊。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这均衡器抽头系数怎么标定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先跑K-S检验看分布，再做非参数检验比对历史数据，确认90%置信区间下界大于12dB；探测信号压到165dB以内用相干叠加补。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前对海洋噪声统计特性太想当然了，这块是我短板。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周内把非参数检验和K-S检验的Python脚本写完，直接用这批外场数据跑通，把脚本加进标定工具链里。以后再遇到类似数据验证，我直接调脚本出结果，不用再凭感觉看均值了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在线上声光异构链路监控脚本重构背景下，与导师围绕声光指标解耦、硬编码阈值消除与操作审计留痕持续沟通（6轮），其中在异构网络监控指标拆分部分与通信质量监控师沟通（1轮），并最终形成声光采集流与周期分离、补全不可篡改审计留痕的三条重构核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这代码写得太随意了，声学和光学的采集频率根本不一样，居然用同一个死循环跑。多径时延扩展这里直接写死了一个20ms的阈值，浅海环境多径变化这么大，写死阈值肯定要崩。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "解耦就是把声和光拆开呗，分两个进程跑。运维负担我哪管得了，我又不是干运维的，只要指标算对就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上有个老监控脚本，声光指标混着算，多径阈值还是写死的，这玩意儿怎么重构？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "老脚本里没日志啊，就光算指标然后存数据库。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没注意。那我在重构的时候加个操作记录的字段？把谁改的、改了啥存下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，声光采集流彻底拆开，声学盯时延扩展和相干带宽，光学盯束偏角和遮挡率；第二，采集周期跟着介质走，不能一把梭；第三，补上操作审计留痕，阈值调整必须记操作人和变更前后数值，存到独立日志区。"
+              }
+            ]
+          },
+          {
+            "microScene": "在线上声光切换失败报警归因背景下，用户与导师围绕异常根因拆解与验证方案持续沟通（6轮），其中在跨介质切换超时归因拆解部分与异构协议栈设计师沟通（1轮），在不改线上代码的假设验证部分与迭代规划师沟通（1轮），并最终确定优先定因于触发层误判及采用离线数据回放验证的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看日志了，基本上都是光链路建立超时。声学那边刚发切换指令，光端机半天不响应，最后回退到声链路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不确定，日志里就只看到MAC层报了timeout。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光切换超时这种异常，怎么拆解根因？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家讲分三层，我看大概率是触发层问题，光链路明明不好还硬切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为日志里光端机收包率已经是0了，还往上切。验证的话，我就加点日志看看探测包是不是丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么不改线上代码验证探测包丢失导致切换误判的假设？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在潜器声光异构组网系统上线复盘与演进规划背景下，与导师围绕复盘指标、演进路线及外推边界持续沟通（6轮），其中在宏观大盘指标选取部分与通信质量监控师沟通（1轮），在演进重点与边界确认部分与迭代规划师沟通（1轮），并最终形成含短期修复、中期演进及深水快时变边界约束的规划结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多径衰落抵消的均方误差，还有均衡算法的收敛步数。这两个我熟，直接拉曲线看就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "除了均方误差，系统层面还要看哪些效能数据？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联合编码增益达成率？之前湖试的时候这个数测得不太稳。行，我把这三个加上，和我的均衡指标一起看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切换时延抖动比较大。下一版演进重点是啥？还有，当前这套机制在浅海多径时变特别快的时候，好像不太稳，这算外推边界吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "剥离信噪比低于15的片段单独验证，这个动作能做。中期步长因子自适应，改动挺大的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没把握。深水多径跟浅水完全不一样，回放脚本里的信道冲激响应模型得换。我之前一直只搞浅水，深水这块我没概念。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "深水信道冲激响应的扩展时延不一样，均衡器阶数可能得重算。我先把这块补了，看能不能直接套现在的LMS结构。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "短期：修复触发误判，离线回放验证，优化切换时延。中期：均衡步长因子环境自适应。约束条件：当前结论仅适用于浅海缓时变场景；深水及信噪比<15dB的快时变场景作为外推边界，需重构信道模型重新验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

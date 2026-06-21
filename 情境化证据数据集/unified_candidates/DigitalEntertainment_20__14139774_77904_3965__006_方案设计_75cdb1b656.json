@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在试玩房间“编排引擎与规则接口”方案设计背景下，用户与导师围绕规则描述/编译校验/权威执行/可回放审计与接口字段清单持续沟通（7轮），其中在DSL约束、事件/状态通道、确定性来源与仲裁审计设计部分与规则引擎工程师沟通（5轮），并收敛最小接口口径与版本/序列对齐思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里比较像工作流。触发器-条件-动作那套。编排器把图存起来，运行时把图解释执行。然后要能暂停、继续、回滚？回滚我不确定是不是必须。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Schema我想用JSON。一个room里有多个rule，每条rule有trigger、condition、actions。trigger比如“玩家提交答案”“计时器到点”“道具被使用”。condition就是表达式，比如玩家角色==侦探，或者room.state.x>3。actions就是setState、发消息、解锁门、加分。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "表达式我想到用受限的AST，不给任意脚本。就and/or/比较/数学，函数白名单。字段引用走路径，比如 state.puzzle1.solved。读写集合在规则编译时静态分析出来？但我没做过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则引擎工程师 我们要做编排引擎和规则接口。JSON那种触发-条件-动作可以吗？表达式要受限。可回放要怎么保证，规则运行要拿什么当事实源？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那随机数也要变成事件？会不会太麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结构化表达式大概像 {\"op\":\">\",\"lhs\":{\"var\":\"state.x\"},\"rhs\":{\"const\":3}} 这种？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "冲突检测是硬卡死吗？还是按优先级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可审计就是要把decision也记下来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "了解。我再问一句，状态变更patch的格式有推荐吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先抓住几个：规则引擎吃“事件流+初始快照”，不能直接读时间和随机，时间到点也得变事件。规则定义用JSON，但表达式不能是字符串，要AST结构。动作限定成原子动作，输出分patch和effect。然后需要有仲裁，Set和Inc不一样，Inc可能可合并。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我以为引擎就是房间权威的一部分。就是引擎在服务端跑，算出patch，然后房间服务提交状态，再广播。客户端只看广播，不自己算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "eventId去重。执行器维护已处理eventId集合？但集合会膨胀。可能用滑动窗口，只保留最近N个。超过就靠快照？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Bloom会有误判，会不会把事件吞掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以关键是“事件入队”先统一编号。执行器只吃编号后的事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则定义：ruleId、name、priority、enabled、trigger、conditionAst、actions。trigger里有eventType和过滤条件。编译接口输入就是这些规则集合，输出compiledVersion、reads/writes、errors。运行时事件：roomId、roomSeq、eventType、payload、eventTime、eventId。输出：patches、effects，还有命中ruleId列表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "determinism envelope听起来像把“用到的时间/随机”都写进去。那我理解成每个tick都带 usedTime=xxx usedSeed=xxx？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。那设计态校验要检查“规则里有没有调用未允许的函数”，还有写集冲突。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我之前没想到。我以为effect就是广播消息。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第3点里“priority优先”我能理解，但如果两个规则都Set同一路径，低优先级就丢掉？创作者会不会很懵。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我就怕我记混：docVersion是发布版本，compiledVersion是编译产物版本；roomSeq是运行事件序列。baseSeq还是协作那边的序列，不直接进运行执行链路。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

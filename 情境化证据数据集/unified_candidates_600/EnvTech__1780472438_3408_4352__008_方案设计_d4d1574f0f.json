@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧调度模型容灾设计背景下，用户与导师围绕模型容灾架构约束、降级策略及验证手段持续沟通（7轮），其中在容灾架构约束部分与架构设计师沟通（1轮），在故障注入验证与变量控制部分与测试工程师沟通（1轮），并最终形成本地快照与安全降级执行器硬接管、防涝优先降级策略及脚本故障注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型崩了就重启呗。如果怕重启慢，用K8s拉起新Pod不就行了？或者有没有那种自带主备切换的中间件？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保闸阀别乱动？我看网上好多方案都是用Redis做状态共享，主备切一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧调度模型做容灾有没有方便点的方案？最好别让我们写太多底层逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "安全降级执行器是啥？又要自己写守护进程吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测一下呗。把模型杀掉看闸阀动不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能直接用Chaos Mesh把模型Pod杀掉，看闸阀反应？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关上怎么搞故障注入？我想用Chaos Mesh但好像装不上。怎么验证模型挂了闸阀能安全打开？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暴雨时模型挂了闸阀必须全开，这个算安全位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用K8s和Redis了。边缘侧模型挂了，靠本地快照恢复，恢复不了就由安全降级执行器接管，暴雨天闸阀强制全开防涝。验证就用脚本在流量峰值杀进程，看3秒内闸阀开没开。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

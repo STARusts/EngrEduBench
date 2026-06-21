@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在频谱图谱存储与数据流转链路设计背景下，用户与导师围绕时序降维、冷热分离及流图增量更新触发条件持续沟通（5轮），其中在图谱存储与流转架构部分与数据流架构师沟通（1轮），并最终形成流图双驱与增量触发更新的数据流设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全扔Kafka，然后存Neo4j呗。图数据库存图谱天经地义啊"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 你来说，这图谱怎么存才快？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Kafka+Flink，图存Neo4j，时序存ClickHouse。就这么干"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增量呗，全量肯定慢啊。增量怎么触发？就，就特征变了就触发呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态变化超阈值就更新图。数据流就是Kafka接Flink，Flink算特征，超阈值改图库，其他存时序库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

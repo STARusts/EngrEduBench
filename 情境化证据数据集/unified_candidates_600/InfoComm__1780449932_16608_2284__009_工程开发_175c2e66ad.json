@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算网随动调度联调对齐背景下，用户与导师围绕接口契约遵守、异步解耦、审计日志补齐及降级逻辑持续沟通（7轮），其中在接口报文修正、死锁排查与异步改造、幂等性及降级策略部分与微服务联调匠沟通（5轮），并最终按规范修改接口、改用消息队列异步触发、补齐日志及调整降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能先绕过去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度接口报错，反演那边给的数据它不认，赶紧帮我看看日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "少个字段而已，我加个默认值0不就行了？时间戳我改成字符串硬拼一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我改。加上了，跑起来了。但是跑一会就卡死，调度服务假死。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步太啰嗦了，还要写回调逻辑。我就直接同步等了，反正测试数据量不大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加日志太影响性能了，先跑通再说吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加几行print。异步回调我也改成消息队列触发"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "幂等我加个全局ID判断一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改好了，跑着没死锁了，数据也对上了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级逻辑我写了if-else，算力不够就扔掉一半信令。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还得改迭代次数？太麻烦了，我直接在调度端做个限流不行吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

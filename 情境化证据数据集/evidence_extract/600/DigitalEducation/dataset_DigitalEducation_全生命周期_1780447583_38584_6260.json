@@ -1,0 +1,615 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在隐性认知阻滞识别系统需求梳理背景下，与导师围绕行为特征定义、合规红线与假设验证持续沟通（7轮），其中在隐性阻滞行为刻画部分与教育痛点分析师沟通（1轮），在眼动数据合规底线部分与数据合规专家沟通（1轮），并形成行为漂移抓取对象、合规红线及核心验证假设的约束对齐。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个系统，专门对付学生做复杂题卡壳的情况。不直接给答案，而是抓他们在页面上的小动作，比如鼠标乱晃、草稿划了又改、盯着某行字看半天。用这些数据反推他们哪一步想错了，然后给个提示帮他们顺过来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间长肯定就是卡了吧，或者一直在那删改答案。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你平时看学生卡住都有啥表现？光看时间感觉不太准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行为漂移，就是操作变碎变乱呗。那抓鼠标轨迹和视线焦点确实能看出来，技术上能做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抓眼动是不是很不合规？我加个勾选同意弹窗行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "撤回授权，那正在跑的流式数据咋办，断了不就前后端报错吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直觉上肯定对应啊，想不出才乱动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设？就是说如果出现高频涂改，就说明他这一步逻辑断了？这咋检验，跑个A/B测试对比一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我不太行，我平时就写代码做功能，实验设计和统计验证这块真没搞过。我得补补这块，这两周先搞懂A/B测试里怎么算显著性差异，还有怎么控制干扰变量，不然连指标该定啥都不知道。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多模暗痕合规评估背景下与导师围绕MVP数据采集边界与需求取舍持续沟通（4轮），其中在数据风险分级部分与数据合规专家沟通（2轮），并最终形成砍掉眼动、涂改降级为坐标向量、保留键鼠的MVP采集基线及撤回机制绑定结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个授权弹窗不就结了？用户点同意，我们啥都能采。我之前做产品都是这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "眼动、草稿涂改、键鼠滞留，这三类数据在合规上到底算什么级别？我想全采，但导师说眼动可能是生物特征。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "也就是说，眼动和原始笔迹图像不能传到我们服务器上？只能存本地？那我们要算全局统计就麻烦了。坐标向量可以传？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规专家说眼动和笔迹图像算高敏，最好别上云，MVP先别采。涂改只存坐标向量，键鼠滞留算低敏，可以采。这样我们MVP的数据范围就得砍掉眼动了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两周搞不定眼动那套本地算子，前端适配太耗时。用滞留时长和涂改频率拟合游离，我觉得能凑合，反正我们先验证涂改频次和断裂点的正相关。视线游离本来也不好量化。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP采集基线：1. 砍掉眼动，视线游离用滞留和涂改频次近似拟合；2. 草稿涂改只传坐标向量序列，不传笔迹图像；3. 键鼠滞留和点击坐标作为低敏数据正常采集。授权弹窗按这个分级做。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在过程诱导系统变现背景下，与导师围绕收费模式与教育伦理底线持续沟通（4轮），其中在阻滞点计费与防诱导偏移设计部分与商业架构师沟通（2轮），并最终形成效能订阅加跃迁效度费模式及偏移熔断规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就包月呗，或者按提示次数收钱，用一次扣一次，多直接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按什么阻滞消释收。这咋弄？能赚钱不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来能赚钱啊，解锁就完事了。我回去跟导师说按解锁收钱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "拆点？还能这么玩？那确实有点坑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "必须加个防诱导偏移的东西，收费还得跟提示解耦。你重想一个呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这实现起来会不会很麻烦啊，怎么判断他是不是真消释了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "起码不会为了赚钱疯狂弹提示了。就按这个定吧，包月加跃迁费，我也好做埋点统计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 基础包月收诊断和有限提示费；2. 跃迁效度费绑定后置验证通过；3. 触发偏移熔断效度费归零。就这三条。"
+              }
+            ]
+          },
+          {
+            "microScene": "在MVP场景收口背景下，用户与导师围绕学科内容选择、业务痛点与开发难度权衡及思辨暗痕内涵持续沟通（7轮），其中在隐性阻滞痛点判断部分与教育痛点分析师沟通（1轮），并最终锚定高中政治哲学主观题场景及核心依据。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先做数学选择题呗，选项多容易算错，点来点去数据也好抓，前端埋点最省事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那做大题？大题步骤多。不过大题让学生在电脑上打字太麻烦，他们肯定不干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育痛点分析师 咱们这系统做啥题最合适？大题学生肯定不愿意打字写啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "物理受力画图多，我们前端能抓鼠标轨迹，这个好搞，就选物理吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "政治一堆文字，怎么抓暗痕？看屏幕哪里算卡住？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，错题本烂大街了。那就做政治哲学？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这类题学生容易盯着题干反复看，视线跳读多，草稿上容易写了一半划掉，这些暗痕好抓，而且市面上没东西能帮他们理顺这种逻辑断裂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 视线跳读和草稿涂改暗痕密集；2. 逻辑思辨断裂痛点深；3. 市面缺过程诱导产品。就这三条。"
+              }
+            ]
+          },
+          {
+            "microScene": "在高中政治哲学主观题干预战略制定背景下，用户与导师围绕系统干预边界、认知依赖风险与建构主义脚手架策略持续沟通（7轮），其中在强提示策略风险红线部分与诱导偏移审计员沟通（1轮），并最终形成启发式提问、干预次数上限及5人最小A/B测验证的干预战略核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得最直接的就是，看到哪里涂改多、停顿久，就顺着这块逻辑给他补一段提示。比如他卡在矛盾普遍性这块，就直接推“要看到矛盾的对立统一”这种话过去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边界？不要直接给完整答案算不算？就给一半？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我按刚才那种思路，在学生卡壳的地方给半截子结论提示，风险有多大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是不给答案呗？全改成反问，然后卡死次数？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "脚手架我听过，但具体怎么搭我其实不太确定。我之前做的都是规则引擎那种直接分发的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回头我把提示生成的逻辑改一下，从输出“半截结论”改成输出“探索性问题链”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备找几个高中生试一下。就拿两道哲学大题，一组给半截结论提示，一组给纯反问提示，看看哪组放弃率高，哪组最后自己写出了完整逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就定放弃率和自主推理完整度。5个人，分两组测。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 提示只能是启发式提问，严禁断言结论；2. 单题干预有次数上限防依赖；3. 最小验证先跑5人A/B测看放弃率。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在暗痕采集流架构设计背景下，用户与导师围绕流式架构选型、选型验证假设及合规脱敏方案持续沟通（7轮），其中在Kafka与Pulsar差异部分与隐迹流架构师沟通（1轮），在数据脱敏与拦截部分与数据合规专家沟通（1轮），并最终形成包含Pulsar接入、前端聚合与网关拦截的MVP架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接上Kafka收日志，后面挂Flink算不就行了？这套我熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吞吐量没细算，这块原理我确实有点含糊。@隐迹流架构师 你来说说，Kafka和Pulsar收眼动数据到底差在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来Pulsar抖动小。那我就换Pulsar？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是Pulsar比Kafka快。对照就是，一组用Kafka，一组用Pulsar，跑同样眼动数据，看谁延迟低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿JMeter编个插件发报文。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Pulsar的底层分层机制我还没吃透，怕配错参数。这块我得补一下，周末把Pulsar官方那篇架构博客啃了，跑个单机Demo把延迟曲线画出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端埋点先加密再发呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据合规专家 暗痕采集流里，眼动和草稿涂改数据，怎么做合规脱敏？全传上来再脱行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端做聚合，网关做拦截。那我这MVP方案就是：前端埋点聚合后，走Pulsar接入，网关层校验Token和脱敏，Flink做流式清洗。"
+              }
+            ]
+          },
+          {
+            "microScene": "在无GPU预算的解耦映射方案设计背景下，用户与导师围绕轻量映射实现、算力妥协、方案风险与阈值标定持续沟通（6轮），其中在轻量映射方案与算力替代部分与认知图谱工程师沟通（2轮），并最终形成基于Word2Vec与动作词典的解耦映射MVP方案及仿真造数据任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没GPU那GNN肯定跑不了。我想着，能不能先写一堆规则？比如停留超过5秒就判为“思考阻滞”，直接映射到对应的提示节点。简单粗暴，CPU肯定扛得住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在要在CPU上做暗痕时序到图谱节点的解耦映射，纯写规则怕覆盖不全，有没有省算力的招？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink流里实时跑BERT转向量是不是也费劲？还有你刚说的“认知动作词典”是啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险就是动作词典如果没覆盖全，或者Word2Vec不准，匹配的阻滞节点就全错了，后面给的提示就偏了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能得拿几组真实的做题暗痕试跑一下，看召回率再调？但我现在手里没现成数据。"
+              }
+            ]
+          },
+          {
+            "microScene": "在启径编排与分发链路设计背景下，用户与导师围绕链路搭建、防沉迷机制与可靠性验证持续沟通（5轮），其中在防沉迷熔断边界部分与诱导偏移审计员沟通（1轮），在分发链路架构选型部分与启径编排开发者沟通（1轮），并最终形成DAG编排、gRPC双向流下发、秒退熔断及梯度压测验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我寻思用规则引擎配个决策树？前端请求一次我们吐一次提示，弄个消息队列防阻塞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防沉迷我前两天看个论文讲自适应衰减的，好像能用，就是越往后提示越模糊？但我没看懂衰减因子的算式，就大概想按时间衰减，超时就不推了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防沉迷这块，按时间衰减行不行？比如超时就不再推提示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分发链路用规则引擎加消息队列行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计员说连续秒退3次要熔断，不能用时间衰减。开发者说用DAG不用规则引擎，下发用gRPC双向流。我觉得DAG画起来顺手，gRPC我之前写过客户端，能搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Jmeter压一下呗，多并发发暗痕看看断不断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这版方案就定：编排用DAG，下发gRPC双向流，防沉迷按秒退3次熔断，验证用Jmeter加抖动脚本分频率梯度压测，看重连耗时和丢失率。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在思辨暗痕重构与启径编排系统开发启动背景下，用户与导师围绕前端暗痕采集与清洗边界、技术选型持续沟通（7轮），其中在前端清洗边界部分与交互暗痕捕手沟通（1轮），在微清洗期望形态部分与隐迹流架构师沟通（1轮），并最终形成前端自研SDK结合RxJS微清洗与后端Flink重度清洗的技术选型方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接复用Sentry的SDK，它自带捕获事件和网络请求，我在外面再加个时间戳拦截器，数据直接推给后端。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "开个WebWorker把脏数据丢进去，滤掉无效的点击，算一下停留时长再发。这样后端拿到的就是干净的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "发版太慢了。可以配个远端JSON拉规则。不过WebWorker里拉规则再更新状态有点麻烦。我不太确定这块怎么写才不卡主线程。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前端暗痕采集和清洗放WebWorker里搞行不行？我想把脏数据都在浏览器里洗成干净的事件再发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端不洗的话，后端压力太大了呀。一堆没用的鼠标移动事件全发过去，带宽也受不了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果前端不洗数据，直接把原始的键鼠轨迹推给你，Flink那边能抗住吗？带宽会不会炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "去抖和合并？我只会用lodash的debounce防抖，这种时序合并怎么写？自己写定时器吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "听过没用过。如果是RxJS的话，我不懂怎么把埋点事件转成流，也不懂怎么开时间窗口合并。这块我得查查怎么写。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去把官方文档里关于bufferTime和window操作符的例子跑一遍，看看怎么把click事件转成Observable，再合并发出去。学完了我直接把这套逻辑套到咱们的mousemove事件上。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在本地写个对照测试。左边是原始事件流，右边是经过RxJS微清洗的流，统计一下同样操作下两边发出的包数量，看看降了多少。关键暗痕比如草稿涂改，我加个标记位，看合并后的包里有没有这个标记。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端自研SDK抓多模态暗痕，用RxJS的bufferTime做时间窗合并去抖，降低上报频率，然后批量发给后端。后端Flink负责重度清洗和特征提取。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在断点重构推理引擎开发背景下与导师围绕图结构、推断方式、验证及算力瓶颈持续沟通（5轮），其中在图映射与验证指标部分与推理重构算法师沟通（1轮），在流式排布与降级部分与隐迹流架构师沟通（1轮），并最终形成含异构图、混合推断、超时降级及F1验证的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接把特征塞给GNN图神经网络，训练一把，让它直接输出是不是断了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就是操作呗，边就是时间。时序就加个时间戳特征。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink出的特征怎么建图？GNN推断怎么搞？验证断裂点准不准咋弄？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则好办，写个脚本判断时间差就行。GNN没数据训不了，得先用规则跑一批让人工标，再训。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "推断是不是很慢？Flink流那么快，这边算半天跟不上咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "混合推断太慢跟不上Flink咋办？怎么排布？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，图结构建异构图，节点是认知状态。第二，推断用混合模式，Aviator写规则，GNN微服务做推理，Flink算完异步并行调这俩。第三，GNN超时就降级只出规则结果。第四，验证得人工标数据构造对照集算F1。"
+              }
+            ]
+          },
+          {
+            "microScene": "在启径策略图谱联调测试背景下，用户与导师围绕防沉迷节制与提示下发时序、测试用例构造持续沟通（5轮），其中在防沉迷逻辑实现部分与启径编排开发者沟通（1轮），在极端暗痕数据构造部分与质量护航测试官沟通（1轮），并明确联调测试重点与Mock脚本编写方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱查出来直接发提示不就行了？防沉迷不是加个限流开关就行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防沉迷节制到底怎么实现的？我以为是写个限流开关。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来是这样，不是开关，是衰减和熔断。那联调的时候得测这个衰减曲线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就多造几个断点请求发过去呗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造数据测这个防沉迷熔断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用高频涂改加滞留来触发。那联调测试重点就是三个：1.正常断点查图下发提示；2.高频涂改触发提示衰减；3.5次每分钟触发熔断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在并发诱导分发性能调优背景下，用户与导师围绕延迟飙高原因、日志折中方案、压测环境差异及背压控制持续沟通（10轮），其中在日志砍留提速部分与隐迹流架构师沟通（1轮），在暗痕日志审计复盘部分与诱导偏移审计员沟通（1轮），并最终形成核心审计同步写与非核心异步批量写方案，决定引入Reactive Streams背压机制与网络抖动压测验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟是高了。我我看cpu没打满，是不是线程池不够？加几个线程行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才压测分发接口，延迟飙到200ms了，我想加线程，你觉得呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构说要把日志砍了提速，这能行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定不能接受，太卡了。但没日志确实不敢上线，万一诱导错了没痕迹。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只会看cpu。async-profiler我昨天刚装了，还没搞明白怎么看IO阻塞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我马上用它跑一下，看看是不是卡在写日志上。要是真是IO阻塞，我就把非核心日志改成异步批量写，核心审计字段保留。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢日志确实会影响熔断统计。不过批量写的话，我设置个很小的flush间隔，比如50ms。这样最多丢50ms的数据，对5次每分钟的熔断阈值来说，误差应该能接受吧？因为熔断看的是分钟级，不是毫秒级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单机没算网络开销和锁竞争，真实延迟肯定比压测高。我我压测的时候得加点网络抖动的模拟，不能直接拿单机数据当线上预期。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心审计保留同步，非核心异步批量，flush间隔50ms。我这就去改下发逻辑和日志配置。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我本来想用一个有界队列，满了就丢弃。但丢弃暗痕数据可能导致推理断裂点漏算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我我查一下，用Flux的request方法让下游拉取，应该能避免队列撑爆。我改完代码再用带网络抖动的脚本压一次。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度验证诱导链路背景下与导师围绕线上验证方法、消释阻滞证明及过度干预防范持续沟通（6轮），其中在A/B测试设计与统计检验部分与认知效能评估师沟通（1轮），在防认知依赖熔断机制部分与诱导偏移审计员沟通（1轮），并确认分流与熔断配置方案，计划补充统计检验脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写了个带网络抖动的压测脚本，打算用JMeter压一下接口，看提示下发延迟。然后挑几个测试账号，看他们收到提示后有没有继续作答。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就全量打日志看转化率啊，怎么分对照组？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上诱导链路验证，怎么证明是提示消释了阻滞？我只会看日志里的转化率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我懂分流，但p值和效应量我只会套公式，不太懂具体啥意思。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实验组一直给提示会不会让学生产生依赖啊？怎么防？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "统计检验这块我真不行，只会算平均数。我今晚得去补一下假设检验和p值的课，明早把t检验的Python脚本写出来，跑通历史数据，把效应量算出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估背景下围绕推理阻滞消释率监控口径与逻辑与导师持续沟通（5轮），并在消释率计算与基线对照议题上与认知效能评估师沟通（1轮）、在依赖穿透判断与拦截阈值议题上与诱导偏移审计员沟通（1轮），最终形成包含有效消释增量、依赖穿透率及熔断线的看板监控逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我加了Grafana看板，盯请求成功率，还有平均做题耗时。耗时降了应该就是阻滞消释了吧，说明学生想通了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推理阻滞消释率具体怎么算？我现在面板上只有平均耗时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是看诱导完了，后面做对了，而且没再卡住。还要减掉那些自己能想明白的，剩下的才是系统的功劳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "硬喂的也算对啊，面板上请求状态都是200绿灯。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么判断是不是硬喂的？我面板上怎么加这个报警？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在看板上加三个数：有效消释增量、依赖穿透率、还有5%的熔断线。穿透超了就断路。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先算自然自愈率做基线；然后算诱导后的做对且没卡住的，减掉基线，得有效消释增量；要是提示太深且秒退，算依赖穿透，穿透率过5%就触发我之前配的熔断。盯着这三个数就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在看板出现启径误判熔断记录的背景下，用户与导师围绕误判归因分类、方差计算落地及阈值验证方法持续沟通（6轮），其中在误判数据切分方法部分与诱导偏移审计员沟通（1轮），并最终确定基于交互坐标方差分类及扩大抽样打标验证的脚本编写计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了那几个session，学生收到提示后直接跳出去了，停留时间极短。感觉像是提示没给对，把人搞烦了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这个区分，看草稿变化行不行？跑偏的话可能直接删草稿，过度的话可能还在乱写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在只有秒退的日志，怎么分这俩？看草稿删没删感觉不准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方差大就是跑偏发散了，方差小就是还在原地打转。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我拿暗痕流里的x,y坐标写个滑动窗口脚本算方差呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "方差多大算大？阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑那几十个打标case，看切出来的结果跟打标一致不一致呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把滑动窗口脚本写了，算完方差再去抽样打标。混淆矩阵的脚本我也一并写了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在系统上线复盘认知跃迁效果背景下，与导师围绕评估指标剥离、对照组构建、协方差分析补全及诱导偏移排查持续沟通（8轮），其中在评估口径与量化跃迁部分与认知效能评估师沟通（1轮），在偏移监控与依赖排查部分与诱导偏移审计员沟通（1轮），并最终确定评估指标、补全脚本方案及结论外推边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看正确率呗，用了咱们系统的人正确率涨了没。或者看做题时间，卡壳时间短了就是跃迁了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这剥离不了吧，线上乱七八糟的因素太多了。我就跑个前后对比，上线前和上线后的数据拉出来比一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "正确率和时间这种指标有混淆，怎么算真正的认知跃迁？对照组咋搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阻滞消释率我懂，刚才算方差的脚本改改就能算。启径后独立完成率得去日志里捞后续步骤的打分。对照组没提示的群，这数据咋切？我们全量都开了提示的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差脚本加个分组group by，按提示下发前后切两段算。独立完成率，我捞日志里“后续步骤无暗痕异常且正确”的case除以总case。对照组的事我去找运维切流。不过我以前没写过协方差分析的脚本，只会算均值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确实不会。我记个日志，去翻评估师的协方差分析文档，照着把python的statsmodels库用上，套进现在的脚本里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看提示点击率？点得多的就是依赖？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "系统有没有提示过度导致学生依赖的情况？怎么排查？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "价值权衡题依赖高，说明咱们的启径对这种题没啥用，只治标不治本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "评估指标用阻滞消释率和启径后独立完成率，要补协方差分析脚本；对照群找运维切空白流；结论外推只认逻辑推断题有效，价值权衡题有偏移风险待重构。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

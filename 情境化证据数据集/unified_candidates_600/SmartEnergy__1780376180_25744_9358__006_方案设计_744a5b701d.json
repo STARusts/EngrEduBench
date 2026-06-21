@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨模态能流数据接口设计（端侧64K内存硬约束）背景下，用户与导师围绕极低资源下异构时序流编码、时序对齐与验证方案持续沟通（5轮），其中在低资源异构时序流编码与元数据契约部分与多模态接口定义师沟通（1轮），并形成基于TLV编码、相对时标偏移与元数据极简契约的接口规范及交叉编译验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本来想直接上JSON，可读性好调试方便。但64K的话，解析器都放不下吧？Protobuf呢？生成代码小一点，能不能塞进去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热压电采样率又不一样，JSON和Protobuf都顶不住。这接口咋设计？总不能裸奔发字节吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它的帧结构套过来，但GOOSE是等间隔重发的，相变潜热释放是非线性的，采样点根本不均匀，这时间戳对齐我卡住了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以在设计阶段先做个最小验证。写个C的TLV打包函数，只包含测点ID、相对时标和float值，交叉编译到ARM上，看map文件里的BSS段和Text段大小。变量控制就是：同等数据量下，对比 nanopb 和 改版TLV 的峰值内存占用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改接口定义。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

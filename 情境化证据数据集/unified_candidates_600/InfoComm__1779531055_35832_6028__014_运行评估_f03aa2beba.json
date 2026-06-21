@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上监控看板搭建背景下，用户与导师围绕语义保真度与带宽监控指标选择、报警阈值设定及端侧算力约束持续沟通（7轮），其中在实时保真度与带宽指标设计部分与语义保真度监控分析师沟通（1轮），并最终对齐看板核心口径与阈值计算方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重构质量用SSIM和BERTScore算，带宽看压缩前后的比特数比值。理论上是这么对应的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，我没想过算力开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上实时监控如果不能用BERTScore，保真度怎么看？带宽监控除了比值还要看什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SE-SNR和余弦相似度，这个计算量小。带宽看差值，能预警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没数据支撑。只能先拍一个值？比如差值超过20%报警？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "端侧功耗确实没算过，一直以为云端算。如果端侧也要算余弦相似度，芯片算力可能不够。我得去翻翻端侧算子融合的文档，看能不能硬件加速。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值的话，我先用这两周跑出来的历史日志算一下差值的置信区间，取上界当报警线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心口径：1. 保真度主线盯SE-SNR，算余弦相似度平方，报警看关键语义包丢失率是否大于0；2. 带宽主线盯实际节省率与理论极限差值，报警阈值暂用历史日志置信区间上界；3. 端侧算SE-SNR需查硬件加速可行性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

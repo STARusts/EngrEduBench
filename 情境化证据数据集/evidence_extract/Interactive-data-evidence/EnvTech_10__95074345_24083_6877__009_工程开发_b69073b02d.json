@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在园区雨污调度旧策略“乱触发/抢泵/补传二次执行”整改的预测与调度策略实现背景下，用户与导师围绕触发逻辑、状态机、幂等去重、控制输出与审计字段落地持续沟通（10轮），其中在降雨触发与调度提前量/目标设定上与水力模型工程师沟通（2轮）、在event_time窗口与decision_id幂等上与后端工程师沟通（1轮）、在priority/ttl/lease_id租约与断链保守模式上与边缘计算工程师沟通（2轮），并明确按六项改造点完成端到端测试交付。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是阈值设太低吧，就一直报警。抢泵可能是指令冲突。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第1个可能是降雨判断只看当前雨强，不看累计？第2个可能是液位判断用错了点位。第3个是补传当成实时了，所以又跑了一遍。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就把R>2改成更大？初期30分钟改短点？事件key改成毫秒？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@水力模型工程师 初期雨水模式怎么触发才不乱？调度要提前多少比较合适？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以就是用P15、P30，然后提前开泵？V_target我先写死成70%？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 补传导致策略又触发，这种一般怎么挡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就把decision_id加上，然后补传超过5分钟的不跑。窗口起点用10分钟对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发用P15和P30，干旱期也加一下。参数先写配置里，比如X、Y、干旱小时数。提前量就先定10分钟。V_target先70%。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "退出就看雨停了就退？抢泵…给泵加互斥锁？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态就三种：晴天、初期、常规。进入初期：P15或P30满足且干旱期满足。退出初期：P15很小并且P30也很小。最短保持…5分钟？死区就是阈值上下差一点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 控制指令优先级和租约怎么实现？还有离线会不会乱控？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就都加priority和ttl，云端断了就本地保守。lease_id用时间戳就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）触发逻辑：用P15、P30加干旱期；阈值都放配置；不用单点雨强。  \n2）状态机：晴天/初期/常规；初期最短保持10分钟；退出看P15和P30都低于退出阈值。  \n3）幂等去重：用event_time算窗口；decision_id=rule_version+场站+10分钟窗口+state；迟到超过5分钟只入库不回放。  \n4）控制输出：带priority、ttl、lease_id；边缘维护租约，只允许高优先级覆盖；断链进入本地保守模式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那日志就只记工号？控制指令记…发起人ID、原因、输入值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我照这个字段加。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

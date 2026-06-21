@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实时共玩解谜编排平台方案设计背景下，用户与导师围绕谜题资产分层、版本/发布冻结与最小接口契约持续沟通（9轮），其中在版本与发布范式上与解决方案架构师沟通（4轮）、在版权留痕与可举证要求上与法务与合规经理沟通（2轮），并回到导师处确认双ID+Release冻结引用及Puzzle输入输出声明的落模方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想的比较书本化：实体-关系模型。大概三层吧：题目（Puzzle）属于关卡（Level），关卡属于房间模板（RoomTemplate）。版本就给房间模板打版本号，比如 v1、v2，改动就升版本。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能理解“实例”和“模板”分开。但 Puzzle、Logic、Bundle 听起来有点像重复的层。是不是一个 Puzzle 里就包含素材和规则？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我担心的是改文案这种小事，会让所有引用都变得不稳定。理论上我想要“引用透明”，改动可追踪，最好还能回滚到旧题面。不然会影响有效场次率这种指标的可解释性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 谜题资产这块，版本和发布一般怎么设计？我怕改一点点东西就全链路炸。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 Bundle 是干嘛的？就是 Release 吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "版本号用 semver 吗？像 1.2.3 这种。我怕大家乱写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最后一个：怎么判断“不兼容”？我感觉会吵起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务与合规经理 谜题资产和版本这块，合规上需要哪些留痕？尤其是素材版权和发布记录。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那创作者把一张网图拖进来，系统怎么判断侵权？要做自动识别吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。我把重点放在“反查”和“冻结引用”上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概想这么定：每种资产都有两个ID：一个是长期的 puzzle_id/asset_id，一个是每次改动生成的 rev_id。编辑时 RoomTemplate 可以用 puzzle_id 引用最新版本；但一旦要上线投放，就做 Release，Release 里必须全换成 rev_id 列表。运行场次只认 Release。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规那边要加字段：素材来源、授权期限、可商用之类；Release 还要记录发布人/审核状态，能从某个素材反查到哪些 Release 和场次。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入输出接口是指谜题的答案校验？还是玩家操作事件？我这里有点糊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "静态检查我懂一点，像类型系统。那 breaking 的定义就偏“schema 变了”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第4点我可能会写得很抽象，但我先照这个来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还有一个小确认：Bundle 我先不做成独立实体，可以先用 Stage/RoomTemplate 组合出来，对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "下一步我是不是要把这些实体的接口列一下？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

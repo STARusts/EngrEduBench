@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上运行反馈与监控指标冲突的调度迭代背景下，用户与导师围绕体验保障与算力利用率的权衡、折中方案及验证持续沟通（11轮），其中在体验卡顿归因部分与教学体验观察员沟通（1轮），在算力利用率与成本冲突部分与调度策略工程师沟通（1轮），并形成按实验类型分类的Buffer折中策略、分组对照验证方案及调度标签修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学体验观察员 具体哪块体验差？大盘看着没毛刺啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度策略工程师 利用率低又是咋回事？不是刚加了节点吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一边要加Buffer保手感，一边要砍Buffer降成本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前都是看报警调参数，没弄过这种带人感的。我那个学习日志里好像记过一次IO throttling的处理，但那是纯后端的事，跟这种前端拖拽卡顿不是一回事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得去看看前端有没有埋点能抓这半秒的卡顿。我记一下，晚上把前端的JS错误和卡顿日志加上，迁移到现在的调度权重计算里。不能光看后端指标了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一刀切肯定不行。能不能按实验类型分？带GUI拖拽的留20%，跑深度学习训练那种批处理的，直接压到5%。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "得复现一下。我找两门课的日志，一门是3D建模，一门是模型训练。控制变量，都把Buffer调到10%，看3D建模是不是卡顿投诉暴涨，训练那边是不是没影响。如果确实这样，说明我的分类策略在外推到其他交互型实验时也有效。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在沙箱编排请求里加个`exp_type`标签。调度器匹配到`gui_interactive`就走高优保Buffer逻辑，匹配到`batch_compute`就允许超卖压算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，请求入口加`exp_type`标签区分交互和批处理；第二，交互型保20%Buffer，批处理压到5%；第三，今晚我去扒前端卡顿埋点，补进调度权重；第四，拿3D建模和模型训练两门课日志做分组对照复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在方案设计需构建跨节点数据隐私墙与容灾机制的背景下，与导师围绕全量加密缺陷、ABE原理应用及容灾接力与混沌验证持续沟通（9轮），其中在动态脱敏与合规红线部分与隐私安全守卫者沟通（1轮），在副通道容灾接力部分与数据拓扑设计师沟通（1轮），最终形成基于动态脱敏与ABE的隐私墙及WAL冷备容灾基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个鉴权呗，查配方库带个Token，数据库做全量加密，磁盘丢了也不怕。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟确实会炸。只加密敏感字段？但怎么控制谁能看啥，我也没现成的代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配调中心查配方库，怎么搞脱敏？全量加密太慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "动态脱敏，ABE。回流节点不给原图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没接触过。我只会RSA。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了下，ABE就是用属性当公钥，比如属性是“决策中心”，就能解密带有“决策中心”策略的密文。我们在识解网关把配方请求用ABE加密，只有决策中心能解，回流节点没这个属性，自然就看不到了。不用改后端逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "挂了就挂了呗，大不了不告警了，决策中心按默认路由走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "复训回流节点宕机了，副通道数据怎么保？不能全丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "写日志加冷备。验证就是拔网线看告警丢不丢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "变量就是主节点状态，正常和宕机。宕机用Chaos工具注入。RPO的话，看主节点宕机前发出的最后一条告警ID，和冷备接管后发出的第一条ID，中间不能有漏的。对比主备的告警总数得一致。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "隐私墙用动态脱敏和ABE加密，网关出数据脱敏，决策中心用ABE解配方。容灾用WAL日志加冷备，混沌注入验证RPO等于0。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

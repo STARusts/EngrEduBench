@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计第三轮微态重构算法选型与仿真背景下，用户与导师围绕气象云图推演模型选型与仿真验证设计持续沟通（7轮），其中在时空联合建模选型部分与算法设计师沟通（2轮），并最终形成ConvLSTM选型及边缘算力约束、基于本站历史数据回放与极端云团切片的仿真验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种时间序列的，我看网上好多现成代码，直接套个LSTM的包跑一下行不行？调调参数应该能出结果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "空间？我本来想把各方阵辐照拼成一维向量输进去。自己写空间提取太容易搞砸了，最好找个封装好的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接套LSTM包，但说空间特征不行。这块有没有封装好的模型能同时处理云图移动和时间序列的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规整，都是标准方阵。听起来ConvLSTM好像好弄一点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法设计师说用ConvLSTM，开源也好找，边缘侧跑着也不至于太卡。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "仿真这块，有没有那种气象仿真平台可以直接灌数据的？我找个开源数据集跑一遍看Loss降没降下来就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "地形风确实没法套现成。那只能拿咱们场站去年历史气象云图和实际功率跌落的数据做回放对照了？把云图喂给模型，看预测的遮影时间跟实际跌落时间差多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，选型定ConvLSTM，严禁网络过深导致边缘推演延迟超标；第二，仿真不用通用数据集，用本站历史云图与功率跌落数据做回放对照；第三，必须构造云团分裂、对冲等极端切片，测漏判率边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路联调与性能调优背景下，用户与导师围绕结构化快照落库方式、MQ选型、半匹配状态存储及压测延迟排查持续沟通（8轮），其中在跨域接口降级策略部分与接口协议定义师沟通（1轮），在压测基准与快照异步化部分与质量保证测试员沟通（1轮），并最终形成Kafka异步落库、Sentinel限流加异步回调、半匹配存Redis及盯GC日志的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联调就前后端跑通呗，性能的话，加个Redis缓存应该就差不多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加MQ？我看网上都用的RabbitMQ。延迟就加个超时重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域接口延迟大，直接加Sentinel限流行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测要测到多少QPS才算过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用MQ解耦，异步写。限流加Sentinel。半匹配状态存本地。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RabbitMQ吧，网上例子多，上手快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前两天翻了一篇讲Kafka异步落库的，里面说调batch.size能提升吞吐，但我没搞懂那个参数怎么跟我们的快照大小对应。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能是网络抖动吧？或者数据库慢了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "快照改Kafka异步落库，batch.size根据快照大小调小点。跨域接口加Sentinel限流加异步回调兜底。压测盯GC日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

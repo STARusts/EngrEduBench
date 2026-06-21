@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在水幕气幕阻截时序测试背景下，用户与导师围绕测试方案、触发条件与熔断逻辑持续沟通（6轮），其中在时序压测指标与风洞测试部分与测试验证工程师沟通（2轮），在指令链路耗时分析部分与机物联调开发者沟通（1轮），并最终形成风洞直连触发、时序指标与超时熔断的测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就写个压测脚本，批量发指令，掐表算延迟，看水幕气幕响应是不是同步的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就多跑几轮，取个平均？同步误差这块，我还没细想。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻截时序测试这块，我们需要达到什么样的硬指标？风场突变下怎么测才有效？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那指令链路上，50ms能打满吗？哪里最耗时？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试说端到端 50ms，同步误差 10ms，要用风洞测。联调说阀门动作占 30ms，余量够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风洞一开，风速传感器超阈值，就触发指令呗。熔断条件，如果超了 50ms 还没收到阀门开到位的反馈，就熔断？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "旁路传感器，直接硬触发。那我改测试脚本，走直连触发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

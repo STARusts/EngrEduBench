@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在蓝藻水华声光异构感知固件驱动开发背景下，用户与导师围绕摒弃通用SDK自研驱动、安全校验前置、验证设计与数据脱敏持续沟通（8轮），其中在底层时标获取与中断回调部分与边缘感知固件极客沟通（2轮），在声学数据采集合规与频域截断部分与水环境合规审查员沟通（1轮），并最终形成自研中断、安全前置、合规截断及50微秒对齐误差等开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我准备先写感知节点的固件驱动，直接拿厂商给的SDK套一下应该就能跑吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有现成的安全组件库能直接挂上去？我看网上很多物联网项目都是加个MQTT TLS库就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种底层时间戳怎么搞方便点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接读寄存器？这也太底层了，万一读错了时序全乱。有没有那种已经封装好的宏或者函数？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "看来只能自己写中断。那验证怎么办？我总不能扔到水里看时间对不对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我一般就打log看输出。不过水下确实不好看log。要不我多跑几遍试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没想过，我就负责拿数据，脱敏不是后端的事吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光节点采数据这边，有什么合规限制吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我现在的计划是：驱动自己写，时标读硬件计数器，哈希在封包前算，验证的话我写个硬件回环脚本把声光两路数据对齐测，数据采集加上频域截断，日志只打摘要。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看两路时间戳差值是不是在1毫秒以内吧。超过就算不对齐。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没搞过这么细的时序控制。我去找找芯片手册里定时器那章，再看看有没有开源的固件时标对齐案例能参考，今天下班前把回环测试脚本写出来跑通。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

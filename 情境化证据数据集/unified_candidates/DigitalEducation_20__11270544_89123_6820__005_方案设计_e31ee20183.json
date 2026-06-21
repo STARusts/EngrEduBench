@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育编排引擎方案设计背景下，用户与导师围绕对话数据流与接口、插件契约/扩展点、回放与版本治理及失败兜底持续沟通（12轮），其中在“仅风险/抽检/申诉可写全文回放”的合规强约束与审计字段设计上与合规与隐私官沟通（2轮），并形成三条主接口与事件/插件字段骨架及治理要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆：课堂里会有“事件流”和“生成流”两条。事件流负责记录、审计、回放；生成流走编排引擎->模型/工具。接口上我想把插件分三类：感知类（ASR/表情/举手）、策略类（路由/控温/上下文裁剪）、执行类（知识检索/题目生成/点评）。每类都约定输入输出是事件包，不直接传整段对话文本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小我觉得得有：trace_id、session_id、anonymous_user_id、role（师/生/助教）、timestamp、event_type、payload、summary_ref。payload按事件类型分schema。稳定的核心字段就是前面那几个ID和event_type，还有一个schema_version。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，我想把内容拆成三层：raw_content可选、content_chunks可选、summary必选。事件里只带summary_id，raw要走单独的“回放存储接口”，而且得带risk_reason或者抽检标记才允许写入。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 全文回放这块，接口怎么卡住“默认摘要、仅风险/抽检/争议存全文”？需要哪些必填参数和审计字段？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发证据这块我明白了。trigger_type/trigger_evidence强制，TTL强制。读取要审计表。那“争议申诉”的appeal_id如果是老师口头说的也不行，得工单系统出具。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把接口字段按这套做成必填校验。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件摄取我倾向统一成 EventIngest API：  \n- req：trace_id、session_id、anonymous_user_id、role、timestamp、event_type、schema_version、payload、summary_id（可空，后置生成也行）  \n- 幂等：用 event_id=hash(trace_id+timestamp+event_type+seq)  \n- resp：ack_id、ingest_status、server_time、reject_reason。  \n错误码我分三类：参数/权限/策略拒绝（比如含PII被拦）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想两种都支持：课堂实时走“增量摘要插件”，每隔N轮输出summary_patch事件；课后再跑“整段摘要”产final_summary事件。EventIngest里不强求summary_id，但要求每个session最终必须有final_summary事件，否则试点指标没法算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "编排执行我设 OrchestrateRun：  \n- req：trace_id、session_id、turn_id、intent（可空）、context_refs（指向chunks/summary，不直接传raw）、policy_set_version、plugin_chain（插件ID列表+各自config_ref）、constraints（比如温度上限、max_tokens、禁止项）  \n- resp：assistant_action（说话/提问/布置练习/调用工具）、generated_text（这是给前端展示的）、tool_calls（结构化）、metrics（token_estimate、latency_budget）、provenance（用到的知识源id、提示模板id）。  \n幂等按 turn_id+policy_set_version。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回放我不打算“重放生成”，而是“回放当时生成结果+结构化链路”。所以 OrchestrateRun 的 resp要把“最终输出文本”作为事件写入 EventIngest，事件类型 assistant_output，payload里带output_text和provenance。回放展示就读这个，不再重新跑模型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "同意。provenance里我加：prompt_template_version、plugin_versions（map）、router_version、safety_policy_version。每个版本最好是语义化版本+内容hash，hash用来对抗“同版本号内容被改”的问题。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我理解的插件契约可以统一成：  \n- meta：plugin_id、plugin_type、version、capabilities、required_scopes、input_schema_ref、output_schema_ref  \n- invoke(req)：req里有 trace_id、session_id、step_id、input（结构化）、context_refs、deadline_ms、budget_tokens（对LLM类）  \n- resp：status（ok/degraded/blocked）、output、events（插件自己产的观测事件）、cost_estimate、explain（给审计/调试）。  \n降级语义：degraded要附fallback_used=rule/skip/cache；blocked用于合规或安全拦截，必须给reason_code。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分三种：  \n1）硬依赖插件失败：整个编排返回fail，并触发降级策略（比如切换到模板话术）；  \n2）软依赖失败：记录warning_event，链路继续；  \n3）安全插件blocked：直接中断输出，走安全兜底回复。  \n在 OrchestrateRun resp里加 overall_status 和 failed_steps 列表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能想到三层：  \n- schema_version：事件和插件输入输出都带，编排引擎只接受白名单范围，比如支持 1.x，拒绝2.0；  \n- capability negotiation：插件注册时上报capabilities和supported_schema_versions，编排下发链路时做匹配；  \n- policy_set_version灰度：同一课堂可能不能半节课切版本，所以以class_session为粒度锁定policy_set_version，课后再切。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我有点摇摆。我直觉放在路由前做“统一脱敏过滤”，这样无论走哪家模型都一致；但也担心不同模型对输入限制不一样，适配器里做会更贴近。可能是“双层”：路由前做PII硬脱敏，适配器再做供应商特定的屏蔽和格式化。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "可以做最小验证：抽三类课型样本（讲授/练习讲评/讨论），对同一输入跑三种路径：无脱敏、仅统一脱敏、双层脱敏。对比两项：1）任务完成率（是否能给出可用引导/点评）；2）敏感命中率（是否还有手机号/姓名/学校等泄漏）。阈值我先定：敏感命中率要降到接近0，任务完成率下降不超过5%。具体阈值再跟教研确认。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在 OrchestrateRun 的 resp里把 metrics 固化：prompt_tokens_est、completion_tokens_est、model_tier（base/pro）、cache_hit、context_bytes、summary_used(bool)、retrieval_k。EventIngest把这些metrics也作为事件入库，后面业务分析师能直接按session聚合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两条我觉得危险：  \n- 幂等和顺序：EventIngest如果乱序，summary_patch可能先到，turn事件后到，回放会难看。可能要加 seq_no 并允许服务端按(seq_no)重排，或者至少回放端按timestamp+seq_no排序。  \n- 权限scope：插件meta里required_scopes不只是给人看，编排引擎下发链路前要校验“课堂角色+租户”能不能用这个插件，不然老师模板被学生端调用会出事。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

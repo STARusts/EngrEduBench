@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在北向接口与SLA保障数据模型设计背景下，用户与导师围绕接口抽象、数据最小化、意图驱动接口引入及验证方案持续沟通（7轮），其中在接口协议选型与数据结构部分与跨域路由协议工程师沟通（1轮），在跨境数据脱敏与审计留痕部分与空基通信合规分析师沟通（1轮），并最终确定协议与数据约束、引入意图接口并形成自愈频率控制验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是弄个API，把时延抖动这些SLA参数传上去呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，不能全传。开销也得控制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口用啥？数据模型怎么建才不占太多带宽？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域数据脱敏怎么做？审计怎么留痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Protobuf，只传切片ID和SLA，不传IP。审计只记违约。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不用管底层怎么切，直接说我要低时延，系统自己配。我加上这个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测一下接口。就发一堆请求，看看接口崩不崩。对照组就是不加压的呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议用Protobuf，数据只传切片级SLA和租户ID，不传IP。审计只记违约和自愈。意图接口加上。验证就是控制自愈频率，看上报时延，跟静态路由对比。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

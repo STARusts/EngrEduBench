@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在结算计费平台方案设计背景下，用户与导师围绕安全多租户隔离、容灾切换下幂等结算与审计追加写、以及按租户限流与验证演练持续沟通（10轮），其中在隔离分层与RPO/RTO及唯一键+状态机防重复计费部分与解决方案架构师沟通（4轮），在内部排障跨租户访问授权与审计边界部分与合规与风控经理沟通（1轮），并收敛为可写入方案章节的6条要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先用现成的云方案顶着，比如直接上多租户隔离，然后数据库主从加备份。容灾就跨可用区，感觉就差不多了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更偏向共享表加 tenant_id，省事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等的话…就是 compute 接口重复调用返回同一个 settlement_id，所以应该不会乱。审计日志就跟着业务库存？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 多租户隔离和容灾这块，平台计费结算怎么设计比较靠谱？我现在只想到共享表+跨可用区。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "强制行级隔离是指数据库 RLS 那种？我看很多人用 ORM 自动加 tenant_id 条件，这个够吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容灾这块呢？我担心切换的时候 settlement_id 还没落盘。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 RPO/RTO 怎么写才不会被挑刺？我不太会定指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从架构师那听到的重点是：多租户不能只靠 ORM；结算要用 settlement_id 做唯一键先落库再算，配状态机，容灾切换靠唯一键避免重复。RPO/RTO 按数据分级写。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "升级独立库…是不是给大客户单独部署？边界我不太会写，就写“支持切换模式”？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "追加写的话，就把 settlement、review、audit 都设计成 append-only 表，不 update？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概懂，就是 settlement_result 不能改，review 只能追加；但 settlement 状态可以从 PENDING 变 SUCCEEDED，只是要记录状态变更历史。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可以限流？我看网关都有 per-tenant 的限流插件，开一下就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我写：compute 请求落表后进“按租户分区的任务队列”，每租户并发上限；超限返回 429 并记录 audit_log？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "未完成的…就靠状态机，切换后扫 PENDING/COMPUTING 重新拉起来跑？可能会重复跑，但不会重复出账，因为唯一键挡住了。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "做演练用例：在 compute 写入 settlement 表后、结果还没写完时，模拟主库不可用切到备库；然后重复调用 compute 多次，最后检查 settlement_id 只有一条，结果一致；audit_log 里要看到每次请求都有记录。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这我没想。是不是给内部支持一个“跨租户只看元数据”的权限？比如只能看 job_id、状态、错误码，不给轨迹细节。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 多租户下内部排障、数据访问这块，方案设计里要写哪些硬要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，风控那边给的底线是：内部默认无权跨租户看数据，要工单审批临时授权；排障先用脱敏/聚合；跨租户查询只能走受控接口和审计，不能随便查库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）多租户默认共享库，但所有表带 tenant_id，入口 tenant_id 从 token 解析，不让前端传。\n2）数据访问层强制 tenant 隔离，不只靠 ORM。\n3）compute 用 settlement_id 唯一键先落库去重，再计算；状态机可恢复。\n4）结算结果/证据/复核结论/audit_log 追加写不可覆盖；状态更新要留历史。\n5）容灾同城优先保证低 RPO，异地切换允许重放，靠唯一键防重复出账；未完成任务切换后扫状态重跑。\n6）按 tenant 做配额与并发上限，避免单租户拖垮；超限返回明确错误码并记录审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

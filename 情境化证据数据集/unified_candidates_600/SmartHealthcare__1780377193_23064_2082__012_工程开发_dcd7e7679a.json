@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在药轨重配微服务封装与接口测试背景下，用户与导师围绕服务边界切分、状态依赖处理与架构选型持续沟通（7轮），其中在算法状态拆分可行性与事务回滚机制部分与药轨自适应调优师沟通（3轮），并最终确定单实例有状态服务封装、HTTP接口暴露、etcd配置中心及越界触发与回滚测试用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "药轨重配涉及多策略并行和灰度回退，我准备引入 Istio 服务网格。用 Envoy sidecar 做流量劫持，gRPC 双向流实现推演策略的下发和状态回收。没有服务治理，后续多模型灰度发布根本没法管控。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "资源可以纵向扩容，但架构的灵活性一旦丢了，后期补刀成本极高。至少得用 Consul 做配置中心吧？不然重配策略写死在代码里怎么热更新？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边重配算法的工程化准备得怎么样了？我现在要把它封装成 gRPC 服务，你的状态机能拆成无状态接口加外部 Redis 缓存吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你这写法根本没法做水平扩展和微服务封装啊！强耦合单体怎么接入我的服务网格？你必须把推理上下文和模型参数解耦，状态外置是分布式系统的基本要求。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "他这边强依赖本地状态，我这边要分布式解耦，架构完全冲突。如果保留他的内存态，服务重启就丢失状态，这在工程上不可接受。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "进程内开关？那每次更新策略还得重新编译部署？这太丑陋了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果保留进程内状态，我只能做成有状态单实例服务。灰度路由降级为基于请求头的 Nginx 转发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试用例方面，我重点关注两个：一是径流漂移越界时的重配触发时延，二是重配指令下发后，如果下一轮嗅诊数据未按预期返回，状态机的回滚机制。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把 Nginx 配置和 etcd watch 机制写进去，重配服务封装成带健康检查的单实例 Docker 容器。测试脚本我用 pytest 写异步超时验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端无损转发链路压测背景下，用户与导师围绕压测阶段划分、工具选型与无损判定边界持续沟通（5轮），其中在工具选型与无损边界界定部分与测试工程师沟通（2轮），并最终形成基于Optical-Storm与PFC反压的压测方案及验收边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端到端压测不能只看带宽，还得把微腔反演的时延和阻尼寻优的收敛时间串起来。我打算分两阶段：先是固定拓扑下的稳态吞吐压测，然后是注入链路故障看动态寻优的收敛性能。验收KPI的话，无损转发丢包率必须0，端到端时延抖动控制在微秒级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本来想用标准的TRex打流，配置上改改包长分布。不过您说的微腔级阻尼特征，TRex好像确实打不出那种因为驻波反演带来的瞬时相移抖动。这块工具选型我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端无损转发压测这块，TRex打流没法模拟微腔驻波的相移抖动特征。你们平时做光互连压测用什么工具？还有反演时延的探针怎么采集？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Optical-Storm加FPGA发微扰，这比纯软件发包真实多了。我之前没接触过这个框架，看来得补一下它的DSL配置。Chrono-Trace挂回调也解决了反演时延的黑盒问题。这样我第二阶段的动态寻优压测，就可以直接用FPGA注入阻尼突变，然后通过Chrono-Trace抓收敛曲线，比用系统时间戳精度高好几个量级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果在阻尼突变收敛期，时延尖刺没有导致丢包，只是转发排队时间拉长，且尖刺持续时间在一个反演周期内，我认为应该算无损。因为上层的RDMA协议有重传容忍机制，只要不丢包，瞬时的排队尖刺是可以接受的。但如果尖刺超了反演周期还没收敛，就说明寻优算法失效，必须Fail。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测工具改用Optical-Storm配合FPGA发微扰，反演时延用Chrono-Trace钩子抓纳秒戳。验收边界我们敲定了：时延尖刺只要在阻尼寻优收敛周期内，且不丢包，就算无损；超了周期还没收敛，触发PFC反压。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改压测脚本，把Optical-Storm的DSL和Chrono-Trace回调加上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

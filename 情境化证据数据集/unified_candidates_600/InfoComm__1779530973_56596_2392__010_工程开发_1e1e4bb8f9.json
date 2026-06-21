@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在同步协议栈联调背景下，用户与导师围绕老代码死锁与时延抖动重构、写端饿死处理及审计日志合规持续沟通（4轮），其中在老代码问题诊断与重构思路部分与确定性同步协议开发者沟通（1轮），并最终形成包含读写锁加公平机制、独占核无锁队列及合规日志策略的确认重构点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "死锁不就是锁没释放嘛，加个超时强制释放不就行了。毫秒级抖动肯定是线程睡多了，把sleep删了肯定快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老代码死锁时延高，咋整？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是锁太大换小锁，线程分开跑别抢核。审计日志我加上"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写端饿死我就再写一遍呗。日志全记下来，磁盘大不怕，存个十年八年。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "换成读写锁加公平机制，线程独占核用无锁队列。日志只记元数据和时间戳，留30天。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

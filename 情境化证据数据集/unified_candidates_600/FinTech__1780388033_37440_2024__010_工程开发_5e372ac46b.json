@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在债筹智调规则引擎实现背景下与导师围绕技术选型、性能约束、硬编码与脚本边界及热更安全持续沟通（5轮），其中在性能评估与沙箱实现部分与智调引擎开发者沟通（2轮），并最终确定LiteFlow编排、核心硬编码、外层脚本及审批流加沙箱隔离的选型方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向排除Drools，太重了，而且我们的债筹微调规则变更频率高，Drools的版本管理和热更新比较笨重。自研的话成本高，测试覆盖难保证。我初步想用LiteFlow这种轻量编排引擎做底座，业务规则用脚本语言写，方便热更。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@智调引擎开发者 你那边评估过LiteFlow在微调高频触发场景下的性能表现吗？特别是Aviator脚本热更时的开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口这块我会在LiteFlow的入参拦截器里做一层Protobuf到POJO的转换，和前面的Schema对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边界划定可以按是否涉及资金池变动来切，动资金池的硬编码，只做路由判断的脚本化。至于安全，我会加操作日志，记录谁改了哪条规则。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "防注入这块我确实考虑浅了，只想着业务逻辑没想到底层安全。Aviator本身支持限制某些内置函数，但完整的沙箱可能还得在类加载器层面做隔离。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终选型定下来：底层用LiteFlow做流程编排；核心资金计算算子Java硬编码；条件路由用Aviator脚本；热更必须过审批流，且用自定义ClassLoader做白名单沙箱隔离。这样能对齐前面50ms的延迟要求，也补上了安全短板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

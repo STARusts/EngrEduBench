@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析与并发风险推演系统上线运行评估背景下，用户与导师围绕核心推演指标基线设定、线上有效性验证及监控策略补充持续沟通（6轮），其中在业务指标基线设定部分与系统运维监测师沟通（1轮），在线上有效性验证部分与临床效果评估员沟通（1轮），并最终补充业务基线指标与分组验证逻辑，制定统计理论补充目标与监控大盘改造计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加了GPU显存、流计算反压率、还有推演接口的P99延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统运维监测师 上线初期的业务指标基线一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能拍脑袋我懂，但依据从哪来？离线测试的ROC曲线能用吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@临床效果评估员 线上推演结论的有效性怎么验证？我手里只有大盘的准确率数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我是不是得在推演服务里加个标记，区分开历史数据和实时推演数据？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我在Prometheus里加两个自定义指标：risk_trigger_total 和 graph_hit_total。然后在Grafana上画大盘。至于分组比较，我在接口层加个 experiment_group 标签，把走推演的流量打上标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "资源类：GPU、反压、P99；业务类：触发率、命中率。验证设计：打上分组标签回流数据，做历史对照。告警阈值先按离线测试的80%设，跑一周再调。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块理论确实差。我定个目标：这周末前把A/B Test和假设检验的基础概念看明白，重点是P值和置信区间的计算逻辑。下周一把Grafana里的分组聚合查询语句改出来，让大盘能直接展示对照组和实验组的差异。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

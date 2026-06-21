@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在关卡编辑器与素材管线开发背景下，用户与导师围绕最小可用链路的事件模型、导出/运行时范围划分、验收指标与版本兼容持续沟通（8轮），其中在关卡包数据结构与分段流式加载对接上与客户端主程沟通（3轮），在UGC素材许可审计与隐私最小化要求上与合规与内容安全经理沟通（2轮），并整理形成开发清单与落地约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向先把素材管线做得很“严格”：所有资源都走统一manifest，音频、触觉pattern、叙事脚本都能版本化，关卡导出就是一份可复现的bundle。编辑器我想做实时预览：拖一个音符就能听到空间音、同时打触觉。这样作者体验最好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "实体我想分：LevelMeta、Timeline、Track、Event、AssetRef。字段上至少要：时间戳、持续时长、空间位置、触觉effect_id、强度、还有叙事trigger。预览那块我想让编辑器只连一个“模拟器”，设备真实输出可选，不强制。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想统一成曲线，甚至频谱，反正最终都能映射到设备；tap/rumble/texture只是标签。统一模型后，编辑器表达力更强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端主程 编辑器导出到端上运行时，你希望关卡数据长什么样？我现在想做一套很通用的事件系统，怕你那边不好接。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分段索引是指比如每10秒一个chunk？那编辑器导出就要切片。还有`offset_ms`我是不是复用之前触觉校准里的`latency_offset_ms`？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，关卡包要设备无关。那我触觉事件里就只存`intensity_0_1`，运行时再乘`gain`，再加`latency_offset_ms`做提交时间修正。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全经理 UGC关卡里会带音频/触觉pattern/叙事脚本。素材管线这块你这边有哪些硬要求？我想把资源都hash化版本管理，但怕踩雷。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我manifest里加`source_declared`会不会被作者乱填？我更想搞自动识别，比如音频指纹比对重复素材。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我从客户端主程那拿到最小闭环结构：level包=meta+assets+按时间分段的segments(events)。触觉事件设备无关，只存`intensity_0_1/effect_id/duration/channel`，运行时乘gain并加latency offset。合规那边要求manifest里必须带license和来源声明，还要`content_rating/flags`，编辑器日志不要带本地路径和设备序列号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把编辑器做到：时间轴编辑、拖拽放置事件、波形对齐、空间位置可视化、触觉曲线编辑……  \n验收点：能做出一个2分钟关卡，端上跑一致。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须：  \n- 编辑器：时间轴放置`note_hit/note_hold/spatial_audio_emit/haptic_tap/rumble/texture/story_trigger`，每类事件都有固定参数面板；只做“虚拟预览”（音频播放+屏幕提示触觉，不要求真实设备）。  \n- 导出：生成关卡包，包含`meta/assets/segments`，assets走hash和size，导出校验sha256。  \n- 运行时：能按segment流式加载并播放，触觉事件走适配层：`intensity_0_1 * gain`，提交时间加`latency_offset_ms`，队列压力按`tap>rumble>texture`降级。  \n验证：同一关卡包在两台设备上事件数量一致、P95 `haptic_submit_latency_ms`不回退、`haptic_missed_event_count`在压力测试下可控。\n\n可选：  \n- 真机触觉预览开关  \n- 3D编辑视图更精细的gizmo  \n- 自动切chunk策略可配置"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增量构建我想做内容寻址缓存：asset以sha256作为key，打包时只拷贝新增。关卡包也按`version`字段，运行时按版本选择解析器，旧版缺字段用默认值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则我先给四条：  \n1）`level_schema_version`用`major.minor`，minor只允许加可选字段；major才允许改结构或语义。  \n2）运行时支持读取`major`当前和前一代；更老的提示“不支持”。  \n3）编辑器导出默认写当前`major`，但可选“降级导出”到前一代（只丢弃新增字段，不改时间轴）。  \n4）字段废弃：读取保留、写入停止，至少跨一个major再移除。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我一开始没想。可能要做“引用不导出”：平台库素材只在包里存`asset_id`和授权token，端上拉取；本地导出时不落真实文件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我现在的manifest字段补充成：`uri`既可以是本地打包路径也可以是远端受控URL；加`access_scope(public/platform_restricted/private)`。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清单我按落地讲：  \n1）关卡包结构：`meta(level_id, version, bpm, offset_ms, duration_ms, content_rating, flags[])` + `assets(asset_id,type,uri,sha256,size_bytes,license_tag,source_declared,access_scope)` + `segments(start_ms,end_ms,events[])`。  \n2）事件kind固定为：`note_hit/note_hold/spatial_audio_emit/haptic_tap/haptic_rumble/haptic_texture/story_trigger`；触觉params固定字段`effect_id,intensity_0_1,duration_ms,channel`。  \n3）导出分段策略：默认10s窗口+事件数上限；保证运行时可流式加载。  \n4）素材缓存：asset以sha256做去重，增量构建只打包新增；受限素材允许远端`uri`引用不落盘。  \n5）运行时触觉回放：事件设备无关；端侧用`intensity_0_1 * gain`，提交时间叠加`latency_offset_ms`；队列压力按`tap>rumble>texture`降级、texture先降频再关。  \n6）编辑器预览：默认虚拟预览（音频+UI提示），真机触觉预览是调试开关，不作为验收门槛。  \n7）兼容规则：`schema major.minor`，minor只加可选字段；读取支持当前major和前一代；废弃字段跨major再移除。  \n8）验收与指标：同关卡包跨设备事件数一致；压力场景下`haptic_submit_latency_ms` P95不劣化、`haptic_missed_event_count`可回归；导出包hash校验通过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

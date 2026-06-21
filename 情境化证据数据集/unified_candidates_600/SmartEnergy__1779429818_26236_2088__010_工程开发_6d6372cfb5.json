@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微网自愈逻辑性能调优背景下，用户与导师围绕日志写入与重构性能的矛盾持续沟通（6轮），其中在性能提升方案部分与性能调优师沟通（2轮），在合规红线部分与合规审计员沟通（1轮），并最终形成采用DMA搬运日志释放CPU算力的方案及验证缓存溢出风险的边界条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "日志太慢就先不写呗，或者等自愈完了再补上。跑分过不去更麻烦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自愈的时候写日志太拖后腿了，能不能直接关掉，或者扔到队列里最后再写？只要跑分能过就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自愈瞬间能不能先不写日志？调优师说关了最快。跑分差一点点过不去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规这边咬死不能关，调优师说关了能提8%。我觉得还是先关了把验收混过去吧，反正就零点几毫秒的事，出不了大乱子。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既要写日志又要快，CPU就这么点算力，我哪有招啊。除非日志不占CPU。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看通信协议手册刚学了配置DMA搬运串口数据。是不是可以用DMA把日志搬到RAM里，CPU不管这事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用DMA搬日志代替CPU写，能省多少时间？会不会影响自愈算法执行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优师说DMA可行，能压到验收线以下。就是中断优先级得配好。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改代码，把日志改成DMA发，然后故意多注入点故障看看会不会丢。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

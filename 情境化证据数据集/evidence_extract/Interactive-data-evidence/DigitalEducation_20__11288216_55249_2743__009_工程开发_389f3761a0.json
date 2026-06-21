@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课堂终端联调背景下，用户与导师围绕最小链路打通、通道选型、拒绝语义体验、聚合状态与验收用例持续沟通（8轮），其中在省电低打扰的回执/重试/离线队列设计上与移动端工程师沟通（2轮），在强一致回执、幂等与拒绝码边界及过期清队列上与后端工程师沟通（2轮），并形成折中重试口径、三态聚合与3个联调用例及上报字段边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先把链路拆成三块：1）服务端事件下发到终端的通道；2）终端回执事件的幂等/乱序处理；3）教师端的聚合展示。优先打通 1 和 2，因为 3 只是读状态。联调我先用固定脚本样例，只跑一个环节一种动作，减少变量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "通道我倾向先做长连接推送，断线就降级轮询拉取未读事件。临时拒绝就让终端按 retryAfter 重试，永久拒绝就直接提示并停止重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证的话我准备做三类联调用例：乱序到达、重复投递、权限过期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 终端联调这块：服务端推送任务后，学生端回执/重试/离线队列你建议怎么做？重点是省电、别频繁弹错误，但又要让状态尽快收敛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payloadHash 用来干嘛，校验一致性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 课堂终端联调里，任务下发后的回执你希望做到多强？另外临时拒绝/永久拒绝在 API 层你希望终端怎么配合，才能让状态机收敛快一点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最大重试窗口 3 分钟这个你是拍脑袋还是有课堂数据？我怕太短导致弱网学生一直失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我倾向这样定：  \n- 回执拆 delivered / completed，两种都走同一套幂等键（transportId+semanticKey），端侧串行发，避免并发风暴。  \n- 临时拒绝：终端静默按 retryAfter 重试，不弹强提示；但是加一个 maxRetryWindowSec（默认 180s，服务端可下发覆盖）。超窗就把任务标记为 pending，并提示“等待课堂同步”，不继续刷。  \n- 永久拒绝：不重试，按 scope/role/policy/expired 显示一次原因；同时清理本地队列里同 runId 的回执。  \n- 断线策略：长连接优先，断线指数退避重连，上限 30s；同时提供低频轮询兜底拉未读事件。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "聚合我建议先定三态够用：  \n1）delivered：端侧确认收到任务；  \n2）completed：端侧提交完成；  \n3）exception：包含 blocked（永久拒绝）和 pending（临时拒绝超窗/等待前置）。  \n教师端默认看 completed/总人数，点开详情再区分 blocked/pending。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我这样设计：  \n用例1【乱序+前置不满足】：先下发 Step2 的任务事件，再下发 Step1 的前置事件。期望：Step2 回执第一次返回临时拒绝+retryAfter；端侧不弹错误，按 retryAfter 重试；等 Step1 到达并 confirmed 后，Step2 最终 delivered 成功，教师端聚合里 pending 人数先上升后归零。  \n用例2【重复投递+幂等】：服务端对同一 semanticKey 重发 3 次（模拟网络抖动）。期望：端侧最多产生一次 delivered 回执；服务端事件表里该 semanticKey 只推进一次状态；教师端不出现人数抖动。  \n用例3【runId 结束后回执】：课堂结束立刻切 runId 到 ended，端侧还残留一条 completed 回执未发出。期望：服务端永久拒绝 expired；端侧收到 expired 后清掉该 runId 队列，不再重试；教师端详情里该学生显示 blocked: expired（或映射成“课堂已结束”）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我容易踩坑的是把答题内容顺手打进日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的口径是：event 只带 resourceId、actionType、semanticKey、runId、clientTimestamp、resultCode（临时/永久拒绝的原因码）。audit 只在高风险动作出现时写摘要，比如“教师端强控跳步”这种，终端回执不进 audit。正文内容、学生输入、附件链接都不进日志，只走资源服务存储。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我排个短顺序：先把 delivered/completed 两类回执的端侧队列串行发通，再把临时拒绝 retryAfter+maxRetryWindowSec 接上，最后做断线重连+轮询兜底。教师端聚合先用三态展示，blocked/pending 先做明细再做美化。联调就先跑你确认的三条用例，通过了再扩其他环节类型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

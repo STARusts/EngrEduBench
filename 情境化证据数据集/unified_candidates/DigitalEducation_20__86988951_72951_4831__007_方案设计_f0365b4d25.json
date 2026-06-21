@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实训设备排程与孪生的IoT接入数据流方案设计背景下，用户与导师围绕链路、采集字段最小集、推拉模式、乱序去重断网处理、排程预占与实况冲突及合规成本约束持续沟通（9轮），其中在最小事件与质量字段及离线补传部分与物联网工程师沟通（2轮），在IoT数据最小化、权限留痕与保留期部分与合规与风控负责人沟通（2轮），并形成可评审的数据流图要点与处理规则口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概就是设备连个网关，然后网关把数据推到平台里。平台再更新孪生状态。排程那边订到了就把状态改成占用。就这样一条线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想采心跳、开关机、故障码、还有使用中的状态。字段就时间戳、设备ID、状态值。是不是再加个传感器数值，比如电流温度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 实训设备接入这块，最少要上报哪些事件/字段才够排程和孪生用？还有断网补传要怎么做才不乱？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我理解就是一定得要 seq，不然很难搞。可有些老设备不是只会吐 Modbus 寄存器吗，没有事件也没有序号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用 IoT 的 running 吧，毕竟是真实的。排程只是计划。要不就把排程当成一个“预占”，设备真的开始了再确认。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就拒绝新的预约？给个冲突原因码，说设备忙。然后通知管理员？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则一：实况优先，running 或 alarm 就视为不可用。\n规则二：排程只能做预占，不直接改设备状态。\n规则三：如果排程预占了但一直没等到 session_start，就超时释放。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我…我看网上有人就写5分钟。或者按课程开始时间？"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "那就先默认比如10分钟，然后上线前拿一周的上机记录，看从预约开始到设备真正 running 的延迟分布，取P95当阈值？这样不会卡太死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "从预约开始时间到 session_start 的 event_time。或者从签到成功到 session_start？我不确定我们有没有签到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那事件流里还得有“领用”这种业务事件？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推送吧，设备自己上报省事。拉取感觉要一直轮询。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "混合模式：能推就推，不能推就网关拉，然后转成统一事件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按(device_id, seq)去重；\n2）按event_time排序更新孪生；\n3）event_time异常就标suspect，不更新关键状态？\n4）离线太久就把设备标离线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "suspect 的事件只入库和展示，不推进孪生的可用/占用判断；孪生用最新可信事件算出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最好别从 IoT 里直接带学生信息？只带设备状态。人员信息走业务系统。要真带也要脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 IoT 上报里我们想尽量只传设备状态，不带学生信息。最多带预约ID/工单号做对账。这样合规上够不够？审计留痕要留到什么粒度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始事件只留30-90天是为了降低风险和存储成本？那如果学生投诉说设备坏了，要追很久怎么办。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节点我理解是：设备/PLC -> 网关（可能轮询转事件）-> IoT接入层 -> 事件存储/流转 -> 孪生状态计算 -> 排程/预约服务用这个状态。\n事件类型就四类：在线、运行、告警、会话。字段最小：device_id、event_type、event_time、ingest_time、seq、source、quality、payload_version，再加可选 booking_id/session_id。\n规则：平台按(device_id, seq)去重；可信事件推进孪生；suspect只存不推进；实况优先于排程预占；预占超时释放，阈值先默认再用P95校准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路：设备到网关到接入层到事件流转到孪生计算再到排程使用。\n四类事件：在线、运行、告警、会话。\n字段：device_id、event_type、event_time、ingest_time、seq、source、quality、payload_version，可选 booking_id/session_id。\n处理规则：去重用(device_id, seq)；按可信事件推进孪生，suspect只存；实况优先排程预占；预占超时释放，阈值先默认再用延迟P95调。\n约束：IoT不带个人敏感信息、查询要审计；轮询类默认上报状态变化并控制保留期，原始事件不无限留。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在生成式抄袭检测链方案设计背景下，用户与导师围绕用既有过程事件产出可解释风险线索、接口对象字段、触发与降级及合规边界持续沟通（9轮），其中在特征分层与解释卡片设计上与机器学习工程师沟通（2轮），在事件模型/幂等回放/最小化存储上与数据治理经理沟通（1轮），在L0-L3线索分级与处置申诉口径上与学术诚信专员沟通（1轮），并确认DetectionRun/Signal/RiskFlag最小闭环要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把作业丢进检测，然后出个分数？再给老师看就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信号就……写作次数、提交次数、改了多少字。输出就风险等级和原因吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把可疑的片段标红，再说是AI生成的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@机器学习工程师 生成式抄袭检测链要怎么做？我们尽量不加新采集，只用过程事件。要能解释，别直接定罪。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听着就是看字数暴涨和相似度，再加个AI风格分。解释就是给时间点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，懂了，就是绑定hash，然后能降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入带 tenant_id、term_id 这些，输出也带。再加 raw_event_hash。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 检测链这块要怎么落事件模型？要幂等、能审计回放，还不能多采集。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是多三张表，run、signal、flag。幂等用hash。正文别存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计ID就放run里，然后老师点开就有记录。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂，就是不能把别人的内容给他看，只给相似度分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@学术诚信专员 风险分级和处置口径怎么定？我们这边只出线索，怕误伤。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是L2才进队列，L3也不能直接处罚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）能吧，分高就进队列。2）可以放片段，老师看得清楚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "AI风格分只能算加分项，不能单独把人拉去复核。解释卡片不默认给片段，只给摘要；真要看也得老师权限才行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发：提交时；老师点检测时；还有系统定时跑一遍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都行。批量重跑别太多就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为它们更严重，先处理这些。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第2条吧，字段太多我记不住，但我按你说的写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

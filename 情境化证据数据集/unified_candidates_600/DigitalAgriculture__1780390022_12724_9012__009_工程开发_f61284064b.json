@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声纹分类算法边缘网关工程化封装背景下，用户与导师围绕推理引擎选型、内存与算子适配及接口封装持续沟通（6轮），其中在模型规格与量化可行性部分与水声学算法专家沟通（1轮），并最终梳理出内存压降、算子替换、接口定义与量化校准四条工程化底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看直接上TFLite Micro就行吧，把模型文件转成.tflite格式丢进去，调它的Invoke接口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "内存这块，我看网上好多人用CMSIS-NN加速，应该能挤一挤吧？延迟的话，一帧一帧往里塞应该也来得及。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用TFLM跑，这模型多大？能不能直接转int8？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "260KB峰值？我们板子留给算法的SRAM好像就128KB，塞不下啊。还有那个Attention算子，听起来就很麻烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那是不是只能把模型拆两半分次跑？或者干脆不用TFLM，自己手写C算子？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就暴露一个`predict(float* frame)`函数？里面把内存池和算子替换包起来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 推理峰值内存必须压到128KB内，得重写TFLM的内存分配器做张复用；2. Attention算子用CMSIS-NN的内核注册替换掉TFLM默认的；3. 接口得传帧数据指针和状态句柄，不能只传裸数据；4. 量化校准得留个离线脚本生成标度系数写死进代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

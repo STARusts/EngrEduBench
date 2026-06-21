@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘网关安全约束落地背景下与导师围绕中控接口协议选型、报文安全字段设计、幂等性防重放及弱网验证持续沟通（7轮），其中在报文结构与安全字段嵌入部分与物联接口设计师沟通（1轮），并最终形成中控接口规范核心四条。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "协议选型上，MQTT报文小适合物联网，CoAP基于UDP更轻量，gRPC性能好但太重。我觉得下行控制用MQTT，上行状态回传也用MQTT。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可靠性MQTT有QoS机制可以选。签名的话，放在Payload的JSON里加两个字段就行了吧，解析也方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "中控指令下发和状态回传的协议和报文结构应该怎么设计？特别是签名和时间戳放哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "MQTT 5.0的User Property，这个我书上看过但没实操过，不太敢直接定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家建议中控下发用MQTT QoS 2，回传用QoS 1。签名和时间戳放MQTT 5.0的User Property里，不占Payload业务结构。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "幂等性这块我之前确实没想深。昨天刚看了一篇关于分布式接口幂等设计的文章，里面提到用唯一请求ID做防重。我是不是可以把ReqID也加到User Property里，网关收到相同ReqID的指令直接丢弃？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以设计一个验证实验。控制变量是网络丢包率，分别设为20%和50%，自变量是客户端重试次数，因变量是实验设备的实际执行次数。预期结果是，无论重试多少次，只要ReqID相同，设备只执行一次。我可以写个脚本模拟弱网下发100条指令，看设备侧日志是不是只记录了100次执行，没有多余动作。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "中控接口规范核心四条：1. 下行控制走MQTT 5.0 QoS 2，上行状态走QoS 1；2. 安全字段放User Property，包含sig、ts和reqId；3. 网关侧基于reqId做去重保证接口幂等；4. 弱网验证采用模拟丢包加监控设备执行日志的方式，确保不重复执行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

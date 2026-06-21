@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端负荷波束冲突压测背景下，用户与导师围绕极限冲突用例构造、系统稳定性判断指标及超限熔断机制持续沟通（7轮），其中在极限冲突用例构造与监控打点部分与极限压测工程师沟通（1轮），在算法退化与死锁判断指标部分与核心算法工程师沟通（1轮），并形成包含eBPF监控、反演迭代与死锁指标判断及熔断回退的压测脚本修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "极端冲突的数据我不太好造，平时模拟器里波束都是匀速扫的，打不出那种抢资源的冲突。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造极限波束冲突的用例？我本地模拟器波束都是匀速的，打不出冲突。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "K4完全图，抢时隙。加eBPF探针抓延迟。我这就去改压测脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看CPU和内存呗。只要不OOM，CPU没打满到100%，应该就没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法在K4完全图冲突下怎么判断没崩？导师说看CPU不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超限了就报错退出呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加熔断。反演超MAX_ITER或者deadlock_flag为1，直接触发熔断器，跳过寻优走默认图样。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

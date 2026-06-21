@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在尾流拓扑动态同步背景下，用户与导师围绕同步机制、时延约束、网络抖动容错与状态一致性持续沟通（8轮），其中在动态图同步、时延基准与版本机制部分与气象与流体架构师沟通（3轮），并最终形成基于gRPC推增量、向量时钟防乱序及节点跳数硬约束的架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄个共享数据库存起来呗，谁要谁去查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "尾流图怎么同步不乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推模式肯定快啊，拉模式还要等查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "200ms能行吗？推增量的话。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就gRPC推增量，图不超50个点，3跳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没收到就再发一次呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加个版本号行不行？没收到就不管旧的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就加这个解决并发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用gRPC推增量，带向量时钟防乱序，图不超50个点3跳，时延压在200ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

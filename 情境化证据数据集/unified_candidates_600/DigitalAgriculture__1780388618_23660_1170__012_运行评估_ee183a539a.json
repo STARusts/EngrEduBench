@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估期实地监控背景下，与导师围绕识别率波动与施药延迟的归因及保在线率与保防效底线的取舍持续沟通（5轮），其中在阈值放宽与系统崩溃风险部分与运维监控专员沟通（3轮），在防效底线与药量超标风险部分与农艺效果评估师沟通（3轮），并最终形成识别率分级暂缓施药与延迟减速停等的整改基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "识别率掉到85%以下好几次，施药指令下发也有延迟。估计是边缘盒算力不够，得优化模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控专员 识别率波动和延迟，你们这边数据怎么看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农艺效果评估师 宽松阈值农户能接受吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一边要松一边要紧。我这边边缘盒如果强行拉高置信度阈值，识别率肯定掉得更厉害，但误喷能少点。通信延迟我加个预测补偿行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "防效底线不能破吧，喷错药农户损失更大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控专员 预测补偿加在边缘盒上，算力占用大概多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那不能加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农艺效果评估师 延迟2秒坐标偏多少？如果偏个半米，能不能接受？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以核心是别崩。我这样搞行不行：识别率这块，把置信度低的框标成\"待复勘\"，不直接驱动施药；施药延迟这块，如果超2秒，农机先减速，等指令跟上再喷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "总比全崩了好。待复勘的地块，我让边缘盒把多光谱图打上水印存本地，等巡测完农户看一眼再补喷。减速这块，就卡在2秒，超了就停等。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就卡0.6，以下的都算低。这块我熟，改边缘盒配置就行，不用动模型代码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "识别率监控分级，0.6以下暂不施药存图待复勘；施药延迟超2秒农机减速停等；告警阈值保持严控不放宽。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

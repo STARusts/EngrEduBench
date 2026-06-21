@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在交易图谱存储优化与排障背景下，与导师围绕分片键调整、重分布合规与压测偏差修正持续沟通（9轮），其中在子图匹配超时根因部分与图数据开发工程师沟通（1轮），并最终形成分片键改起始账户、RBAC权限管控及补充长环样本重测的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改成，改成资金ID？不对，账户？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我昨天看了Nebula的官方文档，有个工具叫Balance Data，可以在线迁移分区。如果把分片键改成起始账户，用这个工具迁移，查询就不用跨分片了，速度应该能快几倍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图库有RBAC权限控制，我可以用它的审计日志工具，把查询接口的权限锁死，只允许风控应用角色读，重分布期间开启只读模式和全量审计日志。工具自带的，不用额外写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分片键改成起始账户，用Balance Data工具迁，开RBAC和审计日志锁权限。压测要补长环样本重新跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

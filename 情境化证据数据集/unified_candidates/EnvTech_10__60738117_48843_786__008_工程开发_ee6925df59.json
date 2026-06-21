@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在排放预测预测器v0的特征工程与建模实现背景下，用户与导师围绕窗口对齐、单位口径、特征模块可测试化、评估与版本治理持续沟通（12轮），其中在窗口/缺失乱序稳健特征与基线模型选择上与算法工程师沟通（2轮），在训练数据快照与特征/模型最小版本闭环上与MLOps工程师沟通（1轮），并最终明确预测目标、特征集、异常处理、切分与单测优先级。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想一步到位做个端到端的“碳氮协同优化”模型：把 CO2、NOx、O2、温度、流量、负荷、喷氨量这些拼成多变量时序，用 Transformer 或者图神经网络，直接输出“下一步怎么调喷氨/风量”。这样后面优化器都省了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "窗口怎么定、标签怎么对齐。我担心乱序和时钟漂移导致“未来 5 分钟”不是真的未来。还有 CO2 有的是浓度、有的是排放量，单位可能混。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我要不要先做统一的“排放总量=浓度×标干流量”再建模？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 窗口长度和预测步长你建议怎么定？另外这种工业尾气时序乱序、缺失挺多，特征工程怎么做才不被噪声带偏？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "预测 t+5min + 10min 两个头我也想做，顺便做多任务学习，共享 encoder。这样以后加 SO2、颗粒物也方便。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解了：先做表格特征 + 树模型，窗口 10min + 30min，缺失要加 ratio 和 gap。回到导师那边我再定实现细节。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先定：预测步长 5min，窗口 10min；30min 的慢特征先做个开关。模型先两套：NOx 一个、CO2 一个，避免多输出调参变复杂。缺失用“插值/填充 + 缺失标记”，漂移窗口先丢掉不训练。后续再加 t+10min 和多任务。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我原本想搞个 feature store，把窗口特征实时写入，训练和推理共用，避免训练-推理偏差。现在限制不引入新依赖的话，我可以做一套“同一份 Python 特征函数”，训练用离线回放，推理用流式调用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征版本用 git tag 够不够？还是要在输出里带 feature_hash？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@MLOps工程师 我们现在在开发阶段要把特征和模型做版本化、可回放，最小闭环怎么做？我不想引新平台，但也不想以后对不上训练数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来就是：parquet 快照 + commit_id 锁死特征 + 模型带 metadata。字段 hash 是个轻量的 guard。推理一致性用单测兜底。回滚只保留 5 个版本，省存储。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按“点位分组”做，核心 30 个以内：  \n- 基础过程量：O2、烟温、烟气流量、负荷、入口 NOx/出口 NOx（如果都有）、喷氨量、引风机频率/阀位（有就用）  \n- 10min 窗口统计：mean/std/min/max/last、p10/p90（分位数我想留着，可能有用）  \n- 动态：斜率（last-first)/dt、差分均值  \n- 质量相关：missing_ratio、max_gap_seconds、duplicate_count、out_of_order_rate（这个我想从接入层带过来）  \n- 类别：工况模式（如果能从规则识别出，比如“升负荷/稳态/降负荷”）"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点担心：没有分位数会不会抓不到“喷氨突然抖动”这种尖峰？min/max 又怕被异常点带飞。我要不要对输入先做 Hampel 过滤或 winsorize？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "评价指标这块，我想同时看 MAE、R2，再加“超标预测召回率”，因为现场更关心别漏报。我还想做一个“协同指标”，比如 CO2 和 NOx 两个头都低的时候加权更高。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "训练集切分我打算用随机打散，量大一点效果好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行吧，这个单测我能写。算力方面我也想过：LightGBM 在边缘跑可能也可以，但我又想上深度模型，担心边缘 CPU 扛不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把本轮决定收一下，避免我又跑偏：  \n1）预测目标：NOx、CO2 各训练一个模型，预测 t+5min。  \n2）特征窗口：最近 10min 的 mean/std/min/max/last + slope；暂不做分位数；30min 慢特征做开关。  \n3）缺失：数值填充 + missing_ratio/max_gap_seconds + 漂移窗口标记；重复去重按事件时间最后一条。  \n4）异常：关键点位做 1%-99% winsorize，并加“被裁剪”标记。  \n5）切分与评估：time-based split + 泄漏单测；指标=MAE/SMAPE + 超标漏报/误报。  \n6）版本：训练样本 parquet 快照；feature_version=commit_id；模型带 metadata，保留最近 5 版。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多模态实时反欺诈风控引擎方案设计背景下，用户与导师围绕特征时序对齐机制、多模态融合方式选择及验证标准持续沟通（5轮），其中在融合方式优劣评估部分与风控架构师沟通（1轮），并最终形成基于Flink滑动窗口对齐、晚期融合基线与早期融合对照的特征架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看Flink的EventTime和Watermark文档，弄懂乱序数据怎么对齐，明天把它用在特征管道设计里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "早期融合和晚期融合哪个好？我要简单粗暴能跑通的，别搞太复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "晚期融合快又好维护，就晚期融合吧，掉点就掉点，先保证不超时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "假设就是晚期融合延迟低但AUC会掉，早期融合相反。对照设计就是拿之前两家大行PoC的脱敏数据，同时跑晚期融合基线和早期融合对照。如果晚期融合AUC比早期掉超2%，我就换早期融合。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就用Flink的滑动窗口把行为特征对齐到交易事件的时间戳上，然后再去查图谱拿向量，最后走晚期融合出分。就先这样定吧，晚期融合基线，早期对照，对齐靠Flink"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

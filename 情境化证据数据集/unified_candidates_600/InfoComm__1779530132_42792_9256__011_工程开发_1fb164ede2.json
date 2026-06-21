@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在重编排时延飙升的调优Debug背景下，与导师围绕死锁根因定位与并发安全改造持续沟通（3轮），其中在锁竞争分析部分与信令与性能压测专家沟通（1轮），在双缓冲拆锁与eBPF探针定位部分与核心算法实现工程师沟通（1轮），并形成双缓冲拆锁、eBPF仅作调试及P99时延压回50ms的调优策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是机器性能扛不住了，加点CPU和内存可能就好了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这重编排耗时飙升怎么回事？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把锁去了就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抢锁死锁怎么改？重编排状态机那块。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就加上bpftrace探针，用双缓冲改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用perf buffer往用户态推，开销应该不大吧？双缓冲肯定能解决时延。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

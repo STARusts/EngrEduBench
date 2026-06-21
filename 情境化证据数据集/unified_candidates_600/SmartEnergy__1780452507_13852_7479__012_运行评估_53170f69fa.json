@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段反演模型部署核验背景下，用户与导师围绕生产配置防覆盖、灰度切流策略及模型有效性统计验证持续沟通（7轮），其中在配置注入与灰度切流部分与部署交付专员沟通（1轮），并最终形成部署核验清单与统计验证补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是直接用Helm一键推到生产集群就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就打算用Jenkins流水线跑一把，然后去Grafana大盘看有没有红线报警。之前算法那边说1%采样率，我在Flink的conf.yaml里把metrics.sample.rate设成0.01了，应该就行了。如果有问题，大盘上肯定会飘红，到时候再回滚呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配置覆盖这事我还真没想过。至于模型有没有效，我就看看算出来的衰减因子是不是在0到1之间，只要不越界应该就算正常吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink的采样率配置怎么确认没被覆盖？还有灰度切流怎么搞比较稳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原来要用-D参数才行，记下了。灰度先切5%流量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有没有那种一键对比压测结果和生产结果的工具？我平时就用Python调包算算均值，这种线上有效性的验证，我只会看大盘走势，感觉不出差异。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不懂假设检验和P值这些底层的逻辑，平时都是直接调库出结果，参数都是网上抄的。看来这块我完全依赖现成代码，自己连怎么选统计方法都不会，真到要验证有效性的时候就抓瞎了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来两周，每天花1小时学《应用统计》，重点看双样本T检验和效应量计算原理，不再只抄API。然后在项目里自己写一个对比脚本，把灰度流量和基线流量的衰减因子P值算出来，补到核验报告里。时间就定在模型全量放量前必须完成。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

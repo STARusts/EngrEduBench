@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在镜界AI虚拟偶像直播系统运行评估背景下，用户与导师围绕灰度分桶、观测指标、回滚触发与降级矩阵、以及合规护栏不被破坏持续沟通（7轮），其中在灰度/回滚切换粒度与全链路可观测（trace_id/event_id/bucket_id）上与SRE运维工程师沟通（4轮），在硬护栏定义、误伤/漏放口径与演练验证方法上与风控策略负责人沟通（3轮），并收敛成可执行的灰度-触发-动作-证据链最小预案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想先把灰度发布和回滚预案打扎实：灰度怎么分组、怎么判定“该回滚”、回滚时哪些能力要降级但不能误伤合规链路。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆：直播编排台、实时消息、内容安全决策、对外投递（BLOCK/REVIEW/ALLOW）这几段。灰度我倾向先从“风控决策服务的 rule_version”入手做灰度，而不是先动音视频推流。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分层可以是：白名单房间全量走旧版本、普通房间 1%→5%→20%→50%→100%。指标我想看：误杀率（人工标注小集）、延迟 P95、乱序降级比例、REVIEW 投递成功率。回滚触发我先写“任一关键指标超过阈值持续 10 分钟”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度和回滚在你们这边能支持到什么粒度？我需要分钟级回滚，并且回滚过程中要能定位哪些 event_id 受影响。我们现在主要变更点在风控决策服务的 rule_version、以及对外投递策略。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bucket_id 这个我之前没明确写进统一输出契约里，我们契约里是 decision、reason_codes、rule_version、trace_id/event_id。bucket_id 是不是也要强制全链路带？否则灰度对比会很痛苦。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "回滚触发条件这块，我担心“误杀率”实时拿不到。我们能实时看的更像：BLOCK/REVIEW 比例、REVIEW 投递失败率、决策延迟、乱序降级标记比例、以及投诉量，但投诉是滞后的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "理解。我回到导师那边把触发器分级写清楚：P0 立即回滚、P1 降级观察、P2 记录复盘。还差一个点：回滚时如何避免“白名单房间不 BLOCK、付费礼物不静默吞”的边界被破坏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控策略负责人 灰度发布期间，哪些风控约束要作为硬护栏不随 rule_version 回滚？以及回滚触发时，误伤/漏放我们该用哪些口径做快速判断？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规链路完整率当 P0 这条我赞同。还有硬护栏独立开关，我在实现侧能理解是“决策服务入口先套一层 guardrail”，但现在是运行评估，我更关心怎么验证它在灰度/回滚时确实没被绕开。有没有推荐的演练方法？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着落成三档：  \n- P0：合规链路断（trace_id/event_id 缺失率上升）、付费礼物投递失败>阈值、或错误码爆炸；动作是立刻灰度比例置零 + rule_version 回切 stable，同时冻结进一步发布。  \n- P1：灰度桶 BLOCK/REVIEW 代理指标异常，但技术稳定；动作是先把“最严动作”关掉只允许 REVIEW/ALLOW（并保留乱序降级标记），同时回切到较保守的 rule_version，观察 15 分钟。  \n- P2：轻微波动；动作是记录并扩大样本，维持灰度不动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级矩阵我先给个可执行版本：  \n1）仅乱序比例上升：只做“动作降级”——原本可能 BLOCK 的，降为 REVIEW；并且必须带乱序标记，禁止升级到更严。  \n2）投递通道抖动：不改决策，只把投递改为“至少一次重试 + 落审计队列”，但付费礼物 REVIEW 仍要投递“待确认”，不能吞。  \n3）reason_codes 分布异常：回切 rule_version，不做动作降级（避免放过高危）；如果回切后仍异常，再回退镜像。  \n4）合规字段缺失：直接 P0 回滚，不讨论降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收束一下，给本微场景一个“能执行的最小集”：  \n- 灰度：房间ID哈希固定分桶；白名单房间强制稳定桶；普通房间 1%→5%→20%→50%→100%，每档至少观察 30 分钟。  \n- 观测：技术指标（P95、错误码、投递失败率）、业务代理（BLOCK/REVIEW 差异、reason_codes 分布）、合规完整率（trace_id/event_id 缺失=P0）。内部埋点必须带 bucket_id、rule_version。  \n- 触发与动作：P0 立刻置零灰度+回切 stable rule_version；P1 定向降级（仅灰度桶、仅乱序或指定规则），必要时回切保守 rule_version；P2 只记录。  \n- 不可破坏护栏：白名单不 BLOCK、付费礼物不静默吞且 REVIEW 投递“待确认”、重放一致+乱序只降级不升级。  \n- 回滚后证据链：按 trace_id/event_id 串起 decision、reason_codes、rule_version、命中片段与计数窗口字段，供审计与复盘对比稳定桶/灰度桶。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

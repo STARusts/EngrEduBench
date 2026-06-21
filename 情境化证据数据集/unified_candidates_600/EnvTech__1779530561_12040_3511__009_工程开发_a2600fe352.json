@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在孪生仿真压测与性能调优背景下，用户与导师围绕边缘网关压测手段、计算瓶颈定位、精度与速度平衡及降频保底策略持续沟通（4轮），其中在压测指标采集部分与联调测试工程师沟通（1轮），在模型推理边缘优化与延迟影响边界部分与反演算法工程师沟通（1轮），并最终形成Py-Spy采样、ONNX INT8量化及P99延迟目标的调优决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我装个Locust，对着网关的调度接口发压，看看QPS和响应时间行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键出性能报告的工具？我不想自己写剖析逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关上做压测，怎么抓CPU和计算耗时？我不想装一堆乱七八糟的探针。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调那边说P99得卡2秒内。现在水盐反演模型跑一次要多久？太慢的话有啥现成的加速包没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上个项目查内存泄漏我用的Py-Spy画火焰图，挺好使的，这次直接拿过来找反演计算的GIL锁瓶颈应该也行。我把模型转ONNX，再用Py-Spy盯着，这样既能加速又能找准瓶颈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化我选INT8，精度掉个2%应该能兜住。P99如果还超2秒，我就把反演频率降一降，从每秒一次改成两秒一次，虽然慢点但不会触发5秒看门狗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改模型导出脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

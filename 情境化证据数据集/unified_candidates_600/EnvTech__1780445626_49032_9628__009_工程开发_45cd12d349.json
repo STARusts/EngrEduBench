@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在反演核心逻辑编码背景下，用户与导师围绕架构选型与防发散逻辑持续沟通（5轮），其中在刚性ODE生产级实现部分与机理反演码师沟通（1轮），在雅可比矩阵奇异处理部分与化工机理建模师沟通（1轮），并最终确定C++调Sundials进程内求解及物理约束截断与发散回退告警的编码方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然是多源传感融合，反演流水线必须高吞吐且解耦。我准备引入Flink做状态流处理，再搭一个图计算引擎处理降解产物之间的关联网络，最后用gRPC调TF Serving跑模型推理。这样架构够弹性，以后加新降解通道的模型不用改核心代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种状态空间方程反演，生产级实现一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要原生算子，我准备用Rust从零手写一个分布式并行ODE求解框架，加上Actor模型做计算任务调度，再实现一个算子热加载机制，这样扩展性比用现成库强多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果清洗后的传感数据在边界跳变，导致雅可比矩阵奇异，ODE求解器发散，我是直接截断计算，还是回退到上一稳态重新推演？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果传感器数据异常导致反演计算时雅可比矩阵奇异，求解发散，从机理上看怎么处理最合理？是强制截断到0，还是用上一时刻的状态回退？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "放弃Flink、TF Serving和自研框架。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反演核心逻辑采用C++封装Sundials的Radau IIA求解器，进程内直接求解。加入物理约束截断逻辑，浓度不为负且不超活度模型边界。一旦发散，回退上一稳态并触发置信度降级告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

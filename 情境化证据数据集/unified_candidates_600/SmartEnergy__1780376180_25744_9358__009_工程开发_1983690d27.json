@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微熵路由协议栈与端侧感知全链路联调背景下，与导师围绕端侧适配、兼容处理与联调优先级持续沟通（6轮），其中在高位填充兼容性部分与协议联调专家沟通（2轮），在日志时间戳格式统一部分与协议联调专家沟通（1轮），并最终确定开启掩码兼容、网关加拦截器及优先跑通握手的联调策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚抓了下端侧发上来的微熵增量时间戳，64位纳秒级。他们高位补的是0，咱们协议栈定义要求补1。这肯定得改，不然解析直接错位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "没通。基础字段都对不齐，后面怎么走？我打算直接改端侧适配插件，让他们高位强补1。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧现在补0，咱们要求补1，这玩意是强制的还是能兼容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "掩码开关？我之前翻代码没注意这个字段。打开就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "掩码一开，日志里打印出来的时间戳就不统一了，有的补0有的补1，排查问题多乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "掩码开了日志时间戳格式不统一，联调阶段怎么处理？我不想再碰端侧代码了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "掩码打开解析对齐了，握手包理论上没问题。但我还没实际跑过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我还是觉得高位补0不严谨，迟早是个坑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，开掩码，跑握手，记兼容点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

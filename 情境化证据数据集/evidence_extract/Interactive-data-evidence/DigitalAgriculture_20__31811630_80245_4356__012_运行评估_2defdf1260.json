@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估中线上出现异常工单背景下，用户与导师围绕工单分桶与以日志允许字段构建ZONE_MISSING根因假设、分支条件、证据分级及合规边界持续沟通（7轮），其中在获取APM/依赖超时与发布版本等非敏感可观测证据部分与SRE运维工程师沟通（5轮），并形成可直接用于复盘与分析会的收敛版排查框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会先把工单按“用户可见现象”分三类：1）处方生成直接失败（比如 ZONE_MISSING）；2）生成成功但降级（zone_fallback 触发，策略 SAFE_RULES，用户抱怨不准）；3）执行闭环异常（下发到农机失败或回传缺失）。然后每类按时间、版本、租户、区域做分层，看是不是只集中在某几类 zone 或某批数据同步窗口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我挑“处方生成失败，error_code=ZONE_MISSING”这一类。步骤我会这样走：\n1）按 request_id 拉取处方服务运行日志，只看允许字段：request_id、zone_id_hash、degrade_flags、strategy_code、latency、error_code。确认 error_code=ZONE_MISSING，且 degrade_flags 里是否含 zone_fallback。\n2）做对照：同一租户、同一时间窗内成功请求的 zone_id_hash 分布，看看失败是否集中在少数 hash（提示某些 zone 配置缺失或映射错误）。\n3）看 latency：若 ZONE_MISSING 同时 latency 很低，像是早期校验就失败；若 latency 较高，可能是下游 lookup 超时后被归并成缺失。\n4）把这些证据变成根因假设树：配置缺失、映射错、同步延迟、权限导致查不到（但被报成缺失）、或降级策略误标。\n5）需要反查 zone_id_raw 的，只走审计域，带 RBAC 与留痕，不在运行日志里碰 raw。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，按我能直接拿到的运行日志字段先分：\n- 分支A：error_code=ZONE_MISSING 且 latency < 50ms，说明很可能是入口参数或本地缓存/配置里没找到 zone 映射，偏“立即失败”。证据：低延迟、无其他 error_code。需要补证据：配置中心/字典服务是否有该 zone 的记录（这部分我拿不到，要问后端或SRE）。\n- 分支B：error_code=ZONE_MISSING 且 latency 高（比如 > 500ms），可能是 lookup 走了远端依赖，超时/失败后被统一映射成缺失。证据：高延迟，可能同窗口其他请求也高延迟。需要补证据：下游依赖告警或 trace（我需要 SRE 给依赖侧指标）。\n- 分支C：degrade_flags 含 zone_fallback，但仍然 ZONE_MISSING，这说明“降级没兜住”，要么降级开关在某些请求路径没生效，要么策略 SAFE_RULES 需要 zone 也无法运行。证据：同时存在 zone_fallback 与 ZONE_MISSING。需要补证据：策略引擎实际走的分支（运行日志没有细节，得靠 SRE/后端从更细粒度 trace 或 debug 日志看，但要确保不引入敏感字段）。\n- 分支D：degrade_flags 不含 zone_fallback 且 strategy_code 非 SAFE_RULES，说明请求没有进入我们预期的失败用例路径，可能版本/配置漂移。证据：strategy_code 不符合预期。需要补证据：灰度标识和发布版本对齐情况（SRE）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 我在归因 ZONE_MISSING 工单，想把“立即失败 vs 依赖超时归并 vs 版本漂移”区分开。你那边能提供哪些不涉敏感字段的证据？我希望是：按 request_id/时间窗的 latency 分布、下游依赖错误率或超时、以及发布版本/灰度命中信息，但不要包含任何基因型/表型/地块位置字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“request_id链路打通”，是每次都能从处方服务日志跳到依赖接口的调用吗？如果断链，我就没法把分支B做成强证据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那分支B的判定我就做两级证据：强证据是 request_id 级别能对上依赖超时；弱证据是时间窗相关性。你这边能按“ZONE_MISSING spike 的分钟级”给出依赖超时对照图的数值口径吗？我需要写进复盘里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "版本分布这块很关键。release_tag 和实例版本是两个维度，你建议我先看哪个？我担心灰度里同一个 tag 下也会有热修补丁差异。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再确认一个合规点：你给我的 APM/依赖指标里，能不能包含 zone_id_hash？这算不算敏感？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，高基数会把成本和稳定性拖垮。我会把“hash集中度”放在日志侧的离线查询，指标只看 error_code/版本/时延。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收敛版我会这么写：以 ZONE_MISSING 工单为例，根因假设与证据路径分三条主线，每条都有强/弱证据：\n- 主线1（配置/映射缺失，入口即失败）：判定条件：error_code=ZONE_MISSING 且 latency 极低（我先用 <50ms 做候选阈值，后面用分位数再校准）；degrade_flags 可能为空或不含 zone_fallback。强证据：失败集中在少数 zone_id_hash，且跨时间稳定。弱证据：仅低延迟但 hash 分散。\n- 主线2（依赖超时或错误被归并成缺失）：判定条件：ZONE_MISSING 同窗口 P95 latency 抬升；依赖 zone-mapping 接口 timeout_rate 同步抬升。强证据：request_id 级链路能对上依赖超时/5xx；弱证据：分钟级相关性但 request_id 断链。\n- 主线3（发布/配置漂移导致未走预期降级路径）：判定条件：strategy_code 非 SAFE_RULES 或 degrade_flags 缺少预期的 zone_fallback，且集中在特定实例版本或 release_tag。强证据：某版本实例 ZONE_MISSING 占比显著高于其他版本；弱证据：tag 维度差异存在但版本混杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会用“失败样本 vs 成功样本”的 latency 分布做分割：\n- 取成功请求的 P5 latency 当作“几乎只做本地校验”的参考下界；\n- 再看 ZONE_MISSING 的双峰情况，如果出现明显近零峰，就把该峰的 P95 作为“入口失败阈值”。\n全程只用 request_id、latency、error_code、strategy_code、degrade_flags，不需要业务字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把工单内容当作“触发线索”而不是证据源：\n- 复盘材料里只引用系统侧可观测字段与聚合指标，不贴工单原文，不复制截图文本；\n- 如果必须关联工单与 request_id，就只保留工单号↔request_id 的映射在受控系统里；\n- 需要反查 zone_id_raw 的场景，走审计域，RBAC+访问留痕，不在运行评估讨论群里扩散 raw。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明天分析会我建议按这6条走：\n1）先按用户现象分桶：失败（ZONE_MISSING 等）、降级但不满意（zone_fallback/SAFE_RULES）、执行闭环异常。\n2）对 ZONE_MISSING 建三条主线假设：入口配置缺失、依赖超时归并、版本/配置漂移。\n3）每条主线对应可观测证据：运行日志允许字段（request_id、zone_id_hash、degrade_flags、strategy_code、latency、error_code）+ SRE 的 APM/依赖分钟级指标 + 版本/灰度标识。\n4）证据分级：request_id 级链路对齐为强证据；时间窗相关性为弱证据，必须标注不确定性。\n5）阈值不拍脑袋：用成功/失败 latency 分布找“入口失败峰”，再定入口失败阈值。\n6）合规红线：工单文本只做线索；复盘不引用包含地块/品种/表型等内容；zone_id_raw 只在审计域反查并留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在盲聚合基带算法联调背景下，用户与导师围绕相干合并定点溢出、流形索引定标、CORDIC防跳变及基带时序握手持续沟通（9轮），其中在累加器保护位与CORDIC查表防跳变部分与基带信号处理工程师沟通（2轮），在流形相位边界越界部分与算法与流形寻优工程师沟通（1轮），并形成累加器扩位、相位拼象限位、异或防跳变及轮询握手的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了，代码里复数乘法是直接截断的，Q15格式乘完没做左移防溢出。时序这块，寻优返回的流形索引是浮点，基带这边强转成定点，精度掉得厉害。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前人留下的相干合并模块，累加器保护位留了几个？还有CALC状态返回的流形索引，转定点应该用什么定标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以累加器要扩展3个保护位，流形索引得先乘4096再取整转Q12。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你输出的流形相位弧度，范围是严格在负pi到pi内吗？会不会有边界越界？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做差分后，结果大于pi就减2pi，小于负pi就加2pi？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Q12下，2pi就是2乘3.14159乘4096，大概25736？不对，Q12最大表数是2047，2pi超了。得用Q14？或者差分还是在浮点算完再转？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CORDIC查表入口的相位定标是多少位？差分防跳变怎么处理比较好？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "累加器扩3位保护位，算法Q12相位拼象限位变16位，象限跳变用异或判断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "协议栈那边WEAVE要锁双缓冲，基带这边算完相干合并，得发个ready信号让协议栈进WEAVE？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加个握手指令？还是中断？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

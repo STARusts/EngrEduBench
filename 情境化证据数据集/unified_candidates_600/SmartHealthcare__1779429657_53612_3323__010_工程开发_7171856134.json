@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在依从性流式特征抽取开发背景下，用户与导师围绕Flink乱序迟到处理、漏服判定逻辑、患者ID脱敏合规及状态膨胀OOM修复持续沟通（7轮），其中在特征定义与抽取边界部分与后端开发主管沟通（3轮），并最终形成DataStream API改造、动态规则注入、SHA256脱敏及空状态补偿等修复基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Kafka接网关的数据，然后Flink跑滑动窗口。算过去7天的服药率、活跃天数这些，直接写Flink SQL查出来存Redis给干预引擎用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "乱序就加Watermark呗，允许迟到几分钟。漏服就是计划吃了没吃嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用Flink SQL算7天窗口的服药率，迟到设个Watermark。漏服就是没按时打卡。你看这样行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态机？Flink里写状态机那得用Java DataStream API了，不能纯SQL。那周末容差这种规则写死在算子里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明文存Redis快啊，查起来方便。脱敏了还怎么做聚合？我拿患者ID做KeyBy啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我还没看日志，我以为加机器就能抗住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把TTL调长点？或者把RocksDB的缓存加大？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "空状态补偿，懂了。就是catch住异常，当新数据处理。那脱敏的事，我用Hutool的SHA256把患者ID哈希一下，拿HashID做KeyBy。原特征库也只存HashID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. Flink用DataStream API，不用纯SQL；2. 接收广播流注入动态规则；3. 患者ID做SHA256脱敏后做KeyBy，特征库不存明文；4. 状态后端用RocksDB，补录数据触发空状态补偿，不抛异常；5. 孤儿状态设TTL自动清理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

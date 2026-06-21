@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在零知证绿ESG系统总体架构设计背景下，与导师围绕密态核验约束、架构隔离标准与形式化验证持续沟通（6轮），其中在零知证明与隐私计算架构边界部分与密态架构师沟通（1轮），并最终否决微服务平级拼凑，确定双区隔离架构方向及形式化验证学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了几个开源项目，打算直接用Spring Cloud微服务做底座，隐私计算部分套个FATE框架进去。ESG原始数据进FATE算，算完的结果扔给信贷适配服务。这套东西现成组件多，搭起来快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个API网关加密传输呢？或者FATE本身也有加密模块。我对零知识证明怎么嵌到这套微服务里没底，以前没写过ZKP的微服务接口。我得去翻翻ZKP的SDK文档，看看别人怎么调包。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在想用微服务加FATE，但不知道零知证明这块怎么切分，数据流怎么防泄露？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我拿K8s切两个Namespace，密态区放FATE和ZKP服务，明文区放信贷服务，中间用gRPC调用，这样是不是就算物理隔离了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设网络策略配得足够严，只开特定端口。验证的话，我跑一遍容器渗透测试脚本，扫一下密态区端口有没有越权访问，通不过就改网络策略。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "零。没接触过这种验证。那我今晚得去搜一下形式化验证怎么搞，有没有一键跑的脚本或者Docker镜像。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

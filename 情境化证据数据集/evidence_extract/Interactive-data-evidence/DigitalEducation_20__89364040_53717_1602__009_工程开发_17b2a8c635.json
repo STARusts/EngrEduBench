@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多端渲染与课堂同步联调背景下，用户与导师围绕多端一致口径、同步范围收敛、验收可测指标与constraints产出持续沟通（8轮），其中在课堂同步最小字段、延迟口径与弱网段级降级上与客户端工程师沟通（3轮），并最终确定快照同步+render_constraints断言联调落地方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把编排产物做成一套跨端统一的“渲染中间表示”，类似scene graph，再配一个同步协议，把每次patch都变成可重放的事件流。这样端上渲染只是解释器，逻辑就不会漂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致口径我想分三层：页面结构一致、组件属性一致、时序一致。同步我希望是“播放头”同步，包括当前page_id、分段索引、交互可用性状态。patch我想支持实时下发，让课堂上根据注意力波动动态调整。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端工程师 课堂同步这块，最小同步状态你建议有哪些字段？延迟和丢包到什么程度算可接受？弱网时你们通常怎么降级，才能保证学生端不乱跳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的segment_id跟我们pace_split正好对齐。interaction_gate我也能从interaction_throttle直接落成端上状态。那渲染一致性呢？比如visual_density在Web和端上字体/排版会不一致。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果只做状态快照，我担心后端重放不了导致难查问题；我更想加上patch事件日志……"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从客户端那边拿到的建议偏“最小同步”。同步状态用快照，不做事件流：session_id、leader_id、page_id、segment_id、t_play_ms、interaction_gate、version单调递增。延迟验收：同屏跟随P95≤300ms；弱网允许到1s但避免回跳；客户端只接受更大version。弱网降级到段级同步，只在segment边界对齐，同时把交互锁住防分叉。渲染一致性不追求像素级，改成“密度档位一致”，用相对约束实现。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把visual_density的计算做成一套跨端共享的WASM模块，三端都用同一份计算器，这样档位肯定一致。然后渲染端只消费“档位”输出。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "也行，但我担心端上实现的约束会漂，最后还是不一致。要不至少把约束校验做成一份共享的JSON Schema + 断言库？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "render_constraints字段我先草拟：max_text_lines、max_images、max_interactions、min_font_size_sp、min_contrast_ratio、cue_modality（比如VISUAL/AUDIO/BOTH），还有segment_count。够吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "同步消息里要不要带reason_codes？我想让学生端能解释“为什么交互被锁”。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "隐私这块我差点忽略了。同步payload里我本来想塞注意力状态的分数，看来不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那联调用例我建议按三条跑：1）普通课件无触发，三端渲染一致且同步顺滑；2）触发visual_density裁剪，验证constraints被满足、patch数量不超max_patches_per_page；3）弱网模拟下段级同步不回跳、交互锁定不分叉。这样基本覆盖。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我最后还是想加一个“版本回放”用于debug，但只在本地：缓存最近20个同步快照，配个导出接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "收到。我把WASM那条先压住，先按constraints+快照同步把联调跑通。之后真出现漂移，再看要不要做共享校验库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在算力潮汐与热负荷自适应接口设计背景下，用户与导师围绕云端指令下发、协议融合、语义映射落地与接口契约持续沟通（6轮），其中在异构协议融合与降级部分与多能流接口设计师沟通（2轮），在指令权限与安全约束部分与算力调度架构师沟通（1轮），并最终形成算力热负荷自适应接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个API下发就行吧？RESTful接口把算力调度结果转成泵的频率指令。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个重试？或者套个消息队列？自适应就是算力高了指令发快点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口这块，算力侧和热控侧协议不一样怎么融？断网怎么降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "语义映射就是把算力占位换算成温度设定？网关里的映射规则谁配？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口说只推设定值。算力侧对下发指令有什么权限要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口要搞边端网关做协议转换，算力侧Kafka转成OPC-UA给热控。自适应靠语义映射，把算力漂移算成温度设定值。断网网关自己保持微调。还要双向验签和加过期时间戳，过滤多余数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "曲线得实测吧？热力这块我不熟，参数真定不了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "查表灵活点吧？算力波动太复杂，线性可能不准。用查表法，放在网关里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超出范围就卡边，用最大或最小值。验证的话，在仿真里跑几个极端工况看阀门动作。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口契约确认：1.网关协议转换Kafka转OPC-UA；2.自适应语义映射用查表法，超限卡边；3.指令需验签、时间戳、优先级；4.数据最小化只推设定值；5.断网降级走网关本地保持微调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

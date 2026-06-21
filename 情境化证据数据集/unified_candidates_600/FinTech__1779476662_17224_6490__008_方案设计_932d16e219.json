@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在资金清分与对账接口设计背景下，用户与导师围绕防单边账、接口幂等性、一致性及超时冲正机制持续沟通（5轮），其中在防重防丢与双向核验机制部分与清分对账专家沟通（1轮），在异步对账最终一致性与超时冲正回滚部分与分布式架构师沟通（1轮），并最终形成包含双向预对账、幂等流水号、异步回执、超时冲正与审计留痕的接口设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接写个接口把链上的清分结果传过去呗，用JSON包一下，他们接收就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "清分接口怎么防重防丢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "幂等流水号，双向核验，预对账锁账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就再调一次接口催一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链下锁账超时了，合约卡死怎么办？怎么冲正？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件驱动，超时块高自动冲正，T+1跑批平账。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "双向预对账，流水号，异步回执，超时块高冲正，审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

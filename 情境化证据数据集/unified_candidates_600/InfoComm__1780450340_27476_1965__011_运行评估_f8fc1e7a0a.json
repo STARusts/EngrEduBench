@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网灰度部署背景下，用户与导师围绕监控看板指标选择、数据有效性验证及统计分析方法持续沟通（6轮），其中在看板指标选取部分与SRE稳定性值守沟通（1轮），并最终确定自写PromQL构建看板及基于Pandas的统计对比验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "官方模板里有 CPU/内存利用率，还有 HPA 的扩缩事件，我加几个 Panel 应该就够用了吧？我看网上很多云原生项目都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度部署的监控看板，是不是套用 Grafana 现成的 K8s 大盘就行？还是得自己写 PromQL？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看来现成大盘套不上。推演残差和端到端时延分布，我得去查一下我们 Adapter 暴露的指标名，然后在 Grafana 里拼出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就盯着看板，如果没报红，然后缩放也正常触发了，应该就说明没问题吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "统计检验这块我不太熟，平时都是看图说话。置信区间和方差比较，我只会用 Python 算一些简单的，Prometheus 里怎么做对照我不确定有没有现成插件能直接算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺运行数据统计分析的能力，只会看面板曲线，不懂怎么用统计学方法证明指标有效。我接下来得补这块，这周内我要学会用 Pandas 对比 Prometheus 导出的灰度和压测基线数据，写出时延 P99 和残差方差的对比脚本，跑出置信区间结果，不能只靠肉眼看图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先拼 PromQL 拿到数据，再写脚本做统计对比验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

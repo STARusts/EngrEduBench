@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在孪生状态与事件引擎工程开发背景下，用户与导师围绕事件载荷最小化、回放可复现、并发幂等与验收条款持续沟通（10轮），其中在字段禁入清单与受控debug通道合规边界上与合规与数据治理官沟通（3轮），并对齐事件schema门禁、debug三默认及状态机/事件类型与用例口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不想把“全量原始载荷”当默认方案。事件引擎里我倾向两层：业务事件（可回放/可验收）只存标准化字段；调试需要的原始请求体走短期debug通道，默认关闭、严格权限、短留存。否则审计库会变成隐私和成本黑洞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标准化字段我想卡住：event_id、event_type、occurred_at、source（sensor/rs/manual）、entity_ref（只内部ID，比如 aoi_id/plot_id/crop_id 的内部号）、run_id/scene_id（如果来自遥感）、payload_hash、schema_version、actor_type（system/user）。不能进的：坐标、客户名、精确地址、手机号之类直接识别字段；还有原始遥感栅格引用路径也要小心，避免透出客户目录结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现上：告警触发要靠事件序列；但孪生展示更多靠“当前状态快照”，事件只是追溯链路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会给他们一条可复现的替代物：存“决定性输入”的最小集合+hash。比如遥感那边参数、阈值、qflag边界、scene元数据这些是决定性输入；传感这边存聚合后的统计窗口值，不存每条原始点。需要深查时由受控的debug存储保存原始载荷，TTL很短，比如7天或更短，可配置，但默认不开。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 事件引擎要做回放和排障，后端想把原始载荷都存审计库。我倾向只存标准化字段+hash，原始载荷走短期debug通道。合规上：哪些字段绝对不能进事件/审计？debug通道怎么设默认、留存、权限才不踩线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "设备序列号也要谨慎这一点我之前没卡住，我以为设备号不算敏感。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解是：事件里只留 device_id（内部映射），不留厂商序列号/IMEI。debug通道的break-glass需要我们做个最小流程，不然工程上很难用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我把debug通道当“紧急排障设施”，不作为常态开发依赖。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一点：事件payload如果含文本备注（农事手工记录）容易写进地名、人名，这个也要拦？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规给的口径我带回来了：审计/事件库只留最小必要字段；精确坐标、客户名、地址、个人信息、厂商序列号/IMEI等都禁入，设备只留内部映射device_id。debug通道要“三默认”：默认关闭、默认≤7天短留存、默认更高权限（break-glass/工单审批），并对访问与导出强审计。文本备注不进事件正文，只留存在性/长度/hash或走单独受控域。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件类型我先收敛到能跑通主链路：  \n- TWIN_STATE_UPSERTED：状态快照写入成功（含entity_ref、state_version、valid_time、source、payload_hash）  \n- TWIN_RULE_EVALUATED：规则/阈值评估完成（含rule_id、result、qflag、threshold_version）  \n- ALERT_RAISED / ALERT_CLEARED：告警产生/解除（含alert_code、severity、dedup_key、related_event_id）  \n- INGEST_REJECTED：接入被拒（含reason_code、schema_version）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态机推进：外部输入事件（sensor/rs/manual）先归一化成“状态候选”，再写状态表（current）+history（单current）；写成功后再发评估事件，评估产出可能触发告警事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收用例：  \n1）回放：给定 entity_ref + 时间窗，按事件序列重放，能还原每个状态版本的payload_hash与告警变化；且能追到遥感的 run_id/scene_id 与阈值版本。  \n2）并发幂等：同一 dedup_key 的输入重复到达，current状态不新增版本；history只新增一次，或新增多条但只有一条is_current=true，且不出现两个current。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向强口径：相同 dedup_key + valid_time + source 三元组视为同一业务写入，history最多一条。做不到就用事务/唯一索引兜底。要是后端坚持“可能多条”，那也得保证：对外回放只返回一条“业务视图”，其余标成重复且不参与回放。我更想要前者，测试也好写。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一条“schema门禁”验收：事件入库前做allowlist校验，未在schema声明的字段直接拒绝并发 INGEST_REJECTED（reason_code=FIELD_NOT_ALLOWED）。再加一条扫描：单测里跑一组包含坐标/客户名/IMEI的模拟payload，确认被拒且审计记录里不落敏感原文，只落hash和reason_code。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本能想先不做全套审批流，工具链我也不太想碰太深。但完全没有debug通道，后端会把原始载荷塞进事件库，风险更大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我建议先做“最小可用版”：单独表/桶、TTL=7天、仅管理员角色可查、所有查询写审计事件 DEBUG_ACCESS_LOGGED（只含工单号、查询条件hash、记录数）。审批流程先用人工工单号校验，后面再迭代自动化。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）事件/审计落库字段走allowlist最小化：只存内部ID、时间、类型、版本、关键参数与hash；坐标、客户名、地址、个人信息、厂商序列号/IMEI、文本备注原文一律不入。  \n2）回放与可复现靠“决定性输入参数集+版本+hash”，不靠原始载荷；给定entity_ref+时间窗可重放出状态版本与告警演变，并能追到run_id/scene_id与阈值版本。  \n3）排障原始载荷走debug通道最小实现：默认关闭、默认≤7天留存、权限更高且访问强审计；同时幂等口径明确为相同dedup_key+valid_time+source history最多一条（唯一约束/事务保证）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

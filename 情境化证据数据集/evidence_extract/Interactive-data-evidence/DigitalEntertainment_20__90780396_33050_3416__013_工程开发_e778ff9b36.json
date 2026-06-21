@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动链路联调验收与灰度发布背景下，用户与导师围绕验收拆解、联调顺序、灰度开关与三层回滚及日志合规持续沟通（7轮），其中在验收口径与断言/时延/稳定证据上与测试负责人沟通（3轮），在端类型/机型灰度维度与回滚生效方式上与客户端负责人沟通（2轮），并形成最小可执行清单与分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉会卡在端侧吧。SDK 收到事件了，但 overlay 没出来，或者出来慢。还有就是不同端可能表现不一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "功能正确性就按用例跑，比如灯光投票、应援特效、剧情分支都点一遍。时延就看 end_to_end p99 还在不在目标内。灰度就先给少量房间开开关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 联调验收你们那边要什么口径？我这边怕跑完了你们说不算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "功能断言里“epoch 内状态一致”是怎么验？是看服务端，还是端上也要打点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问下灰度那块，你们会卡什么条件？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按你说的三块做。功能上我先挑灯光投票+应援特效，做那 5 条断言。时延就补 sdk_recv->applyOverlay_end 这段统计，样本量拉到 10 万。灰度开关按维度做，我可能先支持“场次+房间段+SDK版本”，端类型和主办方晚点补。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端类型我不太确定怎么区分得准，怕接入层要改。先按 SDK 版本分，基本能覆盖 Android/iOS 的差异吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 灰度想按端类型或机型分档，这个在 SDK 里加维度难吗？我们现在只有 sdk_version。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚 2 分钟生效是靠服务端开关吗？端上要不要重启 SDK？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着列：  \n1）我这边补端上 overlay_state_hash 和 sdk_recv->applyOverlay_end 统计。  \n2）网关/编排加 buildId 透传，版本号对齐。  \n3）灰度维度先做场次、房间段、SDK 版本，再加 platform。  \n4）跑 30 分钟联调，收丢失率、重连恢复、崩溃率。  \n时间我不太会排，可能两天？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我按角色说：  \n- 端侧：补 overlay_state_hash、sdk_recv->applyOverlay_end 打点；验收点是能出 epoch_id/event_seq/hash/p95p99；负责人我；截止明晚；风险是我怕漏字段。  \n- 服务端：buildId 全链路透传；验收点是同一房间日志能关联同一 buildId；负责人后端负责人；截止后天中午；风险是有服务没加。  \n- 灰度：加 platform 维度到 handshake；验收点是能按 iOS/Android 配开关；负责人客户端负责人；截止后天晚上；风险是字段兼容旧 SDK。  \n- 联调用例：灯光投票+应援特效各 5 条断言；验收点是能自动比对 hash 1% 抽样；负责人测试负责人；截止周五；风险是不一致时定位慢。  \n- 回滚：2 分钟内回滚生效；验收点是回滚后新房间 epoch 不被旧事件污染；负责人实时网关工程师？我不确定；截止周五；风险是开关缓存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回滚怎么测我说下：  \n- route_switch：切到旧通道后，receipt_rtt 的分布回到旧基线，且新通道连接数下降。  \n- rule_version：切回旧规则后，同一输入事件得到旧的分支结果（hash 对齐旧版本）。  \n- overlay_enable：关掉后端上不再 applyOverlay，但 sdk_recv 还在，保证互动不死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我之前日志里会打 user_id 明文，方便查房间里谁投的票。那我改成只打 uid_hash？需要的话再去库里查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把端侧字段和 uid_hash 改掉，再跟测试对齐断言里要的 hash 格式。回滚三开关我按你这套去找人对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

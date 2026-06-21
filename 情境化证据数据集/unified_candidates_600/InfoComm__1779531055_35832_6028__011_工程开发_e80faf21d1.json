@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在SINR适配层联调异常背景下与导师围绕重构失真飙升的根因定位与修复验证持续沟通（5轮），其中在SINR门限判定部分与信道适配层开发工程师沟通（1轮），在溢出降级影响与验证部分与降级异常排查专家沟通（1轮），并最终确定累加器溢出根因及类型替换、钳位保护与模糊测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "根据相干时间和Jakes模型，这种快衰落下的SINR波动不应该导致编码策略从高保真直接切到极度压缩模式啊。是不是基带上报的CSI本身就不准？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "日志显示SINR在15dB震荡，但编码策略却切到了极度压缩。是不是滑动窗口平滑那块出了异常？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我光顾着看衰落模型的理论边界了，没往数据类型上想。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改类型肯定得改成uint32或者float。验证的话，我构造一个持续高SINR的序列注入进去看还会不会溢出？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种因为数值溢出引发的异常，除了这个累加器，后面还有没有类似的风险点？我改完怎么验证才稳妥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加钳位保护，然后做模糊测试覆盖整个SINR动态范围来验证门限跳变。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

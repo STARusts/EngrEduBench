@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端拥塞压测与性能调优背景下，与导师围绕压测方案与调优策略持续沟通（3轮），其中在微秒级毛刺压测工具与流构造部分与测试与性能优化专家沟通（1轮），在DPDK轮询调优与尾部时延分析部分与测试与性能优化专家沟通（2轮），最终形成基于硬件打流、GCL时隙调优及尾部时延分布的压测调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接用iperf3打满带宽，看丢包率行不行？加个多线程打流应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级毛刺怎么打出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按线速打满呗，打到丢包为止。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最近看DPDK调优的帖子，里面说用rte_eth_rx_burst批量收包，调节轮询频率能抗突发。我准备把收包轮询频率拉高试试。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信区间？多跑几次取平均行不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 用硬件测试仪打微秒突发流和探测帧；2. 观测交换芯片缓存水位，结合GCL时隙调DPDK轮询；3. 分析尾部时延分布，不看平均看99.9%分位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

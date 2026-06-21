@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在双师协同数字教育平台方案设计收尾背景下，用户与导师围绕权限隔离越权点、租户/对象级隔离、证据访问控制与审计字段及A级/B级高可用分级持续沟通（9轮），其中在证据对象级鉴权与下载控制、审计字段部分与安全工程师沟通（3轮），在同城高可用/跨城灾备与组件冗余对齐分级SLO部分与解决方案架构师沟通（3轮），并形成本轮定案要点列表。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "企业导师看见不该看的吧，比如学生的成绩、别的班的任务。还有校内老师去改企业导师的评分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）企业导师看别的企业的任务包和证据。2）企业导师导出学生信息。3）助教之类的人把评分改了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就是教务管理员直接改评价结果？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用租户ID？学校一个租户，企业一个租户？我不确定是不是要这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只允许看自己被分配的班级，和这些班级里的任务、证据、评分。别的都不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据存储按班级分目录？然后权限跟着班级走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 外部企业导师访问学生证据这块，对象级权限一般怎么设计？下载/转发怎么控？审计要记什么字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "短期访问凭证就是那种临时链接？如果学生把链接发给别人，别人也能看吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那水印是不是必须？我怕需求会变大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须的是：学校租户隔离；对象级鉴权按班级/任务包；证据不直接暴露地址，用短期凭证；审计要记actor、资源、allow/deny、policy版本这些；权限变更要留痕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排课调度不能挂，还有课后评价提交不能挂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用99.9？然后数据不丢。RPO=0？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A级 RPO接近0，RTO十几分钟？B级 RPO几小时，RTO一两小时？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 我们要做权限隔离+高可用方案。按A级/B级分级的话，同城高可用怎么落？跨城灾备要不要做？哪些组件必须冗余，哪些可以降级省成本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "追加写模型是指审计不能改？那会不会库很大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跨城先不做热备，只做备份和演练，这样也算灾备吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）以学校为租户隔离，企业导师是外部身份。  \n2）企业导师只能访问被分配班级/任务包/证据，做对象级鉴权。  \n3）证据访问不暴露真实地址，用短期凭证并二次校验身份；水印先做可选。  \n4）高可用按A级/B级分：A（评价提交、证据、归档、审计、鉴权）同城冗余+快速切换；B（排课求解、统计、画像）允许延迟/降级。  \n5）跨城灾备先做备份恢复和演练，后续再升级热备。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "tenant_id、actor_id、actor_role、resource_type、resource_id、action、decision、policy_version、trace_id，再加时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "移除后就不能再访问。历史访问记录还在审计里。之前发出去的短期链接过期就没了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

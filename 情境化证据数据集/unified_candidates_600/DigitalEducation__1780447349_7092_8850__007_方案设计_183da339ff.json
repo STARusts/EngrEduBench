@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在沙箱逃逸防御与隔离评估背景下，用户与导师围绕跨域多租户隔离选型、安全与体验冲突的折中及防逃逸验证持续沟通（6轮），其中在容器隔离风险部分与沙箱隔离技术专家沟通（1轮），在强隔离体验影响部分与教学体验观察员沟通（1轮），并最终形成基于数据敏感度与信任域的分级隔离方案、CVE回归验证策略及MicroVM热启动补学重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Docker跑着挺顺的，Namespace和Cgroups隔离资源，之前项目都这么搞。逃逸这事儿概率极低吧，没必要换更重的方案。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域多租户场景，Docker这种轻量级隔离能扛住逃逸风险吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "独立内核？那启动得多慢，资源开销也大。咱们项目要求高并发按需拉起，毫秒级供给，强隔离根本达不到吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果全上MicroVM，启动慢占资源多，学生做实验会不会卡得骂人？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就难办了。安全非要独立内核，体验非要1秒内，我选哪个都得出事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对MicroVM就停留在知道名字，底层怎么快起、怎么切分内存没细看过。现在看必须得补这块，不然没法评估它能不能优化到1秒内。我定个目标，这两天把Kata的文档和内存热启动机制过一遍，看看有没有折中余地。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "是不是可以搞分级？跑涉密数据或者跨域不信任节点的，强制走MicroVM；校内可信源、跑普通数据的，走Docker？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信任域可以根据算力节点接入时的认证等级来分，校内节点高信任，外域联盟节点低信任。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证防逃逸，我可以用自动化脚本跑一批历史容器CVE漏洞镜像，分别往Docker池和MicroVM池里塞，看能不能突破Cgroups限制拿到宿主文件。控制变量就是两种池子用同一套宿主内核版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

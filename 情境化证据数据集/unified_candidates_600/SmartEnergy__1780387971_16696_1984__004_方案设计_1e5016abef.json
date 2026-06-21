@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在散源微涌频调与网态稳控系统方案设计背景下，与导师围绕边云协同微态感知架构选型、延时敏感性与安全合规持续沟通（3轮），其中在边缘选型与延时验证部分与微网架构师沟通（1轮），在数据流转安全与合规隔离部分与安全合规审计师沟通（1轮），并最终形成架构MVP要点与补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算边缘侧全上KubeEdge，云端用SpringCloud微服务做聚合，这样扩展性好，开发也快。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我假设边缘节点的算力余量在40%以上，KubeEdge的Pod调度应该能在500ms内完成。但我确实没有实测数据支撑这个假设，对照组也没设。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧如果用KubeEdge，对微涌感知的毫秒级回传会不会造成阻塞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "方案B确实更稳。我放弃KubeEdge，边缘侧改用轻量OS+MQTT，云端依然用微服务做聚合计算和碳电映射。这样架构就是：端侧裸机采集，边侧网关做协议转换和轻量聚合，云端负责寻优和哈希上链。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没考虑这么细，我以为MQTT本身TLS加密就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边云协同架构下，微态感知数据回传和控制指令下发，安全机制怎么设计才不拖累延时？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘网关作为安全隔离区，云端指令先到网关校验签名，再由网关通过私有协议下发给端侧。回传数据在网关做脱敏和哈希预处理，再上云。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前对边云安全协议和轻量容器编排的细节掌握太浅了"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周我要把MQTT v5的安全扩展规范和轻量OS下的证书管理机制精读完，输出一个边云安全交互时序图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，架构选型：放弃边缘KubeEdge，采用端侧裸机+边侧轻量OS网关+云端微服务分层。第二，数据切分：端侧秒级采样，边侧亚秒级聚合与脱敏，云端寻优与上链。第三，安全底线：云端指令禁直连端侧，边侧网关做双向认证与指令校验隔离；回传数据字段级脱敏。第四，待验证假设：边缘内存<512MB下，方案A与方案B的基线延时对比，需在局部微网实测抖动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

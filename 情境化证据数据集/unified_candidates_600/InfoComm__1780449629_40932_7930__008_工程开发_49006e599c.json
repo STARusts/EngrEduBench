@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预畸变对消链路实现背景下，用户与导师围绕Volterra系数应用、流水线时序对齐、RAM读写冲突及系数平滑更新持续沟通（6轮），其中在系数平滑过渡部分与算法工程师沟通（1轮），在流水线延时补偿与双缓冲实现部分与基带开发师沟通（1轮），并形成乒乓缓冲防毛刺与EWMA扫参定因子的实现清单及伪代码绘制要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把提取的系数矩阵直接乘到发射数据流上，做预畸变抵消。时序同步一下应该就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序对齐就加移位寄存器延时嘛。RAM直接写会跳变，那就用双端口RAM？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 系数要是实时刷新直接写RAM，预畸变输出会跳变，这怎么搞？@基带开发师 流水线里各级乘法器延时不一样，数据没对齐，还有RAM读写冲突，工程上一般怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说用EWMA做平滑，因子在0.05到0.2之间。基带说要做乒乓缓冲，还有打拍对齐时序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切换的时候应该挺平稳的吧，不会出毛刺。平滑因子我就先定0.1。验证就上板跑一下呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 乒乓切换加门控防毛刺。2. EWMA平滑因子在强自扰下扫参定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

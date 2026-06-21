@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在几何引擎与工艺库联调背景下，用户与导师围绕接口适配、特征映射与异常回调机制持续沟通（8轮），其中在引擎侧数据输出与CAM接口输入格式部分与几何引擎联调员沟通（1轮），在工艺库输入约束部分与约束知识工程师沟通（1轮），并最终形成带上下文标签的接口参数结构与异步事件驱动的联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几何引擎输出的B-rep特征流具体长什么样？CAM接口那边需要什么格式？中间的坐标系转换怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要把面片转成加工特征码，然后做仿射变换。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工艺库那边对输入的加工特征码有什么要求？陡壁特征是不是要带刀轴矢量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "陡壁特征要带避障余量包络体，不然会报异常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是定义三个接口，参数就是面片、特征码和包络体，异常回调就报错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入BrepFaceSet，转成带上下文的MachiningFeature，异常要带missing_constraint_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步事件吧，不阻塞。因为演解引擎算拓扑挺慢的，阻塞会卡死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

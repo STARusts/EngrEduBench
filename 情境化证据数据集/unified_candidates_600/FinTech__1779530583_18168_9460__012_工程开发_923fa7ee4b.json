@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在异常注入与防雪崩验证背景下与导师围绕注入范围、数据合规、工具提效及限流阈值冗余持续沟通（7轮），其中在注入类型与验证重点部分与穩定性保障工程師沟通（1轮），在数据防污染与合规隔离部分与合規與風控專員沟通（1轮），并形成延时超时注入、金额Mock为0、令牌桶840限流及Chaos Mesh记录复现的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这步就是搞混沌工程吧，用Chaos Mesh杀几个Pod，看服务能不能自动拉起就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异常注入到底该注哪些？防雪崩验证重点看什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "注延时和超时，不杀Pod。还要验疏导引擎的令牌桶限流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图库混进假数据确实麻烦，脱敏的也不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异常注入的时候，如果用脱敏报文，会不会有污染生产图库的风险？合规上怎么卡？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了Chaos Mesh的文档，它有个Fault Injection Record功能，可以把注入动作和参数存下来。刚好能迁移过来用，这次做异常注入时把延时和超时的参数录下来，后面复现问题不用每次手动配，能省不少事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "之前压测跑过备用通道的极限TPS，大概是1200。令牌桶就设1200呗，超过就拒。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没仔细算过误差。意思是压测的1200不准，异常时实际承载能力可能只有1000左右？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "令牌桶840，留30%冗余。我这就去改限流配置和注入脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在审计导出、授权校验与快照幂等链路的灰度发布和回滚演练背景下，用户与导师围绕灰度编排、观测打点、数据一致性与合规要求持续沟通（7轮），其中在发布路由/回滚是否回库及指标设计上与DevOps工程师沟通（6轮），在演练用例三层断言、触发回滚条件与异步任务处理上与测试负责人沟通（5轮），并最终定版按租户路由的灰度+软硬回滚、必备指标与6步可重复演练脚本落地项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先走最省事的，按环境变量开关灰度。就是新版本只给一小部分组织用。验证的话，就跑一遍我们那几个 403/409/DEGRADED 的分支，然后再把开关关掉，应该就算回滚了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 灰度发布这块你给我个可照着做的流程行不行？还有回滚到底要不要回数据库。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是就用现成的灰度发布工具，配个按租户路由就行？我怕我自己写规则写崩。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "观测这块我没太有概念，我们现在 Prometheus 有，但我就会看 CPU、内存。你说的授权校验错误码分布，是要我在接口里打点吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚后数据不脏怎么证明？我听起来像要对账，但我不会做那种很复杂的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个小问题：回滚要不要把新版本容器都停了？我怕有人还在用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问了 DevOps，那边说数据库一般不回滚，主要是前向兼容然后路由切回旧逻辑。灰度最好按租户ID，不要随机百分比。观测要加授权校验的错误码分布、DEGRADED 次数、延迟，还有导出 manifest 构建失败这种。回滚分软回滚切路由和硬回滚下线新版本，尤其异步任务要管住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能先用现成的指标库加几个 counter 吗？就是你说的 auth_check_total 这种。我不太确定标签怎么定，怕爆炸。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演练步骤的话，就选 2 个租户，跑素材引入、引用标注、触发一次 403/409，再做导出，然后开灰度，重复一次，再切回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "reason_code 我现在记得的就：NO_LICENSE、SCOPE_MISMATCH、FINGERPRINT_CONFLICT、RULE_ENGINE_TIMEOUT？可能还有别的。我先按这些写死？再多的我不清楚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "6 步我试试写：1）灰度前全量旧版本，租户A做一次素材引入并引用标注，拿到 decision_id；2）重复提交同一 decision_id，看不会多写 snapshot；3）导出证据，看 manifest 构建成功；4）开灰度只给租户A走新版本；5）租户A再跑一次，触发一次 DEGRADED（用开关复现），看 UI 分支和后端 reason_code；6）回滚路由到旧版本，再导出一次，确认还能导出、字段不空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 灰度发布+回滚演练，怎么写用例和断言比较靠谱？我主要怕回滚后导出证据链有洞，但我不会断言。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "quote_graph_hash 我们还没做哈希吧？我印象里只有引用关系列表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值呢？DevOps说要看 DEGRAGED 次数、错误码分布，但我不知道到什么程度要回滚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步任务这块我更不懂了，我们有个批量扫描会补指纹。回滚时要停掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，测试那边给了三层断言：接口层重放 decision_id 不新增快照；数据层快照表只有 insert；导出层 manifest 字段要齐（decision_id、material_id、source_uri、license_id、license_scope、quote_graph_hash、时间戳、操作者原因）。quote_graph_hash 我们可以先把引用关系列表稳定序列化做 hash，用来比对回滚前后是否一致。触发回滚条件先用演练触发：manifest_build_fail 出现就软回滚；超时或 P99 超基线两倍持续 5 分钟也回；如果旧版本导出读不到新写入直接硬回滚并停批量扫描任务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "租户我想用内部测试组织，不用真实学校。素材就用我们自带的示例素材库？或者用公共领域的图片。审计数据留存我不太确定，感觉跟正常一样留就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记下来了。那今天收口是不是就是把演练脚本和指标清单定下来？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

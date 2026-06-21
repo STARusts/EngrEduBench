@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在线上运行评估背景下与导师围绕误触发率与重构耗时的监控策略持续沟通（9轮），其中在误触发根因部分与异常溯源分析师沟通时序对齐方法（1轮），在耗时长尾分布部分与效能评价审计员沟通工件分桶切片计算（1轮），最终形成不抑制报警、按工件切片算P99耗时及以P99设红线的策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘整体绿的，但误触发那块偶尔有尖刺。我想着是不是现场震动大带来的毛刺，直接在Grafana里加个报警抑制规则把瞬态毛刺吞掉算了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我去翻日志太费劲了，ELK里刷出来的都是些触觉数组原始值，我看不懂。有没有那种一键能搜出误判原因的脚本或者现成面板？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上偶尔有误触发，我想找个快捷脚本搜ELK日志，你看怎么搜比较快？有没有现成的关键字匹配规则？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以核心就是手抖和真意图分不清？那简单啊，我在边缘端加个去抖滤波，把阈值调高点不就行了？这个我在配置界面改一下参数就好，不用查日志了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "耗时可能会变长？但我看大盘上平均重构耗时1.2秒，达标了呀。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有一键导出P99耗时的工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能看整体平均，得按工件类型切片看P99，大曲率件和薄壁件要分桶算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算用常见的3-sigma法则，超出3倍标准差就报警，这在Prometheus里自带函数，很好配。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那不用3-sigma用什么？我不太会配复杂的统计模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，误触发报警绝对不能吞，要按异常分析师的口径查时序断点，也不准乱调去抖阈值；第二，重构耗时不能看平均，要按工件类型切片算P99；第三，报警阈值不用3-sigma，直接按P99设红线，超了就报。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

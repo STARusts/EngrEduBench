@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在人机共域安全合规背景下，与导师围绕合规条款对标、业务柔性冲突协调及安全与效能架构拆分持续沟通（4轮），其中在动态分离监控与双源架构验证部分与安全合规专员沟通（5轮），并最终形成包含双源感知、独立回路、最坏制动距离及Fail-safe的四条合规红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ISO 15066具体得满足哪些条款？之前提了一嘴动态分离监控，这够吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想全靠3D视觉做栅格判断，直接发指令让机器人减速或者停。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加安全激光扫描仪，部署位置是固定的，会限制我们动态栅格的覆盖范围，而且成本也上去了，跟我们要提升空间利用率的业务目标完全反着来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是安全激光扫描仪只负责守住底线，视觉负责算更灵活的动线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们用双源架构，视觉做动态栅格和轨迹重规划，安全激光扫描仪做硬线互锁底线，这样能过PLd的审吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "万一视觉把人识别成物料没减速，只要人进到激光扫描仪的危险区，还是能硬线切断停机，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我把合规这块的硬约束理一下：1. 必须双源感知，安全级传感器做硬线STO/SLIM，视觉做非安全级降速优化；2. 安全控制回路必须独立，满足PLd性能等级；3. 安全距离计算必须基于最坏制动距离。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚才说的都是正常运作时的。如果系统断电重启，或者激光扫描仪本身坏了，是不是也有要求？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加上这条：4. 系统必须具备启动自检与Fail-safe机制，异常状态下锁死不运行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

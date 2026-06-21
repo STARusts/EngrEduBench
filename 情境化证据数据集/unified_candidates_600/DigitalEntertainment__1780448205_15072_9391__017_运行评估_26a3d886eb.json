@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在极端材质算力扩容规划背景下与导师围绕算力瓶颈、保真度与成本平衡点及有限扩容策略持续沟通（8轮），其中在算力分布与成本红线部分与算力效能优化师沟通（2轮），并形成基于沙箱回放姿态边界触发有限扩容的规划方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上瓶颈在隐式积分求解的收敛性，高密度材质的刚度矩阵条件数太大，迭代次数飙升。算力肯定炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了物理穿透报错，降级触发率没看。云原生监控那套Prometheus指标我不太熟，有点看不懂那些面板。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算力效能优化师 线上极端材质的GPU开销和降级触发情况怎样？扩容上限在哪？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "成本红线我之前没考虑过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加2台能覆盖35%的降级吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "得调阈值，不能全硬算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太会算成本收益。不过从研究角度看，这35%的超时能不能外推？是不是特定姿态下必然超时？如果只在特定姿态超时，是不是不用全量扩容？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用上次复盘的沙箱回放！把高频抖动区间的姿态集提取出来，看是不是集中在大幅度抬臂或深蹲这种大变形动作。如果是，只对这些姿态触发扩容调度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实是我的能力缺口。我记在日志里了，接下来两周要补学Prometheus和云成本核算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先把刚才的姿态边界框出来，作为扩容触发条件，上线后我盯着这几个特定姿态的指标看，应该能看懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 成本红线限制最多加2台；2. 提取沙箱回放中的高频抖动姿态集作为扩容触发条件；3. 我要补学云监控指标，确保上线后能看懂降级率变化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育系统方案设计阶段，用户与导师围绕权限审计高可用的审计范围、最小字段、降级与防绕过持续沟通（10轮），其中在审计范围与保留期上与合规与风控负责人沟通（2轮），在Outbox可靠事件与主链路降级策略上与系统架构师沟通（2轮），并形成审计分层、错误码与验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉就是全打日志吧，像用现成的审计组件那种。高可用是不是审计服务挂了也不能影响预约？就别把主流程卡死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "必须留痕的动作…登录算吗？然后查设备状态、查预约列表、改预约、还有改权限。绕过审计查库…就把数据库权限收紧，只给服务账号？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 审计这块最小必须记什么？设备状态查询这种量大的是不是也要一条条记？保留期一般咋定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那设备状态这种就可以不逐条写？只按接口采样就行？导出一定全量记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 审计要高可用的话，审计服务挂了主流程咋办？是异步写就行吗，会不会丢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Outbox是一定要跟业务同事务？我之前以为直接写到Kafka就行，省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解：高风险操作要“业务成功就必须有审计”，所以得同事务。低风险读可以弱一点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）权限变更、导出、跨租户这种，如果审计写不进去就直接失败。\n2）预约创建/取消这种算关键业务，要保证有审计事件，但可以先落本地再异步传。\n3）看板查设备状态就别一条条记，改成按时间桶计数，异常就告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小字段我试着列：event_id、event_time、actor_id、actor_type（教师/管理员/系统）、tenant_id、action、resource_type、resource_id、result、ip、user_agent、trace_id。变更类再加before_hash/after_hash？导出加query_scope和rows_count。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码：AUDIT_OUTBOX_WRITE_FAIL（高风险操作时触发，直接拒绝）；AUDIT_PIPELINE_LAG（管道堆积，低风险放行但提示降级）；AUDIT_STORE_UNAVAILABLE（审计检索不可用，只影响审计查询，不影响业务）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计查询也要审计，就是有人查审计记录也要产生一条审计事件，action=READ_AUDIT_LOG，resource_type=AUDIT_LOG，范围也记录。单点…Outbox在业务库里，业务库本来就要高可用。异步管道和审计存储要分开，挂了也不影响预约，只会延迟审计入库。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限这块…是不是缓存？比如把角色权限拉下来放本地缓存，短时间策略中心挂了还能用旧的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缓存可以比如5分钟刷新一次？如果超过比如30分钟没刷新成功，高风险操作就不给做，普通查看先放行但标记风险。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证的话…可以做个最小演示：模拟审计管道停掉，看预约还能成功，然后Outbox里有记录，恢复后能补投递。再模拟Outbox写失败，高风险导出就直接被挡住。还有查审计也会生成审计记录。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在触感叙事空间音游系统运行评估中，用户与导师围绕体验指标如何落到留存监控、阈值与早期信号设计持续沟通（8轮），其中在指标口径与采集上限上与数据工程师沟通（2轮），在用户可感知断点阈值上与用户研究员沟通（1轮），在数据采集合规边界与审计开关上与合规与内容安全经理沟通（1轮），并形成必做指标/分组维度/双告警线与异常追踪规则清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是同步相关的，音画触三者的漂移会直接劝退。可以把“节拍命中”和“触觉对齐误差”做成核心指标，再加上空间音频定位准确度。最好全量采集原始序列，后面还能训练个模型去预测流失。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 我们要做“体验指标与留存监控”，你给个能用的指标组合和埋点口径，最好能把同步、触觉、空间音频对留存的影响拆出来。还有采集上限怎么控？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分位数这套我能接受，但我还是想要更细的时间序列，不然漂移到底发生在哪个小节看不到。能不能每个关卡上报每10秒的offset均值？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "北极星就D1/D7留存，起点用首次进关并结算，回访也是要结算一次。体验代理我先抓四个：`sync_offset_p95_ms`、`haptic_drop_rate`、`session_friction`、`motion_jitter_p95`。空间音频头锁我觉得也重要，但先当备选。时序桶只在canary或异常会话开，默认不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户研究员 你从测试/访谈角度看，哪些体验问题会直接影响留存？我们在监控里想把“用户能感知的断点”变成阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那阈值就直接卡 100ms 好了，触觉丢失率我想设成1%红线，空间音频先不管。然后把这些都拉进同一个综合体验分，分数低就预测流失。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "体验告警线用研究给的感知阈值，比如 `sync_offset_p95_ms > 120ms`。工程告警线可能更严一点，比如跟stable对比，canary的P95偏差上升超过20ms就报警？触觉丢失也是对比上升，绝对值再加一条，比如 `haptic_drop_rate > 0.5%`。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用“首局完成率”和“会话时长中位数”当早期信号？如果同步差，玩家可能首局直接退。我们可以看 `first_level_complete_rate` 和 `median_session_duration`，按 stable/canary 分组对比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做相关性验证：在同一批用户里，按 `sync_offset_p95_ms` 分桶，看 `first_level_complete_rate` 和后续D1的差异。先用canary小流量做，样本不够就先看方向性。还有用回滚窗口的对比：回stable后这两个信号应该快速回归。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全经理 留存监控要做分组分析，会涉及设备、行为事件。哪些字段能采？比如设备指纹、音频渲染状态、触觉事件计数这些，有没有红线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我就不碰设备指纹。异常追踪模式我之前想常开，现在看来得做成受控开关，还要审计。未成年人模式默认关，这块我之前没考虑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必做：  \n- 结果：D1/D7留存，起点“首次进关并结算”，回访“任意关卡结算1次”。  \n- 体验代理（会话聚合）：`sync_offset_p95_ms`、`haptic_drop_rate`、`motion_jitter_p95`、`session_friction`。  \n- 早期信号：`first_level_complete_rate`、`median_session_duration`（只留这两个）。  \n分组：`effective_track` + 设备档位/OS大版本 + 模式（单人/多人/UGC）。  \n告警线：  \n- 体验告警：`sync_offset_p95_ms > 120ms`；触觉“一局出现>=3次空洞事件”或 `haptic_drop_rate` 过高（阈值先用0.5%试跑）。  \n- 工程告警：canary相对stable的P95偏差上升>20ms，或丢失率相对上升>0.2%。  \n异常追踪：默认只传聚合；时序桶只在canary或异常会话开；开关需要权限+审计，未成年人模式默认关闭。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

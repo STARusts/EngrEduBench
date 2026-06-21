@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在中继联调Sink节点解析生命信令报错背景下，用户与导师围绕错位原因定位、修改方案及验证方式持续沟通（11轮），其中在极简信令重组逻辑及字节序宏统一部分与极简信令算法工程师沟通（2轮），并最终形成包含出口加字节序转换、写单元测试及移位硬编码换宏的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好像是固定偏2字节。那应该是算法打包的事吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "偏了2字节，你看看是不是重组逻辑有问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大端小端宏没对齐，中继那边按大端拼，驱动是小端，所以偏了2字节。算法说还要看移位操作有没有硬编码。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "统一成小端，这样跟驱动就一致了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那Sink端也得改？可是如果都改成小端，之前定的极简信令规范里不是说空中接口要按大端传输吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那具体在哪加？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一遍全链路联调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看看代码里有没有直接写>>8这种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 在打包函数出口加hton_vital转换大端；2. 写单元测试对比新旧字节流；3. 把移位硬编码换成宏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

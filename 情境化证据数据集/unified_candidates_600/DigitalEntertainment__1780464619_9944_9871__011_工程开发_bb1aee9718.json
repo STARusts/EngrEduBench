@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在调度总线极限压测背景下，用户与导师围绕压测策略、内部耗时模拟工具选型及极限边界判定持续沟通（7轮），其中在队列堆积与背压测试部分与总线调度开发工程师沟通（1轮），在异常注入策略部分与联调测试工程师沟通（1轮），并最终形成基于Gatling注入动态耗时与监控吞吐拐点及P99延迟突增的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测总线要注意什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "极限压测怎么造异常？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "JMeter确实管不到内部耗时模拟。我前两天刚好在查压测资料，看到Gatling可以写自定义模拟器，能控制算子执行时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Gatling写一个自定义的算子Feed，模拟探路沙箱耗时从5毫秒到5秒的动态分布，直接注入到总线内部接口，这样测背压才真实。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看吞吐量的拐点。当并发数上升，吞吐量不再线性增加，而且P99延迟开始急剧飙升，这就是总线处理能力的极限边界，说明背压要触发了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

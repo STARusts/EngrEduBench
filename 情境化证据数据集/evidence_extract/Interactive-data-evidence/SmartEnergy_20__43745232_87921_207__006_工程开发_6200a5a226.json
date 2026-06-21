@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在绿电配额区块链溯源与自动化清算平台进入合约开发背景下，用户与导师围绕清算原子性、失败处理、自动化与安全取舍及验证方案持续沟通（8轮），其中在转账跳过后果、重入风险与拉取/推送模式选择部分与智能合约开发工程师沟通（2轮），并形成待补齐安全规范学习与用例验证/逻辑约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算写个循环，只要配额确认转移了，就自动触发转账函数把钱打过去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好的，那我就加个判断，失败了就跳过，继续执行下一个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白了，那我就在函数前面加个锁，不让它重复进。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好的，这样确实更保险，那就按您说的改成用户自提。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "呃，好像是有点矛盾，要不还是改回原来的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在本地链上跑两组数据，一组模拟正常转账，一组模拟恶意攻击，看看哪种会挂掉，再看看最后剩多少手续费。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "实话说，我刚才听专家说Call函数和重入的时候有点晕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，合约必须严格遵循检查-影响-交互模式，先改状态再转账；第二，引入重入防护机制，防止恶意回调；第三，针对自动化清算，我们采用‘逻辑锁定-异步触发’的模式，不直接在主循环里清算，而是记录清算凭证。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去查查Solidity最新的安全编程规范，尤其是关于Check-Effects-Interactions模式的说明。我找几个GitHub上的标准清算合约案例，对照着咱们的绿电场景看一遍，下午我列个核心逻辑的修改清单给您。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，没问题，这些我都加进开发备忘录里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在可验证数字藏品体验链路平台方案设计背景下，用户与导师围绕“权益凭证”数据模型的边界、数据最小化与低预算MVP表结构持续沟通（6轮），其中在主键/ID体系、状态机、核销审计事件表与EEC_U/EEC_T口径部分与数据架构师沟通（9轮），并最终明确以Entitlement/Voucher/RedemptionEvent/RedeemPoint四表为MVP及不强制上链等取舍。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就想用现成的那种“coupon表+order表”的套路，直接上字段就行。但又怕后面核销、争议、审计都对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1是这张凭证是谁的；2是能用什么权益；3是用了没、啥时候用的。差不多就这些？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行。我去问。@数据架构师 权益凭证这块，能给个“最低成本可落地”的数据模型骨架吗？主要是要支持核销可追溯、别存敏感信息、还能算EEC_U这些指标。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点分不清 entitlement 和 voucher。是不是一个东西？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们还是分开吧，免得以后又改库。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "anti_replay_nonce 我以为是接口层做就好，表里也要存吗？我怕又变复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 RedemptionEvent 这张表会不会很大？感觉核销一多就爆了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小字段大概有哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "verifier_sig_hash 是不是要上链？我看很多人都直接用链上哈希。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。EEC_U 按“用户-权益去重”，是用 voucher 还是 entitlement 去重？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 state 字段，used 是不是只要有一次成功核销就改 used？多次核销怎么办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心合规：user_id 存内部ID就够了吗？争议单要不要存实名信息？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须…Voucher、RedemptionEvent、还有 RedeemPoint？可选就是状态变更日志那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不存手机号证件号，user_id用内部ID。证据不存原文，只存hash和引用。权限分开，至少能查日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是查得快一点，尤其按权益类型拉取核销漏斗的时候，不用 join entitlement？成本就是多一列，还有同步一致性风险。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。版本号我之前没想过，但听起来比到处update安全。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n1）核心对象：Entitlement 表示权益实例；Voucher 表示用户持有凭证；RedemptionEvent 记录每次核销结果与证据；RedeemPoint 做核销点主数据。  \n2）隐私：Voucher/事件都只存内部 user_id，不落手机号证件；证据存 hash+引用，不存原文。  \n3）指标口径：EEC_U 用成功核销事件去重(user_id, entitlement_id)；EEC_T 数成功核销事件条数。  \n4）防重放/幂等：request_id 幂等；nonce 放在事件表里做唯一约束。  \n5）不做的：不强制上链存证、不做二级交易相关字段、不把争议处理所有材料塞进核心表。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

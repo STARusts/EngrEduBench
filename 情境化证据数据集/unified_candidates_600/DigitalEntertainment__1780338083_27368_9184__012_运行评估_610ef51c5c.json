@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在场控引擎灰度上线背景下，用户与导师围绕灰度切流比例、统计有效性取舍与数据分析短板持续沟通（7轮），其中在初始切流比例与安全性部分与演艺SRE部署专员沟通（2轮），在低频流量指标验证有效性部分与视效时序监控专员沟通（2轮），并最终形成5%首秀观察灰度策略及统计基础补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按常规的先切5%流量？看P99延迟和错误率，没问题就继续放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "场控引擎灰度切流，从稳妥角度怎么定初始比例？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "1%是不是太少了？一晚上可能都没几条信令，数据不够怎么看有没有问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果只切1%流量，验证指标能信吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就矛盾了啊。切少了没数据，切多了怕翻车。到底听谁的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能先切5%但是多跑几场演出攒数据？或者搞个影子流量？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就知道把请求扔一起算平均。分组比较口径是啥？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会算置信区间和分组对比。我接下来去补这块。这周内我把A/B测试的统计基础看一遍，写个Python脚本算样本量和置信区间，下回我自己定灰度比例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看《可信在线实验》那本书的前三章，重点看序贯检验。脚本输入错误率和延迟方差，输出需要的最小样本量和灰度时长。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先按5%切一个完整控台的设备，跑完今晚一场主秀。如果错误率是0，再看P99样本量够不够50个，不够就再挂一晚。够50个且P99小于15ms，明天再切到10%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先保证不回退，全量放行等样本攒够再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

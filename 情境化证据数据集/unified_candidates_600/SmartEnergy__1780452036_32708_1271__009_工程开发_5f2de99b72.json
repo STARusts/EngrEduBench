@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微网供需适配联调背景下，与导师围绕反演结果与微网控制器的连接方式及核心时序对齐问题持续沟通（4轮），其中在微网侧接口与时序要求部分与微网适配开发员沟通（1轮），在反演时间戳不均匀及处理部分与算法实现工程师沟通（1轮），并最终形成边缘侧1秒滑动窗口聚合与gRPC推送的适配层开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个REST接口把反演结果推过去就行了吧？或者用MQTT，之前项目都这么干，快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微网侧到底要怎么接？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "换gRPC。时间戳我加上去就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演出来的时间戳不均匀是吧？微网那边要1秒周期的数据，你这能对齐吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两边都不给直接用，算法这边时间戳乱跳，微网那边要1秒对齐。得在中间加个处理。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在边缘侧加个1秒的滑动窗口，攒够了再推。接口换gRPC。这就去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

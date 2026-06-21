@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在确权水印与签名服务工程落地背景下，用户与导师围绕constraint_report与snapshot_id的指纹/签名字段、验签失败处理、权限分层及接口表结构持续沟通（11轮），其中在内容指纹/最小payload/时间戳存证与水印形态上与区块链与签名工程师沟通（3轮），在公开验签最小披露、密钥轮换审计与限流日志上与安全与隐私官沟通（2轮），并形成接口清单、attestation_record字段与单测验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是生成完就打水印？然后签个名。跟 run_id 绑一起就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我不太会。就 run_id、project_id、snapshot_id、created_by？还有时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与签名工程师 指纹怎么取？签名里要放啥字段？时间戳存证咋做才不把全文泄露？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那水印呢？一定要放内容里吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验签怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了。就是存 hash，不存全文。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先做导出包的 manifest 水印，再签名。文本里那种零宽的先不做。payload 放 run_id、snapshot_id、hash、rule_pack_version 这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。就是把 evidence_ref 列表也 hash 一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "验证接口不用卡吧，大家都能验。重签要管理员。解密全文就…按之前那个 who/when/why。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撤销会影响结算吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "canonicalize 我就用 json 排序？我怕我写错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那水印短码怎么生成？直接取 run_id 前 8 位？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私官 验证接口公开到什么程度？payload 能给出去吗？还有密钥放哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "限流我没配过，是不是先不管？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去就把 signature 打印全串关了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）导出包生成 manifest，里面放 watermark_code 和 hashes。\n2）做 payload_hash 和签名，落 `attestation_record`。\n3）verify_public 只回 valid 和 reason_code。\n4）verify_internal 给内部看 payload。\n5）revoke 写原因和审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "唯一约束就对 run_id+step+snapshot_id 做 unique。report_hash 我就拿 report 的 canonical json 来 hash，里面有 rule_pack_version 和 gates。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

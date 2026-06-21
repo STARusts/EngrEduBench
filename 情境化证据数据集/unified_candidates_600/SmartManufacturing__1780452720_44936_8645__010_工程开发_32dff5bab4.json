@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在PINN边缘容器化部署背景下，与导师围绕模型裁剪、动态与全量固化取舍及内存限制持续沟通（5轮），其中在模型体积裁剪部分与反演模型工程师沟通（1轮），在边缘算力与延迟硬约束部分与边缘联调专员沟通（1轮），最终形成全量固化、分层构建及Pod内存硬限的部署基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘端算力吃紧，我打算把PDE软约束部分做成动态算子，根据实时声热输入特征自适应加载，容器包只保留核心推理图。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "具体的容器运行时，我不确定现在工业网关跑Docker还是更轻量的Podman合适，底层内核支持情况有点模糊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "训练好的PINN做边缘部署，非均匀参数查表那块怎么处理能减少模型体积？ONNX导出时自动微分的二阶导算子支持情况怎么样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线网关的OS和算力规格是什么？我们想用容器部署推理服务，PLC指令下发延迟上限是多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对于我之前提的动态算子加载，我打算做成独立微服务容器，通过共享内存和主推理容器通信，避免冷启动影响实时性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "50毫秒卡得太死，动态加载容错空间太小。我选全量固化。牺牲一点灵活性换实时性。查表So库直接打包进容器镜像，运行时直接本地加载。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "为了解决后续模型热更新问题，镜像采用分层构建，基础层放推理引擎和运行时，业务层放模型权重和So库，更新时只推业务层。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ONNX图精简后预估占用不到200兆，So库大概50兆，containerd和K3s组件占用控制在500兆以内。总堆内存1G左右，还有1G余量给系统缓存。OOM风险可控，可以在K3s的Pod配置里硬限memory limit为1.5G，超了直接重启Pod，避免拖垮网关系统进程。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

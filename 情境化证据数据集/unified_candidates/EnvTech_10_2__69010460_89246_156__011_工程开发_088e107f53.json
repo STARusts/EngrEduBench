@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多端联调与压测优化且压测资源受限背景下，用户与导师围绕端到端链路稳定性、过线指标与审计日志可串联定位持续沟通（7轮），其中在省资源三段式压测拆分与request_id串联定位上与测试工程师沟通（3轮），在500定位、错误码细化及导出/回放降级合规处理上与后端开发工程师沟通（3轮），并确定分段压测执行顺序与过线口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡住了。就是一压就报错。前端转圈，设备也老断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就压了“查询列表”吧。断哪段我不清楚。request_id 我也没怎么用，就看见 500。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 现在压测一压就500，前端转圈，设备也断。怎么弄最省事？我就一台机器能压。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“假片段”是让我造假数据？这不是不合规吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太会加那个头 `X-Request-Id`，是不是就随便写个1？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是先别全压，分三段。然后每个请求要带个 request_id。不然就看不出来。还有用合成音频，不用真音频。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……少报错？还有别太慢。然后别把日志漏了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "50个也太多了吧。10个行不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 500老出，前端转圈。要怎么查？还有导出接口怎么别把机器搞挂？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步任务听着很大改动。我能不能先把导出接口关掉，压测就不测它？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“短期签名URL”是不是就等于把 raw uri 直接给前端？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我懂一点了。就是给，但只能给一会儿，还不能记下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先让后端把 request_id 透传，还有错误码别全500。再跑接口单压，先压列表和详情。然后设备那边就两台上传合成音频。最后再测回放和导出各一点点。过线就是你说的 800ms 和 0.5%，再抽50个日志字段齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就做点很小声的声音，不是纯静音就行？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

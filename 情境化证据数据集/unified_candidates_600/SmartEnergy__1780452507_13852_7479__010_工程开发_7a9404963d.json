@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在自愈寻优接口封装背景下，用户与导师围绕寻优结果下发接口的封装方式与业务语义冲突持续沟通（4轮），其中在寻优状态透传与安全兜底部分与核心算法工程师沟通（3轮），在下游低延迟分发与轻量化接收部分与决策引擎开发沟通（3轮），并最终形成主结构极简加traceId按需查状态的分层封装方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Spring Boot起个服务，把反演算出来的费率和轮换序列直接丢给下游呗。我看网上好多这种微服务都是直接Map转JSON，方便。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没想太多，反正有结果不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法这边寻优跑完，除了费率和指令，还有啥必须往外传的？下游那边想要极简，你们这边有啥要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法说要把收敛步数和影子价格都传下来，你们能接不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就难办了。一边要传，一边嫌重。能不能搞个配置项开关？默认关掉状态透传，需要的时候再开？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "置信度评分？这又是个新东西了，我得想想怎么弄。要不还是用Protobuf？比JSON省空间，嵌套点状态也不会太慢吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不，分两层？主接口就给决策引擎要的费率、指令和置信度评分，极简。然后如果评分低于阈值，附一个traceId，让下游按需去查详细状态？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不是RPC，算法写内存或者Redis，下游拿traceId去拉。这样主链路不卡，出问题还能溯源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

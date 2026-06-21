@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云性能压测与异常修复背景下，用户与导师围绕压测方案聚焦、LSTM阻塞修复、误差来源分析、测试数据清理与脱敏及验收标准制定持续沟通（5轮），其中在压测瓶颈分析部分与测试与性能工程师沟通（1轮），并形成线程池隔离修复方案及压测验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算在网关层做一套全流量录制，用Kafka暂存，然后写个回放引擎把时序特征放大10倍注入系统，这样可以逼出所有潜藏的并发死锁和内存泄漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关并发上报的洪峰主要冲击Redis Streams，而LSTM推演吃CPU。我担心FastAPI的主事件循环被同步计算卡死。@测试与性能工程师 在FastAPI承载Monod+LSTM计算，且Redis开启MAXLEN截断的场景下，压测瓶颈主要卡在哪？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "LSTM阻塞事件循环这问题我之前理解有偏差，以为加了async前缀就不会阻塞。昨晚翻了uvicorn底层源码和几篇协程调度的技术博客，才搞清楚CPU密集型任务必须用`run_in_threadpool`或者独立Worker隔离。我马上把策略引擎的推演逻辑改了，用线程池承接，这能直接把P99延迟降下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差主要来自三块：边缘网关NTP对齐偏差导致的时序乱序，Redis异步修剪MAXLEN的耗时波动，还有线程池上下文切换的调度开销。置信区间必须排除冷启动阶段，取稳态下的P95和P99延迟。如果P99超过500ms，就说明线程池大小还要调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "造数据用随机种子就行，跑完直接Drop掉Redis的Key，云存储留着做个快照以后分析用。脱敏的话，我给坐标加个偏移量应该够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测试完写个脚本彻底清空云上测试Bucket，坐标全替换成网格ID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收标准：1. 稳态QPS下P99延迟<500ms；2. 洪峰超载时FastAPI中间件熔断率100%，无服务级联雪崩；3. Redis MAXLEN截断下内存无OOM；4. 测试数据清空且坐标脱敏为网格ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

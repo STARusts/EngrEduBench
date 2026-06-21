@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算热协同系统联调开发背景下，用户与导师围绕跨域时间尺度差异处理及缓冲阈值验证持续沟通（5轮），其中在跨域延迟与接口解耦部分与多能流接口设计师沟通（1轮），在算力突增与热网延迟工况仿真部分与测试与仿真攻坚手沟通（1轮），并最终确定事件驱动与双缓冲解耦架构及孪生注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用个定时任务，5秒一次轮询算力集群负载和余热温度，然后直接下发指令。我之前微服务间状态同步这么搞挺顺的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只管过后端接口，热力这块惯性多大没概念。这种跨域的延迟补偿我完全没经验，得赶紧补一下多能流异步协同的机制，不然代码写出来也是废的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域延迟这块怎么搞？接口规范里对这种时间尺度差异怎么处理的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边端MQTT攒批的阈值怎么定？这个我没配过，怕设错导致指令积压。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就写个脚本疯狂发算力扩容指令，看Kafka消息堆多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造算力突增但热网响应慢的工况？要测Kafka水位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我马上把混沌工程的阶跃注入机制学一下，刚好可以把这脚本集成到我们的CI流水线里做卡点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就按事件驱动+双缓冲定，验证用孪生注入测水位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在暗痕采集流架构设计背景下，用户与导师围绕流式架构选型、选型验证假设及合规脱敏方案持续沟通（7轮），其中在Kafka与Pulsar差异部分与隐迹流架构师沟通（1轮），在数据脱敏与拦截部分与数据合规专家沟通（1轮），并最终形成包含Pulsar接入、前端聚合与网关拦截的MVP架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接上Kafka收日志，后面挂Flink算不就行了？这套我熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吞吐量没细算，这块原理我确实有点含糊。@隐迹流架构师 你来说说，Kafka和Pulsar收眼动数据到底差在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来Pulsar抖动小。那我就换Pulsar？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是Pulsar比Kafka快。对照就是，一组用Kafka，一组用Pulsar，跑同样眼动数据，看谁延迟低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿JMeter编个插件发报文。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Pulsar的底层分层机制我还没吃透，怕配错参数。这块我得补一下，周末把Pulsar官方那篇架构博客啃了，跑个单机Demo把延迟曲线画出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端埋点先加密再发呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据合规专家 暗痕采集流里，眼动和草稿涂改数据，怎么做合规脱敏？全传上来再脱行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端做聚合，网关做拦截。那我这MVP方案就是：前端埋点聚合后，走Pulsar接入，网关层校验Token和脱敏，Flink做流式清洗。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

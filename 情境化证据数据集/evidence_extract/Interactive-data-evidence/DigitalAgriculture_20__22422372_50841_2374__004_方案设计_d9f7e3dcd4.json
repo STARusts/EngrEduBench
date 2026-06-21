@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业平台移动端离线核验流程设计背景下，用户与导师围绕离线状态机、核验事件字段、角色与冲突处理、异常码及同步降级策略持续沟通（12轮），其中在离线队列结构/冲突策略/设备时间校准部分与移动端工程师沟通（1轮），在离线证据最小化采集、默认不可见解封与留存审计部分与合规与隐私官沟通（1轮），并形成可用于评审输入的离线核验流程要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想就是：领到任务->到地块点开始->做完点提交。没网就先存着，回网再传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态……未开始、进行中、已完成？再加个已同步？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存任务ID、时间、谁操作。再加照片？定位？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "`sign`我不太懂怎么搞。`task_version`是不是也可先不加？反正task_id一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 离线核验这块，队列怎么存？冲突怎么处理？设备时间不准怎么办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "队列就是事件表，任务是快照缓存。冲突就不自动发了，标人工处理。时间用uptime排序，再用server_time校准展示。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是先不上传？等有争议才传？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 离线核验会采集照片、定位、人员信息。默认怎么做最小化和授权？证据什么时候可见、保留多久比较合规？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以不是全都采，按policy分级。文件加密放手机，服务器先存哈希和时间这些。争议工单触发才看，且留审计。保留期要短点，过期清理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主干：任务列表点进去，点开始；做完点完成；填个数量；如果要证据就拍照；提交进队列；有网就同步；同步失败就重试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就，工人点完成，组长点验收？如果两个人都点了，就以组长为准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那工人同步时就提示冲突，让他去找组长改？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异常码……照片缺失、定位缺失？还有任务不在时间窗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，两个码表分开。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网络差就只传文字，照片不传？存储满就删旧的？电量低就提醒用户别拍？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，按优先级先传事件。照片压缩、Wi‑Fi再传也行。阻止继续采集这条会被骂，但应该得要。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边确认：  \n1）状态机：任务在端上有未开始/进行中/已声明完成/待验收/已通过/已驳回/待同步/冲突需处理。  \n2）事件：用事件队列，不直接改任务；每条至少有verify_event_id、task_id、task_version、事件类型、操作者、client_time+uptime、可选证据引用、device_id；服务端幂等按verify_event_id。  \n3）冲突：版本落后就返回CONFLICT_TASK_VERSION，端上不自动重放，转人工处理；验收通过/驳回覆盖工人声明，端上展示明确原因。证据按policy分级采集，加密存，默认不可见，争议工单才解封且审计；同步先事件后文件，文件可延后Wi‑Fi，照片压缩，存储快满时禁止继续采集并提示先同步。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

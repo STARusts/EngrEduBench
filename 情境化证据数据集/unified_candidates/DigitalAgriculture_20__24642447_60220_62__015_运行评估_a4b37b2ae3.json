@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在数字农业云边协同平台运行评估的迭代路标与版本治理背景下，用户与导师围绕版本对象、发布记录、灰度/回滚与复盘可追溯规则持续沟通（9轮），其中在灰度与回滚最小落地规则上与SRE运维工程师沟通（2轮），在指标口径版本化与冻结视图治理上与数据架构师沟通（2轮），并最终整理出可群发执行的6条版本治理规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本我理解至少有三类：策略 policyVersion、数据口径版本、还有边缘侧的执行器/网关版本。回放对齐就得把三者绑定到同一条“策略生效记录”上，不然看板和现场对不上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏向做一个统一的“版本注册表”，发布的时候写入；工单只是引用。数据层要能查到某个棚在某个时间窗实际跑的是哪套：策略版本+参数快照+边缘执行版本。我想把它做成强一致的事件链路，最好再做签名，避免被篡改。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最小闭环我给两套方案：\nA）以“棚”为灰度单位：policyVersion按棚逐步放量；口径版本全局固定一段周期不动；边缘版本只做月更。优点是简单，复盘清楚；缺点是口径变更会拖慢。\nB）以“策略包”为单位：policyVersion和其依赖的口径版本绑定成bundleVersion；边缘只认bundle。优点是一致；缺点是bundle会膨胀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想选B，一致性更强，理论上复盘不会出现“策略用新口径但报表用旧口径”这种尴尬。而且边缘认bundle，可以把策略参数快照一起下发，避免云上改了但边缘没跟上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 版本治理这块，灰度和回滚你建议怎么定？我们有policyVersion、口径版本、边缘版本，怎么别搞得太重？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说口径按月切，但我们周复盘每周一张待办，口径如果变了怎么解释？还有KPI回滚用8%这种阈值，谁来定，容易吵。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 口径版本怎么治理比较稳？我们要做迭代路标，担心口径改来改去复盘对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关联不绑定的意思是：发布时写清楚这次策略评估使用哪个metricsSchemaVersion，但不强制两者一起递增？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的理解：先别做bundle那种强绑定，最小落地是“发布记录”把policyVersion、edgeVersion、metricsSchemaVersion三者在生效时间窗里关联起来，周复盘也就引用这个记录。灰度按棚/棚组分批，至少观察一个昼夜周期。回滚有三类触发：下发成功率、回执延迟、KPI劣化（比如能耗对照组+8%持续24小时），口径版本按评估周期边界切，变更要分级，L2要出新旧对照。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "签名我还是想要，但我也承认会拖慢。可以先做审计字段齐全：发布人ID、变更原因、前后版本、影响棚范围，保证“谁改了什么”能查。签名放到后面的安全加固迭代。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着列：\n1）版本对象：policyVersion、edgeVersion、metricsSchemaVersion三类，工单/周复盘必须引用三者。\n2）发布记录：每次发布生成releaseId，记录棚范围、startTime、endTime（回滚补齐）、三类版本号、变更原因。\n3）灰度：按棚/棚组分批，批次固定顺序；每批至少观察一个昼夜。\n4）回滚：触发任一就回滚本批次：下发成功率<99%持续15分钟；回执P95>30秒持续10分钟；单位面积能耗相对对照组劣化>8%持续24小时（且无计量异常标记）。\n5）口径变更：L1可热更记录，L2只能在评估周期边界切；周复盘输出必须带metricsSchemaVersion和口径对照说明引用。\n6）证据链：KPI与异常判定必须带证据时间窗和gap/计量异常标记，跟前面周复盘待办字段一致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，我把它补成：能耗劣化比较要写对照组范围，且对照组policyVersion在比较窗内保持不变，否则这条回滚不生效，只做告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把边缘那条改成“默认窗口+特批”。另外我还是想把releaseId贯通到工单，这样复盘一眼能查发布批次。可以吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最终版：\n1）版本治理对象仅三类：policyVersion（策略）、edgeVersion（边缘采控）、metricsSchemaVersion（指标口径）。任何复盘/工单/评估输出必须同时携带三者。\n2）每次变更生成releaseId，并记录：棚/棚组范围、startTime、endTime（回滚时补写）、policyVersion、edgeVersion、metricsSchemaVersion、变更原因；工单允许关联releaseId用于定位批次。\n3）灰度发布按棚/棚组分批，批次顺序固定；每批观察窗≥1个昼夜周期后才能进入下一批。\n4）回滚针对“当前批次”执行，满足任一即回滚：a) 策略下发成功率<99%持续15分钟；b) 执行回执延迟P95>30秒持续10分钟；c) 单位面积能耗相对对照组劣化>8%持续24小时，且比较窗内对照组范围明确、对照组policyVersion不变、无gap/计量异常标记。\n5）口径变更分级：L1（不改语义）可热更但必须记录版本；L2（改语义/计算窗/单位等）只能在评估周期边界切换，并提供新旧口径差异点与影响指标清单；周复盘必须注明metricsSchemaVersion及口径差异引用。\n6）所有KPI、回滚判定与周复盘证据统一带：证据时间窗、gap/计量异常标记，与工单审计保持一致；对外汇总不包含人员字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

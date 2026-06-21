@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极端工况高可用与降级评估背景下与导师围绕降级梯度切分、合规边界、特征裁剪与混沌工程验证持续沟通（8轮），其中在降级策略定级部分与高可用保障工程师沟通（1轮），在传感器漂移合规限制部分与环保合规审计师沟通（1轮），并最终形成四级降级策略、合规红线、L2裁剪方案及混沌工程验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "极端工况，是不是就直接停机保安全？之前接口设计不是有安全态嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@高可用保障工程师 极端工况下降级策略一般怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说分L0到L3四级。L2的时候算力低，只做兜底拦截。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环保合规审计师 传感器数据漂移时候执行拦截，合规上有什么限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以L2还得加个条件，感知置信度低的时候，不能主动分流，只能被动拦截。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "前两天看了水利信息化容灾规范，里面提了“降级不降效”原则。我觉得L2虽然算力低，但感知精度不能降太多，不然置信度肯定掉。可以只跑轻量特征提取，把耗算力的多模态融合丢掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，模拟断网测一下？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "组合变量，就是同时注入网络延迟、CPU限流和传感器噪点？样本量要多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级分四级：L0全功能，L1云断边推，L2低算力保感知与被动拦截，L3休眠。合规红线是低置信度禁止主动分流。验证用混沌工程，3种组合工况各跑20次看误触率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "保留单模态光学特征提取，舍弃声学和电导融合，这样算力降一半，光学还能保底置信度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

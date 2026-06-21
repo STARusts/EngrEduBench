@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在野外音频流与云端模型服务接口链路设计背景下，用户与导师围绕传输选型、降级策略、特征提取周期与格式、带宽压缩及稳定性验证持续沟通（7轮），其中在高并发音频接入选型部分与端云联调工程师沟通（1轮），在特征提取耗时与接口格式部分与频谱算法架构师沟通（1轮），并最终形成gRPC主干与HTTP降级机制、10秒Protobuf特征输出规范及混沌测试验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近看了点 gRPC 的文章，感觉挺适合流式传输的，咱们直接上 gRPC 吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我提了 gRPC，你看行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按秒算？一秒吐一个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取多久吐一次？接口格式怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "优势就是，就是快。带宽不够的话，就再压缩一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本发请求测一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "音频流主干用 gRPC，断点续传，降级 HTTP。模型服务 10 秒吐一次 512 维特征，用 Protobuf。验证做混沌测试，控制丢包率变量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我今晚补 Protobuf 和流控机制。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

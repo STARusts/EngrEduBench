@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在架构骨架已定背景下，用户与导师围绕影像校正精度与算力实时性取舍、处方图粒度及边界约束持续沟通（6轮），其中在影像精度与正射校正部分与空间数据流设计师沟通（3轮），在边缘算力与轻量级仿射变换部分与多机调度开发者沟通（2轮），并最终形成边缘仿射替代正射、处方图粗化至2米网格、边界硬屏蔽的数据流约束策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是把照片传上去，带上无人机自己的GPS，然后模型出结果，再下发喷洒指令吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "影像带GPS不够用吗？听说对不上地？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "正射校正这玩意儿边缘算力吃得消吗？上一步刚说边缘算力很紧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一个要GeoTIFF保精度，一个要轻量级保实时。这怎么弄？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能先不校正，等模型发现虫子了，再把那块小图抠出来校正？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那就做个轻量的？仿射变换是啥，比正射快多少？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "镜头畸变差多少米？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那边缘先做仿射变换，把姿态纠回来，镜头畸变不管了。处方图别搞像素级，直接按2米乘2米的网格划分，网格内有虫就喷，没虫就不喷。这样就算偏个一两米，顶多旁边网格多喷点，不至于飞出地块。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边界网格直接掐掉不喷，反正边上几米本来就容易漏，少喷点也没事。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

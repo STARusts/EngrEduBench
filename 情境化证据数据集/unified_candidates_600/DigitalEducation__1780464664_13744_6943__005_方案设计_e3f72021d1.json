@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在教治跨域数据流与接口规范设计背景下与导师围绕跨域数据接入方式、ETL流程与接口规范持续沟通（5轮），其中在跨委办局数据接入方式部分与政企合作架构师沟通（1轮），在前置机摆渡数据的ETL与接口设计部分与数据集成开发工程师沟通（1轮），并最终形成T+1批处理数据流向与接口规范核心约束结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按照流批一体的架构，公安和民政的数据通过API Gateway实时推过来，我们这边用Flink接住，清洗后直接落库给LightGBM用。接口就统一用RESTful，加上OAuth2.0鉴权就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨委办局的数据到底怎么接入？我想用实时流，可行吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "T+1定时交换，前置机摆渡，还要沙箱脱敏。那实时性就没了，Flink也用不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前置机T+1给过来的脱敏数据，ETL流程和接口报文怎么设计？之前想的RESTful是不是也得换？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不用RESTful，改用文件交换；Flink撤掉，用离线ETL；关联主键用加密哈希。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据流向：委办局数据T+1定时推送到前置机，通过物理摆渡进我们的贴源层，在沙箱里脱敏清洗和空间对齐，最后给推演引擎用。接口规范：不用RESTful，用CSV/XML压缩包报文；关联主键用加密哈希；只拉取必需字段，不做全量同步。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

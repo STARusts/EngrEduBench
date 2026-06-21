@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多源过程数据接入规则已定的方案设计背景下，用户与导师围绕溯源图谱模型的节点/边、Attempt切分、引用挂载、版本演进表达及合规与成本控制持续沟通（10轮），其中在事件模型映射与幂等审计字段落图部分与数据治理经理沟通（2轮），在Attempt超时窗与误伤控制部分与学术诚信专员沟通（1轮），并明确由用户梳理Attempt/Event字段及主链路边关系。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就学生、作业、提交记录这些吧。边就是提交了、修改了。差不多这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件就是保存、复制、粘贴、提交。引用就放个链接在作业上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 图谱里事件和ID怎么搞？还有去重和审计字段要怎么放？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Attempt是啥，就是一次写作过程对吧。那我把每个保存都建一个Event节点就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按一天算一个Attempt？或者按打开文档算一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就按提交来分？每次提交前的都算一个Attempt。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就算到最近一次提交里。没有提交就不算吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@学术诚信专员 Attempt切分的时间窗X怎么定？会不会误伤？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就默认24小时，测验30分钟。attempt_end_reason也加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "引用就做个Source节点，粘贴的时候Event连到Source，表示从这来的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本就用hash串起来？hash一样就是同一个版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "hash只是证明没改过，不用来算像不像。版本靠版本号或者事件顺序连起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "tenant_id、term_id、角色权限。还有删除时间？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，图谱就是证据，不是判决。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高频的不进图，比如每次打字。关键事件进图，比如粘贴、提交。其它做汇总字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就负责把Attempt和Event的字段列一下，还有那几条边怎么连。其它你们定就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

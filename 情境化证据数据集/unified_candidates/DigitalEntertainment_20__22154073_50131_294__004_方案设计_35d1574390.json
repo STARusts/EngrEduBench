@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在光帧智能舞台灯控编排系统方案设计背景下，用户与导师围绕灯控域模型拆分、三条主流程（编排/排练回放/应急）、协作锁段与一致性边界持续沟通（8轮），其中在编排动作粒度、回放一致性与应急红线部分与行业顾问灯光师沟通（5轮），并收敛为以Cue/Palette/Group/FixtureProfile为核心的对象与流程口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向用事件溯源：所有灯光变化都是Event，时间轴就是Event Stream。然后节目单是多个曲目流的组合，回放就是重放Event；协作也自然，用冲突合并。再加一个“状态投影”给实时控台看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确定性我想靠统一时间基准，Event带绝对时间戳；粒度上用“关键帧+插值”，不是每个DMX值都记；协作先锁段也行，Event日志还是能审计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业顾问灯光师 你们现场做编排时，一个“动作/片段”通常怎么划分？是按小节、按拍点、还是按Cue？我们做系统域模型，最怕粒度不对导致回放不一致或操作太慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Cue里“目标状态”你们会存全量吗？比如每盏灯的所有通道？还是只存改动的部分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那回放一致性呢？如果Palette在不同品牌灯上映射不一样，会不会回放就不一致？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "应急这块你们最常用的一键是什么？全亮？黑场？还是切到手动控台？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解了：模型中心是Cue，不是Event；Palette/Group/Fixture Profile是基础；一致性更偏效果与时序，不是数值完全一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那Cue触发点你更偏时间码还是音乐特征点？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把域模型从“事件流”收敛到“Cue/Palette/Group”为主。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版偏“对象图”的口径，你挑刺：  \n1）Show（节目单）：包含多个Track（曲目）和全局资源（Group/Palette）。  \n2）Track：有Timeline（时间轴），Timeline由Cue序列构成；Cue可绑定Timecode或ManualGO。  \n3）Cue：Trigger（触发点）、Transition（Fade/Delay）、Target（对Group/Fixture的参数指派，优先引用Palette再局部覆盖）。  \n4）Group：灯具集合（逻辑分组），支持子组。  \n5）Palette：参数模板（Color/Position/Beam等），与FixtureProfile映射。  \n6）Fixture/FixtureProfile：设备实例与能力描述（通道、范围、模式），用于校验和映射。  \n7）PlaybackSession：一次回放/排练运行实例，记录版本、设备快照、运行日志。  \n我还想加一个“Scene”做Cue的集合复用，但可能过度了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "并行层我本来想用“多轨道”，类似DAW：每个Layer一条Cue链，合成时按优先级/HTP/LTP规则合并输出。这样算不算太重？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那流程我也按三条写一下，你看有没有漏：  \nA 编排流程：建FixtureProfile→接入Fixture→建Group→建Palette→在Track里创建Layer与Cue→Cue引用Palette并设Trigger/Transition→保存为Show版本。  \nB 排练/回放流程：选择Show版本→生成PlaybackSession→做设备能力校验（缺灯/模式不符）→运行时按Trigger激活Cue→输出合成结果→记录运行日志（触发偏差、掉线、手动介入）。  \nC 应急流程：任意时刻触发EmergencyPreset（Blackout/Worklight/SafeLook）→系统进入应急态并冻结正常Cue触发→直到人工解除才恢复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我希望锁“时间段+Layer”，比如在Track里选一段时间区间锁定，别人只能读，避免互相覆盖。保存时做乐观版本号检查，冲突就拒绝提交。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对。我再补一条：版本策略。Show是可版本化的，每次发布到现场回放要绑定一个不可变版本；Palette更新不能默默影响已发布版本，要走“派生版本”或“显式重映射”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心我又想多了：要不要把日志也做成事件序列，方便复盘？比如每次Cue激活、每次参数合成结果、每次协议下发都记。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "行，我收敛。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我们这轮的“灯控域模型与流程”就按Cue中心+三条流程+协作锁段来写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你给个最终检查清单，确保我没漏边界？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

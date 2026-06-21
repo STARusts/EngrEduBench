@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在券商接入要求阻截指令同步防篡改审计留痕的运行评估背景下，用户与导师围绕同步留痕影响、网关与合规冲突的折中路径及硬件方案确认持续沟通（5轮），其中在延迟影响与硬件方案部分与微秒级阻截网关设计师沟通（2轮），在异步写通融可能性部分与合规与审计架构师沟通（1轮），并最终形成采用NVDIMM硬件进行同步写的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这会对咱们下发延迟有多大影响？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "券商那边能不能通融下，搞异步写？异步落盘也不一定就会丢数据啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关说延迟要炸到毫秒级，合规说必须同步写不能丢。这俩根本没法调和啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "快又能防掉电？SSD？但SSD写也不够快吧，而且擦写延迟不稳定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种写特快又掉电不丢的硬件？合规非要同步防篡改，常规IO肯定不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关说可以用NVDIMM，速度接近内存又防掉电，就是贵。或者用FPGA旁路，但要加一个月开发期。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就上NVDIMM。虽然费钱，但总比系统废了强。我去跟合规和网关说用NVDIMM做同步写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

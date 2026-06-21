@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在真实课堂体验复盘背景下，用户与导师围绕动态支架干预误判、合规风险及后端推送流改造持续沟通（7轮），其中在体验降阶与弱提示设计部分与交互设计师沟通（2轮），在支架僭越与认知挣扎权部分与教学教研专家沟通（1轮），在过度干预违规与缓冲机制部分与隐私合规官沟通（1轮），并最终形成将强制推送改为协商推送的接口变更方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看监控里支架推送的QPS挺高的，接口延迟也没超，技术层面挺顺。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "后端只管推，前端渲染和教研反馈我没细看。@交互设计师 你们那边有没有报错或者卡顿？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "挣扎权？这指标后端怎么算？现在只要眼动散乱加上笔触停顿超阈值，模型就判定超载推支架啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加确认框？那不就打破无感注入了吗？交互设计白做了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "改动太大了，模型推断逻辑、前端渲染状态、后端推送流全得改。能不能只调调阈值？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得加个状态机。以前是推了就渲染，现在得改成推了先挂起，等前端回传用户动作。如果主动拒绝，还得记下来送给算法做负反馈。改动量不小，我得重新设计推送的异步回调。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口从 push_scaffold 改成 offer_scaffold，加个 offer_id。前端如果不理或者点拒绝，发个 reject_offer 回调，我存进特征库给模型重训。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

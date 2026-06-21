@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在动态调度核心实现背景下与导师围绕操作工人效数据的合规使用与精度取舍持续沟通（4轮），其中在数据脱敏与合规要求部分与工控安全审计员沟通（2轮），在细粒度数据对排程精度影响部分与动态调度算法师沟通（1轮），并最终形成保合规的Flink数据过滤与按班组聚合方案及审计日志留痕机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全量灌呗，用Flink直接把Kafka里的数据拉过来做特征工程，这样算法效果肯定最好，现成的流处理框架也省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有现成的脱敏组件可以直接套？@工控安全审计员 这种情况一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@动态调度算法师 可是如果只留统计特征，细粒度的数据没了，排程模型还能用吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "一边说不能用，一边说没它不行。我就想找个现成规则引擎把敏感字段过滤掉，又不想改算法逻辑，这有戏吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就保合规吧，惹官司划不来。我在Flink流处理层加一道过滤逻辑，把人员ID和细粒度时间戳抹掉，只按班组聚合成平均耗时。这样算法拿到的就是脱敏后的群体特征，虽然精度差点，但合规。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在Flink的ProcessFunction里加个侧输出流打日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

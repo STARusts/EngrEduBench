@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在盐胁迫自适应营养膜控系统方案设计背景下，用户与导师围绕根域感知数据通路的必采变量、分钟级/事件级明细、弱网断电兜底与审计授权边界持续沟通（9轮），其中在离线缓存/断点续传/对时与质量码部分与边缘计算工程师沟通（4轮），在留痕粒度、导出授权、远程只读时间窗与保留策略部分与合规与数据治理官沟通（2轮），并形成三类记录字段集与默认保留周期及最小验证要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "根域有哪些“必须采”的变量？采样频率怎么分分钟级和事件级？还有一个核心：弱网、断电的时候数据怎么不丢、时间怎么对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须采就EC、温度、湿度？离子平衡可能也要。分钟级就每分钟一条。事件级就是比如EC超了、突然变化就一条。字段就时间、地块、传感器ID、值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 根域感知这条数据通路，弱网断网时怎么保证分钟级+事件级数据不断、还能对上时间？需要哪些机制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那事件级你说单独队列，是不是就不需要一分钟一条了？我有点想偷懒，只保事件。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量码是指传感器坏了这种？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "知道了。容量预留你说按最差断网时长，那一般填多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我记一下：分三段、双队列、序列号、对时、质量码、落盘断点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 根域感知数据通路里，分钟级/事件级明细、策略下发和阀控、膜参数变更的留痕，还有导出授权、远程访问审批时间窗，这些在数据治理上怎么设计才算合规和可审计？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那普通用户看分钟级明细会不会也算敏感？是不是都要审批？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，差不多就是“看得到但留记录”，导出更严格。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试试：  \n1）传感器到网关到云三段。  \n2）分钟级每分钟一条，事件级超阈值就记。  \n3）网关断网缓存72小时，恢复后补传。  \n4）每条带时间戳和序列号防丢。  \n5）策略下发、阀控、膜参数变更都记日志，不能删。  \n6）导出要授权，远程访问要时间窗只读。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分钟记录：time、device_id、plot_id、ec、温度、含水、quality_flag？  \n事件记录：time、device_id、plot_id、event_type、value、threshold、reason。  \n审计记录：time、user、action、target、before、after、result。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分钟记录：sample_time、ingest_time、device_id、plot_id、ec、moisture、root_temp、quality_flag、seq_no。  \n事件记录：event_time、device_id、plot_id、event_type、trigger_metric、trigger_value、trigger_rule_id、pre_window_summary、post_window_summary。  \n审计记录：op_time、operator_id、source、人为或策略、action、target_id、before_value、after_value、request_id、result_code。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就一直保留？反正以后可能要用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那分钟级原始保留6个月，作季汇总长期保留；事件和审计保留2年。理由就是复盘一般按作季，细的半年够查问题，太久存储成本高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间一致性就是对时后看时间差不大？缺测漂移就是看quality_flag。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，那我就照这个写。处置去向就是告警或者工单。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基本都对。就是“水势和含水二选一”我分不清怎么选，但先写二选一也行。还有事件摘要我不知道怎么做，但先占位就占位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

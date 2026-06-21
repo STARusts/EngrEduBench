@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流变事件总线压测与调优背景下，用户与导师围绕延迟飙升的根因定位与调优路径持续沟通（6轮），其中在背压根因及限流降级参数校准部分与性能压测师沟通（2轮），并最终形成限流、上下文降级与防空桩兜底的调优策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了一眼日志，全是超时。按流程我应该先定位是哪块慢，但我看堆栈都砸在事件总线的消费端，具体为啥堆积我没查出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在P99延迟5秒多，总线消息堆积，根因查出来了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加机器最快吧？加两台消费节点应该能顶住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级我有点拿不准，万一降级了补全的上下文不全，重接渲染会不会出问题？限流的话，阈值定多少合适？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "回调补全太重导致背压，你看限流阈值定多少？非核心上下文怎么降级才不影响重接？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这样重接端不会因为缺权重报错吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优项确认：第一，总线消费端限流阈值1500；第二，上下文降级，先推核心ID和骨架，权重延后补；第三，重接端防空桩兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

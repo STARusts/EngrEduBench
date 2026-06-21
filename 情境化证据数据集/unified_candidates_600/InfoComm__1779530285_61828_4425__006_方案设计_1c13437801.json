@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极低带宽下意图识别与语义软卸载流设计背景下，用户与导师围绕意图提取算力分配、软卸载机制、切分点判定及无NPU兼容方案持续沟通（3轮），其中在意图分层提取部分与意图分析师沟通（1轮），在软卸载流设计与切分判定部分与语义编译开发主管沟通（2轮），并最终形成粗细意图分层、边端协同计算图切分、双阈值触发流式卸载及无NPU降级兜底的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "意图提取，就，用个小模型呗？比如DistilBERT。算力不够的话，就把计算推到边缘服务器去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极低带宽下提意图，用DistilBERT行不行？延迟会不会很高？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "软卸载流怎么设计？边端算力怎么分？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "意图分析师说意图要分层，粗的用CNN秒出，细的用大模型，只传粗意图ID。开发主管说卸载是计算图切分，边侧重算，端侧重构，边侧过载就切子图流式卸到端侧NPU。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切分点，就，看边侧CPU占用吧？占用高了就切。端侧NPU不行，就，就全在边侧算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切分点判定依据是什么？看SNR还是算力？旧设备没NPU怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "判定是看边侧队列长度和信道SNR双阈值。旧设备就走纯边侧加全量特征下发兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

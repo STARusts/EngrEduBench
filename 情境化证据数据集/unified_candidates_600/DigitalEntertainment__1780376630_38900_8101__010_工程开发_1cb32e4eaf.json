@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在风控推理引擎攻坚与MVP交付背景下，与导师围绕推理加速、并发削峰、模型编排、精度校准及降级开关持续沟通（4轮），其中在消费端并发与批处理调度部分与性能优化工程师沟通（1轮），在模型依赖解耦与DAG调度部分与多模态风控设计师沟通（1轮），并做出MVP取舍，形成简化版DAG编排、固定批处理与降级开关策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推理慢就转ONNX跑。我之前用过ONNX Runtime，提速挺明显的，直接把多模态风控模型转ONNX格式应该就能扛住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发就加个Kafka队列削峰。模型编排就按顺序一个个查，先查图再查文。精度我还没测，一般不会掉太多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风控推理请求量太大，我想加Kafka削峰然后转ONNX加速，消费端怎么搞才能快？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多模态规则一个个跑太慢，能不能全并行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能全串行，得搞DAG调度，互不依赖的并行跑。Kafka消费端要做Dynamic Batching。精度校准的事，专家说必须做对照测试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "完整的DAG写不完，太复杂。我先把图文和音频特征提取拆成两个并行协程，水印提取放最前面串行。Batch先写个固定大小凑合，动态的排期再改。精度校准我跑几个样本对比一下原模型和ONNX的输出差异。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级开关加在配置中心。默认全开，降级时只关耗时长的特征提取，侵权拦截规则保留。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

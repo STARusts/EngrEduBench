@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在云边协同叙事引擎灰度部署背景下，与导师围绕灰度切流维度、监控体系及放量判准持续沟通（4轮），其中在灰度策略与监控链路部分与运维监控专家沟通（1轮），在显著性检验与统计口径部分与数据分析师沟通（1轮），并调整切流策略，制定手写统计算子目标，最终形成按可用区灰度及U检验与Bootstrap CI联合判准的放量策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先切5%的流量到新架构，重点盯一下云边通信延迟和风控重定向的成功率，没问题再扩大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想按用户ID尾号切流。指标方面，除了P99延迟，我还想重点看“叙事连贯性打分”，这是体验核心。但这个打分是玩家主观反馈加系统状态机跳转成功率合成的，大盘均值可能掩盖长尾问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按用户ID切流量会有会话粘滞问题吗？云边协同下，边缘节点状态缓存和云端推演的监控链路怎么打通？我想看云侧推演耗时和边侧渲染耗时的分位值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "叙事连贯性打分是1-5分，灰度组和对照组怎么算显著性？大盘均值不行的话，看什么分布？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维专家建议按可用区灰度保证状态完整，数据分析师要求连贯性体验用U检验和Bootstrap CI判定放量，CI下界>0且d>0.2才放量。这套逻辑我认，能避免假阳性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我对Bootstrap重采样写算子不太熟，现有的监控组件好像没直接支持这种定制化统计。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实在数据统计工程化上差点意思，只会调包不会写底层算子。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我定个目标：下周内，我用Python的SciPy库手写一个Bootstrap CI算子，封装成Prometheus的Client端自定义Histogram，跑通单元测试并部署到测试环境。这样灰度看板就能直接拉到这个指标了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

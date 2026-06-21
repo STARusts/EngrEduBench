@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流式特征计算核心实现背景下，用户与导师围绕多模态异构流拼接、状态管理与降级日志规范持续沟通（5轮），其中在异构流连接与异步回调状态管理部分与数据流设计师沟通（2轮），在降级特征上下文与日志格式部分与算子开发工程师沟通（1轮），并最终确定流式拼接、降级及结构化日志方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Flink的DataStream把文本、图谱、时序三个流union起来，然后一把梭过模型不就完了？赶紧把数据灌进去跑通最要紧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink里三个异构流怎么接最快？我要毫秒级出特征，最好别搞太复杂的窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图谱异步回调就先放Map里存着，到了就拿出来拼。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的图谱异步回调状态，不用Map用啥？Flink状态后端怎么存回调的半成品？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用MapState存半成品，图谱没回来就降级往下发。TTL设个5秒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在特征里加个flag，标明降级了，然后日志打一行文本扔Kafka呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级特征上下文格式长啥样？直接给我个模板我照着填。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "is_degraded，missing_modalities数组，fallback_reason枚举。Kafka发这四个字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Connect加MapState，定时器降级，结构化Kafka日志。下班前跑通时序加文本，图谱Mock。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

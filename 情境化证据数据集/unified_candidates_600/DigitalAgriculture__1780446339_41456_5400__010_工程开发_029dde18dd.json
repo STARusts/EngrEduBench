@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在积蕴推演引擎联调与调优背景下，用户与导师围绕联调方案、模型轻量化、精度校准与数据脱敏持续沟通（5轮），其中在边端算力与模型裁剪部分与AI算法设计师沟通（1轮），在压测指标与数据构造部分与测试与性能调优师沟通（1轮），并最终形成三步联调方案及校准脱敏修正策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上做时序推演的，直接上 Ray 或者 PyTorch Forecasting 调包就行了。把前面进来的时序数据丢进去训练，应该能直接出风味积蕴的曲线，联调就是把接口对齐一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边端算力我还没细看，感觉这些框架应该会自己做优化吧？接口对接我打算就用 RESTful 硬连，反正都是微服务。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "请问咱们推演引擎在茶园边端网关上跑，算力限制大概是个什么情况？模型是不是得做裁剪？有没有现成的轻量化工具可以直接用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端推理要卡50ms，那联调压测的时候，并发指标怎么定啊？有没有那种一键生成压测脚本的工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法那边说要用ONNX或者TVM做量化，推理要卡50ms，还得自己写光温耦合算子。测试那边说用Locust压测，要我自己造升温场景的数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化工具我打算直接用ONNX Runtime自带的，应该能兜底吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "校准数据我就随便抽一段历史数据试试吧，大不了精度掉一点。经纬度这些测试数据，我就直接用真实的吧，反正测试环境内部应该没关系？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就分三步：第一步，把模型转ONNX，用历史数据校准精度，掉的太多我再找算法调；第二步，写Locust脚本，造脱敏的微气候压测数据；第三步，跑通50ms延迟的联调。脱敏我就把经纬度加个随机偏移，行不行？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

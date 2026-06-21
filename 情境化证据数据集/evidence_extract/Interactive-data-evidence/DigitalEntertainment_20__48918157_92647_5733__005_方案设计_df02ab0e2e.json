@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多端沉浸音游平台方案设计背景下，用户与导师围绕触觉谱面“设备无关主模型—设备派生层—合规封边”持续沟通（7轮），其中在版权/隐私与离线留存边界上与合规与隐私官沟通（3轮）、在RenderPayload加密与离线宽限票据策略上与安全与反作弊工程师沟通（2轮），并收敛出Chart/PatternLibrary/RenderPayload/Replay分层与授权态软失效约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算分三层：Track（歌曲/版本）、HapticChart（设备无关谱面）、HapticRender（某设备家族的映射结果）。HapticChart里用时间轴事件：每个事件有 t、duration、intensity、patternId、channel（左/右/全身）。Render层根据设备能力把channel映射到 actuator，并做强度曲线、频段或脉冲参数落地。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备做确定性：HapticChart里只存“规范化事件”，不存设备特定参数。事件强度用 0..1 的归一化，duration 用毫秒。patternId 指向一个 PatternLibrary，库本身也版本化，Chart引用 patternUri + version。回放复现时只要同一个 chartVersion + patternVersion + mappingVersion，就能重算 Render。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "P0我们有“离线宽限明确告知”，我理解是到期后最多允许一定时间离线用，但不能无限期。那模型里要有 licenseWindow 或 expiration。回放如果引用已下架内容，可能要提示不可用或只留基础统计，不让再播放触觉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 触觉谱面数据模型这块，我要定“可离线缓存/回放复现”的边界。请你按合规视角给我三点：1）触觉谱面本身是否算受版权保护内容，能否本地长期保存；2）回放复盘需要的最小数据集（含未成年人保护留痕）；3）日志/埋点如何避免采集过度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "你这里说“到期后软失效”，我理解为：回放界面还能显示统计、但触觉输出要禁用。那对数据模型而言，可能需要在回放记录里标记 contentEntitlementStatus，不要让客户端靠猜。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个细节：我本来想把设备能力做得很细（比如马达数量、频响），但你提到别采精确指纹。那“设备能力”这块我们只能按设备族/能力档位？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按三块说，避免塞太多：  \n1）HapticChart（设备无关，平台内容）：chartId、trackId、chartVersion、bpmMapRef（节拍映射引用）、eventList（t、duration、intensityNorm、patternRef、channel）、patternLibVersion、createdBy、contentPolicyTag（比如是否适配未成年模式）。Chart本身按“受版权约束内容”处理，不承诺永久离线可用。  \n2）HapticRender（设备派生结果，可缓存）：renderId、chartId、chartVersion、deviceClass、capabilityTier、mappingVersion、renderPayload（设备SDK可用的参数序列）、checksum。Render缓存要受 entitlement 状态控制，到期/下架后不再解密/不再下发。  \n3）Replay（用户回放，最小化）：replayId、userId、trackId、chartId、chartVersion、mappingVersion、deviceClass、inputEvents（只存相对时间戳+判定，不存精细触觉曲线）、scoreSummary（分数/命中率/段落统计）、entitlementStatusAtPlay、entitlementRef。到期/下架后 replay 只能看 scoreSummary，禁止触觉输出与完整复现。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两种路：  \n- 路A：renderPayload 不落地，只在线获取并短时缓存；离线宽限期内也要定期续签 token。缺点是离线体验受限。  \n- 路B：renderPayload 可落地，但加密，解密依赖 licenseToken 且 token 有有效期；到期就解不开，从而做离线软失效。缺点是复杂度和密钥管理成本上来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向路B。理由：  \n1）沉浸音游离线场景很常见，路A会直接伤体验；  \n2）路B能把“到期不可用”变成可验证的技术机制，而不是靠客户端自律；  \n3）成本上我们可以先只做 capabilityTier 粗粒度映射，renderPayload 体积可控，加密也不会太重。风险是密钥体系我不想拍脑袋，需要安全同学评估。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与反作弊工程师 触觉谱面 RenderPayload 我想做“可离线缓存但到期软失效”，考虑加密+短期licenseToken解密。请给我：1）内容保护需要到什么强度（防普通拷贝/防逆向到什么程度）；2）token有效期/轮换与离线宽限的建议；3）对数据模型字段的最小要求（如 keyId、nonce、policy）。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果 24h token + 72h graceTicket，那用户 3 天不联网还能玩；版权到期时，即便 graceTicket 没到期也可能需要立即失效，这怎么做？靠服务端拉黑 policyId？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，回到导师那里我会把“分级下架策略”加进模型：普通到期允许延迟，强下架不允许。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终选择我收敛成四个对象+一个状态机：  \n- Chart：设备无关事件流+版本引用；  \n- PatternLibrary：patternRef可解析且版本化；  \n- RenderPayload：按 deviceClass+capabilityTier+mappingVersion 派生，可缓存但加密；  \n- Replay：最小回放数据，默认不含细粒度行为轨迹。  \n状态机：EntitlementStatus = ACTIVE / GRACE / EXPIRED / TAKEDOWN；其中 TAKEDOWN 再分 NORMAL（允许延迟失效）和 HARD（不发graceTicket或短票据）。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "最小验证动作：选一首曲，做两端（手机+手柄）各两档 capabilityTier，验证同一 chartVersion 在四种组合下：事件对齐误差<10ms（以音频beat为基准）、主观“节奏点一致性”问卷差异不超过1个Likert档；同时模拟到期与硬下架，确认回放只剩 scoreSummary 且触觉输出被阻断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这五条我都认。唯一我想补一句边界：RenderPayload 允许缓存是为了沉浸体验，但必须保证“无票据不可解密”，不然软失效形同虚设。其余就按这个模型进下一步模块拆分。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

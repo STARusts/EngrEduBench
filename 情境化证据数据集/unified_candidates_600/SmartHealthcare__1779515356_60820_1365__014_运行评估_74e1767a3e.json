@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估背景下，用户与导师围绕居家断网容灾逻辑持续沟通（7轮），其中在断网业务降级与本地缓存部分与边缘算力适配开发沟通（1轮），在本地数据隐私合规部分与合规与伦理审查官沟通（1轮），并最终形成断网业务降级为纯图像基线规则、数据加密落盘与环形缓冲限容及恢复网络后重传的容灾策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网续传呗。MQTT客户端不是自带本地缓存么，或者套个PouchDB在本地存着，网好了再推上去就行了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没医嘱匹配，全按无医嘱处理，那报警不得满天飞，或者干脆全哑火。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网了医嘱拿不到，边缘侧业务逻辑怎么降级？还有本地缓存怎么搞才不会把存储打爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那数据存本地这500帧，合规上有什么要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加密存，环形缓冲，还有基线规则降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网时，把云端推演停了，边缘网关自己跑个简单的规则，只看面积变大就报警。然后数据加密存本地，最多存500帧，多了就覆盖。网好了再推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "微生态算力要求太高，网关跑不动。我看网上很多人用TF Lite转个轻量模型放边缘。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "担不起。那就只留面积和红肿这种图像的基础判断，微生态的直接忽略，等网好了再算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

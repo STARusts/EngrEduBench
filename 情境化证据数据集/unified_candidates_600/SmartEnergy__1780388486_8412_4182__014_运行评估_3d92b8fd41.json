@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度部署盯盘与A/B复盘准备背景下，用户与导师围绕监控口径匹配、灰度分组标签缺失及临时兜底方案持续沟通（7轮），其中在监控数据口径与分组过滤问题部分与运行监控分析师沟通（4轮），并最终确定离线清洗时延与硬编码过滤的临时方案及后续标签规范计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我配了Prometheus采集规则，时延和达标率应该都能抓到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行监控分析师 灰度切流的监控看板能用了不？P99时延和达标率数据准吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "包含网络抖动不是更真实吗？标签我加了园区ID啊。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把采集规则改一下，只用网关收到执行结果的时间减去网关收到指令的时间？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "来不及重新采集。标签的话，我让运维在网关层加个灰度标？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行监控分析师 如果我不改采集规则，你能从日志里算出剔除网络抖动的时延吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "标签怎么办？发版肯定不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对！我选的就是两个特定的非核心工业园区聚合池。@运行监控分析师 你能直接把这两个聚合池ID作为灰度组，剩下的全当对照组吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我不改采集规则了，你看板硬编码过滤，离线算时延给我。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "等这轮灰度复盘完，我把灰度标签加到网关发版的常规checklist里，下次发版带上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

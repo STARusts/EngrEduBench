@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘双卡算力受限的弥散推演模型训练与封装背景下，用户与导师围绕代理模型选型、物理约束保留、截断误差修正及封装工具选择持续沟通（7轮），其中在低成本替代方案部分与弥散算法工程师沟通（1轮），在强热源POD截断修正部分与流体动力学架构师沟通（1轮），并最终形成热源剥离加POD-DNN架构及ONNX Runtime GPU版封装方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "双卡跑全尺度NS方程确实不现实，连推理都过不了200ms线。我考虑用代理模型替代。比如用U-Net直接映射传感输入到流场，但这样物理约束太弱，容易出非物理弥散结果。如果上PINN，训练收敛在双卡上可能极慢，这周根本出不来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用深度学习代理模型，既要保留气溶胶弥散的物理可解释性，又得在有限算力下收敛，你有什么建议？特别是前面清洗保下来的0.1-1Hz频段特征，代理模型能接得住吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "POD-DNN听起来算力友好，但我担心病区里热源多、障碍物复杂，POD的线性截断会不会把非线性的强耦合弥散特征丢掉？导致反演出来的染压偏差大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "病区有暖气排风这些强热源，POD的线性截断会不会导致流场反演失真？有没有低成本的修正方法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "热源剥离加POD-DNN，这个折中方案很实在。把强非线性部分摘出来算，剩下的用降阶，既保了物理又压了算力。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我决定采纳热源剥离+POD-DNN方案。理由：纯数据驱动没物理底座，PINN训练成本超标；热源剥离后POD-DNN能在双卡上快速收敛，且在线推理就是矩阵乘和轻量网络前传，200ms延迟有保障。风险在于离线Snapshot的覆盖度，如果没覆盖到某些极端通风工况，DNN会外推失效。我准备在训练集里专门补灌极端工况的CFD数据来对冲。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "通过向量化离线CFD参数空间来对冲外推风险。封装方面，我打算把模型导出ONNX，用ONNX Runtime跑推理，兼顾跨平台和加速。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TensorRT我没实操过，只看过文档，怕踩坑耽误进度。ONNX Runtime我比较熟，能快速跑通，配合CUDA EP也能吃掉GPU算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，模型架构选热源解析剥离加POD-DNN降阶，离线生成Snapshot做POD，DNN映射传感到系数；第二，训练约束是双卡3090，需补充极端通风工况CFD数据防外推失效；第三，验证口径是清洗后0.1-1Hz频段特征在POD基模态中能量占比超95%；第四，封装用ONNX Runtime GPU版，先保推理延迟低于200ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

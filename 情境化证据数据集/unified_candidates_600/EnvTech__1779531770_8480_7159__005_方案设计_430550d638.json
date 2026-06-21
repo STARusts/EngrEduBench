@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘端STM32声纹特征流式提取方案设计背景下，用户与导师围绕算力约束下的技术路线及流式处理参数配置持续沟通（5轮），其中在特征提取算法选型与滑动窗口参数部分与声学算法设计师沟通（3轮），并最终形成边缘侧特征流式处理基线方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上Librosa呗，算Mel频谱多方便，Python几行代码就搞定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想把Librosa的Mel频谱弄上去，跑不了吗？有没有C版的现成库直接搬？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MFCC太老了吧，现在深度学习不都用Mel吗？非得退回去搞这种老古董？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "谱减法我以前抄过一段MATLAB的，直接改C能行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是用KissFFT算定点FFT，然后提MFCC。风噪用谱减法挡一下。最后把MFCC向量吐出去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "滑动窗口怎么切？DMA缓冲要配多大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这没法直接抄啊，得自己写逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端谱减法降噪，KissFFT做滑动窗口FFT，帧长20ms帧移10ms，双缓冲并行，提MFCC特征切片往外发。就这套吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

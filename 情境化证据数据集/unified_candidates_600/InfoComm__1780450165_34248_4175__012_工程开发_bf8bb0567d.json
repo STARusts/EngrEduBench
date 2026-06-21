@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在湖试环境多径衰落致均衡器发散背景下，用户与导师围绕算法替换、定点补偿、发散防护及MAC层联动持续沟通（9轮），其中在LMS失效边界与NLMS替换部分与均衡算法工程师沟通（2轮），并形成换用NLMS、定点补偿、复位联动MAC层flush的改动清单与验证步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了下波形，抽头系数跑飞了。应该是步长参数设大了，我打算把LMS的步长从0.01调到0.005再跑一遍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长小了收敛慢但不会跑飞啊。水池里多径就几条，湖里反射多，我猜步长小点更稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固定步长LMS在时延扩展大的时候是不是肯定会崩？现在步长0.01，我想改小点，但又怕跟踪不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "归一化步长？就是NLMS？算力会不会比LMS大很多？我们DSP资源挺紧的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "固定步长肯定不行，得换NLMS。专家说只多一点算力，主要是除法精度要注意。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定点除法我之前没搞过。验证的话，我昨晚正好翻了几篇水声信号处理的文献，看到有人用归一化最小均方误差配合功率估计做定点补偿，我打算把这招直接搬过来，在除法前加个抖动注入试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没全验证，但我可以先在仿真脚本里跑一组最差多径时延，看看信噪比恶化多少dB。如果恶化不超过2dB，我就敢往板上刷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个看门狗？系数连续三次超限就强制复位抽头寄存器。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我没想到。复位时均衡器输出全是乱码，MAC层应该立马触发flush吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "中断优先级这块我懂，声接收中断必须低于定时器中断，之前在水池里调过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动清单：1. 均衡算法从LMS换NLMS，步长归一化；2. 加定点除法抖动补偿，仿真验证恶化小于2dB才上板；3. 均衡系数发散超限触发抽头复位，同时联动MAC层发flush中止指示。验证步骤：先跑定点仿真，再刷板看DSP负载和中断时序，最后湖试看误码率曲线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

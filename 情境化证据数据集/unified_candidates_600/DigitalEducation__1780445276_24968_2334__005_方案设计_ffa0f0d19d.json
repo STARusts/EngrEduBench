@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在默会动觉微势感知与活体图谱衍编系统方案设计背景下，用户与导师围绕微势捕获与图谱解耦架构、一致性、方案对照及合规脱敏持续沟通（10轮），其中在推流要求部分与动觉采录架构师沟通（1轮），在数据切片需求部分与本体衍编工程师沟通（1轮），并最终形成Flink背压、时间切片订阅及双层脱敏的解耦边界与时序图输出计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采录端一直推数据，图谱端慢慢演，速度不一样，分开就不堵了。中间加个MQ就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性？就，保证不丢就行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@动觉采录架构师 采录这边推流有什么硬性要求？@本体衍编工程师 图谱这边接数据要什么格式？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采录要背压防阻塞，图谱要时间切片回溯。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设方案A用Kafka，背压靠客户端限流，图谱自己攒窗口。方案B用Flink中间层，直接算好切片推给图谱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去跑个压测，看Kafka回溯延迟和Flink算力占用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对背压机制和图谱时间切片怎么对齐没概念，这块我得补一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看看Flink反压机制的官方文档，再找两篇时序知识图谱切片的论文，把窗口滑动逻辑弄懂，两天内给个结论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采录端脱敏完再推MQ呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "必须双层，MQ推之前脱敏一次，图谱消费时再验一次权限和特征遮罩。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口用微势变更事件流，背压靠Flink中间层控制，图谱按时间切片订阅，脱敏双层，推和拉各一次。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

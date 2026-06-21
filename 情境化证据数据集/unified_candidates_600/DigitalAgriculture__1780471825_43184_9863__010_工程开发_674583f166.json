@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在地下传感固件开发与低功耗优化背景下，用户与导师围绕固件架构精简、低功耗模式选择与验证方法持续沟通（6轮），其中在固件Bug排查与架构调整部分与硬件固件工程师沟通（2轮），并最终形成裸机前后台+原始透传架构、Stop2低功耗模式及功耗分析仪对照验证的决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算基于FreeRTOS做微内核任务调度，配合Contiki的RIME轻量栈实现Mesh自组网，再叠加DVFS动态调频，把架构做灵活，方便后续扩展。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑是跑起来了，但有个严重Bug，运行大概两小时后触发看门狗复位，而且平均休眠电流测出来有800uA，离我们50uA的指标差太远。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在FreeRTOS下跑了5个任务，采集、封装、Mesh路由、DVFS控制、上行发送。看门狗老复位，休眠电流也降不下来，是不是DVFS在唤醒时调度开销太大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把Mesh路由和DVFS砍了，改用星型拓扑和定频，但保留FreeRTOS，这样任务切换还是方便，加新传感器也容易。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据封装我还是想用CBOR格式，比JSON省空间，还能自描述，方便以后微灌决策模型加参数不用改下行解析。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "透传确实最省。那我重构固件，裸机+原始透传。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时就用万用表串着测，感觉抓不到瞬态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用高精度功耗分析仪，设置高采样率，分别跑\"连续唤醒\"和\"标准休眠-唤醒循环\"两组做对照，算平均积分功耗。这算是验证口径了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我发现我对STM32 L4的Stop2模式配置有盲区，之前休眠没进去可能就是寄存器没配对，导致外设没停住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我马上去翻ST的参考手册PWR那一章，把Stop2的进出时序搞清。写个最小验证Demo，只做GPIO触发进Stop2，用功耗仪测基准电流是不是几微安。把这个补学记录更新到我的工程日志里，然后再迁移到主固件里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "固件架构砍掉FreeRTOS和CBOR，改用前后台中断+原始ADC透传；低功耗模式切换到Stop2；验证用功耗分析仪做唤醒/休眠对照测试；我先补学Stop2配置并跑基准Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

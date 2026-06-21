@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在核心演算引擎架构设计背景下，与导师围绕状态机并发回滚、ECS架构取舍与性能验证持续沟通（5轮），其中在状态机并发与回滚设计部分与引擎核心攻城狮沟通（2轮），在Prompt模板组装与接口对接部分与AIGC提示词工程师沟通（2轮），并最终确认ECS架构与结构化Prompt方案，计划编写Benchmark验证性能。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用C++写个树状结构管理剧情节点，大模型推理用协程挂起等回调。但不确定状态流转怎么处理多分支并发，特别是玩家情绪突变时要不要做剧情回滚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在要实现核心演算引擎的状态机，要支持剧情回滚和并发分支，C++层面怎么设计比较高效？我原本想写个树状结构加协程。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那内存池化具体怎么配合大模型的异步回调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧情绪向量过来后，怎么拼成大模型能懂的Prompt？接口格式怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这块跟引擎的ECS怎么联动？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "攻城狮建议用ECS架构做状态流转，双缓冲队列处理异步回调；提示词那块用结构化模板，情绪向量转标签，再拼节点ID和全局约束。但我对ECS不太熟，这套东西上手成本挺高，会不会拖慢开发进度？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ECS下回滚是不是直接把对应的Component回退到上一帧的Snapshot？这样比树状结构回退指针简单多了。不过我还是有点担心ECS的轮询开销，万一级节点量很大，System遍历会不会卡主线程？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这两天突击一下Entt框架的源码和Example，先写个Demo跑个Benchmark。对比下传统OOP树和ECS在万级节点轮询下的耗时，顺便测一下双缓冲队列在并发推理下的延迟。验证过了再重构状态机。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把Entt的环境拉起来，写个最简的Component轮询Demo测耗时。Prompt模板那块我也先定个JSON Schema把槽位占好。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

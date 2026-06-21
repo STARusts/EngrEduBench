@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在知识图谱引擎联调背景下与导师围绕流式特征注入时序、异常降级策略、窗口聚合策略及联调验证步骤持续沟通（6轮），其中在流式特征注入降级与突变帧聚合部分与图谱引擎工程师沟通（2轮），在特征推送频率确认部分与特征提取工程师沟通（1轮），并最终确定滑动窗口聚合、加权策略及联调验证步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重点就是把接口对上，把特征数据传过去，看图谱能不能正常出推荐路径就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序就加个消息队列缓冲一下呗。延迟高的话，就报错重试？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取这边数据是流式推过来的，你们图谱引擎怎么接？如果推送断了或延迟了怎么处理？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我确认下特征这边的推送频率。我们这边特征推送的间隔大概多少？能配合2秒的窗口吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱那边用2秒的滑动窗口聚合特征，我们这边一秒能推4、5次，数据足够。要是断流超2秒，图谱就冻结路径，不报错。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接取平均吧，算起来简单。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导师说取平均会抹平突变。窗口里如果有情感突变帧，怎么合成Snapshot？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "聚合策略定下来了：最新帧加权，遇到突变直接打断窗口生成紧急Snapshot。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

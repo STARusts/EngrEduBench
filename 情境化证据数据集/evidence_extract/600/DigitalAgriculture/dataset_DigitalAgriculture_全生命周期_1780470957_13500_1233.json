@@ -1,0 +1,599 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在农地碳汇动态核算与绿金信评系统需求与战略背景下，用户与导师围绕业务痛点、数据合规与模型精度冲突、合规知识补充及底线决策持续沟通（6轮），其中在数据合规边界部分与合规审计师沟通（1轮），在碳汇模型精度与数据依赖部分与农业碳汇分析师沟通（1轮），并最终形成合规优先、精度妥协的底线决策及授权意愿研究假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "主要就是解决碳汇算不准、绿金数据孤岛的问题。我打算用多源传感和遥感数据，把农田碳汇量算出来，然后直接丢给银行做信贷评估，给农户放款。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "农户痛点不就是算不准拿不到钱嘛。我们把物联网设备一装，涡度相关法测碳通量，再结合遥感反演，精度肯定上去。数据我们全量拿，算得准银行肯定认。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要把农户的碳汇数据拿去给银行做绿金信评，这数据合规怎么弄？我后端加个脱敏函数够不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果只拿最少数据，碳汇模型能跑准吗？算不准银行不认，这业务就转不起来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规说必须最少，分析师说少了算不准。我觉得还是得先想办法把数据全弄过来，保证模型精度，大不了后面再补个授权协议，先把业务跑通再说。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对这些法规和隐私机制没怎么研究过，平时搞后端只管存取。我得花点时间补一下这块，不然没法往下推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得看下《个人信息保护法》里关于敏感数据授权的条款，还有多方安全计算怎么用在联合信评里。这周我找两篇相关论文和开源实现看一遍，至少搞懂“可用不可见”的数据流转逻辑，能画出合规的数据流图就算补到了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果农户能直观看到授权数据能换多少信贷额度，他们的授权意愿就会显著提高？自变量是是否展示预估信贷收益，因变量是授权率？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选合规。坚决不搞先拿数据再授权，也不搞过度采集。系统的核算流必须建立在农户明确授权和数据最小化之上。哪怕初期模型只能用粗粒度数据跑个基线，也得保证合规。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在碳核算合规可行性分析背景下，与导师围绕合规红线与约束条件持续沟通（6轮），其中在核算合规坑点与MRV要求部分与合规审计师沟通（2轮），并最终形成四条核算合规底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个授权弹窗呗，用户点同意就完事了。数据存库的时候加个脱敏字段，查的时候抹掉身份证号。这有什么难的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要做农户碳汇核算，数据都农户授权了，还有啥合规问题？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MRV？这玩意怎么在系统里体现？不就是算个值存下来吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "坐标和产量隔离，那我就把地块切成网格，网格不给坐标，只给个相对ID？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还要给第三方查？那这系统不就成审计系统了？太麻烦了吧。我就存个最终碳汇值不行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重点就是不能只存结果，还得存过程？还要用什么官方的排放因子。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就多建几张表存日志。坐标那块，按专家说的，用网格ID代替，核查的时候再单独走个授权解密流程？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 必须有授权。2. 算法得用官方的排放因子，不能自己瞎编。3. 过程得留着给第三方查。4. 坐标和产量不能放一块。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志不可篡改，我用区块链存个哈希不就行了？方法学溯源，我加个版本号字段。"
+              }
+            ]
+          },
+          {
+            "microScene": "在绿金信贷模式设计背景下，用户与导师围绕碳汇信贷额度换算风险、动态调额机制及增汇潜力量化依据持续沟通（6轮），其中在信贷卡点与动态调额缓冲机制部分与绿色金融产品经理沟通（2轮），并最终形成以增汇潜力定预授信、以实际碳汇动态调额的信贷模式逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接换算呗。碳汇算出来多少吨，乘个系数，就是贷款额度。汇多贷多，很简单。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳汇信贷现在卡在哪？我们想按碳汇存量给额度，导师说风险大，银行不认。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "万一碳汇降了，银行直接抽贷，农户刚买的化肥还没用完呢，这不得出事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态调额怎么搞？降了就抽贷农户肯定受不了，有没有缓冲余地？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "支付受控我懂，就是加个白名单校验。所以模式就是：看增汇潜力给个预授信，然后定期看实际碳汇，没达标就降级观察，钱只能定向花。这么个闭环？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "肯定不能信他嘴上说。得看数据吧。看他以前种地咋样，或者看我们推荐的增汇方案靠不靠谱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "历史数据推演加方案预估算潜力，实际算出来的碳汇用来兑现信用。行，信贷模式的理我就按这两块拆了，预授信看潜力，调额看实际。"
+              }
+            ]
+          },
+          {
+            "microScene": "在平台商业战略规划背景下，用户与导师围绕双边市场冷启动解法、MVP验证切点与合规底线持续沟通（6轮），其中在冷启动破局与样本标准部分与绿色金融产品经理沟通（2轮），在数据流转合规部分与合规审计师沟通（1轮），并反思商业短板，最终形成MVP单点突破、合规红线与样本真实性三大战略核心点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "系统免费给农户用呗，银行放贷我们抽点服务费。接口写好了，他们自己调就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，确实没想过。我光想着把后端接口写好，保证高并发不宕机就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种两边都不愿先动的局，一般咋破？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "样本代表性具体要啥标准？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农户的产量和地块坐标给银行，合规上能过吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说冷启动得找个高价值作物和地方农商行兜底，还要保证样本覆盖真实乡镇分布，不能只拿试验田数据。合规那边说地块坐标和产量绝对不能明文给银行，得脱敏，还得搞一套农户授权链路，不然就是违法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，先挑一个省？或者一种作物？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我真选不出来，我对农业补贴和各地农商行政策一窍不通。我得去查查以前有没有类似的成功案例，或者看看哪边政策推得最猛。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那MVP战略就先定：选单一高经济作物，找一家地方农商行做闭环，样本覆盖该行网点周边真实农户。数据必须走脱敏和授权。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农地碳汇动态核算系统技术方案设计背景下，用户与导师围绕碳汇核算总体架构与合规落地持续沟通（4轮），其中在传感数据规模与时序特征需求部分与农业碳汇分析师沟通（1轮），在高频时序数据架构选型与合规前置部分与系统架构师沟通（1轮），并最终推翻批处理假设，确认数据流驱动、存储分离与合规前置三条架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我初步想用微服务那套，SpringBoot加MySQL，农户点上报或者设备传数进来，存库，然后弄个定时任务跑核算模型，算出碳汇量再推给绿金信评模块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果量大，我加个Kafka缓冲下呗。脱敏的话，算完存库之前脱敏一把不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "田间设备上报的数据到底啥规模？我以为是农户一天填一次表呢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频时序数据加上滑动窗口特征，微服务加MySQL真扛不住吗？我之前做电商订单都是这么干的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前假设农户数据都是低频填报的，如果按你说的分钟级传感上报，我这批处理方案确实得废掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我得去补学Flink在时序特征提取上的用法，还有InfluxDB的存储模型，晚上把这两个的官方文档和架构案例过一遍，明天给出流计算算子的选型依据。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计多源数据融合流拆解背景下，用户与导师围绕传感与遥感时空对齐、状态存储及脱敏算子位置持续沟通（5轮），其中在时空对齐与插值逻辑部分与数据流设计专家沟通（2轮），在脱敏算子位置与状态TTL配置部分与数据流设计专家沟通（1轮），并形成遥感快照基准流与传感增量流模式、RocksDB加TTL清理及脱敏前置的融合流基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢进Kafka，Flink读进来做个Union算子就行了。都是流，拼一起不就融合了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端这边就管流进来啊。对齐不是算法那边的事吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频点传感和低频面遥感怎么在流里做时空对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MapState存快照？这我懂，就是拿传感流去查状态。云遮挡插值我不清楚，是不是得设个时间窗口？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用MapState存遥感快照，传感流查状态做关联。还有插值事件流，超时没更新就触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存RocksDB呗，不会炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TTL我设个几天吧。脱敏在流算子之前，那就Kafka消费出来先脱敏再进Flink？"
+              }
+            ]
+          },
+          {
+            "microScene": "在农户数据出域供银行做绿金信评且算力受限无GPU背景下，用户与导师围绕隐私计算技术选型、合规边界与安全基线持续沟通（6轮），其中在轻量级隐私求交与半同态加密方案部分与隐私计算工程师沟通（1轮），在数据最小化与审计留痕合规要求部分与合规审计师沟通（1轮），并最终形成五条绿金信评隐私安全基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没GPU？那就别搞联邦学习了，太重。我寻思直接给银行开个API，数据过去的时候用RSA非对称加密包一层，银行那边解密算信评不就行了？加个IP白名单，安全得很。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不是有白名单吗，银行自己承诺不泄露不就完了。合规这东西不就是签个协议嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种轻量级的，别搞太复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PSI求交，然后Paillier加密算回归？听着挺麻烦，不过CPU能跑就行。通信多一点是多点，反正内网带宽不要钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这方案合规能过不？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还要假名化？还要审计留痕？这越搞越多了。脱敏前置不是已经脱过了吗？怎么还要假名化？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就按这个写设计了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，不用GPU，用PSI做隐私求交；第二，信评模型用Paillier半同态加密跑逻辑回归；第三，出域数据要假名化，不能带明文ID；第四，跨域交互全都要记审计日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在绿金对接接口规范设计背景下与导师围绕无预算下的对接方式、限流幂等要求及验证设计持续沟通（7轮），其中在银行侧必传字段与限流阈值部分与绿色金融产品经理沟通（1轮），在轻量级限流熔断实现方案部分与系统架构师沟通（1轮），并最终形成绿金对接接口底线规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接用Spring Boot写几个Controller，HTTP直连银行，加个Filter校验Token，反正数据量也不大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等性加个唯一请求ID就行了吧。限流我不太确定，银行那边具体什么要求我也不清楚，直接写容易出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "银行那边的绿金信评接口，必须要传哪些字段？限流卡在多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "没钱买商业网关，还得实现50QPS限流和防重放，Spring Boot里面怎么搞最省事？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天刚好在看Spring Cloud Gateway的源码，它的Predicate机制正好能用来做LCC码的格式校验，我准备把这套用上，不写硬编码Filter了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写完代码跑一下JMeter压测呗，并发打高一点看看有没有报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JMeter起100个线程并发发请求，持续10秒。重试的话，我手动把银行接口Mock成超时，然后看数据库里同一TraceID的信评记录是不是只有一条。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在农地碳汇核算算法工程化实现背景下，与导师围绕模型封装、传感数据容错、插值补全及精度验证持续沟通（7轮），其中在时序数据缺失容错与插值算法选型部分与算法开发工程师沟通（2轮），并最终形成包含Spring Boot服务封装、样条插值补全及基于Golden Dataset计算MAPE指标验证的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Spring Boot起个微服务，把Python模型翻写成Java呗。如果太复杂翻不了，就用Jython或者JNI起个Python进程跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "容错的话，加个Redis缓存上一时刻的数据？如果新数据来了就覆盖。毛刺我就设个阈值过滤掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传感数据断了或者有毛刺，Java端该怎么容错？直接用上一个有效值顶替行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "三次样条插值？这玩意Java里能直接调包吗？我自己手写太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边界条件我更懵了，平时写CRUD根本不碰这些。我只知道线性插值，就是两点连一条线那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚回去把Apache Commons Math的样条插值API看一遍，写个单元测试把几种边界情况跑通，明天再整合到核算服务里。我只能先照着官方Demo改，边界条件可能还得问你们。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿几组历史传感数据输入，看输出的碳汇值跟以前Python算的差别大不大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就算个误差率呗，比如误差在5%以内就算通过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用Spring Boot封装核算服务；第二，遇到数据缺失用样条插值补全，这块我今晚补学Apache Commons Math的用法；第三，开发完必须用Golden Dataset做对照测试，算MAPE指标，达标才能合并代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在物联网关采集与联调背景下，与导师围绕后端数据接入方式、弱网重传、时间戳校验、设备认证及农户隐私数据脱敏持续沟通（7轮），其中在网关协议转换与数据管道部分与物联接入开发工程师沟通（3轮），并最终形成改用MQTT接入、校验采集时间戳及脱敏拦截经纬度的后端联调开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "LoRa我只听过名字，Modbus完全没碰过。后端只管接JSON。网关那边怎么转我确实没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关那边Modbus和LoRa怎么转成我们能懂的格式？弱网断了数据咋办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网关解析完直接Pub到MQTT Broker，后端写个Subscriber收数据？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时间戳这点我之前真没注意。后端收到的JSON里必须带 `event_time`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "后端不能光等HTTP了，得加个MQTT客户端，订阅网关发上来的Topic。JSON格式不变，但得加个校验，必须有 `event_time` 字段，不然拒收。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我之前没做过，得查查Spring Boot怎么配MQTT SSL连接。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没考虑。那网关上报的JSON里，把经纬度去掉，只留 `plot_id`？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，后端接入改用MQTT，连Broker，我今晚补一下MQTT SSL双向认证的配置；第二，接收数据校验 `event_time`，没有就打回；第三，数据里不能有明文经纬度，只留 `plot_id`，有经纬度的后端直接截掉。"
+              }
+            ]
+          },
+          {
+            "microScene": "在碳汇信贷引擎开发背景下，用户与导师围绕规则解耦与异常容错持续沟通（5轮），其中在规则配置化需求部分与绿色金融产品经理沟通（1轮），在规则冲突与异常值测试部分与测试调优工程师沟通（1轮），并最终形成信贷引擎三大核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接在 `CreditEvalService` 里写逻辑呗，根据碳汇量分级，if-else 判定额度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这确实麻烦。那我用 Drools 规则引擎？把规则抽成 DRL 文件。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳汇数据转评分这块，规则是写死还是怎么弄？你们后面会经常改规则吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Drools 我怕玩不转，搞个 JSON 配置行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信贷评分这块如果做成规则配置化，测试的时候要注意啥？比如碳汇值特别小或者特别大的时候。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "JSON 配置是不是搞不定这种复杂的交叉逻辑？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误伤这个我确实没想。我加个前置校验，如果 `carbon_flux` 是 null 或者 0，信评流程先挂起，发告警让人工复核，不直接出分。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在碳汇动态核算性能调优与排障背景下，与导师围绕核算延迟瓶颈、缓存与精度冲突、排障工具及验证口径持续沟通（5轮），其中在滑动窗口平滑与极值保留部分与数据流设计专家沟通（1轮），并最终形成Redis缓存转换系数、Flink一分钟窗口及5%误差边界的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大批量传感数据灌进来的时候，核算接口响应时间会飙到 3 秒以上。我看了下，主要是计算农田呼吸作用的循环太深了。我准备直接加缓存，把中间算子结果缓存起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "缓存会导致数据漂移，不加又扛不住流式数据。这俩有点矛盾啊。你说的滑动窗口聚合，是在 Flink 层就把数据平滑了吗？那窗口内的极值不就丢了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "发现 80% 的耗时其实卡在频繁查数据库里的作物碳汇转换系数上，不是纯计算。既然这样，我不缓存碳通量计算结果，我缓存转换系数总行了吧？系数不会秒级变化。至于窗口平滑，我取个折中，窗口大小设为 1 分钟，保留窗口内的最大值和均值，一起推给核算引擎。这样既缓解反压，又尽量留住峰值特征。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就打算压测的时候看下接口 P99 延迟，再对比下 1 分钟窗口和原始逐条计算的碳汇总值差异，差得不多就算过了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "误差边界卡在 5%。我这就去改，系数走 Redis 缓存，TTL 设半小时。Flink 那边加 1 分钟窗口，带上 max 和 avg 标签。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Arthas 的 trace 命令确实好用，以前我碰到慢接口只能瞎猜，现在能直接定位方法耗时分布，排障效率能高不少。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在农地碳汇核算与信评系统生产环境部署背景下，用户与导师围绕部署验证方式与误差边界判定标准持续沟通（6轮），其中在灰度发布与指标验证部分与运维部署工程师沟通（1轮），并最终确认按区域灰度5%流量、核算误差P99小于5%的验证口径及超限回滚策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就正常部署呗，用K8s起服务，看有没有Error日志。没报错应该就没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生产环境部署，怎么搞灰度？还有怎么验证核算误差没超标？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前都是看平均值，分位数这块不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看P95误差率是不是小于5%？如果是就算过了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量都卡5%以内太严格了吧。要不看P99？或者P95小于3%？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对统计检验这块一知半解，只会看大盘平均数。我这周得把Prometheus的histogram_quantile函数弄明白，自己写个PromQL算P99误差，加到看板里，算是定个具体目标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认三点：第一，按区域灰度5%流量；第二，验证指标是核算误差P99小于5%；第三，达标才放量，超了就回滚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改部署脚本和监控面板。"
+              }
+            ]
+          },
+          {
+            "microScene": "在碳汇核算精度监控背景下，用户与导师围绕监控维度拆解、残差计算及数据流改造持续沟通（6轮），其中在精度监控维度与残差阈值部分与农业碳汇分析师沟通（1轮），在Flink增加残差字段与滑动窗口配置部分与数据流设计专家沟通（2轮），并最终形成分组监控与P0告警改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "精度不就是看算出来的值和真值的差距吗？我可以在Prometheus里配个告警，算出来的碳汇量和标准模型差太多就报警。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过。我只配了全局的P99。水稻田崩了可能被平均掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳汇核算精度监控这块，除了看全局误差，还得按哪些维度拆开看？哪些维度塌了会出大事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "残差这个字段咱们数据流里有吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我好像没看到Flink作业里有输出残差的逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在Flink作业里没这字段，我要怎么加？改动大不大？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滑动窗口选多大合适？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，不能只看全局P99；第二，必须按作物类型、土壤质地和轮作周期分组；第三，核心看N2O和CH4的拟合残差均值，阈值是10%；第四，Flink里要加Group By和1小时滑动窗口算残差，推给Prometheus。"
+              }
+            ]
+          },
+          {
+            "microScene": "在精度监控P0阻断规则上线导致信贷转化率暴跌背景下，用户与导师围绕异常归因及降级授信通道落地规则持续沟通（7轮），其中在业务降级预案部分与绿色金融产品经理沟通（1轮），并最终形成阻断改降级、系数动态拉取、订单打标抽检及推送波动提示四条改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拉了下网关日志。报错码是BLOCK_BY_P0的占了大概65%，还有35%是流转到了信评引擎，但最后状态是REJECT。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在碳汇残差一超10%我们就直接阻断信评流转，导致信贷转化率暴跌。业务上这块怎么算？有没有什么降级策略，不能直接卡死吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是别直接返回失败，给个低额度？那风控能认？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "信评引擎入参加个字段，比如`degrade_flag`，如果是true，就把碳汇增信额度砍掉？或者乘个折损系数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我哪知道，得风控定吧。我就负责把开关加上去，系数给他们配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，阻断逻辑改成降级，入参加`degrade_flag`；第二，折损系数不能写死，走规则中心配置；第三，降级订单打标，走人工抽检。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就这四条：改降级逻辑、系数动态拉取、订单打标抽检、推送波动提示。我这就去改流转代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在农户反馈与迭代规划背景下，与导师围绕客诉归因与迭代方向持续沟通（6轮），其中在客诉归因拆解部分与业务运营专家沟通（1轮），并最终形成包含新增归因看板、结果可见参数不可见原则及数据复现边界的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了后台工单。大部分都在问额度为什么突然降了，这不就是咱刚加的推送提示触发的嘛。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "农户看不懂提示呗。文案太技术了，把“碳汇监测波动”改成大白话，比如“最近地里有变化”，应该就没事了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在农户投诉额度降级看不懂提示，这批反馈你怎么归因？后面迭代到底该改啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加归因看板？这得要算法那边出中间数据，前端也得新开页面，工作量不小啊。这算新需求还是算线上Bug修复？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "中间变量有些能直接用，但像降雨影响系数这种，是算法那边的黑盒参数，前端拿不到明细。如果强行拆开输出，可能涉及算法逻辑泄露，合规那边也不好过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前几天我确实在补联邦学习的笔记，记在学习日志里了。不过那是隐私计算那边的，跟这个归因展示好像搭不上？我不太确定怎么迁移过来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只给农户看“降雨导致碳汇下降20%”，但不给具体公式？那我就把这个“结果可见、参数不可见”作为归因看板的迭代约束。不过这看板的数据复现，我得跟算法确认下口径，不然前端展示的波动原因跟实际核算对不上，又要被投诉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "迭代规划核心点：1. 新增碳汇波动归因看板解决信任问题；2. 遵循“结果可见、参数不可见”原则，只展示影响权重不暴露公式；3. 归因数据需与核算引擎对齐口径，明确模型失效的不可外推边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

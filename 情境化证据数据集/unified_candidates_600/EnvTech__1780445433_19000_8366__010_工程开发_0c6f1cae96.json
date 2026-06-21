@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演结果与阻控调度引擎联调测试背景下，用户与导师围绕联调卡壳原因、状态一致性、指令误发合规风险及解决方案持续沟通（7轮），其中在事件乱序与状态跳变、幂等校验、Outbox改造方案部分与后端开发工程师沟通（5轮），在并发穿透、长事务性能、压测用例部分与测试调优专家沟通（4轮），并最终确定基于Outbox模式改造、补充并发压测用例及盯住指令误发率为0的指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡住了，后端和测试在那吵，指令一直积压发不出去，接口也时不时报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就看了一眼日志，一堆异常栈。@后端开发工程师 @测试调优专家 你们俩到底谁的问题，赶紧对齐一下！"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那加个去重不就行了？用Redis set一下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "顺序反了设备动作就反了。这咋整？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "乐观锁？加个version字段呗？ upd set status=new where version=old？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我哪懂这么深啊。要不，后端你把状态机和指令生成放一个事务里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "发件箱？就Outbox？听着耳熟。@后端开发工程师 你会搞这个不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "卧槽，这锅我可背不起。那必须得有回滚或者熔断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，指令误发率必须为0。我这就去催他俩改，后端你先出方案，测试你把用例准备好，别再吵了赶紧干活。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

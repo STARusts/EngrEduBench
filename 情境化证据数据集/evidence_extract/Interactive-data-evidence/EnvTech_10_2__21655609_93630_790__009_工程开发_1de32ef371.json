@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预测模型训练与上线评审的隐私合规冲突背景下，用户与导师围绕训练/推理数据最小化、分域隔离与审计证据链设计持续沟通（7轮），其中在训练与推理可用数据粒度、脱敏与留痕口径上与合规与核证官沟通（4轮），在不读明细前提下的事件窗特征、标签与验证切分上与算法工程师沟通（4轮），并形成v1上线的数据分域、ID映射与日志审计落地约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是把数据都丢到模型里就行？反正我们系统是环保用途，不算敏感吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须的就雨量、流量、水质氮磷吧。想要的是施肥量、啥时候施的，还有田块边界。可不要的……农户名字？手机号？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "线上直接读训练用的特征表不就省事了？我看很多人都这么接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证官 训练和上线推理，施肥记录、田块边界这些能用到什么程度？要怎么留痕才算能过核证？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "田块几何还要哈希？那地图上不就对不上了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那跨乡镇复用数据行不行？省得每个地方都冷启动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白一点了。我们训练就用聚合特征，不碰明细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "训练就用特征表，特征表里只放累计量、距离这些，不放名字。推理也用同一个特征表，然后打日志记录谁查了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 不能直接用明细施肥记录和田块坐标的话，事件级氮磷预警还能怎么训练？会不会准头掉很多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把施肥明细先在库里算成7天累计，再给模型。这样不算用明细吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跨地块切分是啥意思？我一般就train_test_split一键跑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解是：明细不直接给模型。先算成事件前7天/30天投入量、有没有追肥这种。田块坐标也别给，给坡度距离之类。切分按plot_id，不用随机切。线上就查这些聚合特征表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不做逐日施肥时序特征了，只做7天/30天窗口。地块几何也不放点位，只放网格ID？不对，网格也能定位吧。那就只放派生距离，不放ID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）训练和推理分开读库，不共用明细表。2）训练只拿聚合窗口特征，不拿姓名电话。3）plot_id做映射，映射表不给服务读。4）日志里记模型版本和特征版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

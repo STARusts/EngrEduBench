@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在声光力觉硬件联调与标定背景下，与导师围绕力反馈延迟抖动排查与修复持续沟通（7轮），其中在底层波形与重传时序分析部分与软硬联调与标定专员沟通（2轮），在力觉标定工程验证与热漂移处理部分与软硬联调与标定专员沟通（1轮），并最终形成引擎侧预补偿与冷热双态标定修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "事件溯源的时间戳是对齐的，理论上环形队列出队不会乱序。会不会是边缘节点算力不够，导致总线吞吐瓶颈？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "波形图高低电平跳变太碎。我分不清哪段是异常。理论上时钟沿对齐就行，这些毛刺算干扰吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这力反馈总线的波形跳变太乱，我分不清哪些是有效信号哪些是干扰，力觉延迟到底卡在哪了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "调小引擎下发包的尺寸，或者把ACK超时阈值调大，是不是能缓解积压？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "底层SPI带宽和ACK重传有冲突，力觉节点是一收就刷DAC没解耦。建议拆包或者做预补偿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我知道史密斯预估器能补纯延迟。可这还有抖动，系数我不会算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑几组不同力度的阶跃响应，看执行器输出和指令的误差。用最小二乘法拟合一下补偿曲线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "标定参数怎么验证？我担心设备热漂移。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "修复点：引擎侧加预补偿对冲重传抖动；力觉标定按冷热双态重刷补偿表烧录。固件不动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

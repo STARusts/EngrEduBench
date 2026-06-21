@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在INT遥测泄露业务数据引发合规与监控冲突背景下，与导师围绕INT数据结构改造与防篡改审计持续沟通（6轮），其中在载荷剥离合规判定部分与合规与标准专家沟通（2轮），在剥离抖动影响及硬件Hash时延部分与运行监控分析师沟通（2轮），并最终形成仅含节点ID、时间戳与硬件Hash的采集原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "精度要紧吧？微秒级监控抓不到毛刺，自愈就没法触发，网络就白建了。内网环境，泄露风险应该不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "开INT带出业务数据，合规上是不是必须禁？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果把业务载荷剥离了，只留时间戳，微秒级监控还能干吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说要剥，监控说剥了就抖，没法兼顾。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "当时为了方便定位，把包头都拷进去了。如果只插Hop时间戳和节点ID，确实不需要业务载荷。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加哈希校验？每个节点把自己的时间戳和ID做个Hash带进去？但这也会增加指令周期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果INT只携带Hop时间戳、节点ID和硬件加速生成的Hash校验，完全不接触业务载荷，这样符合合规要求吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "节点只插时间戳和硬件Hash，不拷贝包头，处理时延能控制在微秒级不引入额外抖动吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "INT遥测数据只包含：1. 各跳节点ID；2. 入出微秒时间戳；3. 硬件加速Hash校验。严禁携带业务载荷与包头。监控侧基于时间戳算时延与抖动，自愈判定不受影响。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

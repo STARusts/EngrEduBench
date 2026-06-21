@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在林间微气候菌菇产量自校准决策网工程开发的采集网关与固件联调背景下，用户与导师围绕数据上报中断的边界定位、缓存重传与可复现验收口径持续沟通（10轮），其中在固件ACK/日志打点/缓存策略等最小闭环设计上与嵌入式开发工程师沟通（5轮），在接入层ACK(seq_max)与错误码/trace_id对齐上与后端开发工程师沟通（4轮），并形成6条联调验收与断网复现步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是跑着跑着就没数据了。日志我看不太懂。大概十几分钟就断一次，有时候重启网关就好了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只看了后端接口没进来。设备端我没看，网关我也就看个面板在线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式开发工程师 固件这边有没有啥一键诊断？现在老断，上报就没了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们是 MQTT 吧，我看配置里有 broker。seq 我不确定，时间戳肯定有。缓存好像有个 queue，但我没细看。断的时候我就看到没有数据了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ACK 机制是 broker 自带的吧？QoS 设一下就行？日志事件我可以开 debug 模式吗，会不会很占内存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "下行 topic 我们还没做。那我是不是先别搞了，直接用现成平台会省事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那断点续传就是靠这个 ack_seq？我理解是“后端说收到第几条”？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢弃计数我没加过。我怕改固件会不会很慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个 ack_seq 下行；再把日志多打点；然后 QoS1。差不多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 现在 MQTT 断断续续，你们接入这边能不能给个 ack_seq 回来？还有有没有啥错误码能看出来拒绝了没？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "trace_id 也要回？固件放得下吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那你们说“落原始表”是啥，我以为入库就是入库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "嗯…就是：上报带 device_id ts seq fw_ver；MQTT 用 QoS1；后端回 ack_seq；固件收到 ack 才删缓存；断网就重连；日志开关键事件。6条够吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "缓存满了就丢最旧吧，省事。复现就把网关断网？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "地理位置也算敏感？我们有 GPS 模块，我之前想直接打印经纬度方便查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

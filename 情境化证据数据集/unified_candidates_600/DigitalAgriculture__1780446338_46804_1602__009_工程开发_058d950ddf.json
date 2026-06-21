@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云协同指令下发链路开发背景下，用户与导师围绕指令下发可靠性、防重放及权限审计持续沟通（6轮），其中在弱网重发与指令幂等部分与边缘系统架构师沟通（1轮），在防伪造与权限控制部分与安全与高可用工程师沟通（1轮），并最终形成包含幂等去重、ACK重试、防重放校验及审计日志的开发约束与任务拆分。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个下发接口呗。云端算出结果，调边缘的接口发下去，用JSON格式传参就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢了就再发一次呗。重复执行我不太懂。防伪造的话，加个登录密码？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网情况下指令下发怎么保证不丢？设备收到重复指令咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控指令怎么防伪造和重复提交？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加时间戳和随机数，还要RBAC和审计日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，发的时候带个ReqID，边缘收到回个消息。Nonce就是加个随机字段进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

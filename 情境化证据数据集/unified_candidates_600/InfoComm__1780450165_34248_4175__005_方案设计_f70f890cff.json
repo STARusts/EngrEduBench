@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在浅海多径信道探测与反演背景下，用户与导师围绕反演模型选择、算力约束与切换门限平衡持续沟通（6轮），其中在反演策略与算力开销部分与信道反演设计师沟通（2轮），并最终形成采用射线逼近法、算力预算200MIPS及预留3dB误差余量的探测与反演约束总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发个LFM探测信号，测多径时延和幅度，然后反演出信道冲激响应，不就能算信噪比了嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预测的话，是不是套个卡尔曼滤波就能往前推了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们潜器端算力有限，哪种反演方法能支撑信噪比预测，又不会把DSP跑满？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们板卡留给通信处理的大概还剩200MIPS。简正波肯定跑不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "射线逼近的话，多径幅度误差对信噪比预测影响大不大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那把探测频率降低点？比如2秒测一次，少算几次，省点算力，也不用切那么频繁。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就射线逼近吧，算力控制在200MIPS内，声链路占用稍微高一点就高一点，总比预测失效强。门限加3dB滞回。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 探测信号用LFM，周期1秒；2. 反演用射线逼近法，不用简正波；3. 反演算力预算不超200MIPS；4. 切换门限预留3dB误差余量，用滞回逻辑防乒乓切换。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

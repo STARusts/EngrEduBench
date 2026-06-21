@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在岛群流控核心算法联调背景下，用户与导师围绕指令下发时序控制、节拍对齐机制和日志链路追踪持续沟通（6轮），其中在跨岛时序冲突部分与跨岛联调专员沟通（1轮），在心跳节拍同步部分与节拍同步设计师沟通（1轮），并形成基于心跳滑动窗口的流控下发与TraceId透传核心链路方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想直接用RocketMQ消费分配事件，拿到订单和岛群路由信息后，直接调设备接口下发。这样实现最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流控算法直接调设备接口下发指令，联调时会不会出问题？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "要维护状态机，还要等ACK。那我在消费MQ的逻辑里加个本地状态流转，发完指令挂起等回调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨岛联调专员说要有状态机和ACK，但我怕高并发挂起线程池炸了。心跳机制怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Netty接心跳包，更新本地ConcurrentHashMap里的窗口水位，分配事件来了判断余量再下发。不过心跳包里的数据格式我得和设备端定一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把分配事件的TraceId塞到下发指令的Header里，设备端日志也打出来。工具方面，我就用SkyWalking把MQ消费和Netty链路串起来吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查下SkyWalking Netty插件的文档，不行就手动打MDC。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先把心跳协议字段定下来：岛ID、剩余产能、缓冲区水位、时间戳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

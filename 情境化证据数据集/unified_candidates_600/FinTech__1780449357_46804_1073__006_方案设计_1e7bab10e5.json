@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在巨灾分保层厚与流控设计背景下，用户与导师围绕层厚切分依据与流控建模持续沟通（5轮），其中在溢流穿透与恢复因子建模部分与流控规则引擎开发沟通（1轮），在层厚切分精算依据部分与精算架构师沟通（1轮），并最终放弃硬编码，形成按VaR百分位切层厚、用规则引擎Fact模型处理流控及卡Solvency II红线的原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按保额切层最简单。500万以下自留，500万到5000万分给第一溢出层，剩下的再分。流控就顺着合约顺序挨个走，走到哪算哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "恢复因子就加个计数器呗，用一次减一次。穿底就穿底，大不了多买几层。写代码嘛，if-else搞定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "溢流穿透和恢复因子在规则引擎里怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是要搞几个Fact对象，按顺序排个优先级嘛。资本红线我加个校验不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "层厚切分到底怎么定？我按500万一层切不行吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "按百分位切。规则引擎搞Fact。那就按精算的分布切层，流控用规则引擎。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "层厚按VaR百分位切，不硬编码金额；流控用规则引擎Fact模型处理溢流和恢复；自留额卡Solvency II红线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

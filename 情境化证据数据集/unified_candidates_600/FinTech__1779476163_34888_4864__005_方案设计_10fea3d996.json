@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在预言机交互与数据流设计背景下，与导师围绕外部数据接入信任锚点、防重放机制与多源数据聚合逻辑持续沟通（7轮），其中在交互协议与多源验证部分与跨域预言机对接师沟通（2轮），在数据上链合规边界部分与监管合规边界分析师沟通（2轮），并最终形成预言机交互5条设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这简单，就写个REST接口把ERP和物流系统的数据抓过来，直接推给智能合约去执行呗，反正都在内网。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个签名校验不就完了，防重放就在报文里塞个时间戳。后端接口都这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预言机推数据给合约，我加了签名和时间戳，还有啥要防的？多源数据怎么回事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据推上链有啥红线？我准备把发货单明细全推上去方便合约算账。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只推哈希？那合约怎么知道具体发了多少货、该付多少钱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据不全上链，只推哈希和状态。预言机得装CA证书，还要弄个Nonce。交叉验证就是多调几个接口一起看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，以先到的为准？或者都到了再算？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就是预言机先收集数据，按聚合逻辑验证都满足了，生成证明，把哈希和证明推给合约。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 业务数据只上链哈希和状态断言；2. 预言机节点CA准入；3. 多源数据必须聚合验证满足后才触发；4. 防重放用Nonce；5. 推送要带证明。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

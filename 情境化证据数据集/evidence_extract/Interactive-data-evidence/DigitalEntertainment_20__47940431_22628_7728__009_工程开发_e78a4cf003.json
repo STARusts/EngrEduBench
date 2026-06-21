@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在直播画面实时数据叠加渲染工程开发背景下，用户与导师围绕数据接入、去重乱序、时间对齐、降级与可观测口径持续沟通并对齐验收规则（8轮），其中在事件模型与幂等/乱序/时间戳口径上与实时数据工程师沟通（3轮），在渲染管线、缓存抗抖与性能预算上与图形与叠加渲染工程师沟通（3轮），并最终明确按overlay_stream实现的5条落地规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从我们事件总线来吧，前端订阅。重复就用eventId去重，跟之前转码那套一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时数据工程师 事件这块给我个格式就行，还有怎么不重复。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "seq就是自增数字对吧，那我前端按大到小排一下就好了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那就等200ms，不够就算了，然后快照盖掉。eventTimeMs我用来显示时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就订阅overlay_stream。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是快照，一秒一条，直接把比分那些全量刷掉。另一个是事件，按seq排，eventId去重，时间用eventTimeMs对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@图形与叠加渲染工程师 叠加层怎么画才不卡？我就用canvas直接画可以吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把所有东西都放一个canvas上面省事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就固定1280，然后缩放。事件队列就按eventTimeMs排队，到了就画。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指标我加三个就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "订阅overlay_stream，拿到快照和事件。事件先按eventId去重，再按eventTimeMs进队列。渲染用playhead去跑，不按收到时间。静态的缓存一下。卡了就把特效关掉，或者15fps。指标就你说那三个加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则就是：事件最多等200ms，过了就丢；快照每秒覆盖；日志不打payload。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可能会把seq和eventTimeMs搞混"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先画出来？不然用户看不到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就跳过去继续，后面快照会盖回来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

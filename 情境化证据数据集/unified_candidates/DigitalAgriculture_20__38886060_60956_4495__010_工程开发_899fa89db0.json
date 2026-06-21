@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在识别模型训练与蒸馏工程开发背景下，用户与导师围绕训练数据准入、评估切分、困难集与可复现字段持续沟通（7轮），其中在原因码分层与标签体系对齐上与数据标注与质检负责人沟通（4轮），在地块级切分防泄漏与蒸馏最小配置上与算法负责人沟通（3轮），在训练用图与定位留存审计合规上与合规与风控经理沟通（1轮），并形成训练规则条目与蒸馏跑通清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是先只拿质检是pass的。warn和block先不进训练。定位缺失的“待补定位”，也先不进。然后按model_version、rule_version把数据分开存一份，方便回溯。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据标注与质检负责人 标注这块我有点跟不上：现在采集记录有质检结果(pass/warn/block)和原因码列表。训练集筛选时，哪些原因码必须直接剔除？哪些能保留但要降权？还有标签体系是按“杂草种类”还是要带“抗性状态”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那原因码的枚举我们端上已经固定了，跟你们的一致吗？我怕两边名字不一样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "评估集为啥不能带LOC_MISSING？我只觉得少个经纬度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“warn”里如果只是BACKLIGHT，也能进训练？我之前以为warn都别用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "蒸馏这块你们有建议吗？我只知道老师说要蒸馏，但我不太会定teacher、student和指标。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我先把筛选规则按你说的三档做出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：  \n- train：pass全进；warn里如果原因码属于软保留也进，但加个低权重标记；block和硬剔除原因码不进。LOC_MISSING也能进train但算软保留。  \n- val/test：只用pass，且必须有定位；warn一律不进；LOC_MISSING不进。  \n- 困难集：从warn里挑BACKLIGHT、轻度模糊、背景杂乱这种，单独存一份，用来每轮回归看鲁棒性。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "田块切分我想靠field_id，如果定位齐全就能对应田块。定位缺失的就只能按采集任务id切分？这块我不确定会不会串。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 训练集这块：数据切分要避免同田块泄漏，field_id能用，但LOC_MISSING怎么办？还有蒸馏的最小配置你建议怎么做，teacher/student选什么，验收看哪些指标？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "LOC_MISSING只进train的bucket，我之前想直接进train主集。那我就分开。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "困难集F1我没做过，是单独一份test吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "蒸馏的温度T我就先2和4各跑一次？我怕算力不够。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把“过滤+切分+困难集”按你说的做成脚本配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一版我想做：  \n1）训练数据准入：按原因码映射三档，硬剔除不入train，软保留进train但打低权重；LOC_MISSING单独bucket。  \n2）数据切分：val/test只用pass且定位齐全，按field_id做group split。  \n3）困难集：从warn里挑BACKLIGHT、轻模糊、小目标，固定一份回归集，每轮出困难集F1。  \n4）先训练teacher并冻结评估口径，再做一次student蒸馏，温度先固定2。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "训练跑出来我能记：数据快照版本、标注版本、代码版本、模型配置版本。还有随机seed。再把你们说的rule_version、model_version也带上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。我还有点担心合规：我们会把原图都拉下来训练，没问题吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 训练阶段会用田间原图和定位。留存多久、怎么控权限、需要做脱敏吗？我们要留哪些审计信息才算合规？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我理解：训练快照里可以不带用户个人信息；定位对训练内部保留，但对外分享要降精度；导出要审计。审计字段我就加到数据导出工具里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "训练数据规则我按条说：  \n- 入train主集：质检pass；warn里原因码属于软保留的也可入，但样本权重低；硬剔除原因码一律不入。  \n- LOC_MISSING：不进val/test；进train但进单独bucket，只在后期鲁棒性微调混入。  \n- val/test：只用pass且定位齐全；按field_id做group split，避免同田块泄漏。  \n- 困难回归集：固定从warn软保留里抽样（逆光/轻模糊/小目标等），每轮输出困难集F1。  \n蒸馏最小配置：先训teacher稳定；student用轻量模型；loss是CE+KL，温度先固定2；验收看宏F1、困难集F1、模型大小和端侧延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

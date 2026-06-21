@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涉诈交易剥离系统异常注入防重与边界测试背景下，用户与导师围绕图状态防重、环状拓扑与乱序时间戳的异常注入及验收标准持续沟通（4轮），其中在异常数据构造与验收标准部分与测试与性能专家沟通（2轮），并最终形成基于图库乐观锁防重、遍历深度限制与Watermark容忍度的异常注入方案及验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重复推送的话，Kafka和Flink应该能挡住吧？我开Flink的Exactly-once语义，处理出错的丢死信队列，这样不用改图计算逻辑。环状拓扑我还没想过，实在不行用Chaos Mesh停掉图遍历的Pod看看会不会雪崩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉诈资金流的异常注入，具体要造哪些特殊的图数据？我本来想直接用混沌工程工具搞点网络延迟和宕机。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "防重的话，我在写入图库前加个Redis Set判断一下行不行？这种现成方案比较快，网上很多人都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实只懂流处理那块的去重，图库并发这块没细看。刚去翻了翻JanusGraph的官方文档，里面提到用乐观锁处理并发边更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备写个多线程并发脚本，对同一个节点同时狂插重复边，看图状态是不是只增加了一次，这样比加Redis靠谱点，也符合咱们对图库底层特性的验证要求。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "乱序的话，我用Flink的Watermark允许一定延迟，测的时候把时间戳打乱看看图构建会不会错。环状链路就造一个A转B转C转A的环，看遍历会不会卡死。验收标准就是没报错，跑完就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，写多线程并发脚本注入重复边，测JanusGraph乐观锁防重，验收阻截指令幂等率100%；第二，构造环状拓扑，测遍历深度限制，验收不卡死且指令不重发；第三，打乱交易时间戳注入，测Watermark容忍度，验收时序拓扑一致率。不用Chaos Mesh和Redis了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

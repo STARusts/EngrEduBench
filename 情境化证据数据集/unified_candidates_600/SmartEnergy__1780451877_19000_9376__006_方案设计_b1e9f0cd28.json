@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在柔算调控高可用评估背景下，用户与导师围绕容灾架构选型、降级动作调整与实验验证设计持续沟通（7轮），其中在降级方案适用性与实验设计部分与智算微网耦合架构师沟通（2轮），在硬切断状态盲区处理部分与算网能多域联调师沟通（1轮），并最终确定最终一致加平滑降频架构及梯度故障注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指令丢了就重发呗，或者节点直接跑本地默认配置。搞那么复杂干嘛。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定选最终一致加降级啊。Raft那套强一致太重了，同步复制延迟受不了。我前两天刚看了个金融级系统异地多活的降级预案，直接套过来，本地存个兜底策略就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我拿金融那套异地多活降级兜底用在微网调控行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我本地直接写死一个切断算力负载的硬逻辑，一断网立马断电保设备，不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本地写死硬切断，联调时状态盲区怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么办？不切断等跳闸？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个测试呗，断网试试看系统崩不崩。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "丢包率梯度，跑1000次。那方案就这么定了吧？最终一致加本地硬切，跑完验证收工。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级动作改成平滑降频，架构选最终一致加降级，验证按刚才说的跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在量表引擎链路灰度联调与压测背景下，用户与导师围绕分桶方式、403/429稳定复现、压测口径与阈值持续沟通（8轮），其中在不改全局配置的造数与压测分层设计上与测试工程师沟通（4轮），在测试专用header触发限流的合规约束与数据最小化上与合规官沟通（2轮），并对齐可控限流方案与通过验收要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先把链路做成全异步，证据查询走事件流，然后压测只打入口，靠回放去模拟证据。这样更接近最终形态，也能把延迟压到很低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分桶我想按用户 id 做一致性 hash，班级会有跨老师共享问题。稳的判定我想用 p99、错误率、还有引擎输出 hash 一致性。403 就用无权限 evidence_id；429 就把证据服务 rate limit 调低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测里要稳定触发 403/429，还要验证我们反馈服务的分桶计数，你会怎么做？别改全局配置那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 429 呢？我之前想把证据服务阈值调低。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "A 这种 header 感觉像后门，会不会不规范？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测指标你这边一般怎么定？我想加“输出 hash 一致性”这种验证。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "403 用固定禁用 evidence_id 集合，放到压测数据里，保证每次都能走 E_EVIDENCE_FORBIDDEN 的链路，反馈服务能按版本分桶计数。\n429 我倾向选 A：灰度环境加测试 header 触发局部限流，更可控，压测脚本不用靠运气撞阈值；但这个点我担心被当成不合规“后门”。一致性校验拆出去做 1% 抽样回归，不塞进主压测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规官 灰度环境压测想加一个“测试专用 header/参数”触发局部限流，避免动全局阈值。怎么做才不踩合规红线？需要哪些留痕/限制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们现在灰度环境有一部分真实班级在跑联调，这条“压测不用真实证据”会卡住。我一直觉得用真实数据才能测出问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选 A，但把它做成“测试能力”而不是通用能力：\n- 只在灰度环境打开；生产构建直接不编译或启动时报错禁用；\n- 只允许 CI 的身份调用，且强制签名；\n- 审计里打 test_mode=true，不记录 header 值。\n通过口径我先列个草案：p99、错误率、桶计数、以及 1% 一致性抽样。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阈值我先拍：主链路 p99 < 800ms，错误率 < 0.5%；403/429 都要能在 5 分钟压测窗口内各出现至少 1000 次并稳定落桶；1% 抽样 hash 对比一致率 100%。改动边界：反馈服务增加分桶计数维度；证据服务增加灰度专用限流触发入口；压测脚本按 70/20/5/5 配比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性只比对 hash 覆盖那张字段表：每维 score/level_id/matched_rule_ids（已排序）/reason_code/citations（已排序）+ total_score + engine_version + rubric_version，不包含 request_id、时间戳、耗时这类。\n延迟阈值我没有历史数据，只能先用灰度环境基线跑一版空压测取 p99，再给一个“基线+30%”的门槛；先不定死 800ms。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第 6 条里“分桶计数偏差 <2%”我有点想抬到 <0.5%，计数这种东西就该严丝合缝。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

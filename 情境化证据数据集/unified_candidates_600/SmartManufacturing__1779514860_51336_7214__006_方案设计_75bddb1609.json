@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在缺陷特征库接口规范设计背景下，用户与导师围绕边缘侧查询延迟、缓存一致性与快照机制持续沟通（6轮），其中在查询结构与批量接口部分与算法与模型规划师沟通（1轮），在接口协议与版本号部分与云端溯源开发主管沟通（1轮），并最终确认特征库接口基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟确实不行。那就在边缘侧存一份？同步的话，用消息队列推？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧查特征库，接口怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端接口用REST还是gRPC？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端提供批量查接口，用gRPC传向量。字段有ID、向量、标签、阈值。还有版本号，边缘侧根据版本号更新缓存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "启动时拉全量，推理时带版本号校验。版本不对就重新拉。处理中的请求就让它跑完呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "快照机制，好，我加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。gRPC查询，批量向量加快照版本，响应带相似度，还有快照同步接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

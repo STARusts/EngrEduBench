@@ -1,0 +1,414 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在跨域微栅时隙抖动反演系统需求梳理背景下，用户与导师围绕业务痛点明确与需求边界划定持续沟通（7轮），其中在极低抖动业务画像与痛点验证假设部分与算网需求分析师沟通（2轮），并最终确认痛点核心为跨域时隙冲突与流表碎片化及系统仅针对极低抖动业务的边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用Grafana拉过面板，就，红线往上窜，时延飘得厉害，丢包也有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "机械臂？反正要求低。流表碎了就是，资源缝不上，浪费了。就那种，你懂吧，缝隙找不到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域微栅，时隙抖，业务受不了，流表碎了咋办？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块缺知识，微栅隙怎么预留的我不懂。我接下来两周，就看TSN标准里时隙相关那部分，看完写个时隙分配的demo跑一下，必须弄懂这15%咋来的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心就是，跨域边界不对齐，时隙冲突，流表碎了缝不上，业务抖动大挂掉。我们要反演这个抖动，织合流表，把缝隙找回来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只要那种极低抖动的。普通的就算了，飘就飘呗。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微栅时隙抖动业务画像刻画背景下，与导师围绕极低抖动业务分类、画像标签设计与假设验证口径持续沟通（5轮），其中在画像分类与核心约束部分与算网需求分析师沟通（1轮），最终确认周期同步与事件触发两类业务画像及验证基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咋画这画像？就是快的那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿wireshark看了现网，全是那种一小段一小段的包，就那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下看看碎没碎呗。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域流表碎片化合规评估背景下，与导师围绕合规红线、脱敏与精准反演冲突及需求基线持续沟通（6轮），其中在脱敏要求与反演匹配机制部分与合规与标准专员沟通（2轮），并最终形成伪标识脱敏流转与域内映射表支撑反演的合规需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准专员 流表流转，脱敏，审计，红线，啥情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "脱敏就，就反演不准了呗。那就，不脱敏？不行吧。那就，脱敏一点点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准专员 脱敏了还怎么匹配啊？总得给个口子吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，就用这招。伪标识发出去，里面自己转。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在通算一体编排商业闭环背景下，与导师围绕微栅时隙计费因子拆分、价值收费逻辑与支付意愿验证持续沟通（10轮），其中在计费因子拆分部分与商业架构师沟通（1轮），并最终确定MVP方案三个计费因子与金融客户A/B测试验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按流量收。包月也行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "计费因子怎么拆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反演费算力？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺商业逻辑。我拿Excel先拉个公式算一下预留度单价，看看能赚多少。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我记本子上，右边填这三个因子。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "之前伪标识流转那边，我也得加上反演频次计费触发点，不然反演了没收到钱。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨域微栅时隙抖动反演系统方案设计背景下，用户与导师围绕感知粒度、合规边界与反演精度折损持续沟通（9轮），其中在遥测数据抓取部分与数据流转规划师沟通（1轮），在脱敏合规要求部分与合规与标准专员沟通（1轮），并最终形成遥测数据脱敏裁剪、算法适配模糊特征及精度折损对比验证的架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抖动反演和微栅感知这块，架构怎么弄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就全抓呗，不准客户不干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "遥测数据怎么抓？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱敏合规怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他俩说不能全抓，得脱敏，只拿最小特征。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设脱敏了就不准了呗。对照组，就一组不脱敏，一组脱敏。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "具体怎么注入我不懂。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我我不知道怎么做脱敏反演。这啥隐私计算，没搞过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查查跨域零信任和隐私计算在遥测里的用例。明天看完。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看看能不能把反演算法改了，输入模糊特征也能跑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就保合规吧。精度降就降点，大不了后面再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知数据全脱敏，反演用模糊特征。算法那边得兼容。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域流表织合协议设计背景下，与导师围绕脱敏特征对信令交互的影响及织合方式选择持续沟通（5轮），其中在强织合与弱织合的开销及一致性权衡部分与确定性协议设计师沟通（1轮），并最终敲定弱织合协议方向及3条设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选弱的。特征都脱敏了，强同步根本对不齐，不如就弱一点，最后收敛就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域数据流转与时隙门限设计背景下与导师围绕流转路径、门限策略及合规要求持续沟通（5轮），其中在管道与门限下发部分与数据流转规划师沟通（1轮），在数据最小化与审计部分与合规与标准专员沟通（1轮），最终形成微栅管道、偏移向量传递、动态门限及审计留痕4条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据怎么走？网关怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规呢？有啥限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们说零信任，微栅管道，偏移向量，还有审计。不能带时间，带向量。门限是动态的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传统信令网太慢，管道快，能缝合。静态不行，有漂移。审计是合规硬性规定的。"
+              }
+            ]
+          },
+          {
+            "microScene": "在全网多级容灾与高可用方案设计背景下，用户与导师围绕跨域容灾架构选型与验证口径持续沟通（4轮），其中在跨域容灾架构与流表织合方案部分与高可用保障架构师沟通（3轮），并最终形成三地多活增量织合与数据面降级容灾架构及覆盖单点宕机与网络分区的验证实验口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "挂了就，就重启。多备几台机器。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前两天看了个讲Raft的推文，上面写选主只要几秒，是不是直接用这个就行？直接套进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Raft能搞定容灾吗？流表怎么弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "B吧。太大了同步不过来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就拔网线测。看多久恢复。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三个情况分开测。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定了，三地多活增量织合。测三种，主挂了，从挂了，还有网断了。看中断和延迟。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨域微栅时隙抖动反演系统训练联调背景下，用户与导师围绕反演模型验证口径、训练框架与日志记录、联调抓包工具持续沟通（6轮），其中在收敛指标与基线对照部分与算法开发工程师沟通（1轮），在时序bug复现与重协商验证部分与联调测试工程师沟通（1轮），并最终形成训练联调验证口径与脚本用例编写方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑起来看抖动降没降就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "收敛看啥？基线是啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序对不上咋整？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PyTorch跑。日志就print出来看呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会看TensorBoard。我回去装一下，把训练日志写进Events文件里，拿TensorBoard看曲线。试试看能不能把超参和MSE曲线导出来对比。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "tcpdump吧，命令行快。"
+              }
+            ]
+          },
+          {
+            "microScene": "在流表织合引擎微服务封装背景下，用户与导师围绕接口契约、封装边界及技术选型持续沟通（6轮），其中在高并发下发与容器化技术栈选型部分与微服务开发工程师沟通（1轮），并明确控制面gRPC、数据面eBPF及K8s Operator方案，被要求编写proto文件与Dockerfile。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，弄个docker呗。接口，就那种，传个json过去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微服务开发工程师 导师让我问高并发下发和容器封装，grpc和ebpf怎么选？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ebpf是不是写内核啊，我不会写c代码啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是反演算出来的，输出就是流表。边界，啥边界？"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨域网元接口适配背景下，用户与导师围绕异构网元下发、回滚机制、事务一致性与权限边界持续沟通（6轮），其中在异构网元联调坑点与适配方案部分与联调测试工程师沟通（1轮），并最终确定Adapter模式、南向代理鉴权、TCC补偿事务及操作审计的开发方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就写个接口转一下格式呗，P4和NETCONF不都是往下发配置吗，能有啥区别。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "回滚？重试一下呗。直接连不挺快的，多一层多一倍bug。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "厂商接口不一样怎么搞，直接写转发行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "隔离就是不直接连。一致性，就，都发成功了才算完吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两阶段吧，听着高级点。边界就给个只写权限，只让发不就行了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极低抖动端到端压测调优背景下与导师围绕压测流量构造、工具选择及反演补偿验证标准持续沟通（6轮），其中在微栅时隙抖动极限流构造部分与联调测试工程师沟通（1轮），在反演算法收敛边界与时延分布假设部分与算法开发工程师沟通（1轮），并最终确定使用TRex构造时戳混合流及15%错位率与5us抖动的临界点验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打流。发大包。一直发。看断不断。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造流？打大包看断不断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JMeter打HTTP。微栅时隙没弄过，不知道咋写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演边界啥样？时延咋分布？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用TRex打时戳混合流。看15%和5us。临界点。补学这俩工具。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在跨域流表织合系统部署验证背景下，用户与导师围绕验证指标、探针数据统计结论与能力缺失补学目标持续沟通（8轮），其中在灰度节点探针数据拉取部分与部署运维工程师沟通（1轮），在探针数据假设检验部分与效能评估专员沟通（1轮），并形成验证阻断结论、灰度回退决策及SMART补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看界面。界面没红就是通了吧。别的不懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拉个数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢了68条。肯定有问题。P99不懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "54.6%怎么弄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看界面，不会算。补什么。想让它变绿。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用python算P值。周五前跑通脚本，算出成功率。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微栅时隙抖动缺乏监控的运行评估背景下，与导师围绕监控指标确认、采样开销控制及数据管线实现持续沟通（7轮），其中在探针采集与gRPC采样点补充部分与部署运维工程师沟通（1轮），在反演验证指标与动态采样率设定部分与效能评估专员沟通（1轮），并最终确定核心监控指标与动态采样策略，明确先实现gRPC exporter原型。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，延迟？抖动不就是延迟嘛。用grafana画一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针能不能采？缺啥补啥，我们要看延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加gRPC。空洞率。他说加gRPC采样，然后看什么空洞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就存数据库呗。放es里。算力，多加点机器不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "哪些指标能验证？采样率多少机器不会炸？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方差，空洞率。1%采样。动态的。就看方差和空洞率，1%采样，高了就多采。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能配。grafana画图，prometheus抓数。"
+              }
+            ]
+          },
+          {
+            "microScene": "在确定性保障效能复盘迭代背景下，用户与导师围绕残差收敛复现条件、结论外推边界与复盘结论撰写持续沟通（7轮），其中在效能归因与外推边界部分与效能评估专员沟通（2轮），在数据审计留痕与日志合规部分与合规与标准专员沟通（1轮），并形成双域轻载有效边界、全链路锁定复现及数据合规留痕三条核心约束与补三域压测的迭代方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "快照重放，三域不行。日志去中心库。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1，双域轻载行，三域不行。2，复现要快照和重放。3，日志去中心库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估孤岛涌现监控看板配置背景下，用户与导师围绕业务指标选择与报警阈值策略持续沟通（5轮），其中在孤岛涌现核心指标及模体含义部分与关联图谱业务主理沟通（2轮），在图指标报警策略及动态基线设定部分与阻尼异常巡舱员沟通（1轮），并最终确定局部聚集系数等三个核心指标及基于滑动窗口的动态基线报警策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板我用Grafana接了，图计算集群的指标都推过来了，CPU、内存、QPS这些都有。但图业务指标我不太懂，现在就是干看着，报警都没敢加。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜是不是节点度数突然变大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "具体看哪几个指标？度数够不够？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "聚集系数和路径长度我能算，模体频次这个是什么意思？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来想写死个阈值，比如聚集系数大于0.8就报。但刚才听他说模体频次，这玩意儿波动挺大的，写死肯定误报。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图业务指标的报警怎么搞？聚集系数和模体频次这种，写死阈值是不是不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "滑动窗口，算标准差。这个Grafana自带功能吧？我配一下。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误报复核成本这块我确实没想过，以为就点个确认。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控看板加三个业务指标：局部聚集系数、平均最短路径长度、担保环模体频次。报警不用固定阈值，用滑动窗口算动态基线，超3西格玛再报。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

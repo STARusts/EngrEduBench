@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动节目实时编排方案设计背景下，用户与导师围绕时间对齐、状态机平滑、分级降级门槛/恢复、引擎故障回退与可观测审计持续沟通（12轮），其中在指令绑定媒体时间轴与抗抖动字段设计上与实时音视频工程师沟通（4轮），在视觉闪烁安全限制与降级留痕/数据最小化上与合规与隐私官沟通（3轮），并形成指令协议字段与三档容错降级要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最致命就是卡顿吧，还有就是指令丢了，灯光乱闪这种。反正别让观众看出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "情绪侧卡就没新数据；编排侧卡就不出参数；下发卡就收不到；渲染卡就画面跟不上。观感就是突然不动或者跳一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "跟服务器时钟？统一一点。然后音乐那边就跟着对齐就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时音视频工程师 指令要怎么跟媒体时间轴对齐？如果网络抖动或者延迟高，怎么避免舞蹈/灯光突然跳？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是要带时间戳、ttl、seq，然后客户端排队等生效，过期就扔掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就 effect_ts、gen_ts、ttl_ms、seq。默认值……ttl先给2秒？缓冲就500ms？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就4秒？覆盖最大窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冻结就走位速度吧，别乱走。灯光可以轻动，节奏密度也可以一点点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 闪烁频率上限一般怎么定比较安全？我们容错降级（冻结参数、只用heat轻动）需要额外告知观众吗，审计要留哪些东西？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了，闪烁别超过3Hz，还要限斜率。降级不用单独弹窗，但告知里提“可能简化”，审计要记触发条件和冻结/限幅。存桶级就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "顺序就是先去重乱序，然后延迟大就加缓冲，再不行就冻结，N不足就走轻量heat，conf抖动就别跨档。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "X就2秒？Y就5秒？冷却就3秒？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，enter 2，exit 8，cooldown 4。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "轻度就是只限跨档，保持2-4秒；中度就是冻结走位速度和队形密度的大变化，灯光和节奏密度小动；重度就是N<30那套，只用heat EMA去动节奏密度、灯光频率、队形密度一点点，不出情绪类别。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用上一次配置？再不行就默认中性参数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "房间ID、时间戳、seq、还有触发原因。再加版本号？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，房间ID、trace_id、seq、effect_ts、mapping_version、degrade_level、触发原因这些。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记三件事：指令字段那一串，按effect_ts生效、seq去重、ttl别太短；降级三档，N<30就只用heat那套，进出是2秒进、8秒出、4秒冷却；闪烁别超过3Hz还要慢慢变，审计记触发原因和冻结限幅，桶级存7天。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

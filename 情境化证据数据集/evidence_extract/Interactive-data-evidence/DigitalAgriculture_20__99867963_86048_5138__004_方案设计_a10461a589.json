@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在授粉调度与合约流程方案设计背景下，用户与导师围绕调度如何消费授粉窗口/置信度/降级状态、失败分类与合约结算对齐持续沟通（7轮），其中在置信度约束、候选集与降级到人工复核/规则调度部分与优化调度工程师沟通（2轮），在链上合约状态机、托管保证金与CANCELLED/EXPIRED触发及合规留痕部分与区块链与合约工程师沟通（2轮），并口头定版接口字段、reason_code/摘要hash留痕与KPI验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按事件流想：预测给出每个棚的授粉窗口和置信度，调度生成工单给服务方。工单里带窗口、截止时间、还有“最小数据域模式”的标记。执行完回来填作业记录，再触发合约结算。风险点是置信度低的时候，算不算违约，或者要不要先锁定一部分钱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬约束我觉得是窗口起止时间、作物类型、棚ID；软约束是置信度、路程成本、服务方负载。低置信度就把窗口放宽一点？或者先发“待确认工单”。资金我倾向托管，先锁10%-20%作为保证金，执行后按效果分成。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@优化调度工程师 调度侧如果输入只有“窗口+置信度+有效期+降级标记”，你们一般怎么把置信度用进约束？还有调度失败时怎么降级，不至于乱派？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "候选slot在窗口内切分这个可以。reason_code我能接住。那“人工复核队列”在系统里就是不自动派单，等农户或运营确认？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 履约状态机怎么设计，才能把“低置信度/需要人工复核/调度失败”都映射进去？还有托管保证金和结算触发建议怎么做比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听起来链上就是“摘要+状态”。reason_code也要上链一份，避免线下改口。那调度失败时就是不进DISPATCHED，直接EXPIRED或CANCELLED？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两块：调度对置信度用“惩罚项+候选slot数量”，不改窗口边界；降级时进NEEDS_REVIEW或规则调度；合约做状态机，链上放摘要hash、版本、reason_code。还缺的是“字段清单”和“失败策略的KPI”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着列：  \n1）输入给调度的预测包：棚ID、作物ID、window_start/end、valid_until、confidence、model_version、io_hash、degrade_mode（normal/minimal）。  \n2）调度输出工单：order_id、provider_id、planned_slot、reason_code、decision_trace_hash、review_flag。  \n3）置信度使用：进入软约束分数，不改变窗口硬边界；低置信度时提高备选slot数量和备选服务方数量。  \n4）降级触发：degrade_mode=minimal或confidence低于阈值，工单标review_flag=NEEDS_REVIEW，或切到规则调度。  \n5）失败分类：NO_FEASIBLE、SOLVER_TIMEOUT、PROVIDER_REJECT、WINDOW_EXPIRED。每类映射到合约CANCELLED/EXPIRED并带原因码。  \n6）留痕：工单/证据/评估都生成摘要hash，上链只写hash+时间戳+版本，不上原始数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值我没很确定，先用A/B：比如confidence<0.6进review；0.6-0.75加大备选；>0.75正常。验证用仿真回放：看准时率、窗口内完成率、人工复核占比。成本这块我只能想到限制review队列的容量，比如每天每区域最多X单进人工，否则就走“保守取消”避免拖着。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约我按你们说的状态机：CREATED->FUNDED->DISPATCHED->EXECUTED->VERIFIED->SETTLED；异常是CANCELLED/EXPIRED。对齐字段：  \n- CREATED写订单摘要：棚ID、窗口摘要hash、预测版本hash、价格规则ID、valid_until；  \n- DISPATCHED写工单摘要hash+reason_code+planned_slot；  \n- EXECUTED写作业证明摘要hash+时间戳；  \n- VERIFIED写效果评估摘要hash；  \n触发：调度失败不进DISPATCHED，走CANCELLED/EXPIRED并退款；NEEDS_REVIEW下允许无责取消或延后一次（要在valid_until内）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复核只看棚级任务信息、历史汇总、服务方可用性，不新增个人定位和音视频；如果要看更细的棚内传感器日汇总，得单独授权并留痕，且用途限定在“调度与履约”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阈值和KPI我先给两条：人工复核占比要有上限（按区域/天），否则成本爆；以及窗口内完成率、准时率要分三档置信度分别统计，避免平均数把问题掩盖。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

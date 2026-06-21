@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在作物生长双模数字孪生管家平台工程开发背景下，用户与导师围绕设备多协议接入、边缘代理模块拆分、离线补传幂等与审计合规持续沟通（9轮），其中在事件ID/ACK游标/WAL缓存/授时与设备指纹实现细节上与物联网工程师沟通（4轮），并形成可开工的接入与边缘代理落地口径清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备进入工程开发先把“设备接入与边缘代理”这一段落地。现在卡在接入协议、网关边缘代理怎么拆模块、以及怎么把离线补传和幂等等约束落到代码结构里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在倾向于边缘代理分三层：协议适配层（Modbus/串口/厂商私有）、采集与本地缓存层、上行同步层。事件模型里带全局唯一ID、设备指纹、采样时间、网关接收时间、校时漂移标记。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "问题是：ID怎么生成更稳，边缘到云的幂等到底靠什么字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 设备接入和边缘代理这块，事件ID生成、重传幂等、授时漂移标记和设备指纹，你建议怎么实现？我们要兼容多协议采集，断网可缓存，回云可对账。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "event_id 里加 payload hash 我理解是防止 seq 重用时撞ID，但我们有 boot_id+seq 其实也够。hash 的收益大吗？会不会增加CPU？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "缓存用段文件WAL我能接受。上行ACK你说用游标，那离线补传时如果云端“已写入但ACK丢了”，边缘重传会被云端去重，OK。那云端去重表怎么设计才不爆？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备指纹如果没有TPM，只能序列号+盐，那合规上能过吗？我们前面有“离线日志签名链与设备指纹”的硬约束。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去跟导师对齐下取舍点：hash可配置、WAL段文件、时间字段不修正只标记、指纹分等级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于默认开启hash（只对小字段集），担心现场seq回退造成对账复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小字段集我先按接入侧定义：device_id、metric_id、raw_value、unit、quality_flag、sensor_time、edge_recv_time、clock_source、clock_drift_ms、event_id、gateway_id、device_fingerprint、fingerprint_level。农事事件离线记录是另一条链路，不混进采集WAL里。敏感的处方参数不进边缘缓存，只保动作级+强度等级这个约束也沿用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "段文件我准备按“条数或时间”滚动，比如每5万条或30分钟一段，索引只存（boot_id, seq）到文件偏移的稀疏索引，减少内存。清理策略是两道：1）云端ACK推进游标后，删除已确认且超过安全窗口的旧段；2）即便没ACK，超过30天也要触发“只保留最小字段集”的压缩段，保审计链不断但丢弃非关键扩展字段。这里我不太确定压缩段会不会破坏签名链的一致性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我调整：不做历史压缩重写；存储水位高时进入轻量模式：只采集关键测点、降低采样频率、关闭payload hash、只保留阈值告警事件。WAL仍然追加，签名链不断。等网络恢复再退出轻量模式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用三类水位：磁盘占用>80%触发、>90%强制；上行失败连续N次触发；CPU/负载过高触发。我会把阈值做成配置，但默认值先保守。回滚条件就是磁盘<70%且上行成功率恢复一段时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧默认禁止导出，只有本地查看最近状态；日志仅用于补传与审计。云端才走权限和双审脱敏。边缘如果要调试导出，只能通过临时工单开关并记录审计事件，导出内容也只限最小字段集，不带客户标识映射。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "落地口径我先给一版：  \n1）边缘代理模块：协议适配器→标准化事件构建→WAL追加→上行发送(带游标ACK)；  \n2）事件结构：event_id、gateway_id、boot_id、seq、device_id、metric_id、raw_value、quality_flag、sensor_time、edge_recv_time、edge_send_time、clock_source、clock_drift_ms、device_fingerprint、fingerprint_level；  \n3）event_id默认：gateway_id+boot_id+seq+hash(payload_core)，hash可关；云端按event_id唯一约束幂等；  \n4）离线：WAL段文件+段间hash链，只追加不重写；回云ACK推进游标；超过留存期且已确认则滚动删除；  \n5）轻量模式：磁盘/上行失败/负载触发，降采样与关hash，仅保关键测点与边缘阈值告警事件；  \n6）错误码：适配器层区分“可重试/不可重试”，例如网络错误可重试、协议解析错误不可重试并打设备健康告警；上行返回重复键视为成功。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

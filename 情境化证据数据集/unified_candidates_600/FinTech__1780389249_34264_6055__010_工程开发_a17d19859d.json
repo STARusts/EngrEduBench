@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微拆分合约极限并发压测背景下，与导师围绕链上压测方法、发压模型对齐及结果分析持续沟通（5轮），其中在压测方法与TPS测算部分与性能压测工程师沟通（1轮），并最终形成包含吞吐量控制、监控采集、结果区分及延迟边界的压测调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JMeter起几千线程并发请求拆分接口，看响应时间不就完了。Web接口我都这么压的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这链上压测到底咋弄？JMeter不能直接压吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "梯度加压嘛，就是慢慢加线程呗。懂了，我回去调JMeter线程组 ramp-up 时间。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没弄过，以前压测都是看接口返回状态码，链上这块怎么卡住的不清楚。我得学学这出块逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我原来都是靠线程数瞎猜，现在直接卡死发压速率，不让Pending池堆起来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改JMeter脚本，加上吞吐量控制器和这几个监控采集。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失败的就直接扔了呗，只算成功的TPS，多简单。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那压测报告里我得把Revert交易单独摘出来算失败率，P99延迟也不能光看平均数。我加个断言去抓Receipt里的Status字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

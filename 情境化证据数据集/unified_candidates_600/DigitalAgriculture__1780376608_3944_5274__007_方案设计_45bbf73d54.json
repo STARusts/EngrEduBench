@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在接口安全与分级结果防篡改背景下，与导师围绕鉴权机制取舍、防篡改验证方案及整体链路对齐持续沟通（7轮），其中在核心接口防篡改部分与平台安全评估师沟通（1轮），在合规包容性与轻量级接入部分与合规与标准审计员沟通（1轮），并最终形成HMAC与Token分级鉴权方案、对照验证策略及全链路核实计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没想过。那就简单点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口安全这块，如果怕被改，一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加密太复杂的话，小合作社接不进来怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "安全专家说必须加密签名上链，合规专家说核心强校验，查询可以轻量级。我听着好像能折中？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太懂这些机制。我就知道弄个Token。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不懂。我得去查查这两种机制的区别。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了HMAC那块，用密钥做摘要校验好像挺适合防篡改。那我核心流转接口就用HMAC签名保真，农户查询那块就发短时效Token，这样既安全他们也好接入。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抓包改点数据试试能不能拦住？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就各跑个几百次？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双组对照，注入篡改，看拦截和误拦，样本量按功效分析算。我这就去补到设计文档里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传感给流式供数据，流式重组窗口给Transformer模型，模型出的分级结果走HMAC签名接口对外给Token查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

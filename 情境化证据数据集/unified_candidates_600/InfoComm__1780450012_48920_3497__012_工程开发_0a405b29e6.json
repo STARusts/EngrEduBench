@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发压测背景下，与导师围绕时敏信令传输抖动的根因分析、修复方案及验收标准持续沟通（6轮），其中在信令抖动修复方案与测量工具选择部分与时延调优专家沟通（2轮），并最终形成基于绑核、SCHED_FIFO策略与bpftrace测量的修复与验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测时看日志有几百微秒的抖动，我以为是CPU负载高正常波动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思在发送队列加个缓冲，平滑一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@时延调优专家 这种信令抖动怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我能在代码里用pthread设置。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对实时调度这块一窍不通，之前只写过普通业务逻辑。我现在就去查pthread_setschedparam和timerfd的文档，把信令线程改成FIFO，顺便把定时器换了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用perf抓吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我用bpftrace写个脚本挂钩子，把调度延迟打出来。如果确认是调度切走导致的，我就把绑核和FIFO加上去重新跑压测。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改线程属性和定时器，测完直接拿bpftrace日志对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

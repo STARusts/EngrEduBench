@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在柔性负荷群态唤醒与频响支撑系统端边云协同架构设计背景下，用户与导师围绕架构延迟要求、控制与数据流拆分、边缘聚合逻辑及安全鉴权持续沟通（4轮），其中在控制与数据流链路拆分及通信协议选择部分与云边协同架构师沟通（2轮），在控制闭环切分部分与频响控制设计师沟通（1轮），并最终确定云策略-边聚合-端执行的架构分层、控制链路边缘闭环禁用MQTT及边缘网关鉴权原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想法是直接拿KubeEdge那套云边协同底座改改，边缘用EMQX接设备，云上用K8s"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不能直接用这些现成框架，有没有更方便一点的办法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想假设如果边缘节点算力足够，是不是可以把频响控制全放边缘，完全不经过云，这样肯定最快？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "A方案稳一点但依赖网络，B方案快但边缘算力可能不够。要把国标调频响应死线和这两种方案的验证变量加到Notion里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以我准备选云边协同，边缘只做指令穿透。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是云端收到频差，算出功率缺口，再发给边缘分配？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "闭环是：云出策略包，边做秒级分配，端执行。那接口是不是就分三类：云边之间是策略下发和基线上报，边端之间是控制指令和状态采集，还有云端和调度之间的接口。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把KubeEdge从控制面方案里划掉，只在数据面保留。边缘控制面我得找找有没有现成的gRPC脚手架可以套。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

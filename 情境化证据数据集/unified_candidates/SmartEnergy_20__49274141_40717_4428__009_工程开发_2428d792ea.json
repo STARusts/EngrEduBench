@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧实现48路温控传感器100Hz高并发接入背景下，用户与导师围绕接入架构、数据格式与抗干扰重连/异步机制持续沟通（5轮），其中在协议与Topic聚合路由设计部分与边缘计算架构师沟通（3轮），在统一数据模型/结构化封装与Schema要素部分与系统集成工程师沟通（2轮），并梳理出MQTT分区Topic、JSON含时间戳与CRC及非阻塞接入的初步方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我直接写个多线程程序，每个传感器开一个Socket连接，把采集到的温度值拼成字符串发给网关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算架构师 这种高并发场景，确实得换个专业的架构。您看是用MQTT这种轻量级的协议，还是直接上Kafka这种大数据量的方案？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我给每个传感器都设一个独立的Topic，这样网关解析的时候就互不干扰了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接发原始浮点数，省流量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统集成工程师 既然原始数据不行，是不是得搞一套统一的数据模型？我看有些文档提到过边缘计算的标准协议，咱们这项目里能用上吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我回去把格式定成JSON，加上校验位，反正现在网关性能也还行，多这点解析开销应该没事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我还没细想，应该是等超时了再连吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就改成异步模式，让程序发完请求就去管下一个传感器，不等它回消息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在梳理一下：1. 接入层采用MQTT协议，按区域（如Pump_Zone, Server_Zone）划分Topic；2. 选用JSON格式封装数据，包含Timestamp、Sensor_ID、Value和CRC校验码；3. 接入逻辑改用非阻塞模式。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@系统集成工程师 那个Schema的范本您能发我参考一下吗？我怕自己定的格式跟后面算法分析的时候对不上。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在去查一下CRC16和CRC32的区别，顺便把异步回调的内存管理逻辑加进流程里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

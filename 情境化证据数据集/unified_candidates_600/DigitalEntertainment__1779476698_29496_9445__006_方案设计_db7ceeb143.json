@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在潮玩元数据上链设计背景下，用户与导师围绕元数据组织方式、合规边界与IPFS不可变更新策略持续沟通（5轮），其中在IPFS敏感数据合规风险部分与跨链合规分析师沟通（1轮），在分润规则与元数据链上结构设计部分与智能合约研发专家沟通（1轮），并最终形成链上存哈希与分润状态、IPFS存不可变溯源、合约映射负责更新指向的分层存储策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上大家都是JSON放IPFS，链上存CID。直接套ERC-721的标准改改应该就行吧？有没有更方便一点的办法，比如现成的模板？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算把潮玩所有生成参数、创作者信息都塞IPFS的JSON里，链上只存CID。这样链上数据少，是不是就符合数据最小化了？隐私啥的也不用管了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那敏感数据不放IPFS，链上元数据结构怎么设计？分润规则要链上执行，肯定得存链上吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规说IPFS不能放敏感信息，会全网广播。专家说分润是合约状态，元数据只管外观。所以我改成：IPFS存外观和生成参数原文，链上存CID和分润配置映射。这样行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "IPFS不能改吗？那怎么更新？有没有那种能动态指向的现成存储服务？我看网上有人用Arweave。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分三块吧。1. 核心分润配置和生成参数哈希存链上合约状态，保证执行和防伪。2. 生成参数原文和外观描述存IPFS的JSON，不可变。3. 如果要更新元数据，就在合约里把tokenURI指向新的CID。敏感信息都不放IPFS。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这个分层去画元数据结构的接口规划。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

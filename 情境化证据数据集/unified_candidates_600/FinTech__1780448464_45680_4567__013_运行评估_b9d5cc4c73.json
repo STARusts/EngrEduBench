@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度部署监控重构背景下，用户与导师围绕监控指标设计、采集轻量化方案及指标口径持续沟通（4轮），其中在轻量采集与长尾指标暴露部分与监控分析师沟通（2轮），并最终确定基于Prometheus Histogram的埋点方案与PromQL产出。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想重构这套采集链路，引入eBPF做内核态无侵入采集，拿到纳秒级网络栈耗时，再起个Flink集群实时计算订单流的公平特征分布，最后用ClickHouse存监控明细。这样监控数据还能复用给算法团队做模型迭代。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期我们最该盯哪几个指标？怎么采最轻量且不影响撮合主链路性能？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "公平排队偏移度这个指标，如果只看P99会不会掩盖长尾的极端不公平事件？我能不能在PromQL里加个分位数，比如P99.9？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放弃eBPF和Flink，改用撮合引擎埋点加Prometheus Histogram加Pushgateway。核心指标盯三个：意图判定P99和P99.9耗时、公平排队偏移度P99和P99.9、灰度组与对照组的拦截率差值。报警阈值对接灰度约束：意图判定P99偏移大于5微秒或拦截率下降超1%触发回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算单笔差值再求P99更准，能反映单笔订单的公平性损失。两个独立P99相减可能会抵消掉局部异常。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 埋点位置：OrderInterceptor.preHandle记录意图判定开始时间，FairQueueScheduler.enqueue记录入队预期时序和实际时序；2. 指标：intent_judge_duration_seconds用Histogram，queue_fairness_offset_seconds用Histogram，intercept_rate_diff用Gauge；3. PromQL：histogram_quantile括号0.99逗号rate intent_judge_duration_seconds_bucket左中括号1m右中括号，histogram_quantile括号0.99逗号rate queue_fairness_offset_seconds_bucket左中括号1m右中括号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

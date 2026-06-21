@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在教学脚本语言MVP方案设计背景下，用户与导师围绕脚本形态、Step最小字段、条件控制取舍、事件映射、分组语义与合规约束持续沟通（9轮），其中在课堂环节类型与条件刚需上与教学设计师沟通（2轮），在脚本可配置采集边界与审计要求上与数据治理官沟通（2轮），并形成JSON脚本骨架与可观测/合规约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先别搞太重的DSL，先用结构化JSON/YAML，编辑器也好做。MVP先覆盖课堂里最常见的 5-8 种步骤类型，比如讲解、投票、分组讨论、作业提交、展示。后面如果教师要写更复杂逻辑，再考虑更像“语言”的东西。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Step里我觉得至少要：id、type、title、duration（或超时）、resources（投放的素材）、tasks（学生要做的任务）。再加个条件字段，比如依赖前一步完成才激活。还有分组策略引用，比如 groupPolicyId。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加 scriptId、scriptVersion、stepKey（稳定标识，别用顺序号），还有 runId在运行态带上。事件payload里都要带 stepKey 和 stepType。约束上：stepKey在同一scriptVersion里唯一；脚本发布后不可改，只能出新版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先不碰太复杂的表达式，容易变成半个编程语言。MVP可以支持很有限的分支：基于事件计数的阈值，比如 SubmissionReceived计数达到N就放行；或者超时就走默认分支。更复杂的先让教师手动控制下一步。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 教学脚本如果先做成结构化配置，不做复杂表达式，你觉得最小必需支持哪些“环节类型”和“条件控制”？尤其是分支/循环到底是不是刚需？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“条件控制”如果要写进脚本，你会希望它长什么样？比如“50%完成就推进”这种，是不是要支持按角色/按组？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：脚本里的资源投放，你们更关心“投了什么”，还是“学生看没看到”？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定MVP：脚本语言用JSON结构。Step类型先做 7 类（导入讲解/测验投票/分组讨论/资料投放/产出提交/展示讲评/总结退出）。条件控制不做自由表达式，做固定结构：triggerType 只能是 TIMEOUT、QUORUM、TEACHER_APPROVE 三种；scope 先支持 CLASS、GROUP；QUORUM里只允许用“提交计数/完成组数”这种可从事件拿到的量。循环不做，临时加练走“运行中插入临时step”以后再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RunCreated：从scriptVersion创建run时发。\nStepActivated：step进入激活态发，payload带stepKey/stepType。\nTaskPublished：step里有tasks字段时，在step激活后发布任务触发。\nGroupingUpdated：step引用groupPolicy或明确要求分组时触发，比如分组讨论开始前。\nSubmissionReceived：学生提交任务就发，只记计数和任务/step维度，不存内容。\nStepCompleted：满足触发器（超时/完成度/教师裁决）就完成。\nRunEnded：总结退出step完成或教师终止。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一个 groupMode 字段？比如 REUSE、REBALANCE、RESET 三种。默认REUSE就不触发GroupingUpdated；REBALANCE/RESET才触发，而且payload里带 groupPolicyId 和 groupRevision。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 教学脚本语言里如果允许配置“采集/记录”开关，哪些字段可以让脚本决定，哪些必须平台固定禁止？我们现在事件里有actorRole、stepKey、任务提交计数这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脚本里如果想做“点名回答”，要不要记个人层面的参与？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "了解。我把“脚本可配置采集项”收敛到聚合层，不让脚本碰个人标识和原始内容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则我先写到脚本语言的校验层面：\n1）脚本不允许定义任何PII字段名，脚本schema里压根不出现 studentName/studentNo/deviceId/location/content 这类入口；\n2）可配置的记录项只有四个开关：recordStepDuration、recordTaskStatus、recordGroupId（运行时随机）、recordResourcePublished；\n3）提交事件只允许上报计数和时间戳，不含原始答案内容；\n4）必须记录审计动作：ScriptPublished、RunCreated、StepManualApproved 这类在事件里带 actorRole，actorId走内部脱敏ID。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "骨架我理解是三层：Script、Steps、Step内的Tasks/Controls。大概这样：\n- script: {scriptId, version, title, audience, steps[], policies{groupPolicies[]}}\n- step: {stepKey, type, title, resources[], tasks[], groupMode, groupPolicyId, controls{triggerType, scope, quorumValue, timeoutSec}}\n- task: {taskKey, kind, prompt, submitMode, allowResubmit}\n事件映射要求每个stepKey稳定，taskKey在step内唯一。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

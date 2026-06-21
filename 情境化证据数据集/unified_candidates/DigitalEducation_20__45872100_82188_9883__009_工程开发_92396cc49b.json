@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在学业诊断闭环平台的证据采集链路工程落地背景下，用户与导师围绕低预算下队列+存储选型、幂等/乱序/重试/死信/对账、压测验收指标与合规最小化持续沟通（6轮），其中在最小可用技术组合与落库分层部分与后端负责人沟通（6轮），并最终形成Redis Stream+MySQL分区+接入日志表+DLQ与压测验收的实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在一个点：预算很紧，队列+存储怎么搞才能既省钱又不丢数据？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在是想：HTTP接入后写队列，worker消费，落到证据表。就是怕消息重复、还有teacher端补交作业那种乱序。还有存储，我不知道是不是要上对象存储，感觉贵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "队列我倾向RabbitMQ或者Kafka。存储就MySQL先顶着？幂等我想用“请求id”，写一张去重表，写过就不再写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 证据采集这条链路，预算很紧。队列和落库你建议怎么选？我怕重复消息、乱序，还有失败重试怎么做最省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Redis Stream也能当队列？那消息丢了咋办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "乱序呢？比如离线采集，先到后到的都有。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "失败重试和死信要咋搞？我怕一直重试把队列塞满。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接入日志表会不会很大？成本也上去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload放哪？MySQL大字段我有点怕。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我懂一半。那我回去怎么跟导师说，最后选啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了后端负责人，偏“省钱能跑”的方案是用 Redis Stream 当队列，worker 消费落 MySQL 分区表。幂等用 event_id 唯一键（tenant_id+event_id），重复投递 upsert。乱序不强保，靠 occur_time 分析时排。失败的话：可重试的走指数退避，超过次数进 DLQ stream；不可重试直接 REJECTED 记原因。再加一张很瘦的接入日志表做追踪和对账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Redis我们现有集群就有，应该能用。延迟我觉得就是多一次写库，但也能接受吧。日志表我只存event_id这些，不存payload。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以写个压测脚本打接入API，先测不写日志表的QPS，再开日志表写入看掉多少。然后再测worker消费速度，看队列会不会堆。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接入接口 p99 延迟小于…200ms？然后队列堆积别一直涨，消费成功率 99%？我不太确定阈值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块还要补吗？我现在只想着把链路跑通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把错误码做枚举，不把异常堆栈全吐出来。最多存字段缺失这种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实现清单我这边是：  \n- 接入API：生成event_id，校验tenant强校验，写接入日志表一条RECEIVED，再写Redis Stream；  \n- worker：消费、落库upsert，成功就把日志表改为 STORED；失败按可重试/不可重试分流，重试超过次数写DLQ stream；  \n- 对账：定时扫RECEIVED但没STORED的补投；  \n- 压测：对比开关日志表前后p95，和端到端成功率、DLQ数量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

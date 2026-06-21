@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微态声振高频采集联调与50微秒时延预算背景下，与导师围绕采集框架选型、自研无锁队列实现与对照压测验证口径持续沟通（6轮），其中在底层驱动与无锁分发部分与嵌入式开发专家沟通DPDK旁路方案及脱敏要求（2轮），并最终放弃XStreamer，确定采用DPDK加自研无锁队列及单生产单消费对照压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了下，有个开源的XStreamer框架，自带环形缓冲和多路复用，直接拿来包一层采集接口应该很快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可从零写底层驱动太慢了，我看网上很多人说这框架改改配置就能抗高并发，有没有更方便一点的办法绕过去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "XStreamer这种框架是不是稍微调调参数也能用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DPDK和无锁队列，这俩是不是有现成的库可以直接调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征脱敏我加个过滤。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家建议用DPDK和无锁队列，有现成接口。我这就去调DPDK的包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看看文档应该能跑起来，大不了先跑个demo。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证，我就跑两遍看时延行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "写不出，不太懂内存屏障那些。我这两天先去把DPDK的rte_ring源码看一遍，手写一个单生产单消费的无锁队列跑测，把日志打出来分析。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃XStreamer，用DPDK加自研无锁队列。我先把rte_ring源码和内存屏障这块补完，跑通单生产单消费的对照压测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

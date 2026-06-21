@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边侧病斑模型选型背景下与导师围绕模型架构、漏检风险、数据合规及人工复核流程持续沟通（5轮），其中在精度提升部分与算法工程师沟通（1轮），在数据授权与漏检定责部分与政策合规审核员沟通（1轮），并形成YOLOv8-nano加蒸馏、低置信度转人工及仅用商用开源数据的选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上YOLOv8-nano，参数少推理快，肯定能卡在70%算力以内。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "罕见病害本来样本就少，漏几个也不能全怪模型吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用YOLOv8-nano，罕见病害的F1大概能有多少？有没有什么招能救一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得全用开源数据集凑合用得了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全用开源数据集，或者拿农户私有数据微调，这有风险吗？还有漏检导致绝收算谁的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "人工复核接口肯定得加，不然真出事了担不起。数据这块就用商用合规开源集，私有数据先不碰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就选YOLOv8-nano加知识蒸馏方案。置信度低于0.6的判定结果，不直接生成处方图，转人工复核。训练数据只用商用合规开源集，私有数据不用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘盒跑出结果，置信度低的打标成\"待复核\"，处方图对应区域标灰，不直接驱动农机施药。等农艺师确认了再补发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选型结论：模型架构选YOLOv8-nano，采用知识蒸馏提升精度；算力约束满足占用<70%；置信度阈值设为0.6，低于此值标记\"待复核\"转人工确认，防范漏检误伤风险；训练数据仅限商用合规开源集，禁止未授权私有数据微调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

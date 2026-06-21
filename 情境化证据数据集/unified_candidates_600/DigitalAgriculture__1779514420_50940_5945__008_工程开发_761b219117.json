@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在固碳农艺导配系统周转推演模型代码开发背景下，与导师围绕刚性ODE求解器选型、业务接口对接及模型验证口径与单元测试设计持续沟通（6轮），其中在求解器选型与步长处理部分与算法工程师沟通（1轮），在碳库分室与参数接口对接部分与生态建模师沟通（1轮），并最终确定BDF求解器、五库接口、验证口径及容灾降级与边界测试硬指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Python写嘛，求导用欧拉法，步长固定一天，这样实现起来最快。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "刚性确实容易出问题。我这就去查SciPy库里处理刚性的求解器，把BDF的文档过一遍，再拿个单库降解的例子跑通，确认不炸再往下推。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生态建模师给的碳氮微分方程，转代码求解器选哪个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "方程里的碳库分室和初始参数，代码里怎么接？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用BDF求解器，五库模型接口，步长自适应，参数从数据底座读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿真实地块数据跑一遍，看算出来的曲线跟实测值差多少呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就验证活性有机碳库的动态趋势？误差的话，RMSE小于15%？缺数据就用前一天的值顶着。单元测我再加个极寒温度的用例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "BDF求解器、五库接口、活性库RMSE<8%被动库<12%、容灾降级、温湿骤变和参数缺失的边界单元测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

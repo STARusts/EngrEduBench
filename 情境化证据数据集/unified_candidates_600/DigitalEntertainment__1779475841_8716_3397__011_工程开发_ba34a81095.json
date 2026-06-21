@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极限压测与异常熔断验证背景下与导师围绕压测拐点、熔断状态切换、探活机制与监控指标持续沟通（6轮），其中在压测方案与半开探活逻辑部分与测试与压测专家沟通（2轮），并最终敲定压测验收硬指标与监控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用压测工具狂发弹幕，看QPS能撑到多少，超了就触发熔断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就，就模拟报错呗，报错多了应该就熔断了。异常弹幕我随机造一点进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测和熔断验证方案，半开状态怎么验？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三档造数据。脚本我改改，控制流量条数应该能行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是熔断打开后，过一会放一点点流量试试，如果推理服务好了，就切回去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了Resilience4j的文档，里面说半开状态可以用配置的ring buffer size来放探活请求，比如配10，就放10个。我准备把探活窗口配成10，如果这10个请求都成功，就切Closed；有一个失败就继续Open。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Prometheus抓，配个Grafana大盘，专门看熔断状态和降级率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

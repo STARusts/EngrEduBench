@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在氢蚀反演与流场推演选型背景下，与导师围绕技术选型及安全落地约束持续沟通（4轮），其中在反演物理机制引入部分与管材物性分析师沟通（1轮），在实时流场推演架构部分与流场仿真工程师沟通（1轮），并形成基于PINN加非对称惩罚的反演方案与基于轻量代理模型加瞬变降级的流场推演方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时序数据嘛，反演我打算直接上LSTM，搞个多变量预测模型，丢进去跑呗。流场就更简单了，直接调流体仿真软件的API算一把，把压降和流速返回来就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "纯数据驱动不行啊，我之前都这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演这块怎么把物理边界绑进去？我不懂渗氢方程这套东西。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度要秒级响应，流体仿真软件接口太慢，实时流场推演怎么设计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反演这块不用LSTM，改用PINN，把物理方程塞进去约束着，脆裂阈值卡死。流场这块不上流体软件了，离线算好样本库，线上用轻量代理模型毫秒级出结果，算不准就降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反演最怕，怕数据质量差？降级触发，就是算的偏离样本库嘛。具体怎么设我还没想好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反演用PINN加非对称惩罚，流场用代理模型加5%瞬变降级线。这两条定死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

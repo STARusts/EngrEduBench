@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在生境图谱特征提取工程开发背景下，用户与导师围绕底层实现、内存连续访问及特征维度持续沟通（6轮），其中在底层算子与性能瓶颈部分与空间计算开发员沟通（1轮），在特征维度形态部分与图算法设计师沟通（1轮），并形成包含空间对齐、C++连续内存算子、三维时序张量及对照组验证的实现思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用Python调GDAL，把多源遥感波段读进来拼成特征矩阵，这应该最快吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生境图谱特征提取用Python调GDAL行不行，会不会慢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但内存连续这块，CUDA kernel启动开销具体怎么避免？我平时写Python多，C++这块不太熟。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去查CUDA Best Practices Guide里关于Coalesced Access的章节，写个小的PyTorch C++ extension demo跑通，然后把特征提取的Tensor构造改成连续内存分配方式。这样应该能直接用到项目里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就那些遥感波段值，NDVI、高程、坡度，拼一起就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "节点特征是不是把遥感波段拼起来就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白了，得把时间维度加上，做成三维张量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，多源遥感输入前必须统一空间参考和分辨率；第二，底层特征提取算子改用C++封装，保证内存连续，我马上补学Coalesced Access写demo验证；第三，特征维度从静态向量改成包含时间步长的三维张量[T, N, D]；第四，验证设计用对照组比较Python和C++算子的P99耗时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在异构机群位姿融合接口规范设计背景下，与导师围绕坐标系与时间戳统一及兼容性实时性取舍持续沟通（9轮），其中在带宽与标准兼容部分与通信协议专家沟通（1轮），在低延迟推演与硬同步部分与边缘计算架构师沟通（1轮），并最终确定双坐标双时间戳及超时降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按50Hz输入，统一转Protobuf。坐标系全用WGS84经纬度，时间用系统时间戳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构农机位姿上报，坐标系和时间戳怎么统一？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "协议专家说传经纬高边缘转，时间走NTP。能行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要省带宽后置转换，一个要前置转换保实时。这冲突了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "红线要低延迟，那得前置转换？但协议专家说的带宽和标准兼容怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就保实时，给推演直接供ENU坐标和PTP时间。原厂数据兼容呢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双发不浪费带宽吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PTP断了就全乱了。带两个时间戳？一个PTP，一个本地软时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就用上一帧插值。超时太久就触发精简势场保底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "500毫秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "双坐标，双时间戳，超时500ms插值接精简势场。这跟前面算法降级链路对上了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

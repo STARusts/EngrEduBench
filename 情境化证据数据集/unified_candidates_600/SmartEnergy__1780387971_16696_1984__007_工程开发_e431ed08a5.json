@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘微涌感知节点开发背景下，用户与导师围绕降采样与抗混叠设计、哈希后台化与RTOS调度及验证方案持续沟通（5轮），其中在中断延迟与滤波开销评估部分与边缘开发主管沟通（2轮），在信号带宽与抗混叠截止频率部分与控制理论工程师沟通（1轮），并最终确认硬件抗混叠降采样、RTOS优先级划分及对照验证设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块核心是高频采样和特征提取，我打算用双核异构，一核跑采集，一核跑轻量化推理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种架构下，中断响应延迟你们之前测过大概在什么量级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我知道算力是个瓶颈，所以准备把采样率从原设计的10kHz降到2kHz，用滑动窗口提取频调因子，算力能省一半。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暂定STM32H7系列。验证方面，我会在开发板上打桩，对比10kHz和2kHz下的微涌特征提取误差率，误差在5%以内就过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5%是经验值，工业上通常能接受。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "混叠风险确实是个坑，我本科做实验好像加个低通滤波就能防，但针对微涌这种非平稳信号，截止频率怎么算我没把握。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "散源并网引发的微涌波动，能量主要分布在哪个频段？需要知道带宽上限来设计抗混叠滤波。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果在ADC前加抗混叠滤波电路，节点MCU的RAM够不够跑滑动窗口和前序定下来的哈希脱敏？确权机制要求边侧做哈希映射。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "微涌本源是低频，高频是开关谐波，必须加硬件抗混叠。RAM够用，但哈希计算耗时不能放中断。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算把哈希计算从中断移到后台任务，中断里只做打时间戳和存原始值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对实时操作系统的任务调度和优先级反转机制掌握不深，以前基本裸机跑。现在中断和后台任务协同，我得补一下FreeRTOS的信号量与优先级继承协议。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚看野火的FreeRTOS手册，重点看互斥量防优先级反转，明天把哈希任务优先级设得比采样低但高于普通日志，跑通后把调度时序图更新到项目wiki里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证设计调整：对照组是全采样10kHz无滤波，实验组是降采样2kHz加抗混叠滤波。注入标准微涌信号源，观测指标是频调因子的提取时延和幅值误差。时延要求小于50ms，幅值误差如果混叠严重会大于10%，加了滤波应该能压到3%以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

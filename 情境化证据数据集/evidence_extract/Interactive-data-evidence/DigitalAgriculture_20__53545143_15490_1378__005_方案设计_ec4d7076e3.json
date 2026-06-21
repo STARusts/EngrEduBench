@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在两场猪场试点的畜禽行为健康联邦风控服务网方案设计背景下，用户与导师围绕多源感知接入架构的备选结构、SLA区间验收、断网降级、统一事件模型与接入边界持续沟通（7轮），其中在端边云分层与A/B/C分级及SLA区间、断网续传对齐部分与系统架构师沟通（4轮），在设备口径坑点、标定与quality_flag细分部分与物联网设备集成工程师沟通（2轮），并最终形成试点接入架构6条结论口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "试点就2个猪场，设备和网络都不统一，我想把接入层先定个能跑起来又不太贵的方案。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我有两套：\n1）“边缘网关为主”：摄像头、饮水计量、称重、环境传感都进网关，网关做时间对齐、去重、缓存，产出统一事件流再上云。好处是弱网扛得住，坏处是网关要适配很多协议。\n2）“设备直连云+轻网关兜底”：能直连的设备直接发云端，网关只管不能直连的和缓存转发。好处是改造少，坏处是现场网络抖会把延迟和缺失弄得很难看。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先给个粗口径，你帮我补：\n- 视频：我倾向只传结构化结果，不传原视频到云，原视频留场内。延迟可以放宽点，比如分钟级？缺失率也得低但不可能0。\n- 计量类：得秒级到十秒级，不然采食饮水异常会拖到很晚。\n- 环境：一分钟级采样就够。\n区间我没把握，主要怕我拍的太严现场过不了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 多源感知接入这块，端-边-云怎么分层比较稳？视频/计量/环境三类数据各自建议的延迟和缺失率区间怎么起步？还有断网续传的时间对齐要怎么做才不坑验收？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的A/B/C我能用。A类P95 5-30秒会不会太严？猪场那种4G路由经常飘。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那视频算法输出算B类，延迟到5分钟还能用？预警会不会太慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个合规点：C类原视频不出场，这样联邦学习怎么训？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 系统架构师给了个分级：A类（饮水/采食称重/体重/温湿氨）走强SLA，B类（视频算法输出的密度、躺卧、活动量）走弱SLA，C类原视频原音频默认不出场。起始区间建议：A类延迟P95 5–30秒、缺失率0.5%–3%；B类延迟P95 30秒–5分钟、缺失率2%–8%；C类不进主链路SLA，只验“可取证”。断网续传按事件时间和到达时间分开，网关授时+对齐窗口（A类2–5秒，B类10–30秒）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想折中成“网关主、分批适配”：  \n- A类全部强制先进网关，统一时间戳、缓存、去重再上云，这样延迟缺失能控；  \n- B类允许两路：能在摄像头侧直接产结构化就直上云，不行的走网关；  \n- C类只留本地NAS或摄像头存储，不上云。  \n控复杂度靠“只适配两家主流设备协议+其余走通用采集”。但我不确定通用采集能覆盖到啥程度。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "协议我倾向这样分：\n- 摄像头：如果是国标就GB28181拉流，但只在边缘做算法，云只收结构化；私有SDK先不碰。  \n- 计量和环境：优先MQTT/HTTP推送，老设备走RS485/Modbus进网关。  \n质量规则：缺失就是按设备心跳+数据点间隔算；乱序按事件时间倒退；时间漂移看设备时间和网关时间差超过阈值就标红。阈值我先按A类2秒、B类30秒。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小事件模型我先拍个小的：\n- 必填：farm_id、barn_id、device_id、event_type、event_time、ingest_time、value、unit、quality_flag  \n- 可选：animal_group（栏位群）、confidence（给B类）、raw_ref（本地取证引用）  \nevent_type就先覆盖试点那3个事件相关的指标，比如饮水量、采食量、环境温湿氨、活动量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我加：schema_version、source_vendor、calibration_id。标定这块我不太熟，可能得设备集成那边给口径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网设备集成工程师 两场猪场试点里，饮水计量、称重、环境传感接入最常踩的坑有哪些？尤其是饮水“脉冲/累计量”、称重“瞬时/均值”、还有标定最简流程，怎么设计到接入规范里才不翻车？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "饮水累计量回零这个点我之前没想到。那quality_flag里也要体现“计数器回跳/回零”这类异常。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 设备集成那边补了口径坑：饮水有脉冲计数和累计量两套，累计量会断电回零或回跳，需要reset/wrap标记；料塔称重瞬时抖动，接入层建议输出窗口均值/中位数+窗口时长；过道体重会重复计数要按时间窗口去重；环境传感要写安装与月度抽检。quality_flag建议细分missing、late、out_of_order、counter_reset、drift_suspect、duplicate。标定流程最简三步：登记-一次性系数-现场抽检记录，用calibration_id挂上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备写成两条硬边界：\n- 试点A类数据只接“能输出标准口径”的设备：MQTT/HTTP/Modbus这三种方式之一，或者通过我们网关适配的两家主流厂商；私有SDK/私有云平台先不接入A类，只能进B类或先做设备健康监测。  \n- 摄像头只收结构化结果，且结构化输出接口统一成HTTP/MQTT之一；原视频不上云。  \n然后给一个回旋：如果场方坚持用私有协议，进入范围变更评审，可能影响M0排期。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我按6条写口头版：  \n1）数据分A/B/C三级：A类计量与环境强相关数据进主链路；B类是视频算法结构化结果；C类原视频原音频默认不出场只做本地取证。  \n2）数据流：设备→边缘网关（规范化、缓存、授时、去重）→云端事件总线/存储→风控与联邦训练编排；B类可在满足接口规范时直上云，A类必须过网关。  \n3）SLA起始区间：A类延迟P95 5–30秒、缺失率0.5%–3%；B类延迟P95 30秒–5分钟、缺失率2%–8%；C类不进主链路SLA。  \n4）统一最小事件模型：farm_id、barn_id、device_id、event_type、event_time、ingest_time、value、unit、quality_flag，加schema_version、source_vendor、calibration_id，B类可带confidence，C类用raw_ref做本地引用。  \n5）质量与断网：quality_flag细分missing/late/out_of_order/counter_reset/drift_suspect/duplicate；断网续传区分事件时间与到达时间，网关授时，同步对齐窗口A类2–5秒、B类10–30秒。  \n6）接入边界：试点A类只接标准协议（MQTT/HTTP/Modbus）或两家已适配厂商；私有协议默认不进A类，若强接走范围变更评审；摄像头只出结构化结果，上云不传原视频。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

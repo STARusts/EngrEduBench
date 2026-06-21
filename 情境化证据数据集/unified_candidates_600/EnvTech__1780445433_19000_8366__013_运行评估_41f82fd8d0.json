@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估感知推演链路监控指标设计背景下，用户与导师围绕从系统级监控转向业务链路监控、关注业务阻塞与长期资源消耗趋势持续沟通（4轮），其中在业务阻塞指标部分与运维监控工程师沟通（2轮），在推演落盘量与长期存储部分与算法工程师沟通（1轮），并最终形成包含推演延迟、Kafka积压深度、反演存储增速与收敛步数的监控方案及大盘三区划分。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接上Prometheus加Grafana，用Node Exporter把CPU、内存拉出来画线，内存超85%就发告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演链路这种业务阻塞，一般看啥指标？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "队列积压深度，这得在每个算子代码里埋点吧？有点麻烦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Kafka Lag好办，有现成的exporter。行，那我加上推演延迟和Kafka积压深度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演中间结果会占多少地方？你们推演模块跑一轮落盘量大不大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就加这三个业务指标：推演延迟、Kafka积压深度、反演存储增速。收敛步数放Grafana上当参考线看看。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "收敛步数算推演健康区的关键项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在去改采集配置和Grafana面板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

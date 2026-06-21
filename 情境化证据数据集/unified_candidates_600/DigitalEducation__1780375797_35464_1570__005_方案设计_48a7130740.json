@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异地师生实操孪生体方案设计背景下，用户与导师围绕低延迟、高可用及防超卖兜底策略持续沟通（7轮），其中在延迟红线与降级策略部分与高可用与安全设计师沟通（1轮），在AP模式防超卖部分与高可用与安全设计师沟通（1轮），并最终确定延迟红线、降级策略及柔性预留防超卖方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多部署几个节点呗，异地多活。延迟大就加缓存，反正机器够多总能顶住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指令那就走UDP，快。冲突的话，谁先抢到算谁的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异地实操到底能忍多少延迟？机房挂了怎么降级？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超卖，加个分布式锁呗，谁拿到锁谁用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说选AP模式，导师说会脑裂超卖，加锁又太慢，这矛盾怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "本地扣减快，不用等跨区网络，所以延迟低。异步确认就算失败，大不了把资源退回去重新调度，虽然可能有一瞬间多分了，但系统没卡死，最终也能改过来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "延迟这块，指令通道50毫秒内用QUIC，状态通道500毫秒用TCP。高可用选AP模式，脑裂或宕机直接降级成只读录播。防超卖不用锁，用柔性预留加异步补偿，允许短暂不一致但保低延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

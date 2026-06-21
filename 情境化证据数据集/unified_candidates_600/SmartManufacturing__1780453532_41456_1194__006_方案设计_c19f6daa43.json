@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在制令防篡流转与边缘算力约束背景下，用户与导师围绕防篡方案选型、算力挤占、批次回滚与插单冲突及混搭模式持续沟通（7轮），其中在轻量防篡路线与批次内防篡机制部分与可信存证师沟通（2轮），最终形成基于优先级分流的双轨制防篡设计定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用联盟链吧，PBFT共识，节点少，比公链快。或者用Hyperledger Fabric，支持通道隔离，制令下发走专有通道。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力跑不了重链，有没有低成本防篡方案？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "M-DAG批量存证不用TPM，打包上链延迟高。可是排产指令如果被改了，批次内不就全废了？TEE能单条验证。但网关算力不够的话，TEE会不会也吃资源？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "批次内用M-DAG，怎么保证单条制令不被改？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得M-DAG方案好，本地哈希链不吃算力，就是费点内存存哈希，比TEE那种单条上链省网络开销。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "排产算法支持动态插单，如果整批回滚，插单的指令也一起滚了？这好像不行，插单是紧急维保，不能随便回滚。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混搭可以。紧急走TEE，常规走M-DAG。不过这要在排产算法输出那加个分流逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "制令可信流转采用双轨制：常规散需制令用M-DAG批次存证，本地哈希链防串改，根哈希上链；紧急插单制令用TEE单条哈希锚定，保证实时不可回滚。分流依据是排产算法的优先级标签。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

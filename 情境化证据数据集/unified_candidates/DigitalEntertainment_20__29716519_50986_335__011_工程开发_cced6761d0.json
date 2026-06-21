@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动剧集编排平台的灰度发布与分钟级回滚落地背景下，用户与导师围绕发布指针服务、接口/数据结构、端侧会话绑定与控制台联动持续沟通（7轮），其中在规则计算与缓存回滚一致性、强弱绑定门禁与降级上与后端工程负责人沟通（4轮），在最小测试矩阵与文案触发条件上与测试负责人沟通（2轮），并收束为9条可执行开发联调口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我会先把“灰度对象”和“可回滚粒度”拆开：灰度对象按端、渠道、用户分桶；回滚粒度我倾向按 episodeId+编排版本（commitId）一键切回上个稳定版本。实现上需要一个“发布指针”服务：给播放端返回当前生效的编排 commitId + pack 版本号，并且跟产线的 manifest 校验一致。回滚就是把指针从 new commitId 退回 prev commitId，同时要求端侧拿到的指针和 CDN 的包都是同一套 commit。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口我想两类：  \n- Query：`GET /release/resolve?episodeId&deviceId&uid&appVer&platform` 返回 `releaseId, orchestrateCommitId, packCommitId, manifestUri, ttlSec, reason`。reason 是命中规则说明。  \n- Control：给控制台用的 `POST /release/switch`，参数 `episodeId, targetReleaseId, action(rollout/rollback), operator, comment`。  \n数据结构：Release 记录里要有 `episodeId、orchestrateCommitId、packCommitId、state、createdAt`；灰度规则单独表 `ruleId、releaseId、predicate(json)、traffic(0-100)、priority`。  \n边界：resolve 必须校验 packCommitId==orchestrateCommitId，不一致就返回失败并带上 commitMismatch，让端/控制台都能看到。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我理解要允许两种模式：  \n- 强绑定模式：orchestrateCommitId 和 packCommitId 必须相等，主要用于需要严格一致的互动切支；  \n- 弱绑定模式：允许 orchestrateCommitId 指向新编排，但 packCommitId 还是旧包，仅当编排只改分支逻辑不新增媒体资源。  \n但弱绑定风险大，容易出现编排引用新 mediaUri。我们可以在产线门禁里限制“编排引用的 mediaUri tag”必须能在 pack 的 manifest 找到；如果找不到直接禁止走弱绑定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程负责人 我们在做互动剧集多端互动分支编排平台的灰度发布与回滚。想确认三点：1）resolve 接口你建议的字段和错误码；2）灰度分桶/规则计算怎么实现（缓存、优先级）；3）回滚时如何处理客户端/CDN 缓存，保证分钟级生效。另外我们在讨论“编排与媒体包强绑定 vs 弱绑定”，后端侧是否支持两种发布模式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "弱绑定的门禁这块，你们是打算在 resolve 时查 manifest 还是发布时查？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚审计怎么做？我们要能追溯是谁点的回滚、回滚到哪个 release。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个细节：如果控制台误配导致 commitMismatch，resolve 是返回 5xx 还是给默认稳定版本？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把接口草案按这个字段对齐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我跟后端对齐完了，我倾向这样落地：默认强绑定；弱绑定只给“纯逻辑改动”的场景，且发布时做 tag 覆盖校验，不在 resolve 里做 IO。resolve 响应带 ETag + 短 TTL，回滚通过切 activeReleaseId 并 bump version 保证 60s 内生效；配置错（commitMismatch）时自动 fallback 到 stable release，同时在 debugHint 里提示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧我建议“会话绑定”：在一次播放会话里，首次 resolve 得到的 `releaseId` 固定到本次 session，后续分支决策都用同一个 release。TTL 只影响下次进剧或下次起播，不影响本次会话。回滚紧急场景，端如果已经在坏版本会话里，只能靠“下次进入”生效；要更激进就需要服务端推送踢下线，但这超出我们这期。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会给控制台约定三类展示信息：  \n- 发布状态：active/stable/canary/disabled，带 from->to 的切换记录；  \n- 风险提示：commitMismatch_fallback、assetMissing（弱绑定被拒）、ruleEvalError；  \n- 影响面：当前 traffic%、命中用户数估算（用 hash 桶范围估算，不做实时统计）。  \n控制台的文案例子：`版本不一致：已自动回退到稳定版本 releaseId=xxx`；`弱绑定校验失败：编排引用素材 tag=xxx 不在 manifest`。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 我们在做灰度发布与回滚机制，核心点是：resolve 短 TTL + ETag；回滚切 activeReleaseId 并 bump version；播放会话内 releaseId 固定不漂移；配置错 commitMismatch 会 fallback 到 stable 并给 debugHint。你帮我列一下最小 E2E/接口测试矩阵，尤其覆盖：缓存导致回滚不生效、会话绑定下的版本一致性、弱绑定 assetMissing 拦截、以及控制台文案触发条件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "发布拒绝 ruleEvalError 这点我赞同，避免线上 resolve 才爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "端到端第 6 条我有点担心：如果坏版本导致黑屏，用户不退出就没法恢复。我们需要至少给运营一个“强制重进”的按钮吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试矩阵我拿回来了：接口层覆盖命中稳定性、TTL/ETag、commitMismatch fallback、弱绑定 assetMissing、ruleEvalError 发布拒绝；端到端覆盖会话绑定下回滚、manifestUrl 含 commitId 避免缓存污染、控制台三类文案。边界上，回滚对“已进入坏会话的用户”不强制生效，需要用户退出重进；要不要做强制重进会牵涉端协议和产品提示。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边收束成 9 条：  \n1）resolve 接口统一返回 `releaseId/orchestrateCommitId/packCommitId/manifestUrl/expireAt/ETag/debugHint/policy(bindingMode)`，TTL 30-60s。  \n2）分桶：稳定 hash(uid|deviceId|episodeId|salt)->0-9999，按万分比 traffic 命中；priority 从高到低匹配 predicate。  \n3）强绑定默认开启；弱绑定需显式开关，仅允许编排不引入新素材的场景。  \n4）弱绑定发布门禁：编排引用的 mediaUri tag 必须在 pack manifest 中可解析，否则发布拒绝并返回 `assetMissing`。  \n5）commitMismatch（发布记录内编排/包不一致）不允许 active；若误配进入 resolve，必须 fallback 到上一个 stable，并标记 `commitMismatch_fallback`。  \n6）回滚：控制台 switch 切 activeReleaseId 并 bump version；客户端通过 ETag/TTL 最多 60s 生效。  \n7）端侧会话绑定：一次播放会话内 releaseId 固定，TTL 到期不触发会话内漂移；回滚仅影响新会话。  \n8）控制台展示：状态+切换记录+审计字段（operator/from/to/requestId）+人话提示（版本不一致自动回退、弱绑定校验失败、回滚成功）。  \n9）验收：按测试矩阵 A1-5、B6-8 通过；特别看 304 与 version bump 的行为、回滚后 manifestUrl 是否变化且不被缓存污染。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

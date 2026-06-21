@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在微交互上报链路异常追踪背景下，与导师围绕链路根因定位、修复优先级取舍、数据质量合规风险及合并逻辑依据持续沟通（8轮），其中在端侧埋点截断部分与前端交互埋点开发沟通（1轮），在服务端反压断链部分与流式交互系统设计师沟通（1轮），在合并时间窗认知依据部分与教育心理学分析师沟通（1轮），并形成服务端放宽反压阈值与端侧增加200ms合并窗口的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拉了报错日志，HTTP 5xx挺多，看着像网关扛不住拒了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "拆链路我只会看traceId，要是端上没打全我就抓瞎了，根本串不起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "学端SDK是不是有数据没发出来？监控显示涂改事件丢了一块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "服务端这边呢？是不是接收流也出了问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两边都有坑。安卓机本地丢了，服务端还把连接断了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先调服务端反压阈值吧，改配置重拉一下就行。端侧改代码还要提审发版，太慢了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，诊断算错了就乱导学了，还得被投诉。那端侧必须修。我让端侧把短时间内的涂改事件合并成一个再上报，降频。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这个我不懂怎么定时间窗。涂改事件合并的话，多长时间内的操作算同一次认知犹豫？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "200ms，行。那服务端反压阈值先放宽一倍顶着，端侧加200ms合并窗口逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查下监控面板，现在流式节点CPU才用了40%，放宽一倍应该没事，大不了再降回来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

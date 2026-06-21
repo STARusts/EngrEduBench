@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路压测高光延迟超标背景下与导师围绕链路瓶颈定位、预处理优化与抗性误判风险权衡持续沟通（9轮），其中在延迟与阻塞定位部分与测试工程师沟通（3轮），在机电耗时排查部分与机电控制工程师沟通（1轮），在预处理耗时与加速部分与边缘计算工程师沟通（2轮），并确定NEON重写均衡化、不截断图像及perfetto验证的优化策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "肯定是算法那边慢了，高光嘛，识别不出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们机电没问题吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近看了个trace工具，叫perfetto，能看时间线。我打算用这个画一下，看看是哪块卡了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是算力不够。调的话，就，就砍点模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是你那边图像预处理卡了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重写算子太慢了。跳过的话，识别会瞎。那，那就还是重写吧，不重写过不了压测。我让边缘那边用查表法加速试试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加截断就行吧，截断一点像素不影响大局。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那，那就不能随便截断。这有点麻烦。所以还是得保证预处理不卡，又不能截断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用NEON指令重写均衡化？我之前看资料说这个能加速，我这就去让边缘工程师试试这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 预处理用NEON重写压到30ms；2. 不准截断图像防误判；3. 用perfetto抓时间线验证加速效果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

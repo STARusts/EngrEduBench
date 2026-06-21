@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "交通物流",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在设计“瞬复织网”物流网络中断预警与自适应恢复平台的分布式架构背景下，用户与导师围绕事件推送、节点失效处理与数据隔离持续沟通（7轮），其中在消息模型选型上与首席架构师沟通（1轮）、在零信任落地与服务网格鉴权上与安全专家沟通（1轮），并形成以Kafka事件总线+Sidecar鉴权隔离+审计链记录为初步方向并安排Istio资源评估任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着就用微服务那种，把预警做一个服务，恢复做一个服务。中间连个数据库，数据存进去，另一个服务去取就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@首席架构师 老师让我问问，咱们这个项目是用发布订阅还是队列好？节点要是断了，消息怎么保证不丢？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，听起来方案A挺厉害的，那就选A吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "您说得对，混合一下可能更好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算在网关层做统一鉴权，而且给每个承运商分配独立的Topic。所有决策过程都会记在不可篡改的日志库里，就算以后出审计，咱们也能拿出这三年的记录，保证流程是干净的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全专家 刚才导师说Topic太多不行。我想问问零信任怎么搞？既不让数据乱跑，速度还得快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那就用这个Sidecar。@导师 专家说把鉴权放到基础设施层，用Header传令牌，这样就快了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查Istio的文档，把内存占多少记下来，下次给您看。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

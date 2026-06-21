@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端并发压测与修调背景下与导师围绕数据管线背压机制与图锁降级方案持续沟通（5轮），其中在瓶颈定位与压测验证分组部分与质量守门员沟通（2轮），并最终形成基于Reactor背压替换固定限流及读写锁降级的修调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接拿JMeter压测插件加压，看哪里响应慢，就给对应接口加个线程池，或者把JVM堆内存调大点应该能顶住吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前500并发OOM和图锁阻塞，具体卡在哪些代码段？有没有现成的压测报告或者修调工具能直接套一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "背压限流我之前用过Resilience4j的RateLimiter，直接在消费端方法上加个注解是不是就能挡住？锁的话，我改成ReentrantReadWriteLock试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "响应式流我就用过WebFlux写接口，底层背压细节没深究。我去翻翻Project Reactor的文档，看有没有现成的配置能套过来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "咱们数据管线如果改成WebFlux接收，用limitRate控制Kafka消费端拉取的prefetch量，下游图推理处理不过来就暂停拉取，这样内存就不会堆积了。比硬限流好，不会把突发的正常请求给拒掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我确实没想过。就看压测时写冲突的频率高不高，如果不高读写锁就够用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按这个方向改，用limitRate替换Resilience4j，锁换成读写锁，跑压测的时候重点盯热点节点那组数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

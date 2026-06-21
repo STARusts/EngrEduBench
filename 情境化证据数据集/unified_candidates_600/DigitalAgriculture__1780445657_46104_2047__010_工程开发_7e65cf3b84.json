@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘算力性能优化背景下，用户与导师围绕流场推演模型轻量化与精度校准持续沟通（8轮），其中在模型轻量化方式部分与流体仿真工程师沟通（2轮），在网关资源瓶颈部分与边缘网关设计师沟通（1轮），并最终形成INT8量化与算子融合、KL散度校准及误差与内存硬限的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算剪枝，把参数砍一半应该就快了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流场推演模型太大了，剪枝能不能砍掉一半参数？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没细评，反正精度掉一点应该没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关资源具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用INT8量化和算子融合，网关只支持INT8加速，内存限256MB。我就按这个方向改代码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把这个机制加上，误差应该就能卡住了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "校准集就用上次风洞测试抓的那批真实风场数据。阈值，就设5%吧，超了就回退。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就强制INT8，校准集用风洞数据，误差阈值卡在5%，如果超了就调校准算法重跑，绝对不回退。内存严格压在256MB以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

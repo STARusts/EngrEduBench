@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在系统上线前的K8s运行评估背景下，用户与导师围绕Pod频繁重启与YAML硬编码/资源配额缺失的标准化部署整改持续沟通（3轮），其中在资源限额压测验证与Helm Chart重构解耦部分与SRE运维工程师沟通（2轮），并整理Helm模块与参数清单以对接CI/CD和自动化测试。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了一下目前的K8s部署记录，发现很多Pod都在频繁重启，而且部署文件里全都是硬编码的内网IP，这套旧的配置文档根本没法直接用在生产环境。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了一下，最麻烦的是资源配额完全没写。有的节点CPU占用率突然飙升到90%以上，系统也没自动扩容。我想着先把镜像版本号固定下来，不再用latest标签，然后把所有的数据库连接都封装到ConfigMap里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 老师让我过来问问系统部署标准化的事情。现在的时频共振系统在运行中经常出现Pod重启，我怀疑是内存限额设置不当导致的。我想通过实验找出最佳的Resource Limit值，比如在预发环境设置2Gi和4Gi两个对比组，看看在高并发瞬时流量下，哪组的系统响应更稳。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没考虑到宿主机背景流量的噪声问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那专家你的意思是，除了要做这种对比验证，在部署结构上我也得大改吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "刚才专家说的那些统计方法，比如置信区间和假设检验，我听得有点懵。我发现自己在评估系统运行有效性时，完全不知道该怎么定量分析这些监控指标，这直接导致我之前给出的扩容建议全是凭感觉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算这周末找几本关于A/B测试和SRE性能分析的书补一补，争取在下周联调前，能自己推导出具有统计意义的资源阈值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算按照专家的建议，先把那套乱七八糟的YAML重构成Helm Chart结构。我会定义三个核心模块：一个是Global全局配置，处理镜像仓库地址；一个是Service资源配置，把CPU和内存的Request/Limit固定下来；还有一个是业务层配置，专门管算法模型的共振频率阈值。这样以后换环境部署，我只要改一套values文件就行，不用到处翻代码找IP了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去列清单。目前初步定的参数结构包括：模板目录Templates、依赖声明requirements、以及最重要的values字段。values里我会细化出计算节点、数据节点的不同资源水位，还有针对不同规模客户的规模化配置模板。配置好之后，我先在测试集群跑一次自动化分发测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

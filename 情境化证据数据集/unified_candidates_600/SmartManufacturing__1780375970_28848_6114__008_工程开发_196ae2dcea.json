@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在缺陷点云反演算法工程化背景下，用户与导师围绕反卷积算子数值稳定性、工程级验证标准及底层优化能力缺口持续沟通（6轮），其中在验证口径与失败复现机制部分与修复轨迹算法工程师沟通（1轮），并最终明确工程化指标与异常回退机制，计划补充数值优化知识并搭建代码框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按照开发规范，把Python脚本转成C++工程模块，接入PCL库处理点云，编译跑通就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在测试集上跑一遍，跟原脚本结果对一下，差不多就行。NaN的话加个判断跳过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反卷积算子的验证标准和失败复现具体要怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要跟Python原型对比，误差2%以内。还得用坏数据测发散，耗时和内存也要卡。发散了要抛异常回退。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太懂。以前都是直接调库，底层怎么写没碰过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚搜几篇C++矩阵求逆和正则化的博客看一眼，然后在代码里加个try-catch把发散的日志打出来，看看具体在哪步炸的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

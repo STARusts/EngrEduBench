@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估同频干扰与吞吐监控背景下与导师围绕C/I底噪异常、吞吐未降原因、寻优算法失效及临时止损方案持续沟通（8轮），其中在数据拉取与统计口径确认部分与遥测监控分析师沟通（5轮），并形成重启反演微服务与边缘波束降权的临时止损策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板我搭好了，Grafana拉的数据，C/I和吞吐曲线都有。不过肉眼看不出啥，波动挺大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我拉一下最近6小时的C/I底噪和吞吐汇总？我这边看板曲线有点乱，想看聚合数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "2.5dB挺多了啊，怎么吞吐没掉？是不是我取数接口写错了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果是算法调走了，那跳波束频次肯定变高。我查一下跳频指令计数器。跳波束的时序指令下发频率最近6小时有突增吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没介入？那底噪抬升为什么没影响吞吐？难道是干扰只抬了底噪没影响信噪比？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吞吐统计口径是啥？全星汇总还是按波束？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来是边缘波束扛了伤害。那这2.5dB底噪主要就在边缘波束？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "手动跳走太慢了，而且我根本不知道往哪跳。得让寻优算法动起来啊。为什么没介入？寻优算法的触发阈值是多少？现在C/I到了没？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算法挂了？！内存溢出？星上内存那么紧张，反演模块吃多少内存？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重启微服务只能管一会，内存还是会被吃满。得限制矩阵大小。但我不会改算法逻辑。能不能先加个监控报警，内存超80%就重启反演模块，先把服务保住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我把刚才边缘波束C/I跌到8dB前后的遥测包导一份给我，我要跑T检验。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "3次/小时，这就很麻烦了。如果反演模块内存泄漏快，根本撑不住。这得找核心算法工程师改内存分配，我只会写脚本验证，改不了C++代码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘波束降权的话，我需要在监控看板加个告警规则，C/I低于10dB直接标红，然后手动注飞降权指令。先这么顶着吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

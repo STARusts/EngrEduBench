@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在沙箱切分与调度流设计背景下与导师围绕跨域异构调度、GPU切分、降级策略与接口规范持续沟通（5轮），其中在启发式调度与GPU切分部分与调度策略工程师沟通（1轮），在学程时空映射与同班同域约束部分与教育业务架构师沟通（1轮），并形成双阶段调度流与降级链路决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨域的话，我就给不同域打上拓扑域标签，用podTopologySpread过滤一下。切分就是按CPU和内存limit配额。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GPU切分我听说可以用多实例MIG，但配置挺麻烦的。预留算力这块，原生调度确实没有，我也没写过自定义调度器。这块有点没思路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域异构环境里，怎么根据学程需求做启发式调度？特别是预留算力和GPU细粒度切分这块，K8s原生搞不定，自定义调度器一般怎么写？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "学程时空映射模型具体是什么？调度那边说要加时间窗约束，这约束怎么来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调度那边说用scheduler framework写扩展，分两步走：先跨域匹配再微观切分。业务这边说输入是排课表，还有个“同班同域”的约束，要把同一个班的沙箱放一起。我理解就是得写个自定义调度器了，原生调度全废。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同域放不下，那就按学生拆分，散到其他域呗，就是延迟差点。接口的话，我这边定个JSON格式，把课表转成沙箱需求列表推过去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去查下scheduler framework的PreFilter接口怎么写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

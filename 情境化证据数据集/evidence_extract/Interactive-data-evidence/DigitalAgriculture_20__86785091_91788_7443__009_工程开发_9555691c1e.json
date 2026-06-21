@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核验引擎实现联调、需将采集事件稳定产出可计费核验结果并打通幂等链路的背景下，用户与导师围绕接口对齐、segment聚合切段、幂等键与联调验收持续沟通（8轮），其中在核验输入/输出结构、乱序与gap处理及证据引用合规部分与核验规则工程师沟通（5轮），并形成联调口径与三组回放验收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这边主要卡在联调的时候返回不稳定。有时核验结果一片空，有时同一批事件算出来的面积不一样。我就想是不是能直接把核验引擎当黑盒，用个现成的回放工具把数据灌进去看输出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用的就是 Kafka 那条 topic，消费后攒一段时间窗口再调核验服务的 API。幂等键我就传 event_id，感觉够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@核验规则工程师 你们核验引擎接口到底希望我怎么传？我现在是按窗口攒事件，然后只带 event_id 调你们 API。还有就是乱序、gap 你们这边怎么处理的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "segment_id 是你们生成还是我们生成？我现在没有很正式的段 ID，就是窗口时间戳拼一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输出呢？我现在拿到的就是一个 total_area，还有一堆规则命中列表，看着挺乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说不要塞原始坐标，但我们做 debug 不是得看点吗？不然我都不知道哪段算错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "乱序和 gap 的影响呢？我这边窗口 600s 内的 out_of_order 会标出来，但核验面积有时候会跳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解了。那我回去是不是就要把事件先按 task 聚成 segment，再给你们？我现在直接把点扔过去，可能你们内部又聚一次，就重复了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。我先按 5k 点切。证据引用我可能先只做 time_range，不走坐标查询。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要是我现在传得太散了，得先聚成 segment。segment_id 不能用当前时间，要可复现，最好用 first_event_id 到 last_event_id 做 hash。输出我盯 summary + evidence_refs 就够了，然后带上 rule_version 和 input_hash，方便对账。gap 还要看 gap_ratio，超过 5% 可能就 degraded，需要复核。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "聚合键就 tenant_id + task_id + machine_id。切段我想用 600s 窗口，再加 points 超 5000 就切。然后 segment_id 用 hash(tenant_id, task_id, machine_id, first_event_id, last_event_id)。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "seq 连续性我有，但我没太想用它切段，我怕设备 seq 会乱跳。窗口感觉省事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能做。我就按 ts 排序再扫一遍断段。seq 不靠谱就不强依赖。只是我得写个聚合器，可能得加内存缓存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用 segment_id 作为核验请求的 idempotency_key，然后核验输出里存 input_hash + rule_version。结算那边按 tenant_id + task_id + segment_id 去 upsert，重复就不重复计费。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "hash 我用 sha256 全量，存 64 位会不会太长……我可以存前 16 字节。规则版本这块我不太确定，能不能就不重算，等新任务才用新版本？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我把 key 拼上 rule_version。那 input_hash 还是保留，用来排查“同 key 不同输入”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算拿一段固定的采集数据，做三组回放：  \n1）原始顺序喂进去，得到核验 summary；  \n2）把其中 10% 点打乱顺序但 ts 不变，再喂，summary 应该一致；  \n3）删掉一段连续 2 分钟的点，gap_ratio 应该上去，area_mode 变成 interpolated 或 degraded，confidence 下降。  \n我用你们要求的 input_hash 来对比 1）和 2）是不是一致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这块可能一开始会 print 一些点，方便看。那我改成只打 segment_id、points_count、ts_range、还有 out_of_order_count。真要看坐标就走开关，按 tenant。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "segment_meta 我能传。evidence_refs 我先只做 time_range+摘要，不碰坐标。input_hash 我就按 points 排序后的序列算，保证乱序也一样。规则版本我从响应里拿，存到结算记录里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

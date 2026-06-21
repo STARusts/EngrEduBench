@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在声光渲染接口规范制定背景下，用户与导师围绕接口降级兼容、协议转换位置及验证实验设计持续沟通（6轮），其中在流式指令下发与降级状态切换约束部分与实时渲染引擎工程师沟通（1轮），在架构侧降级切换与对照实验设计部分与分布式系统架构师沟通（1轮），并最终确定云端下推JSON、边缘转换与快照封装、终端Protobuf解析的接口规范及双变量验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备把AI生成的声光指令和终端渲染的参数对应起来，定义好字段类型和结构就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个状态码标识一下？流式的话，推拉都行吧，我看别人都用WebSocket，我们也用这个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流式指令下发和降级状态切换有什么约束？协议扩展性和时序要求怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两位专家说核心用Protobuf，降级用JSON，还要加序列号防撕裂。降级切换时要支持全量快照包。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们可以设计两组实验，一组Protobuf一组JSON，变量就是丢包率，分别设5%和10%，看渲染延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力差异确实没控，我再补上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "转换位置，放云端吧，终端省事点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "放边缘节点确实更合理，云端过载时不会雪上加霜。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "实验方案我也把机型分档加进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

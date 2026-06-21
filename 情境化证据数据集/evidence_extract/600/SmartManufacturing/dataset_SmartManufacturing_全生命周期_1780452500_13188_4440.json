@@ -1,0 +1,532 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在散单柔性加工系统需求定义背景下，与导师围绕数据采集边界、合规红线与调度精度取舍持续沟通（6轮），其中在全量采集合规性部分与合规约束审计员沟通（1轮），在工人监控抵触影响部分与散单洞察师沟通（1轮），并最终形成放弃全透明调度、基于最小化数据集的折中需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想搞个全量数据采集，把每个工人的操作视频、所有订单明细全拉上来，用算法做实时流注分单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "管他感受干嘛，机器就是干活的。没数据我节拍怎么算？订单解构都做不了，后端逻辑没法写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这系统要拿工人操作视频和全部订单明细做岛群流注分配，合规上能过不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那工人那边呢？装个摄像头测节拍怎么了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我后端算法没这些细粒度数据，节拍适配怎么做？精度肯定掉一截。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不懂合规怎么设计边界。我只会写如果A就B的逻辑。这种数据脱敏和权限控制我完全没概念，之前写的系统都没这玩意。我接下来两周得把《工业数据分类分级规范》看一遍，至少搞懂哪些数据是绝对不能出车间的，不然接口都没法定，这块我短板太明显了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果只用设备电流、主轴转速信号来推算加工节拍，不用视频动作捕捉，调度延迟如果能在500毫秒以内，这折中方案就能接受。这个后续可以用历史数据跑对比验证。现在只能先按这个最小化数据集来定需求。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃全透明调度。数据采集边界定为：设备运行电信号、工位启停状态、订单脱敏标签只保留工艺类型和紧急度。不采集视频，不跨岛流转完整客户信息。牺牲部分节拍预测精度，换取合规通过和工人配合度。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数据最小化基线约束下的柔性产能商业模式推演背景下，用户与导师围绕计费模式、防白嫖机制与商业模式闭环持续沟通（7轮），其中在计费模式与ROI计算部分与产能商业推演师沟通（2轮），在造假惩罚机制设计部分与产能商业推演师沟通（1轮），并最终形成双轨计费加信用熔断的商业模式基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按加工件数收呗，或者按机器开动时间收。反正是岛群，谁用谁掏钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就分个档？简单件一档，复杂件一档。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才定死只能拿工艺类型和紧急度标签，这条件能搞出啥计费模式？精细计费做不了了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "占位费好懂，就是租工位。脉冲溢出价，就是加急费？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得占位费稳，加急费这玩意儿，万一有人瞎标紧急度呢？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防白嫖得加校验吧。可我们又不能看视频复核。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抽检出来造假的，罚他？加倍收占位费？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "计费双轨，占位加溢出；防造假靠抽检加信用熔断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在散单潮涌产线变构背景下，用户与导师围绕变构期安全合规底线、放行标准及流注规则持续沟通（7轮），其中在设备防撞防强占要求部分与合规约束审计员沟通（1轮），在变构完成双签放行标准部分与合规约束审计员沟通（1轮），并最终形成包含隔离启动、硬互锁、双签放行与暖机限流的变构合规基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个软件互锁呗，变构时把设备状态锁死，不让新单子插队。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线变构时设备防撞和防强占，合规上有什么强制要求？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以变构时岛是物理封死的，路由全停？等变构完才放单？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "急单来了也只能在外面等，不能打断变构。但可以在变构快结束时，提前把急单排到岛群入口队列前面？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "变构完成的放行信号，是设备上报就行，还是得双重确认？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这改动有点大，我原本想着路由层直接根据状态机流转就行，现在得插进边缘校验逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "变构期流注规则：1. 物理围栏闭合且光敏无人确认，才允许变构；2. 变构中硬互锁生效，软件路由挂起，任何优先级订单岛外排队；3. 变构完成需设备上报加边缘网关双签，才解除互锁恢复流注。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚放行设备是冷的，急单直接冲进去节拍跟不上。是不是得有个暖机期，先放点小单子进去跑跑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "变构合规基线：隔离确认启动、硬互锁挂起路由、双签放行、暖机限流恢复。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在岛群协同战略目标锚定背景下与导师围绕柔性岛群业务目标量化、节拍适配约束及验证样本口径持续沟通（7轮），其中在商业指标定义部分与产能商业推演师沟通（1轮），在散单潮涌分布与压测样本选取部分与散单洞察师沟通（1轮），并最终形成包含产能弹性、履约率、节拍偏差三维度及大促SKU解构样本的战略目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "目标就是散单来了别堵死呗。把单子顺到空闲岛上，节拍对得上就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种岛群流注系统，商业上ROI怎么算？产能释放看啥指标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所以目标得加上产能弹性系数和急单履约率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "变构成本这块有点复杂，每次路由切换都算进去吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "节拍绝不能乱。如果只看吞吐量，节拍乱了加工质量肯定出问题，返工成本更高。所以目标得加一条：节拍适配偏差率必须卡在阈值内，这是保底的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "样本的话，拿上季度的散单历史记录跑一遍行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我不确定。我对这种商业数据推演一直不太行，平时只看后端日志。这块确实得补一下，不然节拍阈值没法定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚把推演师刚才提的产能弹性系数算例看明白，记在笔记里。明天把我们后端节拍适配算法里的权重调整逻辑改一下，试着把履约率权重加进去，看能不能跑通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "散单潮涌的分布有啥特征？上季度的数据能覆盖极端情况吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "岛群协同战略目标：1. 产能弹性系数提升至基线的X倍；2. 急单履约率达成Y%以上；3. 节拍适配偏差率低于Z%。验证样本采用大促分钟级SKU解构数据。前面确认的变构合规基线作为底线约束全程挂载。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在散单潮涌柔性加工岛群路由架构设计背景下，与导师围绕订单解构方式及静态哈希与动态流注路由选型持续沟通（6轮），其中在动态流注路由机制部分与产线变构架构师沟通（1轮），并最终确定动态流注路由基线与验证口径，明确时序预测补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想用规则引擎做订单解构，把SKU属性、工艺要求拆出来。路由那边，我比较熟一致性哈希，按解构后的工艺特征哈希分配到固定岛群。这样路由表好维护，后端服务调用也有缓存优势。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这确实是个问题，哈希环调整会有数据迁移和瞬断，节拍适配这块我还没细想，哈希只管路由不管产能状态。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态流注架构下，路由分配一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我可以提个对照假设：假设A是静态哈希路由，假设B是基于产能心跳的动态流注。关键变量设为岛群负载方差，如果在潮涌峰值下，假设A的负载方差超过基线30%，就推翻A选B。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "产能心跳的实时预测计算，我有点拿不准用什么模型算节拍得分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺实时流式特征提取和时序预测的经验，平时主要写CRUD业务逻辑，时序数据接触少。我这周得补一下流式计算处理时间滑窗的文档，看看怎么把预测误差控制住。学完之后，我打算把滑窗逻辑迁移到路由权重的衰减计算里，防止历史高负载把路由压死。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选动态流注。静态哈希在变构时风险太大，流注决策层虽然开发量更大，但能兜住产能弹性目标。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把规则引擎的接口定义出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在产能心跳机制落地背景下与导师围绕中心调度与边缘分布式协同心跳选型及延迟方差问题持续沟通（6轮），其中在散单潮涌下中心式心跳缺陷部分与节拍同步设计师沟通（1轮），在底层状态同步与协议支撑部分与边缘物联集成师沟通（1轮），并最终敲定边缘分布式协同心跳基线及底层TSN与OPC UA同步依赖。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定中心调度啊，逻辑全在云端写，各加工岛只要听指令干活就行，好控制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "中心式心跳不好用吗？我觉得写起来最简单，岛端不用管逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分布式协同开发量太大了，跨岛状态同步我完全没写过，容易出bug吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果搞边缘分布式协同心跳，底层协议能不能直接把状态同步干了？我不想在业务层写一堆一致性逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果底层能把状态同步封起来，业务层只做校准，那我这边改动还算可控。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选边缘分布式协同心跳。中心式延迟确实搞不定方差指标。业务层依赖底层TSN和OPC UA做岛间同步，我这边只写宏观校准逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "OPC UA这块我确实不熟，回头先看它的Pub/Sub文档。"
+              }
+            ]
+          },
+          {
+            "microScene": "在物联感知与跨岛流控协议设计背景下，用户与导师围绕跨岛流控协议选型与降级策略持续沟通（7轮），其中在实时性与协议选型部分与边缘物联集成师沟通（2轮），在非标协议合规与降级安全部分与合规约束审计员沟通（2轮），并形成正常态走OPC UA over TSN、降级态走MQTT加TLS与Token的双轨流控及审计策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "数据上报嘛，岛上的PLC和传感器数据，用MQTT汇到边缘网关再上云就行。流控指令，也是云端算好了往下发MQTT吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨岛流控走MQTT延迟真不行吗？散单一来就卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UDP组播自己写重传，这操作能过审？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要UDP搞实时，一个要OPC UA搞安全，这俩怎么拼？UDP加个密行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上一步选了OPC UA Pub/Sub和TSN。所以跨岛流控也全压在OPC UA上？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级的话，能不能退回到MQTT？TSN正常走OPC UA的高优Pub/Sub，抖动超限就切MQTT异步重试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源消耗这块，网关内存和CPU够加这层代理吧？别到时候流控没降级，网关先OOM了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议这块就定了：正常态跨岛流控走OPC UA Pub/Sub over TSN；降级态走MQTT加TLS和Token异步；降级条件是TSN心跳超时；所有指令留痕审计。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在柔性扩缩容高可用评估背景下与导师围绕OEE数据获取的合规冲突、差分隐私加噪方案及验证、数据分级持续沟通（6轮），其中在产能共享ROI与调度输入要求部分与产能商业推演师沟通（1轮），在强制上报合规风险与加噪聚合合规确认部分与合规约束审计员沟通（2轮），并最终形成基于差分隐私加噪聚合的数据分级采集方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这有什么好犹豫的。调度不准订单全堵死，系统不就废了。直接在流控协议里加个必选字段，不报OEE就不给派单。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不拿换线时间和良率，只看设备是不是转着，这ROI还能看吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们在入网协议里强制要求上报OEE，会不会踩线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "两头堵死。要数据没数据，要合规没合规。我光会写接口，这业务冲突我搞不定啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想起来了，前两天看差分隐私的资料，里面提到加噪声可以保护隐私。如果把拉普拉斯噪声加在OEE上报环节，调度器拿到的就是带噪数据，单点真实值被掩盖了，但整体分布还在。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得做个实验。控制变量就是噪声的隐私预算epsilon，样本量选三种规模的岛群，小中大。对比组是不加噪的真实调度命中率，实验组加不同强度的噪声，看订单完成时间的偏移量是不是在容忍范围内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "低敏感的设备状态明文走OPC UA；高敏感的OEE指标，在边缘网关端加差分噪声后聚合上报。这样既符合数据最小化，又保住了调度模型的基本输入。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在散单潮涌订单解构微服务开发背景下，用户与导师围绕微服务边界划分、异步解耦、最终一致性事务补偿及验证设计持续沟通（6轮），其中在边界划分与异步解耦、分布式事务处理部分与订单解构开发组沟通（2轮），并形成基于DDD的接收与拆单服务边界、事件驱动解耦及Saga补偿验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按功能分模块就行了，接收模块、校验模块、拆单模块、下发模块。每个模块一个微服务，Spring Boot一套，接口互相调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我把订单接收、校验、拆单分成三个微服务，它们之间同步调用是不是会出问题？应该怎么拆边界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件驱动，就是加个MQ？那拆单失败了怎么办，事务怎么回滚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不能用@Transactional了，得用本地消息表。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块确实没写过分布式事务补偿，平时都是单库操作。我得先去学一下Saga模式怎么实现，不然代码写不出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就模拟拆单服务挂了，看补偿事件能不能把前面的状态改回来。我会写个测试用例，故意抛异常，检查订单状态是不是能回到待处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚看Seata的Saga文档和本地消息表的实现，明天上午写个Demo跑通。然后把接收和拆单的边界定下来：接收服务只管接和存，发事件；拆单服务订阅事件，拆完发分配事件。补偿逻辑写在拆单服务里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接收服务和拆单服务之间就用订单创建事件解耦，我先把这两个服务的接口定义和事件格式敲出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在岛群流控核心算法联调背景下，用户与导师围绕指令下发时序控制、节拍对齐机制和日志链路追踪持续沟通（6轮），其中在跨岛时序冲突部分与跨岛联调专员沟通（1轮），在心跳节拍同步部分与节拍同步设计师沟通（1轮），并形成基于心跳滑动窗口的流控下发与TraceId透传核心链路方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想直接用RocketMQ消费分配事件，拿到订单和岛群路由信息后，直接调设备接口下发。这样实现最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流控算法直接调设备接口下发指令，联调时会不会出问题？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "要维护状态机，还要等ACK。那我在消费MQ的逻辑里加个本地状态流转，发完指令挂起等回调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨岛联调专员说要有状态机和ACK，但我怕高并发挂起线程池炸了。心跳机制怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Netty接心跳包，更新本地ConcurrentHashMap里的窗口水位，分配事件来了判断余量再下发。不过心跳包里的数据格式我得和设备端定一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把分配事件的TraceId塞到下发指令的Header里，设备端日志也打出来。工具方面，我就用SkyWalking把MQ消费和Netty链路串起来吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查下SkyWalking Netty插件的文档，不行就手动打MDC。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先把心跳协议字段定下来：岛ID、剩余产能、缓冲区水位、时间戳。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨岛数据总线高并发重构背景下，用户与导师围绕线程隔离、流控与背压策略持续沟通（6轮），其中在流控和线程隔离实现部分与边缘物联集成师沟通（1轮），并最终形成IO与计算分离、心跳与业务分池隔离、业务池加有界队列与拒绝策略及TraceId上下文传递的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "老代码是用FastJson序列化整个工单上下文，然后丢进一个全局ThreadPoolExecutor。序列化太慢了，阻塞了IO线程。我想把FastJson换成ProtoBuf，然后把线程池改成异步的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加队列？把队列长度拉大一点？不对，拉大还是会OOM。要不加个拒绝策略？但心跳丢了岛就掉线了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在老代码是全局共享线程池，散单多的时候大包计算把心跳都堵死了，怎么搞流控和隔离？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Reactive全改肯定来不及，里面状态机逻辑太绕。我打算先做线程池隔离，把心跳的EventBus单独拆出来，业务计算放另一个池子。背压先上有界队列加CallerRunsPolicy，水位超了就让调用方自己跑，不丢消息。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，调用方如果是IO线程就卡死了。那只能用AbortPolicy然后捕获异常打日志？不行，心跳不能丢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一，Netty的IO线程只做收发，拆包后丢到计算池。第二，心跳包和业务包分两个计算池，心跳池优先级高，队列满时只拒绝业务包。第三，业务池加有界队列和AbortPolicy，拒绝的订单记录下来重新路由。TraceId要在往计算池提交时手动塞进Task的Runnable里，不然线程切了就丢了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在散单潮涌系统极端单压背景下，与导师围绕压测场景构造、CPU抢占验证与拒绝策略兜底持续沟通（5轮），其中在场景构造与边界指标分析部分与极限压测官沟通（2轮），并形成Mock长耗时注入、Jmeter洪峰乱序心跳、Arthas监控及Redis重路由兜底的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Jmeter照着接口压呗，把并发线程数调高点，看看AbortPolicy报不报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端单压场景怎么造？要打爆业务池还要保心跳。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我代码里没有长耗时单的逻辑，正常散单处理都很快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加Mock比较快，我直接在业务Task里加个Thread.sleep(500)模拟耗时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结果的话，我看日志里有没有“订单重路由”的记录，有就是正常流控。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不应该啊，心跳池优先级高，CPU不应该抢不过。会不会是上下文切换太多？我最近刚好学了Arthas的thread命令，可以用它看下死锁和线程状态。迁移过来应该能看清是不是CPU抢占了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Arthas thread -n 3 看最耗CPU的线程，如果都是业务池的，那就是CPU抢占。如果是别的，就得再查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重路由代码我写了，捕获RejectExecutionException后，把订单推到Redis的待重试队列里，有个定时任务捞出来重新分配。只要Redis不挂，单子就不会丢。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在变构部署验证上产线背景下，用户与导师围绕切换护航策略与验证有效性持续沟通（4轮），其中在灰度控制与回滚机制部分与产线部署护航员沟通（3轮），在节拍漂移统计推断与样本量估算部分与漂移监控员沟通（3轮），并最终形成基于哈希分流、统计指标检验与死锁熔断的灰度护航方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着先切一部分流量过去跑跑，没问题再全量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我写了个回滚脚本，要是新系统报错率高，就直接切回老路由。@产线部署护航员 你那边做切换应该顺滑吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "哪有那么复杂，先跑起来看嘛。大不了我盯着大屏，漂移超阈值我就手动切回来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不就看个平均值吗，新系统节拍均值比老系统低不就说明有效？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@漂移监控员 那你说怎么算？我平时只看大盘曲线，这套统计我不太熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产线部署护航员 监控员说要算这些指标，你们灰度平台能算吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只在代码里写了按比例随机分流。这改起来有点麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我改成分流哈希键。那灰度比例怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "15%跑两小时。@产线部署护航员 能切15%吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对这套统计验证没概念，回头得补。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周末我把A/B测试的统计基础看一遍，写个Python脚本把置信区间算出来，以后自己能算，不用每次靠猜。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度15%切流，用订单ID哈希分流防横跳；运行2小时积累至少2000样本；核心看节拍漂移率的T检验p值<0.05和效应量>0.5；护航员负责跨岛死锁熔断，达标后扩容。"
+              }
+            ]
+          },
+          {
+            "microScene": "在节拍适配漂移监控告警设计背景下，用户与导师围绕如何区分正常波动与真漂移、全局与单岛问题及告警策略持续沟通（6轮），其中在漂移特征指标与动态基线设定部分与漂移监控员沟通（2轮），在跨岛心跳丢失与告警级别映射部分与节拍同步设计师沟通（1轮），并最终形成基于订单特征簇分桶的动态基线与主从心跳源分级告警约束。",
+            "evidence": []
+          },
+          {
+            "microScene": "用户在P0熔断触发产线流注淤积的溯源复盘背景下，与导师围绕淤积异常根因分析与复盘框架持续沟通（5轮），其中在流注淤积溯源手法部分与效能复盘师沟通（1轮），并最终形成包含时序倒推、拓扑断点排查与水位关联证伪的三步复盘口径。",
+            "evidence": []
+          },
+          {
+            "microScene": "在产能弹性释放迭代规划背景下，用户与导师围绕复盘根因转化、迭代目标量化及商业约束融合持续沟通（4轮），其中在验收指标提炼部分与效能复盘师沟通（1轮），在弹性释放代价与商业边界部分与产能商业推演师沟通（1轮），并最终确认包含核心目标、约束红线与适用边界的迭代规划三点内容。",
+            "evidence": []
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在叙事律动共创引擎进入运行评估需做灰度发布与可回滚保障背景下，用户与导师围绕分桶策略、放量节奏与回滚门槛持续沟通（4轮），其中在指标闸门、硬/软回滚方式及缓存/字段兼容风险上与SRE运维工程师沟通（8轮），并收口为可执行的灰度+回滚规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我卡在：灰度怎么分桶、出问题怎么判定、回滚要不要把流量瞬间全切回去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分组我想按 userId hash 5% 开始。interactionId 也在 header 里了，感觉也能用它分？放量我不太敢定，怕一放就炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能看 totalBackendMs 的 p95/p99，fallback 计数，409 比例，rebuildMismatch。差不多就这些。就是阈值我没谱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布这块你给我个能直接照做的：分桶用啥、5%到全量怎么放、哪些指标一超就回滚、回滚是立刻切还是慢慢切？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "倍数是指跟全量旧版本比？我们现在旧版本就是上个稳定包。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚是直接把 5% 变 0%？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "新旧并存踩是指 review 缓存这种？我们 TTL 改了，旧版本读写会不一致？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "expectedPrevSegmentId 我们是服务端检查不匹配才 409，旧版本不传我本来想当成不校验。这样行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚之后缓存里可能还留着新版本写的，旧版本读会炸？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "版本化 key 会不会把缓存量翻倍，成本上去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只知道 review 缓存 TTL 现在是 segment 的两倍，最多 30 分钟。条数我没算过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE 给的建议是：分桶用 userId/deviceId，interactionId 只追踪；放量从 1% 开始，30-60 分钟一档，1%->5%->20%->50%->100%。回滚分硬/软：5xx或超时就硬回滚直接切 0%；性能波动先停再退档。闸门要做灰度桶 vs 非灰度桶对照，例子是 5xx 上升超过 0.2% 持续 5 分钟就回滚，p99 上升 30% 持续 10 分钟也算。还有兼容坑：expectedPrevSegmentId 旧端不传要算兼容模式不能打 409，要加“缺失字段计数”。缓存最好 key 带版本前缀，先在 1% 灰度试，别一下全量双前缀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先拍三条：  \n1）5xx/超时比例一上来就回滚；  \n2）totalBackendMs p99 比旧桶高 30% 持续 10 分钟回滚；  \n3）fallback 或 rebuildMismatch 比例翻倍就回滚。  \n409 我不确定算不算红线，怕它本来就会涨。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基线我得去看监控最近一周均值？我现在手上没有。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "409 我可以拆成两类计数：missingExpectedPrevSegmentId 和 conflictExpectedPrevSegmentId，回滚只看 conflict 这类。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这套去跟 SRE 把闸门配上。缓存 v2 前缀我先只开 1% 桶，不然容量我真算不明白。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

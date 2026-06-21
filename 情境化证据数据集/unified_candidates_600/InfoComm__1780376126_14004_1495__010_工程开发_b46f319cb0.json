@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端工况测试脚本重构背景下，用户与导师围绕旧脚本缺陷与重构方向持续沟通（5轮），其中在光电切换与时延毛刺测试部分与测试与性能调优师沟通（2轮），在节点失效时隙重排测试部分与确定性调度架构师沟通（2轮），并最终形成硬件故障注入、对数分桶直方图和PTP报文切断三个重构硬指标及测试桩编写计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了一下旧脚本，不就是用tc发点大流量打满带宽，然后看丢包率嘛。加几个断网打桩逻辑应该就能跑了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "平均时延确实看不出毛刺。断网打桩我加个回调通知上行协议不就行了？光模块状态我不太清楚怎么硬塞进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这玩意儿怎么改才能测出光电切换和时延毛刺？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直方图区间怎么配我有点懵，微秒级毛刺分桶太细会不会爆内存？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有节点失效的时候时隙重排怎么测，旧脚本里完全没这块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时隙资源重排的触发条件和预期时延怎么mock？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "心跳静默是不是得停掉节点的时钟同步报文？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试框架重构有三个硬指标。第一，光路断开用硬件故障注入器改寄存器，不用软回调；第二，时延统计换成对数分桶直方图，重点看1到10us的毛刺；第三，节点失效靠切断PTP报文模拟心跳静默，重排流表下发必须在5us内完成。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去写切断PTP报文的隔离桩，硬件注入器那边我得看看有没有现成的API，没有的话得自己封装一层寄存器操作。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

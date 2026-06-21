@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在溯源归因与靶向指令生成逻辑落地背景下，用户与导师围绕归因推演方式、指令防误发机制、代码串联及自动拦截规则持续沟通（6轮），其中在因果推断与置信度计算部分与归因推理引擎开发沟通（1轮），在指令下发防误伤与状态机设计部分与微服务与接口设计师沟通（1轮），并最终形成归因推理链路与含自动拦截的指令状态机落地思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算在Flink里写ProcessFunction，测到超标就查图谱找上游源，然后拼个限产指令发到Kafka。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防误发我加个阈值判断呗，超太多才发。这块逻辑我不太敢定"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "归因具体怎么推？指令防误发有没有标准做法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "因果推断在咱们项目里怎么写？我只有时序特征和图关联。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令下发怎么防误伤？直接发Kafka感觉太粗暴。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因得结合气象算权重，用Drools推。指令要加状态机，先落库，有唯一ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink侧输出超标事件，去调Drools推理服务，把时序值、图关联和气象参数传进去。算出置信度后生成指令对象，带请求ID，写库置为“待审核”。合规分析师那边过一下规则，改状态为“生效”，再发控制信令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个自动拦截规则在落库后。如果停线比例超限，直接置为“已拦截”，不进审核流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

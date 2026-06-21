@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘侧多光谱采集适配开发背景下，与导师围绕驱动定制、黑电平校准、时序对齐验证及能力缺口补充持续沟通（5轮），其中在底层驱动与校准逻辑部分与边缘算力适配开发专家沟通（3轮），最终确定定制驱动、黑电平校准与IMU帧稳定预处理及动静结合验证的约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上很多人用RKNN套件做边缘推理，采集这边我想着找个通用库把帧拉出来，再用RKNN跑特征提取，应该挺顺的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "能不能不写底层驱动，找个通用框架把帧抽出来？我想直接把数据喂给RKNN。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不太懂黑电平校准的具体逻辑，时序控制我也只调过USB摄像头。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能把校准参数写死在配置文件里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚去翻几个开源多光谱相机的驱动代码，看看他们时序控制怎么写的。黑电平这块我找两篇应用笔记看一眼，先把逻辑理顺，明天试着写个伪代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用标准色卡和标定板。我拍一组多光谱标定板图像，检查边缘锐度有没有重影，时序偏移如果超过一帧就能看出来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "陀螺仪对齐？这我之前没考虑到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那我得把IMU的数据流也接进来，跟图像帧做时间戳对齐，这块有没有能改改的开源代码？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先把驱动框架搭起来，校准逻辑照着应用笔记写，IMU对齐我试着统一一下时钟源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

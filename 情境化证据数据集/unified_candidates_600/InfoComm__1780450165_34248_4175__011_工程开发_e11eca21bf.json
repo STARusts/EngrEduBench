@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在SVSLMS基线敲定后代码联调背景下，用户与导师围绕跨介质切换断流原因及修复方案持续沟通（7轮），其中在MAC层队列卡包与状态机死锁排查部分与异构协议栈设计师沟通（2轮），在对端超时重连机制确认部分与声光联调测试员沟通（1轮），并最终形成切换触发MAC层flush、发送中止指示与状态机复位的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是我这边均衡器初始化没跑完，抽头系数乱了？或者声学驱动没起来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异构协议栈设计师 切光转声断流，导师说是状态卡死，你看下日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我在底层驱动里加个清空缓存的指令行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异构协议栈设计师 在切换函数里直接把MAC队列flush掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要在协议栈加flush，重置状态机。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "截断的话，对端不知道发完了，会一直等ACK吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@声光联调测试员 协议栈加flush截断发包，对端超时重连能正常触发吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切声链路本来就是光链路断了才切的，本来就断流了，5秒应该能接受吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

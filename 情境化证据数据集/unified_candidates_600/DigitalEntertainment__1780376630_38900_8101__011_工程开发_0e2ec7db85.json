@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在大促场景异步削峰背景下，用户与导师围绕Kafka积压处理、限流策略与降级联动持续沟通（6轮），其中在CPU负载与限流配合部分与性能优化工程师沟通（1轮），并最终形成网关令牌桶限流、Kafka快慢通道及CPU打满降级停慢通道的削峰方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接丢Kafka里把请求全接住，后端慢慢消费不就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多加几个消费者节点？或者换更牛的机器？积压太多就丢掉一些？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "确权请求大促时太多，丢Kafka里积压了怎么弄？水印提取吃CPU，加消费者好像也扛不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关加令牌桶，Kafka分快慢通道。超出的直接拒绝，不进队列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "速率压测跑一下看极限。比例，就按侵权拦截和普通确权的量来分？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 网关侧令牌桶限流，速率和CPU利用率联动。2. Kafka分快慢Topic，侵权拦截走快通道。3. CPU打满触发降级，停掉慢通道，新来的普通请求直接拒绝。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

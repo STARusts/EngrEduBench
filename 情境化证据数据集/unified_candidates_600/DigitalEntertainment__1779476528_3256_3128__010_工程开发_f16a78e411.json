@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路压测与延时毛刺消除背景下，用户与导师围绕毛刺定位方式、压测置信区间与截止条件、压测策略及采样窗口持续沟通（8轮），其中在GPU侧延时定位部分与性能攻坚手沟通（2轮），并最终形成双端插桩结合异步回读与触发式抓取的压测策略及5分钟采样窗口。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按书上的说法，应该在关键节点加时间戳插桩，算差值。比如信令对齐前插一个，着色器执行前后插一个，统计P99延时。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实，GPU是异步的。那我多插几次？不对，CPU根本不知道GPU啥时候执行完。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "GPU渲染管线里的延时毛刺，光靠CPU插桩抓不到，你们平时怎么定位的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过回读不是会阻塞吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得这比单插CPU时间戳好，能分开看CPU和GPU的瓶颈。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这得看样本量。按中心极限定理，样本量够大，均值才收敛。但毛刺本身就是长尾，P99可能受极值影响。我不太确定压测要跑多久才算置信区间收敛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最近我在看RenderDoc的帧分析文档，里面会抓GPU Stall和Cache Miss。我想能不能把这种思路迁移过来，平时只做轻量级Query，如果连续几帧P99都超过阈值，就触发一次详细的Stall抓取，不用一直开着抓全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选B。纯CPU插桩会掩盖GPU排队延时，B方案能拆开看。而且用触发式抓取，压测对算力的消耗也控得住，不会因为压测把正常串流挤挂了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按60FPS算，一秒60帧，跑5分钟就是18000个样本，算P99应该够收敛了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

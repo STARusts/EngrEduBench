@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在认知流场重塑系统灰度发布监控布防背景下，用户与导师围绕灰度范围、核心观测指标、可观测性工具链及实操短板持续沟通（8轮），其中在认知效能指标统计效力部分与效能评估师沟通（1轮），在业务指标无侵入接入与灰度流量隔离部分与运维交付工程师沟通（1轮），并最终形成灰度布防确认点与实操补齐目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得先把监控布防做好，免得认知重塑干预一上，把学生注意力搞散了还不知道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先按单个教学班灰度，大概50人左右。指标的话，主要看流场重塑服务的P99延时、干预指令下发成功率，还有前端的SDK崩溃率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期间，我想对比干预组和非干预组的认知专注度回升情况。但这种个体差异很大，我需要多少样本量，以及看什么指标才能说明干预是真的有效而不是随机波动？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能只看P值。那我在灰度看板上除了看工程指标，还得加上心流持续时长的Cohen's d和95% CI的实时计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "认知指标这种业务数据，我不太确定怎么高效地透传到监控链路里，以前只打过简单的计数器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想把认知流场重塑的效能指标（比如心流时长）实时打到Grafana上，同时保证灰度流量不影响大盘。具体在K8s里怎么弄比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步吐CK直查，这个思路好，我之前只想着硬塞进Prometheus exporter里。灰度隔离用Istio路由也比我原想的在网关层写死要灵活。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "OPA策略引擎和Istio的路由规则我只停留在概念理解，没自己写过YAML。刚才运维专家一说，我意识到我在云原生可观测性和流量治理的实操上是断层的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我要在灰度切流前，把Istio和OPA这块补上。目标是：这周五前，用PromQL写出3个核心认知指标的采集规则，并在本地K8s环境跑通一个Istio灰度路由的Mock配置，确保能按Header正确分流。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度发布监控布防确认点：1. 灰度范围先单班50人，用Istio按班级ID分流隔离；2. 工程指标看P99延时和成功率；3. 认知效能指标看心流持续时长，必须计算Cohen's d和95% CI，用序贯检验；4. 监控链路用Kafka异步吐到ClickHouse，Grafana直连CK聚合，主服务零侵入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

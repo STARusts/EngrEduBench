@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计容灾高可用与防篡改背景下，用户与导师围绕容灾降级策略、防篡改机制及验证方法持续沟通（6轮），其中在防假信号注入与病历防篡改部分与隐私计算与安全工程师沟通（2轮），并形成边缘锁定降级策略、TEE校验防篡改机制及混沌工程验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高可用我打算直接用云厂商的K8s集群，多可用区部署，自带故障转移。防篡改就给API加个JWT签名，应该就差不多了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "伪造正常数据包这我没想过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "中断期间药量就按最后一次发？防伪造数据，有没有现成的SDK能直接校验设备指纹的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种，比较方便的组件，不用我们从头写太多逻辑的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TEE和默克尔树，这我都听过，但没自己搭过。特征校验是不是得和算法那边耦合起来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证方法我最近在看《医疗ICT安全攻防标准》，里面提到要用混沌工程。我能不能就用混沌工具随机杀节点？防注入这块，我不太会设计红蓝对抗的样本量，感觉得搞很多数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级策略是云端断联时边缘锁定最后剂量并报警。验证方法是混沌杀节点控制时间点，对抗样本50组。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

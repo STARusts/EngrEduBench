@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在票据图谱穿透验真系统开发启动背景下，用户与导师围绕票据实体抽取与入库方案及验证标准持续沟通（5轮），其中在票据OCR与抽取落地部分与算法开发工程师沟通（1轮），在图谱入库schema与性能部分与图谱架构设计师沟通（1轮），并最终明确OCR版式定位、Nebula入库、实体对齐及脱敏等开发约束与量化验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接上大模型，给个Prompt让它把票号、金额、日期抽出来，然后直接存图库里，应该很快能跑通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就找几张发票跑一下，看着字段对就得了吧。大模型现在泛化能力挺强的，网上那些教程都是这么干的，给个few-shot就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用py2neo或者那种现成的ORM包往Neo4j里塞呗。我看网上很多人都是这么搞的，方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就想直接用大模型Prompt抽票据字段，不想搞传统OCR切图那一套，太麻烦了。有没有更方便一点的办法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "F1要到95，还得校验码验证，这我好像得自己写点后处理逻辑了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用Python包直接写Neo4j行不行？有没有现成轮子？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实体对齐和脱敏，这工具包好像不能直接帮我干啊。我也没写过这种对齐逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂版式分析的代码怎么改，对齐也只能想到写if-else。我这两天先把PaddleOCR的版面分析源码看一遍，搞懂怎么自定义区域映射，然后写个对齐的单元测试用例，跑通信用代码的映射逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽取这块不能直接上大模型，得OCR版式定位先做，再接抽取。入库换Nebula，入库前必须做实体对齐转信用代码，还要脱敏。验证指标定票号容错为0，整体F1大于95%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

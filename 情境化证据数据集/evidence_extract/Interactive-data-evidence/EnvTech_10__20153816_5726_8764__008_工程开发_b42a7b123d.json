@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在饮用水管网二次污染系统进入工程开发、实现边缘网关采集背景下，用户与导师围绕协议优先级、边缘质控、断网缓存/重传、幂等与审计日志、接口契约和压测验收持续沟通（10轮），其中在仪表时间戳可靠性与Modbus异常处理部分与物联网工程师沟通（2轮），在落盘队列+批量上送+ACK、退化策略与可观测设计部分与边缘计算工程师沟通（1轮），并明确以sqlite队列、recv_seq幂等、错误码分流与三条可复现验收点推进实现。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "想跟你对一下：我这版实现边界、数据格式、还有断网怎么处理，别一上来就写偏了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "协议我先押两类：Modbus（RTU/TCP）和仪表厂家的HTTP推送；另外留个MQTT口子但先不做。优先级：先把Modbus跑通，因为现场仪表多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "质控我先做“格式校验+量程校验+简单跳变校验”，比如余氯<0或>5直接标记bad，压力突变超过阈值先打suspect但不丢。更复杂的漂移识别我不在边缘做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等我想用“设备ID+测点ID+采样时间戳”做事件键，重复上报就覆盖；追责靠审计日志落后端（之前担心指令网关单点，所以采集这边我也尽量无状态）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 现场仪表时间戳这块一般啥情况？我打算用“采样时间戳”做去重键，你觉得会踩坑吗？另外Modbus采集时有哪些常见异常要提前在代码里兜住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解了：仪表时间不可靠，去重不能押它。质量码和reason_code要从采集层就带上。Modbus异常主要是超时、CRC、地址和字节序。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果网关本地生成seq，重启后seq会从0开始，这会不会又撞？是不是得持久化一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 我这边要实现网关采集：本地缓存、断点续传、乱序重复、还有把质量码带上。你给我一套“能写进代码”的策略：缓存结构怎么做、何时flush、失败怎么退化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边的建议拼一下，初版准备这么改：\n- 不再用仪表时间去重，网关对每个device+point维护recv_seq；落盘保存offset（先用sqlite），确保重启可续。\n- 每条采样都写raw_sample，永不“覆盖”，重复上送靠服务端唯一键去重。\n- 上送走批量HTTP（我们平台侧先给个/ingest/batch接口），带batch_id，等服务端ack最大recv_seq再删本地。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心的是：sqlite会不会拖慢？还有48小时缓存上限怎么选，我现在只是在拍脑袋。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按一个典型站点估：水质4项+压力流量2项=6点位，每分钟采一次，就是6*60*24=8640条/天。每条按（时间戳、id、value、qc、hash）算200字节，粗算一天1.7MB，48小时也就3.4MB，哪怕乘10个站也不大。\n但有些点可能是10秒一次，那就放大6倍：一天约10MB。网关磁盘给到1GB都够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测口径我想定：单网关模拟1000点位、10秒采样一次，写入+批量上送都不丢；队列深度能稳定回落。这里我不太确定“1000点位”是不是太夸张。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我收敛成保守假设：单网关200点位，10秒一次；极限档翻到600点位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "退化我先做两级：\n- 触发1：队列深度>30分钟数据量 或 磁盘占用>80%，动作：上送批量降到100条/批，采集频率不变但只保留GOOD+SUSPECT，BAD不丢但延后上送；\n- 触发2：队列深度>6小时 或 磁盘>90%，动作：把非关键点位改成60秒汇总（均值/最大/最小），关键点位仍原频；\n恢复：队列深度回到10分钟内并持续10分钟再解除。\n这里“关键点位”我需要一个配置文件白名单。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补一下错误码处理，我先按HTTP上送来：\n- NET_DOWN（DNS/连接失败/超时）：进入断网模式，只落盘不删；按指数退避重试；队列超上限时只淘汰“非关键点的原始高频”，保留聚合和所有设备离线/恢复事件。\n- HTTP_401/403：鉴权失败，停止重试（避免刷爆），只落盘并打本地告警；需要人工更新token后再恢复。\n- HTTP_413（payload太大）：把批量从500降到200再试。\n- HTTP_429/503：服务端限流/忙，按Retry-After或退避重试，同时触发“触发1”的批量降级。\n- HTTP_400：请求格式问题，直接把该batch记录成dead-letter（不再重发），但保留原始数据，并输出reason_code=SCHEMA_ERROR。\n我对dead-letter怎么落盘还没想细，可能另开表。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "日志这块我之前确实想直接把payload打印出来方便调试，我改掉：默认只打batch_id、count、device_id数量、最老/最新ingest_ts、以及错误码。需要看明细时加debug开关，但debug也只输出前3条样例，不出点位中文名。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "dead-letter我按你说的做两表：\n- raw_queue：存原始采样\n- dead_letter：存batch_id、first_fail_ts、fail_code、fail_msg截断、sample_range（起止ingest_ts）、payload_hash列表的摘要（不全量）\n这样审计还能查到原始数据在raw_queue里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "batch请求我先定成这样（最小可用）：\n- gateway_id\n- batch_id（uuid）\n- sent_at（网关时间）\n- samples: [\n  - device_id\n  - point_id\n  - recv_seq（int）\n  - ingest_ts（ms）\n  - measure_ts（可空）\n  - value（number/string，按点位类型）\n  - qc_flag（GOOD/SUSPECT/BAD）\n  - reason_code（RANGE/CRC/TIMEOUT/SCHEMA_ERROR/MAINTENANCE/OK等）\n  - payload_hash（sha256前16字节hex，避免太长）\n]\n响应：\n- batch_id\n- ack: [{device_id, point_id, max_recv_seq}]\n- server_received_at\n- rejected: [{device_id, point_id, recv_seq, error_code}]（可选）"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“value统一用string + value_type”。理由：\n- 水质仪表有时会回“——”或“ERR”，直接走number会解析失败；我宁愿让平台做解析并按value_type判定，边缘只保证原样落盘。\n- 这样边缘质控只针对“能解析成数的点位”做范围/跳变，不可解析就直接BAD+PARSE_FAIL。\n平台侧后面要做统计时再按value_type转。\nhash我只用于排查“同一个recv_seq内容变了”这种异常，不做去重条件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定三条能测的：\n1）断网续传：模拟网络断30分钟，raw_queue持续增长；网络恢复后，5分钟内队列深度开始持续下降，且平台端按recv_seq无缺口（允许乱序到达但最终齐）。\n2）幂等：同一batch重发3次，平台端落库条数不翻倍，ack不回退；网关收到ack后本地删除到max_recv_seq。\n3）退化生效：把采样规模拉到极限档（600点位/10秒）并限制磁盘空间，触发2后非关键点转60秒聚合，关键点保持原频；同时dead_letter和drop_count都有可追踪记录。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

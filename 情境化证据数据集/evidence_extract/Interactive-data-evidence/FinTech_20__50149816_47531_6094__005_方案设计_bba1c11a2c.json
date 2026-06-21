@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在智能合约安全平台检测引擎需尽快选型并出原型的背景下，用户与导师围绕检测技术组合、深度与性能取舍及MVP落地顺序持续沟通（7轮），其中在DeFi漏洞触发与符号执行必要性上与安全研究员沟通（2轮），在AI模型作为预警切片以缩小符号执行范围上与AI算法工程师沟通（2轮），并确定静态扫描+AI预选+局部符号执行的三段式方案并准备定义接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前看了一些开源项目，打算主要用静态代码分析加上模糊测试，这两个方案成熟度比较高。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "静态分析跑得快，适合大规模初筛，模糊测试能抓深层次的，但这两种配合起来确实没谱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全研究员 咱们这个平台要是针对DeFi漏洞，检测技术上选哪种更稳？我正发愁静态分析不够深的问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是就不用静态分析了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI算法工程师 我们想在检测引擎里加AI模型，主要用来干什么比较合适？现在的进度很赶，得先做个能跑通的MVP方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是说，AI先搜一下，觉得有问题的再让符号执行去跑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问了一圈。安全研究员建议必须有符号执行来抓深度漏洞，AI算法这边觉得可以用模型做切片预选来提速。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我是这么想的，先用静态规则扫一遍最基础的，然后AI模型过滤出可疑点，最后符号执行做精准验证。这样既能保证速度，也能抓到深层的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，服务器开销可能会很大，这方面我确实没细算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得MVP版本可以先砍掉全量符号执行，只针对AI判定的最高危函数做局部路径分析。这样计算资源能控住，核心查杀能力也有了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这个三段式方案我马上理一下接口逻辑，确保模型输出能直接喂给验证引擎。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

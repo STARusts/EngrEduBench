@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在IT到OT产线控制指令安全校验背景下，用户与导师围绕指令防篡改防重放机制与验证实验设计持续沟通（7轮），其中在指令下发风险与合规边界部分与工控安全评估师沟通（1轮），在边缘侧校验算力开销部分与边缘计算架构师沟通（1轮），并形成基于硬件加速HMAC与时序校验的方案基线及实验设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个Token鉴权？或者把指令用HTTPS加密一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就，签名？我不太懂工控这边的签名怎么做，反正不能让乱码指令下去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在要把推理结果发给PLC，怎么保证不被篡改和重放？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前两天我补看了点IEC 62443标准的资料，里面提到安全等级SL2，要求做分区隔离。咱们这套校验是不是也该套上SL2？虽然我还没看全细则，但感觉直接照着标准来比较稳。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就写个脚本发点错误指令，看网关拦不拦得住呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们打算在网关侧给下控指令加HMAC签名和时序校验，这算力消耗大不大？别把边缘节点卡死了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "硬件加速HMAC，时序查表，开销5%可以接受。实验分篡改、重放、乱序三个变量组测，漏检率要算出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概，测个一万条？漏检率0.01%以下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "三十万条样本，分区打标签。我这就把这几个约束更新到方案里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

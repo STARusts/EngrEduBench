@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度运行评估与看板灯号核验背景下，用户与导师围绕 ack_delay_p95/e2e_latency_p95 变黄变红时的延迟与卡顿根因分析流程、分组切片与数据护栏口径持续沟通（9轮），其中在端上弱网/重连与时延拆分观测点补齐部分与播放器与直播工程师沟通（2轮），并形成可执行排查清单与最小化埋点及合规边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是生成那边，LLM 可能卡了。或者播放器回传慢。现在就靠看板那几个 p95，我还分不清。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "ack_delay 是用户互动到服务端确认？e2e 是到剧情生效。我可以看 ack 正常但 e2e 高，就像是后面编排/生成/播控慢；如果 ack 本身高，可能是回传或网关之类。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "步骤大概：先看护栏是不是炸了；再按 show_id+版本+渠道 过滤出红灯的组合；然后对比 ack_delay_p95 和 e2e_latency_p95，看是哪一段；最后再看 fallback_rate 有没有同时升，判断是不是降级导致的卡顿感。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺分段耗时。比如网关到编排、编排到生成、生成到播控。还有客户端缓冲、首帧时间这种，但那是播放器侧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放器与直播工程师 灰度里 ack_delay_p95、e2e_latency_p95 会变高。端上这块你们通常怎么判断是弱网/回传慢，还是服务端慢？能给我几个你们常看的分段时延或日志字段吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些时间戳我们现在服务端不一定都打了。上行 RTT、丢包这些我能按渠道拿到吗，还是只能播放器 SDK 才有？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去先按网络和地区切一下，再看是不是重连导致的 p95 拉高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我先记住几条：如果 ack_delay 高，优先看上行问题，比如 RTT、丢包、重传、连接重连次数；按网络类型/地区/运营商/端版本切。要是 ack 正常但 e2e 高，就要服务端加 server_recv_ts、decision_commit_ts、playout_notify_ts，端上加 apply_ts，把 e2e 拆开。合规上我不太确定，地区/运营商算敏感吗？我倾向只存聚合，不存 IP。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设1：弱网或重连导致 ack 就高。证据是 ack_delay_p95 同步升，且重连/重试占比升，按网络类型切 4G 更严重。  \n假设2：服务端排队或资源紧，ack 可能正常但 decision 慢。证据是 ack 平稳，e2e 高，而且同一 show_id 在某版本集中出现，可能是新版本逻辑变慢。  \n假设3：播放端切分支换素材引发缓冲。证据是 e2e 高同时卡顿率/rebuffer_time 上升，而且只在某渠道播放器上明显。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果 policy_hit_rate 下降、fallback_rate 上升，可能是策略没命中导致走 fallback，体验可能卡住或变慢？生成慢我没直接指标，只能看 e2e 变高但 fallback 没升，感觉是生成或编排处理变慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "延迟红灯如果还带着 dropoff_at_3、branch_abort_rate 上升，就更像是真卡到用户走了；要是只有延迟升但行为没变，可能是局部渠道、或数据问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第1条我容易忽略护栏，看到红灯就想直接下结论。第3条里“ack 稳但 e2e 高”我也怕判断错，尤其是到底算服务端还是端上。只能先按你这个分法写成“候选根因”，不敢拍板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

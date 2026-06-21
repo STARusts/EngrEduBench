@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在密态证绿端到端集成测试重构背景下，用户与导师围绕假断言重构、验证一致性、多轮验证通过率分布及资源与脱敏处理持续沟通（6轮），其中在断言构造与Mock数据生成部分与测试联调专员沟通（2轮），并最终形成引入自定义Witness生成、多轮验证统计、脱敏替换与内存清理的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "全是用硬编码的期望值去assert，跑是能跑通，但根本没验证密态数据流。我想直接拿JMeter套一下，看接口返回200是不是就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "构造测试向量是不是得自己手写生成逻辑？Mock库能不能直接把这密态数据造出来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用密态Mock工具生成，然后断言验证结果。最近我刚看了下Circomtestkit的新版文档，它支持自定义Witness生成器，我直接把电路约束喂给它，它能自动校验一致性，这比手写断言省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存可能会吃紧，Mock数据量一大就容易OOM。我加个临时清理脚本吧。测试数据脱敏打标我也可以加上，用假名替换企业ID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重构方案就是：引入Circomtestkit的自定义Witness生成代替硬编码断言；跑100轮验证统计通过率；测试前置加脱敏替换，后置加内存清理脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

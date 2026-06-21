@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在超写实数智人口型强同步系统工程开发背景下，用户与导师围绕音轨与视效特征对齐方案的算力约束、可变状态风险及底层并发补学计划持续沟通（6轮），其中在端侧极限约束下的对齐实现部分与核心对齐开发组长沟通（1轮），并最终确定静态查表与分段线性插值的对齐基线及补学回退条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要强同步，我打算引入一套基于跨模态Transformer的特征重映射流形，用注意力机制把音轨隐变量和BlendShape权重直接对齐，这样泛化性最好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以做成模型蒸馏，把Transformer蒸馏成一个轻量的MLP，或者用INT8量化，这样开销应该能压下来。而且不引入这套流形映射，光靠线性插值对齐太粗糙了，遇到非标发音口型肯定崩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在这种约束下，音轨隐变量到视效BlendShape权重的映射，如果不用MLP或注意力机制，怎么处理非标发音的对齐精度？纯线性插值误差太大了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查表加线性插值确实能满足零GPU和常量耗时。但静态表泛化太弱，我能不能把表做成自适应的？比如根据运行时的口型偏移残差，用EMA动态更新查表权重？这样既没有GPU推理开销，又保留了一点自适应能力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以给EMA加衰减因子，让权重最终收敛，而且用无锁队列更新。但我确实对端侧无锁队列在极高并发下的Cache Line伪共享和内存对齐问题把握不准，之前没写过这么底层的并发无锁结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去补学L1/L2 Cache一致性协议和C++内存对齐机制。今天内刷完相关的内存屏障和False Sharing检测案例，写个无锁RingBuffer的压测脚本验证对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果证明无锁队列在端侧Cache伪共享严重，我就彻底放弃EMA自适应，回退到静态查表，把对齐逻辑完全写死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线方案：音轨Viseme序列通过Phoneme-to-BlendShape静态查表映射，辅以分段线性插值平滑。严禁引入任何推理模型、自适应权重或可变状态缓冲。验证设计：构造不同语速切片做对照测试，因变量为映射耗时和口型偏移量，确认时钟周期为常量且无内存漂移。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在证据链系统工程开发的“隐私脱敏与权限校验”落地背景下，用户与导师围绕字段分级、角色访问矩阵、越权拦截与审计验收持续沟通（8轮），其中在脱敏最小化与日志红线部分与合规与隐私官沟通（2轮），在双层鉴权落点、资源签发与审计错误码部分与安全工程师沟通（2轮），并形成可验收的最小闭环实现清单与抽样复现规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "危险的就学生信息吧，姓名、手机号这种。还有作业内容里可能带个人信息。我们现在事件里有 student_id、work_id、chain_id，还有一些提交时间、班级、学校这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明文应该就 id 吧，不然联不起来。姓名我觉得可以打星。手机号就不要返回。权限层…我本能想用网关的鉴权插件直接做，省事点，但数据层是不是也得有一份，不然绕过接口就麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概是：  \n- 任课老师：看自己班自己学科的学生证据链，能看到作业详情和批改反馈。  \n- 教研组长：看本组老师的汇总，可能不看学生原文？  \n- 校管理员/督学：看全校指标和抽查样本，但抽查也得有理由。  \n- 家长：只看自己孩子的，不看别的同学，也不看老师的内部评语？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 证据链这块我们要做脱敏和最小化，哪些字段建议默认不出？哪些场景必须明文？另外访问和审计日志有没有不能记的内容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志不能记原图链接和原文内容，只记 id 和哈希。那如果要排查问题，日志太少会不会不好查？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 权限校验这块我们要挡越权访问，还要审计留痕。工程上最好放在哪里？还有 token 里要带哪些 claim 才够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "token 里如果没带 class_ids，是不是每次都要查一次用户-班级关系？我怕性能不好，能不能直接把班级列表塞 token 里省一次查询？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我从合规和安全那拿到的点是：字段分 L0-L3，默认 L2/L3 不出；作业原图走短期签名 URL；日志只记引用ID+哈希+策略版本，不记原文；权限要 API 层 + 数据层双控，资源签发前再做归属校验；401/403/404 区分并审计 403。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先做最小闭环：  \n- 查询证据链接口按角色过滤，老师只能看自己班；家长只能看自己孩子；督学只看汇总和少量抽样。  \n- L2/L3 默认不返回，确需展示就用脱敏后的展示字段。  \n- L3 资源预览全走我们服务签发短链，带水印。  \n审批和导出先不做，直接不提供接口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抽样我有点卡。我想用现成的 AB 测试库做随机，但又怕不合规。是不是可以固定一个规则，比如按 chain_id hash 取前 N 个？然后督学带 reason_code 才能取样本详情。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入用 `org_id + 统计周期 + 指标维度 + chain_id` 做 hash，然后按 hash 排序取前 50 条作为候选样本。督学要看详情时，只能从候选里点，不能自己输入 student_id 搜全校。每次点开必须传 reason_code，写审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）证据链查询接口：按 token 的 role/org_id 做数据层过滤；教师加 class_id/subject 限制；家长强制 student_id=绑定关系。  \n2）响应字段：L0/L1 正常返回；姓名变成 display_name（脱敏）；L2/L3 不返回原值。  \n3）资源预览：`/evidence/{id}/preview` 先校验归属 + 授权，再签发 5 分钟 URL，URL 带水印参数。  \n4）审计日志：记录 user_id、role、org_id、action、chain_id/work_id、allow/deny、reason_code、policy_version、对象哈希；不记原文和完整存储路径。  \n5）错误码：401/403/404 分开；403 必须审计；401 按之前联调策略只允许修复后重试一次。  \n6）测试：用例覆盖老师跨班访问、家长访问他人、督学越权翻全校、403 审计落库、预览 URL 过期不可用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那第5条改成：错误码严格区分 401 未认证、403 无权限、404 不存在；服务端对 403/401 都写审计，但 401 不记录敏感请求参数，只记路由和 token 校验失败原因码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我们在配置里放 `mask_policy_version`，每次改规则就 bump 一次。日志里跟着写这个版本，方便回溯是哪版规则。这个我能做，不用上复杂平台。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

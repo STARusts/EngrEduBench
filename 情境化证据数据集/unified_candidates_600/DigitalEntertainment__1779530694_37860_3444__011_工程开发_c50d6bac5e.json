@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发记忆遗忘与冲突消解测试背景下，用户与导师围绕跨端记忆冲突消解与长期记忆遗忘机制及测试方案持续沟通（8轮），其中在跨端字段合并与软遗忘机制部分与数据一致性研发专家沟通（2轮），并最终形成基于Redis CRDT按维度合并、接入可视化工具调试、语义衰减与聚合摘要及对照实验校准半衰期的测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冲突就用时间戳，谁新听谁的。遗忘就删掉超过30天没访问的记忆。测试就多线程并发写一下试试。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "覆盖会丢字段，硬删会断。这块合并逻辑我不太懂怎么写才不丢数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨端修改不同字段怎么合并不丢数据？长期不用的记忆不能硬删的话怎么处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "落地我用Redis的CRDT模块。测试用例写个脚本，同时发两个请求，一个改心情一个改亲密度，看合并结果。摘要触发就设访问间隔超7天，跑压缩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚查了有个Redis CRDT的调试工具叫CRDT-Visualizer，可以看状态图。我准备把这个工具接进来，看合并路径对不对，比打日志快多了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不同记忆类型半衰期不一样，我得跑实验看召回率和幻觉率来定边界，不能直接写死7天。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 冲突消解用Redis CRDT模块按情感维度合并，不整条覆盖；2. 接入CRDT-Visualizer工具追踪合并路径做调试；3. 遗忘用语义衰减和聚合摘要，不硬删；4. 摘要触发阈值按记忆类型分层设半衰期，先跑对照实验看召回率和幻觉率来校准边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

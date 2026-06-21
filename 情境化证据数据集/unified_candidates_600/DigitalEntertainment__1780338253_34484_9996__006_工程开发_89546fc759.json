@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在神经辐射场轻量编码工程开发背景下，用户与导师围绕轻量化切入点、特征场蒸馏短板及验证方法持续沟通（4轮），其中在底层哈希碰撞与轻量化落地做法部分与算法工程师沟通（1轮），并最终确认采用多分辨率哈希加光照解耦配合QAT量化的开发方向及补齐蒸馏实现能力。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看现在主流都是用Instant-NGP那种哈希编码，速度挺快的。我打算直接把这个结构搬过来，把网络层数减一减，应该就能轻量化了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "NeRF轻量编码现在落地怎么做？我原来想直接用哈希编码减层数，但怕碰撞率控不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "也就是几何用哈希，光照解耦，然后加个QAT。校准集要混实拍帧这块我记下了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对特征场蒸馏具体怎么配损失函数不太熟，之前没手写过蒸馏逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去扒两篇特征场蒸馏的论文，把里面MSE和Cosine的配比代码跑通，明天移植到咱项目里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我设两组：一组纯哈希编码，一组哈希加QAT。跑同一段虚实互映素材，测首帧渲染耗时和SSIM，看QAT到底掉多少精度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

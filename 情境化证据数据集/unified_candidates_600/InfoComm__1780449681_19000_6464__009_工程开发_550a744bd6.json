@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在漂移根因图谱实现背景下，用户与导师围绕图模型构建、并发写锁冲突、跨分片时延优化及验证口径持续沟通（5轮），其中在时序图因果推断建模与级联漂移降级部分与根因推演算法工程师沟通（2轮），并最终锚定图谱开发基线及更新Sprint Backlog。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算用属性图做底座。现网配置流进来后，按网元对象建节点，配置项做属性，关联关系建边。但漂移是动态的，全量快照图太重，我倾向于增量图，只把发生偏移的节点和边标记时间戳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "增量更新下的因果推断路径怎么保证不断链？@根因推演算法工程师 时序图上的因果推断，算法侧一般怎么建模？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Delta子图的边界怎么划？现网一次误配容易引发级联漂移，Delta子图可能瞬间膨胀，内存撑不住。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法侧建议用TinkerPop时序切片图，增量Delta模式，级联深度超K降级快照。这比全量重建和纯时序图插件更可控。我准备按这个基线搭图模型。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现网多源异构数据并发写图，锁冲突怎么处理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自研锁机制成本太高。我倾向基于JanusGraph封装，它底层支持MVCC，且能对接我们的BigTable后端。但JanusGraph的分布式切分在跨分片级联查询时延会抖动，反演实时性可能受影响。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Off-Heap缓存做热点子图缓存，冷数据落盘JanusGraph。反演时先查缓存，未命中再查底层图库。这样高频漂移网元的推断链路能避开分布式IO。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证分两层：单源增量写入并发压测，确认MVCC无锁死且Delta生成正确；级联漂移超K截断反演，确认降级逻辑生效且图状态一致。Off-Heap缓存命中率需要压测基线，低于80%要调优切分策略。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我马上更新Backlog并启动图模型Schema定义。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

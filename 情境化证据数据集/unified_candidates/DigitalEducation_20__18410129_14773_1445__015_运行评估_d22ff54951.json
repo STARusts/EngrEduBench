@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段线上运行三周后需求池膨胀背景下，用户与导师围绕迭代需求池的分类、准入、证据化验收、打分与出池规则持续沟通（6轮），其中在分层与指标口径模板上与产品经理沟通（2轮）、在数据打点缺口与reason_code/策略版本上与数据治理工程师沟通（3轮）、在合规拦截改动准入字段与review要求上与合规与隐私官沟通（2轮），并形成8条可执行的需求池治理规则用于次日汇报。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就很多人提改进。大多是字幕、讲义，还有说检测太严、误报多。还有人想加一键批量采纳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没数很细。体感替代生成类最多，尤其是图的alt和讲义结构。误报也挺多。优先级我想先做大家喊得最凶的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 需求池现在太乱了，你这边一般怎么分层？准入条件要写啥，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那指标写啥算够？我怕大家乱填。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规拦截不算漏斗分母这条，也要写进模板里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 产品那边说分三层：P0合规/阻塞，P1采纳增长，P2长尾。准入四项：场景、范围、预期指标、验收方式（版本+指纹hash对比）。合规拦截类别别用采纳率当指标，用拦截率、误伤率、申诉时效。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理工程师 需求池要证据化打分。现在我们线上数据够不够？哪些字段缺得厉害？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code要多细？我怕开发嫌烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "视频代理偏差也能靠策略版本解释？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 数据治理说我们证据化有两坑：视频链路指纹hash没全打；还有缺reason_code和策略版本，导致拦截/降级/回退没法分桶看。最小reason_code建议那几个：BLOCKED_PRIVACY/COPYRIGHT、DEGRADED_LOW_QUALITY、FALLBACK_TEMPLATE、MODEL_TIMEOUT/ERROR、USER_ABORT，再加策略版本字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想就按P0/P1/P2，然后P1按采纳率提升预估排。P2就先放着。出池就做完就关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "价值：绑定主指标，能让采纳漏斗某一步变好，或者降低误伤/投诉。\n证据：必须能拿到线上数据分桶，或者有一批可复现样本，能用版本+指纹hash对比。\n实现成本：两周内能做完的算低，不然就高。\n运行成本/风险：会不会让处理时间变长、调用变贵，或者引入更多合规审计点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 合规拦截相关的需求，卡片里你最少要看哪些信息才会放行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师们觉得拦截太多，就只能干等？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 合规官要需求卡至少六项：数据类型、处理目的、数据流向、留存、拦截与申诉、审计（操作者/规则版本/指纹hash）。还强调版权拦截别用采纳率去“优化”，只能做降误伤和原因解释/替代路径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）所有需求先分P0合规/阻塞、P1采纳增长、P2长尾优化；没指标的进观察池。\n2）准入必须写：触发场景、影响范围、主指标最多2个、验收方式必须含版本字段+输入输出指纹hash对比。\n3）合规拦截类不进采纳漏斗分母，指标看拦截率/误伤率/申诉时效；视频类代理指标要在汇报写清代理偏差。\n4）评分四维：价值（绑指标）、证据强度（线上分桶或可复现实例集）、实现成本（两周内优先）、运行成本/风险（时延/费用/维护/审计负担）。\n5）涉及对比的需求，相关链路必须补齐指纹hash打点；涉及拦截/降级/回退必须定义reason_code最小集+策略版本。\n6）合规拦截逻辑改动必须走合规官review，需求卡补六项合规字段。\n7）出池三种：验证成功上线、验证失败关闭、证据不足回观察池；避免僵尸卡。\n8）每周只允许P1进迭代上限N条（我先拍个5条？不确定），其余滚动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那第8条改成“按近两周平均交付量设上限，超出要写取舍”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

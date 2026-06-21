@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工单与消息链路联调背景下，用户与导师围绕风险事件到工单/通知/复核回填的最小闭环、字段收敛、幂等与验收观测点持续沟通（8轮），其中在工单幂等口与消息至少一次语义部分与后端工程师沟通（2轮），在消息字段敏感性与最小权限/审计/TTL限制部分与合规与数据治理官沟通（1轮），并形成联调最小闭环定义与两条关键用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是把整条链路做成事件溯源那种，所有节点统一用traceId，最好再加个事件溯源存储，工单状态也用事件来驱动，后面可回放。验收我想用“端到端时延<3s、一次风险触发必生成工单、消息至少送达一次”这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我想要：deviceId、地块plotId、时间戳、特征向量摘要、模型分数、阈值版本、置信等级、建议动作。幂等的话用deviceId+时间窗当幂等键？重试就消息队列消费失败重投。断网可能边缘缓存一批，上来会重复发，我想在云端去重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 工单这块现在支持什么幂等方式？风险事件打过来，你们建议怎么避免重复建单、重复推送？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "eventId用雪花就行？边缘节点离线时也能产很多eventId，会不会撞？还有你们“人工待处理队列”联调怎么测得到，我怕我们以为送到了其实掉进待处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解就是：eventId必须稳定，不是每次重发都变。那边缘就要把eventId跟风险记录一起缓存。消息投递至少一次，所以前端也可能收到重复？需要前端按eventId去重展示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 后端说工单createTicket支持Idempotency-Key，TTL 24h。建议风险事件自己生成稳定eventId，把eventId当Idempotency-Key去建单；消息是至少一次投递，消费者和前端都要按eventId或ticketId去重。推送失败三次重试后会落messageStatus=DEAD_LETTER，可查工单详情验证。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小字段我收敛到：eventId、deviceId、plotId、eventTime、riskScore、riskLevel、thresholdVersion、featureDigestId（引用）、modelVersion。建议动作我想放可选。  \n幂等规则：eventId稳定且唯一；createTicket用Idempotency-Key=eventId。  \n用例1：单次风险→创建ticket→推送→复核回填→ticket关闭。  \n用例2：边缘断网缓存，恢复后同一eventId重发N次，只生成一个ticket，消息可能重复但前端去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延我定义为：边缘产生eventTime到工单服务返回ticketCreatedTime的差，算创建时延；再加上通知送达前端的ackTime，算通知时延。打点：边缘上报带eventTime；后端落库记录createdAt；推送服务记录sentAt；前端收到回执记录ackAt回传。联调时先不全做回执，先用推送服务sentAt当近似。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "缓存我想按事件数量上限，比如最多200条，或者按大小5MB。满了就丢最老的低风险，只保留高风险。这里我不太确定风险怎么比大小，按riskLevel和riskScore排序？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我能做。那联调时我们也要测“缓存满”场景：触发dataLossFlag=1，云端仍能建单但在摘要里提示数据缺口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想走一个特征明细查询接口，按featureDigestId拿“训练明细（受控）”或“运维/业务摘要（裁剪）”。但我担心权限很麻烦，可能要做ABAC。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 风险事件、工单消息链路联调时，哪些字段算敏感/不该上消息？特征明细查询你建议怎么做最小权限？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住了：消息里不出个人信息、不出原始序列/向量，只给digestId；明细查询走RBAC分三类角色，必须带ticketId做审计；联调数据也要TTL。RBAC我能接受，ABAC先不搞。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）风险事件最小字段：eventId、deviceId、plotId(内部ID)、eventTime、riskScore、riskLevel、thresholdVersion、modelVersion、featureDigestId、actionCode、dataLossFlag。  \n2）工单幂等：eventId稳定；createTicket 的 Idempotency-Key=eventId，TTL 24h；消费者/前端按eventId或ticketId去重。  \n3）联调用例A正常：风险→建单→推送sentAt→小程序可见/回执→农技复核→回写结果→工单关闭。  \n4）联调用例B断网重发：边缘缓存重发N次，同eventId只建一个单；允许重复推送但展示去重。  \n5）观测点：eventTime、工单createdAt、推送sentAt、（可选）前端ackAt/首次可见时间；统计创建时延、通知时延、死信占比。  \n6）边缘缓存上限：高风险50条、低风险100条；溢出丢低风险FIFO，高风险只保最新50条并置dataLossFlag。  \n7）合规：消息不含个人信息/地块名称；不传原始序列/向量，仅digestId引用；明细查询RBAC分角色并审计留痕，数据TTL（原始7天、摘要30天）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

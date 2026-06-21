@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多模态渲染适配与集成测试背景下，用户与导师围绕老管线解耦重构方案、队列选型依据及Mock数据合规持续沟通（7轮），其中在管线解耦与资源隔离部分与多模态渲染集成师沟通（1轮），在Mock数据脱敏与轻量解耦部分与全链路联调专员沟通（1轮），并最终形成自定义ConcurrentQueue按LineageID路由、Mock脱敏规则及单线态对照测试的集成方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全是硬编码，渲染逻辑和图引擎节点绑一块了。我想能不能直接把这块替换成开源的XR渲染框架？我看网上好多人重构老代码都是直接换框架，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阻塞确实有，一推演就卡UI。并发隔离我还没细看。我以为是换个支持异步的框架就自动解决了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老管线跟图引擎强耦合，同步阻塞，我想直接换框架，但导师说要解耦。这块怎么改比较好？集成测试怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这东西是不是可以直接用RabbitMQ那种消息队列？或者Unity自带的CommandBuffer？我不想自己写队列，容易出bug。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没想那么多。就觉得现成的稳。如果CommandBuffer不支持LineageID隔离，那可能还得自己包一层。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "集成测试Mock数据怎么脱敏，还有管线解耦有没有轻量点的办法，不想上重中间件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脱敏就是抹掉用户ID和对话内容是吧。ConcurrentQueue包一层，听着好像也不难。对照测试这个挺好，能验证没改坏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用大框架了。自己写个轻量的ConcurrentQueue，按LineageID路由。Mock数据得脱敏，只留事件和LineageID。集成测试先跑单线态对照。这样风险小点吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

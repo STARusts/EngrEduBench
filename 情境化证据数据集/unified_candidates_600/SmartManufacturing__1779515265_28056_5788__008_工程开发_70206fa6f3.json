@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在柔性产线排程模块开发任务拆解背景下与导师围绕微服务拆分粒度、安全约束落地、求解定制与验证口径持续沟通（5轮），其中在OptaPlanner多约束定制部分与动态调度算法师沟通（1轮），在代码模块切分与微服务合并部分与核心开发带头人沟通（1轮），并最终形成排程引擎合并、约束解析剥离及补学验证等任务拆解要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用Spring Cloud那套微服务把排程拆开，调度服务、求解服务、指令下发服务分开。我看网上很多排程项目都是这么搞的，用脚手架生成项目结构比较快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "签名应该放在下发服务里吧。求解服务我想着直接调OptaPlanner的API，它是个现成的排程框架，封装好了各种算法，省得自己从头写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用OptaPlanner做求解服务，高混小批量场景下多约束动态插入，直接调API能行吗？排程求解这块任务应该怎么拆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "代码模块这块怎么切比较好？我本来想拆三个微服务，调度、求解、下发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "排程核心引擎要把调度和求解合在一起，约束规则得单独解析，不能全塞在求解器里。下发服务独立，签名用切面做。OptaPlanner不能简单调包，得自己写ConstraintProvider。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我对ConstraintProvider确实不熟，我今晚把OptaPlanner官方文档里ConstraintConfiguration那章啃下来，写个多约束插入的Demo跑通，明天再改项目代码。验证的话，我拿车间上个月的历史排程快照做基准，把新参数输进去跑，比对结果偏离度和耗时，耗时超过2秒就算不达标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，排程核心引擎合并调度和求解，内部多线程；第二，约束规则解析与求解器剥离，深度定制OptaPlanner；第三，指令下发服务独立，签名与时间戳用切面织入；第四，用历史快照做基准测试，时延阈值2秒；第五，今晚补学ConstraintProvider机制并出Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

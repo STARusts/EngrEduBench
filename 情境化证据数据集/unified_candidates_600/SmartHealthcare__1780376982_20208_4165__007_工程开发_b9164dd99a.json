@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在穿戴端固件开发背景下，用户与导师围绕阻抗微迹采集噪点根因与中断冲突修复及验证口径持续沟通（6轮），其中在底层时序冲突排查部分与穿戴固件开发专家沟通（1轮），并最终明确中断抢占根因及补学目标与极限压力验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跑阻抗微迹采集时噪点特别大，用官方SDK带的滤波组件压不下去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看波形就是毛刺多，想着是不是换个强点的DSP滤波库，或者干脆把采样率从500Hz降到200Hz，高频噪点可能就没了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种比较好用的降噪库可以直接调？或者我把采样率调低点行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前用的开发板自带协处理器，没碰过这种抢占问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "关了数据传不出去啊。我不太敢自己改中断优先级，怕把整个时序搞崩。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得去看看这颗MCU的手册，把中断优先级分组弄明白，还得写个测试脚本测一下当前抖动到底多大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个固定阻抗源，看基线方差是不是变小了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "补学目标是ARM Cortex-M4的NVIC优先级分组机制，今天写个GPIO翻转脚本用逻辑分析仪抓实际中断响应时序。验证口径是：在蓝牙每秒发包10次的极限压力下，连续跑10分钟，ADC触发抖动量必须小于2微秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

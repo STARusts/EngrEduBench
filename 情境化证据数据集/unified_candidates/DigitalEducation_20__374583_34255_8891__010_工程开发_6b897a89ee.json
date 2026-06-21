@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在训练事件上报链路联调压测与缺陷修复背景下，用户与导师围绕压测模型、验收口径、状态机/幂等与审计完整性持续沟通（9轮），其中在压测场景分组与阻断标准上与测试负责人沟通（4轮），在重复与乱序事件返回码及审计记录规则上与后端负责人沟通（2轮），并收敛为4条可执行验收点与数据脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先保三件事：不丢事件、状态不乱跳、422/409这些错误码返回稳定。指标我先盯吞吐和P95延迟，还有失败率。切入上就先压“START+IN_PROGRESS心跳+SUBMIT”的组合，因为离线补传会把这些叠一起。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型我先按学生端来：每人一次训练大概1个START，过程可能10到20个IN_PROGRESS事件，最后1个SUBMIT。补传会在网络恢复时把这堆事件集中打上来。验收口径我先定成：事件入库成功率99.9%，P95小于300ms，422/409这些按预期出现且不导致服务端500。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "300ms我确实是先拍的，我改成先用基线测出来再定阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率按“事件最终落库率”，因为有些422本来就该失败。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计字段我补一个抽样校验：比如每1万条里抽100条，检查tenant_id、user_id、session_id、published_version_id、client_event_id、server_received_at都有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测我准备测事件上报链路（START/IN_PROGRESS/SUBMIT + 离线补传），你这边能给个压测场景分组、数据构造建议，以及通过/阻断标准吗？我们现在重点是联调压测+缺陷修复。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“队列堆积”我们这边是看什么指标？我这侧只看到了接口延迟和状态码分布。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先做第一组基线链路+第三组离线补传尖峰。第二组真实行为先放后面，因为它更像“长时间稳态”，我们现在是把明显缺陷先掐掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态机正确我想用两条：\n1）对同一个session，server端记录的session_state只能按START->in_progress->completed走，不能因为ANSWER之类回跳；\n2）如果事件乱序到达，应该返回STATE_CONFLICT或做幂等忽略，不允许把completed覆盖回in_progress。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向服务端做最终幂等：按client_event_id做唯一键，重复直接200但带标记duplicate=true，或者409？我不确定现有约定。移动端只保证尽量不重放，但离线重试肯定会重复。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 现在在做联调压测，想确认下：同一client_event_id重复上报（离线重试、断点续传）服务端期望返回200还是409？另外审计落库对重复事件是只记一次还是要记录duplicate标记/计数？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那乱序呢？比如先到SUBMIT后到IN_PROGRESS，服务端会怎么处理？是直接409还是允许SUBMIT把状态推进然后忽略之前的IN_PROGRESS？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去压测里把“乱序补传”单独做成失败用例，不算系统不稳，但要看409比例是否符合构造。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定4条：\n1）压测组1（START+SUBMIT）下：无500，事件最终落库率>=99.9%（排除预期422/409），且P95不超过基线*2。\n2）压测组3（离线补传尖峰）下：重复client_event_id返回200且duplicate=true；落库不重复，dup_count递增，last_seen_at更新。\n3）状态机：任何session_state只允许START触发in_progress，SUBMIT触发completed；ANSWER/IN_PROGRESS不改最终态；乱序或缺前置一律409+STATE_CONFLICT。\n4）审计字段抽样：tenant_id/user_id/session_id/published_version_id/client_event_id/server_received_at 必有；HASH_MISMATCH、TOKEN_EXPIRED、SESSION_INVALID、STATE_CONFLICT这些reason_tag与规则引擎枚举一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线我用单用户低并发（比如10 rps）跑10分钟，取P95当基线。数据我用固定的测试账号集合，user_id做假号，token我这边客户端日志不打印，只打印token_hash前8位定位。服务端如果有request log，我也提醒后端把Authorization打码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

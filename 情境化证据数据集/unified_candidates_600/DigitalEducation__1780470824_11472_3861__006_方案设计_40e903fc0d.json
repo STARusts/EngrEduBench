@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实时导学推流与状态注入方案设计背景下，用户与导师围绕大模型侧状态接入、推流低延迟、长上下文裁剪、压测验证及合规拦截降级持续沟通（9轮），其中在推流拓扑与首包透传部分与流式交互系统设计师沟通（1轮），在Prompt状态注入与防爆炸部分与大模型提示工程师沟通（1轮），并形成SSE透传、增量状态注入、滑动窗口裁剪及护栏超时降级等硬约束基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端用WebSocket长连着，状态拿到了直接拼进Prompt发大模型，流式返回不就行了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "增量拼吧，全量塞肯定慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "首Token延迟这块我确实没底，大模型推理本身就慢，状态再一变，感觉容易卡。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导学推流用SSE还是WebSocket好？首包延迟怎么控？状态实时变会不会把连接冲断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "认知状态增量注入Prompt，怎么防Prompt越来越长拖慢推理？增量状态格式怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推流用SSE，网关透传Token；状态用标签包起来增量注入，还要用滑动窗口裁剪上下文。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "滑动窗口具体怎么裁，我有点懵，之前没写过这种长上下文控制逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我是不是能把这招搬过来？把系统Prompt和认知状态标签当Sink死死保留，解题过程用滑动窗口滚出去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个压测呗，多并发打一下，看看平均延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三组？短Prompt低并发，长Prompt低并发，长Prompt高并发。变量隔离我不太懂，就是每组只改一个条件？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "流断了前端给个“正在安全校验”的提示转圈，审核过了再续传？或者直接重发最后一段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 下行推流用SSE，网关层逐Token透传；2. 增量状态用结构化标签注入；3. 上下文裁剪用Attention Sink保留元信息加滑动窗口滚历史；4. 合规拦截时前端转圈提示，1秒超时换兜底话术。压测看P99，对照组补上状态注入复杂度变量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

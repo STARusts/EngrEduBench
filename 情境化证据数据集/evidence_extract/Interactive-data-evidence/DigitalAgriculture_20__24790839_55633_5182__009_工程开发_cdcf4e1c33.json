@@ -1,0 +1,109 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方生成模型训练落地debug背景下，用户与导师围绕处方异常（特征名对不上、风险分层反直觉、菌剂组合不稳定）持续沟通（11轮），其中在可回放最小留存字段与特征血缘/版本绑定上与数据架构师沟通（3轮），在解释阈值应采用分位数与参考分布版本化上与土壤微生物组科学家沟通（2轮），并确定feature registry+版本/缺失处理+确定性排序与解释schema的实现与验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边复现了三种怪事。第一是同一块地，重复训练两次，处方里“建议施用的菌剂组合”会跳，像是随机的。第二是病害风险分层有点反直觉，历史发病高的地块反而打成低风险。第三是模型输出的解释字段，有时引用不到对应的样本特征，像特征名对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我拼了三块：扩增子/宏基因组那边给的OTU/ASV聚合到属级，传感器是采样前后7天的均值和方差，农事记录是最近一次施肥施药和作物。标签我先用“复测后病害评分下降/没下降”做二分类，处方输出是一个JSON：risk_level、actions（菌剂/有机质/轮作建议）、explain（top features）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照我做得比较粗。第一个“组合跳”的，我怀疑是训练时的数据shuffle导致；第二个风险分层，我觉得可能是标签反了或者时间窗取错；第三个对不上，我怀疑是特征工程那边字典顺序不稳定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如 explain 里会出现“Genus__Bacillus_ratio”，但我训练表里列名是“genus_bacillus_rel_abundance”。还有“soil_temp_std_7d”，但表里是“temp_std_7d”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做一个feature registry，训练时把每个特征的 canonical_name、来源、计算公式、单位写进去，然后训练产物里把feature_id映射存下来。解释模块只认feature_id，再去registry里取展示名。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型产物里记录registry_version，推理服务加载同版本registry。回放的话，我能把推理时的特征向量也存一份……但这会很占空间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 现在处方模型训练/推理的特征名对不齐，我准备做feature registry+版本绑定。想确认两件事：1）为保证可回放，最小需要落库哪些原始字段/中间特征？2）特征血缘和版本你建议怎么存，才能既能重算又别太贵？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“缺省值版本号”我之前没记。是指我现在填补缺失用的中位数、众数那套统计量也要版本化？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。还有个点：omics_result_id如果是hash，hash算哪部分？全量OTU表会很大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心是三层。必须落库的是推理输入快照：plot_id、sample_id、collect_time、omics_profile_id/omics_result_id、传感器窗口start/end、农事记录引用IDs、还有缺省填补的版本号。registry里固化feature_id到来源/变换/单位/缺失策略/合法范围，按registry_version冻结。模型版本固定引用registry_version+training_dataset_version，回放靠这三个重算特征，不存整向量，只有少量不可重算的派生特征才考虑落。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用的是同plot_id，且复测样本在首次采样后30-60天。作物我没强卡，只要地块一致。追溯字段我只用到sample_id对应lims_result回传，没拿container那套。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能做个分桶：14-30、30-60、60-90天，分别算“病害评分下降”的比例、以及跟基线病害水平的相关性。如果短窗口反而更稳定，就把复测定义收紧。另外加“同作物/同茬口”过滤，先把噪声降下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看过一眼，相关系数接近0，我以为是模型自己学别的特征了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺失率我没系统看，只抽样看过几条。填补我用0，想着“没记录就是没发生”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向1，数值特征加一个is_missing位，原值缺失就填中位数。这样模型能学“没记录”本身的信号。用0我先不用了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型输出risk_level和几个功能群的权重，然后我写了个规则：按权重top2选菌剂A/B库里的候选，再按库存可用性过滤，最后取前两个SKU。库存那边返回顺序不固定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改法：候选SKU按一个稳定键排序，比如`(evidence_score desc, agronomic_priority desc, sku_code asc)`，库存过滤后再排序；如果evidence_score相同就靠sku_code。测试我写两类：  \n- 同输入跑10次，处方actions必须完全一致；  \n- 库存列表随机打乱顺序返回，最终处方不变。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阈值我现在没带出来，只带了top features。我可以在registry里给每个特征加`clinical_threshold`，解释时如果超过阈值就输出“超阈原因”。但阈值来源我不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@土壤微生物组科学家 处方解释想补“触发阈值/分位数原因”。能给一版工程可用的建议吗：哪些微生物组/功能指标适合硬阈值，哪些更适合用分位数或相对基线？我们先做第一版可迭代的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解就是：别写绝对数值阈值，更多用“同区域同作物分位数”来触发解释；单OTU不展示。参考分布也得版本化，跟检测流程走。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备这样落：  \n1）解释里不放绝对阈值，放`ref_cohort`和`quantile`。比如：`{\"factor\":\"Shannon\",\"ref\":\"region=鲁中|crop=番茄|season=春\",\"value\":2.1,\"quantile\":0.12,\"meaning\":\"多样性偏低\"}`。  \n2）每条action挂1-2个trigger_factors，固定结构，避免自由文本。  \n3）参考分布我先离线算，按`region+crop+season+assay_version`分桶，生成`ref_stats_version`；推理产物记录这个version，回放可复现分位数。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我设个最小样本数N=50。低于50就逐级回退：去掉season，再不够去掉crop，只留region；再不够就用全国基线但在解释里标“低置信”。这个“低置信”也能影响处方动作强度，比如从“建议施用”降到“建议复测确认”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "顺序我排：先做feature registry和模型产物的版本引用，不然解释一直飘；然后把缺失处理改成indicator+中位数，并补一组数据质量检查（缺失率、取值范围、dtype）；最后改处方动作确定性排序和解释结构，外加两条稳定性测试。验收点：同输入多次推理处方完全一致；解释字段能用feature_id查到展示名；回放时按model_version+registry_version+ref_stats_version能重算出同一分位数结果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

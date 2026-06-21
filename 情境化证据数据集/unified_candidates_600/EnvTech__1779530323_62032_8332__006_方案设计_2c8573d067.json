@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在时序数据并发与高可用设计背景下，用户与导师围绕数据分级合规约束、高可用降级策略与压测验证方法持续沟通（8轮），其中在敏感工况数据跨AZ同步合规限制部分与环保合规分析师沟通（1轮），在本地AZ高可用集群与降级容灾设计部分与大数据架构师沟通（2轮），并最终形成数据分级分类、标签路由、AZ级故障降级与Chaos压测验证等核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Kafka接进来，写时序库呗。TDengine或者TimescaleDB，建个集群，分片写入。并发高就加节点，高可用就多副本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨AZ多副本啊，不然单机房挂了咋办。延迟高点就高点呗，时序数据晚个几百毫秒无所谓。脑裂的话，时序库自己有仲裁机制吧，配成多数派写入就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序数据跨AZ多副本同步，合规上有什么说法吗？我打算把传感器数据全丢进去多副本容灾。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就麻烦了。工况数据量最大，不让跨AZ同步，本地AZ机房挂了数据不就没了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规说工况时序数据不能跨AZ副本，只能在本地AZ。这种情况下高可用和并发写入怎么搞？我总不能就单节点裸奔吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我写入侧的降级触发条件怎么定？本地AZ节点挂了一台算降级吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以用超级表把数据分级打上标签，公共数据打\"public\"，工况数据打\"sensitive\"，查询和副本策略按标签自动路由。这样不用拆两个库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个压测呗。写个脚本狂发数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "控制并发数这个变量，从10万到50万逐步加。AZ级故障用Chaos Mesh注入网络分区，把本地AZ的网络全掐断。然后看写入成功率是不是掉到0，恢复后断点续传能不能接上，数据有没有丢。再跑一组没标签路由的做对照组，看TPS差多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据分级分类，公共数据跨AZ多副本，敏感工况数据本地AZ多节点加加密冷备；接入层按企业ID分片打散；用超级表标签做路由策略；降级条件是AZ中断或多数派丢失，降级动作是本地落盘背压和断点续传；压测验证要覆盖Chaos注入的AZ级故障和标签路由性能对照组。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

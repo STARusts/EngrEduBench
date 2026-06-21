@@ -1,0 +1,551 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在需求与战略痛点剖析背景下，用户与导师围绕AIGC关卡不可演机理、形式化验证假设及校验总线算力降级持续沟通（9轮），其中在痛点机理部分与玩家体验研究员沟通心流断裂（1轮），在商业反噬部分与文娱商业分析师沟通合规风险（1轮），并形成痛点剖析核心锚点与可检验假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是玩家走不通，卡住了。现有审核太慢吧，人工看不过来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AIGC关卡走不通的时候，玩家到底怎么崩的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "商业上这痛点怎么反噬的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加人肯定不行，生成太快了。形式化验证能自动查。但形式化验证这块我其实不太懂原理，只知道能查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是AIGC生成的逻辑图里肯定有结构性死胡同，我们用沙箱探路能找出来。至于怎么证明更好，我这两天得补一下图论和状态机的东西，不然说不清遍历逻辑。我计划这周末看完状态机基础，下周用Python写个最小图遍历demo，跑通一个死胡同检测，这样我就真懂这个验证假设了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力消耗确实没想过。挂了就重试呗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心结论是：AIGC生成关卡存在结构性死胡同和违规涌现，导致玩家心流断裂和流失，人工审核成本不可接受且无法拦截合规红线。现有简单规则查不出逻辑死循环，必须用形式化验证和沙箱探路。还有，校验总线自身算力消耗大，必须设计降级限流，不然自己会崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可检验假设就是：若生成关卡的逻辑图谱存在无法出度为0的闭环节点，则沙箱探路智能体步数将超限。反驳标准就是：步数没超限但玩家依然无法通关。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在玩家可演性期望调研背景下与导师围绕AIGC关卡可演性底线、心流断裂行为表征及需求假设持续沟通（4轮），其中在挫败感来源与可达性底线部分与玩家体验研究员沟通（1轮），并最终形成可演性底线、心流断裂表征、流失激增需求假设及公平可达性红线等调研结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发个问卷呗，问问大家觉得AIGC关卡好不好玩，哪里不好玩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是能通关吧，别卡死。还有别出违规的吓人东西。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "玩家遇到那种走不通或者突然冒出来怪东西的关卡，反应是啥？他们对可演性的底线要求是啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "玩家就是不想死得太冤，而且不能只给手柄玩家做关卡。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不玩了，退出了。假设就是遇到死胡同玩家就退出？"
+              }
+            ]
+          },
+          {
+            "microScene": "在AIGC内容合规边界梳理背景下，用户与导师围绕涌现式违规防范与校验调度总线架构约束持续沟通（5轮），其中在动态组合与跨模态隐喻审查要求部分与内容合规风控师沟通（1轮），并最终确认涌现叙事审查、空间隐喻与跨模态一致性审查及总线态势感知与熔断三条合规约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要就是别生成违规的词和图，我们在输出端加个敏感词库过滤，应该就差不多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "动态组合确实容易出事。这种边界挺难定的，我还没太想好"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们AIGC涌现逻辑在游戏叙事和关卡结构上有什么合规红线？特别是动态组合和跨模态隐喻这块，审查要求是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "红线有三个。一个是不能美化犯罪，一个是不能用宗教符号，还有一个是文本和图不能搭配出恐怖感。感觉就是咱们得在总线里加规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "总线里防，是不是得边生成边查？我不太确定，感觉生成完再整体查一遍比较保险？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "生成态势感知和熔断，不能只靠末端拦截"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在需求与战略阶段的商业推演背景下，与导师围绕AIGC规模化分发的算力成本、校验成本与营收可行性持续沟通（8轮），其中在盈亏平衡点与成本结构拆解部分与文娱商业分析师沟通（1轮），并最终形成基于行业研报的三个基准假设以约束后续方案设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得只要量铺开了，边际成本肯定能降下来，然后就能赚钱了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力成本和营收到底怎么算啊？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要把废稿率降下来，然后靠二创抽成回本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该能优化吧？校验总线跑快点就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下测试看看呗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚去看看Roblox和几个AIGC游戏引擎的研报，把算力成本和废稿率的行业基准找出来，列个对比表，这样就能知道我们要定什么目标了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我重点看熔断和探路的算力开销，然后把阈值加到我们的需求约束里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "单次校验成本X元，付费转化Y%，算力占比M%。我拿这三个去对齐研报数据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在涌现逻辑形式化架构设计受成本与算力约束背景下，用户与导师围绕架构选型、状态裁剪标准、假阳性处理及对照假设设计持续沟通（9轮），其中在状态裁剪与转换路径部分与涌现逻辑架构师沟通（1轮），并最终确定抽象状态图架构方向，提出对照假设，计划补充偏序关系理论以支撑合并粒度设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把AIGC生成的逻辑直接转成有向图，节点是游戏状态，边是玩家动作，这样就能遍历校验了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个限制就行，边太多就不展开那些次要分支。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AIGC逻辑转可计算图，怎么裁剪状态才不会丢关键信息？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误判了就再生成一次呗，反正生成快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设抽象图的假阳性率在5%以内，废稿成本比全量展开的算力成本低，就选抽象图。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "变量是状态合并的粒度，对照组是全量FSM。看合并粒度调到多少时，假阳性率不超5%且单次校验耗时降一半。要是假阳性率压不住，就说明抽象图方案不成立。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没搞透，等价类合并的数学定义我不熟，拿不准怎么算相似。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这两天去找图论教材里关于偏序和格的章节看，弄懂怎么判定状态等价，再回来看合并粒度怎么定，把判定条件写进架构文档里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在沙箱探路机制设计背景下，用户与导师围绕探路策略、算力预算与结果交付接口持续沟通（7轮），其中在探路策略与算力预算部分与沙箱算法工程师沟通（1轮），在量化指标与预算设定部分与可演性评估专家沟通（1轮），并最终形成剪枝探路、动态预算与标准化交付约束，准备写入架构文档并与总线调度开发工程师对齐。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "沙箱探路就是放AI进去跑，能跑通就说明关卡没问题，跑不通就打回重生成。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力肯定要限制的，跑太久就停掉呗。设个超时时间，超时就判不可演。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@沙箱算法工程师 探路策略和算力预算怎么搞，超时截断好像不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "K倍就先定个经验值，比如3倍？人工审核量大的话，就再调小一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@可演性评估专家 量化指标，用来定探路预算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家给了三个指标，覆盖率、死胡同检出和通关置信度。K倍预算要根据图的平均出度算，保证覆盖率的期望能在预算内。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "交付探路结果？就是通没通，还有覆盖率这些数值。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计可演性量化指标建模背景下，用户与导师围绕离线量化体系、算子与沙箱解耦及阈值标定持续沟通（4轮），其中在离线算子定义部分与可演性评估专家沟通（1轮），在算子与沙箱解耦调度部分与可演性评估专家沟通（1轮），并形成三大算子定义、解耦计算流及基线标定定阈值的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "量化啊，我觉得可以看玩家通关率和停留时间，如果低了就是体验断崖。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我先算算生成逻辑的复杂度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们项目要在关卡上线前评估可演性，没玩家数据，怎么量化啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从沙箱来？沙箱不是输出了阻塞点和步数吗，用这些算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该能吧，沙箱都跑了一遍了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算子计算和沙箱探路能拆开吗？导师怕沙箱算这个太吃算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "探路先跑，跑完把结果给算子流，算子再算丰度平滑度这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个，定个0.5？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在方案设计审查与调度流规划背景下，与导师围绕调度总线串接、背压与降级旁路设计及验证实验设计持续沟通（8轮），其中在并发调度与背压传导部分与总线调度开发工程师沟通（1轮），并形成审查前置同步拦截、探路异步背压、溢出降级旁路的调度约束及含基线对照组的验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用消息队列串起来，保证顺序就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审查优先，探路靠后。积压就加个限流，挡住外面的请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "审查和探路并发怎么调度？背压怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是沙箱满了告诉解析器慢点发，依据就是看沙箱剩余容量。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨晚看了Reactive Streams规范，里面说背压是下游向上游要多少给多少。但我没看懂这机制怎么套到我们这调度总线里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规范里有个drop策略，类似丢帧保命。那我们这也就是，解析器发太快，沙箱接不下，缓冲池满了就直接丢到旁路打标放行，不进沙箱试错了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多压点探路任务进去，看它崩不崩，打标率多少。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在关卡图谱解析器开发背景下与导师围绕文本到图的转化实现、解析鲁棒性验证、容错降级策略及同构性校验阈值持续沟通（8轮），其中在解析器实现深坑与验证严谨性部分与图谱解析开发工程师沟通（1轮），并最终形成基于容错Schema半结构化解析、缺失关系建虚拟边结构补全及同构性对照测试门禁的开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用正则匹配提取节点和边，然后存到图数据库里，再给总线用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就多跑几个生成的文本看看有没有报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "解析器写的时候有什么坑？还有怎么验证解析出来的图对不对？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "缺失的话，就断开边吧。阈值，我觉得0.1就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我周末查一下图同构的开源库，比如VF2算法。写个Demo跑通，把结果记在实验Log里。阈值我改成0.05试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发约束就是：用容错Schema做半结构化解析，遇到节点关系缺失要建虚拟边做结构补全。提测前必须加上同构性对照测试脚本当门禁。"
+              }
+            ]
+          },
+          {
+            "microScene": "在探路智能体联调背景下，用户与导师围绕容错设计、异常流处理与降级策略持续沟通（6轮），其中在智能体卡死与逃逸机制部分与沙箱算法工程师沟通（1轮），在总线背压与降级旁路部分与总线调度开发工程师沟通（1轮），并最终形成沙箱逃逸与总线旁路降级的联调约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时时间我设了，超时就杀掉进程，总线那边记个失败就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "智能体在沙箱里探路要是卡死了，光靠超时杀掉是不是不太行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱这边可能会上报'疑似环路'信号，总线那边怎么接？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "沙箱要有逃逸机制，总线要走旁路降级。我都加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "沙箱那边，如果探路步数超过图里节点数的两倍，就报环路信号；总线这边，我先设个固定阈值，比如10%的沙箱任务超时就降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调约束：第一，沙箱智能体步数超节点数两倍触发逃逸，上报环路信号；第二，沙箱必须打步数日志用于验证系数；第三，总线收到信号降级走形式化旁路；第四，降级阈值不硬编码，做成可配置项。"
+              }
+            ]
+          },
+          {
+            "microScene": "在可演性算子代码实现背景下，用户与导师围绕算子计算复杂度与总线同步超时冲突的协调方案持续沟通（6轮），其中在精度保证部分与可演性评估专家沟通马尔可夫链及异步复核可行性（2轮），在实时性吞吐部分与总线调度开发工程师沟通同步耗时及粗分可行性（2轮），并形成同步粗分与异步精算复核的折中方案及代码实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个算子类，把那些指标都实现出来，比如通关率、死路率啥的，挂上去跑就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，不能超时。我尽量优化代码，写快点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算子计算复杂度能不能降一点？总线怕卡。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评估专家说要用马尔可夫链，总线这边能跑吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们俩冲突了。评估专家坚持要马尔可夫链保证精度，总线工程师说同步跑马尔可夫链会超时崩吞吐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就，把马尔可夫链放异步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@总线调度开发工程师 同步流走轻量启发式粗分，异步走精算，这样吞吐没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@可演性评估专家 同步走粗分，异步旁路用马尔可夫链精算复核，这样精度能保证吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "同步粗分控5毫秒，异步精算结果回写图谱触发二次标记。"
+              }
+            ]
+          },
+          {
+            "microScene": "在调度总线极限压测背景下，用户与导师围绕压测策略、内部耗时模拟工具选型及极限边界判定持续沟通（7轮），其中在队列堆积与背压测试部分与总线调度开发工程师沟通（1轮），在异常注入策略部分与联调测试工程师沟通（1轮），并最终形成基于Gatling注入动态耗时与监控吞吐拐点及P99延迟突增的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测总线要注意什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "极限压测怎么造异常？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "JMeter确实管不到内部耗时模拟。我前两天刚好在查压测资料，看到Gatling可以写自定义模拟器，能控制算子执行时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Gatling写一个自定义的算子Feed，模拟探路沙箱耗时从5毫秒到5秒的动态分布，直接注入到总线内部接口，这样测背压才真实。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看吞吐量的拐点。当并发数上升，吞吐量不再线性增加，而且P99延迟开始急剧飙升，这就是总线处理能力的极限边界，说明背压要触发了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在调度总线灰度上线背景下，与导师围绕灰度策略、统计依据、合规拦截与短板弥补持续沟通（8轮），其中在灰度指标与统计口径部分与运维监控工程师沟通（1轮），在AIGC涌现合规拦截与分池放量部分与内容合规风控师沟通（1轮），并最终形成分池灰度放量方案与补短板计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度放量我们要看哪些指标？怎么判断能不能扩量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看95%置信区间，上界低于1%才能扩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AIGC涌现逻辑可能生成违规内容，灰度放量怎么防？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加实时合规审查算子，先内部池再玩家池。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为AIGC会涌现未知组合风险，词库挡不住，必须加算子形式化校验，而且要保证拦截率。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对合规算子接入和置信区间计算确实不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周，每天花1小时学AIGC合规审查算子的接入规范，再用1小时学灰度放量统计里的置信区间计算，自己写个Python脚本跑模拟验证，把结果用到总线的监控配置里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度方案调整为：先接入实时合规审查算子，放量分两池，先内部测试池，合规拦截率95%置信区间上界达99.9%后，再进玩家灰度池。放量指标看总线错误率和P99延迟，同样看95%置信区间上界低于1%才扩量。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估拦截监控设计背景下，与导师围绕拦截分类量化、降级兜底策略及报警阈值设定持续沟通（6轮），其中在拦截分类与误杀区分部分与可演性评估专家沟通（1轮），在看板搭建与资源控制部分与运维监控工程师沟通（1轮），并最终确定拦截核心指标、静态规则校验兜底策略及基于内部池P95的阈值设定方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就盯拦截率呗，设个阈值，超了就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，得拆开。我我去查日志，把报错原因分个类，分开算比例。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@可演性评估专家 拦截分类怎么搞？怎么区分是真不可演还是误杀？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控工程师 看板怎么搭？资源消耗怎么控？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "拦截分逻辑死锁、数值断层和合规三类。误杀看重放不一致率。看板分池，还得加降级开关，超时就放行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那不放行？但专家说延迟会爆啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心指标是逻辑死锁率、数值断层率、合规拦截率，还有重放不一致率。降级策略是超时走静态规则校验兜底，不直接放行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先定个5%？超了就报警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "记下了。重放不一致率阈值初期跟内部池P95，跑三天再收窄。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在关卡断崖率异常归因背景下与导师围绕工程归因框架与看板口径持续沟通（6轮），其中在归因维度拆解部分与数据洞察分析师沟通（1轮），在真实反馈校准归因部分与玩家反馈运营师沟通（1轮），并最终形成结构、逻辑、行为三层交叉对齐ID的归因框架与看板分区口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看看报错的关卡都是啥类型，是不是生成的怪物太强了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断崖率归因怎么拆维度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看图的结构，看有没有死锁，还有数值。交叉一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "玩家反馈怎么校准归因？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加上重试次数，0次退出才是断崖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对齐ID。强一致修生成器，不一致查数值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "看板分三区。口径就是对齐ID。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估用归因结论驱动算子迭代背景下，用户与导师围绕参数调整依据、适用边界及灰度验证持续沟通（4轮），其中在玩家吐槽归因映射部分与玩家反馈运营师沟通（1轮），在算子参数调整部分与可演性评估专家沟通（1轮），并最终明确参数映射与边界，决定补日志并灰度跑验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "归因分了强一致、弱一致、误伤，玩家吐槽主要对应哪些？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "结构惩罚要加，算子参数怎么调？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说惩罚因子改0.8，多样性奖励翻倍。还有只能用于线性关卡，网状图不能直接用，得重跑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没记录。我补个日志，把这次的惩罚因子迁移到新探路配置里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在耗材精算数据湖方案设计背景下与导师围绕湖仓一体架构、危化品合规审计、数据一致性及核心约束持续沟通（8轮），其中在危化品合规留痕与数据分层部分与数据湖工程师沟通（1轮），在精算模型特征与采样粒度部分与算法开发骨干沟通（1轮），并最终形成基于最终一致性双写与死信补偿的四条核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我考虑用Apache Iceberg做表格式层，底层存S3或者MinIO，计算引擎用Trino做即席查询，Flink做实时摄入。这样既能保留历史实验轨迹，又能支持精算模型的特征提取。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计的话，Iceberg本身有快照隔离和Time Travel功能，应该能回溯历史状态。宽表就是把耗材属性、实验项目、学生信息拉平存一张大表。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "危化品合规留痕怎么在湖仓一体里落地？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "精算模型具体需要哪些聚合特征呢？我不太确定算法那边需要啥粒度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "精算模型对耗材历史消耗的采样粒度和特征要求是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据湖的DWS层就按这个粒度建聚合表。数据湖方案基本有了：底层Iceberg，摄入链路加双写保证合规，DWD建三元组事实表，DWS按天聚合带协变量给精算模型。权限上做RBAC和脱敏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性的话，可以用Flink的Exactly-once语义，通过两阶段提交来保证OLTP和湖的原子写入。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就改成最终一致性？先写OLTP，写湖失败的话，把消息丢到死信队列，后面再补偿重试？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束四条：1. 架构基于Iceberg湖仓一体；2. 摄入采用最终一致性双写，OLTP主写供校验，异步写湖供精算，失败走死信队列补偿；3. 模型宽表按“实验-设备-耗材”三元组事实加天级协变量聚合；4. 危化品数据强制RBAC权限与脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

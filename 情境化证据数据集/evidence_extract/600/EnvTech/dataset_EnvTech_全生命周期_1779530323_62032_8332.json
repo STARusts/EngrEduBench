@@ -1,0 +1,537 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在大气微污染溯源系统需求梳理背景下与导师围绕痛点依据、验证假设设计与系统定位持续沟通（8轮），其中在执法权与数据合规部分与环保合规分析师沟通（1轮），并形成辅助决策定位、官方数据通道及80%归因命中率验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在环保局查到超标，经常抓不到具体是谁排的，只能让整个园区停工。我想搞个能动态算出是谁排的，然后直接发指令让他停的系统。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用Python跑过几个园区的CEMS历史数据，发现O3前体物飙升的时候，传统网格化排查至少要半天，半天才找到源头，早超标了。要是能分钟级算出来，就不用连坐了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周找几节因果推断的公开课看看，重点学怎么设对照组和反驳标准。至少得搞懂怎么证明我的溯源不是碰巧，能写个基本的验证方案出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "查到哪家厂排污就自动发指令让它停产，这个可以吗？还有企业那边的在线监测数据我能直接拉过来用吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "感觉只能做成辅助系统。给环保局出建议，告诉他们大概率是哪家排的，建议怎么限产。他们确认了再发指令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设是：把微气象和微观排放清单算在一起，找源头的速度和准确率比传统方法高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "认，这样就有数了，我就照着80%这个指标去搭验证环境。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在系统生存与业务模式推演背景下与导师围绕数据变现与双边市场逻辑持续沟通（6轮），其中在数据变现与双边市场构建部分与商业架构师沟通（2轮），并最终形成G端保底建设与B端按效果增值付费的业务模式结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业架构师 污染数据怎么搞变现？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可我觉得企业那帮人精得很，没看到实在好处不会掏钱的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但万一归因有偏差，企业买了服务还是被停工，肯定找我们退钱闹事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就分两块。G端出建设费把系统搭起来；B端按效果付费，归因准了他们算账划算才会买。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "超标前预警？不对，应该是帮他们做排放优化，就是那种微调工艺参数就能降一点排放的，不用大改产线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "G端覆盖建设与基础运维，B端为“避免一刀切”的精准调控指令付费。核心前提是归因精度带来的经济收益大于服务费。"
+              }
+            ]
+          },
+          {
+            "microScene": "在环保局提出直连企业DCS获取数据的需求变更评估背景下，用户与导师围绕合规风险、变更方案及试点验证逻辑持续沟通（5轮），其中在数据获取合规边界判断部分与环保合规分析师沟通（1轮），并最终形成拒绝直连DCS的可行性评估结论及基于政务数据与授权试点的变更方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "技术上就是加个采集前置机的事。不过直接连企业内网，是不是得走专线？这合规上没毛病吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "直连企业DCS系统拿实时生产数据，环保局让我们干，我们就能直接干吗？会不会侵犯商业秘密什么的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没企业授权根本推不动，强行搞连G端那边的验收都过不了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前对企业数据接入的法规太不熟了，这块必须补课，今晚得把涉排企业数据分类分级的规定还有授权链路过一遍，不然后面设计接口全得推翻。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "变更方案只能退一步：不直接穿透DCS，而是通过环保局已有的排污许可台账数据，加上企业厂界微站监测数据做融合。如果真要校准，先找几家自愿开放的企业做授权接入试点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找两家工艺不同的厂，对比他们自愿授权提供的脱敏生产工况数据和厂界微站反推的排放数据，算一下误差范围。如果误差在溯源模型可容忍范围内，就证明不直接连DCS也能行"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "环保局要求直连企业DCS的诉求因触及数据安全红线不可行。变更方案调整为：以政务监测与排污许可数据为主源，辅以厂界微站数据；对于需校准的场景，采用“企业自愿授权+数据脱敏”的试点模式。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我待会儿把授权链路约束和试点验证逻辑加到需求规格里。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在有限算力下的微污染溯源架构设计背景下，与导师围绕推演与图谱的算力妥协、选型、容错及验证持续沟通（8轮），其中在低算力推演选型部分与气象扩散建模专家沟通（2轮），在内存图替代Neo4j部分与图谱算法工程师沟通（1轮），并形成AERMOD批处理与内存图加快照持久化的架构妥协方案及验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着图谱用Neo4j存，扩散推演上CFD模型，精度最高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "8核？这咋跑CFD啊，网格一多直接卡死。那我只跑高斯烟羽模型？但图谱那边查询如果也占内存，会不会挤爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种条件下，气象场和排放清单耦合的推演怎么设计？能不能用高斯烟羽模型凑合？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AERMOD？我之前没调过这个模型的参数，它跟我们的微观排放清单怎么接？接口是文件还是内存流？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我图谱那边如果也吃内存，两个容器怎么分？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我对AERMOD的内存占用和地形预处理细节没底。这块我得补一下。今天下班前我要把AERMOD的官方文档跑一遍，重点看AERMAP的内存峰值，明天给出具体资源分配预估。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证的话，我假设AERMOD能在8核下做到2分钟内出结果且浓度误差小于15%。对照组就是纯高斯模型。我拿历史重污染天的数据，分别跑这两个，看哪个能在资源内跑完且误差达标。CFD就不测了，肯定跑不动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用Neo4j，只用内存里的轻量图结构做污染源关联查询，能省下多少资源？我们需要把内存挤给气象预处理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "百万级够用了，我们这片区重点源也就几千家。那我就定下来：图谱用内存图，不上Neo4j；扩散推演用AERMOD替代CFD，用批处理接数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "持久化可以每次更新图后异步写个JSON快照到磁盘。AERMOD挂了，可以用shell脚本拉起重跑，反正它是批处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论是：扩散推演架构弃用CFD和纯高斯，选用AERMOD，采用微站数据批处理输入方式；图谱存储弃用Neo4j，改用内存图加磁盘JSON快照持久化。验证假设：在8核32G*2容器下，AERMOD推演延迟<2min且浓度误差<15%（对照组为高斯模型）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构感知数据融合流设计背景下，用户与导师围绕企业排口数据入流的合规与精度取舍持续沟通（5轮），其中在采集脱敏合规底线部分与环保合规分析师沟通（1轮），在流式架构脱敏与推演关联兼顾部分与大数据架构师沟通（1轮），最终敲定双轨架构设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Kafka接，Flink全量算。精度第一啊。脱敏等落盘后再说？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "企业排口DCS数据我想全量拉进Kafka，后面再脱敏，这样行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规说流里绝对不能传原始曲线，只能传特征和标识。这怎么跟AERMOD对齐？没原始浓度场算不准吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规不让传原始数据，要特征和标识。Flink流里怎么做关联推演？AERMOD还要浓度场呢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说弄个可信沙箱脱敏，主链路只走特征和哈希ID。AERMOD用特征推演，关联用哈希ID。查原始数据走授权接口。就是多一层沙箱开销。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确认。沙箱脱敏进Flink，图谱用哈希ID，反查走授权。这样不用担责。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户围绕靶向指令下发链路设计与导师持续讨论停限产指令的可靠送达、防重机制与业务合法性（6轮），并在指令下发可靠链路与防重机制部分与微服务与接口设计师沟通（1轮）、在指令下发合规凭证部分与环保合规分析师沟通（1轮），最终形成靶向指令下发链路核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个接口推给他们呗，或者丢消息队列里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "消息队列可以重试吧。防重的话，加个唯一ID？但具体怎么弄没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微服务与接口设计师 管控指令下发，怎么保证不丢也不重？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环保合规分析师 指令下发要带什么合规凭证？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事务消息保送达，幂等键防重，必须挂文书编号和证据快照，要有签收回调和补偿，下发动作全量审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在时序数据并发与高可用设计背景下，用户与导师围绕数据分级合规约束、高可用降级策略与压测验证方法持续沟通（8轮），其中在敏感工况数据跨AZ同步合规限制部分与环保合规分析师沟通（1轮），在本地AZ高可用集群与降级容灾设计部分与大数据架构师沟通（2轮），并最终形成数据分级分类、标签路由、AZ级故障降级与Chaos压测验证等核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Kafka接进来，写时序库呗。TDengine或者TimescaleDB，建个集群，分片写入。并发高就加节点，高可用就多副本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨AZ多副本啊，不然单机房挂了咋办。延迟高点就高点呗，时序数据晚个几百毫秒无所谓。脑裂的话，时序库自己有仲裁机制吧，配成多数派写入就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序数据跨AZ多副本同步，合规上有什么说法吗？我打算把传感器数据全丢进去多副本容灾。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就麻烦了。工况数据量最大，不让跨AZ同步，本地AZ机房挂了数据不就没了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规说工况时序数据不能跨AZ副本，只能在本地AZ。这种情况下高可用和并发写入怎么搞？我总不能就单节点裸奔吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我写入侧的降级触发条件怎么定？本地AZ节点挂了一台算降级吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以用超级表把数据分级打上标签，公共数据打\"public\"，工况数据打\"sensitive\"，查询和副本策略按标签自动路由。这样不用拆两个库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个压测呗。写个脚本狂发数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "控制并发数这个变量，从10万到50万逐步加。AZ级故障用Chaos Mesh注入网络分区，把本地AZ的网络全掐断。然后看写入成功率是不是掉到0，恢复后断点续传能不能接上，数据有没有丢。再跑一组没标签路由的做对照组，看TPS差多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据分级分类，公共数据跨AZ多副本，敏感工况数据本地AZ多节点加加密冷备；接入层按企业ID分片打散；用超级表标签做路由策略；降级条件是AZ中断或多数派丢失，降级动作是本地落盘背压和断点续传；压测验证要覆盖Chaos注入的AZ级故障和标签路由性能对照组。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在气象扩散算法引擎开发背景下，用户与导师围绕微尺度排放清单接入方案、降尺度推演校准验证及引擎核心约束持续沟通（6轮），其中在DCS数据合规性部分与环保合规分析师沟通（1轮），在无工况数据替代算法部分与气象扩散建模专家沟通（1轮），并最终形成禁止直连DCS、采用降尺度推演及WRF敏感度调参的引擎开发核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接走接口拉他们DCS里的实时流量和阀门开度数据呗，之前不是留了数据接入层吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "非预警期拉企业DCS工况数据算不算违规？企业那边死活不给开接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "没有微观工况数据，扩散引擎怎么调？精度还能不能看？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规说强拉违规，气象专家说用中尺度降尺度推演加历史数据校准。我不拉DCS了，改走推演？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿几天的监测桩数据跟推演结果对比一下算个误差？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我降尺度这块底子薄，只会算MAE和RMSE。我今晚把WRF模式官方Tutorial跑一遍，重点看PBL参数化方案那章，把里面的敏感度分析方法搬到咱们引擎里做参数校准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1.禁止直连企业DCS拉取隐私工况；2.采用中尺度气象降尺度推演替代；3.用历史监测桩数据做对照校准；4.引入WRF的PBL敏感度分析做调参依据。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多源感知接入与图谱联调背景下，与导师围绕感知流式与图谱微批的延迟一致性妥协、联调接口协议及合规风险持续沟通（9轮），其中在感知层接入部分与流式计算开发工程师沟通（1轮），在图谱微批更新及特征对齐部分与图谱算法工程师沟通（2轮），在私有桩数据脱敏授权部分与环保合规分析师沟通（1轮），并形成流式感知与微批图谱联调折中方案及合规拦截策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知数据接入如果不用纯流式，延迟压不住吧？监测桩数据秒级进不来，溯源就没意义了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那图谱这边呢？流式那边说不能直接写，你们图更新怎么弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拼的话，感知数据流式进时序库，然后5分钟开个窗口把统计特征推给图谱？但这样图谱的溯源结果不就有延迟了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那感知接入还是全流式，保证报警快。图谱结构用微批更新。但是联调的时候，流式特征怎么跟图谱的微批状态对齐？时间戳对不上咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果感知特征是流式产出的，图谱是5分钟微批更新的，查询图谱做溯源的时候，怎么保证用到的是最新的感知特征，而不是5分钟前的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图索引加时序取值，懂了。也就是图谱只管谁跟谁连，不管现在浓度多少，浓度去时序库查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "流式侧输出特征向量带监测桩ID和时间戳，图谱侧暴露关联路径查询接口，也带时间戳。我写个Join服务去捞数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监测桩数据接入，有些是企业的私有桩，我们只拉脱敏后的浓度数据，不拉设备工况，这符合规范吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加个授权校验拦截器。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 感知层纯流式接入，Kafka接Flink写时序库；2. 图谱层微批更新结构，只存关联和ID；3. 联调用图索引加时序取值，我写Join服务对齐；4. 接入层加授权校验拦截器，过期熔断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在溯源归因与靶向指令生成逻辑落地背景下，用户与导师围绕归因推演方式、指令防误发机制、代码串联及自动拦截规则持续沟通（6轮），其中在因果推断与置信度计算部分与归因推理引擎开发沟通（1轮），在指令下发防误伤与状态机设计部分与微服务与接口设计师沟通（1轮），并最终形成归因推理链路与含自动拦截的指令状态机落地思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算在Flink里写ProcessFunction，测到超标就查图谱找上游源，然后拼个限产指令发到Kafka。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防误发我加个阈值判断呗，超太多才发。这块逻辑我不太敢定"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "归因具体怎么推？指令防误发有没有标准做法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "因果推断在咱们项目里怎么写？我只有时序特征和图关联。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令下发怎么防误伤？直接发Kafka感觉太粗暴。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因得结合气象算权重，用Drools推。指令要加状态机，先落库，有唯一ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink侧输出超标事件，去调Drools推理服务，把时序值、图关联和气象参数传进去。算出置信度后生成指令对象，带请求ID，写库置为“待审核”。合规分析师那边过一下规则，改状态为“生效”，再发控制信令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个自动拦截规则在落库后。如果停线比例超限，直接置为“已拦截”，不进审核流。"
+              }
+            ]
+          },
+          {
+            "microScene": "在溯源中枢全链路压测与异常排查背景下，用户与导师围绕压测方式、P99延迟分析、图查询内存控制及OOM排查持续沟通（6轮），其中在真实流量构造与未知异常捕捉部分与测试与性能调优专家沟通（1轮），并最终形成脱敏数据回放、Arthas排查及图查询限跳数的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用JMeter直接往Kafka里灌数据，并发线程开到5000，把CPU打满看会不会崩。异常捕捉我就在每个微服务接口加Try-Catch，把错误码写进日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路压测怎么造真实流量？Try-Catch抓不到的OOM和长尾延迟咋抓？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Arthas我之前没用过，但听他说好像是直接挂到Java进程上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TPS达标P99高，说明大部分请求快，但有个别请求卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我下午先看Arthas的官方Demo，把`trace`命令搞懂，直接用它看我们归因引擎的耗时链路。这比打日志快多了，不用重启服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图查询深度我可以在Cypher语句里加limit，或者在代码里限制最大跳数。如果不限制，深度遍历确实容易死循环把内存撑爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Arthas的`heapdump`导出堆内存？不过导出可能会卡住服务。我我我先看`dashboard`观察老年代增长趋势吧，真要OOM了再dump。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在大气微污染溯源管控中枢生产部署与基线验证背景下，用户与导师围绕部署方式、基线指标、统计检验能力缺口及补全目标持续沟通（7轮），其中在生产部署与灰度策略部分与DevOps与交付工程师沟通（1轮），在基线核心指标与统计检验方法部分与业务监控运营专家沟通（1轮），并形成Helm/GitOps灰度部署方案、基线验证指标体系及统计脚本补全目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我直接把Docker-compose拉起来跑基线验证行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看QPS和P99呗，压测都过了，线上流量小肯定没问题啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps与交付工程师 生产部署不能用compose？还有基线验证咋弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务监控运营专家 基线验证看啥指标？我就会看QPS。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "DevOps说用Helm和GitOps，还要设Limit。监控那边说看命中率和误报率，要算什么t检验，Cohen's d大于0.5。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不懂，数学烂透了。有没有工具直接出结果？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周把统计书翻翻，写个Python脚本算Cohen's d，加到监控脚本里去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就《应用统计》第五版，周五前写完脚本，拿测试集跑一下跟SPSS对答案。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署走Helm加GitOps，灰度10%流量。基线看P99延迟、溯源命中率、误报率，用t检验算置信区间。"
+              }
+            ]
+          },
+          {
+            "microScene": "在系统运行评估指标不佳背景下，用户与导师围绕接入企业产线实时数据的风险与折中方案持续沟通（4轮），其中在数据接入必要性及折中方案精度评估部分与业务监控运营专家沟通（2轮），在数据接入合规风险及折中方案合规性部分与环保合规分析师沟通（2轮），并最终形成接脱敏聚合数据、只做预警不下发限产指令并加审计留痕的调整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "响应度还行，就是溯源命中率上不去，误报也多。我想把企业产线实时数据接进来，算得准点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在误报太多，我想接企业产线实时数据，能不能搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控那边说必须接企业产线实时数据，不然误报下不来，能接吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他俩说的完全反着。监控说必须接，不然没法靶向；合规说接了就违法，误伤了还得赔。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不敢。刚上线就搞限产，万一误判了真得出事。但精度上不去也交不了差。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先只接脱敏的聚合数据？然后指令先不下发，只做预警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果先只接脱敏聚合数据，指令不直接下发，只做预警，精度能提多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱敏聚合数据，只做预警不下发限产指令，合规能过吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两边确认了。聚合数据合规能过，预警模式误伤风险小。就是精度只能提15%，响应度指标得改成预警触达率。"
+              }
+            ]
+          },
+          {
+            "microScene": "在靶向减排效益复盘背景下，用户与导师围绕剥离气象因素计算真实减排效益及确定MVP方案持续沟通（6轮），其中在气象归一化算法与基准线建立部分与环境治理顾问沟通（1轮），在寻找简化算法与现成脚本部分与业务监控运营专家沟通（1轮），并最终确定基于历史同期气象匹配法的粗估方案及仅限秋冬季严禁外推的结论约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看板上区域浓度降了15%，涉排企业也响应停机了，应该算有效益吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过。就看数字降了以为成了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么算出是我们预警指令带来的真实减排，而不是风吹走的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "得搞气象归一化建基准线。这算法我不熟啊。而且不能推到夏天。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我算法底子确实差，气象归一化原理我现在真搞不定。我先记到学习日志里后面补课。这周要不找个简化算法或者现成工具，先把基准线出了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有气象归一化的现成脚本？或者简单点出基准线的方法？这周要出报告搞不定复杂的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用历史同期均值算基准线，结论只管秋冬季不推夏天。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

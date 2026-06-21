@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发末期极限并发性能调优背景下，用户与导师围绕编排引擎并发崩溃的瓶颈定位与解决方案持续沟通（6轮），其中在压测执行与Arthas诊断配合部分与联调测试工程师沟通（4轮），并最终定位锁争用为根因，形成将全局锁降级为实例级锁的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用JMeter发压呗？网上有现成的JMeter脚本，我改改参数就能用。并发上不去的话，就加机器或者加线程池。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这压测怎么搞？我直接用JMeter并发加到5000试试行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "断崖下跌？是不是内存不够了？我加点JVM内存试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我得找个工具看看。我记得上周看过一个诊断工具叫Arthas，能看锁死锁。我装一个试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没，就看了篇帖子。我试试，用它trace一下那个工作流下发的方法，看看耗时是不是都在锁等待上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Arthas显示大量线程block在WorkflowLock的tryLock方法上。平均等了200多毫秒。确实是锁的问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GC停顿大概20毫秒，影响不大。TPS在2000下跌的误差来源就是锁等待时间超过了切片下发超时阈值，不是背压的问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "别换组件了，改锁粒度，把全局锁改成实例级锁。你压测用例能配合测下细粒度锁吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改锁的代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

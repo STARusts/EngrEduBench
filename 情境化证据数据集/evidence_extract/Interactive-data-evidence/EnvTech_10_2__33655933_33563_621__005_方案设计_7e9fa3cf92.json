@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在室内多源感知系统方案设计中，用户与导师围绕暴露风险算法路线的指标体系、计算链路、质量/不确定性处理、策略接口与验证闭环持续沟通（7轮），其中在多污染物合成、阈值/权重来源与CO2定位部分与环境与暴露建模工程师沟通（3轮），并形成R/V/O指标划分、conf与data_stale机制及接口字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“输入-计算-输出”拆三层。输入就是污染物浓度、通风/净化状态、占用的代理量，再加质量分。计算层我倾向两条线：一条实时暴露评分，一条短期预测的超标概率。输出层给策略引擎两样：风险等级+建议动作的约束条件。问题是：暴露到底用哪个口径更贴近健康风险，又不至于解释不清。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "核心指标我想用“加权暴露剂量”或“时间加权浓度TWA”，辅助做“超过阈值的累计时长”和“未来30分钟超标概率”。可解释性靠把权重写清楚：污染物不同、敏感人群不同权重。追溯性就是每次输出都带上参与计算的原始数据时间窗、quality_score、以及缺失时的补全方式标记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 多污染物暴露风险在室内场景里，核心指标你建议怎么选？阈值/权重一般用什么来源，怎么在系统里讲得清楚又不容易被质疑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的max和sum两种合成，我理解是：max适合触发控制动作，sum适合做总览KPI。那参考值RV，如果同一污染物有短时和长时两套，就分别对应E_short和E_long？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我还想把CO2当作通风不足的代理项，它不是健康阈值那种，但能驱动通风控制。它能跟PM2.5、TVOC放在同一个合成里吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，我回去把核心指标定成急性风险R，另加通风风险V，并把sum类的运营指标单独列出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指标我先定三类：  \n1）健康急性风险R：对污染物集合做r_i=TWA_30min/RV_short，R=max(r_i)；  \n2）通风风险V：CO2的TWA_15min/CO2_ref 或者直接用CO2分级；  \n3）运营汇总O：sum(w_i*r_i) 作为日/周报趋势，不进联动闭环。  \n计算链路：清洗后数据进入风险计算服务，先按quality_score算conf，再算各r_i，然后合成R和V，最后输出risk_level（绿黄红）+conf。  \n接口字段我想到：space_id、ts、R、V、dominant_pollutant、conf、quality_flag、window_size、recommended_action_class（通风/净化/复核）。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向分三档：  \n- quality_score高：直接算；  \n- 中等：算但把conf压低，且risk_level不直接到红，除非连续多窗都高；  \n- 很低或断连：不更新R，只输出data_stale并触发“需要巡检/复核”，策略引擎走保守默认，比如维持当前或回退到安全通风档。  \n这里“连续多窗”我没想好取几窗合适。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "RV和目标线都做成租户级配置，但变更要审计，谁改的、何时、改了什么、理由。并且默认模板来自权威标准，用户只能在允许范围内调目标线，标准线不让随意改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输出加两个字段：action_severity_suggested（low/medium/high）和safety_guard_required（true/false）。比如conf低或者空间类型是“手术区/隔离区”，就把guard_required置true，让策略层必须走“设备/区域约束检查+人工确认”才允许高强度动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做两件：  \n1）历史回放：选学校教室和办公会议室各1个点，回放一周数据，看R/V的告警和人工记录的异味/拥挤事件是否对得上，主要看召回与误报趋势；  \n2）对照：同一空间在“只用max合成”和“用sum合成”下，红色触发次数差异，确认max更稳定用于联动。  \n具体评价指标我先用：红色告警每天次数、持续时长、以及conf分布。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把验证指标分三组：稳定性、解释性、业务可用性。回放数据先挑两个典型场景，不做全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第2条里“红不直接红”我想改成：允许红，但必须conf>阈值或连续多窗满足，否则最多黄+提示复核。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下一步我会把RV模板和空间类型分级先跟产品对齐，免得算法定义了策略用不了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

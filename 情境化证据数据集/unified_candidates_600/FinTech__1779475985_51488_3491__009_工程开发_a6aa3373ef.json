@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在行情底座硬件加速模块开发背景下，用户与导师围绕极值提取开发方式、时序收敛与验证口径持续沟通（6轮），其中在资源预算评估部分与软硬协同设计师沟通（1轮），在ILA探针预留部分与微秒Debug猎手沟通（1轮），并最终形成手写核心逻辑加HLS封装的混合开发方案及验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Vivado HLS先把极值提取的C++模型转成RTL，这样出活快。验证口径方面，我准备做对照测试：C++软件模型和生成的RTL跑同一份Tick级历史极值数据，比对提取结果和时延周期。如果时延超过5个时钟周期，就算功能对也是失败。不过，HLS生成的资源占用率可能比较大，这块我不太确定怎么预估。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "控制逻辑开销我确实没底。我之前主要写纯RTL，HLS只做过简单滤波器。我今晚得把Xilinx的UG902文档里关于Pipeline和DATAFLOW优化的部分看一遍，跑个小的C/RTL协同仿真实例，看看AXI-Stream接口的开销到底多大。看完我再决定是不是要手写关键状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极值侦测模块如果用HLS实现，你那边能给多少BRAM和DSP余量？另外跨时钟域处理极值特征，进AXI-Stream前加FIFO的话，时延开销大概多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "资源卡得太死，HLS生成的接口开销肯定超限。我决定放弃全模块HLS，改成混合方式：底层的多路极值比对和状态机我手写Verilog，保证1个cycle出结果；上层的特征封装和AXI-Stream打拍输出用HLS包一下。这样既保住时序，又能少写点胶水代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边界对齐我会在HLS的顶层加个打拍模块，把握手信号对齐到同一个时钟沿。验证这块，我设计一个双轨对照：Python生成随机极值冲击激励，同时喂给我手写的RTL模型和纯C++参考模型。比对点包括极值触发信号、触发时的价格/时间戳、以及从输入到输出的绝对时延周期数。如果出现时序违例，我会找微秒Debug猎手帮我抓。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行情底座极值侦测模块我准备手写核心逻辑加HLS封装，跨模块边界可能有时序毛刺。你能在ILA里预留几个探针点吗？我想看极值比对结果和AXI-Stream的TVALID信号之间的抖动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行情底座硬件加速模块的实现方案现在敲定：核心极值比对纯手写Verilog，特征打包用HLS，验证用双轨对照测试覆盖极值触发和时延，ILA探针就盯比对结果和TVALID的时序抖动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

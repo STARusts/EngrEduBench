@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在密态穿透计算调优与除错背景下，用户与导师围绕PHE算子直调FPGA的延迟毛刺与除错盲区处理持续沟通（5轮），其中在非侵入式除错手段部分与密算性能优化师沟通（1轮），在JTAG信号合规与防泄露部分与隐私计算架构师沟通（1轮），并最终形成基于JTAG非侵入抓取与Hash映射的除错工程约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想引入一个eBPF用户态探针网格，在内核态追踪FPGA DMA交互，再结合分布式追踪的W3C Trace Context，建一个全链路密态穿透的动态基线池。一旦PHE算子耗时偏离基线，自动触发FPGA比特流重编译来除错。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "痛点是FPGA校验返回的异常码在OpenCL侧无法直接映射到PHE明文错误，相当于黑盒。动态基线池确实有点远。那退一步，我先在OpenCL Kernel里加一组自定义Profile Counter，把FPGA寄存器状态透传回Host，再写个离线Python脚本做映射？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在要在OpenCL Kernel里拿FPGA寄存器状态除错，但又不能加Counter导致FPGA资源超限影响吞吐，有什么轻量级手段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JTAG非侵入式抓取信号，在密态穿透计算里合规吗？会不会泄露中间态？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得加硬件混淆又绕回修改FPGA布局了，只返回比对结果Hash比较靠谱，Host侧拿Hash做异常码映射就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用SHA-256做比对结果Hash，碰撞概率在除错阶段可以忽略。映射效率的话，我在Host侧维护一个LRU Cache存最近的Hash到异常码映射。如果Cache Miss，就触发一次FPGA内建的自检微码，把异常码强制刷出来。虽然会卡一次流水线，但除错期可以接受。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "密态穿透计算调优与除错约束：1. 除错手段废弃侵入式Profile Counter，采用JTAG Debug Bridge走XVC非侵入抓取FPGA内部信号；2. 隐私红线：JTAG信号严禁明文透传Host，FPGA内部只输出比对结果Hash，防逆推PHE种子；3. Host侧维护LRU Cache做Hash到异常码映射，Cache Miss时触发FPGA自检微码强制刷异常码，允许流水线瞬断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

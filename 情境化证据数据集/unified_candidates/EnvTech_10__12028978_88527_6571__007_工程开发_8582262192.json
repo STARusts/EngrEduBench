@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在雨洪调蓄设施数字孪生运维与碳效平台进入工程开发的接入落地背景下，用户与导师围绕边缘网关MVP范围、协议优先级、可靠性边界、模块拆分与验收口径持续沟通（8轮），其中在协议栈取舍、at-least-once+幂等、WAL离线缓存与可测验收标准部分与物联网接入工程师沟通（3轮），在数据分级、日志留存与受控诊断开关部分与合规与审计官沟通（2轮），并最终明确要做/不做清单与弱网断网验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在“传感接入与边缘网关”怎么落地：我想做一个几乎“零丢包、全协议自适配”的网关，但又怕一上来就过度设计。你先帮我定一下这一段开发该先做什么。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设备我知道有三类：液位计、流量计、水质（浊度/电导率）+ 一些泵站PLC。协议上现场五花八门，我想一次性把 Modbus RTU/TCP、4G/NB 的 MQTT、还有厂家私有 HTTP 都吞掉。实时性我想做到秒级，最好 1s 内入库。掉线我倾向于都不丢，哪怕堆本地盘。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想端到端 1s，因为孪生和预警看起来才像实时系统。协议优先：我觉得 MQTT 最干净，然后是 Modbus TCP，最后才是 RTU 和私有协议。PLC 先用 Modbus TCP 或者 OPC-UA？但 OPC-UA 我没写过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 这段“传感接入与边缘网关”你会怎么切 MVP？我想把 MQTT/Modbus/私有协议都纳入统一插件框架，还想做本地时序库缓存 + exactly-once，上来就做到极致可用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点不甘心。at-least-once 会重复，我怕孪生曲线抖，告警也会重复触发。我想在边缘直接做去重、排序、补点，甚至缺测插值，让上层永远看到“干净数据”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那断点续传和批量上送，具体怎么验收？我不想做完还不知道稳不稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 边缘网关会采集大量时序数据，还会打日志做诊断。合规上最容易踩坑的是哪几块？我希望日志越细越好，方便追 bug。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想把每条上送消息的 payload 全量打到 debug 日志里，现场定位会快很多。你这边是不是完全不建议？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边的意见揉一下：MVP 先 MQTT + Modbus TCP，网关内统一点位模型；可靠性先 at-least-once + 上层幂等；离线用本地 WAL 滚动缓存；插值不上边缘，只打质量标记。日志默认摘要，必要时开受控全量。  \n但我还是想把插件框架先搭好，不然以后加 RTU/私有协议会很痛。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想按三层拆：  \n- southbound：协议适配（MQTT client、Modbus client），输出统一采样事件；  \n- core：标准化（点位映射、单位转换、quality、去重窗口）、本地缓存队列、重试；  \n- northbound：上送（MQTT/HTTP 二选一，先 MQTT），带批量与压缩。  \n测试我想做两类：协议模拟器（虚拟设备发数据）+ 弱网注入（丢包/延迟/断网）。KPI：采集成功率、上送延迟 P95、缓存水位、去重命中率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "点位映射我想做自动发现：MQTT topic 扫描 + Modbus 寄存器扫描，识别出点位名和单位，再自动建档到平台。控制指令我也想顺手做，双向才像完整 IoT。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我又想一步到位了。那控制指令先禁掉，只留“只读采集”。点位映射用配置文件/接口下发。  \n我有个纠结：上送协议到底 MQTT 还是 HTTP？HTTP 好调试，MQTT 更像实时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向 MQTT：  \n- 弱网重连和 QoS 有现成语义；  \n- 批量可以自己定义 payload（比如 1s 一批）；  \n- 平台现在也有 MQTT broker 接入计划（我记得架构师选的是统一消息总线）。  \nHTTP 我担心频繁建连、以及断网补发要自己搞更多状态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要做：  \n1）网关支持 MQTT 采集（作为 southbound）和 Modbus TCP 采集；统一输出点位模型（deviceId、pointId、ts、value、quality、unit）。  \n2）core 做去重（窗口 30 分钟可配）、WAL 离线缓存（按天/容量滚动）、重试补发；不做插值，只打 quality。  \n3）northbound 用 MQTT 上送，at-least-once；上层靠 messageId 幂等去重。  \n不做：RTU/私有协议、控制指令、自动发现点位。  \n验收：断网 6 小时不丢、恢复后 30 分钟补齐 90%；弱网 30% 丢包链路不崩；重复发送 3 次落库不重复；时间偏差 >5s 产生告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

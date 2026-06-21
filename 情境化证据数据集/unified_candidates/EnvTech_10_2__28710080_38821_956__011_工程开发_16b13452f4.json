@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在扰动事件链路进入联调测试与性能压测背景下，用户与导师围绕用例分类、压测事件模型、指标阈值、错误注入与边缘留存持续沟通（9轮），其中在验收口径与缺陷分级部分与测试负责人沟通（4轮），在云端摘要字段白名单/黑名单与留存审计要求部分与合规与审计官沟通（2轮），并形成可执行的联调+压测清单与准入标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就是压测QPS，然后看有没有报错。重复工单这块，我只记得幂等键是event_id+policy_version。别的…我不太确定应该盯哪些指标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件结构就是outfall_id、edge_id、event_id、score、risk_level、device_health这些，再加decision_path和payload_hash。频率…我想平均打，比如50 QPS？重复event_id要混一点，可能10%？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 现在要做联调和压测。我们这条链路边缘推理->低优先级核查工单->云端ACK+审计。你这边一般怎么定通过标准？要盯哪些指标，缺陷怎么分级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟口径我有点糊：是从事件产生时间，还是从边缘发出去那刻？我们事件里有ts，但现场时钟漂会影响吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等这块，如果云端是“已存在”，那我边缘审计里的workorder_id怎么填？我拿不到新的id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那缺陷分级里，重复工单算P几？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值这块我想先按你们的：P95 2s当目标，5s算P1；ACK成功率99.5%。outbox积压5分钟回落。流量我做三段：1 QPS跑10分钟、然后突发到100 QPS 5分钟、再回到10 QPS。重复event_id混10%，再加一组policy_version切换的重复，可能1%？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我以为policy_version变了就当新策略，所以允许新工单。就…同event_id也能再开一次。可这会不会被误判成重复？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就查云端日志里有没有payload字段？但“payload”不一定叫payload。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 云端现在要做事件摘要和审计。联调压测里要验证“不含原始payload”。你能给个摘要字段白名单/黑名单口径吗？还有边缘详细留7-14天我们先写死，这在审计上能接受到什么程度？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盐策略我没做过，我以为hash一下就行。坐标这块我们摘要里没有lat/lon，只有outfall_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，我回去把摘要字段做白名单校验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）联调走通：单事件输入，边缘输出score=0.82、risk_level=P2、device_health=OK，生成核查工单请求，云端回workorder_id且ACK；  \n2）幂等：同event_id+policy_version重复发多次，工单不新增，审计里workorder_id一致或拿existing_workorder_id；  \n3）策略变更：同event_id，policy_version从v1到v2，允许新增工单，审计里policy_version/threshold_set_id对得上；  \n4）压测流量：1 QPS稳态->100 QPS突发->10 QPS回落，混入10%重复event_id，外加乱序/延迟回放；  \n5）指标：链路P95延迟目标2s，超过5s算P1；ACK成功率≥99.5%；outbox积压峰值后5分钟回落；  \n6）合规：云端摘要只允许白名单字段，禁止原始payload和全量decision_path，出现即算阻断级缺陷。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "错误注入是指云端返回5xx让边缘重试？边缘留存我只记得detail留7-14天先写死一个值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

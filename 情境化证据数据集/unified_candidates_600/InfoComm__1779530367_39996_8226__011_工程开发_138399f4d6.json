@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在确定性时延边界性能调优背景下，用户与导师围绕P99时延毛刺消除、调优方案风险与验收标准持续沟通（4轮），其中在毛刺削平与轻量调优解法部分与确定性性能调优师沟通（2轮），并形成eBPF sockmap加速与局部flatbuffers替换的调优方案及压测验收要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95时延降了40%，但P99依然有几十微秒的抖动。我看eBPF的火焰图，主要卡在内核态的内存拷贝和GIL锁竞争上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备把数据面全换掉，用XDP重写收包逻辑，绕过整个内核协议栈，这样肯定能压到5微秒以内。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "P99的抖动源头定位在内核态上下文切换和部分内存拷贝上。在不动底层收包框架的前提下，这种毛刺能削平吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我之前没实操过，特别是eBPF绕过TCP/IP栈那段，我担心把TSN的802.1Qbv时间感知调度给破坏了。我得先补一下sockmap在TSN流量下的保序机制，这块我今明两天看下Cilium的源码和内核文档，确认不会把时间戳打乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果sockmap能保序，那确实比硬上XDP风险小。但我还是觉得flatbuffers的改造成本也不低，整个编解码逻辑都得重写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我目前的调优方案就是：1. eBPF sockmap加速TSN控制流；2. 南向指令局部换flatbuffers；3. CPU隔离绑核。验收指标是P99 < 10us，且乱序率为0。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我还是想预留一个XDP的空桩，万一以后业务要求5us以内呢？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "周三前出报告，我会用eBPF把P95和P99的分布拉出来，给出95%置信区间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果sockmap这条路验证不通，我再切回XDP方案"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在多模态影像流接口设计背景下与导师围绕时空对齐策略、Schema字段设计与容灾降级持续沟通（6轮），其中在时空对齐与Schema设计部分与多模态数据织法师沟通（1轮），并最终形成包含对齐策略、核心字段与容灾联动的接口设计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于在边端做粗配准，利用设备自带的DICOM坐标转换关系给个初始仿射矩阵，云端再跑弹性配准。这样边端反演能拿到快对齐的数据，延迟可控。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "插值误差的话，我原本想直接用最近邻填充，但这样反演的物理边界可能会抖。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段设计我有点拿不准，特别是配准矩阵怎么塞进流式数据里更高效。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种异步流在FlatBuffers里怎么组织Schema比较好？时间对齐除了最近邻插值，有没有更平滑且低耗的方案？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "置信度这个点很关键，之前没考虑到插值数据要降权。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在接口层，可以在FlatBuffers里加个模态状态位掩码，标明哪些模态是活的。反演算子读到掩码变化，就能触发降级。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "长期运行中，如果PET经常断，一直降级会不会影响消融根治率评估？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 时空对齐策略：边端采用时间窗缓存加线性插值进行粗配准，云端异步执行高精度弹性配准；2. 核心Schema字段：模态枚举、采集时间戳、边端仿射矩阵、像素张量、插值置信度标量、模态状态位掩码；3. 容灾联动：反演算子依据模态状态位掩码与置信度，动态调整反演权重或触发静态降级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

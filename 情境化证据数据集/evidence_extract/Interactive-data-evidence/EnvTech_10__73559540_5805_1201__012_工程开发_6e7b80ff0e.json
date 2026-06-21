@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在压测收尾进入可观测与告警落地背景下，用户与导师围绕监控信号选取、告警分级及日志合规边界持续沟通（6轮），其中在指标/追踪/告警阈值与标签口径上与SRE运维工程师沟通（4轮），在日志白名单、哈希脱敏、留存与审计留痕上与合规与隐私官沟通（2轮），并确定埋点、受控debug开关与验收压测复跑方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加监控面板，然后阈值到了就报警。应该差不多吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把请求参数也打一下，出错时好查。站点信息我就写个简称，不写全名。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 现在要做可观测和告警，最该先埋什么？我怕加多了又拖慢性能。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我在 metrics 里加 siteId 方便筛选，应该没事吧？我们站点也就几十个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那告警阈值怎么定？我怕拍高了不响，拍低了一直响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 日志和审计这块，哪些字段能打？我们调试挺需要现场信息的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我把站点名做个 base64 存日志里，可以算脱敏吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是不能明文，也不能可逆。那我只打 hash。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就按他们说的做：指标别带 siteId，日志也不带。traceId 全链路打上。报警就先用压测的 p95 加一点点缓冲。debug 需要就开开关，但默认关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我主要改后端接口那块，加 requestId、traceId，然后把 metrics 暴露出来。开关就做成管理员才能开吧。payload 我不打。验证就再跑一次 50 并发 10 分钟，看报警会不会乱响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 debug/日志开关怎么做才不容易出事？我们就想排障快点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那我就做成只能对某个 hash 生效，30 分钟过期。过滤器我加一下。trace 采样我就先设 5%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

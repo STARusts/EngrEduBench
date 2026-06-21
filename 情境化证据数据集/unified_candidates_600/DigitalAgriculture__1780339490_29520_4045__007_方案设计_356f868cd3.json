@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在云侧向清污设备下发调度指令的反向控制接口设计背景下，用户与导师围绕防误伤、安全与时效取舍、权限控制及核心约束持续沟通（7轮），其中在后端规范与防误伤部分与后端开发工程师沟通（1轮），并最终形成反向控制接口设计红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用物联网平台自带的那个远程调用呗，封装个MQTT发下去，设备端回调一下状态。我看网上的开源框架都这么干，挺省事的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个重试次数限制？或者前端加个弹窗让人点一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云侧给清污设备发控制指令，怎么防误伤和做审计？我本来想直接MQTT发就完了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘兜底校验这个，是不是还得在网关上写一套规则？那不就复杂了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "高危指令才走边缘校验，低危的直接过？时效性这块，异步确认的超时时间设短一点，比如3秒没回就熔断，不再重试了，直接转人工？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限，就给场长开呗。系统自动触发的算系统权限。这审计日志就记这两个字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "频次上限这个我得加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，指令分级，低危直通高危边缘校验；第二，异步确认，3秒超时熔断转人工；第三，操作留痕，记录触发源，高危操作有频次上限。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

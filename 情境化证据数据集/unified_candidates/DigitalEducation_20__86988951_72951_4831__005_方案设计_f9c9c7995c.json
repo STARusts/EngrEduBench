@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统方案设计背景下，用户与导师围绕数字孪生总体架构的分层、数据流、接口边界与MVP最小闭环持续沟通（13轮），其中在审计留痕与个人信息最小化部分与合规与风控负责人沟通（3轮），并形成四层架构+横切能力、三条关键数据流与可用性视图的图示表达要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分层我大概想成：前端大屏+管理端，然后后面一堆服务，再连设备。孪生是不是就等于3D模型？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我画的时候是不是要把“孪生引擎”单独画成一块？我看有的图就写“Unity孪生引擎”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预约就是看设备在线不在线、能不能用，然后排时间。孪生给个状态就行？比如在线=可约。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是得把规则都放孪生那边？这样预约就只管排程。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那总体架构图里最少要有几层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着像大而全。我怕评审会说我们MVP太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "扫码使用也算孪生吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据流我怎么写才不虚？我怕一写就变成“采集-存储-展示”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "计划态是啥？我以为只有实时状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心合规边界，我们之前说个人明细默认不出，那孪生要不要存“谁用了设备”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 我们做孪生+预约，现场可能扫码使用。系统最少要留哪些“人相关”的字段才满足审计？还有默认哪些地方不能出个人明细？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们不存IP是不是也行？我感觉存多了就容易出事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "照片留证我看很多系统都有，是不是干脆不要？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我大概记住：内部ID、动作、对象、时间、结果、关联单号；默认聚合，查明细要授权和审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想在图右边画个“安全与合规”竖条，里面写：RBAC、审计日志、数据脱敏、留存可配置。然后在“事件中心/日志”上标注“最小审计字段”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主数据就是设备台账；时序就是在线、温度这种；事件是预约、扫码、告警、审批记录。对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可用性视图要有哪些字段？我怕写多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "限制说明是不是会暴露太多，比如“某人占用”？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那总体架构的最小闭环，我们就按你说那条链路画：台账→状态→可用性→预约→扫码→审计。是不是还得画运维监控？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我还想加个“规则引擎”，网上很多都说排程要规则引擎，不然很难改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这六句我能照着讲。图里我就按四层加横切，再把三条数据流用箭头标出来，接口写“可用性视图”。这样应该不至于翻车。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

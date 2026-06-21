@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在赋形相位矩阵控制代码开发背景下，用户与导师围绕控制实现方案、时序评估与验证方法持续沟通（5轮），其中在动态畸变下相位控制方案部分与相控与射频开发工程师沟通（2轮），并最终形成LUT与Cordic混合控制及功率回退方案，明确时序评估与信道模拟验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查表法吧，LUT。我以前都这么干，写个ROM把相位存进去，查起来快，FPGA时序也好扣。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用LUT做相位矩阵控制，导师说动态畸变可能不行。你怎么看？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Cordic我写过，但资源占用多少我心里没底。特别是还要加功率回退，时序能不能闭合真不好说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没用过Ultrascale+的DSP48E2做Cordic级联。我只会算简单的乘法。我得去翻下Xilinx的PG文档，看下级联布线延迟，写个demo测下时序。然后把Cordic迭代次数和时序的trade-off搞清楚，再套到现在的混合方案里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用信道模拟器呗。我手头有个仪器，可以注入废墟遮挡衰减，改变畸变度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "观测核心链路的可达概率。降级触发，我可以直接给板子限流，把电量拉到20%以下，看它是不是自动切窄波束，边缘休眠。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "粗粒度LUT加细粒度Cordic混合，带功率回退。验证就用信道仪注畸变和遮挡，拉电量测降级和可达概率，盯SAR和波束分裂。我先把Cordic demo写出来看时序。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

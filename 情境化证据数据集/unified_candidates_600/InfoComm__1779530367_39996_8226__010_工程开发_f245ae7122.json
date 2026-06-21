@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云边通信代理重构与联调背景下，用户与导师围绕gRPC替换HTTP、异常兜底策略、RBAC鉴权接入及对比测试持续沟通（5轮），其中在联调测试设计部分与云边联调测试专家沟通（1轮），并最终确定重构优先级（gRPC替换、RBAC鉴权、NACK重传与乐观锁、DRL空桩）与时延对比测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "云端下发GCL居然用HTTP长轮询，完全没走TSN通道，高负载时延抖到上百毫秒，丢包就干等着超时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算用gRPC over TSN替换，再加个基于DRL的智能路由重传机制，保证极端情况下的确定性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "没有智能重传，万一TSN通道瞬断，GCL配置丢了就卡死了。DRL只是微调，应该很快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在gRPC的拦截器里把RBAC Token带上，复用之前的审计日志模块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种gRPC over TSN的架构，联调重点和异常注入点一般怎么抓？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级到BestEffort不行，时延就没保障了，宁可阻断也不降级。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时钟失步确实要测，乱序可能导致GCL写反。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "并发锁冲突好办，云端用版本号乐观锁就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重构优先级：1. gRPC over TSN替换HTTP；2. 拦截器加入RBAC鉴权与审计；3. 实现NACK重传与乐观锁并发控制；4. 留出DRL拥塞控制空桩。对比测试我会搭环境跑，用eBPF抓时延分布。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

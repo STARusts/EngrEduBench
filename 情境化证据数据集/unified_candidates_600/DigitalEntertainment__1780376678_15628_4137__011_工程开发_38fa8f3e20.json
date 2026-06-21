@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发极端剧情分支性能调优背景下，用户与导师围绕性能卡点、调优手段及兜底机制持续沟通（6轮），其中在算力分配与剪枝策略部分与算力瓶颈调优师沟通（2轮），并最终形成基于ProbabilityThreshold的DAG剪枝、FallbackHook兜底及禁止外部重图库的调优约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想找个现成的图计算加速库，比如套个RedisGraph或者Neo4j那种缓存机制进来，应该能扛住吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果没有现成的，那是不是只能加本地缓存了？我看网上很多人用Caffeine，调一下参数是不是就顶住了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在用自定义队列和LineageID隔离，如果剧情分支极深，延迟很高，有没有方便点的加速办法？加Caffeine这种本地缓存行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "剪枝万一剪错了，剧情不就断了？有没有那种带自动回滚的剪枝工具包？我怕我自己写剪枝逻辑写挂了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太懂投机执行的具体实现，是不是就是猜一个结果先算着？剪错了的话，大不了，大不了再算一遍？我之前看Java里有ForkJoinPool的work-stealing机制，是不是类似那种？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果我把FallbackHook当成Pipeline的Tail节点，玩家触发偏门时，Tail节点负责兜底拉起计算。这样我不用重写整个图遍历，只要加个Hook就行，延迟肯定比全量算低很多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我自己写Hook，阈值我先设0.05跑一轮对照基线看看。DAG剪枝那块我今晚补一下，应该能套进来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

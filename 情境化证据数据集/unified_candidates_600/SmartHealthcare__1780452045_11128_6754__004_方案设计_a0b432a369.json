@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在房颤电生理反演系统方案设计背景下，用户与导师围绕异构数据流架构选型、时间对齐与验证方案持续沟通（6轮），其中在异构流协同与容灾部分与算法架构师沟通（2轮），在端到端延迟测试部分与实时系统工程师沟通（1轮），并敲定Kafka传Flink算架构及P99延迟验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我打算直接上Kafka，所有标测数据全丢进去，消费端拉取就完事了，这样最快吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三个Topic呗。信号Topic，图Topic，事件Topic。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算Kafka建三个Topic完事，异构流协同到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "又加新组件。Flink我都没用过，还要写窗口逻辑，太费事了。就不能在消费端写个内存队列凑合对齐吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，Flink加Kafka。但我真不会Flink，这数据流图我怎么画？完全没概念。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂Flink怎么把信号流和图流在窗口里join对齐。今晚我去翻Flink官方文档，重点看Event Time Window和双流Join那块，弄明白后再把数据流架构图补上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是Flink对齐延迟低呗。对照组就是纯Kafka自己写队列。跑一下看哪个快不就完了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink对齐对比纯Kafka对齐，在边缘机上怎么打点测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，打时间戳算差值，看P99延迟。Flink背压稳这个点我记下了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

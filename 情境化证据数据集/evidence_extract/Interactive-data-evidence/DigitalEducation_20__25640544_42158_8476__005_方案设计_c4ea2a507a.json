@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在自适应错因诊疗与分层练习订阅平台方案设计背景下，用户与导师围绕错因标签三层结构、字段设计及订阅授权下的可见范围与演进验证持续沟通（9轮），其中在标签粒度、处方绑定、校本扩展与教师端呈现约束上与教研负责人沟通（4轮），并形成可执行的错因标签体系与数据权限控制草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想先把“错因标签体系”定下来：既要能支撑诊断与分层练习，又要受订阅授权档位约束。我们从什么结构切入更稳？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向做三层：学科通用的“错误类型层”（如概念、方法、计算、审题、表达），中间是学科域的“典型错因层”，最底是“证据特征层”，从作答里能观测到的模式。练习编排主要吃前两层，证据层用于解释和置信度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规模上我想用“受控词表+扩展位”：核心标签保持稳定，学校/教研可以挂接本地扩展但不进SaaS默认推送。证据上不写具体解析文本，用结构化的“可计算特征”，比如单位缺失、符号反号、步骤跳跃、关键词遗漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教研负责人 你从教研落地角度看，错因标签体系怎样分层最容易被一线老师接受？粒度怎么卡，才能既可解释又能驱动分层练习？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提到“必须能给统一纠偏策略”，那二级错因是不是最好一一绑定“纠偏动作模板”？比如讲解路径、变式练习类型？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果学校想加本地标签，比如某套教材特有题型导致的错法，怎么避免体系变成一堆方言？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "老师标注时间有限。我们靠算法自动推断，老师只做确认，那标签数量是不是还要再压？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我从教研负责人那边拿到的关键点：一级用“可干预维度”控制在5-7个；二级每个一级8-15个，要求能绑定训练处方类型；证据层只用可观察特征不引用解析文本；校本扩展必须挂靠标准层并带适用范围与可归并关系；教师端只露Top3错因可改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段我先想这些：tag_id、name、level(1/2/3)、parent_id、subject、grade_span、evidence_schema（证据特征定义）、prescription_type（处方类型）、visibility_scope（SaaS/私有化/校本）、license_tier_required（授权档位）、description（不含受版权影响文本）。再加version和deprecate标记便于演进。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我理解要分成两类资产：  \nA 类：平台自研通用错因标签（不引用题干/解析），可在SaaS中推送；  \nB 类：从授权题库解析中提炼出的“题库特有错因说明/例题”，即使抽象也可能映射回原内容，这类跟题库授权走，不默认进入SaaS订阅推送和导出。  \n实现上字段里用content_origin=platform/partner_bank/school_local，再配content_visibility=pushable/exportable/internal_only。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数学例子：  \n- EVID_UNIT_MISSING：结果数值正确但缺单位/量纲；  \n- EVID_SIGN_FLIP：同类项移项符号反；  \n- EVID_COND_IGNORED：题干出现“非零/正数/整数”等限定但解题过程未使用。  \n语文阅读例子：  \n- EVID_SCOPE_OVERGEN：答案从局部信息泛化到全文主旨；  \n- EVID_QUOTE_MISMATCH：引用原文但证据句与观点不匹配；  \n- EVID_KEYWORD_DROP：题干关键词（如“作用”“态度转变”）未回应。  \n这些证据都能从作答文本、步骤、选项路径抽取，不依赖解析原句。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个小样本验证：选3个年级段、每科各挑30道题的历史错题作答（只用已授权或校内数据域），让教研标注二级错因；我们算两件事：一致性（同题同错的标签一致率）和处方命中率（老师看到推荐练习后是否认为“对症”，用5分量表）。如果一致性低，说明二级定义不清或过细；处方命中率低，说明错因到处方映射有问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用版本化和别名：tag_id永不复用；name可变但保留aliases；任何废弃都做replaced_by指向新tag；诊断结果存tag_id+tag_version；聚合指标默认按“当前映射后的tag_id”汇总，同时允许按原始版本回看，避免报表口径漂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这6点我都认。接下来我想先让教研负责人牵头把每科的一级/二级候选填到目标数量范围内，我负责把字段、可见范围、版本策略写进技术方案的“数据与权限约束”章节，避免后面知识点映射时越界。随后再拉产品经理对齐教师端只露Top3错因的交互约束，别让体系再膨胀。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

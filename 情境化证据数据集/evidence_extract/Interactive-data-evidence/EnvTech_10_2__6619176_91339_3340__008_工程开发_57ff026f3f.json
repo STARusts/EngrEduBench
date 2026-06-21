@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳基土壤修复量化与信用结算系统进入工程开发背景下，用户与导师围绕采样/传感接入MVP的接口类型、落库证据链、质量旗标与成本约束持续沟通（10轮），其中在断网补传/时钟漂移/接入协议上与物联网工程师沟通（2轮），在设备身份/加密存储/敏感标记与审计上与安全与隐私负责人沟通（1轮），在软阈值与采样计划对齐上与环境修复工艺工程师沟通（1轮），并形成接入事件清单与最小实现边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这边准备进入工程开发的第一块：把采样与传感接入这条链路先落地。想先把设备接入、数据质量、以及和证据链的落盘规则一起跑通最小闭环。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步拆成四件事：1）设备注册与身份；2）采样/传感数据模型（时空+单位）；3）断网缓存补传与幂等；4）质量控制：校准、漂移、异常旗标。最后输出给证据域的就是不可变的观测记录+处理留痕。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我倾向于把接入层做成三类入口：Telemetry（连续传感）、Sample（人工/间歇采样）、Ops（校准/维护）。服务端统一落成 ObservationRaw，然后派生 ObservationClean、ObservationAgg。幂等用 device_id + seq 或 device_id + ts + hash。replay时用 raw + 版本化清洗规则重放出 clean。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 接入这块我准备做Telemetry/Sample/Ops三类数据入口。野外会断网、时钟不准、还会有校准记录。你给我一版“最小但可靠”的接入协议和补传/幂等建议：设备侧要带哪些字段，服务端怎么落库不丢不重？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我关注一个点：我们之前核证接口提了“最小披露”。采样里的operator_id、位置坐标可能敏感。接入层是不是就该做脱敏映射？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私负责人 采样与传感接入这块，我要做设备注册、消息去重、原始数据入库，同时又要支持后续“按权限定向揭示”。你给我一套开发阶段可落地的最小安全方案：设备身份/密钥、传输与存储保护、敏感字段标记、以及访问审计要记哪些。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两位的建议合一下，准备做：接入层一律写入Raw（带敏感标记），Clean/Agg先不做重放，直接把清洗结果也冻结，并记录清洗规则版本号。等量化引擎需要重放再升级。这样核证抽查时至少能从Raw追到Clean是怎么来的。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我先定四类旗标：  \n- missing：采样计划要求的时间窗无数据；  \n- out_of_range：超过传感器物理范围或方法学允许范围；  \n- drift_suspected：与校准曲线偏差或与邻近点位差异过大；  \n- duplicate/replay：msg_id重复或序列回绕。  \n阻断条件：duplicate直接丢弃且记审计；out_of_range进入隔离队列待复核；missing只在报表层提示；drift_suspected进入“异常”旗标，核证导航可定位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量程属于硬边界，肯定要拦；工艺区间我想作为软边界，只打旗标，不直接拦。两者都带上：hard_limit_source=SENSOR_SPEC，soft_limit_source=PROCESS_KPI。软边界阈值由环境修复工艺工程师给，我们接入模块只执行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境修复工艺工程师 我在做采样与传感接入开发，需要把数据质量旗标里的“软阈值/采样计划”落成可执行规则。你给我一版最小集：哪些指标需要阈值或合理区间、采样频次/窗口怎么定义、以及怎么和工艺节点（比如投加、抽提、通风等）关联，便于异常定位和核证抽查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我会把软阈值表设计成可版本化的配置（带审批人），但执行逻辑保持简单：区间+变化率。工况事件通过Ops消息进来，异常判定时如果落在工况变更窗口，就把anomaly_context=OP_CHANGE，避免误伤。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给个落地清单，你看是否够用：  \n- 事件类型：Telemetry、Sample、Ops；  \n- 统一信封字段：device_id、msg_type、msg_id、device_ts、ingest_ts、event_time_source、payload、sig；  \n- Sample额外：sample_id、chain_of_custody_ref、operator_ref（先用映射ID）、point_id；  \n- Ops额外：calibration_id、method_ref、before_after_bias、effective_window、op_event_type；  \n- 质量旗标：missing/out_of_range/drift_suspected/duplicate，外加anomaly_context；  \n- 安全：device_cred、HMAC+TLS（网关到云），sensitivity_tags、disclosure_policy_id、审计who/when/what/purpose。  \nMVP不做：规则重放引擎、复杂地统计插值、自动阈值学习。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我之前没细想。先加两条硬约束：  \n1）Telemetry默认按点位/指标设定最小上报周期与批量上送上限，超过就降采样并打标（downsampled=true，保留原始分辨率只在短窗口）；  \n2）原始数据保留策略：Raw全量保留但做冷热分层，超过N个月转冷存；对核证抽查窗口可快速回温。具体N先按合规要求再定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

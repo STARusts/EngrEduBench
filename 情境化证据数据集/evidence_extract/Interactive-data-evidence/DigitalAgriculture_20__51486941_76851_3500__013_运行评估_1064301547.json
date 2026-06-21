@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段的在线监控与告警处置背景下，用户与导师围绕监控分层、告警分级(P1/P2/P3)、可计算触发条件与审计留痕字段持续沟通（6轮），其中在服务健康/业务健康划分与降噪阈值方法上与SRE运维工程师沟通（2轮），在灌区现场越界与止损处置边界上与行业顾问沟通（2轮），并形成“在线监控与告警处置最小清单”供运维落地。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控就用现成模板吧。CPU内存、接口报错、然后设备离线报警就差不多了。分级就P1 P2 P3那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异常…可能是传感器没数据、泵站故障、还有…策略下发失败？触发条件就，比如5分钟没数据就告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 监控指标怎么弄？还有阈值要怎么定，少点误报。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就全用P95两倍。然后持续10分钟。都按这个来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "归因指引是不是就写“重启服务、重启网关”这种？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE说分两层，服务健康和业务健康。阈值用P95两倍持续10分钟，还要聚合告警。P1是影响灌溉的，P2是影响核算的，比如覆盖率<0.9报警，P3是一般质量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P1就：泵站离线、阀门离线、下发失败。留痕字段…就告警时间、内容、处理人。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那…P1加个“指令=开泵但反馈没开”？还有“流量为0但电表在走”？影响范围就写分区ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口越界…就看开始时间结束时间？超过就报警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业顾问 现场哪些情况算严重？哪些能自动处理，哪些要人来确认？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "N=3是固定的吗？我就写死3行不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 行业顾问说P1要能止损，比如电在跑但流量0要自动停，处方不在允许时段却出水也停，还有启停抖动10分钟超过3次。P2像串水、墒情不准这种要人确认。还说别自动改处方参数，只停泵关阀。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两件事：一是按你这套把P1/P2规则丢给运维做监控告警，别只看CPU。二是告警处置留痕要把purpose、查询hash、因子版本这些也带上，不然审计过不了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

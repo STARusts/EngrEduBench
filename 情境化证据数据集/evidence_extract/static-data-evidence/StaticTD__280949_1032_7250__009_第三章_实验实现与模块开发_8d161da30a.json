@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "智评课堂——基于多模态行为分析的教学互动质量评估系统",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与模块开发",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与模块开发」阶段，本段围绕系统集成联调展开记述，重点说明音视频异步与内存泄漏问题的排查修复及优化措施，服务于系统实现中的稳定性保障。",
+            "evidence": [
+              {
+                "behaviorLabel": "问题界定",
+                "behaviorEvidence": "由于边缘端CPU负载过高，导致音轨与视轨存在约150ms的时间偏差，严重影响了多模态融合的准确度。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "通过引入NTP时间戳对齐机制，在数据打包阶段强制对每个特征帧打上统一的毫秒级时标。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "使用Valgrind进行了内存剖析，优化了图像帧缓冲队列的长度"
+              },
+              {
+                "behaviorLabel": "验证评估",
+                "behaviorEvidence": "将系统运行时内存占用从512MB稳定降至320MB，确保了系统能连续稳定运行8小时以上不宕机。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

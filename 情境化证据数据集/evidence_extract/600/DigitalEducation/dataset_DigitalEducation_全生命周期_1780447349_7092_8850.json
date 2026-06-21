@@ -1,0 +1,582 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在跨域异构算力编排系统痛点剖析背景下，用户与导师围绕算力孤岛成因、非技术激励建模、能力缺口补课及MVP边界持续沟通（7轮），其中在业务卡点拆解部分与教育业务架构师沟通（1轮），在共享意愿阻碍部分与算力生态规划师沟通（1轮），并最终形成校内GPU孤岛MVP痛点范围与优先级置换验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前调研过几个实验室，主要是GPU资源，做深度学习实验的时候，学生排队等卡，等半天。别的院机房空着也不给用，权限不通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在做实验，经常遇到那种跨学科的需要大算力的课，学校统一分配的资源池根本不够，但各院系自己买的小集群又锁着。这种业务上的卡点，怎么拆解？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那各院系为啥不愿意把闲置算力拿出来？是怕安全问题还是嫌麻烦？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力孤岛不是单纯的技术隔离，主要是没有激励让拥有者愿意共享，也没有机制让需求者能按学程周期精准申请。所以痛点其实是\"供需时空错配\"加上\"共享意愿为零\"。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太懂，之前只搞过单集群的调度。激励模型和计量计费这些，我得补一下经济学或者云商计费模型的课。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我接下来两周，先把主流云厂商比如阿里云、AWS的竞价实例和预留实例的计费模型文档看一遍，梳理出3种常见的按需激励策略，写一份对比总结交给你。这样我在设计编排策略时，至少能知道怎么给共享算力定价。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP阶段，我觉得先不管跨校的，就先打通校内不同院系之间的GPU算力孤岛。业务上先支持那种有明确课表安排的深度学习实验课。激励先不做复杂计费，就用优先级置换——你贡献闲置算力，你排队优先级就高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以先在我们系内部做一个小样本测试，拿两门课的排课数据，模拟一下优先级置换前后的算力利用率变化，看看提供方是不是真的获得了排队优势。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP痛点范围：校内院系间GPU孤岛，业务场景为课表驱动的深度学习实验课，核心矛盾是排队与闲置并存，初步激励为优先级置换机制，验证动作为两门课排课模拟对比利用率。"
+              }
+            ]
+          },
+          {
+            "microScene": "在校内异构算力互通可行性论证背景下，用户与导师围绕底层互通技术硬骨头、改造门槛与MVP路径选择持续沟通（6轮），其中在异构调度与细粒度切分技术限制部分与云原生架构师沟通（2轮），在院系接入意愿与非侵入改造门槛部分与算力生态规划师沟通（2轮），并最终协调专家冲突，确认MVP互通可行性论证范围及验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "做成统一提交接口呗？像我们之前做实验，都是网页上点一下，后端把镜像跑起来。只要接口一样，底下是啥不用管吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，镜像跑不起来就全白搭。异构底层这块我确实没碰过，我只管过Docker打包。这互通可行性我拿不准，不知道从哪下手论证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们想让不同院系的异构算力（K8s/Slurm，N卡/昇腾）互通跑实验沙箱，技术上能做到什么程度？硬限制在哪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从院系接入意愿来看，加装Agent和做协议转换，改造门槛高不高？他们愿意为了置换算力付出这个改造成本吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "云原生架构师要抽象层做细粒度切分，生态规划师说太侵入没人用，只让做粗粒度整卡置换。那MVP阶段我们到底选哪个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP阶段肯定先跑通再说。我觉得听生态规划师的，先做整卡置换，非侵入式代理。细粒度切分以后再说。但云原生架构师说的算子兼容性问题，这个不管粗细都得面对。所以MVP可行性论证，得把非侵入代理和算子兼容都包进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "论证点1：K8s集群和Slurm集群通过非侵入代理接入统一池，沙箱能不能调度过去。论证点2：同一个PyTorch沙箱镜像，在N卡和昇腾上跑，算子兼容性到底卡在哪。验证动作我准备在两台机器上搭小集群，一个K8s一个Slurm，跑个ResNet试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP互通可行性论证范围：1.异构集群非侵入代理接入可行性；2.跨芯片沙箱算子兼容性边界；3.接入改造成本与性能损耗评估。验证动作为双集群ResNet实验沙箱实跑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构算力沙箱池按需供给商业模式推演背景下，用户与导师围绕长期接入激励、算力价值锚定与公平可达性约束持续沟通（5轮），其中在跨域算力置换与合规风险部分与算力生态规划师沟通（2轮），在弱势方保底与学程算力映射部分与教育业务架构师沟通（1轮），并最终形成按需供给商业模式的三个核心前提。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然能非侵入接入，改造又不大，闲置机器闲着也是闲着，应该乐意共享吧？真要收费就按使用时长扣费呗，像买云主机那样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我搞不懂怎么让他们愿意长期共享，按时间收费行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "置换听着靠谱点，积分感觉太虚了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能简单算时长，得有个折算标准，而且尽量不涉及直接给钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怕弱校换不到强算力。业务上怎么设计能保证大家都有得用？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "保底配额加上学时折算，这招行。至少不会出现没机器做实验的情况。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，激励模式走跨域资源置换，不走直接资金交易，规避财务合规风险。第二，算力价值锚定用“学程学时”当一般等价物，抹平异构差异。第三，必须设基础保底配额，保证弱势学校基本实验可达，超额才走置换池。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算力跨域置换背景下，用户与导师围绕跨域实验数据合规审查策略与凭据链规则持续沟通（6轮），其中在合规红线与凭据链机制部分与数据合规审核员沟通（2轮），并决定补学数据分类分级标准、推演典型场景，最终形成数据定级、跨域凭据、镜像审查三条硬规矩。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据全加密传输呗，落盘也加密，配个密钥轮转，这应该就满足安全要求了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "技术上全加密了，但合规上具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那是不是调度前得先查数据的标签？带“涉密”标签的就直接拦住不让调度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "凭据链这个，工程上怎么实现？每个数据包都带一串证书？那延迟不就炸了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "默认不让出，带凭据的才让出？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前做系统只管通不通，没管能不能通。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把“无凭据不调度”加到咱们的需求约束里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我找两个典型实验场景，比如普通编程课和涉密科研计算，分别推演一下数据流转路径，看看凭据链能不能闭环。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨域异构算力编排系统方案设计背景下，与导师围绕异构算力感知与抽象架构、跨域多集群聚合方案选型及压测验证假设持续沟通（8轮），其中在跨域算力感知与多集群聚合实现部分与云原生架构师沟通（1轮），并形成以多集群联邦方案为主、延迟超标则缓存降级的架构决策与压测验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前用过K8s的Device Plugin管GPU，是不是顺着这套往下写就行？给每种算力写个Plugin，然后汇总起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域异构算力感知和抽象架构怎么搞？多集群怎么聚合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A省事，我肯定倾向A。但专家说A有延迟。我这两天得补一下Clusternet的架构文档，看看它的同步机制到底多慢，还有跨域网络抖动下怎么处理。我争取这周末跑个单机多集群的Demo出来看效果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设跨域网络延迟在50ms以内，A方案的API同步应该能撑住，超过100ms可能调度就滞后太严重了。我准备搭两个跨可用区的K8s集群，用方案A组联邦，压测一下资源变更的同步耗时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "B方案自己写探针，还得适配各种异构设备，我觉得我搞不定，工作量太大。还是先以A为主，如果压测发现延迟超标，我们在中心管控区加一层Redis缓存热点算力状态，降级处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 算力感知用多集群联邦聚合异构资源CRD；2. 验证假设是延迟<100ms；3. 不满足就加缓存降级；4. 我这周补学Clusternet机制并跑压测Demo。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在沙箱切分与调度流设计背景下与导师围绕跨域异构调度、GPU切分、降级策略与接口规范持续沟通（5轮），其中在启发式调度与GPU切分部分与调度策略工程师沟通（1轮），在学程时空映射与同班同域约束部分与教育业务架构师沟通（1轮），并形成双阶段调度流与降级链路决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨域的话，我就给不同域打上拓扑域标签，用podTopologySpread过滤一下。切分就是按CPU和内存limit配额。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GPU切分我听说可以用多实例MIG，但配置挺麻烦的。预留算力这块，原生调度确实没有，我也没写过自定义调度器。这块有点没思路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域异构环境里，怎么根据学程需求做启发式调度？特别是预留算力和GPU细粒度切分这块，K8s原生搞不定，自定义调度器一般怎么写？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "学程时空映射模型具体是什么？调度那边说要加时间窗约束，这约束怎么来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调度那边说用scheduler framework写扩展，分两步走：先跨域匹配再微观切分。业务这边说输入是排课表，还有个“同班同域”的约束，要把同一个班的沙箱放一起。我理解就是得写个自定义调度器了，原生调度全废。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同域放不下，那就按学生拆分，散到其他域呗，就是延迟差点。接口的话，我这边定个JSON格式，把课表转成沙箱需求列表推过去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去查下scheduler framework的PreFilter接口怎么写。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在实验数据多级缓存与流转背景下，与导师围绕数据物理分级、跨域流转机制及合规边界持续沟通（7轮），其中在热温冷数据分布与流转协议部分与云原生架构师沟通（1轮），在跨域流转数据红线与脱敏要求部分与数据合规审核员沟通（1轮），并最终形成包含物理分级、脱敏流转及涉密数据本地归档的数据流转决策点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Redis做缓存？或者挂个NFS？之前我们项目都是直接传到OSS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧，就沙箱本地存一份？然后异步推到中心？中间层我不太懂怎么加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实验数据多级缓存怎么设计，热温冷怎么分，跨域怎么传？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件我还没细看。合规，加个HTTPS加密传不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域传实验数据，加密传合规吗？有什么红线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来不能全传。得先脱敏，涉密的只能留本地。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策点：1. 物理分级：热（沙箱本地）、温（区域池）、冷（中心存储）；2. 跨域流转只推脱敏后的温/冷数据，用异步加断点续传；3. 涉密和个人隐私数据红线，禁止出域，仅本地冷归档。"
+              }
+            ]
+          },
+          {
+            "microScene": "在沙箱逃逸防御与隔离评估背景下，用户与导师围绕跨域多租户隔离选型、安全与体验冲突的折中及防逃逸验证持续沟通（6轮），其中在容器隔离风险部分与沙箱隔离技术专家沟通（1轮），在强隔离体验影响部分与教学体验观察员沟通（1轮），并最终形成基于数据敏感度与信任域的分级隔离方案、CVE回归验证策略及MicroVM热启动补学重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Docker跑着挺顺的，Namespace和Cgroups隔离资源，之前项目都这么搞。逃逸这事儿概率极低吧，没必要换更重的方案。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域多租户场景，Docker这种轻量级隔离能扛住逃逸风险吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "独立内核？那启动得多慢，资源开销也大。咱们项目要求高并发按需拉起，毫秒级供给，强隔离根本达不到吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果全上MicroVM，启动慢占资源多，学生做实验会不会卡得骂人？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就难办了。安全非要独立内核，体验非要1秒内，我选哪个都得出事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对MicroVM就停留在知道名字，底层怎么快起、怎么切分内存没细看过。现在看必须得补这块，不然没法评估它能不能优化到1秒内。我定个目标，这两天把Kata的文档和内存热启动机制过一遍，看看有没有折中余地。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "是不是可以搞分级？跑涉密数据或者跨域不信任节点的，强制走MicroVM；校内可信源、跑普通数据的，走Docker？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信任域可以根据算力节点接入时的认证等级来分，校内节点高信任，外域联盟节点低信任。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证防逃逸，我可以用自动化脚本跑一批历史容器CVE漏洞镜像，分别往Docker池和MicroVM池里塞，看能不能突破Cgroups限制拿到宿主文件。控制变量就是两种池子用同一套宿主内核版本。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨域异构算力编排系统工程开发背景下，用户与导师围绕算力探针的技术栈、网络穿透、资源限制、数据脱敏及性能验证持续沟通（5轮），其中在网络穿透部分与运维交付工程师沟通（1轮），在资源限制与脱敏部分与云原生架构师沟通（1轮），在Proto定义与脱敏字段部分与后端研发主管沟通（1轮），并最终明确探针开发方向与单机验证Demo计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Go写个Agent，在K8s节点上打包成DaemonSet跑。异构节点如果是裸机或者Slurm集群，我就手搓个Systemd服务。上报直接往Kafka推JSON就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "NAT后面推Kafka确实可能不通，这块我之前没细想。资源占用的话，Go程序应该不大吧。验证还没做，准备写完再测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域节点在NAT后面，探针状态推不上来，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针资源占用怎么卡死？我怕它吃太多内存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网络改成gRPC反向流，探针主动连控制面。资源用cgroups限制，上报频率动态调。还有个脱敏的事，架构师说不能传内核版本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会写cgroups的代码限制，之前都是K8s yaml写limit。我得去翻一下libcontainer或者runc的源码，看看怎么在Go代码里直接设置cgroup限制。验证的话，我写个压测脚本，跑满CPU和内存，看探针会不会超限崩溃。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针上报的Proto怎么定？内核版本不让传，还有啥要脱敏？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Proto定好了，用Protobuf，只传抽象算力指标，不传宿主特征。网络用gRPC反连，资源限制靠cgroups。我这就去补cgroups的API用法，然后写探针核心逻辑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构算力沙箱镜像轻量化和快速拉起背景下，用户与导师围绕技术方案持续沟通（5轮），其中在异构分发与毫秒级拉起部分与容器化开发工程师沟通（3轮），并最终确定多架构Manifest List、P2P分发Dragonfly、镜像瘦身distroless+GPU宿主机注入及调试用ephemeral container的技术栈，准备改写Dockerfile。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Alpine做基础镜像，然后Docker多阶段构建，把编译环境和运行环境分开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异构就分别打不同架构的镜像呗。毫秒级拉起，只要镜像小了，拉取不就快了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构分发和毫秒级拉起怎么搞？Alpine和多阶段构建够不够？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "overlayfs共享底层这个，是不是只要基础镜像一样，后面起的容器就很快？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对，GPU驱动放进去太大了。那GPU咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "多架构用Manifest List，分发用Dragonfly P2P，本地靠overlayfs共享。GPU驱动宿主机注入，镜像用distroless瘦身。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以留个debug用的epkg？或者用ephemeral container？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我去改Dockerfile，把shell删了试试。"
+              }
+            ]
+          },
+          {
+            "microScene": "在调度引擎核心逻辑与联调背景下，用户与导师围绕学程时空属性与异构算力匹配及K8s调度实现方式持续沟通（4轮），其中在启发式算法与打分机制部分与调度策略工程师沟通（2轮），在API联调接口部分与后端研发主管沟通（1轮），并最终确定Out-of-Tree Plugin实现及防饿死等核心逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接改K8s的默认调度逻辑，写几个自定义的Predicate和Priority进去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时空属性我不太懂怎么塞进去，直接给Node打标签？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "学程时间和算力空闲怎么匹配？我只会写K8s插件，算法这块有点虚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Best-Fit打分具体怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我写Plugin，Filter查标签和CRD，Score算分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调的话，控制面API什么时候能好？我这边要对接。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Extender太慢了，我直接In-Tree写Plugin编译进Scheduler，快。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，每次跟着K8s发版升级要命。那还是Out-of-Tree走Webhook吧，虽然延迟大一丁点，但省事。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多租户高并发极限调优背景下与导师围绕OOM、死锁根因及性能稳定性取舍持续沟通（8轮），其中在QoS分级与压测验证部分与测试调优工程师沟通（2轮），在QoS拖慢启动与死锁解耦部分与容器化开发工程师沟通（1轮），并最终形成基于eBPF采样、QoS分级、熔断降级与对照压测的调优折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚用Jmeter模拟了200并发拉起沙箱，直接OOM了。调度器那边也出了几个死锁。我试着给Pod加了Limit，OOM少了，但沙箱拉起耗时从50ms涨到200ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全加的一样的大小。死锁我看堆栈是调度器在等Webhook返回，Webhook在等算力池分配，算力池又满了卡住了。这循环等太要命了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "200并发OOM，加Limit又拖慢启动，还有死锁，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "熔断好理解，但加QoS控制真会拖慢启动吗？日志不打全量，OOM的时候怎么查是哪块毛刺？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚学了用eBPF做容器内存采样，可以不用打全量日志，只在内存接近Limit阈值时抓当时的内存分布。这样日志量小，合规风险也小，OOM也能定位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "是不是可以只对高优沙箱加Overcommit控制，低优的不管？这样大部分沙箱启动还是走快路径，只有高优的多走一步校验。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "现在的数据太粗，只有成功失败，看不出毛刺在哪。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我重新写个压测脚本，加上eBPF采样，按QoS分级跑对照组。死锁那边我直接在Webhook里加个Timeout和Fallback逻辑，不等了直接降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优方案这几点：1. 日志合规与诊断：用eBPF按需内存采样替代全量日志，防租户数据泄露；2. QoS分级控制：高优沙箱加Overcommit控制，低优走快路径，不影响整体启动P99；3. 算力抢占死锁：Webhook加超时熔断降级，不参与循环等待；4. Overcommit比例：跑1.5/2/3三组对照压测，根据OOM率和耗时P99定基线。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在异地沙箱联机部署核验背景下，用户与导师围绕跨域联机延迟异常与沙箱失联问题的定位分析、监控指标拆解及A/B对照验证持续沟通（7轮），其中在探针与网络责任定界部分与运维交付工程师沟通（2轮），在隧道质量与控制面阻塞排查部分与通感网络设计师沟通（1轮），并形成降采样与切备用隧道的分组对照验证策略及控制面知识补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨域联机的平均延迟到了150ms，比单域的30ms高太多了。而且偶尔有沙箱失联的报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就大盘上直接显示的最近1小时平均值。分组对照没做，感觉就是跨域网络不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "延迟150ms还有失联，是你部署的探针有问题还是什么？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "运维说是你网络隧道抖动导致沙箱失联，延迟也高，怎么回事？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "运维你看下控制面CPU时序图，网络你看下隧道丢包率，到底是谁的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "分不太清，我就看到有红色报警。我对通感网络控制面路由那套底层逻辑不太懂，只能看懂表面日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这周末前把《跨域通感网络路由协议白皮书》看完，画出控制面和数据面的流转图，下周能对着图看监控指标，不再只看大盘红绿。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维你先把探针采样率降50%，网络你切备用隧道。我们跑两组对照，10分钟后看P99和心跳恢复率，用对照数据说话。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算力池负载异常与沙箱存活报警混杂背景下，用户与导师围绕监控报警拆分与线上止血保活持续沟通（6轮），其中在监控聚合规则拆分部分与运维交付工程师沟通（1轮），在调度参数止血保活部分与调度策略工程师沟通（1轮），并形成补加PromQL拆分监控与调参关抢占保高优的止血方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘还是红的一片，CPU利用率都飙到85%了，沙箱那边重启了四五个。我不确定是算力切分不够，还是网络抖导致的心跳断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想去把探针采样率再调调，看能不能抓到细一点的数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘上算力负载和沙箱存活混一块了，是不是Prometheus那缺规则？现在根本分不清谁报的警。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "线上现在还在重启沙箱，加规则还得等生效，中间这会儿咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级？我不太会写降级逻辑，这得改调度器代码吧，现在发版肯定来不及。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力负载85%多，沙箱在重启，怎么调参挡低优学程保高优？来不及改代码了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这俩参数我知道在哪配。调度说关抢占、提高优权重，先保高优存活，低优先排着。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改PromQL和那俩调度参数。改完我盯着大盘确认高优心跳恢复，低优排队情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我重点看分配比和心跳状态这两条线。"
+              }
+            ]
+          },
+          {
+            "microScene": "在线上运行反馈与监控指标冲突的调度迭代背景下，用户与导师围绕体验保障与算力利用率的权衡、折中方案及验证持续沟通（11轮），其中在体验卡顿归因部分与教学体验观察员沟通（1轮），在算力利用率与成本冲突部分与调度策略工程师沟通（1轮），并形成按实验类型分类的Buffer折中策略、分组对照验证方案及调度标签修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学体验观察员 具体哪块体验差？大盘看着没毛刺啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度策略工程师 利用率低又是咋回事？不是刚加了节点吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一边要加Buffer保手感，一边要砍Buffer降成本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前都是看报警调参数，没弄过这种带人感的。我那个学习日志里好像记过一次IO throttling的处理，但那是纯后端的事，跟这种前端拖拽卡顿不是一回事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得去看看前端有没有埋点能抓这半秒的卡顿。我记一下，晚上把前端的JS错误和卡顿日志加上，迁移到现在的调度权重计算里。不能光看后端指标了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一刀切肯定不行。能不能按实验类型分？带GUI拖拽的留20%，跑深度学习训练那种批处理的，直接压到5%。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "得复现一下。我找两门课的日志，一门是3D建模，一门是模型训练。控制变量，都把Buffer调到10%，看3D建模是不是卡顿投诉暴涨，训练那边是不是没影响。如果确实这样，说明我的分类策略在外推到其他交互型实验时也有效。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在沙箱编排请求里加个`exp_type`标签。调度器匹配到`gui_interactive`就走高优保Buffer逻辑，匹配到`batch_compute`就允许超卖压算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，请求入口加`exp_type`标签区分交互和批处理；第二，交互型保20%Buffer，批处理压到5%；第三，今晚我去扒前端卡顿埋点，补进调度权重；第四，拿3D建模和模型训练两门课日志做分组对照复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多端接入与安全鉴权方案设计背景下，用户与导师围绕控制面/数据面拆分、租户隔离、多端差异、企业与Webhook鉴权选型及合规审计要点持续沟通（12轮），其中在token分层、会话票据与Stream Token撤销、claim最小集合及网关/服务校验分工上与安全工程师沟通（5轮），并形成可评审的方案结构与接口要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直觉就是统一走API网关，登录拿token。Web用OAuth那种，SDK也拿token，然后每个请求带上。流式音频就走WebSocket带token。大概这样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "同一套会省事点。过期就刷新？但是流里中断很烦。可能流式给长一点的token。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象…有用户、租户、角色包RolePack、voiceprintRef、还有流会话。滥用就是盗用别人角色包配音、刷时长、爬取音频接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 控制面和实时音频数据面，token怎么分比较稳？最小权限怎么落到RolePack和会话？流式续期/撤销怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "流式就先拿票据再换Stream Token？那WebSocket一开始就带Stream Token就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那企业客户服务端对接呢？他们没法走登录。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分离吧，不然流式token太危险。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我想是：  \n- 控制面：/auth/login、/rolepacks、/rolepacks/{id}  \n- 数据面：/sessions/create拿ticket，/stream/connect用ticket换Stream Token，再开始推音频。字段要带tenantId、rolePackId、sessionId。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 token里最少要放哪些claim？网关校验到什么程度，服务里还要再校验什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）控制面和数据面拆开两类token。  \n2）Web/移动端先登录拿控制面token；企业用client credentials或签名。  \n3）开流必须先create session拿ticket，再换Stream Token，Stream Token短过期。  \n4）token里带tenantId、sessionId、rolePackId这些，网关做验签和限流。  \n5）服务里再判RolePack accessPolicy、riskLevel、voiceLock和计费配额。  \n6）失败都进审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "企业我倾向client credentials，省得他们自己算签名。回调…我们推到他们那边？那就他们给我们回调地址，我们带签名头？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "A案：client credentials，适合能走标准OAuth的客户；B案：HMAC/私钥签名，适合不想引入OAuth或内网隔离的客户。Webhook：我们发请求带timestamp+signature，他们验；他们回调我们也一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "token里不塞voiceprintRef原始信息？只放id。审计记录要有userId、tenantId、rolePackId、sessionId、时间、拒绝原因码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，SDK如果把client secret放里面就完了。移动端就别用client secret，走登录或设备绑定，再用ticket开流。key轮转我记一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这里面“ticket”和“Stream Token”两段我能照着画接口。Webhook签名我之前没写进来，现在补上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "企业A/B我怕写不清适用条件，能不能就用一句：能接OAuth走A，不行走B？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

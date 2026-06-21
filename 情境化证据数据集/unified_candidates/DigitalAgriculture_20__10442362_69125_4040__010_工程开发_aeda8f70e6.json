@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在试点仓两周内交付“可回滚”活力预测MVP训练与上线链路背景下，用户与导师围绕标签与窗口定义、泄漏规避、置信度降级、版本追溯/审计、接口契约与训练频率门禁持续沟通（10轮），其中在标签对齐与置信度校准部分与算法工程师沟通（3轮），在个人信息最小化与上线审计留痕部分与合规与审计负责人沟通（3轮），并形成可开发的训练/发布/在线推理字段与裁决清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“最短闭环”拆：先做离线训练产物可复现，再做上线推理可观测。优先卡死三件事：1）训练数据口径和标签可信度；2）模型版本和特征版本绑定，不然回溯解释会崩；3）上线接口返回要带置信度和可解释字段，给策略引擎做降权。先不追求最优模型，先跑通批次级的活力衰减预测和风险分层。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标签主要来自两类：入库发芽率/发芽势的实验室抽检，和在库期间复检。批次的“活力”我倾向用发芽率+加速老化后的发芽率做组合标签，但复检频率不高，所以训练时要把标签时间戳对齐到检测日。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入窗口我建议以“批次-仓位”为粒度，用最近7天或14天的温湿度、CO2、通风/除湿工单状态聚合特征；缺测按网关传的state_source+质量标记做mask特征，并且当缺测超过阈值就让模型输出低置信度，策略引擎只做抽检提醒，不自动干预。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 我们要两周内把活力预测MVP训练+上线打通。想确认：1）批次活力/衰减的标签你建议怎么定义、怎么按时间对齐抽检；2）工单/干预动作放进特征会不会泄漏，怎么处理；3）上线要输出置信度，校准和阈值建议怎么做，缺测/降采样时怎么让置信度自动变低？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "泄漏这点我认，我之前想把工单状态当特征太激进了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分两层标签也更符合样本量现状。置信度我理解成：模型不确定性+数据质量惩罚，两者都要进返回字段。校准用简单方案先落地。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "切分我倾向按时间切，避免信息泄漏：以label_time做分割，最后两个月做验证/测试；另外按品种做分层抽样，防止某个大品种把整体指标“刷好看”。指标：回归用MAE/RMSE+分箱后的macro-F1（把活力分成A/B/C）；风险分类用PR-AUC优先，因为高风险样本少。基线：先用LightGBM或XGBoost做回归/分类，外加一个“规则基线”：只用温湿度超标累计时长预测风险，确保线上至少有解释。失败兜底：当缺测>40%或出现overflow+降采样期间，返回“低置信度+仅建议抽检”，不输出强策略。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "版本追溯我想用四元组绑定：model_version、feature_schema_version、training_data_snapshot_id、code_commit。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "hash chain我理解是采集侧到中心的链路完整性，训练侧我可以把训练快照的manifest做签名：包含数据源批次范围、时间窗、行数/哈希、特征schema哈希，训练产物也生成artifact哈希，写进模型注册表。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "合规上训练数据只用批次、仓位、传感和抽检，不该有个人信息；但工单里可能有操作人ID，我会在样本抽取时直接丢弃，只保留工单类型和时间戳（如果后面要用也先匿名化）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计负责人 训练与上线MVP里会用到抽检记录、传感数据、工单记录。想确认三点：1）工单里的操作人ID/账号信息在训练样本里是否必须剔除或脱敏，最小化口径怎么定；2）模型上线需要哪些审计字段（模型版本、数据快照、审批人等）才能过内控；3）线上预测结果和置信度、解释字段的留存期限和可追溯要求。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，MVP里工单操作人信息直接剔除，减少审批成本。上线要补齐审计字段，尤其“适用范围”和“回滚目标版本”，这对灰度也重要。预测留存按批次生命周期走，不跟传感原始留存混淆。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在线推理request我先定成批次级：batch_id、variety_id、warehouse_id、bin_id、asof_time、window_days、features（可选预聚合），data_quality（缺测比例、降采样标记、sensor_calib_status、state_source统计）。响应：predicted_vigor（p50）、vigor_interval（p10/p90）、risk_level（A/B/C）、risk_prob（针对30天跌破线）、confidence（0-1）、confidence_factors（缺测惩罚、降采样惩罚、不确定性）、top_drivers（3条，温湿度累计超标等）、model_version、feature_schema_version。模型包元数据：model_version、artifact_hash、training_data_snapshot_id+hash、code_commit、metrics（MAE、PR-AUC）、approved_by+approval_id、effective_scope、created_at。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "同意。features字段我删掉，统一走服务端特征计算/读取。risk_level加UNK态，条件就按confidence<0.4或缺测>40%触发。解释字段改名成influence_factors，并且附上“仅相关性”的标记。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "训练频率先固定每周一次离线训练，另加手动触发；再训练触发先做轻量规则：新增抽检样本超过N条或关键品种覆盖变化超过阈值就允许触发。为了省算力，特征聚合做增量：按天预计算批次-仓位日特征，训练取14天拼接；模型评估不过门禁（比如验证集MAE比上版差>10%或高风险PR-AUC跌破0.6）就不自动发布，只留在候选区。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我按这5条拆任务：后端实现特征读取与推理接口、模型注册表元数据校验；算法实现训练脚本的时间切分、置信度与校准、导出artifact；再把UNK策略和influence_factors契约同步给策略引擎。两周内优先把回滚链路也跑通，避免试点仓卡死在坏版本上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

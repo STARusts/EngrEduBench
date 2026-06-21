@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在算力与制程数据异常溯诊背景下，用户与导师围绕C4分箱时间戳偏差的根因拆解、修正策略及伴随风险持续沟通（8轮），其中在链路断裂点及接口适配风险部分与制程异常溯诊员沟通（2轮），在重算提权对演解吞吐量冲击部分与并行算力优化师沟通（1轮），并最终形成包含根因、算力隔离策略及探针刷新防误熔断的工单口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "出了，确实对不上。C4分箱那边晚了大概几秒，报了一堆错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先看日志吧，看看报错都是啥，大概就能知道了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "C3和C4分箱对不上，C4晚了几秒报错，这到底是制程回传阻塞还是算力OOM？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "修的话，加个优先级就行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要给重算加优先级，这会不会把C3首轮演解的吞吐量搞崩？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该能吧？随动流导只要拿到结果就行，哪边算出来的无所谓。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重算放容灾子集做隔离，随动流导拉取结果的时候，接口能适配吗？有风险没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论是C4晚了几秒因为重算没优先级排队。要改的话，不能简单提权，得做算力隔离放容灾子集。然后随动流导那边得改拉取接口，还有探针配置也要同步更新，不然会误熔断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在漂移调质效果回归与调试背景下，与导师围绕验证调质闭环、确定验收指标与Diff方案持续沟通（5轮），其中在度量失效边界与法线校验部分与漂移度量算法师沟通（2轮），在跨端精度损失与Half-Precision补偿部分与材质重映射工程师沟通（2轮），并形成回归验收指标、法线校验与精度补偿及RenderDoc定因方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备构建一个A/B对照测试集，跑一遍PBR参数重映射的残差分析，再算一下跨端渲染的色差容差。不过现在卡在可视化Diff环节，还没选到合适的工具，我可能得先自己写个Python脚本逐像素算MSE，把回归跑起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚跑了一批AIGC角色资产，我发现网格接缝处的漂移分数异常高，直接跳出了阈值带。这是特征解耦模型本身的失效边界吗？这部分的度量置信区间怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "法线突变是诱因，那度量置信度下降的区间大概在什么范围？我需要给前置校验定个阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨端回归时，移动端GLSL编译后的金属度出现了明显偏移，这不仅是度量漂移，也是重映射精度丢失导致的吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚看完 ARM 的移动端 Best Practice，正准备把 Roughness 和 Metallic 的重映射逻辑改一下。在下发给 Fragment Shader 前，先乘以一个基于设备特征的 Half-Precision 补偿系数，把截断误差提前吃掉。这样应该能压住移动端的色差偏移。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把补偿系数改成动态查表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "度量盲区和移动端精度截断是当前调质回归不达标的两个主因。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主指标改用 SSIM 加上法线连续性通过率。移动端色差用 Delta E 2000，阈值放宽到 2.0 以内。另外，如果法线前置拦截率超过 15%，说明这批 AIGC 资材源质量太差，直接打回重生成，不再走调质。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放度量前置。沙箱入流只验格式和合规，法线连续性属于几何特征，归度量管。这样职责更清晰，沙箱也不会因为算几何特征拖慢入流速度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不写了，自己造轮子太慢还不准。我直接接入 RenderDoc 的 Pixel History，抓取着色器执行流做定因分析，比看全局数值直观得多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，回归验收指标改用 SSIM + 法线通过率 + Delta E 2000；第二，度量链路新增法线连续性前置校验，夹角阈值 35 度，拦截率超 15% 直接打回资材源；第三，跨端重映射注入动态 Half-Precision 补偿系数，修复移动端精度截断导致的金属度偏移；第四，可视化 Diff 放弃自研脚本，接入 RenderDoc 抓取 Pixel History 做定因。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

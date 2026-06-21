@@ -1,0 +1,109 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段设计实时多人房间状态同步背景下，用户与导师围绕statePatch/emit/auditEvents的广播、序号一致性、断线重连补齐与合规留痕持续沟通（10轮），其中在roomSeq/ack/resync与补发窗口设计上与实时通信工程师沟通（4轮），在auditEvents调试日志最小化与脱敏权限上与法务与合规经理沟通（1轮），并明确以roomSeq序列+快照/补丁+服务端审计内置落地实现。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "房间状态就一份 JSON？包含当前 nodeId、vars/facts/timers，然后每次 tick 之后把新的整份发给所有人。这样最直观。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是按时间戳？服务端发消息带个 ts，客户端按 ts 排序 apply patch。丢了就重拉全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "应该服务端 tick 吧，不然客户端能改状态。那房间服务端就是权威，然后广播 patch。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "快照就是最新全量 state，然后补丁是从某个版本开始的 patch 列表。重连发客户端它缺的那段。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "留…一两百条？我没概念，怕内存炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时通信工程师 房间里我们要做状态同步：服务端 tick 产出 patch，客户端 apply。版本号、ack、重连补发你建议怎么搞？补丁窗口默认留多少合适，先能测能跑的那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`baseSeq` 是啥，我有点卡。为啥 PATCH 里还要 baseSeq，不是 roomSeq 就够了吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 emit 和 patch 混在一个序列里，是为了保证提示音和状态变化顺序一致？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "补丁窗口 512 条，那每条 patch 可能挺大，vars/facts 多的话会爆吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解就是：房间里统一一个 `roomSeq`，snapshot/patch/emit 都按这个序号发。客户端只吃 expectedSeq。丢了就 resync。patch 里还带 baseSeq 校验，避免 apply 到错的状态。补发窗口先 512 条，超了给快照。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能一条 PATCH 包含 statePatch，然后 emits…单独 EMIT？但你说要同序，那就发两条，seq 连着。或者把 emits 塞 PATCH 里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把 patch 和 emit 拆开，两条消息更好测。先让序列清楚。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得每一步都广播？不然客户端没法回放中间态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。合并 patch 就把多步的 set/unset/inc 合成一个？inc 可能叠加。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "auditEvents 也要发给客户端吗？感觉会泄露内部读写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务与合规经理 实时共玩房间做状态同步时，我们有审计 auditEvents（记录读写、截断标记等）。开发调试想留痕排查：哪些字段不能记录或要脱敏？用户输入、聊天内容、设备/IP 这类默认怎么处理，权限怎么控？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那 auditEvents 我就理解成“内部可见”，客户端不拿。用户输入如果要定位问题，只存 hash 和截断标志。IP/设备别明文。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "客户端每收到一条就 ack？那会很多包。也可以每 N 条 ack 一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测试1：模拟客户端收到 seq 1..10，中间丢 5，然后发 resync_req(4)，服务端补 5..10，最后客户端 stateHash 跟服务端一致。测试2：重复发送 seq 7 的 PATCH，客户端因为 expectedSeq 不对就丢弃，不会 double apply。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户端记 lastAppliedSeq，只要 seq <= lastAppliedSeq 就不 apply。这样同 seq 重发不会重复。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还有个疑问：patch 合并后，timers 这种东西同步吗？客户端需要 timers 吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "白名单字段是创作者配置？我怕他们配错。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先把 `roomSeq/expectedSeq` 这套和 resync_req 补发链路写通，再把“合并 patch 的逻辑”做成一个函数，顺便把 publicState 白名单裁剪先硬编码进 snapshot/patch。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

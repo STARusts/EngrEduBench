@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发链上数据隐私混淆背景下，用户与导师围绕敏感数据上链确权与隐私保护方案及监管穿透机制持续沟通（6轮），其中在轻量级隐私方案选型、乘法边界及监管穿透旁路设计部分与隐私计算专家沟通（3轮），并最终形成Pedersen承诺加法同态、Bulletproofs范围证明与监管公钥加密旁路的双轨制方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接对金额和ID做AES对称加密上链。链下业务系统持有密钥，需要流转时再解密传给合约做校验。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "zk-SNARKs可以把验证逻辑转成证明，链上只校验证明不碰明文，是不是能解决这个问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "票据拆分需要验证金额等式关系，如果不用通用ZKP，有没有更适合的同态或承诺方案？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Pedersen承诺加法同态加上范围证明，既能隐藏金额又能链上验证等式。不过这里有个边界问题，如果以后流转涉及乘法比如计算利息，Pedersen就处理不了了，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "隐私计算专家建议用Pedersen承诺加Bulletproofs范围证明。链上只存承诺值和证明，合约验证承诺加法等式和范围。这个方案在纯加法场景性能很好，不过适用边界是只支持加法同态，乘法得后续扩展。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没想清楚，Pedersen承诺本身是不可逆的，一旦上链监管也看不到真实金额。我对监管密钥托管的机制还不太熟，得再补一下这块的设计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用Pedersen承诺，监管机构在链上看到的是承诺值，发生纠纷时他们怎么还原出真实融资金额？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "综合下来方案是这样的：链上主数据用Pedersen承诺隐藏金额并验证加法等式，附合Bulletproofs防负数；同时用监管公钥加密明文作为旁路附件上链供审计。普通节点不可见，监管私钥可穿透。这满足了链上确权、隐私保护还有合规审计的约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

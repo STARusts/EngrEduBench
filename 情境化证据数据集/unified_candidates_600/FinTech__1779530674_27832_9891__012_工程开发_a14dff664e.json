@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在ZKP电路性能瓶颈调优背景下，用户与导师围绕证明生成耗时、资源约束、异常掩盖风险、链上验证兼容及风险分流阈值持续沟通（6轮），其中在GPU加速方案落地可行性部分与证明性能调优师沟通（1轮），在链上混跑验证复杂度与统一接口部分与证明性能调优师沟通（1轮），并最终形成WASM多线程内层生成、风险种子分流、递归证明外层包装及链上单次验证的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了下火焰图，MSM（多标量乘法）和FFT（快速傅里叶变换）占了80%以上的耗时。直觉是上GPU加速运算，或者换更轻量的椭圆曲线，比如从BLS12-381换到BN254。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想上CUDA加速，但导师提示了资源约束，微资产网关是弹性部署的，这方案落地有问题吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "冷启动延迟确实致命，我忽略了部署环境的弹性需求。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "减约束的话，穿透式溯源的深度会被砍吗？另外，我最近在研究Halo2的lookup argument优化，能不能把微资产的合规校验规则做成lookup table，批量查表来摊薄单次证明开销？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异常不能被聚合掩盖，我设计个两段式分流：正常流水走批量lookup聚合证明，异常流水（命中风险种子的）单独走原生Groth16生成。用流控网关在入口做分流。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链上验证如果同时支持Groth16单证明和聚合证明，Gas和复杂度增加多少？有没有更统一的验证接口方案？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用递归合成，链上只验证一次根证明，Gas可控。内层用WASM多线程跑聚合，冷启动也快。我们就定这个方向：WASM多线程内层生成 + 风险分流 + 递归证明外层包装。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值直接复用之前对账测试里“风险种子驱动”的命中概率。命中种子的走单算，未命中的走聚合。这样测试数据流特征和线上流控逻辑完全对齐，不用另起一套阈值标准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改电路的R1CS约束，把合规规则拆出来做lookup，然后对接WASM运行时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

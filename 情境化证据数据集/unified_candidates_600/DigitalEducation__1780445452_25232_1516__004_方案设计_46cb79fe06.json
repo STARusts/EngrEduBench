@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在研创轨迹实时追踪架构设计背景下，与导师围绕异构多模态数据汇聚、存储选型及验证假设持续沟通（7轮），其中在多端异构汇聚与写放大、时钟偏移与因果序修正部分与轨迹溯源架构师沟通（2轮），并最终形成追踪架构核心约束与初步框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就想用Kafka把数据收过来，然后写进ClickHouse。这样快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想全丢Kafka里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分通道，高频的先内存聚合。时序库和LSM Tree。还要加逻辑时钟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不太懂LSM Tree的压缩机制。时序库好像更适合带时间戳的。但我怕选错了后续维护麻烦。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在去查TDengine和Cassandra的写入放大对比文档，重点看压实延迟对实时追踪的影响，今晚看完出个结论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以设计两组对照。一组用TDengine，一组用Cassandra。用JMeter模拟高频微事件写入，看读取99分位延迟。如果时序库的99分位延迟更低，假设就成立。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "网关可以丢弃偏移太大的？或者用服务端时间强覆盖？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

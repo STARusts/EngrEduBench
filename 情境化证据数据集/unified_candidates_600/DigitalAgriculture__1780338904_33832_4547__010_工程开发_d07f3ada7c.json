@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在北斗通信接口测试背景下，与导师围绕测试方案从HTTP模拟转向串口真实报文回放持续沟通（5轮），其中在板卡输出格式与模拟工具部分与定位与通信工程师沟通（1轮），在接口一致性测试底线用例与无板卡测试方法部分与系统联调测试员沟通（1轮），并最终形成基于真实报文日志回放的串口测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Postman给云端和边缘侧发HTTP请求，把经纬度填进去，看接口能不能正常解析和转发。这样比较快，不用等硬件板卡到位。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没考虑断帧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上有些Mock服务能模拟延迟和丢包，要不我找个这种工具套一下？或者有没有现成的北斗数据模拟SDK？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "板卡输出的数据具体是什么格式？有没有什么好用的模拟工具推荐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以必须在串口层面测，还得测坏包。但我现在手头没板卡，直接写Python脚本按NMEA格式造数据发到串口，手动改几个校验位做坏包测试，这样行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "北斗串口接口一致性测试，必须覆盖哪些异常用例？如果没真实板卡，怎么搞到这些异常数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回放真实报文，这个好，不用我自己瞎造了。我用串口回放工具推给工控机。这样校验和、断帧还有冷启动对齐都能覆盖到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去找测试员拿日志文件和回放工具，先把串口监听和解析逻辑跑通。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

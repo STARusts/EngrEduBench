@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在弹幕突增异常分析与自愈背景下，用户与导师围绕降级策略、瘫痪原因排查及自愈验收标准持续沟通（9轮），其中在自愈预案与降级分级部分与SRE运维工程师沟通（2轮），在反压与图库卡死排查部分与流式计算架构师沟通（1轮），并最终形成补充图写入降级预案及压测验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得最直接就是加机器，扩容流式计算节点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先保共振吧？织图慢点就慢点。扩容来不及的话，那就限流？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "昨晚那种弹幕突增3倍的情况，咱们现在的自愈预案是啥？怎么降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SRE说有三级降级。一级反压，二级砍图谱推理保共振，三级丢帧。触发是延迟2秒、5秒、10秒。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能阈值设高了？或者没触发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反压机制生效了吗？图存储是不是卡住了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流计算那边说反压是起了，但图库连接池打满锁死了，算子背压把流全堵了，共振拿不到数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级二级要加上图写入降级，关掉关系边写入只存节点，现在的预案要补这个吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SRE同意了，说二级降级除了砍推理，还要把关系边写入改成异步缓冲，只保节点实时写入。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用压测工具模拟突增？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模拟3倍突增，延迟降回2秒以内就算过？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

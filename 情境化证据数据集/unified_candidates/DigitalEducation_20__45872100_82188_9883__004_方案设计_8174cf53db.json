@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在素养目标驱动学业诊断闭环平台的方案设计背景下，用户与导师围绕证据数据模型的核心实体、最小采集字段、指标版本与合规支撑持续沟通（11轮），其中在核心实体与主键口径部分与数据治理经理沟通（5轮），并收敛出6个核心实体、EvidenceEvent最小字段、两张指标映射表与结果快照契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这块想先把“证据数据模型”定下来，但我分不清先画哪些实体、哪些字段算最小采集。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "课堂行为算一类，作业算一类，测验也算一类。然后还有老师写的评语？我不太确定评语要不要结构化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心实体我先拍脑袋：学生、班级、作业、题目、课堂记录、指标。然后证据就是记录学生在这些里面做了什么。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 证据数据模型这块，你能给个最小核心实体和主键怎么定吗？我怕后面口径乱掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这 6 个里，Activity 和 EvidenceEvent 我有点混。是不是 Activity 就是一条作业或一节课，EvidenceEvent 才是学生的作答、举手这些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果是题目得分这种结果，是放 EvidenceEvent 里还是 DiagnosisSnapshot 里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还担心字段太多。比如 event 里要不要存原始答案？存了就很敏感，还占空间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想采纳“6个核心实体”和“term_id、competency_version强制带着”。Activity/EvidenceEvent 这样分我也能做接口。raw_ref 这个我也赞成，别把原始都搬过来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DiagnosisSnapshot 我担心早做会把算法也带进来，但听起来它只是结果表，也可以先占位。字段先少点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小我想留：evidence_id、student_id、activity_id、event_type、event_ts、score（可空）、duration（可空）、attempt_no（可空）、source_system、source_record_id。再加个 raw_ref 可选。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向事件里直接挂，不然多一张表我就要多连一次，感觉麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就是：题目到指标一张，课堂活动到指标一张？作业如果是题目集合，就靠题目映射。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解是，EvidenceEvent 不直接存 competency_code 了，只存 content_id 或 activity_id，后面算诊断再 join 映射。这样历史也能按版本重算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那留存和可见范围这块，要在数据模型里做吗？我只记得之前说最短可用期、默认最小可见范围。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "data_sensitivity_level 我怕大家乱标，最后也没用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在能不能把这块先收敛成一版“我们要建的表”和关键字段，后面再细化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说下：  \n1）核心实体先按 6 个：Learner、Roster、Competency（带 version）、Activity、EvidenceEvent、DiagnosisSnapshot。  \n2）EvidenceEvent 最小字段：evidence_id、tenant_school_id、student_id、activity_id、content_id（可空）、event_type、event_ts、score/duration/attempt_no（可空）、source_system、source_record_id、raw_ref（可选）、data_sensitivity_level。  \n3）映射表两张：ContentCompetencyMap（content_id到competency_code+version+weight），ActivityCompetencyMap（activity_id到competency_code+version+weight）。  \n4）结果快照 DiagnosisSnapshot 先做契约：scope（个人/班级）、对象id、competency_code+version、level/score、生成时间、规则/算法版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

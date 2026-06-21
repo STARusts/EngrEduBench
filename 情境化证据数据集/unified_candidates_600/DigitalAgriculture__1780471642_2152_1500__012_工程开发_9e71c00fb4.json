@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发末期H5与SDK集成背景下，与导师围绕样式防污染、弱网可用、Worker调试及打包体积验证持续沟通（6轮），其中在沙箱隔离与离线渲染及体积误差部分与前端与SDK开发工程师沟通（2轮），并最终形成Shadow DOM隔离、Service Worker离线缓存及ESM打包输出的技术约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "H5首屏加载必须快，理论上应该做骨架屏，数据异步注入。SDK的话，要封装品控和碳迹查询接口，对外暴露尽量少的方法，符合最小知识原则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CSS隔离，可以用BEM命名规范？弱网，可以做请求重试？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SDK样式防污染和H5弱网可用的具体实现方案，BEM命名好像不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Shadow DOM确实隔离得更彻底。Service Worker能劫持fetch，离线可用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前只会在Console里看报错。我这就去查MDN，学会用DevTools的Application面板看Service Worker状态和Cache Storage。这样调试离线缓存就不用傻乎乎地断网测了，直接看命中率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以看打包分析的图。如果没用Tree Shaking，包里会有未引用的函数代码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SDK必须用Shadow DOM做样式隔离，接受15KB的Polyfill体积增加；H5用Service Worker做离线缓存；开发调试用Application面板看缓存状态，不用手动断网测。打包输出ESM格式，方便第三方Tree Shaking，副作用代码要标记清楚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

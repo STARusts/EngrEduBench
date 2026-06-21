@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异常注入与链路除错背景下，用户与导师围绕图算子OOM与数据乱序的混沌注入、降级策略及除错链路持续沟通（7轮），其中在精准混沌注入与降级验证部分与混沌测试工程师沟通（2轮），在乱序除错、日志脱敏与降级断点部分与极速拦截架构师沟通（3轮），并最终确认Chaos Mesh注解模板、500ms降级断点及日志脱敏规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "OOM不就是内存不够嘛，我写个脚本不停new对象把内存撑爆，看它崩不崩。乱序就随机打乱时间戳呗。除错看报错日志就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Chaos Mesh我听过，搞K8s那套。我们这跑图计算的，自己写个脚本多灵活。降级大不了重启呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图算子OOM怎么搞？我自己写脚本撑爆内存不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听起来好麻烦。打注解还得改部署配置。Toxiproxy还要加代理。直接杀容器不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打Log呗，报错就打ERROR。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "乱序除错怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脱敏？多此一举吧，我们自己查问题看哈希多费劲。Checkpoint我懂，就是存档嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "500ms？这数哪来的？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "其实我昨天刚看了点Chaos Mesh的用法，发现打注解确实比写脚本好控制，不用改业务代码，我这就把注解方式迁移到我的测试用例里，省得老重启。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "注解模板用 `memoryLimit: 256Mi` 配在Merge算子上；降级断点定在状态对齐超500ms切全量；日志里交易ID和IP全换MD5。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

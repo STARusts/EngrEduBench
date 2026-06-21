@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在云端卸载网关核心开发背景下与导师围绕判定逻辑、容错机制与协议格式持续沟通（5轮），其中在时序容错与超时兜底部分与云边协同调度师沟通（1轮），在协议字段与插值兜底确认部分与跨端适配工程师沟通（1轮），并形成网关判定、容错插值与协议校验的关键点总结及开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "根据排队论模型，算本地预估延迟和云端传输延迟的差值做卸载判定，理论上很清晰。但网关这边的代码结构我还没想好，尤其是异步等待和回调那边怎么组织比较乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "排队论判定落地到网关，网络抖动和超时兜底具体怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要用RTT滑动窗口预测，超时就用质心速度插值。快照版本号也得带上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关上下行协议字段有哪些？插值兜底确认用质心速度预测对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行带MeshID、快照版本和姿态矩阵，下行带解算顶点缓冲和Delta时间。双向校验快照版本防止状态撕裂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "判定逻辑用排队论加RTT滑动窗口预测；容错用质心速度预测插值兜底；协议要双向校验SnapshotVer防止状态撕裂。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

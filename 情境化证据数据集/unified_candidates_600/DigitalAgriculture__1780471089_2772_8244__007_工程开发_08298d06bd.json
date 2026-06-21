@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘侧推理模型剪枝与部署背景下，与导师围绕部署算力约束、精度验证口径、量化细节及TRT算子对齐缺口持续沟通（5轮），其中在部署约束与保小目标精度部分与边缘AI部署工程师沟通（1轮），并形成剪枝量化部署MVP方案与补齐TRT算子对齐缺口的学习计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接拿YOLOv5s做通道剪枝，然后转ONNX塞进机载盒子里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力的话，我们用的Jetson Xavier NX，算力应该够吧？精度掉一点没事，反正只要能出框就行。漏检验证，我跑一遍测试集看mAP不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Xavier上部署这块有啥硬性约束？还有怎么保证剪枝后小目标害虫不漏检？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案就是YOLOv5s通道剪枝（稀疏率0.5）+INT8量化+TensorRT加速。验证的话，要单独看小目标Recall下降不超过2%。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "校准集我抽500张巡检图应该行。TRT这块我确实没怎么写过，以前都是在Pytorch里直接导ONNX，TRT那套C++或者Python的API我不熟，算子对齐那块容易卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周末把TensorRT官方的L2教程跑一遍，重点看onnx_graphsurgeon怎么改图节点。我会把每次转模型报的错和解决方法记到Notion日志里，下周尝试把YOLOv5s的NMS算子用plugin重写一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

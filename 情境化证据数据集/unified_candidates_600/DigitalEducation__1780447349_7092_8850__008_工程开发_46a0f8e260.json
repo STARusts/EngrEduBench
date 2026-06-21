@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨域异构算力编排系统工程开发背景下，用户与导师围绕算力探针的技术栈、网络穿透、资源限制、数据脱敏及性能验证持续沟通（5轮），其中在网络穿透部分与运维交付工程师沟通（1轮），在资源限制与脱敏部分与云原生架构师沟通（1轮），在Proto定义与脱敏字段部分与后端研发主管沟通（1轮），并最终明确探针开发方向与单机验证Demo计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Go写个Agent，在K8s节点上打包成DaemonSet跑。异构节点如果是裸机或者Slurm集群，我就手搓个Systemd服务。上报直接往Kafka推JSON就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "NAT后面推Kafka确实可能不通，这块我之前没细想。资源占用的话，Go程序应该不大吧。验证还没做，准备写完再测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域节点在NAT后面，探针状态推不上来，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针资源占用怎么卡死？我怕它吃太多内存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网络改成gRPC反向流，探针主动连控制面。资源用cgroups限制，上报频率动态调。还有个脱敏的事，架构师说不能传内核版本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会写cgroups的代码限制，之前都是K8s yaml写limit。我得去翻一下libcontainer或者runc的源码，看看怎么在Go代码里直接设置cgroup限制。验证的话，我写个压测脚本，跑满CPU和内存，看探针会不会超限崩溃。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针上报的Proto怎么定？内核版本不让传，还有啥要脱敏？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Proto定好了，用Protobuf，只传抽象算力指标，不传宿主特征。网络用gRPC反连，资源限制靠cgroups。我这就去补cgroups的API用法，然后写探针核心逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

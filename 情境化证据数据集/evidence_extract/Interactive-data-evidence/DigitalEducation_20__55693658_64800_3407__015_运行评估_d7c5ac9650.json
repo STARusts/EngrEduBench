@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在迭代发布复盘的运行评估背景下，用户与导师围绕指标口径最小集合、去重方案取舍与看板字段落地持续沟通（8轮），其中在差评分流A/B/C判定优先级与升级规则部分与产品经理沟通（7轮），在事件表缺失字段补埋与合规落库边界部分与数据工程师沟通（4轮），并对齐两周验证所需口径与字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标我想做得很细，最好把每个模板版本、每条证据引用、甚至每次生成的token消耗都拆开看。不然复盘太粗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是三类差评有没有下去：引用不准、反馈不具体、语气不合适。还有“太长”。以及分流后的处理效率，比如复核池是不是被打爆。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小集合我先列一下：  \n1）thumbDown率：分子=thumbDown次数，分母=有评价的生成次数；时间窗按天；去重按session？我不确定。  \n2）差评原因占比：引用不准/证据不足、不具体、语气不合适且有补充文本、不符合情境、太长。分子=该原因被选次数，分母=全部差评次数。  \n3）结构完整率：分子=输出包含“要点列表+引用块”的次数，分母=全部生成次数。  \n4）长度超限率：分子=超过上限的次数，分母=全部生成次数。  \n5）复核池命中率：分子=进入A池的差评条数，分母=差评总条数。  \n但我想把去重规则做得严一点，避免刷差评影响。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "方案A：按“生成事件”计数，不去重。优点真实反映负担，缺点容易被少数用户刷。  \n方案B：按“用户-天”去重，每天同一用户只算一次差评。优点抗刷，缺点会低估高频使用老师的真实问题。  \n方案C：按“用户-任务”去重，比如同一份作业同一模板算一次。优点贴近场景，但任务标识不一定全。  \n我倾向C，但实现可能要补task_id链路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 分流规则这块我需要把口径钉死：A/B/C分别怎么判？尤其“语气不合适且有补充文本”和“引用不准”有重叠时算哪个？还有升级规则是按连续次数还是总次数？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这里的“补充文本>0字符”会被乱填一个字触发A，感觉太敏感。我想做NLP判定是否“有效补充”，比如长度>=10且包含名词、动词结构。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“引用不准”和“语气不合适”同时选，按你说的优先级会进A，OK。还有“不具体+不符合情境”这种组合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "升级规则里“不符合情境”要满足间隔≥12小时，我觉得可以改成“连续两次就升级”，这样更快收敛。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我跟产品对完了，分流口径按优先级判：  \n- 选“引用不准/证据不足”直接A；  \n- “语气不合适”且补充文本长度>=20且不是纯表情/重复字符，进A；没补充文本算B；  \n- 只选“不具体/太长”是B；  \n- 只选“不符合情境”是C，但同一教师7天内累计≥3次且间隔≥12小时升级B；  \n- 同一教师7天内出现第2次A，从第2次起进A加急队列并提示复核。  \n指标口径这边你刚建议核心用“生成事件不去重”，再加“用户-天”对照。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先想要这些字段：template_version、policy_version（引用约束和长度上限的版本）、evidence_count、citation_valid_ratio、output_length、thumbDown_flag、reason_codes、free_text_len、pool_label(A/B/C)、teacher_id_hash、school_id_hash、day、hour、request_id链路。再加cost_ms、tokens_in/out便于看性能。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 看板要补字段，想确认现状：我们需要最少支持两周验证的这些：policy_version、template_version、output_length、evidence_count、是否触发超长截断、thumbDown、reason_codes、补充文本长度、分流池(A/B/C)、teacher_id_hash、以及“同一教师7天累计次数/间隔”这种衍生统计。现在线上事件表里哪些已埋？哪些要补？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还想记录每条引用的doc_id和offset，这样才能算citation_valid_ratio。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那citation_valid_ratio就只能是pass率，不是比例了。感觉不够精。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据工程师说现成字段有request_id、teacher/school哈希、时间、output_length、thumbDown、reason_codes、template_version；要补的最小字段可以这样定：  \n- policy_version（策略配置版本号）  \n- evidence_count（引用片段条数）  \n- citation_check_pass（引用校验通过/失败）  \n- length_cap_applied（是否触发长度上限截断）  \n- free_text_len（补充文本长度，不落原文）  \n- sensitive_hit_flag（补充文本是否命中敏感词过滤）  \n- pool_label（A/B/C，按产品判定顺序在评价服务实时打标）  \n另外不建议在看板落doc_id/offset，细查走审计按request_id回溯。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "结构完整率我原来想靠解析输出格式。现在如果不解析，可以换成“template_version是否为结构化模板”当代理指标，再加“length_cap_applied为0”的比例代表没爆长度？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。我把两周验证的指标口径压缩成一页话术，方便产品签字：  \n- thumbDown率（事件口径）+ teacher-day去重对照  \n- 差评原因占比（reason_codes）  \n- A/B/C池命中与升级（pool_label + teacher_id_hash + 时间间隔规则）  \n- 引用风险：A池里“引用不准/证据不足”占比 + citation_check_pass率  \n- 长度：超长截断率 + “太长”差评占比  \n- 情境：不符合情境的重复点击率（同一teacher_id_hash 12小时内相同reason_codes重复）+ 次日留存"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在叙事律动共创引擎方案设计背景下，用户与导师围绕叙事组件模型的MVP组件集合、可审计溯源字段与节奏轨参数化持续沟通（9轮），其中在合规标签粒度与导出溯源隐私边界上与合规经理沟通（3轮），在素材授权自证与二创回源证据链上与版权运营沟通（2轮），并对齐默认严格策略与可自动填充的字段最小集。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这段想先把“叙事组件模型”定下来，不然编辑器和生成编排都不好接。你帮我把要定义的组件拆清楚，顺便看看有没有合规坑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想得比较直：剧情节点、选项分支、音乐段、镜头节奏。然后把它们串成一条可玩的短篇。字段我没想全，怕定义太重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先跑起来。能让人做出一条短篇，观众能点分支，音乐别乱跳就行。状态这块我有点虚，怕越做越像游戏引擎。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PolicyTag 我知道要，但我不想每个节点都写一堆标签。AssetRef 也有点重，能不能直接写URL。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规经理 叙事组件模型里要加合规标签，我不想逼创作者填一堆。最少要做到什么程度？能不能默认值+抽检？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "risk_flag 这个是我们自己算还是人工点？我怕创作者乱填。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我再问下导出二创这块，我们前面想的是导出带回流标识、二创默认回源，会不会踩隐私？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@版权运营 组件模型里我想轻一点。素材就写URL行不行？平台要怎么证明授权、还能支持二创回源？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那导出水印里要不要带 asset_id？我怕被人扒库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了。@导师 我问完了：合规说 Story级强制分级和主题，Node级只要 risk_flag 这种；版权说不能只URL，得有 asset_id、license、proof_ref、fingerprint，还要 derived_from 链。  \n我有个担心：我们MVP做这么多字段，会不会太重，创作者填不动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于：授权类都系统管，创作者只选“我有权/我原创/我用平台库”。别让他们填合同号。risk_flag 也别让他们选低风险。可以吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试试：  \n- Story：story_id、title、age_rating、theme_tags、created_by、version。  \n- Node：node_id、type、text、next、risk_flag。  \n- Choice：choice_id、from_node、to_node、condition。  \n- Track：track_id、music_ref、tempo。  \n- AssetRef：asset_id、license_type、source_type、fingerprint、origin_asset_id。  \n- 还有 derived_from_story/version 和 export_token。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点分不清 beat_grid 和 cut_rate 这种要怎么填，是算法算还是人设？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选B偏严格。尤其免费层还允许发布，导出又要回流标识，感觉不严会被薅。就是会不会把人挡在门外。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能对齐。我觉得卡的点主要是 Track 那几个参数命名我怕我讲不清，但有模板引用就还行。还有 StateKV 的“限量”要定个数，不然大家随便写。其他按你这版走。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

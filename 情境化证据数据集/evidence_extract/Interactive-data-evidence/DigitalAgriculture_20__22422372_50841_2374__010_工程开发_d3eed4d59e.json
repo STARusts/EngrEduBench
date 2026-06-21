@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在离线队列与批量同步已跑通、补齐核验凭证采集与反作弊的工程开发背景下，用户与导师围绕凭证类型/采集时机、端侧最小化留存、服务端校验回执与测试用例持续沟通（7轮），其中在签名与设备绑定反作弊落地上与安全工程师沟通（3轮），在数据最小化/保留期/访问审计上与合规与隐私官沟通（2轮），在媒体上传与事件接口及错误码设计上与后端工程师沟通（2轮），并形成端侧两步上报+ACK/warnings与verification_status处理的联调实现方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想到的就是拍照、定位、时间戳。再加个签名？但签名我不太会做成防伪的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "防代打卡、防在家里点一下就算干完。还有重复用老照片。采集时机我按开始/结束各一次，必要时加中间抽查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 端上采集凭证（照片/定位/时间）怎么做才不容易被伪造？要不要做设备绑定和签名？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "签名这块我有点虚。端上做 sha256 我会，密钥是每台机器生成一对公私钥吗？还是固定一把？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线没有 server challenge 就只能 nonce 了？会不会不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 凭证这块哪些能采、能存多久、访问权限怎么卡？我怕离线那块存照片踩雷。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "定位降精度会不会影响判定在不在地块里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边说的凑一下：端上采集照片+定位+时间，然后做摘要签名，离线就先存加密照片，ACK 后删。服务端验签、nonce 去重、定位阈值打分，照片 pHash 做疑似重复告警。这样行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1）我想还是放 task-events 里，当成一种 event。2）验签失败就拒绝，定位不准就复核？3）测的话……我就模拟改时间、重复发同一个 nonce？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 凭证这块我们想做：照片先上传拿 media_id，再在 task-events:batch 里上报一个 evidence_collected 事件引用 media_id。后端接口怎么定比较顺？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "error_code 我现在只记得上个微场景的那 5 个，这里要新增吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ACKED_WITH_FLAG 我们返回结构里没这个 result。我怕改太多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我端上处理就变成：ACKED 但有 warnings 就不删摘要？还是照删原图？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "测反作弊有效性这块，我只会做几种假数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端侧我按步骤做：  \n1）拍照后先走 `/evidence/media:upload` 拿 media_id，失败就留在离线队列重试；成功就把原图删掉，只留 hash+media_id。  \n2）生成 nonce，拼 payload（task_id、operator_id、device_id、media_id、gps、accuracy、client_ts、nonce），做 sha256 摘要再用设备私钥签名。  \n3）把 `EVIDENCE_COLLECTED` 当成 task-event 进 `/sync/task-events:batch`，按你前面幂等处理。  \n4）收到 ACKED+warnings 就提示“待复核”，不要再重试；REJECTED 才按错误码看要不要重采。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我端上把 `EVIDENCE_SIGNATURE_INVALID` 当成不可重试错误，弹提示然后停掉这条队列项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把 media 上传接口对接出来，再把签名和 nonce 的字段塞进事件里。warnings 和 verification_status 我需要后端把返回和快照字段一起加上，不然端上不好显示。我晚点再去跟后端确认字段名。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

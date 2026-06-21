@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云边协同叙事引擎工程开发背景下，用户与导师围绕微服务拆解方式、延迟验证、通信协议、接口契约与异常兜底持续沟通（5轮），其中在边缘侧服务发现与跨边界链路追踪选型部分与效能专家沟通（1轮），并最终形成微服务拆解规范基线及跨边界追踪补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步按职责域拆。云端侧三个核心服务：剧情推演服务、数字人心智状态服务、合规风控网关。边缘侧两个：交互渲染服务、特征提取与Embedding缓存服务。为了验证拆解不会破坏延迟，我设计了一组对照实验：保持同样的剧情分支深度，变量是服务拆分前后的RPC调用跳数和Payload大小，评价指标就是P99延迟，必须卡在150ms以内。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "云边之间延迟敏感，肯定用gRPC加Protobuf。但服务治理这块我有点拿不准。云边网络环境异构，边缘节点可能不稳定，传统的注册中心不一定合适。链路追踪我想用OpenTelemetry，但跨云边边界的Context Propagation具体怎么配，我只看过基础用法，复杂网络拓扑下的配置细节还没摸透。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧服务发现和跨边界的链路追踪怎么选型比较稳？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "自定义二进制Propagator和Protobuf注入TraceParent，这块我确实没实操过。我现在的能力缺口就在跨边界链路追踪的工程实现上。我今晚去啃OpenTelemetry的Propagator自定义接口文档，写个跨网络边界的最小Demo跑通验证，明早把这套最简追踪配置迁移到我们的特征提取服务代码框架里，先把云边Trace打通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口契约必须云端主导，边缘侧只实现客户端Stub。异常兜底沿袭前序决策，边缘侧特征提取服务挂了，直接降级到云端上一轮合法状态兜底，不重试避免风暴。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "引擎微服务拆解规范基线：1. 服务划分：云侧三服务（推演、心智、风控），边侧两服务（渲染、特征提取）；2. 通信协议：云边强制gRPC加Protobuf；3. 链路追踪：OpenTelemetry加自定义二进制Propagator加Protobuf显式注入TraceParent；4. 契约与兜底：云侧发布Protobuf契约，边侧异常降级至云侧合法状态，禁止重试。验证口径：对照实验确认P99延迟小于150ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

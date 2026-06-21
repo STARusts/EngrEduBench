@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在自新引擎上线旁路验证背景下，用户与导师围绕验证方案、统计口径、假设检验前提及上线判断标准持续沟通（9轮），其中在旁路切分与比对规则部分与部署验证官沟通（1轮），在监控指标与假设检验方法部分与吻合度监控师沟通（1轮），并最终形成包含流量切分、时间容忍区间、卡方检验P值与效应量等硬性指标的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算切一小部分流量给新引擎，然后看它生成的课径和旧系统是不是一样。如果一样就全量切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "统计口径？我就算算重合率吧。重合率高的就算过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "旁路流量切分具体怎么配？比对规则怎么设？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控指标怎么定？重合率不行的话，看什么？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我对假设检验这块只知道名字，具体怎么算、前提条件都不懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周内，我要把卡方检验和置信区间的原理看明白，能自己用Python写一个算卡方值和P值的脚本，用到这次旁路比对的日志分析里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "频次有差异说明行为变了，但偏移在容忍内，说明只是触发时机更敏感了。我觉得算成功，可以全量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加上效应量Cramer's V大于0.1的拦截条件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 旁路流量按尾号切10%；2. 新旧引擎触发时间差在±12小时内；3. 卡方检验P值需大于0.05，若P值小于0.05，则需看效应量Cramer's V，V小于0.1才放行；4. 偏移量95%置信区间上界不超过12小时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

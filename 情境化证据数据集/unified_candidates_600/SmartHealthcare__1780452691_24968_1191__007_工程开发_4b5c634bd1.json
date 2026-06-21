@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在组方配伍禁忌系统开发背景下，用户与导师围绕药对毒性图谱存储调优策略与验证指标持续沟通（7轮），其中在资源受限下的低成本存储方案部分与图库研发工程师沟通（1轮），并最终确认保留Neo4j的子图常驻妥协方案及P99延迟与GC频率验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上Neo4j，这东西查关系最方便，套一下Spring Data Neo4j就能跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着Neo4j可以调大页面缓存，或者开APOC插件加个缓存层。网上很多人处理图查询瓶颈都是这么加插件的，应该能顶一顶？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就跑几个查十八反的语句，看耗时降没降？如果还是慢，我就再加几个索引试试？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这边要存毒性图谱，但内存只有16G。Neo4j加缓存插件能搞定吗？有没有什么改动小点的优化办法，最好不用换技术栈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "换NebulaGraph我还要重写导入脚本，部署也不熟。就按第二个来吧？Neo4j做子图常驻，冷数据放磁盘，这我只要改改查询逻辑就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切分边界，就，就按临床开方频率来？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "底层存储，我我只调过conf文件，内存映射这块没细看。现在确实有点抓瞎。我今晚去翻一下Neo4j的存盘机制，看看它怎么刷脏页的，再试着调调参数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先按Neo4j子图预热来写代码，配上这两个监控指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "药对毒性图谱存储调优方案：1. 选型：保留Neo4j；2. 调优策略：按开方频率做子图切分，高频禁忌子图常驻内存，低频走磁盘；3. 验证口径：同批次高频查询，对比预热前后P99延迟和Old GC频率；4. 短板补学：今晚摸清Neo4j内存映射与刷盘机制，防线上OOM。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

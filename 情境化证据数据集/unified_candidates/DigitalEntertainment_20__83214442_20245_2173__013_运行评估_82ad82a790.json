@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段搭建互动转化漏斗监控背景下，用户与导师围绕漏斗节点定义、去重口径、AB可比切片与告警最小化落地持续沟通（8轮），其中在事件模型与会话去重及异常标记上与数据工程师沟通（3轮），在北极星指标、人群分层与抽样波动阈值上与运营分析师沟通（3轮），并确定最小可用面板与告警方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边就看了几张面板：播放 UV、互动点击量、完成率。漏斗我还没敢画很细，怕一画就全是坑。现在缺的是每个互动点到底算一次还是多次，还有分支跳转算不算流失。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "进入播放页就是 page_view。首个互动触发是点击互动按钮？分支选择提交就是选了 A/B 然后发请求。最后二创或分享我不确定，可能是 publish 或 share。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 漏斗要做“进入播放页→首个互动→分支提交→二创/分享”，事件模型怎么定？会话用什么粒度去重？还有 expectedPrevSegmentId 缺失/409 这种要怎么在漏斗里标记出来，实时看板会不会抽样导致误判？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "play_session_id 这块我理解，就是进播放页就生成。那如果用户后台切回来，算同一个 session 吗？我担心会话打散导致漏斗掉一截。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "first_interaction 你说按 step 去重，是只记一次？用户点了三次互动算一次？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据工程师给的口径：漏斗主键用 play_session_id；step1 play_page_impression，step2 first_interaction（只记首次），step3 branch_commit 带 expected_prev_segment_id 和 commit_result（ok/compat_missing/409_conflict）；step4 co_create_publish 或 share_out。compat_missing 不算失败，409_conflict 算漏斗断点。实时里 branch_commit 不抽样，但 publish/share 可能 10% 抽样，要用 5 分钟滑窗看趋势。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "去重就写 play_session_id 粒度，每步取首次事件。AB 可比这块，我有点慌。是不是所有漏斗都要按 bucket_id 切一遍，然后只看 1% 桶对照？但这样量太小。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就是 bucket_id 继续保留，然后 ab_flags 里再拆一个 tech_cache_v2=0/1。面板上先固定 tech_cache_v2=0 看业务桶，再单独看 tech_cache_v2=1 的 1% 桶做健康检查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运营分析师 漏斗监控这块，四步漏斗已定：曝光→首互→分支提交→发布/分享。你这边北极星指标偏哪一个？人群要怎么分层看（新老、创作者/观众）？还有 publish/share 可能抽样，尾段波动阈值要怎么设才不会天天误报？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "branch_commit_rate 是以曝光做分母吗？还是首互？我怕口径乱。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那“完成率”我们之前就有，现在要换成提交后完成率，口径要改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 运营分析师的建议：别一个北极星，消费漏斗看曝光→提交的 branch_commit_rate 和 提交后完成率；共创漏斗看 publish_rate，但限定先有提交且完成度≥70%。分层按新老、创作者/观众、内容类型。尾段 publish/share 抽样就加最小样本门槛，比如 5 分钟 publish_count<50 不报警；相对对照桶下降>15% 且持续15分钟才告警。还强调 409_conflict 要算技术失败，别当用户流失。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先做两张：1）曝光→首互→提交 的漏斗，按 bucket_id 和 tech_cache_v2 切；2）提交后完成率 + 409_conflict 比例。告警先盯提交率下降和 409_conflict 上升。publish/share 我先不上告警，怕抽样搞得一直响。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有个担心：把告警限定 tech_cache_v2=0，会不会漏掉 tech_cache_v2=1 桶真坏了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有隐私这边要管吗？漏斗里都是 user_id_hash，应该没事吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那我按你这套去让数据那边开面板字段，再让 SRE 把告警接进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）漏斗四步：play_page_impression→first_interaction→branch_commit→publish/share_out；再加两个诊断：首互→提交、提交→完成。2）branch_commit 带 commit_result：ok、compat_missing、409_conflict；compat_missing 不算失败。3）面板按 bucket_id × tech_cache_v2 切。4）告警：曝光→提交相对对照桶掉 8% 持续10分钟（只看 tech_cache_v2=0）；409_conflict 占比翻倍持续10分钟；publish_rate 样本够了再按 15%/15分钟。5）tech_cache_v2=1 只做提醒，不 page。6）事件字段最小化，不上报文案和提示词。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

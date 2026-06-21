@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在M4网关部署病虫害识别模型面临算力与内存约束背景下，用户与导师围绕模型选型与算力墙突破持续沟通（4轮），其中在边端部署硬约束与模型裁剪部分与边端AI算法工程师沟通（1轮），在手写1D算子风险与延迟评估部分与性能优化攻坚手沟通（1轮），最终锁定1D深度可分离卷积加手写C算子补全方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "M4内核主频跑到480MHz，带硬件浮点，我觉得直接上MobileNetV3微调一下就行，精度能保住。如果嫌慢，再开个CMSIS-NN加速。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关芯片是STM32F4，512K SRAM / 1M Flash，多谱输入大概是6通道的反射率时序，这种条件下MobileNetV3还塞得进去吗？如果不行，你们平时怎么裁剪的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得手写算子风险太高，容易出Bug，能不能换颗带NPU的芯片？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果在Zephyr下补写几个1D深度卷积算子，主要坑在哪儿？内存对齐还是指令集调度？推理延迟大概会劣化多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备按1D深度可分离卷积方案落，手写算子我加个单元测试守着。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

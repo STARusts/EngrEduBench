@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在时序风险特征抽取实现背景下，用户与导师围绕Flink滑动窗口全量状态拉取导致的频次偏高与状态膨胀Bug及修复方案持续沟通（5轮），其中在状态后端与去重机制修复部分与数据工程师沟通（2轮），并最终形成增量聚合与旁路拆分修复方案及资源预估结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用EventTime滑动窗口提取急加速频次，窗口长度5分钟，滑动步长1分钟。为了追求特征极致的细粒度和未来的可扩展性，我在窗口触发时做了全量事件的状态拉取，想保留完整上下文。结果跑出来频次比Spark离线算的高了快一倍，Checkpoint也做不动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我当时的考量是，如果后续要加非线性特征，比如计算急加速轨迹的曲率方差，有全量事件在手里直接算就行，不用改上游逻辑。流式计算不就该保证每个窗口都有完整的原始数据吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用Flink EventTime滑动窗口算急加速频次，状态后端用的RocksDB，窗口触发时做了全量状态拉取，现在频次偏高且延迟极大。怎么在不损失特征丰富度的前提下修复？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只维护累加器的话，我后续要加曲率方差这种非线性特征怎么办？没有原始事件序列我算不了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "频次偏高确实是滑动窗口加全量拉取导致的重复累加。修复方案是实时流改用增量聚合。对于非线性特征，他建议走侧输出流旁路计算，落ClickHouse。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没细算资源，我只关注了特征算子的表达力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拆分后，实时流状态大小只和Key数量有关，跟事件总量解耦，RocksDB内存占用至少降80%，Checkpoint间隔也能缩到1分钟以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "根因是滑动窗口内全量事件状态拉取导致重复累加和状态膨胀。修复方案：1. 实时流特征改用`AggregateFunction`增量聚合，只存累加器；2. 非线性特征通过侧输出流写Kafka，异步落ClickHouse计算；3. 状态TTL设为窗口长度加上允许的1天最大延迟。资源消耗预估实时流状态大小降至O(Key)，内存占用降80%，满足部署约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

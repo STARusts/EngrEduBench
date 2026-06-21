@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧集分支编排平台预算受限的方案设计背景下，用户与导师围绕素材资产分层、版本号/灰度/回滚绑定、离线与审计留痕持续沟通（10轮），其中在素材打包粒度与ABR/离线包设计上与音视频工程师沟通（3轮），在合规裁剪、离线限制与审计字段最小集上与合规与内容审核沟通（2轮），并形成高性价比的资产分层与版本灰度离线审计方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“素材”和“编排”拆开。素材走不可变思路：一旦过审发布就不覆盖，只追加版本；编排是可变的，允许快速迭代。端侧拿到的是“剧集版本+分支图版本+节点资产引用清单”，资产引用尽量指向内容寻址的 id，减少改动面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三层：  \n1) 图摘要层：分支图结构、每个节点的轻量元信息（时长、可选项文本、下一跳、预取建议、offlineAllowed 标记），还有每个节点主资产的低清占位信息。这个必须首包。  \n2) 节点内容层：每个节点的主视频/音频、字幕、关键帧缩略图、互动 UI 配置。按播放进度预取。  \n3) 扩展层：花絮、彩蛋、多语言包、导流素材、可选高码率。默认不拉，触发时或 Wi-Fi 下再拉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本策略我倾向两条线：  \n- AssetVersion：针对单个资产包（比如某节点主视频+字幕+封面打成一个逻辑包）做语义版本，发布后不可变。  \n- GraphVersion：分支图版本，引用某一组 AssetVersion。回滚就是把 GraphVersion 指回旧的引用集合。  \n爆炸控制上：多端差异尽量通过“同一 AssetVersion 下多份 rendition”解决，但 rendition 是受控集合，比如只保留 3 档码率、2 种分辨率；多语言字幕单独成包，按需挂载，不和视频主包绑死。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@音视频工程师 互动剧集节点切换频繁，我们想定素材资产打包粒度和版本策略：节点主视频/音频、字幕、缩略图、UI 配置怎么组合更省存储和分发成本？以及多码率、多端、多语言怎么避免版本爆炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们还有“端先拿图摘要，再按进度预取”。图摘要里应不应该包含每个视频分片的索引？还是只到 assetId 级别？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "离线模式那块，我们限制 offlineAllowed 白名单边。离线包你建议怎么做？节点视频全部缓存会很贵。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳三点：  \n1) 视频按“节点=独立媒体资产”管理，避免把一堆节点打成一个更新成本巨大的包；可复用转场做成共享资产库。  \n2) 图摘要只引用到 assetId 级别，分片索引交给媒体 manifest；摘要里只加预取建议字段。  \n3) 离线分两档，小包只保证可播（低码率/首段+字幕），大包用户选择才下，且都只引用已审已发 assetId。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小集合我先列 12 个字段：  \n- assetId（内容寻址或全局唯一）  \n- assetType（nodeVideo / transitionVideo / subtitle / imagePack / uiConfig）  \n- parentNodeId（如果是节点资产）  \n- renditionProfile（分辨率/码率档位集合标识，不展开到每个分片）  \n- language（字幕/文案类）  \n- checksum（完整性校验，端侧用）  \n- sizeBytes、durationMs（预取/离线评估）  \n- reviewStatus（draft/reviewed/rejected/published）  \n- publishAt、expireAt（下线窗口）  \n- rightsTag（版权/地域/未成年人限制等标签）  \n- offlineEligible（是否允许加入离线包）  \n- storageTier（热/温/冷，做成本控制）"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“灰度只发生在 GraphVersion 和非视频类资产”，视频类资产发布后不替换，避免多版本并存导致成本爆。  \n对封面/字幕/UI 配置这类小资产，允许同一 assetKey 下有多个 assetId 版本，通过 releaseChannel 选择：stable/canary。GraphVersion 引用 assetKey 而不是具体 assetId，由服务端在下发清单时按用户分桶解析到具体 assetId。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以折中：图摘要里不放分片，但可以放“assetKey->assetId 的通道映射表”，比如 stable 指向 A，canary 指向 B。端拿到摘要后就能直接拉对应 assetId。服务端只需在下发摘要时按分桶给不同的摘要版本，不用每次节点预取都查映射。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制点两条：  \n- 摘要只在“通道集合变化”时发新版本，不随日常播放行为变化；并且只允许 stable/canary 两个通道，最多再加 emergency 回滚通道。  \n- 摘要差异只在小资产映射表，体积可控；视频仍然只引用稳定 assetId。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们在 GraphVersion 发布时生成一条“发布声明”记录：graphVersionId、引用的 assetId 列表摘要（可以是哈希集合）、发布人、审批单号、时间戳。回滚就是新发一条声明指向旧 graphVersionId，不去改旧记录。这样审计链是追加式。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容审核 我们在做互动剧集分支编排平台的素材资产与版本策略：素材过审发布后不可变、图版本引用素材。想确认合规留痕与标签设计：离线白名单边、未成年人/地域版权限制、审计记录最小需要哪些字段？以及如何避免端侧绕过限制离线播放或拉取未授权素材？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "服务端裁剪会不会影响“图摘要缓存命中”？我们之前想把摘要尽量公共缓存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定案我建议这样：  \n- 资产分层：首包下发图摘要（结构+节点元信息+预取建议+小资产映射），节点主视频/音频等按进度预取，扩展资产按触发/网络条件拉取；转场视频做共享库复用。  \n- 版本/灰度：视频类 assetId 发布后不可变；GraphVersion 引用 assetId 或 assetKey；灰度只开放给小资产（字幕/封面/UI），通过摘要内 stable/canary 映射实现，两通道为主，必要时加 emergency 回滚通道。  \n- 离线：只允许 offlineAllowed 白名单边；离线包分小包（低码率或首段+字幕）和可选大包；离线仅包含 reviewStatus=published 且 offlineEligible=1 的资产，端上选择记录必须带离线来源标识。  \n- 审计：GraphVersion 发布生成追加式发布声明（graphVersionId、引用资产集合哈希、发布人、审批单号、时间戳、适用范围）；rightsTag 结构化（限制类型+范围），服务端下发时按地域/年龄裁剪，端侧拿不到受限素材。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "砍两件：  \n1) 不做“分片级预取控制面”，摘要不携带分片索引，避免版本联动和维护成本。  \n2) 不做“多维度通道矩阵灰度”（端/地区/人群交叉太多），先稳定在 stable/canary 两通道，地域/年龄只做合规裁剪，不作为实验维度叠加。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

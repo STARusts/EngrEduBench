@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场编排平台上线发布与回滚验证背景下，用户与导师围绕灰度门禁、回滚验证目标、审计留痕与触发条件持续沟通（10轮），其中在验证期间可用数据与隐私伦理边界部分与合规与内容安全官沟通（2轮），并形成后端发布观测三项与可执行门禁口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "发布窗口里我该先盯哪些检查点？我怕临门一脚又漏掉合规或数据链路。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在的想法是灰度 5% 开始，先看错误率和 p95，没问题就扩到 25%、50%、100%。回滚就直接切回上一版本镜像。对照数据…我原本想拿线上真实弹幕互动当样本，快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回滚要验证：接口没变导致播放器端不崩；互动指令能回传；还有埋点别断。以及昨天门禁里说的 request_id 能串 session，publish_ts、server_send_ts、ack_receive_ts 能算出 ack_delay。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 发布和回滚验证时，我想用线上互动数据做对照会不会不行？哪些数据能用来验证埋点和链路，留痕要留到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我用线上监控里按 error_class 的分布、p95、丢事件率、重复事件率这种数字就行？不看内容本身。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "标记测试流量是指加个 test_flag？我们现在有 degrade_flag、chaos_id，测试标记没专门字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条边界：  \n1）别把弹幕、语音文本、昵称这种原始内容拿出来做回滚对照；  \n2）线上只能看统计指标，最好别额外落盘导出；  \n3）发布/回滚要能审计，记录版本、操作者、原因，测试流量要能被筛掉，不混到正常运营里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回滚验证我想做两套：一套纯指标级，灰度期间看错误率/p95/丢事件率/重复事件率和 error_class 分布；另一套用内部测试账号跑一遍互动链路，看 request_id 串起来、seq 单调、ack_delay 能算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果回滚后客户端或服务端版本不一致，可能会出现事件重放或乱序，seq 不单调就代表互动指令可能重复触发剧情分支，观众看到就会跳戏。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "五条我先写成口头版：  \n1）灰度 5% 期间满足：错误率 <0.5%，端到端 p95 正常网 <800ms、弱网 <1500ms；丢事件率 <0.1%，重复事件率 <0.2%。  \n2）日志能用 request_id 串 session，publish_ts、server_send_ts、ack_receive_ts 都存在且能算 ack_delay 和服务端排队时间。  \n3）抽样校验 seq 单调，回滚前后都不出现大面积回退或跳号到不可用。  \n4）回滚演练走通：执行回滚后 10 分钟内核心链路恢复到门禁阈值内，且 chaos_id/变更单号/操作者/原因（resume_reason）有审计记录。  \n5）验证不使用可识别的线上原始互动内容（弹幕文本/语音文本/昵称等）；需要功能复现只能用内部测试账号与可筛选的测试标记。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把第4条改成：回滚后连续两个 5 分钟窗口内，错误率/p95/丢事件率/重复事件率回到阈值内；回滚触发条件就按回归失败条件触发，再加“出现新 error_class 占比超过 5% 且持续一个窗口”也触发？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没太有依据，就是感觉新错误码一下多了不对劲。要不改成“新 error_class 进入 top3 且占比>1% 持续一个窗口”？这个也拍脑袋了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，这样稳一点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我盯三项：  \n- 回滚前后 ack_delay 的分位数（p50/p95）和服务端排队时间，看看是不是新版本引入排队；  \n- error_class 分布里 5xx/超时类是不是冒出来，跟 request_id 抽样能对上链路；  \n- 事件质量：丢事件率、重复事件率，加上 seq 抽样单调性，确认没重放。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在权益凭证MVP方案设计背景下，用户与导师围绕链外存证与验真架构、事件链路与字段收口持续沟通（10轮），其中在证据链三层设计与防篡改/重放上与链路验真工程师沟通（4轮），在签名密钥形态、可信链、公钥分发与轮换隔离上与安全工程师沟通（2轮），并确认MVP的三类事件存证、prev_digest串联、非对称签名与分层保留方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "链外我第一反应就是“把关键数据哈希一下存起来”，然后验真的时候再算一遍对上。就这么做行不行？存哪里我不太确定，日志系统还是对象存储都能放吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象…可能就是铸造记录、发放记录、核销记录？哈希是服务端算，然后验真就是前端展示个“已验证”之类的。面向谁…面向用户？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@链路验真工程师 现在我们不强制上链，想做链外存证和验真。发行/发放/核销这三类事件要怎么拼成证据链？最少要存什么字段，哈希/签名怎么搞，怎么避免被人改或者重放？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验真方是用户的话，也要给公钥吗？感觉很重。还有原文存储如果被删了，只剩digest是不是就验证不了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概抓到三层：原文、摘要、签名。MVP可以先把三类事件都做成“原文JSON存一份 + 事件表里存digest和signature”。事件之间用 prev_digest 串起来，不用上链也能形成链。用户侧先别做真的验真，只给个可查入口，真要验是给合作方或审计用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 这里链外存证要做“digest签名”。我们在方案设计阶段要把密钥形态、签名可信链、公钥分发和轮换说清楚。通常怎么设计才不容易踩坑？还有多环境（测试/生产）怎么隔离？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们嫌麻烦，直接用对称密钥做HMAC是不是也能验？合作方我们也能给一份key。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP：三类事件都做digest+签名；原文放对象存储；事件表里放 key_id。增强项：外部时间戳或公证存证，之后再说。争议材料先不塞核心表，只留“证据定位信息”，比如对象存储的uri。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我先按事件通用：event_type、event_id、entitlement_id、user_id（发行可能没有）、occurred_at、request_id（核销有）、nonce（核销有）、prev_digest、digest、signature、key_id、evidence_uri。差不多就这些？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "成本这块我没算过。是不是做个保留期，比如原文存1年？但审计可能要更久。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用户侧展示也别太重，就展示“可验证标识”和下载验真包入口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这6条我能跟上。就第2条 prev_digest 我有点怕串错，能不能先按“同一 entitlement_id 的上一条事件digest”来做，别搞太复杂。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在种源劣变声光共振甄别系统传感驱动开发背景下，用户与导师围绕声光激励时序控制、底层驱动能力短板、时序验证口径及开发分工持续沟通（10轮），其中在硬中断与SPI协议时序实现部分与嵌入式驱动开发者沟通（1轮），并最终形成底层驱动交硬件组、自身负责应用层与环形缓冲区对接及示波器波形对照验证口径的分工方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "种源劣变声光共振甄别系统的接口我核对完了，没缺漏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用定时器呗，文档里写了定时器配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "中断我不懂，没写过这种底层的。我就按上一步的接口定义写个调用函数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光激励同步的代码怎么写？中断怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没用过。专家说开DMA通道，我就开个通道呗。具体怎么配寄存器我不知道，反正就按这个思路写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "编译通过跑一下，看能不能采到数据，有数据就对了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "示波器我不会用。这种验证得硬件组来吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我负责应用层，把采集数据读到内存转给流式接口。底层SPI、DMA和中断配置让硬件组写，他们得给我提供标准时序图做对照。我这边保证调用接口不阻塞就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用个环形缓冲区存数据，流式那边来取。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

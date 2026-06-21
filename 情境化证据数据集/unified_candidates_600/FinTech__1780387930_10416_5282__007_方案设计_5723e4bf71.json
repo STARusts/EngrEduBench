@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计收尾背景下，用户与导师围绕敞口极值与熔断高可用设计、状态机流转及极端行情验证方案持续沟通（8轮），其中在熔断降级与敞口极值计算部分与高可用保障师沟通（1轮），并形成CVaR极值判定、三级降级状态机及行情回放与混沌注入联合验证的高可用约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉着加个熔断就行，超限就断开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超过阈值就断呗。状态就停机吧，安全第一。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "敞口极值和熔断降级具体怎么设计？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "进三级全断吧，用本地快照。不产生新敞口是因为不生成了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前两天看了Chaos Mesh的文档，可以注入延迟和Pod Kill。我们就用这个，把对冲引擎的Pod杀掉，看它切不切换。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "拦截器卡死敞口上限，如果拦截器没拦住，就算CVaR超限，进一级降级不生成新策略，再超就只读平仓。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

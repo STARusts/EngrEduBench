@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在意图驱控信令流规划背景下与导师围绕信令封装格式、上送防抖限速及特征摘要定义持续沟通（5轮），其中在信令必选字段部分与意图架构师沟通（1轮），在上送限速与开销控制部分与数据流拓扑架构师沟通（1轮），并最终形成意图信令字段基线及gRPC+TLV封装与令牌桶限速上送规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，快环查表没命中嘛，直接把请求扔给慢环去解析呗。信令格式的话，用JSON凑合一下？扩展性好，加字段方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能会积压。那我加个队列缓冲一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图信令里面都要塞什么字段啊？是不是有个业务ID和优先级就够了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "快环未命中上送慢环，怎么防抖和限速？导师怕打爆慢环。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要加Goal和Constraint，还有优先级。上送要做令牌桶限速。格式的话，用定长TLV，解析快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就五元组吧，别的我也想不出来了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TLV吧。快环那边处理太慢的话整条链路都卡住了，维护麻烦点就麻烦点，性能要紧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

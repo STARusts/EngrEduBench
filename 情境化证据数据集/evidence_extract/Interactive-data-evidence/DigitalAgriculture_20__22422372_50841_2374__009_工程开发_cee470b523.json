@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在移动端弱网/断网下核验签到需离线可用且可追溯的开发背景下，用户与导师围绕离线缓存结构、同步协议最小集合、幂等与冲突处理、合规删除持续沟通（9轮），其中在离线队列实现与重试/冲突处理部分与移动端工程师沟通（4轮），在本地存储字段边界、加密与TTL清理审计部分与合规与隐私官沟通（2轮），并形成两表结构、同步API与错误码、清理策略的可执行开发清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "手机本地先存任务列表和操作记录，断网就先写本地队列；有网了再按顺序发到后端。只是冲突怎么弄我没想清，比如同一个任务在两台设备都点了核验。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向只存操作，不想塞大字段。就像之前 `task_event` 的感觉：action、from/to、operator、device、ts、payload 摘要。本地也存一份类似的事件队列。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重复提交的话，靠服务端幂等键？我不确定幂等键用什么。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 离线队列一般怎么做比较稳？我现在打算只存操作事件，不存大对象。幂等键、重试、冲突你建议怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "任务快照也要存啊。我本来只想存队列。快照要存多少字段算“必要”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "冲突处理呢？两台设备都核验成功，会不会变成两条？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那队列重试有讲究吗？我怕一直重试耗电。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我会采纳三点：  \n1）本地得分两张表：任务快照和操作队列，队列可重放。  \n2）幂等键用 `device_id + local_event_id` 这种端上生成的，不用自增。  \n3）服务端要管业务冲突，端上最多做状态检查减少冲突，收到冲突码就刷新快照。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太确定的是：快照字段到底怎么控制，怕产品说离线要看很多东西。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 离线场景下，本地要存任务快照和操作队列。里面会有 operator_id、device_id、时间戳，还有可能有核验的照片/定位摘要。哪些能存本地？保留多久？需要怎么删，审计要怎么做才算合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加密存储是指系统 Keychain 那种？我这块不太熟。还有 TTL 自动清理是端上做还是服务端下指令？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说一版，但可能漏：  \n- 本地两类：任务快照（给离线展示）+ 操作队列（重放）。  \n- 队列里每条有 local_event_id、action、task_id、operator_id(内部ID)、device_id(应用内ID)、client_ts、payload_digest、idempotency_key、状态和重试字段。  \n- 同步时按队列顺序发，服务端按 idempotency_key 去重。  \n- 业务冲突服务端判，比如任务已经核验就拒掉第二条，回冲突码，端上刷新快照并把这条标失败。  \n- 照片/定位这类尽量不落地；必须落地就加密，服务端 ACK 后删本地原始，只留 hash 摘要；本地设置 TTL 清理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "批量上报返回每条的结果？像 `{idempotency_key, status, server_ts, server_task_state}` 这种。拉取快照就按 `updated_after` 拉一批任务摘要。是不是这样就够了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先列：  \n1）NETWORK 暂时失败  \n2）VALIDATION_FAIL 参数不对  \n3）CONFLICT_TASK_STATE 任务状态冲突  \n4）UNAUTHORIZED 没权限  \n5）PAYLOAD_TOO_LARGE 超大"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这 5 条去拆任务。今天我先把端上的队列表结构和状态机写出来，再把批量上报的返回处理接上，错误码就按你给的 5 个。同步重试我照指数退避做，最多次数我先设 8 次，不够再调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

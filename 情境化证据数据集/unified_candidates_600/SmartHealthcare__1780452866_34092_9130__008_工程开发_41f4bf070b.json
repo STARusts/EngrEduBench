@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在呼吸信号采集对接代码编写背景下，与导师围绕多路异构信号的物理链路接入、时序对齐方案及验证口径持续沟通（9轮），其中在物理链路与时序差异部分与多模态感知架构师沟通（1轮），并最终明确基于PTP与SPI中断的驱动层对接及PPS硬同步验证任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，写个接口读数据呗。串口读一下存起来不就完了。不是串口啊？那就USB插上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩东西怎么读数据？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网口读光学，SPI读电磁。那我开两个线程，一边收网口一边读SPI，收到就存起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐？我给它们加上当前系统时间不行吗？System.currentTimeMillis()。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我不知道怎么写了。底层时间这块我没搞过，平时都是调别人封装好的接口，里面怎么对齐的我不清楚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺网络和SPI硬同步的代码实现。我去搜搜有没有现成的，抄一下改改参数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看下FPGA SPI中断怎么触发，还有网口PTP时间戳怎么提出来。今晚把这两个模块的硬件手册翻一下，写个最小测试把寄存器值打出来，看能不能对上号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打Log看两边的值是不是一样大。时间戳啊，就看打印出来的时间差是不是0呗。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

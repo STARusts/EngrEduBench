@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在作物品质无损分级协同决策系统运行评估背景下，用户与导师围绕灰度上线切流维度、继续/暂停/回滚判定、分钟级回滚与权限审计持续沟通（7轮），其中在告警窗口、配置级回滚与边缘端切流实现部分与SRE运维工程师沟通（6轮），并收敛形成一版可落地的灰度上线与回滚预案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "作物品质无损分级协同决策系统现在进入运行评估了，我想先把灰度上线和回滚预案捋清楚，不然一上产线出事就很被动。我有点想把灰度做成“多维开关矩阵”，按站点、品类、等级策略、PLC通道都能单独切。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我提两个方案：\nA）按站点灰度：合作社站点A先上，稳定了再扩。\nB）按产线内比例灰度：同一条线按批次hash 5%→20%→50%。\n我倾向B，感觉更“科学”，样本更随机。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那灰度维度就定成“站点/产线”优先。可我还是想加“策略轮版本”的灰度，比如新模型只影响某个等级段或某个品类。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只读是指边缘端算出决策但不写PLC，只做旁路记录？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那回滚预案我先拍脑袋：一旦P99超过阈值就回滚到旧模型；断网就切本地缓存策略；PLC拒写就切成只读并报警。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在能想到的是：\n- 总P99>220ms 就暂停扩大；>260ms就回滚\n- plc_write_fail>0.02%立刻回滚\n- 丢失率>0.1%回滚\n- 等级偏差>±1级比例>0.2%就回滚\n但我不确定“持续多久”算触发，1分钟还是5分钟窗口？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度上线我们准备按站点/产线做第一层，另有策略版本新旧、三态（全量/关闭/只读）。想请你给一套可操作的：切流/回滚怎么做、告警窗口怎么定、以及哪些指标触发“暂停扩大”和“立刻回滚”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“off”是直接用旧的分级决策服务，还是PLC走人工？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警窗口怎么搞？我担心1分钟窗口太敏感，5分钟又放大损失。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "切流具体怎么做？我之前想弄服务网格+动态路由，感觉挺酷，但边缘端环境可能不合适。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计事件要到什么粒度？我怕把日志搞爆，还要合规。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚后怎么验证“回到了稳定态”？有没有一个“解除告警/恢复推进”的条件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想加一个“自动降级”，比如推理超时就跳过模型，走规则基线，避免阻塞队列。这个算灰度里的一部分吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，我回去跟导师对齐：灰度主要是站点/产线 + 三态 + policy_version；告警分立即回滚和暂停扩大两档；回滚配置级切换、current/last_good双份。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把“网格/复杂路由”先砍掉，边缘端做本地策略路由器就够了。开关矩阵也收敛成：\n- 第一层：站点+产线\n- 第二层：policy_version（新/旧）\n- 第三层：write/shadow/off\n再往下的“按等级段/按PLC通道”不做，除非现场硬隔离需求出现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按两档：\n- 立刻回滚（1分钟窗口）：错误写入率>0；plc_write_fail>0.02%；ACK超时占比超过阈值（这个阈值我需要SRE给个建议，可能先按0.1%？我不太确定）。\n- 暂停扩大（5分钟窗口）：总P99>220ms、丢失率>0.1%、out_of_order>0.05%、等级偏差>±1级比例>0.2%。连续两窗再回滚，不然只冻结推进。\n另外回滚后10分钟三项恢复条件满足才能再shadow。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "0.05%我能接受，灰度期保守点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：断网/云端不可达时，我们是继续本地write，还是强制shadow？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这样回滚也更简单：云不可达就不推进灰度、不换policy_version，只能在本地三态切换。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限我有点没想全。我直觉是运维值班+站点主管都能点，但这会不会太松？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我把权限分成两档：\n- 现场操作员/站点主管：只允许 write↔shadow（不允许切版本，不允许off）\n- SRE值班：允许 shadow↔off、版本回滚/切回 last_good\n这样不至于一紧张直接关掉系统。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这版我能落地。唯一我还想加的“自动降级”先不塞进灰度开关里，单独作为运行时保护做监控。今天我就按这6条把告警项和开关字段跟SRE对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

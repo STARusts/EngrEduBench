@@ -1,0 +1,117 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在极端高温后的热事件复盘评估背景下，用户与导师围绕复盘框架、执行率口径、效果对照与合规边界持续沟通（7轮），其中在喷雾执行态证据链与回执分桶口径上与物联网接入工程师沟通（4轮），在预测指标与干预效果对照方法上与机器学习工程师沟通（4轮），在人流数据使用与审计可追溯要求上与合规与数据治理官沟通（4轮），并确定最低可用复盘口径清单与分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先跑未认证的401和外部协作列表过滤+count一致这两条。审计失败那条我怕搞不出来，到时候让后端帮我触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看温度降没降吧。还有报警有没有很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "执行率吧。就看喷雾有没有开。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "调度指令发出去就算开了吧，不然太难了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 喷雾到底怎么算开了？我看就一堆状态位，看不懂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那没有2是不是就当失败？感觉很多设备没回这个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "遥测我没见过，是不是都没有？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "窗口5分钟就行。我就按这个写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "锯齿我真分不出来。那我就只看回执。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 物联网说有三种证据：送达回执、执行回执、遥测。复盘最好用执行回执，没有就分桶，别直接算失败，还要给5分钟窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分母就调度下发的喷雾任务数。分子就是5分钟内收到执行回执的任务数。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选点位吧，听着比较像覆盖面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@机器学习工程师 复盘咋看效果？我就想看开喷雾后温度低点，这样行不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校正是要写公式吗？我不会。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "伪干预组听着像耍赖。领导会不会不喜欢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那预测命中率我就用准确率行不行？我只会这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 机器学习那边说别直接看喷雾后温度降，得有对照。最低配是挑相似街区匹配三四个条件做对照，再看热指数变化差。预测就用混淆矩阵+提前量分布，别硬说因果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同区县、绿地率、建筑密度、人流强度。人流强度我不确定有没有，可能就用协作方的热力图？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 复盘想拿人流强度做对照匹配，能不能用？会不会算违规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我把人流强度理解成“人数”行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "等级分层就是高/中/低那种？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计串起来我不管吧，那是后端的事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规说人流只能用聚合的指数，500m网格/街道级，小时级，不要说人数也别碰轨迹；脆弱性只能用等级不准用明细标签。复盘还得抽几条链路看审计能不能串起来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要报：喷雾点位执行率、回执分桶；预测的混淆矩阵和提前量；对照街区的热指数变化差。先不报很细的因果结论，也不报人群明细。我要拉物联网给回执口径，机器学习给对照匹配，合规看人流和审计抽查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按这四条来。执行复盘我能先做，别的我等他们给数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

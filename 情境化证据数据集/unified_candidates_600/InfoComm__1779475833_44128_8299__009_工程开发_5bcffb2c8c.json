@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在近场抗扰性能优化与除错背景下，与导师围绕干扰应对、FEC取舍及自适应除错策略持续沟通（7轮），其中在极近场抗扰手段部分与近场通信工程师沟通（1轮），在微节点算力与除错工具部分与嵌入式开发师沟通（1轮），并最终形成基于LQI与底噪双控的FEC自适应机制及跳频逃逸除错策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢包的话，最直接就是多发几次，或者把发射功率拉满？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "近场干扰怎么搞，重传和拉功率都不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就跳频加FEC一起上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FEC是不是更省信道占用？那就只加FEC？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微节点能跑FEC吗？我想加个纠错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前补过一篇讲射频底噪寄存器直出的文章，当时配置没看懂，但思路是不是能借过来？直接读物理层底噪寄存器，比看MAC层日志快得多，还能区分是宽带冲击还是窄带干扰。这样不用盲目加FEC，除错也能精准点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用上一步定的平滑LQI。LQI低于150，强制开汉明码；在150到180预警区间，只在底噪寄存器报窄带干扰的时隙开；高于180就不开，省算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "宽带冲击就先不纠错了，直接触发跳频逃逸？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 编解码用轻量汉明码；2. FEC开关由平滑LQI和底噪寄存器双控，低LQI必开，高LQI关，预警区间看干扰类型；3. 除错先读底噪寄存器抓特征，区分窄带和宽带；4. 遇宽带冲击触发跳频逃逸。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

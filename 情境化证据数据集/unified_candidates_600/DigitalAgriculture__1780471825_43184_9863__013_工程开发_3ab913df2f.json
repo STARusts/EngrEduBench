@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云联调与极端环境测试背景下，用户与导师围绕联调工具选型、测试用例组合收敛、预期KPI设定及断网恢复数据一致性策略持续沟通（9轮），其中在物理与网络双重故障注入方案部分与测试与联调专家沟通（2轮），并最终形成基于tc+netem的9种温箱组合联调方案及版本号重传对齐与降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端云联调我准备引入一套完整的可观测性体系。既然云端已经是K8s了，我想在边缘端也跑个OpenTelemetry Collector的sidecar，把Trace和Metric透传到云端的Jaeger。极端环境测试的话，我想用Chaos Mesh在云端注入网络延迟，模拟大棚弱网，这样全链路都能追踪到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心指标主要是断网恢复后的数据最终一致性，还有高温下传感数据采样间隔的漂移。但我确实不知道怎么在物理环境里注入这些故障，Chaos Mesh只能搞网络层。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们在做端云联调时，怎么把高低温试验箱的工况和网关的通信丢包结合起来测试？边缘端跑OTel Collector采集Trace是不是太重了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直搞云原生测试，对内核级的网络控制工具确实不熟，我得赶紧补一下tc的过滤规则怎么写。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果用tc，我就可以在网关启动脚本里根据网络质量自动切换规则了，比部署Chaos Mesh轻多了。那高温导致的CPU降频，怎么抓到它对UDS通信的影响？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这就去学tc netem用法，直接把它集成到我们的联调脚本里。这样就不搞Jaeger全链路了，只把irr_control和model_infer的UDS通信延迟和SQLite WAL写入耗时，作为关键KPI记录下来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本来想把温度从20到60度每5度测一轮，乘上丢包率0到50%每5%测一轮，这就几百个组合了。但这样测试周期太长了，硬件租试验箱的成本也扛不住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "常温0%丢包下，UDS P99延迟应小于5ms；55度+30%丢包下，允许降级到本地保守策略，SQLite WAL写入延迟P99不超过50ms，且不能出现死锁。如果70度下网关直接重启，只要能从SQLite恢复断点就算通过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端下发带版本号的时间戳，边缘端SQLite存最新的版本号。联调时，恢复网络后，边缘端上报本地版本号，云端如果更大就补发差量参数。我需要验证在30%丢包下，重传3次内能对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "根据之前在实验室的初步测试，4G网络在30%丢包下，单次TCP重传成功概率大概在70%左右，3次重传的累积成功率能达到97%，这个置信度对于水肥控制指令下发来说勉强够用了。如果3次还不行，就降级保底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我把重传超时从2秒放宽到5秒，如果5秒还没对齐版本号，就触发断网降级策略，用硬编码的保守配比。联调方案就这么定：9个温箱+tc组合，验证UDS延迟、SQLite WAL写入、版本号3次重传对齐和降级安全性。不用OTel和Chaos Mesh了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

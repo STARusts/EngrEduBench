@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我刚在看屏幕，确实挺慢的，感觉整个系统像卡死了一样。"
+              },
+              {
+                "behaviorLabel": "使用现代工具",
+                "behaviorEvidence": "我试着把前两天学的 pprof 挂上去跑了。它吐出来的图里，核心引擎那一块全是红的，显示 sync.Mutex.Lock 占了 70% 的时间。这应该就是你说的瓶颈吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重构太麻烦了。我能不能直接把锁删了，或者多开几个线程？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端资深开发 刚才查了下，系统里全是等锁造成的延迟。现在高并发完全跑不动，这个地方要怎么改才能快一点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "锁分段？就是多弄几个锁吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "反正就是 16 个最稳是吧？再多的话 CPU 就会因为切换太频繁而变慢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问完了。专家说现在的全局锁不行，要换成分段锁，弄 16 个分段就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "说了个环形缓冲区什么的。但我听着觉得那个太复杂了，代码肯定很难写。我觉得还是分段锁简单，直接多写几个锁就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就按他说的，把那个 `tx_pool.go` 里的全局锁删了，换成一个 16 位的锁数组。反正他连数字都给我了，我照着改就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在隐性行为特征清洗模块开发背景下与导师围绕清洗算子实现、验证口径与测试数据合规性持续沟通（4轮），其中在时序特征衰减因子实现部分与特征工程开发沟通（1轮），在本地单测数据合规性与造数方案部分与合规伦理审计师沟通（1轮），并最终形成基于指数衰减的清洗逻辑、差分隐私仿真造数及AUC降损验证的调整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Spark Structured Streaming做微批处理。断崖特征直接算相邻两天的频次差值，设个绝对阈值截断；交互熵减用固定滑动窗口算信息熵。先出个MVP版本跑起来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "硬截断确实会误杀低活跃学生。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证口径我打算用历史标注的辍学样本做对照，看清洗后特征对召回率的贡献度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种时序特征的衰减因子在Spark里一般怎么实现比较稳？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "mapGroupsWithState这个带状态的算子我之前没写过，我得赶紧补一下。我马上把Spark官方文档这章过一遍，再找个开源Repo照着写个Demo跑通，今晚就把这块逻辑合进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "本地单测需要构造包含时序特征的数据集，直接用脱敏真日志行不行？如果不合规，怎么造测试数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我调整方案：1.清洗逻辑用mapGroupsWithState实现指数衰减，衰减因子0.85；2.测试数据不用真日志，改用DP-Synthesizer造仿真集；3.验证指标看清洗后特征在验证集上的AUC降损不超过2%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

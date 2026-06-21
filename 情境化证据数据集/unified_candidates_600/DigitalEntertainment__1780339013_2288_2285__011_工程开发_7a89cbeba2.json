@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端情绪注入压力测试背景下，用户与导师围绕情绪向量异常边界测试、引擎抗压验证及降级无锁化持续沟通（6轮），其中在注入器设计部分与游戏测试架构师沟通（1轮），在引擎熔断与前置过滤部分与引擎核心攻城狮沟通（1轮），并形成包含Monkey注入器、前置Filter、ASan及无锁降级的压测执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用JMeter起并发线程，直接压NarrativeEngine的推理接口，看QPS和P99延迟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实只考虑了并发量，没想向量本身的极端性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@游戏测试架构师 这种正交性破坏的极端向量，注入器怎么设计？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前方案漏洞挺明显，正常测试数据根本测不出状态机对脏数据的抵抗力。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@引擎核心攻城狮 引擎侧对NaN或者溢出的情绪向量，现在有熔断吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我昨晚补了AddressSanitizer的编译选项接入，刚好能迁移到压测场景。极端向量如果导致OOM或野指针，ASan能直接抓到调用栈，排查效率能提一截。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我判断主要误差源是大模型推理调度的锁竞争。极端向量会高频触发降级分支，降级逻辑如果和主推理线程抢同一把状态锁，并发一高延迟必然抖动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本轮压测方案确认四点：1. 自研Monkey注入器覆盖NaN和溢出向量；2. 引擎侧加前置Filter，染毒向量走无锁降级分支；3. 开启ASan抓内存异常；4. 核心指标盯降级分支触发率和P99延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

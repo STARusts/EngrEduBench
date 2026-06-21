@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在可验证数字藏品体验链路的运行评估背景下，用户与导师围绕核验链路作弊/洗量的异常分析、指标证据与告警处置闭环持续沟通（9轮），其中在洗量判别维度与运行期处置建议上与风控负责人沟通（1轮），在看板指标与基线告警设计上与数据分析师沟通（1轮），在展示粒度/脱敏/留存与审计要求上与法务合规官沟通（1轮），并收敛出异常分型、告警条件与合规约束口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是发券、核验、还有内容解锁那段吧。刷的人可能就盯“核验成功”去刷。还有就是活动页进来那种渠道量。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能想把“通过率”刷高？或者让发行方以为权益兑现很顺。手法我不太确定，可能就脚本一直打，或者多账号轮询。证据就是某些 app_id 的请求量突然上来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控负责人 我们现在要做核验链路的作弊/洗量异常分析。你们一般怎么判定刷量？给我几个最常用的维度和能落到监控上的信号行不行，我想省得自己瞎猜。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们能先做个“同IP一分钟次数>阈值就报警”这种吗？感觉最快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "低频海量就…看新账号占比？或者 device_id 很分散但都来自同一段 IP？我不确定要怎么抓。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 我们要在运行评估里加一块“作弊与洗量异常分析”。能不能给一套适合看板的指标建议？最好能跟现有拆维（app_id/channel/step/error_code）对齐，还能解释为什么怀疑被刷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这些指标我能直接照抄到看板里。就是“事件序列违规率”我有点虚，我们日志里是不是只有核验接口？领券和解锁不一定都有同一套 event。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就先只做核验这一段：QPS、去重账号数、IP段集中度、P99频次、REJECT里 Top error_code。漏斗一致性先不做，或者用“核验成功后是否有内容拉取接口”当解锁近似？但这可能也不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规官 运行评估要做作弊/洗量异常分析看板。我们想看 app_id/channel/step 之外，再加 IP 段集中度、device_id/账号频次分位数、以及 REJECT 的 error_code 分布。看板展示和留存这块，合规上能到什么粒度？需要怎么脱敏、谁能看、要不要审计留痕？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，就是看板只给聚合，不给明细；下钻要审批留痕；IP别完整展示。那我回到设计上，我们就把“Top1 IP段占比”当成核心信号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先试着归一下：  \n- 指标：按 app_id/channel/step 看 QPS 和去重账号数；Top1/Top5 channel 占比；Top1 IP段占比；核验次数分布的 P50/P90/P99；REJECT 的 Top error_code 占比；新账号（<=24h）核验占比。  \n- 告警：优先用近7天同小时基线，变化>30%或>3σ预警；硬阈值只放极端，比如 Top1 channel>80%持续15min。  \n- 解释：告警要带 Top1 app_id、Top1 channel、Top1 step、Top1 IP段、Top1 error_code。  \n- 处置：先观察+建议灰度限流/验证码，不直接封；需要下钻就走审批审计。  \n- 不做：不强行补齐领券/解锁全漏斗，日志不全就先别承诺“洗量已定性”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "两者满足、持续10分钟，这个我记住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分型那块我可能会把“拒绝轰炸型”和“高频打点型”看混，到时看 Top error_code 集中就先判拒绝轰炸，对吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在分润合约编码与形式化验证背景下，用户与导师围绕分润状态机、计算逻辑、防作恶拦截及权限审计持续沟通（7轮），其中在状态机边界与防作恶权限部分与智能合约设计师沟通（2轮），在形式化验证属性部分与质量与测试工程师沟通（1轮），并形成分润合约编码与验证规范关键点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就先写分润计算逻辑，然后再写流转，验证的话就多写点单测覆盖一下。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，单测不够。那就再加上形式化验证。状态机就是几个状态嘛，流转按顺序来就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@智能合约设计师 分润流转的状态机有哪些边界？计算逻辑怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@质量与测试工程师 形式化验证具体要验啥？怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态机有好几个状态，分润是瀑布流，优先级高的先拿。验证要找不变量，总钱数要对得上，不能有非法跳跃，用Certora跑，防溢出和重入。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超过100%肯定不行，加个if判断拦截一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@智能合约设计师 比例超过100%怎么防？权限怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "比例要在配置的时候用require卡死，只能管理员配，还要emit事件留痕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态机五种，瀑布流计算，溢出为0就停。配置时require卡比例总和，管理员权限，emit留痕。验证用Certora跑不变量和防重入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

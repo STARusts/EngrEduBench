@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在热突破动态预警数据流设计背景下与导师围绕边缘侧算力约束下的温压特征提取方案与延迟验证持续沟通（6轮），其中在边缘低资源特征提取方案及WASM延迟吞吐验证部分与数据流架构师沟通（2轮），并最终确认采用WASM轻量流算子与共享内存直通POD模型的数据流定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就Kafka接井口数据，Flink洗一波提特征，推给模型。这套我熟，快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力太抠，跑不了Flink，有没有省资源的法子做温压数据的流式特征提取？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用Flink，用WASM跑窗口，走共享内存给POD。省内存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Rust没人会。WASM的话，以前写C的兄弟能编成wasm塞进去。选WASM吧，慢点就慢点，起码能出活。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "500ms应该够吧？WASM跑滑动窗口很快的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "WASM做温压滑动窗口，P99延迟和吞吐量能到多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说P99才12ms，吞吐单核5k，绝对够了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘流处理用WASM，共享内存给POD，P99 12ms，沙箱隔离防爆。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

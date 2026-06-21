@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流动性池压测与调优背景下，用户与导师围绕压测方案从瞎并发看TPS转向构造不对称单边流与监控链上储备金偏移量持续沟通（6轮），其中在压测负载模型构造部分与性能压测调优师沟通（1轮），在滑点与储备金变动的代码映射部分与流动性池开发员沟通（1轮），并最终形成基于不对称单边流测熔断、监控reserve偏移量及验储备金防穿透的压测调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备直接上JMeter，配几千线程并发发交易，看池子TPS能到多少。调优的话，是不是主要调Gas限制和池子合约里的滑点容忍度参数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极端单边注入？我我我就把并发数再调高点，全发买入请求不就行了？网上很多压测教程都是这么配的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接用K6发随机交易，这种恒积公式的压测有没有通用的并发配置能直接套？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不对称单边流，测熔断点。行，我回去改脚本。就是造大单打进去是吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近看了点推导，x乘y等于k。但压测时，我还是习惯看K6的报告，看响应时间和错误率。公式这块，我不知道怎么跟压测结果对应上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测的时候，滑点计算和储备金变动在代码里怎么看的？我之前只看接口返回的成功失败。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "盯住reserveIn和reserveOut，算偏移量。好，不能只看HTTP状态码，得把链上状态变化拉出来做断言。之前学的恒积公式，就是用来算这个偏移量基准的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，不用K6瞎并发了，得构造不对称单边流，测滑点熔断；第二，压测指标不能光看TPS和响应时间，得监控链上reserve的偏移量；第三，要验储备金总量防穿透。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

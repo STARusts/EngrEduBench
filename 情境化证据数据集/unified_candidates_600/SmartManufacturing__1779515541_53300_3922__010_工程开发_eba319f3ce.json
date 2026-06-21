@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图识别与夹具自重构模块联调背景下，用户与导师围绕控制流实现方式、安全回退逻辑与联调验证持续沟通（7轮），其中在通用框架延迟与互锁可行性部分与实时控制引擎架构师沟通（1轮），在互锁校验实现方式部分与机电重构专家沟通（1轮），并最终放弃通用框架与代码生成，确定手写状态机、硬编码位姿校验、设计安全回退与审计日志及空载验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想找个现成的状态机框架，比如ROS里的SMACH，或者BehaviorTree，把意图状态映射到夹具动作上，这样画个图就能跑，改起来也方便点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "框架应该有回调机制吧，我配一下优先级应该能行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用SMACH这种框架做意图到夹具的指令下发，延迟和互锁能保证吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那互锁校验呢？我在框架里加条件节点做判断行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看来框架确实不行。那只能手写状态机了。有没有那种代码生成工具，输入状态转移图就能直接生成C代码的？纯手写太容易出错了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级是啥意思？直接停机不行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "工具生成确实不好插桩。那看来只能硬写状态机了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，那我就手写状态机，把自锁位姿校验硬编码进去，加上力矩异常的安全回退，还有动作审计日志。先跑空载验证互锁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

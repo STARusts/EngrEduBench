@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课堂对话智能助教编排系统的方案设计背景下，用户与导师围绕权限粒度、裁决链路与审计留痕持续沟通（8轮），其中在未成年人数据最小化与两段式证据留存上与合规与隐私官沟通（3轮），在越权调用与提示注入可追踪审计字段上与内容安全工程师沟通（1轮），并汇总形成权限与审计设计要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按对象拆一下：老师、学生、教研、管理员，还有插件提供方。容易翻车的动作我想到三类：一是“能不能调用某个插件/模型”；二是“能不能看见不该看的对话或课堂数据”；三是“谁改了模板和策略，后面出事追不回来”。但我现在不确定权限粒度到底按“课堂/课程/租户”切，还是按“会话/任务”切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我倾向做两层：租户级+课堂级。租户级定义角色：teacher/student/ta/admin；课堂级再加“课堂成员关系”。最小单位可能是“资源+动作”，资源包括：模板、插件、对话会话、知识库绑定、课堂控制指令。继承上，课堂权限从租户角色继承，再叠加课堂内身份。防学生借老师模板：模板本身得标“可下发范围”，比如 only_teacher_console；同时编排引擎执行前校验调用方 token 的角色和 scopes。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至少要有：调用方是谁（user_id/role/tenant）、在什么课堂（class_id）、调用了什么（template_id/plugin_id 版本）、检查了哪些权限规则（scope 列表、课堂成员校验结果）、最终 decision allow/deny 和原因码。可能还要加请求链路的 correlation_id，把一次对话回合关联起来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先试一版粗的：  \n1) AUTHN_FAILED：身份校验失败/过期  \n2) TENANT_MISMATCH：租户不一致  \n3) ROLE_FORBIDDEN：角色不允许  \n4) SCOPE_MISSING：缺 scope  \n5) RESOURCE_NOT_FOUND：资源不存在或不可见  \n6) VERSION_BLOCKED：版本被禁用/灰度不命中  \n7) POLICY_DENY：策略引擎拒绝（比如课中不允许某类生成）  \n8) RATE_LIMIT：频控拒绝  \n我不确定第7是不是算权限，还是算内容治理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 教育场景里我们做权限与审计设计，硬性要求通常有哪些？审计日志应该记哪些字段才够用，同时哪些字段属于不该记录或要脱敏的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对“默认不记完整对话内容”我有点担心：如果学生投诉“助教说了不当内容”，没有原文怎么复盘？只存哈希是不是不够举证。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那审计里要标识“是否触发证据保全”，以及保全内容的指针。还有第三方插件这块，审计得把“出站 payload 类型”写清：原文/脱敏文本/摘要/向量。这个我之前没想到。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三条进入要点：  \n- 审计默认不存全量原文，走“两段式证据”：元数据+指纹+摘要+受控回放指针；高风险才入证据保全区。  \n- 审计与权限要记录 purpose（教学/回归/调查）以及规则版本、策略版本、插件/模型版本，能解释“为什么允许/拒绝”。  \n- 第三方插件要打“出站数据类型”标记，并写进审计，便于合规核对。  \n留存时长和审批流程我先不细化到天数和具体表单，放为实现阶段配置项。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把审计也当事件流的一类，跟 turn、summary_patch 一样有 seq_no 和 correlation_id。写入时要求幂等键：tenant_id + class_id + session_id + seq_no + event_type。乱序到达时允许重排，但审计落库要保留接收时间和逻辑时间两套：recv_ts 和 event_ts。重放时如果命中幂等键就不重复记，但要记一次“replay_detected”计数或标记，不然回放测试里看不出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "备选A：统一 IAM（或权限服务）做鉴权决策，编排引擎只是调用“canAccess(resource, action, context)”拿到 allow/deny+reason。好处是集中治理、审计一致；坏处是上下文复杂，性能压力大。  \n备选B：编排引擎本地做大部分校验（role/scope/课堂成员/模板可见性），插件网关再做一次“required_scopes + 数据出站限制”的二次校验。好处是延迟低、就近校验；坏处是规则分散，容易不一致。  \n我偏向B，但要把规则版本化并在审计里写明“使用了哪套规则版本”，否则排查会乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容安全工程师 我们在做课堂对话智能助教的权限与审计设计。想重点补齐两类风险：越权调用（学生触发教师级工具）和提示注入/工具挟持。审计里怎么留信息，才能追到“触发链路”和责任边界？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入来源分组这个我能用到审计事件里，至少存各段的 hash/长度，不存原文。发起者分离我之前只想着 user_id，没把 delegator/executor 拆开。高风险工具加二次确认也合理，但会不会影响课堂节奏我不太确定，可能只对少数工具开。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着合并成 6 点，你帮我挑毛病：  \n1) 身份与角色：租户级角色 + 课堂成员身份叠加，权限最小粒度按 resource+action。  \n2) 双重校验：编排引擎做会话侧校验；涉及第三方出站/高风险插件，必须经过统一的数据出站策略点再校验一次。  \n3) 审计核心字段：who/where/what/decision/reason_code + 规则/策略/插件/模型版本 + purpose。  \n4) 事件一致性：审计也走事件流，带 seq_no、event_ts/recv_ts、correlation_id、幂等键；重放可识别。  \n5) 证据两段式：常规审计不落全量原文，存摘要+hash+回放指针；高风险进入证据保全区并更严控访问。  \n6) 提示注入可追踪：记录 prompt 来源分组（system/template/user/knowledge/tool_result）的 hash/长度；工具调用记录 end_user/delegator/executor，标识 tool_call_by_model。  \n我不太确定 reason_code 是否要拆域：权限拒绝 vs 治理拒绝。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我认同这版。只有二次确认点这里，我想加一句“只对课堂节奏影响小的工具默认开启”，像查资料、生成讲义可能不用卡确认；改成绩、对外发消息、导出名单这类才卡。不然产品那边可能一刀切全开。其余没问题。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

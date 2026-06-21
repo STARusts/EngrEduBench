@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在架构与特征集定调背景下，用户与导师围绕预警算法选型、模型解释性及误报伦理代价持续沟通（4轮），其中在微批架构下算法表现与突变特征处理部分与算法选型工程师沟通（1轮），在误报伦理代价兜底与合规审计要求部分与合规伦理审计师沟通（1轮），并最终形成孤立森林前置加XGBoost主预警的双模型方案及误报熔断与干预分级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个是XGBoost，特征明确时见效快，微批迭代也灵活；另一个是LSTM，能抓时序依赖。GNN虽然能建模关系，但咱们特征集刚收敛到最小集，没社交数据，现在上太重。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误报伦理代价这块我确实没细想，只盯着召回率了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我拿不准微批流式下哪个重训代价更低。@算法选型工程师 你怎么看这俩在微批架构下的表现？特别是针对突变特征。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "LSTM确实容易跟轻量架构打架。孤立森林抓突变前置过滤，这思路好。那我现在的倾向是：孤立森林做前置异常检测，XGBoost做主预警模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解释性可以输出SHAP值给特征归因。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "伦理代价兜底，是不是得设个熔断？@合规伦理审计师 如果XGBoost误报率飙升，对学生的打扰边界在哪？审计上有什么硬要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主模型XGBoost加SHAP归因，前置孤立森林，误报超5%熔断，干预走分级。既适配微批流式，也守住合规红线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

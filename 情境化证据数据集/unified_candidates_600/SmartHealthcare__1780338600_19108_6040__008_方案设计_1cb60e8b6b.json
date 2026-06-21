@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在感控数据湖与流式架构设计背景下，与导师围绕传感数据流转、乱序处理及数据湖存储合规与成本持续沟通（4轮），其中在边缘侧流式预处理部分与物联架构师沟通（1轮），在数据湖冷热分层存储部分与流式算发工程师沟通（1轮），并最终形成边云协同流式处理与数据湖三层归档的核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向用Kafka接传感数据，Flink做流式处理。数据湖用Iceberg，支持流批一体，后面查历史推演快照也方便。这套组合比较成熟，团队上手快，不会拖慢迭代节奏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink不是有Watermark机制吗？设置个允许延迟的时间就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "医疗现场传感数据经常乱序补发，Flink端单靠Watermark扛不住，边缘侧应该怎么设计流式预处理？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘侧做排序和降频，云端只处理关键事件流。这样Flink的窗口计算就稳了，而且边缘侧加NanoMQ也不重，不影响我们敏捷迭代的节奏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Iceberg本身支持快照隔离和增量读取，查询效率应该没问题。成本的话，可以设置生命周期，过期的快照清理掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实时流里提取特征后，原始传感数据在数据湖里怎么存？全存成本太高，但院感审计可能要查原始数据。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想到了全存或全清，分层归档更合理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束：1. 边缘侧必须做时间戳排序和特征降频，不能直接透传乱序数据；2. 云端Flink处理关键事件流，Watermark允许延迟基于边缘降频策略动态调整；3. 数据湖分Hot（30天特征流）、Warm（当季原始数据）、Cold（历史归档），合规审计走Cold层反查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

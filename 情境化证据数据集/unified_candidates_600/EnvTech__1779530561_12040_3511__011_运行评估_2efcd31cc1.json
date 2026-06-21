@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估背景下，用户与导师围绕脱盐效能监控口径、水耗异常归因及合规约束持续沟通（8轮），其中在效能口径与优势流归因部分与环境指标评估师沟通（2轮），在用水配额硬约束部分与水权合规分析师沟通（1轮），并最终形成效能看累积比、异常查含水率梯度、红线卡配额、日志留快照的监控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用Grafana连Prometheus，套个时序异常检测的库，比如PyOD，看曲线就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "飙高就发告警呗。PyOD里有孤立森林算法，丢进去跑，异常了就钉钉报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱盐效能和水耗异常，业务上咋定口径？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以得加土壤含水率传感器？还是说在反演模型里算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我搞不懂优势流怎么看。能不能还是用异常检测库，把含水率数据也丢进去，让它自己找规律？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "水耗飙高的话，用水配额会不会有问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配额余量做硬约束，审计日志好办，Prometheus本身就能存数据，或者写进InfluxDB。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 脱盐效能口径用累积量算；2. 水耗异常得验证是不是优势流通道，不能光靠算法包；3. 配额余量卡死在调度引擎里；4. 审计日志不能用时序库存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对比异常微域和正常微域的含水率方差？如果方差大就是通道形成了？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

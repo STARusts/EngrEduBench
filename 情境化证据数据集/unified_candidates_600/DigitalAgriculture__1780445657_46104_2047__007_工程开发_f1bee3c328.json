@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在散粉推演引擎开发背景下，用户与导师围绕高斯模型落地、数据接入、验证方式、短板补充及硬约束整理持续沟通（7轮），其中在参数校准与验证部分与流体仿真工程师沟通（2轮），在气象数据接入与对齐部分与微气象系统架构师沟通（1轮），并最终形成推演引擎开发初期的四条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按设计文档来，把风速风向代进去算浓度呗，数据直接从时序数据库读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就造点假数据跑一下，没报错应该就差不多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演引擎的参数怎么校准啊？我写完代码怎么验证对不对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风洞数据反演我以前没弄过，不太懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "气象数据怎么接？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用旧数据推吧，挂起太严重了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要拿风洞数据做对比，看误差；然后气象数据要按时间戳对齐，断网就用旧数据算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不懂风洞数据反演。我今晚看两篇高斯模型校准的论文，把风洞CSV解析脚本先写出来，跑通一个基准用例，然后再往下写推演引擎主逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就线性插值吧，简单点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 核心算法落地轻量化高斯模型；2. 验证必须对齐风洞数据做差值；3. 气象数据流式订阅，时间戳对齐用线性插值；4. 断网缺数据用旧数据继续推演。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

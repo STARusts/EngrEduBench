@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在众包教案并发编辑防冲突机制设计背景下，与导师围绕防冲突方案选型、实验验证设计与工程落地持续沟通（6轮），其中在协同编辑防冲突思路部分与众包系统设计师沟通（1轮），在CRDT开源库与定制Schema部分与后端开发主程沟通（1轮），并最终形成CRDT+Yjs定制Schema防冲突基线、实验验证方案及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多人同时改，最简单的就是加锁呗，谁先点编辑谁锁住，其他人只能看。或者像Git那样，最后提交的人手动解决冲突。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这教案众包，好多人一起改，不想用悲观锁也不想用Git merge，有啥现成的套路没？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "CRDT听起来挺牛，不用管顺序最后能一致。但这算法听着就头大，我肯定写不出来，平时也就写写数据库行锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿Jmeter压一下接口呗，看看崩不崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是同时编辑的人数和操作频率呗。对照组就拿我刚才说的悲观锁方案。指标看冲突解决耗时，还有文档最终状态是不是一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CRDT这东西，咱们工程上有现成的轮子能套不？自己写肯定凉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "有开源库就行，Schema映射我能搞，不就是定义数据结构嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚回去翻Yjs的文档，重点看它怎么定义共享数据类型。明天争取在本地把Yjs和咱们的教案JSON Schema跑通一个最小Demo，看看结构化数据合并的效果。总比我自己从零写算法靠谱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "防冲突基线：CRDT+Yjs定制Schema；实验设计：并发度与频次为变量，悲观锁为对照，看延迟、一致性和操作丢失率；学习任务：今晚看Yjs文档，明天跑结构化合并Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在热流固推演求解器封装集成背景下，用户与导师围绕封装方案、算力调度、快照回滚、合规边界及回滚测试持续沟通（7轮），其中在算力调度与容错机制部分与求解器集成专家沟通（1轮），在模型交付格式与协议限制部分与多场耦合建模师沟通（1轮），最终形成基于.so与C接口的封装、MPI调度及快照回滚方案，并计划设计失败复现测试验证回滚链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把它包成API呗？写个接口文档，然后让别人能调就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "求解器封装算力调度怎么做？还有容错机制要写啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要弄MPI和CUDA，还有网格坏了要回滚快照。参数不能写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存数据库里？或者写个日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你的模型代码能直接给我们编译进工程吗？有没有什么开源协议限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师说只给.so文件，不能给源码，得用C接口调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用C接口调.so，外面再包一层我们的API，算力用MPI分派，算崩了就回滚快照。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "复现网格畸变？这怎么测？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "找他要参数，然后写回滚逻辑和复现测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

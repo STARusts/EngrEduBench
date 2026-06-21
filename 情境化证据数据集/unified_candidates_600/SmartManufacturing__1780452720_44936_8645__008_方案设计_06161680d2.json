@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘端模型轻量化评估背景下，用户与导师围绕轻量化方案选择、评估指标与实验设计持续沟通（5轮），其中在物理约束保持与实验设计部分与反演模型工程师沟通（1轮），在算力上限与延迟预算部分与性能优化猎手沟通（1轮），并最终确定特征蒸馏为主、结构化剪枝兜底的轻量化路线及四维评估指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是知识蒸馏可能比直接剪枝或量化更适合这种带物理约束的网络，把大模型的物理特征传给轻量MLP。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "评估指标除了延迟和参数量，反演应力场的误差怎么卡比较科学？MSE可能不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据是物理约束在小模型上容易丢失，蒸馏能一定程度上回传这种软约束。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实验设计上，我想对比剪枝和蒸馏，但怎么控制变量，特别是应力场这种连续空间的误差，我不太确定用什么指标来量化物理一致性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演模型做边缘轻量化，剪枝、量化和蒸馏哪种更保物理特性？评估实验怎么设计才能验证应力场反演精度不退化？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关的算力上限和内存约束具体多少？500ms链路里留给反演推理的预算还有多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得特征蒸馏更好，能保梯度场相似度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这正好是我最近在补学的“物理一致性蒸馏”论文里的思路，可以把它提出的梯度场匹配机制迁移过来做损失函数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实验设计上，我会用梯度场余弦相似度做核心指标，加上极端工况测试。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对怎么在边缘端部署这种定制蒸馏结构有点没底，工具链不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "兜底方案选结构化剪枝，如果蒸馏后梯度相似度在极端工况掉到0.8以下，就切剪枝版本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实验变量控制上，固定训练集和验证集工况分布，只变压缩方法，这样能隔离出轻量化策略对精度的影响。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

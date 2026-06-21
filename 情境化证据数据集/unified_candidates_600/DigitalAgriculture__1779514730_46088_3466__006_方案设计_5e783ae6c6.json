@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在深仓断网频发下的仓管数据高可用设计背景下，与导师围绕存算分离、数据防丢及断电容灾验证持续沟通（3轮），其中在边缘数据防丢与防篡改部分与仓管数据高可用保障师沟通（2轮），在边缘算力约束与架构权衡部分与仓储数字化架构师沟通（2轮），并最终形成边缘WAL加云端异常检测及断电对照实验的妥协基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就MySQL主从复制呗，加个备份盘。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据怎么搞不丢？主从够不够？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "太重了，搞什么账本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构能塞下这DAG吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "WAL？我昨晚刚看篇博客讲这个，预写日志嘛，能扛住。就按架构师说的，边缘WAL加云端校验，定了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断电就重启读日志呗。验证就多拔几次插头试试，这还用想？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就写一半断电，跑十次，看数据丢不丢。再对比下缓冲区开大开小。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那账本真不加了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，边缘WAL加云端窗口检测。WAL细节我不熟，我就按文章里说的“先写日志再写数据”配一下，到时候跑起来再调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

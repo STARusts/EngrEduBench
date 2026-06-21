@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在墨量耦演模型部署至ARM边缘盒子的背景下，用户与导师围绕边缘压测工具链、P99长尾验收指标及温升监控持续沟通（4轮），其中在工具链适配与回调时延隔离、P99长尾归因与对照实验设计部分与性能压测工程师沟通（2轮），并最终形成ASan查内存、时间桩隔离IO、分标/长尾case跑P99及同步监控温升降频的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Valgrind跑一遍内存泄漏，再用time命令测一下推理耗时。最近看了篇讲嵌入式profiling的文章，学着用Perf采了几个IPC指标，打算直接套进来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "ARM上的Perf事件确实没验证过。回调阻塞这点我确实没考虑到，只盯了前向传播耗时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想用Valgrind查内存，Perf查耗时，但在ARM边缘盒子上跑，这套工具链会不会有问题？压测时怎么把墨阀回调的时延隔离出来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "ASan重编开销小，适合实时模型，这个替换合理。时间桩分开打能区分计算耗时和IO等待，逻辑更清晰。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把压测脚本改一下，把Valgrind换成ASan，时间桩插在inference接口两端。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想验证下，P99抖动是不是主要来自模型输入维度变化导致计算图重排？如果是，这属于算法层的问题，不能靠换硬件解决。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我压测时就按这两类case跑，重点关注ASan的内存报告和P99长尾。一旦发现计算图重编译，直接拉回给墨流算法组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把边缘节点的CPU温度和频率也采进去，如果P99飙升时伴随降频，就能排除算法因素，锁定热管理问题。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

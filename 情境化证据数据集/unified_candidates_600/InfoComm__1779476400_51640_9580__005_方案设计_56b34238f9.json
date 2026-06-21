@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在数据面毫秒级切片背景下与导师围绕干扰图谱GNN建模实时性与自愈路由DRL寻优降维持续沟通（7轮），其中在增量更新与特征注入、DRL降维与规则兜底部分与干扰算法工程师沟通（2轮），并最终形成增量GNN与轻量级DRL加规则路由兜底的设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图谱建模的话，GNN现在比较主流，我觉得可以用图神经网络来建。把基站和终端当顶点，干扰关系当边。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权重就是干扰强度呗，可以用SINR映射一下。重算来不及的话，就，就设个更新周期，比如5毫秒刷一次图谱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "GNN建干扰图谱，如果要求毫秒级响应，增量更新怎么做？全图重算肯定不行，特征注入有没有什么讲究？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只推突变的边，特征压到16维以下。等于说只做局部推理，不重绘全图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "路由寻优可以用深度强化学习DRL。Agent根据图谱状态输出逃逸路径，理论上收敛性比较好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "奖励函数就设成SINR提升减去切换开销。维度爆炸的话，我意思是，可以加个惩罚项约束动作空间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DRL做自愈路由，状态空间太大训不动怎么办？有没有什么降维或者更稳的兜底办法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "启发式剪枝加轻量级DRL，没收敛时用规则路由兜底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱构建用增量GNN，只推SINR突变的边，特征压缩到16维以下，P4推送。自愈路由用启发式剪枝加轻量级DRL寻优，必须保留规则路由做兜底，防止DRL未收敛或超时导致业务中断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

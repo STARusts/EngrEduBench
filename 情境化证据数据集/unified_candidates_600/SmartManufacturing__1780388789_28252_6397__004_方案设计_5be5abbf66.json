@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在丝阵微张畸变侦定与复材铺放感知架构设计背景下，用户与导师围绕ROS2适用性、软硬同步方案对比验证及架构约束确认持续沟通（4轮），其中在边缘侧通信机制部分与感知识系统架构师沟通（1轮），在采样率与时间对齐部分与复材工艺师沟通（1轮），并最终确认边缘侧轻量零拷贝管道与硬件触发硬同步两条架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接上ROS2，把视觉和力觉节点一挂，用它的消息过滤做融合"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用ROS2做视觉力觉融合，边缘侧能扛住吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "力觉采样快视觉慢，直接用ROS2的message_filters做时间对齐行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "架构师说ROS2太重得写轻量管道，工艺师说时间对齐不能靠软件事后凑得硬同步。那我原来想直接调包的方案就废了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能找个现成的支持硬同步的边缘感知框架？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设A可能开发快点，容差设个几毫秒？假设B稳但得自己写。验证的话，我就跑一下看看报错率？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "多模态硬同步和零拷贝这块我确实没底，平时都是调现成API。我得去看看零拷贝管道和硬件触发同步的规范，这两天先把架构师提到的共享内存机制弄懂，看看能不能移过来改改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知架构约束：1. 边缘侧用轻量零拷贝管道替代ROS2通信；2. 视觉与力觉采用硬件触发硬同步，不做软件事后对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

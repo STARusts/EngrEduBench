@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在素材转码与打包流水线开发排障背景下，用户与导师围绕切支黑屏与manifest触发commitMismatch的排查证据链、版本锁定与门禁设计持续沟通（10轮），其中在黑屏根因与probe校验信号上与音视频工程师沟通（2轮），在runner镜像策略与probe.json落库及URL参数合规上与后端工程负责人沟通（2轮），并形成修复与验证清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先分两条线看。黑屏偏像切换时段的 GOP/关键帧对齐问题，或音视频时戳漂移导致播放器重建解码器；manifest 对不上更像打包阶段拿到的分支编排 JSON 和媒体产物的版本不是同一次 commit。排查上我会先拿一条失败样例，固定 episodeId+commitId，把流水线每一步输出的 hash、时间戳、输入版本号拉通，确认“同源性”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "每个 step 产物我希望都有：sourceAssetId、sourceChecksum、transcodePresetId、outputChecksum、packJobId、inputCommitId、outputCommitId、生成时间。然后对 manifest 的 decisionPointId/optionId 映射，我会比对“编排导出的 option->asset 绑定表”和“打包实际引用的 mediaUri 列表”，看是不是引用了别的 commit 的资源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@音视频工程师 切支瞬间黑屏 200~400ms 这种，你那边通常优先怀疑什么？我们是在转码+封装+打包流水线里出问题，想要能落到验证信号和快速修复点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "probe 这块我们用什么工具更合适？我之前只用过 ffprobe 抽 metadata，GOP 结构要怎么拿到比较稳？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把校验拆两档：必过（首帧 IDR、参数指纹一致、起始 PTS 单调），可降级（GOP 间隔超阈值但仍能播，先标黄）。另外我们现在切支是对齐到分支素材的 0 秒起播，等于强依赖首帧 IDR，这个约束我会写到 pack 校验里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜是“编排导出”和“素材转码”是并行触发的，打包 job 只拿了 episodeId 最新编排，但转码产物可能还是上一个 commit 的 mediaUri。打包成功是因为 URI 都存在，但 decisionPoint->asset 绑定表引用的是新 commit，导致服务端校验 assignedCommitId 时发现 commitMismatch。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会做对照：挑一次 commitMismatch 的 packJobId，回查当时读取的编排 commitId 和读取的 transcode 产物 commitId 是否一致；如果不一致，再看打包阶段有没有“锁定 commit”的入参。最小验证动作是：在 pack 请求里强制传 inputCommitId，且打包服务拒绝“未指定 commitId 只按 latest”的调用；同时流水线日志补齐 packJobId、inputCommitId、resolvedCommitId、以及每个 mediaUri 的 commit tag。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以做成两层：控制台按钮仍叫“打包最新”，但后端在触发 pack 前先调用一次“解析 latest->commitId”并把这个 commitId 固定写入 job，上游再触发转码/打包都引用同一个 commitId。用户体验不变，但流水线内部是“确定性构建”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "门禁三条：  \n1）打包前校验“编排 commitId == 转码产物 commitId”，不一致直接失败；  \n2）manifest 内每个 option 引用的 mediaUri 都要带 commitId tag，打包服务校验一致；  \n3）产物入库时把 commitId 写成强索引键，禁止“同一个 episodeId+optionId 指向多个 commit 的 URI”覆盖写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "标黄我倾向先不进阻断，只做告警+回写到素材详情里给后期同学看；阻断的只留两项：首帧非 IDR、编码参数指纹不一致。原因是这两项几乎必然导致端上卡顿或黑屏，放过去就等于把风险推给播放端。GOP 间隔超阈值可能只是体验变差，不一定必挂，先积累一周数据再决定是否升级成阻断阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把 probe 结果埋到流水线质量事件里：blackFrameRisk=0/1、gopMax、firstKeyframeIndex、paramFingerprint、ptsStart。然后跟播放端的“切支耗时/兜底触发”做关联，按 episodeId+commitId 聚合。观察一周后，如果 gopMax>阈值的样本在端上切支超 1.5s 或触发兜底比例显著升高，再把阈值变成阻断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我对镜像这块不熟，之前都是本机装 ffmpeg。要避免“我这能跑你那跑不了”，我需要你们现有的 CI 镜像基线里有没有 ffmpeg，或者我们得自己维护一个工具镜像。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程负责人 流水线 runner 这边的镜像基线怎么定的？我想在转码后加一个轻量 probe（ffprobe 类），做首帧 IDR、PTS 起点、编码参数指纹校验。能在现有镜像里加工具，还是得单独工具镜像/sidecar？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "A 我认可，打包只消费 probe.json 就能保证确定性，也能减少重复解析。probe.json 的 schema 我先定个最小版：firstFrameIsKey、firstPts、fps、profile、level、pixFmt、colorSpace、gopMax、duration。你们入库这块能挂到现有的 transcode artifact 记录上吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "URL 不落日志这点我会跟播放端保持一致：只落 hash，不落可识别参数。probe.json 也只存技术参数，不存内容特征。commitIdShort 是代码版本，不是个人信息，可以进日志但按你说的别带全 URL。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这轮落地四件事：  \n1）版本锁定：pack job 必须携带 inputCommitId；控制台“打包最新”先解析 latest->commitId 再触发，避免并行漂移。  \n2）一致性门禁：打包前校验编排 commitId、转码产物 commitId、manifest 内 mediaUri tag 三者一致，不一致直接失败并打上 commitMismatch（产线内部码）。  \n3）黑屏风险校验：转码 worker 产出 probe.json，打包阶段硬阻断两项：首帧非 IDR、编码参数指纹不一致；其余（GOP 超阈值）先告警不阻断。  \n4）验证动作：用同一条 episodeId 做三次跑批——正常一次、故意用旧转码产物配新编排触发门禁一次、构造首帧非 IDR 的片段触发门禁一次；同时把 probe 指标与端上切支耗时做一周关联观察，决定是否升级 GOP 阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

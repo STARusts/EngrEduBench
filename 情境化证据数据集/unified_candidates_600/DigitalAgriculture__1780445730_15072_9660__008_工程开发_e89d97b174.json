@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云端腐解推演算法设计背景下，用户与导师围绕算法选型、算力成本、置信度衰减映射及架构决策持续沟通（6轮），其中在轻量替代方案部分与算法建模设计师沟通（1轮），在部署算力与成本部分与后端微服务工程师沟通（1轮），最终放弃Transformer，确定采用Monod加LSTM灰盒架构及协方差映射方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端直接上基于Transformer的时序预测模型。Transformer的自注意力机制能处理变长输入，断网时的降级特征直接当成稀疏序列喂进去，Attention自动学习补全缺失的上下文。精度肯定最高，至于置信度，可以在输出头加个方差分支，降级数据方差大，自然置信度低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟可以用TensorRT做FP16量化推理压下来，几十毫秒没问题。成本方面，前期可以先部署单卡A100，后续并发上来了再扩容。算法精度是核心，这点算力投入是值得的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用Transformer直接吃这两种数据，用Attention补全降级特征。这种纯数据驱动方案在腐解推演里效果如何？有没有更轻量的替代？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果云端推演用Transformer+TensorRT，需要什么规格的GPU？灰盒模型的话，CPU能扛住吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "灰盒模型确实在可解释性和成本上有优势。Monod方程驱动加LSTM纠偏，降级特征通过调积分步长处理，逻辑更顺。但我担心简化机理方程的精度上限，会不会比纯数据驱动差很多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全量数据时协方差矩阵的迹是 $\\sigma_{full}$，降级时是 $\\sigma_{degraded}$。衰减系数 $w = \\exp(-k \\cdot (\\sigma_{degraded} - \\sigma_{full}))$。我可以通过离线历史数据拟合出参数 $k$，使得 $w$ 的期望逼近0.7。这样物理意义和固件标志位就统一起来了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃Transformer方案，采用\"简化Monod机理方程+LSTM纠偏\"的灰盒架构。云端部署在CPU节点上。降级特征通过调整积分步长和误差协方差输入模型，置信度衰减通过协方差迹的指数映射与固件0.7系数对齐。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在去搭Monod方程的骨架代码和协方差映射模块。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

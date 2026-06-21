@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端天气下调光策略性能优化背景下，与导师围绕暴雨天指令防雪崩与状态降级机制持续沟通（6轮），其中在暴雨注入报错与QPS溢出部分与极端工况测试工程师沟通（1轮），在端侧降级保位与超时自治部分与边缘调光控制设计师沟通（2轮），并最终确定云端降级广播与端侧15秒自治逻辑及联调测试用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个超时？重试三次失败就放弃？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "暴雨时候网关收不到ACK。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才跑暴风雨注入，调光指令那块具体报什么错？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "QPS超了，内存也溢出了。那我不重试不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暴雨时候云端推不出图谱，端侧网关能不能自己搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "降级信号？我代码里没写这逻辑啊。现在一旦断连，端侧就一直等ACK。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以我要在云端检测到QPS超限或者ACK回包率极低时，主动停掉重试队列，然后广播一个降级锁死指令？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级广播如果也丢了怎么办？端侧一直等？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，T=15秒，超时就自治。我回去改云端的重试逻辑，加个降级广播。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我把这三个点加进去：1. 暴雨QPS超50触发降级；2. 降级广播下发；3. 端侧15秒无指令自治。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

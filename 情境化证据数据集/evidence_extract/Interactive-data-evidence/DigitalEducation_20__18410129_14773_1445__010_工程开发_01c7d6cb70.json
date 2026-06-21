@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在教师工作台联调后进入验收测试背景下，用户与导师围绕“同课件连跑两遍”的验收口径制定与前端可判定规则持续沟通（7轮），其中在验收用例最小集合/幂等与失败码/性能阈值部分与测试工程师沟通（4轮），在采纳动作审计留痕最小字段与脱敏原则部分与合规与隐私官沟通（3轮），并形成次日抽查用的6条验收清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先冒烟一下：列表能看到issue，然后点进去能跳到页码和框。第二遍再跑，看issue数量不变，gen_history不多出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 验收测教师工作台，你这边最少要哪些用例？我怕漏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3点我有点不确定，我们后端现在每次成功都会写一条gen_history，虽然会裁到2条，第二次就会把第一条挤掉。这样验收会挂？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我得问下后端同学现在怎么写的。我这边能先在前端做判断：input_hash一样就不展示新版本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有失败码枚举，你建议怎么定？我们目前就一个GEN_CALL_FAILED。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 测试那边说幂等要做到“同input_hash不新增gen_history”，不然验收会判刷版本。我现在后端实现可能每次都会append再裁2条。你觉得要改后端，还是改验收口径绕过去？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我需要一个前端可判定的规则：怎么知道“没新增history”？看gen_history长度不变？还是看最新一条hash没变？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个坑：我们接口回写只更新gen_*，定位字段不动。但前端现在点“查看位置”是按issue里bbox画框。万一bbox缺了，就点不了。要不要要求后端保证bbox必填？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还有“采纳”这块，我现在只是在前端把issue标成已采纳，本地状态。你之前说要审计留痕，我不知道落哪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 采纳替代文本这步要留什么审计字段？我们不想把整段文本到处存。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里的adopted_summary我怕实现麻烦，是不是只存hash就能过？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 合规那边说采纳审计最少存：user_id/tenant_id/resource_id/issue_id + adopted_hash + gen_input_hash + timestamp，别把evidence片段写进去，URL要脱敏。摘要可以先不做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "批量这块我只知道前端列表是分页的，默认20条。性能口径要怎么写我没数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 批量课件验收，性能你这边一般卡什么阈值？我们不做压测，只做工作台验收级别。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "轮询间隔我们现在是1s，我当时觉得快点显示。看来会被判有风险。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我把前端轮询调慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这轮验收我理解的最终口径是：不刷版本、可定位、失败/跳过分清、采纳留痕、批量不拖垮。还有啥必杀点吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

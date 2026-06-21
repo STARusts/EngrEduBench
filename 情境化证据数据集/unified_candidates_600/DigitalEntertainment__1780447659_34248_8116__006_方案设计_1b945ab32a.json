@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在玩家行为接入规范制定背景下与导师围绕多模态信源接入架构与流控策略持续沟通（3轮），其中在信源分类与数据契约部分与交互接口专家沟通（2轮），并最终形成信源分类、JSON信封契约、网关流控及上下文更新规范，放弃CQRS与Flink方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然要做动态判定和态机流转，我建议直接上 CQRS 加事件溯源。玩家所有的点击、对话选择、甚至视线停留，全量作为 Event 喂进 Kafka，再用 Flink 做实时流清洗，规整后给 Aviator 消费。这样架构最干净，扩展性也最强，以后加什么新行为只需要加个 Sink 就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想把所有玩家行为统一成 Event Stream，用 Protobuf 做序列化压进消息队列，网关侧全透传。信源规范怎么定比较合理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "JSON 解析性能太差了吧，高并发下容易卡顿。不过防刷和聚合确实有道理，乱点产生的噪音会干扰 Aviator 判定。信源分类我同意，这三类基本覆盖了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果网关能做聚合，那确实能砍掉流清洗那一层。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "判定上下文怎么拉取？Aviator 执行时不可能每次都回溯全量 Event 吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接入规范结论：1. 信源分三类：显性交互、隐性环境、推理进度；2. 数据契约采用标准信封 JSON 格式（包含 traceId, sessionId, eventType, timestamp, payload）；3. 网关侧实施流控与防刷，基于滑动窗口限流，无效高频交互聚合为单次事件下发；4. 有效事件推进态机上下文更新，Aviator 仅拉取判定所需变量。放弃 CQRS 和 Flink 全量清洗方案。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

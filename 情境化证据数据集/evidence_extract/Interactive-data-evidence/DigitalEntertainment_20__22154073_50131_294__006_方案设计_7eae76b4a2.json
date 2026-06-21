@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在舞台灯具多品牌多协议的协议适配与设备建模方案设计背景下，用户与导师围绕统一能力模型、运行期紧凑数据结构、边云分层与审计安全边界持续沟通（8轮），其中在运行期快表与适配层职责边界上与协议适配工程师沟通（3轮），在配置下发最小安全闭环与审计写入策略上与安全工程师沟通（2轮），并形成可评审的三层设备模型、基础能力枚举与分层边界产出。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它做成“通用设备数字孪生”。每台灯具有一个统一 JSON Schema，属性用可扩展的 capability graph，控制指令用一套中间 IR，再编译到 DMX、sACN、Art-Net、甚至厂商私有协议。这样以后接新灯直接加插件，不用改主流程。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小字段我先列：deviceId、厂商/型号、固件版本、协议类型、地址（Universe/Channel 或 IP/Port）、物理位置、fixtureType、通道映射、能力集合。能力粒度我倾向细到“每个参数一个 feature”，比如 pan/tilt/dimmer/color/gobo/strobe 都独立，并且带范围、分辨率、默认值、是否支持 16-bit。分层上：边缘负责协议发送、帧缓存、时间戳对齐；云端管设备库和能力表版本。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕紧凑结构会变成硬编码，后面加新能力又要改一堆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@协议适配工程师 运行期设备模型要压到多小？还有适配层你建议怎么分层，哪些该放边缘？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“参数ID”要统一一套枚举吗？还是每种灯具自定义？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校准的“曲线ID”你们一般怎么做？我想用可插拔曲线函数库，甚至每个参数一条曲线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳“三段式 + 快表”。我原来那套图谱保留在云端设备库里，最终下发到边缘的是快表：ParameterID 到通道写入规则。mode 和校准要进实例层。扩展能力先允许存在，但不承诺进 10ms 触发的主链路，默认只做配置展示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发现这块我想加一个“设备入网态”：unclaimed/claimed/online/degraded。身份可以用 RDM UID 或 MAC/IP 作为 secondary key。Universe 规划我觉得可以做自动分配算法，按通道 footprint 自动排布，甚至加个 SAT 求解保证最优。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计我理解要记录：变更人、时间、变更前后值、变更原因。设备模型里把可变字段都打上“需审批/需二次确认”的标记，比如地址、mode、校准。然后在控制面做权限，只有舞台管理员能改地址。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 设备快表/配置下发到边缘，你建议最小安全闭环怎么做？我不想引入很重的证书体系。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "链式 hash 是不是会影响性能？我担心写日志卡实时线程。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘与控制面通信走受控安全通道，配置包用 HMAC 或签名验完整性，边缘只接受白名单来源。审计采用追加写事件流，链式 hash 放在异步线程；边缘侧只保留最小身份信息，人员映射在云端。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "设备模型我定三层：\n- 静态设备描述：vendor/model/firmware、fixtureType、mode、channelFootprint、通道语义表（含位宽/编码）、支持的基础ParameterID集合、兼容协议列表。\n- 现场实例：deviceId、primaryIdentity(RDM UID/MAC)、协议类型与连接参数（universe+address 或 ip/port）、位置标签、校准（invert/offset/home/curveId）、状态(unclaimed/claimed/online/degraded)、快表版本号。\n- 运行期快表：ParameterID -> (startChannel, width, encode, calibrationRef)，只供实时线程写帧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "能力枚举先承诺基础集：Intensity、Pan、Tilt、ColorMix、CTO、Gobo、Iris、Zoom、Focus、Shutter、Strobe、Prism、Frost；扩展能力允许注册但默认不进硬实时验收范围。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分层边界：云端/控制面负责fixture库与mode选择、语义标准化、生成快表并下发、权限与审计聚合；边缘负责加载快表、帧缓冲写入、按DMX/sACN/Art-Net发送，必要的协议发现/回读限频并避开实时线程；配置包完整性校验在边缘落地。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

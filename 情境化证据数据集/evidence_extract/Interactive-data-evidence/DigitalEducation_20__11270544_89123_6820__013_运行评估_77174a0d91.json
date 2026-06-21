@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在试点课堂“助教风格突变/越权作答”投诉但监控错误率不高的背景下，用户与导师围绕异常对话溯源的分类、证据分层、关键字段与最小验证动作持续沟通（8轮），其中在未成年人数据留存粒度与权限边界上与合规与隐私官沟通（4轮），在溯源最小字段集与可回放口径对齐上与数据架构师沟通（4轮），并最终约定分层留存与“teacher_control未生效”假设链的对照排查框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先把“异常”定义清楚，不然追不动。我想从三块证据切：1）对话回放：同一节课、同一模板、同一题型，找正常/异常对照；2）观测事件：presence、node_count、延迟这些先做可信性检查；3）版本与配置：灰度组是不是碰到了不同的提示版本、知识源、过滤策略。投诉里“风格变了”我怀疑是路由/提示版本漂移，不一定是模型本身。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分类我先按影响拆：A 类是越权/不该答；B 类是答非所问但没违规；C 类是风格不一致或突然变短变长。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "串链路我会从 conversation_id 起，沿着每轮的 turn_id 把“编排决策”和“模型调用”拼回去。字段上我现在想到：entry_scene（课堂/课后）、template_id、prompt_version、router_decision、selected_model、knowledge_hit（命中哪个知识源/命中率）、policy_action（过滤/改写/拒答）、mask_stats（之前说要最小必填集合）、以及最终 response_hash 方便去重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入侧我有点不确定，我们现在不是全量存原文。可能只能靠 input_digest 或者 token_count 这类？我担心为了溯源去存原文会踩合规线。能不能靠“上下文片段ID列表 + 每段长度 + 生成前后摘要”这种方式，既能证明拼接链路，又不落地明文？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 溯源分析这块，我们想把投诉对话追到“输入-编排-模型-过滤-输出”。现在卡在输入侧证据：能不能留原文？如果不能，允许留哪些替代证据（片段ID、摘要、hash、token数等）？另外留存期、访问权限怎么设才不踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "受控层“脱敏文本”是指还能看懂语义的那种替换吗？比如把“张三”替成“学生A”。还有一个问题：我们做异常归因时，常要看上下文拼接，脱敏会不会把关键线索抹掉，导致复现不了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解成两套：全量只保结构化+hash+ID；投诉样本短期保脱敏文本。那我们回放工具是不是也要分权限，不然老师或运营看到了就麻烦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我们要做异常对话溯源分析，合规给了分层留存建议：全量结构化字段 + 投诉样本短期脱敏文本。你帮我对齐下“溯源最小字段集”，保证能从 conversation_id 还原编排链路：输入拼接、路由、检索、过滤、输出。哪些字段是必须，哪些是可选？还有 mask_stats 之前要最小必填集合，溯源里要用到吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "node 拓扑这块我们事件里是 node_count + node_id，有 parent 关系不一定全。我担心“selected_path”要补埋点。能不能先用“node_sequence + step_index”凑合，至少知道走了哪些节点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "投诉里说“突然直接给答案”，但教师面板明明开了“只提示不直给”。这属于输入侧的教师指令没进上下文，还是策略没生效？字段上怎么区分？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把合规和数据的结论拼起来了：全量不留原文，留结构化链路证据；投诉样本短期留脱敏文本（7-14天）且要工单审批。溯源最小字段集以 conversation_id/turn_id/request_id 串起来，必须含场景版本、编排节点序列、上下文片段ID与裁剪原因、检索doc_ids、模型指纹、治理动作与命中规则ID、以及输出hash。这样能把“指令没进上下文” vs “策略没生效”区分开。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先押“教师指令未生效”这条，因为它最影响信任。假设链我分三段：  \nH1：teacher_control 没进入上下文（拼接漏、presence缺失导致指令段丢）→证据：context_segment_types 里缺 teacher_control 或 trim_reason=empty/presence_missing。  \nH2：进入了但被裁剪（超窗，或裁剪策略把教师指令优先级放低）→证据：teacher_control 存在但 segment_token_counts=0 或 trim_reason=over_window。  \nH3：进入且未裁剪，但 policy_version/规则配置错误或执行链没跑 →证据：teacher_control_fingerprint 与期望一致，但 policy_action=allow 且 filter_rule_ids 为空/不含“直给限制”那条。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最小验证动作：挑 10 条投诉会话 + 同班同节课 10 条正常会话做对照，逐条跑这三段证据，统计命中比例，先把根因落到“拼接/裁剪/策略”三级之一。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，我会先跑固定检查顺序：事件上报率、presence缺失率、node_count不一致率、再看延迟/错误率。并且对照非灰度流量做基线。只有当上报率和presence都过阈值，我才把“缺 teacher_control”当作真实缺失；否则归因先落到观测缺口，不直接判系统逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会按维度切片：template_id、node_sequence、router_decision、selected_model、client_type（课堂大屏/移动端）、以及policy_version。比如缺失只发生在“随堂练习-追问节点”，那就把 node_id 定位到编排引擎或前端上报。再看 request_id 有没有对应模型调用：若模型仍调用但上下文缺指令，偏编排拼接；若连 node 事件都缺，偏上报链路或前端触发没走。最后把“哪一类事件缺、缺在何处”落到负责方：编排/前端/治理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）异常分类先用三类：越权/不该答、答偏、风格突变；本轮优先处理“教师指令未生效导致直给答案”。  \n2）排查前置：按事件上报率→presence缺失率→node_count一致性→延迟/错误率的顺序做数据可信性检查，并用非灰度同窗做基线。  \n3）溯源证据采用分层留存：全量仅结构化链路（不存未成年人原文明文）；投诉/高风险样本短期保脱敏文本 7-14 天，需审批与审计。  \n4）最小字段集要能从 conversation_id/turn_id/request_id 串起：版本（template/prompt/policy/router）、编排节点序列、上下文片段ID/类型/裁剪原因、检索doc_ids与得分摘要、模型指纹与token/延迟、治理动作与命中规则ID、输出hash；mask_stats 最小必填含 mask_applied、mask_rule_ids、mask_span_count、mask_char_count。  \n5）最小验证动作：选 10 条投诉+10 条同节课正常对照，按 H1拼接漏→H2裁剪→H3策略链的证据链逐条判定，把根因先落到“观测缺口/拼接/裁剪/策略”四象限，再交给对应负责方处理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

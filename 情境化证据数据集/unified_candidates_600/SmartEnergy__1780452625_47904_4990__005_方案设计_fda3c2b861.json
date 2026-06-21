@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微群无功协同调控流注设计背景下，与导师围绕边端流注载体选型、时序因果链维护与轻量化约束持续沟通（5轮），其中在事件驱动状态机与事件粒度定义部分与系统架构师沟通（1轮），在产消者响应时延限制与可调度域过滤部分与配网规划专家沟通（1轮），并最终形成边端采用轻量时序库维护因果链且事件驱动流转的设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "流注设计是不是就是搭个消息队列？我之前看别人搞流计算都用Kafka，能不能直接套过来？或者用Flink？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有轻量点的流式组件能平替？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产消者响应是不是有什么硬性限制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来有200ms卡着。还得过滤可调度域。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我琢磨着，用Redis做状态机是不是挺方便？读写快，还能存中间状态。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边端资源不够啊那确实不能用Redis。用SQLite存状态行不行？我看有些边缘网关自带SQLite。或者用TDengine的边缘版？反正得有个现成的存时序数据的东西，自己写太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "并发锁我确实没想过。时序因果链是不是得用那种专门的时序库？TDengine边端版好像能扛并发写入，而且自带边缘降级策略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端轻量时序库维护因果链，事件驱动流转，不用Kafka。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

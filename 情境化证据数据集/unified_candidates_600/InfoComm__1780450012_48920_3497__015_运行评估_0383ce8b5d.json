@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在潮汐错配引发越区切换掉线飙升背景下，与导师围绕解决切换失败及放弃重试补丁方案持续沟通（5轮），其中在信令断点拆解部分与故障溯源分析师沟通（1轮），并最终决定抓包计算空窗期差值与调整推演预测步长配置。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我拉了失败日志，全是 0x1A 拒绝码。是不是信令超时？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写个补丁脚本，切换失败就自动重发信令，重试三次应该能过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡在目标波束没资源呗。用户移过去了，新波束没分配资源，肯定切不过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切换失败码0x1A，断点具体在哪个环节？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以是老图样释放太快，新图样太慢，中间断档了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我重发信令，等新图样激活了不就切过去了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时序对齐得改算法吧？核心寻优代码我动不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抓包算差值行，我用tcpdump抓星地信令流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预测步长配置项在哪？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

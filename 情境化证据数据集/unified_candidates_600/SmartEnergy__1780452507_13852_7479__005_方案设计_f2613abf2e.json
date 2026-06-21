@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在衰退感知数据流设计背景下与导师围绕乱序容忍、延迟数据处理及Watermark界限持续沟通（7轮），其中在侧输出流与增量聚合设计部分与数据链路规划师沟通（1轮），在响应衰退判定时间尺度部分与行为动力学建模师沟通（1轮），并最终形成乱序容错边界与增量聚合方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据流这块，我看了下Flink的文档，感觉用那种滑动窗口直接套一下就行吧？我看网上算实时特征的例子，都是开个窗口，然后sum或者avg。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢数据肯定不行。那，Flink不是有Watermark机制吗？我加上Watermark应该就能处理乱序了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调峰响应这种时序数据，如果乱序很严重，Watermark要怎么设？晚到的数据怎么处理才不会把衰减率算错？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着，设大一点总没错吧？比如设个10分钟？这样数据肯定丢不了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "响应衰减判定，一般要等多久没响应才算衰退？Watermark延迟设多少合适？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，Watermark延迟界限设5分钟；第二，超过5分钟的晚到数据走侧输出流，不丢；第三，侧输出流的数据增量聚合，不能回滚重算，怕算力打爆；第四，有效响应判定窗口是3分钟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在基站感知数据流接口设计背景下，与导师围绕数据上报合规风险与边缘预处理取舍持续沟通（5轮），其中在原始数据流转合规部分与无线规约审计员沟通（1轮），在基站侧特征抽取工程落地部分与网侧研发工程师沟通（1轮），并最终形成DU侧L1特征抽取、不可逆脱敏与UDP推流的接口设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按照O-RAN的架构，应该在gNB-CU侧扩展E2接口，把终端的SRS和CSI全量上报给Near-RT RIC。这样算力池能拿到最完整的信道矩阵，干扰图谱构建的精度最高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SRS不是信道信息吗？只要按3GPP标准走，应该没合规问题吧？算力在RIC侧，不在基站内部。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SRS和CSI原始数据通过E2接口送到RIC做干扰图谱，这种数据流转有没有合规风险？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不可逆脱敏？如果剥离了位置分量，终端移动导致的干扰变化怎么追踪？图谱的边更新会不准的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果要求在gNB内部就把SRS原始数据做特征抽取和脱敏，只输出图谱需要的低维向量，这能在DU还是CU做？对协议栈改动大不大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DU侧L1直接算特征向量，然后UDP推流。这样原始数据不出站，合规没问题，也满足图谱16维的输入要求。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口设计约束有三点。第一，数据源在DU侧L1，SRS测完直接抽特征，原始数据不出站。第二，特征维度压到16维以下，做不可逆脱敏，剥离位置强相关分量。第三，推送走数据面UDP封装，不走E2控制面。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

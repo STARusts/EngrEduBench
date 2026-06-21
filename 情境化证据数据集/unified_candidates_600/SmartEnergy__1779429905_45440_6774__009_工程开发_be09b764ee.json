@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知模型边缘网关部署遭遇OOM、延迟与量化精度崩塌背景下，用户与导师围绕算子兼容性与混合量化实践持续沟通（4轮），其中在算子与量化冲突处理部分与边缘端开发工程师沟通（2轮），并最终确定换用NCNN、配置层间混合量化及日志脱敏，准备编写验证demo。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用的是ARM Cortex-A53的网关，内存就64MB。算法组给的Seq2Seq感知模型，我直接转TFLite跑，一启动就OOM。偶尔没OOM的时候，推理一帧要800多毫秒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用TFLite自带的INT8全量化。转是转出来了，但精度掉得没法看，F1直接掉到0.4以下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怀疑是有些算子没对齐，但查日志没查出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TFLite在A53上跑Seq2Seq，INT8量化精度崩了，算子也报错，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "混合量化我之前只用过TFLite的PTQ一把梭，分层配置没搞过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去看看NCNN的文档，找找分层量化的配置写法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去扒一下NCNN源码里的pnnx示例，照着改一个混合量化的配置文件。先拿一个小的特征提取子网试跑，在网关上打点看内存和耗时。今天下午下班前必须把demo跑出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的动作就是：1. 放弃TFLite，换NCNN；2. 衡量混合量化配置；3. 日志脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

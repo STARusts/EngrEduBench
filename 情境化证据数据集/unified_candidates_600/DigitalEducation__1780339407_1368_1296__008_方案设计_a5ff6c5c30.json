@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在流转撮合接口规范与高并发防护背景下，用户与导师围绕接口模式、降级策略、幂等性设计和压测方案持续沟通（5轮），其中在校企异构接入与高并发降级部分与接口协议定义师沟通（1轮），在压测方案设计部分与系统架构设计师沟通（1轮），并最终形成包含双模式接口、幂等契约、限流降级及严谨压测的接口规范要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上Kong网关呗，配个限流插件。接口全走RESTful，用Swagger自动生成文档不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "他们拉就给个拉接口呗。算力不够就扔消息队列里异步嘛。降级...降级我就多加几台机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "校企接入这块有没有现成注解可以用？降级是不是直接抛异常就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步通知加同步查询。那就上RocketMQ。限流用Sentinel配规则。兜底缓存有点难搞，我先记着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防重试...我前两天刚刷到个帖子，说加个token能防重，是不是搞个Redis set一下就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测怎么做？用JMeter随便压一下看能不能扛住不就行了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口用异步通知加同步查询，写操作带唯一ID防重试。限流用令牌桶，降级保核心流，旁路熔断返缓存。压测要分读写场景，控制变量找拐点，还得有基准对照。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

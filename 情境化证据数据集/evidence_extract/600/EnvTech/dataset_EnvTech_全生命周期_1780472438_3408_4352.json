@@ -1,0 +1,644 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在雨洪截污调度项目需求梳理背景下，用户与导师围绕面源污染痛点、截流假设、水文机理差距与防汛合规红线持续沟通（8轮），其中在面源排污痛点与初雨冲刷机理部分与环境规划师沟通（2轮），并最终确立初雨冲刷CSO冲击痛点、前30分钟负荷集中假设与防汛优先约束的需求基点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心问题就是下雨脏水进河里呗。我看网上有那种一体化的水质监测浮标，买几个往河里一扔，数据不就来了？有现成硬件就简单多了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那面源污染到底卡在哪？有没有什么现成的调研报告能直接用啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想问问城市面源污染到底怎么回事？有没有方便点的办法能快速搞清楚痛点？最好不用从头测数据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以只要把刚开始下雨时候的水截住就行了？有没有那种设定好时间就能自动关闸的现成控制逻辑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我只要写个定时30分钟的截流逻辑就行了吧？有没有那种开源的控制策略能直接套？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "维护能耗没想过。开源策略一般都自带参数调整界面吧，调调参数应该能搞定。我其实不太懂怎么算降雨径流曲线，看着挺复杂的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得补补水文模型基础。我接下来两周找两篇CSO污染的论文看看，然后学一下SWMM软件怎么跑一个简单管段，能出流量过程线就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "红线？不就是关闸蓄水嘛，还能有啥红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以痛点是初雨冲刷带来的CSO冲击，假设是前30分钟负荷集中，约束是绝对不能影响防汛安全。"
+              }
+            ]
+          },
+          {
+            "microScene": "在智控截流合规边界梳理背景下，用户与导师围绕合规红线、安全降级策略及事故责任持续沟通（4轮），其中在面源截污合规标准部分与环境规划师沟通（2轮），并最终确认旱天零排、n0动态1-3、故障全截三条合规底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块，是不是下个标准库导进去就行？我看别人好像有现成的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误判应该不会吧，加个硬判断？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种自动更新法规的API？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "截污的合规标准，有没有那种一键导入的规则包？或者自动查法规的接口？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我把这三个数写死在代码里算合规了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能找个现成的规则引擎把这几个数配进去？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传感器挂了，引擎也跑不了吧？那只能写个兜底逻辑了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以合规底线就是：旱天零排、n0动态算但1到3之间、断电断网默认截流？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在画像与诉求梳理背景下与导师围绕水务局防汛与治污诉求冲突及雨天调度优先级持续沟通（3轮），其中在业务冲突与诉求倾向部分与水务产品经理沟通（2轮），并最终总结出防涝优先、截污尽量做的诉求画像及系统需自研污染通量评估辅助决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "水务局不就是看大屏吗？我看网上好多水务项目都有那种蓝色3D地图大屏，直接拿可视化组件库套个模板应该就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防汛和治污一般怎么分权？有没有那种现成的权限配置模板能直接导入的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那能不能搞个滑块，一边调防涝权重一边调截污权重，让他们自己拖去？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "初雨最脏要截，但水位涨得快又要排。这怎么选啊，有没有那种自动判断优先级的规则引擎直接调用的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "系统得告诉他们排涝会排多少脏水出去，让他们自己定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这量化评估能不能直接调环保局的API算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "防汛办怕淹担责，治污办怕罚。系统不能只管截污，雨天防涝优先级更高。系统要给个污染通量评估，帮他们决定什么时候开闸，不能直接替他们做主。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在智慧水务商业模式探索背景下，与导师围绕按效付费可行性、基线设定与资金来源持续沟通（5轮），其中在截污调蓄算效与基线设定部分与商业分析师沟通（1轮），在调蓄设施专项资金与政策包装部分与环境规划师沟通（1轮），并最终形成“专项资金建设+按效付费运维”的商业模式及合规留痕功能需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "网上很多智慧水务项目都是政府购买服务，按效付费。能不能直接套这种模板？有没有那种自动算效的SaaS工具能接进来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们想做按效付费，有没有现成的算效模板？调蓄这块账怎么算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说按效付费行，但效不好算，要定基线。还有清淤费的事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线用历史数据跑个平均呗？清淤费让水务局包了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调蓄设施有没有专项资金或者政策补贴能拿？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规划师说能蹭海绵城市的钱，但要包装成过程调蓄。还要留痕防审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是拿海绵城市的钱建，然后按效收运维费。效靠系统自己算通量，还要加个留痕功能防查。"
+              }
+            ]
+          },
+          {
+            "microScene": "在雨洪智控战略规划与立项背景下，用户与导师围绕核心价值主张、战略对齐与项目边界持续沟通（5轮），其中在政策对口与验证依据部分与环境规划师沟通（2轮），用户咨询政策匹配与验证口径、明确战略取舍，并最终形成包含政策依据、核心主张、战略边界与验证动作的立项框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上有现成的智慧水务可研报告模板，我直接套一下格式，把咱们之前定的词填进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "立项书里政策对口怎么写？有没有那种自动生成政策匹配词的工具？我抓不住重点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验证这块呢？我打算到时候找个下雨天，去排口看看水清不清就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不管？就，下雨太大就不管了呗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我其实对政策文件一直看不太进去，好多词看不懂，更别说写这种战略取舍了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以立项点就是：1.政策依据写过程截污；2.核心主张是算通量精准截污；3.边界是超重现期保防涝；4.验证看3场雨的通量削减率。就这些吧？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在雨洪面源截污与智控调度系统架构设计背景下，用户与导师围绕端边云协同、边缘自治与验证方案持续沟通（5轮），其中在端边云算力切分部分与架构设计师沟通（1轮），并最终确认边缘自治保底、边侧区域协同、云侧全局寻优的架构大方向及降级接管成功率验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种端边云的开源脚手架，我直接拉下来改改参数？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "断网就重连呗。实在不行我加个Redis缓存兜一下，这些中间件工具都能搞定吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我没搞过，边缘网关断网后怎么自己跑逻辑，我不太清楚。我今晚去搜一下边缘自治的文档看看别人怎么写的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端边云算力怎么分？我想把数据都扔上云算，省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是边缘要自己算，云上搞大模型。如果网不好，全上云就不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测一下网络快不快呗。用压测工具打一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘自治保底，边侧协同，云侧寻优，测降级接管成功率。"
+              }
+            ]
+          },
+          {
+            "microScene": "在端边云架构确定后的水文水质多源数据流规划背景下，用户与导师围绕数据流转方案、边缘侧预处理边界及核心约束持续沟通（6轮），其中在数据源特征与边缘聚合部分与架构设计师沟通（1轮），在异构传感器接入与网关封装部分与物联协议工程师沟通（1轮），并最终确认边缘封装对齐、降级采样、边侧提取云侧聚合三条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上消息队列呗？我看网上好多人搞物联网都是Kafka加Flink，一套流计算搞定，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想用Kafka直接把数据全推上去，这有什么问题吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传感器接入呢？是不是有现成驱动直接调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能全推到云上，边侧要先处理一下。然后网关那里要加时间戳，不然算不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "限流？把多余的数据丢了？或者有个本地缓存兜底？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘封装对齐，降级采样，边侧提取云侧聚合。"
+              }
+            ]
+          },
+          {
+            "microScene": "在截流井设备接入与网关协议设计背景下，用户与导师围绕异构设备协议选型、网关缓存溢出策略及数据过滤与降级采样触发机制持续沟通（8轮），其中在协议选型约束及缓存溢出与数据过滤机制部分与物联协议工程师沟通（2轮），并最终形成南向多协议北向MQTT架构及网关边缘处理策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接用大厂的物联网平台SDK呗，我看网上好多人都是把设备注册到阿里云或者腾讯云上，用他们现成的MQTT包，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "清单我扫了一眼，好像有些是串口的。那加个网关就行了？买个现成的DTU透传上去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现场设备挺杂的，既有老闸阀也有新传感器，直接全转成MQTT透传上去行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关得支持多协议接入，Modbus和LoRa都得接，然后统一转成MQTT往云上发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "带宽不够的话，网关自带的那种本地缓存队列能不能顶用？断网了就先存着，网来了再发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关断网缓存溢出怎么搞？还有老设备数据太多的问题，怎么过滤？我不想在网关上写太多代码，有没有现成的配置规则？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是网关配个规则，没变化就不发。点表映射还得写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暴雨期，就，就把死区调大？或者采样频率降低？降级采样不就是少采点嘛。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是队列快满的时候，触发降级，然后死区变大，少发点数据保命。点表映射是必须做的硬逻辑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘侧调度模型容灾设计背景下，用户与导师围绕模型容灾架构约束、降级策略及验证手段持续沟通（7轮），其中在容灾架构约束部分与架构设计师沟通（1轮），在故障注入验证与变量控制部分与测试工程师沟通（1轮），并最终形成本地快照与安全降级执行器硬接管、防涝优先降级策略及脚本故障注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型崩了就重启呗。如果怕重启慢，用K8s拉起新Pod不就行了？或者有没有那种自带主备切换的中间件？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保闸阀别乱动？我看网上好多方案都是用Redis做状态共享，主备切一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧调度模型做容灾有没有方便点的方案？最好别让我们写太多底层逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "安全降级执行器是啥？又要自己写守护进程吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测一下呗。把模型杀掉看闸阀动不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能直接用Chaos Mesh把模型Pod杀掉，看闸阀反应？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关上怎么搞故障注入？我想用Chaos Mesh但好像装不上。怎么验证模型挂了闸阀能安全打开？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暴雨时模型挂了闸阀必须全开，这个算安全位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用K8s和Redis了。边缘侧模型挂了，靠本地快照恢复，恢复不了就由安全降级执行器接管，暴雨天闸阀强制全开防涝。验证就用脚本在流量峰值杀进程，看3秒内闸阀开没开。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在雨洪面源截污与智控调度系统工程开发背景下，与导师围绕感知节点与截流网关联调的边缘侧绑定方式及异常可靠性验证口径持续沟通（6轮），其中在边缘网关本地绑定实现部分与嵌入式开发工程师沟通（1轮），并最终放弃云平台低代码，确定C语言寄存器映射开发策略与错帧降级接管验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上好多物联网项目都是直接用云平台低代码配的，建个产品，把节点拖进去，网关自动就关联了，特别快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不走云端的话，在网关上直接搞关联，有没有什么现成的库能快速搞定？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "直接写寄存器？这玩意儿我哪会啊，我平时都只调Python包或者Java接口的。C语言操作硬件寄存器我没搞过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只能先去翻翻厂商给的C语言SDK文档，照着抄一下映射关系。今天下班前先跑个Demo试试，把报错都记在日志里，明天再改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就发坏包呗，看它降不降级。我写个脚本发坏包试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "关联调不用云平台了，在边缘网关用C写寄存器映射，直接刷驱动；验证就往网关发错帧，看2个周期内是不是触发降级接管，并且计数对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在边缘网关通量测算算法落地背景下与导师围绕计算路径、算力预算与精度兜底持续沟通（7轮），其中在边缘端输入输出与计算约束部分与算法工程师沟通（2轮），并最终确定C语言手写滑动窗口与插值查表的计算路径及5%误差降级报警约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算通量的话，就，直接调那种数学库呗？我看网上好多算降雨径流的，拿过来积分一下不就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "包里应该都处理好了吧？没细看。反正SciPy算积分挺快的，我之前试过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算雨洪通量，能不能直接用SciPy这种库在网关上跑？网上那种算径流的代码能不能直接套？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自己写C？那不麻烦死了。插值对齐，就，把时间戳裁成一样长？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说不能用SciPy，得自己写C。就是要把流量和浓度对齐，插值补齐再算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，写个while循环呗？数据来了就算。算力预算，我尽量少写点循环嵌套？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "预计算，存数组里？这，我试试吧。浮点除法确实慢，我换成查表行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "路径就这样吧。查表精度差点就差点，反正算个大概齐。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加个阈值判断呗，行。查表算完看看超没超5%，超了就发报警。我写进去。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘网关调度逻辑开发与汛期压测方案设计背景下，用户与导师围绕调度语言选型、并发互锁、日志留痕与断网降级持续沟通（6轮），其中在边缘侧调度逻辑部分与嵌入式开发工程师沟通（1轮），在业务场景压测部分与测试工程师沟通（1轮），并最终确定C语言有限状态机、互斥锁、看门狗5秒超时放锁、RAM环形缓冲区双写日志及暴雨毛刺压测等约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个下发指令的接口呗，我看网上很多人用Python写个Flask调闸门，挺快的。压测的话，直接用JMeter压并发就行了吧，现成工具拉个线程组就跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧调度逻辑咋写啊？有没有那种轻量级的C框架可以直接调包的？最好别让我从零手撕状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那压测呢？JMeter不能用吗？我只会这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能跑Python，得用C写状态机，还得加互斥锁。压测也不是JMeter，得往里注水打毛刺，看死不死锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就printf存本地文件呗。断网了就一直重试发指令呗，还能咋降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "C状态机，互斥锁，看门狗超时放锁，日志双写。压测打暴雨毛刺。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就设个几秒吧，双写就写Flash里。我也不太清楚，就先这么定呗。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在云端全链路数据清洗与除错背景下，与导师围绕清洗架构、异常处理及规则引擎选型持续沟通（4轮），其中在异常数据算子库部分与后端开发工程师沟通（1轮），在漂移震荡动态判定部分与数据分析师沟通（1轮），并最终确定Flink对齐、scipy去抖与定制业务修正的三层清洗链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接套个Flink，它有开窗和水印，应该能处理乱序吧？网上很多教程都是这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "清洗这种异常数据，有没有什么现成的算子库能直接调的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种漂移和震荡，怎么区分它是真异常还是真的来大水了？有没有什么简单的判断方法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们说没现成算子，得写定制规则，阈值还得动态算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想找个轻量级的开源规则引擎，比如Drools之类的，把规则配进去，这样以后改阈值也不用改代码了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了个scipy的signal模块，里面有滤除毛刺的函数。我寻思着，如果把它包成一个微服务，是不是就不用我自己手写滑动窗口去抖了？能省点代码量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "系统误差...scipy搞不定吧。得用标定记录算偏移？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在雨洪截污系统试运行背景下与导师围绕交付验证清单完善持续沟通（11轮），其中在数据与指令验证部分与运维工程师沟通（1轮），在截污效果统计检验部分与环境评估师沟通（1轮），用户分析了验证盲区与资源瓶颈，制定统计补齐目标，最终形成包含数据连续性、指令延迟、边缘资源及T检验的清单补充项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种直接用Jenkins Pipeline跑一遍自动化脚本不就全验证了吗，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟这种，用Jmeter压测一下接口？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 之前的交付清单只看服务起没起，试运行期间一般还要查啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接用Prometheus配个监控告警规则，超时就报警，是不是更方便点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源消耗，服务器加机器不就行了，内存不够就扩容。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "边缘算力确实不太好扩。这我没想到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "BI工具拉个降雨量和截污量的折线图，肉眼看看峰值错开没，不就完事了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有封装好的库直接算这些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只会调平均数最大值的API，假设检验这块真不会。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两周内把scipy.stats的T检验和置信区间接口摸熟，在项目里写个验证脚本跑通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "补上边缘到云端数据连续性验证，端到端指令延迟3秒阈值验证，边缘节点汛期资源占用水位验证，还有降雨分组对照的T检验和效应量计算。"
+              }
+            ]
+          },
+          {
+            "microScene": "在系统上线运行评估背景下，用户与导师围绕调度执行率与截污监控的指标口径及数据失真风险处理持续沟通（5轮），其中在调度执行率计算口径部分与运维工程师沟通（1轮），在截污监控通量计算与传感器漂移部分与环境评估师沟通（1轮），并最终确定按专家口径计算指标及增加前置数据质量诊断模块。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，用大盘看呗？我看Grafana上有现成的图，红绿红绿的，绿了就说明执行了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "执行率就是下发指令数除以成功数吧？截污，截污就是看水质变好没，COD降了就是截住了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种直接算削减率的现成组件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度执行率到底咋算？我之前以为指令发过去没报错就算成功。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "截污监控看COD降幅不行吗？非得算通量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "执行率得看闸阀反馈和液位，不能只看指令。截污得算通量削减，浓度会被雨稀释。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过他们说的传感器漂移，是不是得弄个自动校准的工具？不然数据不对监控也没用啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "人工校准太费事了吧，肯定自清洗啊。数据失真，就，设个阈值呗，超了就报警。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端暴雨系统异常复盘背景下，用户与导师围绕模型失配根因与降级调度机制持续沟通（7轮），其中在特征漂移触发原因部分与数据分析师沟通（1轮），在环保与防涝兜底策略部分与环境评估师沟通（1轮），并最终形成基于流态特征监控触发降级、边缘接管及合规留痕的策略要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种偶发极端天气，直接上ELK搜一把Error关键字不就行了？拉出来改改bug。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型跑飞了？那就加个阈值截断呗，输出超限就给个默认值。网上好多这种保底写法。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暴雨时候模型乱算，是不是数据偏太狠？能不能写个脚本把偏太狠的特征直接删了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "满管压力流？这听起来挺麻烦。那加数据进去重新跑一遍拟合不就完了？用AutoML跑一把。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暴雨时候系统乱发指令，环保和防涝那边怎么兜底？有没有现成的预案模板能套？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "放弃截污直接排？这合规吗？我怕到时候被查水表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计日志好办，就加个log打印嘛。流态切换校验，我不懂怎么写这种判断逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Flink算特征分布？这个行，网上有CEP的模板。就监控压力流占比，超了就发降级指令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性？加个分布式锁？Redis搞一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流态特征突变触发降级，边缘本地接管，断网也能控，留痕记日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估背景下与导师围绕调度模型特征漂移归因、外推边界验证与迭代规划持续沟通（8轮），其中在特征偏移原因与调参误区部分与数据分析师沟通（2轮），最终放弃AutoML调参思路，形成基于KS检验的特征分布监控与外推边界划定迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果后面不准了，是不是搞个自动重训流水线，挂个CronJob定时跑一下就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就水位、雨量这些呗。特征变了的话，用个特征监控的包不就得了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们调度模型这几个月数据分布变没变？有没有那种一键检测漂移的面板？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "误差12%是不是直接丢进AutoML里让它自己搜参数就行？网上都说AutoML调参特方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "历史数据当时就拿了去年半年的，估计没覆盖这种急转的情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近正好在看一本讲数据工程的电子书，里面好像有提到分布检验的代码，我今晚去翻翻，看看能不能把那段代码搬过来算算这个KS值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重点就是，不能无脑重训。得先看特征分布，算那个KS值，找出是降雨强度还是淤积导致偏了。然后划定模型还管用的边界，超出的数据得单独处理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

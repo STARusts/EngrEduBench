@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在暴雨并发压测与性能调优背景下，与导师围绕压测工具选型、P99延迟红线边界及基线产出持续沟通（5轮），其中在时序并发数据构造与P99红线设定部分与并发调优工程师沟通（2轮），最终确定Gatling加CSV注入造数据及P99红线200ms的MVP压测脚本方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Jmeter起多线程发请求？不过径流数据是时序的，我直接并发发会不会太假了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能网关那边扛不住？我不太确定，没压过这种时序并发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我只会Jmeter，但径流数据是时序的，并发怎么造？还有P99延迟红线定多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天翻边缘网关代码，发现有个Kafka背压机制还没开，是不是突发流量来的时候可以开这个扛一下防雪崩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Gatling加CSV造时序并发，P99红线200ms。我还想把Kafka背压机制开起来防雪崩，顺便测出阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超过200ms，调度指令下发就慢了，排涝机组动作延迟，淹水时间变长。但只要不丢包，稍微慢点比系统直接崩了好。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

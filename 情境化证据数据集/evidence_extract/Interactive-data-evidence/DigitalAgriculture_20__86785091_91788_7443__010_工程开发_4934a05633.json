@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在接手旧计费结算与对账逻辑并修复单测漂移的背景下，用户与导师围绕结算闭环证据、幂等与重试、规则漂移处理、对账键与权限隔离持续沟通（7轮），其中在幂等键/费率快照/差异定位设计部分与结算与对账工程师沟通（4轮），并确定结算落库字段、UNIQUE幂等索引、adjustment调整单与reconcile_hash等改造要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我扫了下旧代码，感觉它把“核验结果”当成最终应付金额了。像 quality_score 直接乘单价，就出账。还有一个问题是同一笔作业，重试会生成两条账单，我没太想明白怎么卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结算表里有 tenant_id、task_id、machine_id、area、unit_price、amount、status、created_at。幂等看起来用 task_id，但又有个 bill_no 自增。对账我只看到按日汇总 amount，没看见把 engine 的 rule_version、input_hash 放进去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是直接在结算记录里加 input_hash、rule_version、engine_summary，然后 amount 也存下来？然后幂等改成 tenant_id+task_id+input_hash？我不确定对账要不要也按这个维度拆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@结算与对账工程师 幂等键、费率快照、对账差异定位这块，旧代码现在很乱。我这边准备加 input_hash/rule_version/summary，幂等用 tenant+task+input_hash。这样够吗？对账表要怎么设计才好查差异？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "计费参数快照是指把单价写死在账单里？还是把整份费率表存一份？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等是不是我说的 tenant+task+input_hash 就行？还是要加 rule_version？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "调整单就是补差？那对账是对主账还是主账+调整？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "reconcile_hash 我能理解，就是用来快速判断集合一致。那 price_snapshot/meter_snapshot 是不是会很大？会不会存储压力？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点担心我写 JSON 快照会不会后面不好查。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从结算与对账工程师那边听到的重点是：幂等键建议 tenant+task+input_hash+price_plan_version，不把 rule_version 放进去；账冻结，规则升级走 adjustment 调整单；结算单要存 price_plan/version + price_snapshot（分段阈值等）+ meter_snapshot（核验面积、扣减等）+ rule_version/input_hash/evidence_refs 摘要。对账要有 reconcile_hash，差异原因要结构化几个枚举。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）rule_version 升级后核验可能变，放幂等就会新生成一条账，旧账也在，对账会炸。2）同 input_hash 漂移…我想是先不自动重算，还是出原账，然后漂移的留个标记？但标记我不知道放哪里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "calc_trace 我能只存扣减前面积、扣减面积、计费面积、分段命中那一档、最终金额？这些算中间值吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我改旧代码的步骤是：先把旧 bill_no 自增留着当展示号，真正唯一靠 idempotency_key；写一个 upsert：同 idempotency_key 已存在就返回原 settlement_item；不存在才插入。然后对账按 period 算 reconcile_hash。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里是不是要每条 settlement_item 带 coop_id，然后查询都按 tenant_id+coop_id 过滤？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点想偷懒用 ORM 的 tenant 插件自动加条件，但我怕有的 join 会漏掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我还差一个：对账差异枚举我直接按工程师说的四个？MISSING/EXTRA/AMOUNT/STATUS，再加一个 CURRENCY？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）结算单要落库核验引用：input_hash、rule_version、evidence_refs 摘要、engine_meta 精简；同时存计费参数快照：price_plan_id/version + price_snapshot；计费过程留 calc_trace 的最小中间值。2）幂等用 UNIQUE(tenant_id, task_id, input_hash, price_plan_version)，并发靠唯一索引冲突再查回。3）规则变更或漂移不覆盖原账，走 adjustment 调整单；对账按 period 出 reconcile_hash，差异原因枚举固定五个。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧重构渲染出现花屏与高延迟背景下，用户与导师围绕解码维度适配、模型轻量化与推理步数压缩持续沟通（5轮），其中在PQ分块解码适配与轻量化方案部分与端侧重构渲染工程师沟通（3轮），并最终形成端侧重构四项修改方案及码本版本一致性要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图糊得没法看，还有点花屏。我加了点双线性插值想抢救一下，结果更糊了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻址那边特征切了PQ分块压缩，现在端侧解码出来是乱的，花屏，咋整？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟炸了，2秒多。维度对不上我要怎么改输入层？重写模型吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "码本缓存我能弄，但换TinyUNet和砍步数，这生成质量不就废了？全成色块了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查表还原我可以写，但TinyUNet我手里没现成权重，砍步数我也怕效果太差没法交差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改解码层加PQ码本查表还原；生成模型切TinyUNet；推理步数压到4；跑出来看LPIPS指标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

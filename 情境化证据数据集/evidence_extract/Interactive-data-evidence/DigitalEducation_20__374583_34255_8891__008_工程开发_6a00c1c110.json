@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在内容制作流水线工程开发中为第3天跑通“draft-审核-发布-回放”链路背景下，用户与导师围绕规则引擎边界、流程编排、审计与测试用例持续对齐（10轮），其中在接口形态/事务边界/回放查询/错误码与素材hash校验落点上与后端负责人沟通（3轮），在审计hash口径/字段命名/留存脱敏与服务端统一计算上与数据治理负责人沟通（2轮），并形成团队可执行的5条实现约定与两天内拆分验收计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把流程拆成3块：内容状态流转、发布生成版本、回放按decision_time取版本。规则引擎这块我有点不确定边界，是只管“能不能流转”还是连“怎么选命中版本”也算规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我倾向统一成一个context，比如 actor_role、content_id、current_status、action、decision_time。输出就是 allow/deny + reason_tag。错误码我想分：403权限、409版本冲突、422业务条件不满足。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 规则引擎和流程实现这块，你建议的调用顺序是怎样？我需要能跑通 draft→in_review→approved→published，然后按decision_time回放。接口字段、事务边界、审计点位、错误码怎么定更合适？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload_hashes放到规则输入里是为了第5天“素材hash不一致上报”吧？那是在哪个命令里校验更合适，Publish还是更早？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心规则引擎里塞太多校验会变成一堆if。我们要不要做成“规则表+表达式”那种？但现在是第3天要跑通链路，搞太重可能来不及。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去跟导师对齐下：先用代码规则集，流程层统一写审计，发布事务里做最终hash一致性校验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算这么落：  \n1）接口：CreateDraft、SubmitReview、DecideReview(approve/reject)、Publish，再加只读的Replay(content_id, decision_time)。  \n2）每个写接口都带rev，服务层先查content当前rev，若不一致直接409；一致才进规则判断。  \n3）规则拒绝返回422并带reason_tag：比如状态不对、权限不对、素材不齐/不一致。权限不对也可以是403，我倾向403只在明显越权时用。  \n4）审计：每个命令不管成功失败都写一条？我有点犹豫，失败也写会不会太吵。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "全链路用例我做成一条集成测试：  \n- CreateDraft拿到content_id、rev=1；  \n- SubmitReview带rev=1成功，状态到in_review，rev变2；  \n- DecideReview approve带rev=2成功，状态到approved，rev变3；  \n- Publish带rev=3成功，生成published_version_no=1，有effective_at=now；  \n- Replay用decision_time=now+1s，命中version_no=1；  \n再补一条：Reject时带reason_tag+note，状态回draft，rev+1，然后能再次SubmitReview。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Publish时如果已存在上一个published版本，就把它的expire_at设置成新版本的effective_at。这样回放窗口就不会重叠。这个写在同一事务里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则输入我按后端说的context对象：actor_id、actor_role、action、content_status、rev、decision_time（回放才需要）、payload_hashes（提交审核和发布需要）。规则本身先做成一组函数，按action分派。回放规则不放在RuleEngine里，放ReplayService的查询逻辑，单测用固定effective_at/expire_at数据来验证decision_time命中哪个版本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我改一下：回放“选取规则”不塞进通用RuleEngine，直接固化在ReplayService查询里，但写成一个可单测的选择函数，比如selectVersion(versions, decision_time)；数据库查出来的一组候选版本交给它做最后挑选。这样既不搞复杂规则引擎，也能保证口径一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "hash我让内容服务在保存draft时就算，存content_hash和kind列表hash。流程服务写审计时只引用这两个字段，不把正文塞进去。具体hash怎么算我可能要跟数据治理或安全那边确认下格式，避免不同服务算出来不一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 我们审计只存 kind列表+hash，不做全文diff。hash口径你建议怎么定：哪些字段参与、算法选什么、字段命名怎么统一？另外审计留存和脱敏有硬要求吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "序列化规范这块我怕实现时各端不一致。我们服务端都用同一套库就行？如果移动端也要算manifest_hash，会出事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回导师那边，把“hash口径”和“服务端统一计算”这点敲死，避免多端口径漂。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我按优先级：  \n- Day1上午：把4个命令接口骨架 + rev校验 + 状态写入跑通；  \n- Day1下午：RuleEngine最小规则集（状态迁移+权限）+ 422/403/409错误码落地；  \n- Day2上午：Publish事务（新版本+旧版本expire_at）+ Replay查询与选择函数；  \n- Day2下午：审计事件全链路打点 + 两条集成测试用例（approve链路、reject回draft链路）。  \n验收口径：集成测试过；数据库里能看到状态流转、published版本窗正确、审计每步都有记录且只含hash和kind列表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "五条约定我确认下：  \n1）流程层四命令：CreateDraft/SubmitReview/DecideReview/Publish；只读Replay按decision_time回放。  \n2）所有写操作都带rev并先做乐观锁校验，不一致直接409；通过后再走规则判断。  \n3）RuleEngine先做代码内规则集：权限+状态迁移；拒绝返回422并带reason_tag，越权返回403。  \n4）Publish在单事务内：生成新published版本(effective_at) + 回写旧版本expire_at + 更新指针；发布前做material_manifest_hash一致性最终校验，不一致422且写审计。  \n5）审计每次命令无论成功/失败都写：actor/action/from/to/result/reason_tag/changed_kinds + content_struct_hash/material_manifest_hash，不记录正文和URI明文。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

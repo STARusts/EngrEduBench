@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在代偿策略执行引擎开发背景下，用户与导师围绕引擎选型、边缘延迟、硬件下发与容错降级持续沟通（6轮），其中在边缘端架构与延迟约束部分与架构师沟通（1轮），在硬件协议适配与物理延迟部分与硬件适配师沟通（1轮），并最终形成基于C/Rust状态机、多协议适配层及超时降级干预的硬约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查了些文献，复杂事件处理CEP挺适合这场景的，比如用Drools规则引擎，把感统代偿策略写成规则，当输入的震颤级别超过阈值就触发动作。理论上推理分离，好维护。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟这块，我算过Rete网络构建后的匹配时间，应该还行吧。至于下发，直接调硬件SDK发指令不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用Drools做代偿策略执行引擎，做震颤级别的规则匹配，这方案在边缘端可行吗？延迟会不会崩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那硬件指令下发呢？是不是直接调SDK就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来硬件响应这么慢。我还以为都是毫秒内搞定的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不用Drools了，改用C写硬编码状态机，走事件驱动。然后硬件这边要加一层协议适配，还得算上物理延迟。超时的话，我觉得可以设个阈值，超时就重发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "容错底线，是不是应该有个本地兜底？比如硬件不响应，就触发本地蜂鸣器或者网关自带的小喇叭发声？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃Drools，用C/Rust写硬编码状态机，保证边缘端低延迟；第二，增加硬件协议适配层，处理Zigbee/BLE等多协议下发；第三，必须设计指令超时与降级干预逻辑，硬件无响应时切换本地兜底策略，不能盲目重试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

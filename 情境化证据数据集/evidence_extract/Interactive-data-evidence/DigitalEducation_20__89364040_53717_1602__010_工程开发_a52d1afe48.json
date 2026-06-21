@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的端到端测试与压测背景下，用户与导师围绕E2E关键路径断言、trace贯通、最小事件schema与验收口径持续沟通（8轮），其中在用例分层/断言点/压测拆分与trace聚合方案上与测试工程师沟通（3轮），并形成E2E分层与强弱规则断言、双路径压测及日志合规最小化的落地计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是把E2E做成“全链路事件溯源”，从课件编排到三端渲染都串同一条trace。甚至可以把快照和constraints放进统一的回放格式，压测就回放流量。缺点是工程量会炸，但一次把框架搭好后面省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须断言的我先放三类：  \n1）同步：version单调递增，客户端只接更大；弱网下segment边界对齐不回跳；interaction_gate一致锁定。  \n2）渲染口径：后端render_constraints三端断言通过率，比如每页规则命中与否、超限项数量。  \n3）时延：正常网P95≤300ms，弱网到1s但不回跳。  \n像素级一致先不做。至于trace，我怕排障没抓手。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 E2E这块你们打算怎么组织？我想做“场景驱动+追踪ID贯通”，但不想搞成巨型回放框架。用例结构、断言点、压测怎么打比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "卡顿事件定义我这边可能要再跟客户端对齐。你说constraints通过率≥99%，这个阈值怎么定？我担心规则有些端差异先天就会掉点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测模型呢？我们是“课堂session”比较重，还是“编排API”更重？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解了。trace_id就别上OpenTelemetry那套全家桶，先做case_id+trace_id的日志聚合。回到导师那边我会主张“强规则/弱规则”两套阈值，不然容易扯皮。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三点：  \n1）E2E用例按“场景模板”：输入（课件包+设备画像+网络脚本）/执行（编排->分发->三端加入session）/断言。  \n2）断言分强弱：强规则100%（无障碍、interaction_gate、可读性底线），弱规则看通过率目标（先从99%起但用黄金集定基线）。同步断言坚持version单调、segment边界对齐不回跳。  \n3）压测拆两条：编排API（吞吐、幂等、P95）和播放链路（同步延迟分布、回跳率、gate一致率、卡顿事件数）。trace用case_id+trace_id贯通，不引入复杂回放框架。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小事件我先给一版：  \n- orchestrate_done：trace_id、courseware_id、page_id、segment_id、render_constraints_hash、version  \n- snapshot_emit（服务端）：trace_id、session_id、page_id、segment_id、t_play_ms、interaction_gate、version、ts_ms  \n- snapshot_apply（客户端）：trace_id、client_id、page_id、segment_id、t_play_ms、interaction_gate、version、apply_ts_ms  \n- segment_align：trace_id、client_id、from_segment_id、to_segment_id、align_reason（boundary/force_lock）、ts_ms  \n- rebuffer（卡顿）：trace_id、client_id、start_ts_ms、end_ts_ms、at_t_play_ms  \n- gate_change：trace_id、session_id、interaction_gate、version、ts_ms  \n字段我尽量复用上次最小快照那套，避免重复口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我容易忽略。client_id我用运行时随机ID，不落真实账号。留存我不太确定要多久，先给个7天？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能落。卡点主要是“卡顿事件”的统一定义和三端埋点一致性，我得拉客户端把rebuffer口径对齐；还有黄金集别膨胀，我会控制在10份课件×3画像×2网络先跑基线。trace_id这套我先按HTTP头透传+日志聚合做，不上重型追踪系统。强/弱规则我支持，能减少争论。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "domain": "基于YOLOv5的智能分拣系统——面向校园快递集散点",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与开发过程」阶段，本段围绕核心控制逻辑的部署与接口联调展开，说明模型转换与加速组件的集成情况，并记述联调期间排查通信延迟问题、通过修改协议配置与优化算法压缩链路时延的解决过程。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "将PyTorch模型通过ONNX中间格式转化为TFLite float16量化模型，并集成Coral加速组件。"
+              },
+              {
+                "behaviorLabel": "验证评估",
+                "behaviorEvidence": "由于MQTT通信协议的默认QoS等级过高，导致指令传输存在50ms以上的延迟。我们通过修改协议配置，将QoS设为0，并优化了图像预处理中的Resize算法，使整个软件链路的时延从320ms压缩至180ms，为下游硬件动作留出了充足的余量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

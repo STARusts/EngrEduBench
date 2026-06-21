@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计中制定事件总线与数据流规范背景下，用户与导师围绕排课-任务-证据-评价-归档的事件闭环、统一字段及同步/异步边界持续沟通（8轮），其中在事件命名/主键幂等/版本与口径统一上与数据治理经理沟通（2轮），在总线字段最小化与审计留痕上与合规与隐私官沟通（2轮），并形成事件分类示例与字段/约束骨架及模板版本追溯要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是把系统里关键动作都打成事件，比如排课成功、任务发放、导师签核、证据上传、评分提交，然后别的系统订阅。数据流我就没啥把握了，怕漏东西。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先按流程写一串：\n1）排课请求创建（教务/老师发？）\n2）排课结果已确认（系统发）\n3）工位/资源分配完成\n4）实践任务包已下发\n5）学生提交证据\n6）企业导师签核\n7）校内教师复核\n8）形成性评价完成\n9）成绩归档到教务\n字段我能想到的就是：课程ID、班级ID、学生ID、任务包ID、时间戳。别的我不确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 事件总线这块，事件怎么命名、主键怎么定？每个事件最少要带哪些字段，才能保证后面能追溯、不会口径乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果同一个评分被改了，算新事件还是更新原事件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白一点了，就是别覆盖，发更新事件，带上前一条的指针。字段里还要带模板版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 事件总线里我们会带 student_id、证据链接、评分这些。哪些信息不该上总线？需要怎么做最小化和审计口径？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我是不是可以简单理解成：总线只放ID，不放内容；评语先不广播，或者默认不开放订阅？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着说个骨架，可能不全：\n分类：课前排课、课中任务与证据、课后评价与归档。\n示例事件：\n- 课前：`schedule.requested.v1`、`schedule.confirmed.v1`、`resource.assigned.v1`\n- 课中：`task.package.assigned.v1`、`evidence.submitted.v1`、`evidence.accessed.v1`\n- 课后：`assessment.submitted.v1`、`assessment.updated.v1`、`grade.archived.v1`\n统一字段我能凑：`event_id、event_type、occurred_at、producer、tenant_id、course_id、class_id、student_id、trace_id、schema_version`。\n约束：事实源唯一，比如归档只能对接服务发；总线不放证据内容，放引用ID和范围。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边界我有点混。我的理解是：流程推进用事件，必须立刻成功的就同步，比如归档写教务得返回成功才算完成，然后再发 `grade.archived` 事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把字段改成：`event_id、event_type、occurred_at、producer、schema_version、trace_id、tenant_id、biz_id、status、reason_code`。`course_id/class_id/student_id` 看事件需要再加，不作为全局必带。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就至少 `task.package.assigned` 要带 `task_package_template_id`，`assessment.submitted/updated` 要带 `rubric_version`，还有证据提交要带 `evidence_template_id` 之类的，不然对不上模板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

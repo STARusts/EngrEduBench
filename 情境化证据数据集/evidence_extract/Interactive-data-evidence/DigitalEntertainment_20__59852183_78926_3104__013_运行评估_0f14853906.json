@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在织梦漫游叙事地图服务系统运行评估背景下，用户与导师围绕灰度分批、三条链路观测指标、回滚触发与回滚后验证持续对齐（6轮），其中在发布分档、阈值规则、配置快照/开关清单与注入演练设计上与SRE运维负责人沟通（6轮），并形成最小可执行的灰度与回滚演练清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "织梦漫游叙事地图服务系统这块我先别折腾压测了，现在到运行评估了吧？灰度发布和回滚演练怎么搞，给我个最省事的路子。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就先发10%？出问题就回滚。指标就看报错别太多就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据库也要管？我以为就是把服务版本切回去就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维负责人 灰度发布给我个流程，别太复杂。还有回滚演练到底要做啥才算完成？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就记个“1%到100%”就行了吧？15分钟也太久了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚就直接切版本。配置快照我没弄过，没快照咋办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我怕漏。你直接说要哪些开关名，我照着加。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那演练的时候是不是故意搞崩一次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "隐私这块又来？我反正不落事件内容了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了SRE。灰度就1%-5%-20%-50%-100%，每段看三条链路的错误率和P95P99，401/403必须是0。出问题就回滚到上个版本，配置也得回到旧的，还要三个开关能一键关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就……错误率别超过0.1%？P95别太高。回滚生效就看接口能通吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就照门禁抄一遍到灰度里。每档就10分钟稳定段，可以吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "401/403我懂，就是权限炸了。那演练注入点用 `replay/query` 开新索引开关，出事就回滚，对吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就把开关开了让它慢点，慢了就回滚。怎么让它慢我不管了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据库结构这块我没碰，应该没事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不清楚，后端那边弄的。我去问下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我现在就按你们说的定个简单清单，你听下：  \n1%开10分钟，看`walk/events`、`assets/sign`、`replay/query`三条；错误率0.1%以内，P95 200ms内，P99 500ms内，401/403为0。  \n触发就暂停扩量，401/403直接回滚到上一稳定版本，关三个开关。  \n回滚完再抽检三条链路，只存hash/长度，不打事件内容和位置。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

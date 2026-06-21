@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在ZONE_MISSING故障的运行评估收尾复盘与版本规划背景下，用户与导师围绕迭代主题拆解、验收阈值/对照设计、合规边界与回滚条件持续沟通（9轮），其中在验收分层与差分口径制定部分与数据分析师沟通（1轮），在日志字段可入域与复盘报告公开粒度部分与合规与数据治理官沟通（1轮），并形成V1/V2版本动作与分工交付口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想固化三类动作：第一是可观测补齐，把入口到策略再到依赖的链路对齐做成默认能力；第二是配置漂移治理，至少要能发现和快速回退；第三是降级和兜底策略的边界写清楚，不然错误码还是会被“归并”成一坨，看不出真实原因。验证上我倾向于用 request_id 级的强证据来做“上线前后对比”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以先按两个版本走。\n\nV1（两周）：稳定性修补包  \n- 改：入口配置校验 + ZONE_MISSING 细分错误码（区分入口缺失/依赖超时归并/配置漂移嫌疑）+ 日志字段补齐（zone_id_hash、strategy_code、degrade_flags、灰度标识）  \n- 验收：ZONE_MISSING 总量下降、且细分后“入口缺失”占比显著下降；同时 request_id 链路里能把入口失败峰的 latency 分布拉出来  \n- 回滚：细分码导致告警风暴或误报率上升，或对主链路 p95 延迟有可见回归\n\nV2（一个月）：配置与灰度治理  \n- 改：配置版本对齐检查、发布时校验差异、灰度标识强制写入日志/APM tag  \n- 验收：出现漂移时能在 10 分钟内定位到版本/配置差异；漂移相关的 ZONE_MISSING 归因比例下降  \n- 回滚：灰度 tag 影响链路追踪采样/成本过高就降采样或仅失败采集"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会用上次说的成功/失败 latency 分布对比：  \n- 先取一周数据，按 error_code 分组画 latency 直方图，找到失败侧最明显的峰值区间  \n- 用这个峰值区间定义“疑似入口失败”的阈值，例如失败峰落在 50-120ms，就把 <150ms 且 error_code=ZONE_MISSING 的当作入口侧嫌疑  \n- 验收就变成：V1 上线后，“<150ms 的 ZONE_MISSING 占比”要下降，同时“>依赖超时阈值的 ZONE_MISSING”不应明显上升（避免只是挪桶）"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 我们要做 ZONE_MISSING 的复盘迭代验收。你帮我把“上线前后对照”的口径定一下：分组维度、对照窗口、以及怎么把弱证据标注清楚，避免把季节/地块差异当成效果。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解了：验收要做差分，不能只看全量趋势。分层里我会把 request_id 链路样本当主结论来源，分钟级相关性只写“线索”。指标上新增“归因不明占比”这一条很关键，它能直接衡量可观测补齐是不是起效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会写成两层：  \n- 运行域只落 zone_id_hash，不进 raw；request_id 只用于链路对齐，不关联地块/品种/表型字段  \n- 如果需要从 hash 回查 raw，只能走审计域，且必须有工单号/审批记录；复盘报告正文不出现任何能还原地块或品种的信息  \n但我不确定哪些字段会被算作“可推断敏感”，比如 strategy_code 会不会泄露品种策略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 我们准备在 V1 增加日志/追踪字段用于复盘验收：request_id、zone_id_hash、degrade_flags、strategy_code、latency、error_code、灰度标识。哪些可以留在运行日志？哪些需要进审计域？复盘报告能写到什么粒度？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 strategy_code 我们就不要硬塞进运行日志，改成 family 级别。degrade_flags 也只留枚举，不写触发条件明文。这样复盘里还能按 family 做分组分析，不会踩商业敏感。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最终我建议两条版本线并行，但以 V1 为硬交付、V2 为治理增强。\n\nV1：可观测+入口校验（两周）  \n- 动作：  \n  1) ZONE_MISSING 细分错误码：入口配置缺失 / 依赖超时归并 / 配置漂移疑似 / 未知  \n  2) 入口配置校验：缺 zone 的请求在入口直接拒绝并打细分码，避免下游“归并”  \n  3) 运行日志字段：request_id、zone_id_hash、latency、error_code、degrade_flags(枚举)、runtime_strategy_family、灰度标识  \n- 验收（差分+分层）：  \n  - 同客户同灰度比例：上线前后各 7 天；以未升级对照组做差分  \n  - 指标：处方生成成功率按 zone_id_hash 分桶的 P50/P90 提升；“<入口失败阈值 的 ZONE_MISSING 占比”下降；“归因不明占比”下降  \n  - 证据等级：结论以 request_id 串联样本为主；分钟级相关性只作为线索并标注不确定性  \n- 合规边界：不记录 zone_id_raw、品种/表型等；strategy 只到 family；hash 不可逆且不保存映射  \n- 回滚条件：p95 延迟回归、告警误报率显著上升、或细分码引发工单量异常增长\n\nV2：配置/灰度漂移治理（四周）  \n- 动作：发布与运行时记录配置版本签名；灰度标识强制透传到追踪；漂移告警与快速回退路径演练一次  \n- 验收：漂移类事件定位时间 <10 分钟；同类工单重复率下降；漂移相关的 ZONE_MISSING 占比下降  \n- 风险：追踪标签带来成本上升，先只对失败请求全量、成功请求采样"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我来主抓验收口径和强/弱证据标注规则，跟数据分析师对齐差分与分桶；后端工程师负责入口校验和错误码细分落地；SRE 负责灰度标识在追踪链路里的一致性检查和告警质量指标；合规官在上线前做字段与保留期的审查。V1 以“能归因、能复现、能差分验收”为交付口径，不扩到更多新功能。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的压测联调与缺陷修复背景下，用户与导师围绕高事件量下“告警-联动-工单-证据-审计”链路的场景集、SLO、观测字段、自动断言与缺陷分级持续沟通（11轮），其中在压测用例与通过标准制定上与测试工程师沟通（3轮），在batch_id落库/日志聚合与合规边界上与数据工程师沟通（2轮），并收敛压测清单与关键校验点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先用现成压测工具顶一波，看看接口扛不扛。指标我就看 p95、错误率、还有队列堆不堆。链路的话，可能就从告警创建到工单生成、再到 evidence_snapshot 写入。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "场景…就模拟很多传感器一直上报，然后触发很多告警。SLO我不太敢定很死，先 p95 小于 1 秒？最容易炸我猜是写库，evidence_snapshot 版本+1频繁写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块你们一般怎么定场景？我现在就知道打接口p95这种，但乱序、迟到、重复触发这些怎么压出来，怎么判算过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "尖峰那里，如果告警率跳到15%，会不会把联动都打爆？我看网上很多人就把队列开大点，或者加个缓存层顶一下就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就按你说的四类跑。乱序/迟到我用压测脚本里带 event_time，然后延迟发送就行？还有“抖动”是指阈值上下反复那种？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按四类场景来，稳态+尖峰+乱序迟到+权限审计。数字我先用：告警写入p95<300ms、工单创建p95<800ms、证据快照p95<1.2s，端到端p95<2s；错误率<0.5%。业务错误像 E_LATE_UPDATE_IGNORED、E_AUDIENCE_LIMIT 不算失败但要统计。  \n我先不做太长时间的跑（比如24小时那种），先把尖峰和乱序搞出来，能复现缺陷再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会加 trace_id 串起来，然后每个关键点打耗时。字段可能要有 event_id、sensor_id、ticket_id、evidence_ver，还有返回码。幂等我就看同一个event_id是不是被处理多次。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我更怕迟到更新把evidence_ver搞乱，比如迟到的也把版本+1了，或者导致联动又触发一次。这个我有点没把握。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就压测后查一下同一个ticket的evidence_ver变化？超T的那些请求返回码是不是 E_LATE_UPDATE_IGNORED，然后 ver 没变。late_record 有新增。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "自动校验我可能得写点脚本去比对数据库，我不太熟。能不能用现成的APM面板直接看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 压测联调要做自动断言：迟到请求数=late_record新增数，且不增evidence_ver、不新增联动。为了统计方便，想加batch_id之类的字段落库或打日志。怎么加比较省资源，不把时序库/业务库写爆？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "batch_id放late_record里可以，audit_log里只写hash和mask。那我就不把每条请求的统计都写DB了，去日志系统聚合。pressure_run_stats 这种临时表是不是会影响合规？我怕被说存了测试数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "场景集四个：稳态、尖峰、乱序/迟到、权限/审计。SLO就先用测试给的那组。关键断言三条：迟到=late_record新增；迟到不增evidence_ver；迟到不新增联动。再加两个：越权必E_AUDIENCE_LIMIT且audit_log成功率接近100%；抖动不满足N窗不能关单，要 E_TICKET_CLOSE_DENIED。  \n缺陷优先级…我就按“会产生错误联动/错误关单/审计丢失”是P0，性能慢一点是P1？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以加个开关，perf环境才打batch_id和更细日志，别的环境就采样或者只打必要字段。默认就不开压力统计表写入。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去把观测字段补上，batch_id只在perf开。压测脚本我就按四类场景去造数据，尤其迟到那块要能自动断言三条关系。之后跑出来如果是evidence_ver乱增，我再回来问怎么拆事务范围。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

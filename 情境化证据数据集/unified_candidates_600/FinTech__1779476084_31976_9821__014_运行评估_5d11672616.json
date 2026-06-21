@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在图谱模式与推演规则迭代背景下与导师围绕Schema约束、推演权重设计、外推边界排查及线上A/B测试工具持续沟通（7轮），其中在禁用关系平滑过渡部分与知识图谱设计师沟通（1轮），在结合业务权重的推演剪枝部分与量化推演建模师沟通（1轮），并最终形成Schema降权、推演综合权重及Feature Flag切流测试的迭代收敛方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "本体演化一般有Top-down和Bottom-up两种路径。从理论上看，既然实体消歧有错，说明Bottom-up抽取的边权重不靠谱，应该加强Top-down的Schema约束，把那些不合规的关系类型直接禁用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "已有数据可以加个软删除标记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上图谱如果要禁用某类关系，已有数据怎么平滑过渡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推理规则里怎么结合业务权重做剪枝？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "alpha和beta可以用网格搜索调参。外推边界的话，如果domain_weight缺失，综合权重就退化成纯拓扑权重，在研报覆盖少的冷门标的上会失效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排查可以看推演日志里的权重分量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打算这周看Flask做简单的分流服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把deprecated降权逻辑和综合权重计算包在Feature Flag里，先对5%的流量开启，观察推演准确率指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. Schema迭代：对消歧错误的关系加deprecated属性，新数据禁入，旧数据降权。2. 推理规则迭代：转移概率改为综合权重，alpha和beta需网格搜索。3. 落地策略：使用线上Feature Flag切流5%进行A/B测试，重点监控冷门标的推演退化情况。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

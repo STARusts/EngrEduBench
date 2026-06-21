@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在盐胁迫控制策略服务端落地并支持灰度/回滚的工程开发背景下，用户与导师围绕灰度分流规则、策略版本、回退信号、观测与网关字段落地持续沟通（9轮），其中在策略版本/分桶/回退阈值与三态开关定义上与算法与策略工程师沟通（2轮），在日志分级保留、脱敏与mode切换权限审计上与合规与数据治理官沟通（1轮），并确定策略灰度协议v0与网关侧fallback与上报字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度就是先给一部分棚用吧，别一下全开。开关我感觉就是策略开关、还有阈值这些，能切回去就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按设备id分一部分就行。兜底就……边缘也能做点规则，后端也能关策略。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分流规则就device_id取模？版本字段就strategy_version。回退信号就是服务端发个disable。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法与策略工程师 灰度这块策略版本怎么弄？回退阈值怎么定？要看啥指标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分桶别只按device_id，优先zone。版本就是strategy_id加rev。回退看qflag连续bad、EC涨太快、执行器失败。指标看介入率、超阈时长、回退告警。差不多这样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三态我记下了：off/shadow/on。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发配置：strategy_id、strategy_rev、mode（off/shadow/on）、bucket规则（zone_id或device_id），还有回退阈值N、Δ。日志打：strategy_id、strategy_rev、action_type、reason_code，再加输入那几个传感字段。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "数据量就少打点日志？权限就管理员能改吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 灰度期间这些策略决策日志要留多久？要不要脱敏？谁能改mode这种开关，需要啥审计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "日志分两层，debug 7天、audit 90天。audit只留必要字段，不带坐标人员。mode切on要两人复核，要写changed_by/approved_by这些。数据量就按决策事件记，不是每分钟全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就负责网关上报对齐，还有网关侧能不能加个回退标记字段这块。我不太敢碰后端权限流程那块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原因就：QBAD、TIME_SYNC、SENSOR_LOST？差不多这些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能算吧，就用ec_mean滑窗。窗口10分钟，差值超过Δ就触发。我照四个枚举来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能保证新增三个字段上报，还有qflag连续bad触发fallback、以及EC滑窗突变触发。执行器失败计数我得看驱动那边有没有回执，不一定有。calib_state我能直接用上报的状态判断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

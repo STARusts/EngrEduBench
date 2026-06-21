@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在排放监测平台方案设计的“数据可信与审计链路”背景下，用户与导师围绕最小闭环、不可抵赖控制点与双层数据模型持续沟通（9轮），其中在审计字段与血缘粒度定义上与数据治理官沟通（4轮）、在签名哈希/密钥/最小权限与视频元数据合规边界上与安全与隐私工程师沟通（4轮），并确定批签名+关键节点签名及字段与版本化要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解要分两层：一层是原始观测的可信，比如CEMS、气象、微站、视频的时间对齐、校准状态、有没有丢包；另一层是后面算出来的东西可信，比如反演排放量、碳核算结果、异常判定。审计链路就是把这两层之间的转换都留证据，能回放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须不可抵赖的，我觉得是：原始数据落地的指纹、质量评分结果、核算结果的版本和输入、还有对外导出的报表。至于中间的清洗、插值、特征提取，我倾向先做可追溯就行，不然链路太重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "威胁我能想到几类：1）人为改CEMS历史数据或删超标片段；2）边缘设备时间漂移导致对齐错误，事后说“数据不准”；3）算法版本换了，结果变了但说不清为什么；4）导出报表被改动再去报送。控制点就是：原始层写入后要有哈希链；时间同步要有漂移记录；算法/因子版本要锁定；导出要签名。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "适合双层的：CEMS分钟值、气象站数据、微站浓度、视频事件元数据（不是视频本体）这类原始观测。修订层用来处理补传、校准后修正。只需要单层的可能是：衍生指标，比如小时均值、排放量反演结果、以及“多源一致性评分”，这些本来就是重新算出来的，留版本和输入就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向只存：事件开始结束时间、触发原因（比如烟羽可见+风向一致）、ROI位置、脱敏状态、置信度、边缘设备签名、哈希。视频本体尽量边缘留存短周期，中心只拿摘要。对外导出只给事件链和置信度，加免责声明。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 双层数据模型在工业时序里，原始层和修订层各自必须带哪些审计字段？另外我们想要“可复算”，血缘要追到什么粒度才够？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：原始层多记“采集证据+时间证据+质量证据”，修订层多记“变更证据”。血缘不用到代码级，至少到版本、参数、时间窗、门槛。对吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 我们要做不可抵赖和最小权限，签名哈希、密钥、审计留痕怎么设计才不会太重？还有视频事件元数据这一类，有没有特别的合规雷区？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这边我先对齐一下我听到的：双层模型字段要补齐，尤其是revision层的reason_code、ticket_id、approver，外加指标口径版本。安全这边建议批签名，边缘签名+平台hash链两道。导出要export_id+签名。视频事件元数据可入链，但访问更严，且对外不作为超标判定依据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“批签名+关键节点签名”。理由：1）时序数据量大，每条签名代价高，边缘算力和带宽压力会明显上去；2）我们的目标是审计复算，不是司法取证，批签名在风险和成本之间更平衡；3）关键节点（导出、核算结果、修订记录）单独签名能覆盖最敏感的篡改面。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "五类我先定：  \n1）原始批次（raw batch）：batch_hash、signature、signer_id、time_window、clock_quality摘要；  \n2）平台入库链（ingest chain）：payload_hash、prev_hash、ingest_time、ingest_channel；  \n3）修订记录（revision）：based_on_hash、revision_type、reason_code、ticket_id、operator/approver、diff_summary；  \n4）核算/反演结果（result）：result_id、input_dataset_version、algo_version、factor_version、params_snapshot_hash、quality_gate；  \n5）导出物（export）：export_id、scope（站点/时间窗）、metric_def_version、operator/approver、file_hash、signature、免责声明版本号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "参数快照只放影响排放解释的最小集，比如：负荷档位、燃料类型或配比区间、脱硫脱硝运行状态的开关/设定点范围、停开机标志。不要放产量、订单、配方明细这种。具体字段我可能还得和产品/现场确认哪些算“解释必需”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把“质量门槛参数”也版本化：比如wind_stability_threshold、min_sources_required、missing_rate_limit，还有一致性评分的阈值。每次算结果都把使用的门槛版本写进去。异常事件如果被降级或待复核，也要写decision_code，比如LOW_TRUST_PENDING_REVIEW。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第3条里我想再加个小点：metric_def_version这项别忘了，不然同名指标月度对比会乱。其余我就按这五条往后续接口和数据模型里拆。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

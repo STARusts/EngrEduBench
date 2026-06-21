@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推理进度判定算法选型背景下，用户与导师围绕在线GNN推理的延迟问题、折中方案选型、落地结构与规则引擎降级持续沟通（7轮），其中在在线判定延迟与算力折中方案部分与算法工程师沟通（2轮），并最终形成离线GNN向量+在线pgvector检索+If-Else规则兜底的判定架构及验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然图谱已经建好，最直观的就是用图神经网络（GNN）做节点表征学习。玩家当前触碰的线索节点作为 Target，全图做 Message Passing，算出 Target 与各关键推理终态节点的距离和相似度。这样能捕捉到隐性因果关联，比纯规则精准得多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟确实是个问题，但可以用 GraphSAGE 的采样策略控制邻居阶数，限制计算图规模。实在不行就上 GPU 推理服务，只要显存够，几毫秒就能出向量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用 GNN 做在线推理进度判定，通过 GraphSAGE 采样控制计算图，但导师担心在线并发下的延迟和显存开销。目前这种实时判定场景，有什么成熟的折中方案吗？既保留图结构感知，又能压住延迟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Node2Vec 这种浅层嵌入对复杂因果图的拓扑保真度不够，可能会漏掉高阶因果依赖。如果离线用 GNN 生成 Embedding，在线查表，是不是就能兼顾？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我依然想保留一部分规则判定，比如关键线索的直接命中，不能全靠向量距离，防止出现语义相近但逻辑断链的误判。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输出定义为 `ProgressScore` (0~1 浮点数) 和 `ReachedMilestone` (枚举值)。向量相似度算出 Score，规则命中直接跃迁 Milestone。这两个值作为事件推给态机路由。实现上，我先写个 Python 服务用 PyG 跑离线 GNN 生成 Embedding 导入 DB，在线端用 Rust 写个判定微服务，查 pgvector 拿向量算点积，规则部分用 Rete 算法引擎。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "规则部分就硬编码 If-Else 逻辑，不用 Rete。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心验证点就是：在线判定微服务的 P99 延迟，以及离线 GNN 生成的向量在验证集上的因果保真度召回率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度先试 128 维，阈值根据验证集 ROC 曲线找最佳切点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

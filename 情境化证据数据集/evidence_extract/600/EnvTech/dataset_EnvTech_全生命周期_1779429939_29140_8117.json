@@ -1,0 +1,637 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在臭氧靶向减排调度系统痛点梳理背景下，用户与导师围绕系统痛点、合规约束缺失及潜势验证方法持续沟通（7轮），其中在指令下发合规红线部分与环保合规分析师沟通（1轮），在业务链路拆解部分与业务需求拆解师沟通（1轮），并最终确认合规缺位痛点，计划产出法规逻辑规则表及敏感度对照用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在环保局那边对臭氧管控很头疼，VOCs和NOx协同减排一直做不细，我想做个能算潜势、还能直接给企业发减排指令的系统，把一刀切限产改成精准调度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在更多是看臭氧浓度超标了，就直接拉停或者限产。我想做的是根据潜势算出来谁贡献大，就调谁，这样企业反抗也小。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我确实没细想，我觉得只要算法算得准，潜势高的优先减，指令下发应该没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "环保局下发靶向减排指令，合规上有什么硬性要求？不能只要算出来潜势高就随便限产吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从潜势解析到指令下发，业务上到底要经过哪些环节？我原以为就是算完直接发。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规分析师说要依据应急预案和绩效分级，不能动A级企业；业务拆解师说中间还得有寻优和合规校验，寻优结果还得过规则。我之前只想着算潜势和发指令，中间确实缺了合规这堵墙。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接下来两周我打算把市里最新的臭氧管控方案和重污染应急预案看一遍，重点梳理出绩效分级标准和豁免条件，整理成一张逻辑规则表，这样后面做合规校验模块就有依据了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑几个历史案例，看看超标的趋势对不对得上？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "也就是我假设系统对关键前体物敏感度计算结果与实际监测的响应趋势一致，如果不一致就说明机理参数有偏？我回去设计几个敏感度测试用例，用历史数据跑一下看看误差范围。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在光化学潜势核算合规分析背景下，与导师围绕确认核算边界、法规红线及系统需求落地持续沟通（6轮），其中在核算物种范围与调度指令下发限制部分与环保合规分析师沟通（2轮），并最终确认四条合规硬约束拟拆入规则表。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了《环境空气质量标准》，里面只规定了臭氧的浓度限值，没直接说潜势怎么算。我本来想直接用MIR（最大增量反应活性）系数把VOCs算一遍，但怕跟环保局考核的口径对不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想问下，我们做臭氧生成潜势核算，环保执法那边对核算物种范围和计算口径有没有硬性规定？我怕自己选的VOCs物种清单不合规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "也就是说，我得按地方的优先控制清单来筛物种，不能自己按反应活性一刀切。那靶向减排调度指令下发这块呢？我们系统算出潜势高，要给企业发限产指令，这块有没有限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指令得做合规校验，取严执行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想在系统里加三个模块：一个是“物种合规白名单校验”，算之前先查地方清单；一个是“排放限值阈值表”，用来卡指令下发的上限；还有一个是“预案冲突检测”，下发前跟当地应急预案比一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我是不是得在潜势核算结果后面挂一个溯源链，把每个增量是由哪个企业、哪个排放口、哪种物种贡献的都记下来？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就在需求里把“潜势溯源留痕与台账一致性校验”作为最高优先级的合规约束加上，这个不做，后面的调度指令就没法合法下发。"
+              }
+            ]
+          },
+          {
+            "microScene": "在靶向减排业务链路梳理背景下，用户与导师围绕调度指令下发、闭环机制与执行可达性持续沟通（6轮），其中在调度指令实际链路与闭环机制部分与业务需求拆解师沟通（2轮），并最终形成双向闭环与超时升级报警需求，及执行可达性校验与人工干预兜底策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实际操作里这链路是咋走的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以中间还得有个企业确认和回传的动作。那如果企业就是不回传呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能只做单向下发。必须加上：第一，指令下发后必须有执行状态回传；第二，如果超时不回传或者企业拒绝执行，得有升级报警机制。不然这调度系统就是个摆设。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我之前真没想过。就，指令生成的时候得考虑企业当前的生产状态？但这数据我们拿得到吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路必须是双向闭环，强制要求状态回传和超时升级；另外针对执行可达性，目前缺少企业生产状态数据源，需求里要加一条“调度指令生成前需校验执行可达性，若无实时工况数据源则提供人工干预兜底”。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在管控商业模式与价值评估背景下，与导师围绕系统变现模式、算力成本覆盖、调度指令买单逻辑及合规风险持续沟通（6轮），其中在算力成本与变现模式部分与商业架构师沟通（1轮），在指令下发合规边界与责任归属部分与环保合规分析师沟通（1轮），并最终形成政府购买数据服务为主、企业避险为辅的商业模式及指令降级建议、强制双签的合规策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做成项目交付呗？环保局出钱，我们开发完验收，然后每年收点维保费。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算力确实费钱。那难道按调用次数收？但环保局肯定不愿意每次算都掏钱啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力成本高，维保兜不住的话，这系统怎么变现有戏？环保局那边怎么肯持续掏钱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们给企业下调度指令，企业照做结果还是超标了，或者指令导致停产损失，这锅谁背？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是把软件包装成订阅服务，环保局买报告，企业买避险策略。然后指令绝对不能强制，得叫建议，真要停产得有人工双签。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "企业肯定不想接指令。但如果不接，万一超标被罚钱更多。所以企业买单其实是买个保险。调度指令下发应该包含在避险服务里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选政府购买数据服务为主，企业增值服务为辅。指令全部改成“调度建议”，强制操作必须走环保局双签。这样我们只对推演准确性负责，不对停产结果负责。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在系统建设战略目标规划背景下与导师围绕建设分期节奏、业务状态与验证标准持续沟通（5轮），其中在分期规划与验证口径部分与业务需求拆解师沟通（1轮），识别自身验收基线短板并制定规范查阅计划，最终形成三阶段战略目标规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先把潜势算出来，再接调度下发呗。一步到位搞完不就完了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我怎么知道算得准不准？跑个测试集看看呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这臭氧系统建设目标怎么分期？每期怎么算达标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抽数据就随机抽呗。15%这线，我不懂环保验收标准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我得去查查市环保局对臭氧潜势推演模型的验收规范，看看15%到底算啥档次。顺便看看典型污染过程的筛选标准，不能瞎抽。我把这俩加到我的学习清单里，回头把规范里的硬指标抠出来，重新定义一期目标的验收门槛。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在总体架构设计背景下，用户与导师围绕潜势推演流式架构选型、对照假设验证及异步推理时序一致性持续沟通（6轮），其中在Flink反压机制部分与气象数据架构师沟通（1轮），在PDE求解耗时部分与算法路线规划师沟通（1轮），并最终形成“实时流接入+异步推理集群”暂定方向及补学验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "纯流式肯定快，但怕反压。微批处理比如Spark Structured Streaming，攒一批再算，可能不会卡死，但延迟高。我的假设是：纯流式假设能压在5秒延迟内；微批假设延迟在30秒以上。如果纯流式在典型污染过程下延迟超过5秒，就推翻纯流式方案。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@气象数据架构师 排放清单数据突增时，Flink反压具体会怎么扩散？@算法路线规划师 把PDE求解塞进流算子，计算耗时大概多少？会不会直接把流卡断？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "专家说纯流式逐条算必死。微批有延迟风险。异步线程池剥离计算，是不是说我还是用Flink接数据，但算子不直接算，而是把数据丢给外面的推理集群？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实缺这块。我得去查查大气化学模型在流式框架下的异步部署案例，还有算子序列化的接口规范。我这两天把这个补上，看看怎么把PDE求解包成可调用的服务。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构方向：实时流接入清洗，核心推演走异步推理集群。我这两天先补学算子序列化和AsyncIO，验证不通再切微批。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多源异构数据流规划背景下，与导师围绕VOCs、NOx和气象数据的时序对齐、特征拼装及降级策略持续沟通（5轮），其中在多源频差流时序对齐与迟到数据处理部分与气象数据架构师沟通（1轮），并最终形成基于事件时间窗口对齐、侧输出流修正及历史快照降级打标的数据流规划方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据接入我打算全扔Kafka，清洗走Flink。时序对齐就用水印呗，反正得按时间戳排。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就想着在Flink里做窗口，把快的和慢的都拉到同一个窗口里。晚到的数据如果超时了，就丢弃或者报警？但报警太多业务那边肯定要骂人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在VOCs秒级、NOx小时级、气象分钟级，全要进Flink。这种频差极大的多源流怎么拼？晚到的数据丢了又不行，咋整？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征矩阵啥的，是不是就是把同一时间的拼成一个大JSON扔给后面？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主流程就是Kafka接入，Flink里按事件时间开窗，以NOx更新频率为准，VOCs和气象存状态，到窗口触发拼成特征流送出去。迟到数据走侧输出流单独处理。降级的话，如果等太久，就先用上一周期的NOx清单顶一下，保证推理引擎不断流。"
+              }
+            ]
+          },
+          {
+            "microScene": "在臭氧潜势推演与靶向调度算法选型背景下，用户与导师围绕潜势计算可解释性、调度寻优约束及混合路线验证持续沟通（7轮），其中在算法替代方案部分与算法路线规划师沟通（1轮），并最终确定潜势走机理加代理模型加速、调度走启发式加MILP混合路线及历史案例回放验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "潜势计算我打算直接套个DNN，拟合速度肯定快。调度那边出指令，上强化学习呗，现成框架改改就能用，看着也高级。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，没标签确实训不动。那咋整？总不能手写规则吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "强化学习搞不了的话，调度寻优一般用什么？潜势计算黑盒不行，又得快，怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，潜势得走机理，用代理模型加速。调度这边就是NSGA-II或者MILP二选一。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MILP太贵了，Gurobi那种授权费我们预算吃不消。NSGA-II开源不要钱，多跑几次挑个好解不行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不粗筛用NSGA-II，把搜索空间缩窄，然后在局部空间上用开源求解器跑个小规模MILP精调？这样是不是既不用买商业授权，又能保底？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿历史数据回放呗。把去年那几次典型重污染过程的特征流切出来，灌进这混合引擎里跑，看给出的调度指令和实际削峰效果。跟纯NSGA-II的跑分对比一下，减排量差多少，耗时多少，一目了然。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在重污染高并发推演高可用保障背景下与导师围绕反压降级策略与验证实验设计持续沟通（6轮），其中在反压与降级机制落地部分与架构容灾评估师沟通（2轮），在降级精度折衷合规性部分与环保合规分析师沟通（1轮），并形成采样反压与代理模型降级双策略及双变量压测实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加节点呗，并发高就水平扩展。实在不行就限流，把超出阈值的请求扔掉，保住核心算力。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "队列削峰填谷我懂，但推演有实时性要求，积压太久算出来也没用了。降级的话，我不太懂怎么降，算不出来不就是算不出来吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前几天翻了翻Flink反压机制的文档，就是下游处理不过来，把压力传给上游，让上游发慢点。我想着咱们推演集群是不是也能搞个反压，推演引擎算不过来时，让数据管道暂停往里灌数据？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演集群算不过来的时候，我想用类似Flink反压的机制让上游数据管道慢点发，这在我们这个光化学推演场景里可行吗？另外如果算力实在顶不住，怎么从CBM5降级到代理模型？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采样反压？就是把边缘站点的数据扔了只保核心的？这样核心站点的时序就不会断。降级就是新任务走代理模型老任务还是报错吗？不对，老任务排队等CBM5。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是先出个近似结果保命，回头再精算覆盖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能硬反压，会搞乱时序。得用采样反压，非核心站点数据降频。降级就是新任务切到代理模型，先出结果，空闲时再用CBM5回算覆盖。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证的话，写个脚本狂发请求压测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是并发量呗。对照组就是不开降级和反压，直接硬抗。实验组开启采样反压和降级。看核心站点的推演耗时是不是还在3秒内，降级切换时间是不是小于1秒。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，并发1x、3x、5x，采样率100%、60%、20%。我记下这几个档位。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用代理模型替代CBM5出预警结果，等算力空闲再用CBM5回算覆盖，这种“最终一致性精度”的做法，在臭氧预警报告里合规吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要打标记，24小时内补精算报告。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。采样反压保核心时序，降级走代理加打标回补。实验做并发和采样率双变量压测。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光化学机制模块核心代码开发背景下，用户与导师围绕偏微分方程求解、速率常数修正实现与求解器验证方案持续沟通（7轮），其中在偏微分方程离散化与速率常数修正实现部分与光化学开发工程师沟通（1轮），并最终确定算子分裂法与Arrhenius动态修正的核心实现方案及箱模型对照测试验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用C++写底层的求解器，Python做外层调用。边界条件就直接拿气象数据接口传进来的风场、温度场套进去算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "速率常数修正这块我确实有点虚，公式一大堆，怕写错。能不能先硬编码几个典型工况的值，先把流程跑通？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "光化学机制核心计算这块，偏微分方程离散化和速率常数温度修正，代码实现上怎么搞最稳？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用算子分裂法，输送和化学分开解。速率常数用Arrhenius公式动态算，别硬编码。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "推导我肯定写不出来，就知道是个指数关系。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把Arrhenius公式和算子分裂的推导过程看一遍，记在开发日志里，保证参数别传错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用个简单工况，拿我的代码算一遍，再拿CMAQ的结果对比一下，误差在10%以内就算过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就用箱模型对照，卡5%误差，记录误差来源。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在清单接入与清洗联调背景下，与导师围绕多源时序对齐、数据清洗脱敏及联调验收指标持续沟通（5轮），其中在时序对齐与脱敏策略部分与数据管道工程师沟通（1轮），并最终确定Watermark对齐、产量脱敏及24小时无倾斜与插值率1%以内的验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个Flink作业从Kafka拉数据，过滤掉空值和异常大值就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间对齐就，就按整点截断？早到的等晚到的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据管道工程师 排放清单数据时序对齐和清洗怎么搞？企业产量数据是不是要脱敏？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Watermark容忍5分钟乱序，缺了就线性插值补。企业产量全脱敏，只给排放强度，明细不要了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一晚上不报错就行？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在调度引擎寻优求解性能优化背景下与导师围绕加速方案选型、Cython重构方式及验证标准持续沟通（7轮），其中在Numba与C++差异及Cython可行性部分与调度引擎优化师沟通（4轮），并确定核心状态转移矩阵Cython重构与除零风险修复方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得还行，加个Numba注解应该能压到1秒内。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度引擎现在用Python写的，我想加Numba加速，够不够用？不想重写C++。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C++写起来太慢了，而且我不熟，容易出指针Bug。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Cython也算编译型吧？能绕过GIL吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得Cython我能搞，C++我怕写崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把状态转移那块抽成纯函数，入参全改成numpy数组，应该可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个单测跑同样的case，对比结果。性能的话，打点看耗时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查下那块代码，加个极小值偏置。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在推演精度验证与边界测试背景下，与导师围绕极端气象构造、误差适用边界、内存监控及误差放大处理持续沟通（7轮），其中在极端气象场构造部分与测试验证工程师沟通（1轮），并形成包含极端气象覆盖、VOCs/NOx过渡区验证、Valgrind内存监控及置信度降级标记的验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单测全绿了。边界测试我写了几个高浓度VOCs的用例，跑出来误差大概8%"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我数据里好像没这种极端的，平时测试都是正常天气。这种情况下模型会怎样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边界压测的极端气象场怎么构造？我平时只用真实历史数据跑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要自己造数据。静风逆温和极端湿热，记下了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差应该是观测数据本身的噪声吧？适用边界我确实没细想，感觉VOCs浓度只要不超量程就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上次查除零风险时，我学了用Valgrind跑内存泄漏检测，当时挺好使的。这种极端输入的压测，确实容易触发没预料的内存暴增，我把Valgrind集成到边界测试脚本里，边跑边盯内存，应该能抓出隐患。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就跑几组VOCs/NOx在过渡区的极端用例，如果误差超过15%，我就把置信区间标出来，提示用户这时候结果只能参考，不能直接用来下发调度指令。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在调度系统生产部署与基线设定背景下，与导师围绕资源配额依据与监控基线设定持续沟通（6轮），其中在寻优耗时基线与长尾延迟计算部分与监控指标分析师沟通（2轮），在容器资源配额与弹性伸缩配置部分与运维部署专员沟通（1轮），并最终确定部署参数与学习PromQL的SMART目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把容器资源限制调大点，之前测试环境跑调度寻优老是超时卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线不就是设个阈值嘛，超了就报警。我想把CPU limit加到8核，内存16G。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优耗时的基线数据该怎么定？我光看平均耗时好像不行，误差大的时候耗时也长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99和置信区间？这我不会算啊。我就知道在Grafana上拉个平均值。能不能直接给我个数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只会拉平均值，这算基线我搞不定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CPU和内存limit怎么配比较稳？寻优计算有时候会卡一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就8核burst，内存16G，加HPA。这我能在yaml里改。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会用PromQL算分位数，平时都是复制粘贴现成的面板。我得学一下这个语法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就这周五前，学会用PromQL写histogram_quantile，把调度引擎P95耗时和95%置信区间跑出来，存成一个Grafana变量面板，截图发你验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估监控部署背景下，用户与导师围绕调度成功率采集口径、告警阈值与临时策略持续沟通（4轮），其中在成功率全链路口径定义与工况匹配部分与监控指标分析师沟通（2轮），并最终形成三级口径定义、异步关联逻辑及临时告警配置策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率不就是用下发没报错的数量除以总下发数吗？我直接count一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度成功率的口径定义。我现在只算下发没报错的，好像太粗糙了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "下发和回执我懂怎么写，但第三级执行生效，工况数据怎么匹配？这好像挺麻烦的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流式关联，时间窗口5分钟。我大概懂了，就是不在主链路卡着，在Grafana或者ClickHouse那边做join计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发成功率低于99%告警，回执低于95%告警，执行低于90%告警？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "宽进严出，先用临时阈值。可临时阈值我该定多少？总不能全填0吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径分三级：下发（count请求成功）、回执（count DCS ack）、执行（异步关联工况变化，5分钟窗口）。临时告警：下发和回执挂宽松值，执行只记录不告警。"
+              }
+            ]
+          },
+          {
+            "microScene": "在潜势预测偏差异常背景下，用户与导师围绕偏差溯源、减排指令偏严风险及拦截策略持续沟通（7轮），其中在VOCs跳变原因排查部分与异常溯源排查员沟通（1轮），在指令偏严合规风险确认部分与环保合规分析师沟通（1轮），并最终形成下发侧偏差校验熔断策略及修改调度yaml方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "偏差率快到25%了。我估摸着是气象数据更新慢了，要不就是模型没刷权重？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "VOCs清单那块数据有跳变，几个站点的值突然翻倍了。不知道是真排放变了还是数据源出毛病。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "园区A那几个站点VOCs清单数据下午2点突然翻倍了，是不是数据源抽风？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来是插值搞的。那得让数据管道改插值逻辑？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指令严点不正好减排吗？顶多企业多关点阀门。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "系统现在潜势预测偏高，会导致下发的减排指令偏严，企业多限产点，这种行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说这算一刀切，要出事。得在发指令前加拦截。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据层平滑我得找数据管道排期，自己也不会调插值参数。下发侧加校验我能搞，在yaml里加个判断，偏差超20%就挂起不发了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在环保局在线使用熔断逻辑反馈不佳背景下，用户与导师围绕熔断阈值调整与分级熔断逻辑设计持续沟通（8轮），其中在现场痛点与复核积压部分与用户运营反馈师沟通（1轮），在合规底线与变通策略部分与环保合规分析师沟通（1轮），并形成基于潜势与偏差的分级熔断逻辑及修改yaml与PromQL分桶统计的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反馈炸了。他们嫌20%阈值太严，稍微偏点就挂起转人工，复核人员根本看不过来。还有企业打电话投诉，说刚接到限产指令还没十分钟又撤回了，产线来回启停快搞崩溃了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接把yaml里的20改成30或者40？少触发点熔断，他们人工复核量不就下来了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "环保局那边复核积压，企业也闹，现场到底啥情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我把熔断阈值放宽到30%，合规上有问题吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说高潜势强制下发，低潜势才熔断。我懂了，就是按潜势值分个级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "潜势值大于160的，不走熔断直接发；小于160的，偏差超20%挂起。yaml里我就加个if判断潜势字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这过度限产总比违法好，企业多停一会就停一会吧，总比环保局被问责强。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "潜势>160 且 偏差<30%，强制下发；潜势>160 且 偏差>30%，挂起转人工；潜势<160 且 偏差>20%，挂起转人工；其他正常下发？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改yaml里的条件分支，PromQL也加两个label分桶。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在系统运行一周规划减排策略模型迭代的背景下，与导师围绕启发式算法适用边界、MIP求解器引入及验证方法持续沟通（7轮），其中在极端气象寻优失效条件部分与调度引擎优化师沟通（1轮），并最终形成识别静稳天气硬约束、气象分层重构权重过渡及引入MIP压测耗时的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看大盘上低潜势的挂起率降了点，是不是再微调下权重就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "静稳天气确实偏差大，但具体边界我没细看。偏差的话，好像环保局那边也没投诉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在这套寻优在极端天气下啥时候会废？下一版怎么加气象？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "耗时我确实没想。复现，我就把那几天的日志拉出来重放一遍？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我就会改yaml参数，MIP这块我完全不懂。我记在复盘日志里了，周末得去把MIP的基础用法和气象约束怎么加看一遍，不然下周没法改代码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先把现有的规则按气象分个类，高湿低风的单独切一套权重出来当过渡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

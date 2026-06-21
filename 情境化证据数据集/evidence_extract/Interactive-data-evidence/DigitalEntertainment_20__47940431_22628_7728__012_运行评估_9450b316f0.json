@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在星栈云原生电竞观赛编排系统运行评估的灰度发布与回滚验证背景下，用户与导师围绕灰度可控性、版本隔离验收、监控门禁与两级回滚演练持续沟通（12轮），其中在灰度分层策略、disable_version止血与审计/权限及回滚剧本细化上与SRE运维工程师沟通（4轮），并最终形成可执行的验收清单与固定副本数需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按用户吧，先给一小撮人开，没问题再放大。然后出问题就回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个开关，填个版本号，关掉它。然后就回到旧的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "成功条件就是：没报错、延迟不高、用户不投诉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "错误率就看 5xx 吧，阈值就别太高，可能 1%？时延看平均耗时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度和回滚这块你们一般怎么搞？我就想知道怎么放 1% 然后出事能立刻回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就先 internal 然后 1% 这样走。disable_version 我填上版本号就行了对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计也要吗？我以为就是线上开关。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了，那我把权限收紧一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有回滚按钮就是平台那边的回滚对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE那边说灰度走 internal→1%→5%→20% 这样，每档看 15 分钟。出事先用 disable_version 止血，再不行就平台回滚镜像。还要加审计记录，谁改了版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把新版本关掉，看请求是不是都回到旧版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "靠用户分组吧，把那批用户都算灰度用户。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，我加 version 字段，不打内容。trace_id 也有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不会，我就加 version 这个 label。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）internal 到 1% 灰度。2）看 5xx 和 P95。3）出问题 disable_version。4）不行就回滚镜像。5）有审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能，我就跟平台说灰度期间别自动扩缩容，固定副本数，别乱变。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就编排服务固定 6 个副本，灰度当天固定一整天，命名空间就 prod。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

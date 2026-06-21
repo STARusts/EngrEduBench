@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知网关与协议适配代码开发背景下，用户与导师围绕解码逻辑组织、异常报文处理与验证、报文知识短板补充持续沟通（7轮），其中在网关解码架构设计与异常验证口径部分与感知数据架构师沟通（1轮），并最终形成基于Pipeline路由与混沌测试的网关开发落地步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备按设备型号建几个解码类，收到消息判断类型再转JSON。有没有现成的解码器基类能直接继承？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证我就写个main方法测一下正常报文能不能解析。乱码我加个try-catch跳过，半包是什么情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关解码架构和异常验证口径。我本来想按设备类型写类，用try-catch防错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Pipeline加协议工厂我懂了，就是根据魔数分发。混沌测试要真实pcap包和畸形报文，我手头没有，协议文档也只有一部分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Pipeline我用Netty写自定义解码器。混沌测试我只会写正常报文，畸形报文怎么构造我没底。报文格式我不熟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺这块知识。我找仓库要两台核心设备的通信手册，今晚看完。另外我去学一下Wireshark抓包过滤规则，还有Netty的ByteBuf拆包API，写个抓取脚本录几段真实交互数据当测试基线。学完我把脚本和测试用例补进代码库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，搭Netty Server和Pipeline，用协议工厂根据魔数路由；第二步，写基础解码器处理粘包半包；第三步，学Wireshark和协议手册，构造畸形报文和真实基线数据；第四步，跑混沌测试验证解码器容错。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

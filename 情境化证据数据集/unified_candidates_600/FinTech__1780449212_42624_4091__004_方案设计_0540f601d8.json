@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在融券回转套利系统异构行情流式架构选型背景下，与导师围绕Flink+Kafka可行性、时序对齐痛点及架构选型持续沟通（8轮），其中在异构行情接入痛点与对照假设部分与流式架构师沟通（1轮），在反压传导与网关截断机制部分与数据工程Owner沟通（1轮），并最终形成自研轻量CEP网关、P99<5ms及网关主动截断的架构选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接上Flink和Kafka，网上搞金融流式的好像都这么搭，应该挺方便的吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink不就是搞流式的吗？它自带窗口和水印，时序对齐用窗口不就完事了？反压它也有啊。我想不到有啥它搞不定的，顶多加几个并行度呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink在这种场景下有啥坑啊？有没有更省事一点的替代方案，我不想从零写网关。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "方案B听着挺麻烦的，还得自己写网关。方案A如果调优能不能把P99压下去？我看网上有些开源组件说加了堆外内存能提速，加那个算不算调优？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对UDP组播和CEP推断确实没啥概念，平时都是搞TCP的。那我这两天去看看Netty接UDP的例子，还有Flink反压的源码分析文章，看能不能搞懂为啥延迟压不下去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果行情突然爆量，反压传到图计算那边会咋样？有没有啥现成的反压插件能自动限流降级的？我怕把图计算节点搞挂了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "也就是网关得自己判断丢数据，不能全靠后面反压顶回来。那这网关感觉真没法用现成组件拼了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就按方案B走，自研轻量CEP网关。依据就是P99延迟那个反驳标准，Flink+Kafka中转序列化开销大，肯定压不到5毫秒以内。网关还得自己做截断防撑爆。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

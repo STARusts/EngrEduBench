@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在短剧平台将“剧透风险检测”落地为端侧可执行策略决策的工程开发背景下，用户与导师围绕风险服务字段、策略动作映射、降级回退、版本与阈值配置及验证持续沟通（10轮），其中在最小接口协议/幂等回退/审计字段与用户信息最小化部分与后端工程师沟通（4轮），在强干预动作边界、可解释申诉与审计权限部分与合规与风控负责人沟通（3轮），并收敛为固定动作集合+配置化阈值+审计与回退的最小实现方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是搞一个“统一策略中台”，把所有策略都做成规则DSL+在线发布，然后风险服务只吐风险分，策略引擎负责变成端侧动作。这样以后加新策略不用改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险服务我想输出每个分段的spoiler概率，外加一个全局风险；策略引擎拿到概率后按阈值映射动作，比如遮罩、提示、禁评论、延迟弹幕。降级的话就用整集一个分段，阈值更保守一点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 风险服务和策略引擎这块，最小可用你建议怎么设计接口字段？我担心后面要扩展策略，就想做得通用点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_codes 要怎么定？我怕算法那边输出一堆我对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用户信息用 user_hash 够吗？我想为了个性化把用户历史看剧偏好也塞进去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这边还想做一个“策略模拟器”，用来回放某个trace看策略怎么出。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按最小闭环来：风险服务不光给spoiler_score，还给 risk_level 0-3、confidence、reason_codes、model_version；策略引擎输出 actions[]，每个action带scope和params。seg_version 不匹配就 fallback 到整集episode级动作。用户侧只放 is_member、a11y_mode、teen_mode 这类，用户历史偏好先不做。策略模拟器我想先做成内部重算接口，不搞独立产品。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我拟一版：  \n- L0：不做事  \n- L1：轻提示，比如出现“可能含关键信息”的toast，允许一键关闭  \n- L2：默认遮罩关键段落摘要/弹幕，提示后可解锁查看  \n- L3：强遮罩+默认关闭弹幕评论，并且seek到未来片段要二次确认"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 策略引擎会下发遮罩/提示，甚至可能限制弹幕评论或seek。开发阶段最小合规要做到哪些？审计留痕字段、告知同意、申诉入口这种怎么卡边界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不做seek限制，那L3怎么办？只提高遮罩强度？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我收敛成三类动作：  \n1）`PROMPT`：轻提示，scope=episode或segment，params里只有文案key和可关闭标记。触发：L1。  \n2）`MASK`：遮罩，scope=segment，params里有mask_strength(1-3) 和解锁方式（点击显示/长按显示）。触发：L2/L3，L3用strength=3且必须点击解锁。  \n3）`SOCIAL_FOLD`：默认折叠弹幕/评论入口但不禁用，scope=episode，params给fold=true和原因key。触发：episode_risk_level>=2 或者 L3段占比超阈值。  \n版本：输入带 seg_version、model_version、policy_version；输出回带 policy_version 和 fallback_mode。seg缺失/版本不符就只出 episode级 PROMPT + SOCIAL_FOLD，不出MASK。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先设个临时值，比如 L3段数/总段数 > 0.3 就折叠社交。后面再用离线评测按剧ID分布看，密集反转的剧可能太高，可能要按剧型调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小验证我想做个回放集：抽10部剧，每部抽2集，跑风险服务输出L3占比，统计折叠触发率；再按剧ID出分布，看是否集中在悬疑反转类。目标是折叠触发率别超过比如20%，否则说明阈值太低。这个不算A/B，就是离线 sanity check。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先不做DSL。我怕做了之后policy_version和回滚机制反而更复杂。工程上先用“配置+固定动作集合”，配置项限定：各level阈值、mask_strength映射、社交折叠阈值、按drama_id override。等到动作类型稳定再考虑DSL。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我先照这版做实现和单测。唯一担心是 reason_codes 枚举太少，会不会让产品后面想要不同文案时不够用。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

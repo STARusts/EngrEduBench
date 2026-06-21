@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计控指低延迟与高可用评估背景下，用户与导师围绕兜底方案、延迟预算拆解、容灾策略及压测方案持续沟通（7轮），其中在TSN与Raft可行性评估部分与高可用架构师沟通（2轮），并最终形成全链路延迟预算拆解、轻量级本地暂存容灾策略及压测对照组方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算做双机热备，主控挂了备机顶上。延迟的话，尽量用好的硬件加速。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了篇讲TSN时间敏感网络的资料，说能做到微秒级调度。容灾我查了Raft算法，自动选举主节点。我想把这两个直接加进方案里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用TSN解决延迟，用Raft做容灾选举，你看我们这项目能直接上吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那延迟和容灾具体该怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说TSN和Raft都不行，太贵或者太慢。他建议用轻量级状态快照和本地暂存指令。全链路延迟预算和可用性指标我得定一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "50ms的话，反演计算15ms，路由决策5ms，下行传输10ms，阀门动作20ms。压测方案，我设计两组：A组正常网络，B组注入20%丢包模拟恶劣工况。每组跑1万次指令下发，看B组的成功率是否还在4个9以上，以及P99延迟是否超50ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我不太确定能撑多久，得看现场暂存空间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "延迟预算：反演15ms+路由5ms+传输10ms+执行20ms=50ms。容灾：放弃Raft，改用边缘本地暂存指令加心跳探测，暂存覆盖3个水锤波周期。压测：设正常网络与20%丢包对照组，各1万次，验证P99延迟与4个9可用性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,1262 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在学校实训室设备预约管控系统的需求调研背景下，用户与导师围绕真实痛点、典型场景链路、MVP范围与待验证问题持续沟通（11轮），其中在MVP场景优先级与规则分层部分与产品经理沟通（3轮），在数据最小化、权限分离与审计留痕边界部分与合规与风控负责人沟通（2轮），并收束出场景/角色/流程/痛点与调研问题清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想做个“实训设备数字孪生预约管控系统”，就是给学校实训室的设备做预约、冲突自动避开，再加个设备状态可视化。我看网上很多现成平台都有类似的，能不能直接按那种思路走？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是撞车吧。比如一台数控机床，同一节课两位老师都说自己约到了，最后就吵起来。还有设备坏了也没人同步，排进去才发现不能用。管理员就靠微信群和Excel撑着。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预约对象我没想清楚，感觉就是设备吧。权限可能老师都能约？管理员最后确认。冲突类型就是时间重叠。状态更新……可能管理员填一下，或者设备自己上报？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跟过智能制造实训基地，偏机加工那块。还有电工电子实训室我也去过一次，但细节不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排课大概教务那边出课程表，老师拿着课程表去找管理员约设备。管理员看Excel有没有空，空就填上。到上课当天学生来刷卡进门？然后用设备。用完就走，坏没坏不一定说。管理员有时巡检才知道。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 我这项目想做预约+数字孪生+管控。你觉得在学校实训室里，最先该抓哪个场景？MVP别太大，优先顺序怎么排？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那冲突检测就只看时间重叠吗？我担心规则太多就做不动。还有排课是教务系统的，我要不要对接？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那“数字孪生”这词是不是先别提太多？怕被认为噱头。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解是：先做课程实训那种批量预约，顺带支持一点零散预约但别太复杂。孪生先不做3D，就做设备状态：可用/占用/故障/保养。角色主要是老师、管理员，可能还有教务。必须解决的：一是同一时间别撞车；二是坏了/保养时别让人约进去；三是能查到谁约的、谁实际用了，方便扯皮少点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 这个系统里要做预约、签到/上机、违规记录这些。哪些数据算敏感、哪些一定要留痕？有没有容易踩雷的点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "黑名单也要告知啊？我以为就是系统里自动扣分。那申诉是不是也得做？会不会把范围搞大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须进的我觉得：第一是关键操作留痕，不然管理员手动改状态、插单这种更容易吵。第二是权限别给太大，老师只看自己相关的，免得被问“你凭啥看我记录”。第三是数据别收太多，像人脸定位先不碰，先用学校统一身份就够了。黑名单我有点犹豫，但可以先做“违规次数提示+限制规则说明”，别搞得太处罚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "待验证问题我想到几个：  \n1）课程计划能不能从教务导出，格式是不是稳定，还是每学期都变。  \n2）设备是按“台”约还是按“工位/套装”约，机加工那边到底怎么分。  \n3）现场怎么确认“人真的来了在用”，是刷卡、扫码还是管理员点名，现在他们最常用哪个。  \n4）设备故障/保养状态是谁来改，改了之后要不要审批。  \n5）违规规则学校有没有现成制度，还是各实训室各搞一套。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还有“临时加课/补课”特别多，老师临时找设备，管理员经常被催。系统里可能得有个“临时申请”入口，不然他们会继续走微信。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求与战略阶段梳理设备资产痛点并界定资产侧MVP边界背景下，用户与导师围绕现场资产混乱根因、最小必做清单与延后项持续沟通（9轮），其中在“资产最小集不拖预约”议题与产品经理沟通（2轮），在“合规红线与留痕最小化”议题与合规与风控负责人沟通（2轮），并产出资产痛点6条及资产侧MVP边界一句话与三条不做。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一是设备找不到，台账跟现实对不上。第二是坏了没人认，最后算到管理员头上。第三是同一台被好几门课都说自己要用，然后就冲突了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找不到就是借出去没还，或者换了位置。后果是上课等着。土办法就群里喊、打电话问。  \n坏了没人认，就是学生用完不说，老师也怕麻烦。后果是下一班来发现坏了，直接停课。土办法就是贴纸条、口头交接。  \n冲突就是排课表是教务的，设备表是管理员的，两边不一致。土办法就是谁先来谁用，或者临时换项目。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盘点吧。每学期盘一次，挺累的。就拿表格一个个对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "编号、位置、能不能用。还有配件，比如探头、电源线，经常丢。表格里写了有，柜子里没有。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉预约先做比较快…资产那套太大了。我们先把预约跑起来，再补台账？不然范围炸了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 资产这块你觉得最低做到啥程度，才不会拖预约上线？别搞太复杂那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那责任认定呢？坏了谁背锅这种，如果不做会不会一直扯皮。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 资产这块你认为红线是啥？不做会直接踩雷的那种，给我说最少几条。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所以你是说不需要把资产做很全，但权限、留痕、敏感信息别乱收要先定死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必做我理解是：  \n1）设备有唯一编号，不然预约选不准。  \n2）状态别太多，至少可用/占用/维修。  \n3）位置得能找到，不然还是满屋找。  \n4）权限分一下，学生不能随便约所有。  \n5）留痕，谁约的、谁改的、临时预约原因这些要存着。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "风险设备要标一下级别，可能是必做。  \n盘点…我觉得可以延后？但位置、配件不准会导致盘点一直错。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就每次领用/归还都扫一下码？至少知道被谁拿走了。配件也能贴码就贴码，不贴就先当成一套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）台账和现实不一致：设备被借走/挪位置没人记，结果上课前找设备要靠微信群和电话问。  \n2）冲突占用：教务排课和设备可用时间脱节，临时加课一来就“谁先抢到谁用”，最后导致换项目或停课。  \n3）故障责任扯皮：设备坏了发现得晚，没人愿意承认是自己班弄的，只能贴纸条或口头交接，维修也被拖。  \n4）配件丢失：探头、电源线这种小件和主机分离，表里写“齐”，柜子里缺，影响开课。  \n5）权限边界模糊：学生/老师都能随意接触设备信息，管理员不好管控，高风险设备更危险。  \n6）记录不可追溯：预约变更、临时借用走微信，事后说不清谁批准、谁使用、用了多久。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边界一句话：资产侧只做到“预约能选对设备、能找得到、能控权限、能追溯”。  \n不做：不做折旧采购报废全生命周期；不做复杂的责任处罚流程；不碰人脸定位这类敏感采集。"
+              }
+            ]
+          },
+          {
+            "microScene": "在实训设备数字孪生预约管控系统需求阶段的安全合规边界定义背景下，用户与导师围绕数据采集最小化、权限边界、影像留证取舍与可验收约束持续沟通（6轮），其中在数据分类分级、留存分层、审计留痕与授权告知规则上与合规与风控负责人沟通（4轮），并对齐形成六条安全合规边界条款用于后续需求与验收。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我第一反应是把权限搞严点就行？比如用现成的RBAC模板，管理员、教师、学生分开。数据就都进库，后面要用再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设备台账信息、设备状态数据、预约记录、使用日志。还有用户信息吧，学生姓名工号这种。再有就是摄像头？如果做现场留证可能有照片。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 我们这个系统会有预约、设备状态、使用日志，可能还有扫码和拍照留证。哪些数据算敏感？一般要怎么定“能采什么、存多久、谁能查”？有没有省事一点的通用做法？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "影像这块我之前没想那么细。我以为拍照就拍了存着，后面查得方便。7天会不会太短？真出事可能找不到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那日志是不是也可以分层？不然数据越堆越多，库也扛不住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限上我想偷懒用现成RBAC，范围和目的我怕做复杂了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 合规那边给了一套六列法。大概是：个人信息要最小化，影像默认不做持续采集，拍照留证要短留存；日志分层留存，审计日志要只追加；权限不只角色还要加范围和目的，审计查看要独立控制。影像留存可以“普通14天，异常审批延长”。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第一是影像我以为能一直开着录。现在不行。第二是数据全量都存着备用，现在要分层留存。第三是权限只靠角色就够，现在还得限制到院系/实训室范围，导出也要管。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先不做持续视频。拍照留证…我有点纠结，怕现场管理说没证据。能不能先做“可选开关”，默认关？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如领用归还必须拍一张？还有设备异常停机、超时未归还这种触发拍照。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能。那就得先给设备打个“需要留证”的标签。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第4条里“高风险设备组”这点我之前没想过，但听起来能控住范围。第5条留存年限我不敢拍板，得让学校定。"
+              }
+            ]
+          },
+          {
+            "microScene": "在高校数字教育平台订阅计费模式设计且需满足报表默认聚合与不外发个人明细的合规背景下，用户与导师围绕计费口径、学院分摊、明细权限与成本兜底持续沟通（8轮），其中在计费单位与分摊口径上与产品经理沟通（2轮）、在明细查看/导出与审计证据上与合规与风控负责人沟通（1轮）、在机时等指标定义与分摊规则上与业务分析师沟通（2轮），并形成混合计费与权限边界的对外表述规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我第一反应是按账号数，很多SaaS都这么收。然后系统里顺便出个“谁用了多少小时”的账单，就能对得上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "计费单位…按设备数？按实训室数？再就是按预约量、按使用时长。账单可信的话，就给他们一个总时长、总预约数，再按单价算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 学校这类系统订阅计费，一般按啥单位收？还有学院之间分摊怎么搞，能不出个人明细吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分摊按学院聚合就行，不用到人；然后口径有设备数、席位、用量、混合。混合听起来比较像能卖出去的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是就给管理员都能看？不然他们不好处理纠纷。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 订阅计费和学院分摊要做得可信，但又不能随便出个人明细。系统里明细查看/导出权限一般怎么卡？争议核对要留哪些证据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听起来就是：管理员别直接看学生名字，只有审计类角色拿着工单才能看；导出个人明细基本不给，非要给就审批号+水印；这些操作要留日志。计费证据主要用总量口径。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就基础订阅按设备数分档？再加用量按机时。孪生数据量我有点没概念，怕一算就复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是写个“合理使用”，超过就限流？我看很多云服务都写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务分析师 计费想做成“基础订阅（按设备数分档）+机时用量”，孪生采集和留存做成套餐配置。学校侧能接受的计费/分摊指标一般用哪些？口径要怎么定义才不容易扯皮？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂：账单就用计费机时、计费预约数；解释差异用取消率、超时这些；资源压力那块用采样频率档位、写入量做触发条件。分摊就按预约填的学院/课程走，跨学院按使用归属。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按人计费应该卖得更贵，但听起来就很敏感。个人排名也容易搞成惩罚工具。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不做按人计费；报表默认只到学院/课程。个人维度只在系统内、为纠纷核验开放给审计角色，而且要有工单号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）订阅是混合：基础订阅按设备数分档；用量按计费机时或预约数。\n2）分摊只给学院/课程聚合口径，归属规则提前定死，跨学院按使用归属。\n3）不做按人计费、不出个人明细报表；个人信息只用于争议核对，限定审计角色+工单号。\n4）孪生采集频率和保留期做成套餐配置，超出就升级套餐或降级，不靠模糊的“合理使用”。"
+              }
+            ]
+          },
+          {
+            "microScene": "在实训室预约与设备管理系统的需求与战略收尾背景下，用户与导师围绕成效指标口径、合规边界与0-12个月路线图持续沟通（9轮），其中在指标定义与数据源部分与业务分析师沟通（3轮），在KPI展示粒度与个人明细红线部分与合规与风控负责人沟通（2轮），并确定MVP四指标、两间实训室试点与“先测基线再定目标”的推进方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应就是做个大屏，把预约次数、使用时长、设备在线率拉出来。然后能不能直接用BI模板套一下，KPI就自动出来那种。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "痛点……排课冲突、设备闲置、还有就是用的时候出问题不好追。指标我想：冲突率下降、闲置率下降、故障响应时间缩短？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务分析师 冲突率、闲置率这些指标口径到底怎么定？我们系统能采到啥数据来算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“闲置率”是不是就是1-有效利用率？看起来直接算就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MVP指标集大概就选哪几个？我怕选少了被说没价值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先抓4个：冲突率、准时率、有效利用率、爽约率。合规事件率先不上KPI，但日志从一开始就记。闲置我先不单独提，先用有效利用率顶着。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 这些KPI和大屏能展示到什么粒度？比如爽约率要不要到个人？还有冲突原因会不会带出敏感信息？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那大屏要是领导想点进去看“谁爽约最多”怎么办？感觉他们很爱看排名。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "0-3个月先把台账、预约、基础排程、签到做了，然后能看冲突率、爽约率。3-6个月加数字孪生和设备状态，做有效利用率。6-12个月再做合规和运维监控？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "归还算在签到后面吗？就是结束打卡。准时率靠签到时间就能算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小验证…找一个实训室先试点？采一周数据，看看冲突率这些能不能算出来。设备状态先人工勾选可用/不可用，先别全上物联。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "选一个设备多、课多的实训室，再加一个课少的对照？我不太会挑，怕选错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "能。先测基线再定提升比例，不然我也不知道写多少会被打。那我就记住：四个MVP指标+两间试点+个人明细默认不出。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统方案设计背景下，用户与导师围绕数字孪生总体架构的分层、数据流、接口边界与MVP最小闭环持续沟通（13轮），其中在审计留痕与个人信息最小化部分与合规与风控负责人沟通（3轮），并形成四层架构+横切能力、三条关键数据流与可用性视图的图示表达要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分层我大概想成：前端大屏+管理端，然后后面一堆服务，再连设备。孪生是不是就等于3D模型？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我画的时候是不是要把“孪生引擎”单独画成一块？我看有的图就写“Unity孪生引擎”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预约就是看设备在线不在线、能不能用，然后排时间。孪生给个状态就行？比如在线=可约。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是得把规则都放孪生那边？这样预约就只管排程。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那总体架构图里最少要有几层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着像大而全。我怕评审会说我们MVP太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "扫码使用也算孪生吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据流我怎么写才不虚？我怕一写就变成“采集-存储-展示”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "计划态是啥？我以为只有实时状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心合规边界，我们之前说个人明细默认不出，那孪生要不要存“谁用了设备”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 我们做孪生+预约，现场可能扫码使用。系统最少要留哪些“人相关”的字段才满足审计？还有默认哪些地方不能出个人明细？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们不存IP是不是也行？我感觉存多了就容易出事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "照片留证我看很多系统都有，是不是干脆不要？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我大概记住：内部ID、动作、对象、时间、结果、关联单号；默认聚合，查明细要授权和审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想在图右边画个“安全与合规”竖条，里面写：RBAC、审计日志、数据脱敏、留存可配置。然后在“事件中心/日志”上标注“最小审计字段”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主数据就是设备台账；时序就是在线、温度这种；事件是预约、扫码、告警、审批记录。对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可用性视图要有哪些字段？我怕写多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "限制说明是不是会暴露太多，比如“某人占用”？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那总体架构的最小闭环，我们就按你说那条链路画：台账→状态→可用性→预约→扫码→审计。是不是还得画运维监控？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我还想加个“规则引擎”，网上很多都说排程要规则引擎，不然很难改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这六句我能照着讲。图里我就按四层加横切，再把三条数据流用箭头标出来，接口写“可用性视图”。这样应该不至于翻车。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育实训预约进入“计划态”的排程方案设计背景下，用户与导师围绕排程对象定义、硬软约束、可用性视图冻结策略、并发仲裁与合规展示持续沟通（8轮），其中在算法范式、原因码解释性与滚动窗口冻结/重排机制上与算法工程师沟通（5轮），并形成规则层排程+原因码输出+滚动窗口+稳定判定及验收指标的要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我第一反应是用现成的排课那种算法库，直接丢进去算最优。就是输入课程、老师、设备、时间段，然后吐一个表。应该很快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排实训任务吧。实训任务绑定课程，然后再找设备和时间。设备有状态，从可用性视图来。就是优先给必修课、快到期的任务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "硬约束：设备不可用就不能排；时间冲突不能排；同一学生不能同时两门课。软约束：尽量均衡设备利用率、尽量同一个班集中在同一天。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 排程这块一般用啥算法比较靠谱？我们要能解释冲突原因，还要处理设备状态变化，怎么设计“冻结/重排”比较不翻车？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码是指“设备不可用”“时间占用”这种吗？那规则层就是贪心塞进去？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滚动窗口是比如只排未来两周？那两周外就不管了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "置信等级我怕做复杂了。能不能直接用最新一次状态？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我回去跟导师说，我们先规则排程+滚动窗口，优化层先不做？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我大概采纳三点：一是先做规则层排程，别追最优；二是滚动窗口，近的冻结远的建议；三是原因码要输出，让前台能解释为什么排不上。优化层我先不碰，不然感觉很大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成可用性视图别用最新值，得做个稳定判断。最简单就是N分钟内都显示可用才当可用；未知就当不可用，宁可少排一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发就……同一时段同设备，谁先提交谁占用？后面的失败。要不就排队。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排程结果里对外只展示聚合，比如“该时段已被占用”，不显示是谁占用。管理员带理由才能看到明细。仲裁我倾向：课程计划单子优先，临时预约如果抢不到就给可选时间段列表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就冻结窗口内不自动抢，必须管理员特批改动，然后系统留痕。窗口外可以自动重排，把低优先级挪走，但也要通知。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）输入来自可用性视图+课程/实训任务清单；2）排程先用规则贪心，按优先级/截止时间/设备稀缺度排序；3）输出包含排程结果+冲突原因码；4）滚动窗口：近端冻结、中段可自动调整、远端建议；5）可用性视图做稳定判定（N分钟连续可用），未知默认不可用；6）冻结内改动走管理员特批并审计，对前台只展示占用不展示个人。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排程成功率、设备利用率、还有冲突解释覆盖率（失败时能给原因码比例）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在实训设备排程与孪生的IoT接入数据流方案设计背景下，用户与导师围绕链路、采集字段最小集、推拉模式、乱序去重断网处理、排程预占与实况冲突及合规成本约束持续沟通（9轮），其中在最小事件与质量字段及离线补传部分与物联网工程师沟通（2轮），在IoT数据最小化、权限留痕与保留期部分与合规与风控负责人沟通（2轮），并形成可评审的数据流图要点与处理规则口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概就是设备连个网关，然后网关把数据推到平台里。平台再更新孪生状态。排程那边订到了就把状态改成占用。就这样一条线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想采心跳、开关机、故障码、还有使用中的状态。字段就时间戳、设备ID、状态值。是不是再加个传感器数值，比如电流温度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 实训设备接入这块，最少要上报哪些事件/字段才够排程和孪生用？还有断网补传要怎么做才不乱？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我理解就是一定得要 seq，不然很难搞。可有些老设备不是只会吐 Modbus 寄存器吗，没有事件也没有序号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用 IoT 的 running 吧，毕竟是真实的。排程只是计划。要不就把排程当成一个“预占”，设备真的开始了再确认。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就拒绝新的预约？给个冲突原因码，说设备忙。然后通知管理员？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则一：实况优先，running 或 alarm 就视为不可用。\n规则二：排程只能做预占，不直接改设备状态。\n规则三：如果排程预占了但一直没等到 session_start，就超时释放。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我…我看网上有人就写5分钟。或者按课程开始时间？"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "那就先默认比如10分钟，然后上线前拿一周的上机记录，看从预约开始到设备真正 running 的延迟分布，取P95当阈值？这样不会卡太死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "从预约开始时间到 session_start 的 event_time。或者从签到成功到 session_start？我不确定我们有没有签到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那事件流里还得有“领用”这种业务事件？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推送吧，设备自己上报省事。拉取感觉要一直轮询。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "混合模式：能推就推，不能推就网关拉，然后转成统一事件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按(device_id, seq)去重；\n2）按event_time排序更新孪生；\n3）event_time异常就标suspect，不更新关键状态？\n4）离线太久就把设备标离线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "suspect 的事件只入库和展示，不推进孪生的可用/占用判断；孪生用最新可信事件算出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最好别从 IoT 里直接带学生信息？只带设备状态。人员信息走业务系统。要真带也要脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 IoT 上报里我们想尽量只传设备状态，不带学生信息。最多带预约ID/工单号做对账。这样合规上够不够？审计留痕要留到什么粒度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始事件只留30-90天是为了降低风险和存储成本？那如果学生投诉说设备坏了，要追很久怎么办。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节点我理解是：设备/PLC -> 网关（可能轮询转事件）-> IoT接入层 -> 事件存储/流转 -> 孪生状态计算 -> 排程/预约服务用这个状态。\n事件类型就四类：在线、运行、告警、会话。字段最小：device_id、event_type、event_time、ingest_time、seq、source、quality、payload_version，再加可选 booking_id/session_id。\n规则：平台按(device_id, seq)去重；可信事件推进孪生；suspect只存不推进；实况优先于排程预占；预占超时释放，阈值先默认再用P95校准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路：设备到网关到接入层到事件流转到孪生计算再到排程使用。\n四类事件：在线、运行、告警、会话。\n字段：device_id、event_type、event_time、ingest_time、seq、source、quality、payload_version，可选 booking_id/session_id。\n处理规则：去重用(device_id, seq)；按可信事件推进孪生，suspect只存；实况优先排程预占；预占超时释放，阈值先默认再用延迟P95调。\n约束：IoT不带个人敏感信息、查询要审计；轮询类默认上报状态变化并控制保留期，原始事件不无限留。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育系统方案设计阶段，用户与导师围绕权限审计高可用的审计范围、最小字段、降级与防绕过持续沟通（10轮），其中在审计范围与保留期上与合规与风控负责人沟通（2轮），在Outbox可靠事件与主链路降级策略上与系统架构师沟通（2轮），并形成审计分层、错误码与验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉就是全打日志吧，像用现成的审计组件那种。高可用是不是审计服务挂了也不能影响预约？就别把主流程卡死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "必须留痕的动作…登录算吗？然后查设备状态、查预约列表、改预约、还有改权限。绕过审计查库…就把数据库权限收紧，只给服务账号？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 审计这块最小必须记什么？设备状态查询这种量大的是不是也要一条条记？保留期一般咋定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那设备状态这种就可以不逐条写？只按接口采样就行？导出一定全量记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 审计要高可用的话，审计服务挂了主流程咋办？是异步写就行吗，会不会丢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Outbox是一定要跟业务同事务？我之前以为直接写到Kafka就行，省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解：高风险操作要“业务成功就必须有审计”，所以得同事务。低风险读可以弱一点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）权限变更、导出、跨租户这种，如果审计写不进去就直接失败。\n2）预约创建/取消这种算关键业务，要保证有审计事件，但可以先落本地再异步传。\n3）看板查设备状态就别一条条记，改成按时间桶计数，异常就告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小字段我试着列：event_id、event_time、actor_id、actor_type（教师/管理员/系统）、tenant_id、action、resource_type、resource_id、result、ip、user_agent、trace_id。变更类再加before_hash/after_hash？导出加query_scope和rows_count。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码：AUDIT_OUTBOX_WRITE_FAIL（高风险操作时触发，直接拒绝）；AUDIT_PIPELINE_LAG（管道堆积，低风险放行但提示降级）；AUDIT_STORE_UNAVAILABLE（审计检索不可用，只影响审计查询，不影响业务）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计查询也要审计，就是有人查审计记录也要产生一条审计事件，action=READ_AUDIT_LOG，resource_type=AUDIT_LOG，范围也记录。单点…Outbox在业务库里，业务库本来就要高可用。异步管道和审计存储要分开，挂了也不影响预约，只会延迟审计入库。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限这块…是不是缓存？比如把角色权限拉下来放本地缓存，短时间策略中心挂了还能用旧的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缓存可以比如5分钟刷新一次？如果超过比如30分钟没刷新成功，高风险操作就不给做，普通查看先放行但标记风险。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证的话…可以做个最小演示：模拟审计管道停掉，看预约还能成功，然后Outbox里有记录，恢复后能补投递。再模拟Outbox写失败，高风险导出就直接被挡住。还有查审计也会生成审计记录。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统进入工程开发背景下，用户与导师围绕设备模型落库与孪生引擎最小闭环持续沟通（8轮），其中在主数据/时序/事件拆分与可预约reason_code设计上与数据架构师沟通（3轮），在事件幂等、事务更新快照、Outbox通知与乱序测试上与后端工程师沟通（5轮），并最终明确MVP表结构、事件处理链路与最小演示验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要进工程开发这块，先把“设备模型与孪生引擎”做出来。现在我卡在一件事：设备孪生的模型到底要先写到什么程度，才能开始联调预约？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就三类：设备基础信息、实时状态、还有一些告警。然后我就想直接找个数字孪生的平台SDK，接进去就能画图那种，但我不确定我们是不是要自己写很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "台账就设备ID、名称、型号、位置、归属实训室。实时状态我想要在线/离线、运行/空闲、功率。可预约性…是不是直接算个available=true/false？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 设备孪生这块我现在要写库表和模型类，主数据、时序、事件要怎么拆比较稳？我怕我搞成一坨JSON后面改不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“可预约性”的原因，是放在device表里一个字段，还是也当事件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code这些码我是不是要提前定死？我怕后面又加很多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我懂点了。还有一个问题：telemetry这张表会不会很大，开发环境就一台设备也还行，上线后会爆？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我先按这个拆。@导师 我问回来了：主数据/时序/事件三层，加一个state_current快照表。可预约性不直接存布尔，返回可预约+reason_code。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我本来想用个状态机库，直接配置转移图，可能会省事。但我不确定哪些状态需要进状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 孪生引擎我现在要写事件处理：device_event进来更新device_state_current，还要发变更通知。幂等、事务、测试我有点虚，你给个能写代码的落地建议。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "乱序事件这块我有点懵。是不是只要比较event_ts，小的就不更新？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕字段太多写起来慢。能不能先用全局last_ts，等跑起来再改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "优先级就是：ADMIN_LOCK来了就一直锁，直到ADMIN_UNLOCK，其他事件都不动lock_flag？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从后端那拿到的做法是：device_event表用(device_id, trace_id)唯一键做幂等；事务里插event再更新state_current；通知异步用Outbox；快照最好分字段ts避免乱序覆盖；锁定优先级最高。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "顺序我写成这样行不行：\n1）lock_flag=true -> LOCKED\n2）maintenance_active=true -> MAINTENANCE\n3）fault_active=true -> FAULT_ACTIVE\n4）online=false -> OFFLINE\n5）能力不匹配 -> CAPABILITY_MISMATCH\n6）不然就 OK 可预约"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我更想偷懒点，直接靠上报。可如果设备不报，就一直在线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "查询时算，就是每次取状态再比一下now-last_ts？那压测会不会慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那返回体我就用一个DTO，里面有 online、fault_active、maintenance_active、lock_flag、derived_offline、reason_code 这些。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我容易忘。我之前想把操作者姓名一起带上，前端显示方便。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个小事，咱们后续怎么验证这套设计在方案评审能过？"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发阶段实现预约冲突检测背景下，用户与导师围绕时间区间规则、并发一致性、可解释拒绝原因与测试用例持续沟通（10轮），其中在隐形约束与可解释输出部分与算法工程师沟通（2轮），在并发落地方案取舍部分与后端工程师沟通（2轮），并确定半开区间判定、device_day_lock事务锁、admin_locked二次校验及错误码/枚举输出的第一版实现方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "查一下这台设备在这个时间段有没有别的预约，有就报冲突。是不是直接用数据库查一把就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时间区间比较就是 start/end 啥的，边界我不太确定，通常 end 算不算占用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "并发的话是不是加个分布式锁就完了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原因字段就返回“冲突”两个字？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就半开吧，感觉大家都这么用。要不然卡边界太多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向业务层面加锁，比较省事？我看很多人用 Redis 锁，写个 key=设备id+日期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 冲突检测除了时间重叠，还会有什么坑？我怕漏掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "粒度归一化是不是直接把 start、end 向最近的 30 分钟对齐？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 并发这块怎么做靠谱点？我想用锁，但导师说坑多。数据库能不能一把梭？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "B 听起来不用 Redis。占用表是额外一张表？我有点担心表越建越多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先不搞 slot 表膨胀那套。capacity 先支持 1 和 N，但实现上先做 count。并发用 device_day_lock 表加事务锁。粒度我倾向先强制对齐，不对齐就直接返回错误，让前端去选。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "输入就是 device_id、start、end、user_id、purpose？输出就 success/failed 和 reason。错误码我不太会起名，能不能就用 HTTP 409？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "reason 枚举我先写：TIME_OVERLAP、CAPACITY_EXCEEDED、ADMIN_LOCK、OFFLINE。时间不对齐算 TIME_INVALID？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事务步骤：  \n1）校验 start/end，对齐检查  \n2）查设备快照，如果 OFFLINE 或 LOCK 就直接拒绝  \n3）开启事务，锁 device_day_lock 这行  \n4）在预约表里查同设备同天的重叠记录，算 count  \n5）如果 count+1>capacity 就回冲突，否则插入预约记录  \n大概这样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把快照也放事务里查？但快照表不一定在一个库。或者我就不管这个竞态？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是 lock 这种要硬挡。那我设备表里加个 admin_locked 字段？事件来了更新它。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "返回 conflict_type 和 conflict_count？不返回对方是谁。可能再给 next_available_start？这个我不会算，算起来像算法题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "单测就写几组时间区间，重叠/不重叠。并发我用 JMeter 压一下？或者写个多线程测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这些我能照着写。并发那条我就用多线程起两次请求，看返回一个 200 一个 409，然后查库只一条成功。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终是：  \n- 时间区间用半开 [start,end) 判重叠：start<old.end 且 end>old.start  \n- 请求必须按 30 分钟对齐，不对齐就 400，reason=TIME_NOT_ALIGNED；start>=end 就 TIME_RANGE_INVALID  \n- 先读孪生快照挡 OFFLINE，但 ADMIN_LOCK 需要在事务里再查一次设备的 admin_locked 字段硬挡，返回 423  \n- 并发用 device_day_lock 表的行级锁，事务里查有效预约的重叠数量，结合 capacity 判断；冲突 409，reason=TIME_OVERLAP 或 CAPACITY_EXCEEDED  \n- 冲突响应不带任何其他人的信息，只给 conflict_type/reason 和建议枚举"
+              }
+            ]
+          },
+          {
+            "microScene": "在实训设备接入后孪生状态不更新、预约端全 OFFLINE 的排障与协议适配背景下，用户与导师围绕异常入口梳理、协议兼容、状态拆分与回放调试持续沟通（7轮），其中在两批设备封装差异、鉴权签名、断线重传与心跳主题确认上与物联网工程师沟通（4轮），并形成适配改造与验收计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是网关没把数据推上来，或者我们解析失败了。现在我只看到后端日志里一直是“device offline by snapshot”。是不是消息队列没消费到？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关那边我没登进去看过。我在本地起的适配服务里，订阅主题是 `telemetry/#`，然后打印到的 payload 基本是空的，偶尔有一条，但 JSON 解析报错。我就想是不是他们发的不是 JSON，或者编码不对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 现在网关转发上来的 telemetry 我这边经常解析失败，想确认两批设备到底怎么上报的？网关发的是 JSON 吗，主题/字段是啥，还有有没有签名之类的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边 MQTT 解析报错是因为我把 base64 那段当成业务 JSON 了？我以为都统一 JSON。那是不是直接让网关统一成我们想要的格式更省事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始报文落库会不会很重？我怕磁盘爆了。有没有简单点，比如直接用 Wireshark 抓？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "HTTP 的 HMAC 我这边没做，我之前用 Postman 打通了接口就算过了。那签名校验失败的话，网关会重试，然后我们一直丢？难怪一直 OFFLINE。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 两批设备不一样：A 批是 MQTT，但 payload 其实是 JSON 外壳里塞 base64 的二进制，我这边不能直接当业务 JSON；B 批走 HTTP `/ingest/opcua`，还带 HMAC 签名。我准备先把 MQTT 解析改成：先 parse 外壳，再 base64 decode，再按寄存器映射转成统一孪生事件。HTTP 这块补签名校验，然后把同一设备同一时间戳的点位合并一下再入库。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "映射表他们说有。我想先放到配置文件里，或者直接用一套现成的 modbus 解析库，它好像能自动按模板解。这样我不用手写太多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想在孪生这边加一个“last_seen_ts”，只要网关还有心跳就算 ONLINE？但这会不会把坏数据也当正常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能吧，就是要多写点字段。心跳我现在没处理，我以为只有 telemetry 才算在线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 MQTT 这边有没有单独心跳主题？还是只能靠 telemetry 的 ts 判断在线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用 heartbeat 更新 conn_state。data_state 就看最近一次 telemetry 解析是否成功。这样预约就不会因为解析失败全变 OFFLINE。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想按“协议适配器”拆：`MqttEnvelopeParser` 先拆外壳；`ModbusDecoder` 负责 base64->寄存器；`TwinEventMapper` 把寄存器值映射成统一字段。HTTP 的话就是 `OpcuaIngestController` 做验签和合并，然后也走 `TwinEventMapper`。最后统一往 `twin_event` 这个 topic 发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "存原始报文。我能在解析失败时，把 topic、ts、devSn、payload 存到一个小表里，按设备只留 50 条。然后做个内部接口按 id 回放到解析器里跑一遍。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以。我之前没想到回放接口还要鉴权审计，这块我得找安全同事看下我们现成的鉴权中间件能不能复用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "修复计划我总结下：  \n1）MQTT：按外壳 JSON 解析字段 `ts/devSn/proto/data`，对 `data` 做 base64 decode，再用寄存器映射解码，转成统一孪生事件发到 `twin_event`。  \n2）HTTP `/ingest/opcua`：实现 HMAC 校验，失败返回 401；成功后按 deviceId+ts 合并点位，再映射成孪生事件。  \n3）状态：用 `gw/<id>/heartbeat` 更新 `conn_state`，telemetry 解析结果维护 `data_state`，两者分离。  \n4）调试：仅在解析失败时采样存原始报文（每设备最多 50 条，TTL 清理），提供管理员可回放接口并记审计。  \n验收点：A 批来一条 mqtt 报文能落到孪生并把 conn_state 置 ONLINE；B 批 HTTP 能通过验签且不重复写；故意发一条坏 payload 会让 data_state=ERROR 但 conn_state 仍 ONLINE。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘网关状态上报接入完成后进入全链路测试与压测背景下，用户与导师围绕“预约-审批-实训RUNNING-设备MQTT上报-孪生状态可验证”的E2E拆解、断言口径与压测交付持续沟通（8轮），其中在数据隔离、MQTT校验轮询与压测指标门槛部分与测试负责人沟通（3轮），并明确两条E2E正/负例与API/MQTT分层压测口径及CI一键运行边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全链路的话，我能想到用 Postman 或 JMeter 直接跑接口。就是模拟老师创建预约、审核、到开始实训，然后网关上报占用状态？我不太确定怎么把 MQTT 那段也塞进自动化里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5 步我试试：  \n1）创建设备台账+孪生初始化；校验设备有 twin_id。  \n2）教师发起预约；校验返回 reservation_id。  \n3）管理员审批；校验状态变 APPROVED。  \n4）到开始时间调用“开始实训”；校验设备状态变成 IN_USE。  \n5）网关发 MQTT 状态；校验孪生里 conn_state=ONLINE，然后设备 use_state 还是 IN_USE。  \n但第 4、5 步的边界我说不清，比如到底谁改 use_state。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 E2E 要怎么组织比较稳？我现在想用 JMeter/pytest 把“预约-审批-开始-设备上报-孪生状态”串起来，但 MQTT 那段不确定怎么校验。压测这块你们通常怎么定指标，数据怎么隔离不把日志撑爆？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "轮询孪生 API 这个我能做。压测日志开关这块，我们现在好像没有做成配置项，我怕临时改代码会影响主干。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "指标上你们一般给到啥程度？比如预约创建 QPS 多少才算过，我没概念。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "MQTT 这块我用 mosquitto 起个 broker，再用脚本发消息就行。轮询孪生 API 断言 data_state 和占用字段。负例就发坏 base64，看 data_state=ERROR，conn_state 还 ONLINE。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳：  \n- E2E 用 tenant 隔离、设备打 test tag；  \n- MQTT 发完轮询孪生 API 最多 3 秒；  \n- 把负例放进 E2E：坏 telemetry 只打 data_state，不动 conn_state；  \n- 压测分 API 层和 MQTT 层，先按 200/500 并发门槛跑。  \n先不做：日志采样开关我先走路 B，压测先不触发解析失败，免得我改配置中心又踩坑。  \n“开始实训”我测试里只检查预约状态变 RUNNING，不断言设备 use_state；设备占用我靠 telemetry 去触发，然后断言孪生的 use_state/占用字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我加个小用例：对同一设备发 200 条坏 payload，预期“原始报文缓存”最多保留 50 条，超过的被丢弃；再等 TTL（比如 10 分钟）后查询回放接口，应该清空。只是 TTL 时间我不想等 10 分钟跑一次测试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我今天不碰回放接口。那坏 payload 的断言就只查孪生：data_state=ERROR，并且 conn_state 仍 ONLINE；再加缓存计数接口？现在没接口能查计数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那今天的 E2E 我做两条：  \n- 正例：预约->审批->RUNNING->发合法 telemetry->轮询孪生断言 conn_state=ONLINE、data_state=OK、占用字段=1；  \n- 负例：同样流程但发坏 base64->轮询孪生断言 conn_state 还是 ONLINE、data_state=ERROR。  \n压测我先用 JMeter 跑预约创建/查询两组场景，MQTT 用脚本发到 broker，统计端到端延迟我用轮询接口时间差粗算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“发出时间到孪生可见”，因为我现在更容易拿到。说明里写成：publish 时刻 t0，到孪生 API 查询到 message_id 更新时刻 t1，t1-t0。后面如果加 server_ts 再升级口径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "交付点三条：  \n1）E2E 自动化：两条用例（合法 telemetry、坏 base64 telemetry），都通过；断言预约状态流转、孪生 conn_state/data_state、占用字段。  \n2）压测脚本：API 层两组场景（创建/查询），并发与目标先按测试负责人给的门槛；输出 P95、错误率。  \n3）MQTT 压测雏形：按固定速率发消息，采集“发出到孪生可见”的延迟分布，先给 P95<1s 的结果或定位瓶颈的日志线索。"
+              }
+            ]
+          },
+          {
+            "microScene": "在预约管控+设备孪生系统工程开发收尾的安全加固与漏洞修复背景下，用户与导师围绕可修复攻击点、加固边界与验收口径持续沟通（6轮），其中在鉴权授权/输入边界/滥用防护基线部分与安全工程师沟通（3轮），在MQTT共享账号的最小加固落地与不破坏E2E和P95压测部分与后端工程师沟通（2轮），并整理出6条以内可验收的加固清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预约那块吧，怕有人绕过权限直接把别人预约取消掉。还有就是MQTT那块，别人乱发telemetry把孪生状态弄乱。别的我不太确定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "鉴权就是看看接口有没有都加token校验；授权…可能RBAC？输入校验就是继续加base64、json校验；资源滥用就是限流？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能用现成的安全扫描跑一遍吗，省得漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 预约和孪生这套，开发阶段要补哪些安全基线？我想先按高优先级来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对象级授权我有点糊，是不是每条预约记录都要带owner，然后比对？我们现在好像只有预约创建人id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计留痕是要把每次操作都写一条表？会不会很重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳三块里我先做API对象级授权、telemetry大小和字段白名单、查询分页上限。审计日志我怕来不及，但可以先做管理员强制释放和取消这两个动作的。MQTT的ACL我们现在是一个共享账号，改成按设备凭证我不确定要动多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 MQTT现在共享账号，安全那边说要topic ACL/设备凭证。我怕改动大。有没有“最小改法”能先挡住跨设备写入？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就相当于把ACL放到接入服务里了。可我们现在的压测脚本是直接连broker发固定速率消息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n1）预约写接口加对象级授权；  \n2）关键管理员操作加审计；  \n3）telemetry做字段白名单和大小限制；  \n4）查询接口分页上限；  \n5）MQTT入口改走接入服务校验topic；  \n6）幂等key。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统进入运行评估、进行灰度上线与回滚演练背景下，用户与导师围绕灰度单位选择、观测与审计留痕、回滚触发与回滚后验证持续沟通（10轮），其中在灰度维度/回滚演练设计与监控分组及reason脱敏负例部分与运维与SRE沟通（5轮），并形成按学校定向灰度、按version分组监控、相对基线回滚条件与最小用例回归的执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点想直接用现成发布工具一键灰度，但怕漏检查项，你帮我盯一下关键点行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "负例就是 page_size 超过上限要截断或 400、sort 不在白名单 400，对吧？还有强制释放、管理员取消要 reason，不带也 400。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉按流量比例最省事，网关里配 5% 之类的。我看很多人都这么搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "灰度单位…按学校？或者按实训室？指标我就看 5xx、接口耗时、还有预约成功率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 灰度上线和回滚演练你们一般怎么设计？我怕只会点发布按钮。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚怎么练？我就把版本切回去行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们日志现在有 request_id 和 actor_id，我是不是加个 version 字段就够了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏我有点慌，我怕误拦了正常理由。有没有更省事的做法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度期间监控要怎么配？我平时只看总 5xx。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开关放网关路由或者配置中心那种。权限我想只给管理员角色，普通老师肯定不行。证据就是看监控按 version 分组，v2 的错误码没异常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计记录要有 actor_id、action、target_id、reason、request_id、ip、timestamp。灰度开关的 action 就是 “toggle_canary” 之类，target_id 放租户id。reason 也要求必须填，不填 400。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）v2 的 5xx 比基线高很多就回滚；2）预约创建的 P95 超过阈值；3）审计写入失败率上升。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，这种我能照着配。持续时间我怕太长拖死课堂，能不能 2 分钟？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那灰度比例就先 1 个学校，别按百分比。监控我就按 version=v2 和 tenant_id 过滤看。回滚就把路由切回 v1。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑：list 接口 page_size 超限 -> 看是不是 400 或截断；sort 不在白名单 -> 400；强制释放不带 reason -> 400；管理员取消不带 reason -> 400。再跑一条正常预约创建、取消、强制释放各一次，看审计有没有字段齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "检查点：审计里必须能看到 actor_id、action（比如 force_release/admin_cancel/toggle_canary）、target_id（预约单或租户）、reason、request_id、ip、timestamp。reason 不允许超长，我按 200。还有不要把 token、密钥、原始 payload 写进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按“学校维度灰度 + version 分组监控 + 3分钟判定回滚 + 负例回归”来做，开关操作也走审计并强制 reason。要是我在配置上卡住，我再来问你。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字孪生预约管控系统运行评估的监控告警与值班流程落地背景下，用户与导师围绕必报警项优先级、分组维度、阈值与值班动作门槛持续沟通（6轮），其中在告警分级/阈值起步/去重静默与SOP闭环上与运维与SRE沟通（4轮），在合规升级路径与reason留痕红线/字段上与合规与风控负责人沟通（2轮），并口头合并成可贴值班手册的告警分级与SOP清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应就是把 APM 那套全开，接口慢、错误率、CPU、内存都告警。再加个日志告警，匹配“exception”之类的关键词。这样应该不漏？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须告的话……\n1）预约创建失败率升高；2）取消失败；3）强制释放失败；4）接口超时；5）数据库挂了；6）还有…reason 校验失败算吗？就是 400 变多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本分组就用 version 标签，学校维度用 school_id。3分钟判定就是…3分钟内错误率超过多少就算不行。但阈值我不太会定，怕拍脑袋。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 我们实训设备数字孪生预约管控系统现在要做监控告警和值班流程。要按 school_id + version 分组。有哪些告警必须做、阈值先怎么定、还有怎么避免告警炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个“4xx结构异常”我有点怕误报。我们不是有负例吗？灰度演练会跑一堆缺 reason 的请求，那告警不是会响？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "错误码我们现在好像是有的，但我不确定全不全。还有“审计写入失败”我们是同步写库，失败就接口5xx了，还要单独告警吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "值班SOP最小闭环你们一般怎么写？我怕写得太细，写不动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先抓 P0 三条：预约创建5xx、强制释放/管理员取消5xx、审计写入失败。分组维度就是 school_id+version。然后P1抓 reason相关的错误码占比上升、排程P95。孪生延迟就先P2。\n值班硬门槛：P0来了先看仪表盘和最近变更；3分钟内不降就回滚或关开关；操作必须填 reason，200字内，不能带奇怪字符，也不能写手机号学号这种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 值班流程里，哪些告警一定要同步风控？还有 reason 这块，值班记录里要留什么字段，写哪些内容会踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果现场老师投诉，说“某某同学占着设备不还”，值班人写 reason 很容易带名字。直接不让写具体人？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着讲：  \n1）所有告警必须带 school_id、version、动作类型（创建/取消/强制释放/审计）。  \n2）P0：预约创建5xx 3分钟>2%且>50请求；强制释放/管理员取消5xx 3分钟>1%且>20请求；审计写入失败/审计延迟异常出现就算P0。  \n3）P1：reason相关错误码占比异常上升；排程冲突计算P95持续高。  \n4）P2：孪生状态更新延迟持续高。  \n5）告警去重：同分组同类5分钟内合并一次，发布窗口只静默P2。  \n6）演练流量要隔离：x-drill标记或沙盒school，不进生产告警。  \n7）值班收到P0先看三件套+最近变更；能对应到灰度/版本就按3分钟规则回滚或关开关。  \n8）升级：3分钟没止血就升级给负责人；涉及审计/管控动作/reason异常要同步风控。  \n9）所有处置必须写 reason：200字内，无控制字符，不写个人信息，用告警ID/工单号+动作+影响范围。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的值班告警优化背景下，用户与导师围绕设备离线异常的分层分型、证据留存、判定树与处置边界持续沟通（9轮），其中在离线根因分型与关键字段/切片证据上与物联网工程师沟通（2轮），在告警触发条件、阈值与合规限制上与运维与SRE沟通（1轮），并形成可写入值班手册的离线定义、判定顺序与评估指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是直接上现成的监控面板，按“离线设备数”拉个榜单。再配个自动脚本，离线超过5分钟就踢一下网关重连。这样比较省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分层我大概懂：设备不上报算离线，网关心跳断算离线，平台服务挂了也像离线。信号嘛，就看最后上报时间、MQ堆积？还有服务的健康检查。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "证据我就想用日志检索工具，按设备ID查最近一小时的上报日志，没日志就是设备没发。再查网关日志看有没有“disconnect”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 离线怎么分根因？我现在只会看最后上报时间和网关disconnect日志。有没有更快的判定套路，最好是直接按字段就能分出来的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些字段我这边有的好像没打全，比如arrival_ts我印象里在时序库里才有。要是没有，就只能靠“最后上报时间”硬算吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切片我能理解，就是分组对比。我回去跟导师说要按网关/协议/教室一起看，不然容易误伤。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先用三类分组去看：同网关、同协议、同教室。如果同网关一片都断，那更像网关离线；如果只有某协议断，可能是适配进程挂。还有要补两个时间：平台到达时间和设备时间，不然时间戳错会被当成离线。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最短路径我想做成一张看板：离线告警点进去，先显示这设备所属网关的心跳、同网关离线设备数、同协议离线数。然后再看消息堆积指标。最后给个“建议原因”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "顺序我试下：  \n第一步看网关心跳，心跳断就归网关离线；  \n心跳不断看同网关离线比例，很多台一起离就偏链路或网关侧；  \n如果只是单台，去看平台入库计数和网关发送计数对不上，就偏链路堆积；  \n如果计数都正常但last_valid_ts不动，可能是时间戳问题或采集进程。  \n但阈值我不太敢定，比如“很多台”是多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 现在离线告警是怎么触发的？还有队列积压、入库延迟、网关心跳这块，有没有你们常用的阈值或经验值，我想拿来做离线分型的判定条件。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "自动强制释放不让做？我之前还想着离线就把预约释放掉，省得占用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就只能告警+派单，最多给值班一个“一键生成排查信息”的入口，不改预约状态。输出就是分类结果和证据链接，比如哪些指标超了阈值。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标我想一个是“误报率”下降，但这个怎么定义我不清楚。另一个是“平均恢复时间”缩短。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我选“24小时内自动恢复且未派单/未处置”的占比，先当误报近似。然后MTTR按告警到恢复的时间。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能照着做。我有个小担心：backlog 5万是不是对我们这套实训室太大了，可能永远触发不到。要不要按我们高峰的基线再调？"
+              }
+            ]
+          },
+          {
+            "microScene": "在系统上线后的运行评估背景下，用户与导师围绕教学排课满意度回收的触发时机、字段设计、看板呈现、低分工单与两周基线复盘持续沟通（9轮），其中在指标拆分与最小埋点部分与业务分析师沟通（2轮），在教师评价数据的权限、审计与保留期合规部分与合规与风控负责人沟通（2轮），并落成可上线跑两周的结构化回收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能就做个弹窗打分，像很多SaaS那种，1到5星，然后自动汇总出个平均分，就当结果？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发时机…预约成功以后？谁填就老师填吧。低分追因就加个文本框让人写原因。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务分析师 满意度回收要怎么设计？我这边只想到弹窗星级，感觉太粗了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "选项里那个“到场后设备状态不一致”是不是跟上一段离线异常能挂上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先做“课后24小时内给任课老师发一个满意度”，1到5分。然后原因我做成必选单选，不搞长文本为主。过程指标…我可能只接得上改课次数、审批耗时、取消率这几个，别的埋点我怕要改很多地方。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 满意度回收这块，老师的打分和原因能不能直接给教务看？需要注意啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那自由文本我就先不开了？怕大家写“设备管理员不行”这种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发：每次实训课结束后，24小时内推送给任课教师一次，超时不补发。\n字段：1-5分；原因必选单选（冲突多、设备不匹配、时段不合适、审批慢、到场状态不一致、其他）；不加文本。\n看板：教务看院系/课程类型/高峰非高峰的平均分和分布；明细就只有管理员能看。\n低分处理：比如1-2分生成个工单，里面带上这门课的改课次数、审批耗时、取消率，方便回访。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分组对照就是…按高峰和非高峰分别算平均分？再对比改课次数多不多。然后两周后看原因里哪一类占比最高，就优先改那块规则。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略版本对比：这两周排程策略版本是V1，后面调规则是V2。到时候按版本切片看满意度均值、1-2分占比、回收率。\n原因项驱动：如果“审批慢”占比高，就先盯审批节点耗时分布；如果“冲突多”占比高，就看冲突拦截次数和改课次数。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选：课结束事件（用来触发问卷）；改课次数累计；审批完成时间戳（算耗时）。取消率我先从现有预约取消里算，不加新埋点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不做个人榜单，只做汇总分析；看明细要有限定角色并记日志；两周后按高峰/非高峰、课程类型这些分组看回收率和低分占比，再决定调排程规则。"
+              }
+            ]
+          },
+          {
+            "microScene": "在首周满意度回收出现“周三晚间+机电综合台两台设备”低分偏态的运行评估背景下，用户与导师围绕证据口径、假设验证、迭代优化与成本复盘闭环持续沟通（9轮），其中在排程规则与冲突消解改动上与算法工程师沟通（3轮），在监控告警取证与云账单降本口径上与运维与SRE沟通（3轮），并最终确认熔断+缓冲灰度、指标基线回滚与日志分级留存的执行点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先看下看板里按设备、按时段的低分占比吧。再对一下预约成功率、爽约率。成本复盘…是不是看云资源账单和工单数量？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "低分先按1-2分算吧，比较直观。排除的话…按课程类型分组看？再按高峰/非高峰做对比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）设备本身状态不稳，导致体验差，要看设备告警、离线次数；2）晚间人多，排队或冲突多，要看预约冲突率、超时占用；3）教学内容难，学生打低分…看课程类型和评分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在低分集中在周三晚间+机电综合台两台设备。我们能从排程规则上怎么改，能快速验证那种？还有需要看哪些指标才知道是不是规则的问题？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "健康度权重这个要上新特征吧，会不会改动大？有没有更省事的，比如直接把那两台先拉黑一周？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "触发恢复条件怎么写得不那么复杂？我怕同学们看不懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 这周出现周三晚间低分偏态，我们要做迭代优化+成本复盘。你这边能从监控和账单角度告诉我该看什么，怎么判断钱是不是花冤枉了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们不是说要最小埋点嘛，日志还能暴涨？我以为就几条事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那成本复盘我就写“把INFO砍掉”？还是要更具体点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先做“局部熔断”，把那两台异常就暂停预约，至少别继续挨骂。然后周三晚间加缓冲时间，减少拖堂挤占。健康度权重我有点担心要改很多，可能放后面。成本上，做日志分级留存，INFO短留，审计长留。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标…看那两台相关低分占比下降？还有总体1-2分占比下降。预约成功率别下降太多，比如不超过2%？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按设备池做基线。下降超过…超过上周同设备池的下四分位就回滚。这样行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "手动解除给设备管理员吧，教务别给。解除要写原因并记日志，方便审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动：对两台设备做异常熔断，触发按24小时离线3次或严重告警2次，恢复48小时无异常。周三晚间加缓冲时间。灰度先只在机电综合台设备池。指标看1-2分占比、差评集中度、预约成功率。成本…日志分级留存，INFO 7天，WARN 30天，审计180天。回滚条件：预约成功率掉到上周设备池P25以下，或者冲突重排变多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，这些都不动架构，主要是规则和留存策略。教师不排名、明细有审计也都在。就按这6条推进。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

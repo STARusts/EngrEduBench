@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核心网元工程开发背景下，用户与导师围绕微服务拆分粒度、混合治理机制、安全鉴权规范及性能验证方案持续沟通（5轮），其中在边缘拆分粒度与逻辑闭环部分与算网融生架构师沟通（1轮），在边缘资源开销与折中拆分方案部分与云原生调度开发沟通（1轮），在微服务间内部调用鉴权部分与零信任安全专家沟通（1轮），并形成边缘三核心与区域细拆的拆分规范、鉴权约束及对照验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "拆分粒度得适配边缘轻量化和区域高可用，我倾向于按业务能力做细粒度拆分，把算力感知、潮汐调度、信令旁路全拆成独立微服务。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘侧用微服务框架太重，我考虑边缘用gRPC直连，区域侧用Service Mesh管理。但这带来一个问题：两边服务发现和治理机制不统一，开发规范可能会割裂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这样拆边缘和区域，服务治理不统一会不会导致开发规范分裂？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "控制面/用户面粗拆在5G核心网是标准做法，但我们要做信令旁路卸载，控制面逻辑很重。如果粗拆，旁路逻辑混在里面，根本没法独立扩缩容，遇到信令风暴还是会被拖死。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从容器调度角度看，边缘侧粗拆对资源利用率是不是更友好？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "三个核心微服务可以接受，既保证了核心逻辑的独立扩缩容，又控制了实例规模。但我对Service Mesh在区域侧的流量劫持机制怎么无损对接边缘的gRPC直连，还没完全想通。这块需要查一下Istio的Envoy Filter扩展机制，看怎么绕过Sidecar做特定端口的直通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实对Envoy Filter的Lua/C++扩展接口不熟，这是当前实现的硬缺口。我今晚会过一遍Istio的Envoy xDS协议文档，写个Demo验证gRPC直连流量能否被Pilot正确纳管且不劫持数据面，明天把验证结论迁移到我们的拆分规范里，确定区域侧的治理边界。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微服务拆分后，边缘三个核心服务互相调用，还要过零信任网关鉴权吗？内部调用加网关会增加时延。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "mTLS服务间加密可以接受，JWT鉴权我们在代码里加Interceptor统一拦截。审计流水号我会在gRPC Metadata里强制带上，日志落盘时关联提取。那拆分规范我整理几个硬性约束：1. 边缘侧拆分为算力控制、信令旁路、数据转发三核心，禁用Sidecar；2. 区域侧按领域细拆，走Service Mesh；3. 所有服务间调用强制mTLS与JWT，gRPC Metadata带审计流水号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在联调前做个对照测试：用同样的寻优负载，分别跑“边缘三核心粗拆”和“全领域细拆”两组。核心评价指标是边缘节点内存开销增幅和内部调用链路RTT。验证口径设为内存增幅不超过15%，RTT不超过2ms，确保基础架构开销不会吃掉寻优的时延余量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

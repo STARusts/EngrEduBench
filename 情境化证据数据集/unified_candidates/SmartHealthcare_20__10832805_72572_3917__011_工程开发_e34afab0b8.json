@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在放疗智能计划系统跨系统集成联调背景下，用户与导师围绕与放疗控制台/影像中心的实时协议对接、原子性与断点续传及接口字段定义持续沟通（5轮），其中在高频大负载数据交换方案上与后端开发工程师沟通（3轮），并形成采用gRPC与Proto字段/错误码及调试联调安排的初步方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前想的是直接在后端开几个 REST 接口，让控制台定时来抓取剂量矩阵增量。但上个环节提到的置信度评分和状态监控指标，如果全塞进 JSON 里，我怕解析起来太占 CPU。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没深想，我就觉得先把通联跑通。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不用 REST，难道要自己写 Socket 吗？感觉维护起来挺头疼的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 老师让我来找你。我们那个智能计划系统要和控制台对接，需要传很大的剂量矩阵，还要同步 Gamma 预估通过率这些指标。你觉得是用 gRPC 还是继续用传统的 Web 接口？我担心性能跟不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用 gRPC 的话，调试起来是不是很麻烦？我平时习惯用 Postman 看结果，换成二进制流我怕出了错都不知道哪里的问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果控制台那边反馈处理不过来，我们要不要加个消息队列缓冲一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "@导师 我刚才和专家对过了，打算切到 gRPC 协议。核心思路是利用 Protobuf 的二进制流来传矩阵数据，这样能绕开 JSON 解析的性能瓶颈。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备在 Proto 定义里加一个 Header 结构体，专门放监控指标。接口的主体就三个部分：第一是序列化的剂量矩阵数据，第二是包含 Gamma 评分和路径权重的对象，第三是系统运行状态，比如当前的采样率档位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定好了几个关键的。目前初步确认了这几项协议要点：\n1. 传输协议：采用 gRPC over HTTP/2。\n2. 核心字段：包含 `f32_dose_delta`（剂量增量流）、`u32_confidence_level`（置信度）和 `monitor_stats`（监控埋点）。\n3. 错误响应：定义了 `ERR_GAMMA_LOW`（预估通过率不足）、`ERR_MEM_EXCEEDED`（显存超限降级）和 `ERR_SYNC_FAILED`（状态对齐失败）三个状态码。\n4. 调试工具：使用 gRPC-UI 进行接口联调验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

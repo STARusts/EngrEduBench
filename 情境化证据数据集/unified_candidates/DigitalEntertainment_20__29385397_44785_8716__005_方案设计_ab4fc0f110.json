@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场编排平台方案设计背景下，用户与导师围绕剧情状态机技术路线、世界状态承载、强弱一致性校验与处置策略及与DecisionEvent字段对齐持续沟通（8轮），其中在状态机拆分与回退快照/事件重放设计上与叙事系统设计师沟通（2轮），在合规闸介入、留痕字段与弹幕取证分层上与合规与内容安全官沟通（2轮），并形成选A显式剧情图+事实/槽位、有限规则类型参数化与两道闸联动的定案口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉就两条：一种是用纯状态机，节点和边都固定；另一种是更自由点，把剧情当成规则+上下文，每次根据上下文算下一段。后一种感觉更灵活。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏 A。因为编排工具里，编辑节点和连线好理解，也方便运营回溯。B 听起来像会飘，回退也不知道退到哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态就是当前剧情节点 id？再加上角色状态，比如好感度、道具这些变量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@叙事系统设计师 这里状态机到底怎么建才不炸？还要保证角色一致性，怎么落在状态里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 A 里是不是每次转移要存一份世界状态快照？不然回退怎么做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "角色约束是写成规则吗？比如“角色 A 不能突然知道 B 的秘密”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我想选 A：显式剧情图。原因就是能在编排台画出来，DecisionEvent 也好对应 state_from/state_to。世界状态不存全量历史，做槽位+事实，然后隔一段存锚点快照，回退就到 snapshot 再重放事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "强校验就进节点之前拦住，弱校验就给个 warning 还让走。强的用在时间线/知识那种硬逻辑，弱的用在台词风格这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自动改路吧，找一条能过校验的边。如果没有，就触发回退请求？再让人工闸来处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 一致性校验失败，或者生成内容触到红线时，系统应该怎么处理比较合规？需要记哪些留痕？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用户弹幕不能存原文？那我们排查问题会难。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用简单字段，不搞 DSL。DSL 我怕后面维护不住，而且我也不会写一套很通用的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。比如：require_fact / set_fact；require_knowledge（某角色必须知道某事）；timeline_guard（必须发生过某事件 id）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "DecisionEvent 里加 consistency_result？像 pass/warn/block。再加 hit_rules 列表。state_from/state_to 还是节点 id。snapshot_ref 放 target_snapshot_id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自动闸先跑：一致性强规则 + 安全红线，失败就 block 或者 degrade；人工闸主要看 block 的，还有一些 warn 里被频繁命中的场次？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第2条我担心 ownership 这种会不会很难做全，我先按“道具归属”这种简单版。还有取证库权限我不太懂，后面可能得你们给我个边界，我别写错。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

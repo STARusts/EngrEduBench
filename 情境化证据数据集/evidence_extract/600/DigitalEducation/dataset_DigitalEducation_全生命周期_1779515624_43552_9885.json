@@ -1,0 +1,628 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在隐态思流解析系统需求梳理背景下，用户与导师围绕探究学习黑盒真实痛点、避免技术倒推需求及建立可检验认知重构假设持续沟通（7轮），其中在一线探究课堂真实阻力部分与教育痛点调研师沟通（1轮），并最终形成以认知断层假设指导后续数据需求的验证底线与底层逻辑补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在在线探究学习完全是黑盒，只看结果对错。我看网上很多人搞多模态采集，配合知识图谱工具，好像能自动把学生思维过程画出来。我想用这套组合，给卡住的学生动态推脚手架。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺的肯定是过程啊。学生做题卡住，老师不知道他是哪一步概念没懂。只要能用现成的眼动和点击轨迹SDK，把行为序列抓上来，再丢给图数据库跑一圈，不就能定位卡点了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探究式学习里学生卡住，一般到底是什么状态？我这边打算先用多模态行为数据跑个分类模型把他们分个类。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是说，我不能光看行为频率？我看网上有算\"探究深度分\"的现成公式，加上这个权重是不是就能把伪探究筛出去了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没想过怎么验证重构。一般就对比下前测后测正确率？分数涨了不就说明导引有效嘛。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我现在只会用多模态模型提特征，不懂认知诊断的底层逻辑，感觉这块完全没抓手。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我在认知诊断这块是短板。我接下来两周得补一下认知任务分析的方法，不能光靠调包。我准备精读两篇关于认知轨迹���踪的论文，然后自己手写一个简单的概念断层映射逻辑，不用现成库，跑通一个最基础的验证用例，看看能不能把伪探究和真探究分开。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心痛点是\"伪探究\"和\"概念表面附着\"，不是简单的行为卡顿。验证底线不能只看正确率或调参权重，必须建立可检验假设：锚定干预后，同构异形题耗时下降且能复述关联，否则视为导引失效。"
+              }
+            ]
+          },
+          {
+            "microScene": "在隐态认知价值量化背景下，用户与导师围绕技术指标向业务价值指标转化及基线真实性约束持续沟通（4轮），其中在业务价值折算与降本增效映射部分与商业模式架构师沟通（2轮），并最终形成技术指标与业务价值指标的映射关系及基线采集真实性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "量化价值的话，我看网上很多智慧课堂方案，直接拿正确率提升幅度乘以课时数算。我们能不能找个现成的教育数据评估框架套一下？这样出报表最快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那只能自己造指标了。用刚才定的验证底线，比如同构题耗时下降率作为一个核心指标。不过复述关联度这个，人工评太慢了，是不是可以直接调大模型的文本相似度API算？有现成接口就省事多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们系统能诊断出隐态认知断层，这在业务上怎么量化成学校愿意买单的价值指标？我现在只有同构题耗时下降这种技术指标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那是不是得先采集他们现在的辅导时长做基线？这感觉落地阻力挺大的，老师平时哪有空填这种数据。有没有那种不需要采基线就能直接算出价值的算法？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "但我担心采基线数据学校嫌麻烦推不动，部署不下去。能不能就先用系统自带的内测数据或者行业均值当基线凑合一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "技术验证是同构题耗时下降和复述关联度；业务价值是这俩映射过去，带来的辅导人时缩减和真探究课时提升。基线采集必须做，不能用行业均值糊弄，这是价值兑现的前提。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在隐态思流解析项目合规与伦理边界划定背景下，与导师围绕多模态数据采集合规红线与需求定义持续沟通（3轮），其中在合规卡点判断部分与伦理与合规审计官沟通（1轮），并最终锁死三条伦理红线（最小必要拆分授权、导引拒绝权、公平性约束）。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得加个数据脱敏工具就行了吧？现在好多开源的隐私脱敏组件，直接接进来把姓名学号抹掉。或者做个隐私协议弹窗让用户勾选，应该就能过审了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这个隐态思流解析项目，采集多模态数据，合规上具体卡在哪？有没有那种一键过审的合规SaaS或者现成框架可以接？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆分授权的话，前端埋点逻辑是不是得改？能不能先做个大弹窗上线，后面再慢慢拆？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那需求里就加上：采集项必须单独开关；学生端要有明显的“暂停导引”按钮。防偏见这块我不太懂怎么写成需求，是不是得加个定期的审计日志？我看有些开源项目带这种审计模块，可以直接抄过来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条红线：第一，多模态采集项必须拆开单独授权；第二，学生随时能关掉导引；第三，导引不能因为数据量少就区别对待，也不能过度干预打断探究。就锁死这三条。"
+              }
+            ]
+          },
+          {
+            "microScene": "在系统伦理红线已定需构建商业闭环背景下，用户与导师围绕商业闭环模式、数据回流反哺机制及C端付费意愿最小验证动作持续沟通（7轮），其中在B2B2C闭环拆解与验证口径部分与商业模式架构师沟通（2轮），并形成B2B2C双端驱动、数据回流反哺、分层样本最小验证及降级策略的需求方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看市面上教育SaaS都是按学校收年费，或者按学生账号数收。咱们直接套这种按座收费的模板不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这系统怎么搞商业闭环？我本来想直接按学校收年费的，但导师说不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这收费模块怎么写进需求里？是不是得拆成两个收费入口？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "总不能开发完了再看有没有人买吧。有没有什么工具能测一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找几个家长问问？但我不知道怎么设计问题，我怕问出来的不准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "商业这块我基本是空白，以前都是做纯技术交付，卖出去就完事了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把收费需求从“单一按座收费”改成“B端基础加C端增值”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需求里加上：商业模式采用B2B2C闭环，B端卖群体看板，C端卖个体诊断；最小验证动作是选3个试点班发免费片段测转化率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "伦理红线那边，如果转化率低导致回流数据少，得有个降级策略，不能让看板直接失效。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "样本得覆盖不同层次班级。我把这条加进验证口径里"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在隐态思流解析系统感知架构设计背景下，用户与导师围绕端到端大模型与特征解耦架构选型、对照假设与验证指标持续沟通（5轮），其中在多模态特征融合与推理边界部分与认知计算架构师沟通（2轮），并最终确定特征解耦架构方向与毫秒级停顿特征召回率验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接接个大模型API把音视频丢进去解析不就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟这块，我看网上有些流式返回的接口挺快的。黑盒的话，反正最后能出结果就行吧？自己搭特征融合太折腾了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多模态思流感知这块，有没有封装得比较好、能直接把语音表情操作日志丢进去出思维特征的框架？自己搞特征融合感觉坑很多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征解耦听起来好复杂，时序对齐是不是得自己写很多算子？B方案有没有那种开源的脚手架能凑合用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我还是倾向A方案，B方案自己写对齐算子我怕搞不定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A方案的话，我可以拿几段带犹豫的语音跑一下，看它返回的文本里有没有体现？B方案，验证重点就是时序对齐准不准吧。但多模态对齐这块我确实不太懂原理，只会调库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去找几篇多模态对齐的论文看，重点看特征映射那块，争取搞懂怎么把语音特征和操作特征对到同一个时间戳上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用召回率来对比确实清楚点。那就定特征解耦架构吧，虽然麻烦点，但为了特征透明。"
+              }
+            ]
+          },
+          {
+            "microScene": "在思流特征与学科认知图谱对齐的方案设计背景下，用户与导师围绕时序特征映射方式、路径搜索约束与工程可控性持续沟通（6轮），其中在时序动作与游走路径映射部分与知识图谱设计师沟通（1轮），在局部子图受限解码与算力控制部分与认知计算架构师沟通（1轮），并最终形成基于锚点的受限子图时序解码对齐方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算向量相似度？我看Neo4j有图嵌入的插件，把特征扔进去匹配最近邻节点应该就行吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "因果顺序对哦，序列是有先后的。那是不是得用处理序列的模型？比如接个Transformer去对齐？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "思流特征串是个时间序列，怎么跟图谱对齐比较好？现成的图嵌入好像不管时序。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "映射成路径的话，算力会不会炸？全图搜路径实时性肯定没保证吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "子图加Viterbi解码，听起来比全图搜靠谱点。不过子图切多大可能得调参，我有点拿不准这边界怎么定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态转移矩阵得看学科特性吧，这得图谱设计师给先验概率。子图范围，专家说受限，是不是可以根据停留时间动态切？这块我确实没想透。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心就是不做全局节点匹配，改做局部子图上的路径解码。思流序列对应图谱上的游走路径，用Viterbi找最可能的路径，转移概率受图谱逻辑约束，子图限制在二跳邻居内。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在偏差锚定与导引策略设计背景下与导师围绕锚定维度、导引粒度与阈值设定持续沟通（5轮），其中在偏差映射机制部分与认知计算架构师沟通（1轮），在细粒度策略交互代价部分与交互体验塑形师沟通（1轮），并最终形成偏差双维锚定、导引三级克制及阈值基于数据基线的策略框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然都对齐到图谱上了，偏差就是当前游走节点跟标准路径节点不一样呗。导引的话，我之前看到有那种开源的Prompt框架，可以直接套模板，把偏差信息填进去让大模型生成提示词，是不是挺省事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱上算出来的偏差，怎么映射成导引策略？我本来想直接用大模型Prompt搞定的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把规则穷举一下，比如拓扑距离1跳给一级提示，2跳给二级，层级差1给回顾，差2给重学，把所有组合都覆盖到，这样才算严谨嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算按拓扑距离和层级差分个七八级导引，把各种组合都覆盖了，这样精细点行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "三级啊，那粗糙了点吧。不过确实，级数多前端可能乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这三级的阈值怎么定？凭感觉定吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，三级就三级。锚定看距离和层级，导引分无、轻、重。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那大模型生成提示词的Prompt模板我还是得准备一套吧？总不能全写死成规则。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在方案设计双端交互与低延导引推送背景下，与导师围绕交互克制性、低延链路搭建及有效性验证持续沟通（5轮），其中在交互防阻断部分与交互体验塑形师沟通（1轮），在低延链路端云协同部分与认知计算架构师沟通（1轮），并最终形成边缘微动交互、端云协同低延架构及A/B测试验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就WebSocket推前端呗，现成库挺多的。老师那边做个大屏看数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导引不能弹窗，那咋整？有没有那种不挡视线的现成组件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "延迟这块呢？全走服务端推理肯定慢吧，有没有轻量级方案能直接套？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧还要搞推理？这就复杂了。悬停提示加端侧初筛，听起来得写不少逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找几个人测一下呗？看看他们点不点那个提示。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还要搞A/B测试和分组，我连心流恢复时长怎么算都不知道。前几天看了一篇讲微交互响应阈值的文章，里面说200毫秒是感知边界，我是不是可以直接把这个当延迟上限？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就按这个定。端侧做轻量触发，服务端流式下发，交互用边缘微动。测试我再细看。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在隐态思流解析系统交互埋点与流式清洗开发背景下，与导师围绕端侧连续流采集、特征初筛、能力缺口及验证指标持续沟通（8轮），其中在端云协同管线落地部分与数据管线工程师沟通（1轮），并最终确定自定义采集器加WASM初筛、Flink加200ms水位线容忍及余弦相似度大于0.9的验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这块我想直接接个现成的埋点SDK，后端用Flink接一下，应该很快能搞定吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上好多文章说无埋点SDK就能自动采集交互事件，直接拿来用多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有现成的组件能直接把这种边缘微动数据洗好传上去？后端我打算用Flink。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还得自己写采集器啊？有没有轻量级的开源边缘计算框架能套一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Flink的Watermark我倒是知道怎么配，就是怕对齐逻辑写不对。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对端侧写滑动窗口和特征抽取不熟，平时都是写后端接口或者调现成库，这块卡住了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看下WebAssembly处理音视频流的案例，先把特征抽取的算法逻辑用JS写个验证版本跑通，记录一下延迟数据，然后再转WASM提效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿一段历史的眼动数据，跑一下端侧的滑动窗口，看抽出来的特征跟服务端全量算出来的特征差距多大。如果差不多，就说明初筛没丢东西。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定0.9吧？感觉0.9相似度挺高了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Watermark设个200ms的延迟容忍，跟咱们之前的感知阈值对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "在隐态思流解析特征抽取模块落地背景下，用户与导师围绕特征抽取方案选择、可解释性要求及验证约束持续沟通（6轮），其中在行为图结构编码与映射逻辑部分与算法实现极客沟通（2轮），并最终确定硬编码行为转图加PyG跑GCN的方案及图特征方向差异验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我想直接上HuggingFace的multimodal库，把文本和操作日志拼一起，调个预训练模型直接出embedding，应该挺快的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这，我加个时间戳进去行不行？或者找个带时序的预训练模型，网上好像有TimeSeriesTransformer之类的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "草稿删改和停顿这些行为怎么编码？我本来想直接用预训练模型出向量的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自己写编码器和GCN？这也太麻烦了吧，有没有那种能自动把序列转成图特征的工具包？或者我拿PyG调个现成图模型试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉自己写映射很容易出bug，能不能找个类似AutoML的结构，让它自己学怎么把行为映射成图？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，可解释性确实不能丢。那我就用PyG搭GCN，行为转图的映射逻辑按极客说的写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征这块就是：行为序列硬编码转图，PyG跑GCN出图特征，再拼上文本语义向量。"
+              }
+            ]
+          },
+          {
+            "microScene": "在思维轨迹与认知图谱偏差计算背景下，用户与导师围绕结构偏差定义与近似算法验证持续沟通（5轮），其中在偏差几何定义部分与知识图谱设计师沟通（2轮），在Wasserstein距离工程落地部分与算法实现极客沟通（2轮），并形成基于POT库Sinkhorn距离加图粗化的计算方案及对照组KS检验验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接拿scipy.spatial算个余弦相似度或者欧式距离，这种库现成的，调一下很快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "思维轨迹往认知图谱上映射，偏差到底咋算？有现成接口吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Wasserstein？这玩意儿有Python包能直接调吗？自己写我肯定写不出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算图之间的Wasserstein距离，有没有现成轮子？直接算会不会卡死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是先GCN出特征，再当分布用POT算Sinkhorn距离？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PyG接POT，加图粗化。我觉得这个靠谱，有包调，不用自己推公式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证？就跑几个样本看看数大数小？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这就去把POT库和图粗化加上，跑通偏差计算管线，再写个脚本跑KS检验。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在导引策略引擎联调背景下与导师围绕导引时机、心流保护与性能延迟的权衡取舍持续沟通（8轮），其中在规则引擎延迟与图推理取舍部分与算法实现极客沟通（2轮），在粗粒度导引对心流与测试影响部分与质量守门员沟通（1轮），并最终形成图推理超时截断与静默弱提示降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想找个现成的规则引擎套一下。我看网上很多人搞复杂导引逻辑都用LiteFlow，把偏差特征丢进去，编排一下规则，应该就能出动作吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想套LiteFlow做规则编排，你觉得这种方案行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "50ms确实快。但砍了图推理，导引动作会不会太糙？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极客说只用规则树能压到50ms，但导引只能给粗提示。这种粗粒度导引上线会不会出问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一边要快一边要准，这怎么弄。极客要砍图推理保50ms，质量那边说粗导引会打断心流必须带上下文。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能加个开关？正常走图推理，超时了就降级走规则树？我看网上很多高可用系统都这么搞降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看前几次请求的延迟？如果滑动窗口内平均延迟超过200ms，就触发降级开关。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就在请求进来前估算一下图的大小？或者用Sentinel之类的工具做流控？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是设个硬超时，比如150ms，没算完就直接返回兜底规则？这样不用外部开关了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就让兜底规则别弹窗。改成在侧边栏静默更新一个弱提示标签。这样就算截断猜错了，也不会弹窗干扰学生。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改LiteFlow的脚本，加上超时拦截和静默降级的组件。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端并发压测与修调背景下与导师围绕数据管线背压机制与图锁降级方案持续沟通（5轮），其中在瓶颈定位与压测验证分组部分与质量守门员沟通（2轮），并最终形成基于Reactor背压替换固定限流及读写锁降级的修调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接拿JMeter压测插件加压，看哪里响应慢，就给对应接口加个线程池，或者把JVM堆内存调大点应该能顶住吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前500并发OOM和图锁阻塞，具体卡在哪些代码段？有没有现成的压测报告或者修调工具能直接套一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "背压限流我之前用过Resilience4j的RateLimiter，直接在消费端方法上加个注解是不是就能挡住？锁的话，我改成ReentrantReadWriteLock试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "响应式流我就用过WebFlux写接口，底层背压细节没深究。我去翻翻Project Reactor的文档，看有没有现成的配置能套过来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "咱们数据管线如果改成WebFlux接收，用limitRate控制Kafka消费端拉取的prefetch量，下游图推理处理不过来就暂停拉取，这样内存就不会堆积了。比硬限流好，不会把突发的正常请求给拒掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我确实没想过。就看压测时写冲突的频率高不高，如果不高读写锁就够用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按这个方向改，用limitRate替换Resilience4j，锁换成读写锁，跑压测的时候重点盯热点节点那组数据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度交付与基线验证背景下与导师围绕灰度策略、流量权重冲突权衡及统计验证口径持续沟通（7轮），其中在稳定性与监控指标部分与部署与效能专家沟通（1轮），在统计功效与显著性检验部分与认知演进分析师沟通（2轮），并最终形成Flagger自动灰度折中方案与统计补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用K8s的Canary发布，配个流量权重5%就行。监控的话，Prometheus那套现成的模板拉一下应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用K8s原生Canary切5%流量，Prometheus看CPU和内存，这样行吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1%起手，看discardRate。那样本量够吗？1%的流量能跑出认知干预的显著性差异吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这俩冲突了。效能专家要1%慢放保稳定，分析师要5%以上凑样本。K8s的Canary插件好像没法自动根据样本量调权重啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能这样，我还是用K8s的Canary做底，但写个简单的脚本，盯着discardRate。如果这个率正常，我就让脚本自动把灰度权重从1%慢慢往上加，加到5%为止，同时满足样本积累时间要求。有没有更方便的开源组件干这事儿？Flagger行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看P值小于0.05呗？其他的我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对统计检验这块确实没吃透，只会套用网上的代码算P值。刚才分析师说的Cohen's d和分桶，我都没自己实现过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来两周，每天花1小时学A/B测试的统计基础，重点是效应量计算和分桶策略，然后在项目里用Python写个验证脚本，把Cohen's d加进去，跑通一次完整的分析。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Flagger做自动灰度，初始1%，指标达标自动扩到5%。监控指标加上discardRate和线程阻塞率。数据分析用分桶对照，看Cohen's d。先这样折中吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估监控核心指标背景下与导师围绕认知偏差收敛度的监控口径与干预归因逻辑持续沟通（5轮），其中在收敛量化与归因部分与认知演进分析师沟通（2轮），并最终确定监控偏差方差收敛、30分钟滑动窗口及5%流量对照组的评估口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "偏差收敛度监控，有没有现成组件？怎么证明是系统起作用了？我不想自己写一套统计推断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "方差Prometheus能算，平方的均值减均值的平方。对照桶是不是还得在Flagger里切？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差我用PromQL拼一下能出来，窗口我设5分钟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就30分钟一个窗口。对照桶切5%流量只看数据不发导引"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控偏差方差收敛，30分钟滑动窗口。对照组5%流量不给导引，对比收敛速率差异。"
+              }
+            ]
+          },
+          {
+            "microScene": "在导引过载与AI幻觉投诉反查背景下，用户与导师围绕幻觉拦截与过载熔断策略持续沟通（5轮），其中在投诉问题定性部分与用户反馈运营官沟通（1轮），在认知负荷指标计算部分与认知演进分析师沟通（1轮），并形成图谱硬查加用户软纠错的幻觉拦截策略与基于停顿方差和修正频率的动态认知负荷熔断基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看可以加个置信度过滤。大模型接口一般都返回置信度分，分低的直接拦住不发。过载的话，是不是设个每分钟最多推3条的硬限就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户反馈运营官 投诉里幻觉和过载都是啥情况？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幻觉反查，我打算调知识图谱的比对接口，把导引内容丢进去查实体。过载的话，有没有现成的认知负荷计算组件可以直接接？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@认知演进分析师 现有的数据能算认知负荷吗？不想额外加埋点了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "幻觉拦截走图谱实体比对，拦截不住的，加个“报错”按钮让学生纠错，当反馈回路。过载熔断，用停顿方差和修正频率算负荷指数，指数超阈值就暂停推导引，等指数降下来再恢复。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估背景下，与导师围绕体验与效能冲突取舍、动态阈值分档策略及归因短板持续沟通（6轮），其中在师生抱怨归因部分与用户反馈运营官沟通（1轮），在放宽阈值对认知收敛影响部分与认知演进分析师沟通（1轮），并形成按认知水平分档的动态阈值演进规划及理科先行分桶看数据的约束策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看大盘数据，熔断触发率有点偏高。学生好像觉得导引有点烦。我准备挂个现成的A/B测试工具跑两组阈值试试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户反馈运营官 现在师生抱怨主要集中在哪里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@认知演进分析师 如果调高阈值减少干预，认知收敛数据会受影响吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一边要体验一边要效果，这没法搞啊。有没有那种自动平衡的中间件？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按人来分档？基础好的少干预，基础弱的多干预。我用规则引擎配一下分流逻辑应该能搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理科这种有明确图谱的应该能复现。文科发散性强，可能不行。变量就是学科和初始认知水平。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我把刚才的讨论记到学习日志里了。之前我只看大盘均值，没拆分用户群。下次设计阈值，我直接按人群分桶看，不瞎猜了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。理科先行验证，分桶看数据，不套用统一阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

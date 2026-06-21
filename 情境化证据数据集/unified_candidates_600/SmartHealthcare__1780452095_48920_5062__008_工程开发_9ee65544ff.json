@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多组学数据清洗与对齐开发背景下，用户与导师围绕隐私求交、时空对齐、解析器编写与验证标准持续沟通（7轮），其中在特征对齐接口与时空滑窗部分与多组学数据架构师沟通（1轮），在毒副反应标注与清洗流绑定部分与医学数据标注师沟通（1轮），并形成基于特征张量的清洗对齐方案及验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先写个Python脚本，用Pandas把基因组、影像和临床数据按患者ID Merge一下，再做缺失值填充。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "隐私那边要用PSI-CA求交，不能直接拿明文ID Merge。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但时序偏移我怎么处理？我只写过常规ETL脚本，这种带时间切片的没碰过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这多组学数据对齐的接口到底该怎么定义？我这边清洗流要怎么接？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是得先把VCF和DICOM转成特征向量才能进清洗流？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那清洗对齐的时候，毒副反应的关键节点标注数据怎么跟我这清洗流绑在一起？我总不能洗完再标吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我现在最卡的是VCF和DICOM怎么解析成张量，我之前没写过这种解析器"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚得把PyVCF和pydicom的文档看一遍，特别是DICOM的时空Tag怎么提取，写个最小验证脚本跑通一条数据，把张量维度打出来看看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证标准就是：第一，PSI-CA索引对齐；第二，时间窗切片与CRS标注时间误差小于30分钟；第三，张量Shape符合架构师定义。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

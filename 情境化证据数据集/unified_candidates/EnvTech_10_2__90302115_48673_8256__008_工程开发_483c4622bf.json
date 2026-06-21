@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在城市热岛韧性预测与干预调度系统的遥感与物联接入联调背景下，用户与导师围绕时空对齐、变量含义、缺测与单位处理及验收自测持续沟通（7轮），其中在LST时间戳/云掩膜与接口最少字段部分与遥感算法工程师沟通（3轮），在传感器温度字段、device_ts与recv_ts及时区/缩放排查部分与物联网接入工程师沟通（3轮），并明确落地对齐规则与两处代码修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "遥感是一天一张，物联是分钟的。我就直接按天去对，结果温度差很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿的就是“温度”那层，接口里叫lst，我以为就是气温。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@遥感算法工程师 lst这层温度到底是啥？我现在拿它和地面温度传感器对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "哪颗星我不知道，接口就给一张tif。时间戳我看是当天0点，就按0点了。云我没管，反正也有值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我没看到QA波段，我就读第一层。mask文件也没给我。是不是我直接把所有0以下的都删了就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "好，那就是我缺个mask和真实时间。那我先去找后端加字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 传感器的温度字段是啥温度？时间是本地时间吗？我和遥感对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前用的是device_ts，因为看着像“真实时间”。那我改成recv_ts就好了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我好像之前又除了一次，因为我看见是350，就以为是35.0。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "懂了，我把*_c当原始了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就…遥感那边拿真实时间，不用0点。然后物联用recv_ts。再把云的删了。对齐就按最近的分钟取一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就±30分钟，取平均？空间就取点落在哪个像元。邻域先不做，怕慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记得，就是没预测就用上次的，然后保底，再别进禁用区。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "两处：一是我不再把*_c除以10了；二是对齐不按0点，等遥感给真实时间我就用±30分钟取中位数。明天我想看到那3个点的min/median/max能正常点，不要出现3度这种。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

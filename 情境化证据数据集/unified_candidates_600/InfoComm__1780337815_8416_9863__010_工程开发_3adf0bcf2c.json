@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高并发指令下发性能调优背景下，用户与导师围绕调优方案、Netty底层机制及压测指标分析持续沟通（6轮），其中在边缘侧并发瓶颈与P99延迟抖动分析部分与性能优化工程师沟通（2轮），并形成南向协议适配层非阻塞重构动作与P99延迟验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以直接把下发线程池的核心数调大，或者加个无界队列缓冲一下，应该就能扛住并发了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧高并发下发指令的瓶颈在哪，我准备调大线程池行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂Netty底层的ChannelPipeline怎么跟现有的阻塞解码器对接。之前只照着网上的Demo写过Echo服务。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重点看怎么把现在的阻塞解码逻辑重构成ChannelHandler。这样改的话，应该能避免线程阻塞，提升单节点并发上限。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "说明网络不稳定？或者后端处理慢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "光看平均QPS没用，得看P99，还要结合GC日志找毛刺根源。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "动作是把南向协议适配层重构为非阻塞的ChannelHandler，剥离阻塞操作；验收是压测时P99延迟低于50ms，且边缘节点内存占用稳定，不发生频繁Full GC。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

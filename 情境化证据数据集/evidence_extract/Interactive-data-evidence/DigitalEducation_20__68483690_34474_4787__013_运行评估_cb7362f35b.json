@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在试点校诚信评分服务告警（高风险命中率翻倍且申诉上升）排查背景下，用户与导师围绕监控告警定位、分组对照标准、处置步骤与合规边界持续沟通（9轮），其中在告警指标/发布与资源抖动核查部分与运维SRE沟通（2轮），在缺字段影响与回填可行性部分与数据治理经理沟通（2轮），并形成基于dq_flags分组与临时止血的溯源排查口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先怀疑有人作弊变多了？然后就报警了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "数据就是采集变多了。规则就是阈值变严了。环境就是服务器卡了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维SRE 昨晚命中率翻倍是因为什么？有发布吗？机器是不是卡了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那就是接口超时了导致风险变高？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先看p95延迟，再看missing_fields_rate，再看是不是某个学校。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 缺了doc_version_id和client_ts，会影响诚信评估哪些东西？能补吗？要怎么查？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是doc_version_id没了就会断链，然后就高风险了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就看超时率高不高，缺字段高不高。高的就是主导。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，就分组看一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用missing_fields_rate？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就是按dq_flags分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能看学生的内容正文。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1看告警指标。2看是不是发布。3看超时。4看缺字段。5按学校分。6如果不行就找人。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，就按这6条发。然后回填就是用server_ingest_ts顶上去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我就写成只回填client_ts，doc_version_id就缺着。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,117 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联调压测排障背景下，用户与导师围绕推理一致性漂移与压测429/500定位及验收口径持续沟通（12轮），其中在压测脚本与门禁判定上与测试与质量工程师沟通（2轮）、在特征view版本生成与latest问题上与数据平台工程师沟通（2轮）、在模型绑定版本来源上与算法工程师沟通（2轮）、在网关限流与超时重试配置上与安全与SRE工程师沟通（1轮），并明确改造分工与四项验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先想看是不是缓存没开，或者版本号是临时算的。429 是不是限流太低？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就走预警推理接口，参数就是 plot_sid 和 window_end_ts。日志盯 feature_version、qc_rules_version、dataset_partition、model_hash 这几个，还有 request_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对比过一次，feature_version 不一样，model_hash 倒是一样。dataset_partition 我没太看，反正两个请求的 window_end_ts 一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 压测脚本是怎么打的？还有你们一致性怎么判？我这边 feature_version 会变。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "429 18% 是不是你们打太猛了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我知道了，我回去看看 view 是不是取 latest。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有 429 我改大点就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "他们固定一组 plot_sid/window_end_ts 打 10 分钟，看日志四个字段要不变。我这边漂主要在跨整点的 window_end_ts，可能 view 里有 latest。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边是从 fs.online_feature_view_v1 读出来一个 feature_version 字段，代码里也会把 feature_version 打到日志。具体 view 里怎么生成我不清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据平台工程师 fs.online_feature_view_v1 里 feature_version 怎么来的？会不会用 current 或 latest，导致同一个 window_end_ts 两次查不一样？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那就是 latest 了。那改成按 window_end_ts 固定不就好了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是让你们把 view 改了就行？我这边不用动？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可审计就是能查到是哪次跑的，对吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一是 view 不要 latest，按 window_end_ts 找 <= 的 run。二是我服务查询强制带 window_end_ts 条件。三是日志里把 feature_version 换成 run_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记得是从 ml.qc_rules_registry 读最新的……推理也读吗？我有点乱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我可能图省事在推理里复用了训练的校验函数，它里面会查 qc registry。要不我把那段关掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 线上推理里 qc_rules_version 和 feature_version 应该从哪拿？我这边可能误读了 registry 的最新。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就从 model_registry 拿 qc_rules_version，feature_version 也从那拿？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "model_hash、model_version、code_commit、qc_rules_version、feature_view_version 这些从 model_registry。然后特征服务返回的 run_id 我写到 feature_version，保证两次一样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜是网关，或者是 fastapi 的限流插件……我们有用吗我忘了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与SRE工程师 429 是哪里打出来的？压测环境限流是多少，能临时调吗？500 里 504 也挺多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我让他们把网关放大就好了，超时我改成 800ms。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "P95 小于 800ms，429 降下来，500 降到 1% 以下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没有，我们之前就不记坐标，只记 plot_sid。应该没问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）我改推理：不再读 qc_rules_registry，qc_rules_version 从 model_registry 拿；特征查询强制带 window_end_ts，写入稳定的 feature run_id。2）数据平台把 fs.online_feature_view_v1 从 latest 改成按 `pipeline_run_ts<=window_end_ts` 取最大，并把 run_id 暴露出来。3）压测：SRE 给压测 client_id 单独提网关到 200 RPS、burst 100，我把特征超时调到 800ms、重试 1 次；验收看一致性漂移 0、429<1%、500<1%、P95<800ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

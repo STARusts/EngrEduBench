@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在多相收率预测数据流组织背景下，与导师围绕流处理框架适用性、推演状态管理与断点续推持续沟通（5轮），其中在推演链路时序与状态硬性要求部分与反应动力学建模师沟通（2轮），并最终形成边缘切片推演、Redis快照恢复与云端平滑聚合的数据流设计底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上流处理框架呗。我看网上好多时序数据都是用Kafka加Flink，一套下来又快又稳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink自带状态后端啊，配个RocksDB就行了。反正数据丢进去它自己算，不用我操心吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热解推演对数据流有什么要求？用Flink自带状态行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时序对齐，切片带状态听起来好麻烦，Flink搞不定吗？有没有更方便一点的办法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Flink自带状态不行，得自己带业务状态。然后算力消耗大，得在边缘做切片，只传关键点上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重启了就重新算呗，反正原始数据都在Kafka里存着呢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "快照缓存有没有现成的组件能直接用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘小步长切片推演，只传相变节点到云端聚合，用Redis存推演状态快照，断了能恢复。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

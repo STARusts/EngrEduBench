@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在建筑拆除粉尘声振协同管控系统运行评估的现场部署验收核对背景下，用户与导师围绕验收清单化、可追溯对账与P0/P1判定持续沟通（6轮），其中在权限合规与审计证据字段口径上与合规与标准经理沟通（3轮），在断网回放补传对账与验收trace_id成本控制上与运维工程师沟通（3轮），并形成可现场执行的A-E精简验收步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先用平台自带的设备在线列表看是不是都绿了，再点几条告警看看有没有工单，然后……报表能导出来就差不多？我能不能用一个“验收脚本”一键跑完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "event_time 和 ingest_time 我在消息里加了，batch_id 我按之前说的只在 perf 开。现场验收也要开吗？我担心一开就把日志打爆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准经理 现场部署验收核对这块，你们要哪些证据？我们之前做了 E_AUDIENCE_LIMIT、audit_log、evidence 最小化（hash/mask/版本），我怕现场临时又加字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第3条我有点懵。监理能看区间、园区只能看分级，这个是在前端控还是接口直接不给？我看网上很多都是前端一挡就算了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了，接口得直接裁。那“不可编辑”是指 audit_log 不能删改？现场怎么验，不会要我们演示数据库吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边说现场至少要跑：三类角色登录同一事件，越权触发 E_AUDIENCE_LIMIT 且 audit_log 记 deny；audit_log 字段得带 event_time、ingest_time、evidence_ver、hash/mask；还要演示一次离线补传让 ingest_time 晚于 event_time。还有接口必须按 audience 裁字段，不能只前端挡。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）点位清点：每个传感器点位编号、位置、项目/标段绑定对上。  \n2）设备在线：看网关和传感器心跳，拉一条最新数据。  \n3）时钟：抽两台设备，看 event_time 跟现场时间差不大；再看 ingest_time 有数据进来。  \n4）事件闭环：手动造一个超标（比如扬尘），平台出事件->告警->工单。  \n5）权限：用园区/监理/施工三个账号看同一事件详情，确认字段不一样；越权返回 E_AUDIENCE_LIMIT。  \n6）对账：导出报表里这几条事件，跟 audit_log 数量和 event_id 对上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们有个回放工具，能把历史片段推到边缘网关的模拟输入里。我怕现场网络不稳，回放一半断了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 现场部署验收要跑回放/造事件。有没有办法让回放断网也能对账？我们想加个验收 trace_id 或类似的，但不想全量开 batch_id 把日志打爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个 seq_no 我之前没管过。我一直以为 event_id 就够了。seq_no 是设备端自己加？嵌入式那边会配合吗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。我先不碰固件改动，现场就按你说的用 (device_id, event_time, hash) 做一个临时去重？这样算不算危险。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 运维建议搞个验收模式：指定项目+时间窗打 acceptance_trace_id，别开全量 batch_id；断网补传靠网关缓存，最好有 seq_no 做幂等。还提醒权限裁剪别只前端。至于 seq_no 我现在没法改固件，可能只能先问嵌入式 event_id 规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按 A-E 去跑，验收模式用 acceptance_trace_id，先不碰固件去重。要是现场发现 audit_log 少了 deny 或者字段没裁剪，我就直接按 P0 记，先让后端补。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

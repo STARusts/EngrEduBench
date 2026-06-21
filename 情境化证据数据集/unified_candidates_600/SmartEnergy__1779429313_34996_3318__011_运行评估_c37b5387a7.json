@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在柔性并网灰度部署验证背景下，用户与导师围绕量化验证标准、统计检验短板补齐及止损预案持续沟通（7轮），其中在灰度验证指标与分析口径部分与运行指标监控分析师沟通（1轮），在灰度推进节奏与回滚触发条件部分与交付与运维部署师沟通（2轮），并最终形成包含编写统计脚本、配置分桶报警及切流验证的执行计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先切5%的流量到新版本并网接口上，跑跑看有没有报错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得主要看并网失配率和WCET是不是超限就行了，用Prometheus拉个均值对比一下，新版本均值低就算成功。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A/B对比我会配，但置信区间这东西我不太会算，就看看均值差不多了吧？之前项目都这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "柔性并网灰度验证看啥指标？均值不够的话，置信区间怎么算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这太复杂了，能不能直接看图表曲线差不多就行？我工具里没这函数，还得现写代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不会统计检验，我可以去学个Python的scipy库算一下，大概这周末看完文档。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我先配灰度规则，把新老版本按设备ID尾号奇偶分桶，这样好对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算按设备ID奇偶分桶做A/B测试，灰度推进节奏和回滚怎么定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自动回滚配P99超15%这个我熟，用Alertmanager配个规则就行。但t检验结果触发回滚可能有点延迟，算数据要几分钟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的执行计划就是：1. 写scipy统计脚本；2. 用Prometheus和Alertmanager配奇偶分桶和P99报警；3. 先切5%流量跑2小时。周五前把统计脚本跑通的结果发出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

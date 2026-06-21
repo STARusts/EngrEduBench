@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演效能瓶颈定位Debug背景下，用户与导师围绕多介质迁移算子并发延迟的根因分析与解决方案持续沟通（5轮），其中在调用栈耗时与阻塞点定位部分与测试调优专家沟通（1轮），在同步锁设计意图与异步快照误差评估部分与算法工程师沟通（2轮），并最终形成将全局同步锁重构为异步快照机制并设定50ms容忍窗口的Debug方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看Grafana就是CPU满载，感觉就是算子太吃计算资源。要不把网格精度调粗点？计算量马上能降下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推算子压测的时候，除了JMeter的TPS，有没有更细的调用栈耗时？我这边只看到接口级别慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨天看文章学了用Async Profiler查内存泄漏，原来还能看锁竞争。我马上把这个火焰图下下来，照着定位一下具体是哪行代码持锁时间太长。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测火焰图显示多介质状态同步锁竞争极化，并发一高线程全阻塞了。这锁是干嘛的？能去掉吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全局锁太重，那拆成细粒度锁？或者快照别同步生成，搞异步的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步快照有状态不一致，这误差会不会让暴露评估结果乱跳，直接触发假预警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查了下上周的参数校准记录，如果异步延迟在50毫秒内，迁移通量的计算误差大概在4%左右。这还在暴露评估模型的5%置信区间内，不会触发假预警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改推算引擎的代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

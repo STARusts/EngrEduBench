@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在证据链方案设计的多端采集与上报架构梳理背景下，用户与导师围绕端类型划分、证据action与埋点分流、离线重试与幂等回放持续沟通（8轮），其中在上报链路分层与强制字段/幂等回放设计部分与解决方案架构师沟通（2轮），在弱网离线队列、重试退避、批次签名与权限缺失兜底部分与移动端工程师沟通（2轮），并形成可评审的EvidenceEvent字段与上报策略取舍。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端的话，学生端APP、小程序，老师端，家长端，然后还有学校后台Web。事件就上报到服务端，像埋点那样。细的我不太确定，是不是直接走HTTP就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据action大概是提交作业、批改、反馈阅读、家长确认？体验埋点就是点了哪儿那种。必须采的端…学生提交肯定要，老师批改要，家长我不确定，可能可选。延迟的话，提交应该实时，别的可以晚点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 多端采集到上报这块，通道怎么分比较稳？还有事件字段哪些必须带，幂等和回放怎么设计才不容易出事故？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "上报正文不直传这点，是不是会麻烦？我看很多SDK就直接带json上来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "证据事件单独一条路，不跟普通埋点混，不然审计和留存不好弄。字段我记得：action、object_type/object_id、actor_id、action_time、event_id、幂等key，还有平台信息，附件就用file_id引用，再带个hash。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 端上弱网离线这块，证据事件怎么缓存、怎么重试比较靠谱？签名是每条都签吗？还有权限没给导致采集不上，怎么办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "批次签名听着省事。那服务端会不会嫌麻烦，还得拆开验？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向批次签名，关键action再单条签名，不然端上太重。附件不直传，用file_id引用。离线顺序就用client_seq，服务端回执最后成功的seq，端上从那继续发。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等key就拼 object_id + action + actor_id + action_time，再加个nonce。撞车…action_time如果两次点得很近可能一样？nonce能区分，但nonce如果每次都变，就没法幂等了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，就是在本地队列里存一个action_instance_id，重复上报不变。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第2条里我记不住这么多，但方向没问题。关键就是分两路、引用附件、client_seq+回执、幂等用action_instance_id。conflict进审计队列也可以。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

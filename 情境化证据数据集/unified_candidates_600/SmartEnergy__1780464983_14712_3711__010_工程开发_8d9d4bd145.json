@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳电撮合核心引擎出清排序与编码调优背景下，用户与导师围绕报价、时延和频域特性糅合排序权重及热加载参数一致性持续沟通（6轮），其中在频域特性量化权重部分与频域控制规约师沟通（1轮），在惩罚因子参数化部分与撮合引擎工程师沟通（1轮），并最终形成综合报价与指数衰减频域匹配度的排序权重及快照读热加载方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我想用红黑树或者优先队列做资源排序，加上多线程并发处理出清请求。并发库直接上Disruptor，应该能压到极低延迟。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "报价和时延好弄，报价低优先，时延小优先。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "频域特性是啥？这东西怎么量化成权重？我之前只处理过纯价格出清。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳电撮合出清的时候，频域特性怎么算权重？我只懂按价格排，频域这玩意儿怎么加进去？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以排序的时候，除了价格，还得看资源快慢。快的配高频，慢的配低频，不匹配就扣分。那我在Comparator里加个频域惩罚分就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频域惩罚因子怎么参数化？不能写死在代码里吧，不然上线调参得重启。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指数衰减好算，Math.exp就完事了。但热加载怎么保证出清线程安全？我直接用volatile修饰 $\\lambda$ ？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "快照！排序前把 $\\lambda$ 拷贝一份快照，排序全程都用快照值。新进来的 $\\lambda$ 等下一轮出清再生效。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "排序权重 = 报价权重 + 频域惩罚(指数衰减 $e^{-\\lambda \\Delta f}$)。热加载参数排序前做快照，防止批次内标准飘移。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改Comparator和参数读取逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

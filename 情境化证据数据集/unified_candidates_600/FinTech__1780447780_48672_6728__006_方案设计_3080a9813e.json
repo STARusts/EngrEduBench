@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在传染衰减阻尼建模背景下，用户与导师围绕阻尼量化方式、工程实现与更新机制持续沟通（8轮），其中在阻尼量化与线上计算部分与风险传染量化师沟通（2轮），并形成阻尼建模约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "衰减不就是每跳乘个系数？比如传一次乘0.7，多跳就趋近0了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "强关联就衰减慢点呗。但这系数具体给多少，我也没谱，总不能瞎写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻尼衰减这块，线上如果按公式算，怕是算不过来，一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分桶插值？特征组合多了桶不是炸了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不是写死0.7，是跟敞口比和关联度有关的指数公式。线上算太慢，就提前算好分桶表，查表插值出结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看历史违约数据分布切吧。离线算好推到线上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "会吧。那就搞两块内存，读老写新，完事原子替换指针。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防漂移我哪会，得加个指标看表命中率还是啥？这超出我范围了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传染衰减阻尼建模约束：1. 阻尼不是固定值，是敞口比和关联度的指数函数；2. 线上不实时算，用特征分桶查表加插值；3. 桶数据离线算，双缓存热更新，替换时原子切指针；4. 阻尼表带版本号和生效时间，支持AB测试对比。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

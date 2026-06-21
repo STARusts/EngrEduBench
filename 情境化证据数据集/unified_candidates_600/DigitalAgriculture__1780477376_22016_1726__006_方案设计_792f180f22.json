@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧轻量化推理引擎选型背景下，用户与导师围绕运行环境约束、选型方向及INT8精度验证方法持续沟通（5轮），其中在硬件与框架适配度及内存占用部分与边缘计算选型师沟通（1轮），在多模态模型转RKNN算子支持及量化部分与轻量化算法工程师沟通（1轮），并最终确认主推RKNN引擎、保底NCNN、验证加实采INT8对齐的选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RK3588算力不是挺强么，直接上TFLite或者ONNX Runtime呗，部署起来快，算力也够用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没细想。不过TFLite生态好，踩坑少吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "RK3588上跑TFLite和ONNX，NPU能直接吃满吗？内存占用咋样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们多模态模型有视觉和气候特征融合，转RKNN坑大不大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RK3588必须用RKNN才能吃NPU，TFLite和ONNX走CPU太慢。但注意力机制转RKNN容易回退CPU，还得盯INT8掉点。NCNN占内存小，做后备方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑批离线测试集对比下呗？就用之前标好的数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

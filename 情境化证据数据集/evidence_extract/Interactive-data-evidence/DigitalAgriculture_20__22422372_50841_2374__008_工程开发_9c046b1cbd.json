@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在人员技能与排班引擎工程实现背景下，用户与导师围绕排班路线选择、输入输出/原因码与解释、策略接口组织、事件写入与幂等确定性持续沟通（9轮），其中在轻量优化器最小可行与验收指标部分与算法工程师沟通（4轮），在代码分层与单测/解释结构设计部分与后端工程师沟通（3轮），并最终确定规则链+贪心方案的模块拆分与测试/合规约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向规则优先吧。就是把技能匹配、工序时长、地块距离这类写成规则，先排出结果。优化求解我怕弄不动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入可能就是任务列表，每个任务有地块、工序、预计工时、开始时间窗。人员有技能等级、可用时间、所属班组。输出就给每个任务分到谁，外加一个顺序。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原因码我先写几个：NO_SKILL、NO_TIME、CONFLICT、TOO_FAR、CAPACITY_FULL？差不多这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先策略接口吧，按顺序跑。规则表我不太会做，怕配置很绕。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 B路线要做的话，最小可行实现要啥？我们怎么验收它没乱排？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "硬约束就是技能、时间窗这些？路程算软约束？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“任务块”是啥？我现在都是一个任务一条。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "优化器用啥库比较合适？我怕依赖很重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得先A吧，纯规则链+贪心。B听起来要做代价函数、超时回退、还要指标。我怕两天搞不完。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按任务开始时间排序  \n2）对每个任务找候选人：技能符合、在岗、没被占用  \n3）候选人按“同地块优先、空闲时间最匹配”排序  \n4）选第一个分配，写一条assignment事件  \n5）没候选就标不可排，写原因码"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "action写ASSIGN？from是UNASSIGNED，to是ASSIGNED。operator可能是系统账号。payload放候选人数、命中的规则id？不放人身份证号这种。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我没想太细。可以加一个requestId，排班结果按requestId存，重复就返回同一个？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "tie-breaker用人员id我能做。那随机就不要了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 规则链+贪心这套，你建议代码怎么拆？单测怎么写才不至于改一条规则就全崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "表驱动就是参数化测试那种？我平时写得少。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "explain结构大概长啥样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我选A。吸收点我记住三条：Domain对象和Strategy拆开；Filter/Scorer/Selector分开写单测；结果带explain但不带候选列表。不做优化器，不做任务块合并，也不加“超过X公里禁派”这种硬阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）`task_event.payload`不放姓名手机号，只放workerId这种内部id，必要时放hash？  \n2）排班接口返回里也不带敏感字段，管理端查人信息走权限接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

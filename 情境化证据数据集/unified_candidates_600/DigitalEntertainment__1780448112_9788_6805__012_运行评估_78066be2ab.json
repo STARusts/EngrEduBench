@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在系统压测调优后准备上灰度背景下，用户与导师围绕灰度观测指标、分组方式、统计有效性验证及降级数据清洗持续沟通（8轮），其中在灰度观测指标与分桶部分与灰度发布运营沟通（1轮），在效应量计算与置信区间部分与情绪体验评估师沟通（1轮），并最终确定按群境ID分桶、观测微观指标、剔除降级数据计算Cohen's d效应量的灰度观测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接在Sentinel里配个规则，先放5%的流量进去看看有没有报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增益的话，我直接看大盘的留存率和在线时长呗？这种大盘数据A/B测试平台都能直接出，最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配置中心自带的大盘模板有吧？我直接套一个现成的A/B看板行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "方差和抖动率这些，Prometheus里好像有现成的聚合函数，我直接用rate套一下行吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有效性，就是看实验组曲线比对照组高一点？具体高多少算有效，我不太确定。网上很多人说看P值小于0.05就行，我找个在线计算器算一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这东西是不是得自己写脚本算？有没有可以直接调的Python包？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "剔除降级数据，这步挺麻烦的。那我先算Cohen's d，用SciPy调包应该快。只要d>0.2我就推全量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "处理，那就加个标记位。降级触发时在日志里打个标，算数据时过滤掉。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实没考虑到数据污染这块，以为直接拉全量算就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂这些统计原理，平时都是看别人跑出结果直接用。我接下来这周，每天花1小时看SciPy的统计文档和双样本T检验的推导，自己写一个过滤降级标记并计算Cohen's d的Python脚本，在灰度前跑通历史数据验证一遍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

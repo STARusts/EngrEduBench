@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端工况下性能消缺背景下，用户与导师围绕阻尼调控时延超标与指令下发抖动问题持续沟通（3轮），其中在抖动根因排查与验证指标部分与性能优化专家沟通（2轮），并最终明确修改互斥量属性、验证P99时延与相位差及超15度闭锁的消缺底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时延超标啊，我看是不是Python那块GC卡了？要不要我找个APM工具挂上去扫一圈，或者把线程池核心数调大点？网上说加机器配置一般能解决抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "优先级翻转？我不太懂这个。那我去问问@性能优化专家，看看这种抖动通常怎么一键排查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "抢锁啊。那换个不加锁的库行不行？或者我直接把通信那块代码注释掉一半，先保证调控发得出来？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没细看，以前都是拿现成的SDK直接跑。我今晚翻一下VxWorks手册里关于优先级继承那节，明天试着把互斥量属性改成优先级继承试试，应该能防阻塞吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看日志里打的时间戳，如果没超时应该就行。或者再用JMeter压一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改互斥量属性，看P99时延和相位差，超15度闭锁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声纹特征驱动的精密切削闭环反馈补偿系统开发、准备编写MEMS声学传感器I2S驱动背景下，用户与导师围绕高频采样丢帧风险、缓存与实时性权衡及驱动验收指标持续沟通（8轮），其中在采样率要求与受控验证实验设计上与声学研究员沟通（2轮），在DMA双缓冲与I2S时钟配置策略上与嵌入式开发工程师沟通（1轮），并形成48kHz+循环DMA方案及频偏/抖动的验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备开始写传感器的驱动程序了，先把数据采上来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想先按常规做法开个大缓存，只要内存留够，应该就不会丢数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好的，那我就把缓存调小点，尽量快点传给算法模块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@声学研究员 传感器采样率定在多少比较稳？还有@嵌入式开发工程师 这种高频采集用双缓冲是不是好点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白了，那就按48kHz采，用DMA循环模式跑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备写完后直接看数据流里的序列号。只要序列号是连续的，就说明没丢包，应该就准了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@声学研究员 要不我写一段数据导出脚本，你帮我看看波形对不对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好的，这个实验我能做。我先写个测试用例，对比一下输入输出的频率和振幅，看看误差在不在范围内。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是在实验台跑一下，看波形圆不圆润。如果不圆润我再调参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那我就记一下时间戳抖动。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我翻了下寄存器手册没看懂怎么配，我发现我对硬件层时序对齐这块确实短板明显。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我得去补一下I2S协议规范里关于左对齐和右对齐的区别，下午把这一块的逻辑配置表理出来给您看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总结一下，我现在先去补课I2S时序配置，然后按48kHz采样率写DMA双缓冲驱动，最后用10kHz标准波做对比实验。验证指标就定为频率偏差小于5Hz，时间戳抖动控制在200微秒以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

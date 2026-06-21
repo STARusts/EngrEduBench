@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在灌注设备自适应控制对接背景下，与导师围绕预警信号转化控制动作、防指令堆叠与超调熔断持续沟通（7轮），其中在接口协议约束部分与嵌入式开发主管沟通（1轮），在闭环控制安全底线部分与安全管控师沟通（1轮），并最终形成增量控制、ACK确认重试及安全降级等硬约束方案去修改状态机。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预警一出来就直接调灌注泵的流速呗，缺血了就加大流速，不缺了就降回来，写个PID控制应该就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超调确实危险。那我就加个if判断，超了就不发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灌注泵那边怎么接？能直接发目标流速吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那安全方面呢？加个15%限制够不够？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发主管说只能发增量，一次最多改15%。安全管控说要加心跳超时和硬线保护，防软件抽风。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "心跳超时就，就设个定时器呗。下发周期，可能100ms一次？卡在延迟窗口的话，我还没想好，要不就再发一次？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重试两次就熔断吧，间隔也设50ms？这样加上150ms延迟，总共也就250ms，不会超500ms心跳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "重试间隔200ms，超时降级，我这就去改状态机。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

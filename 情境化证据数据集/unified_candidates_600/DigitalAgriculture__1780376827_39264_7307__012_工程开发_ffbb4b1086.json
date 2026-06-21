@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在音频流误报排雷背景下，用户与导师围绕风机与送料车干扰的前置特征工程排雷、音频前处理短板补充及对照实验变量控制持续沟通（5轮），其中在特征工程前置排雷与掩码过滤实现部分与算法调优攻坚手沟通（3轮），并最终形成基于低频占比与过零率的时频掩码过滤方案及包含多转速样本的对照实验设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看误报样本频谱图，风机那块红了一片。我想给训练集多加点风机噪音，让模型硬分。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "风机一开低频全盖住了。送料车就几秒，也不好切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风机低频和送料车瞬态冲击这种误报，进模型前能怎么滤掉？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "低频能量占比和过零率这俩我能写。掩码过滤具体咋做？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时频掩码我只知道名字，具体推导没写过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚把短时傅里叶变换和掩码生成看一遍，照着librosa的掩码API写个demo。然后把低频占比和过零率这俩特征加到预处理里，滤掉风机和送料车，再喂给模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先拿当前误报数据，只加掩码过滤跑一遍，看误报降多少。频段切点默认200Hz以下，换了风机可能得重新标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试集我挑3个不同风机转速的舍。掩码过滤加进去，切点可配，默认200Hz。对照实验看误报率降多少，还要看真实咳嗽召回率别掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

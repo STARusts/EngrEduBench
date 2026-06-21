@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在并发诱导分发性能调优背景下，用户与导师围绕延迟飙高原因、日志折中方案、压测环境差异及背压控制持续沟通（10轮），其中在日志砍留提速部分与隐迹流架构师沟通（1轮），在暗痕日志审计复盘部分与诱导偏移审计员沟通（1轮），并最终形成核心审计同步写与非核心异步批量写方案，决定引入Reactive Streams背压机制与网络抖动压测验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "延迟是高了。我我看cpu没打满，是不是线程池不够？加几个线程行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才压测分发接口，延迟飙到200ms了，我想加线程，你觉得呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构说要把日志砍了提速，这能行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定不能接受，太卡了。但没日志确实不敢上线，万一诱导错了没痕迹。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只会看cpu。async-profiler我昨天刚装了，还没搞明白怎么看IO阻塞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我马上用它跑一下，看看是不是卡在写日志上。要是真是IO阻塞，我就把非核心日志改成异步批量写，核心审计字段保留。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢日志确实会影响熔断统计。不过批量写的话，我设置个很小的flush间隔，比如50ms。这样最多丢50ms的数据，对5次每分钟的熔断阈值来说，误差应该能接受吧？因为熔断看的是分钟级，不是毫秒级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单机没算网络开销和锁竞争，真实延迟肯定比压测高。我我压测的时候得加点网络抖动的模拟，不能直接拿单机数据当线上预期。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心审计保留同步，非核心异步批量，flush间隔50ms。我这就去改下发逻辑和日志配置。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我本来想用一个有界队列，满了就丢弃。但丢弃暗痕数据可能导致推理断裂点漏算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我我查一下，用Flux的request方法让下游拉取，应该能避免队列撑爆。我改完代码再用带网络抖动的脚本压一次。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在作答采集SDK联调闭环（上报/离线补传/验签入库/回放）且预算紧、低端机不卡的背景下，用户与导师围绕事件最小集、可靠上报、性能合规与接口验收持续沟通（8轮），其中在事件字段/幂等去重/乱序与隐私边界上与数据架构师沟通（4轮），在低端机队列与批量上报实现及可测性能阈值上与移动端工程师沟通（3轮），并收敛为可执行的降级策略、/events/batch接口契约与联调验收要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "两块。第一是事件模型：我们想把“答题过程”采得更细做错因，但怕字段太多、太重；第二是上报可靠性：弱网下重复上报和乱序，服务端去重/幂等怎么做得既稳又省成本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 作答采集SDK联调这块，麻烦你给个“最小可用”的事件模型：需要哪些字段、怎么做幂等去重、乱序如何处理？我们预算紧，尽量别引入复杂中间件。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`answer_step`如果抽样，会不会影响错因诊疗？我们后面想识别“犹豫型/反复改答案”这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等键里放 `answer_digest`，客观题行，主观题如果只有附件ID，会不会造成重复难分？比如同一附件多次提交。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "了解。我还想确认隐私边界：`user_id_hash` 这种可以直接当准主键用吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清楚。我回去跟导师对齐取舍点：过程事件抽样、幂等用唯一索引起步、主观题用本地rev。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 我从数据架构师那边拿到最小事件模型了：先全量`answer_submit`，过程`answer_step`可抽样；幂等键用(租户+用户哈希+会话+题目实例+attempt+时间+answer_digest)哈希，服务端先靠DB唯一索引去重，热点再加缓存；乱序用step_index和attempt_no+时间排序。主观题digest用attachment_id+本地draft_rev避免误合并。你看我们还需要补什么验收口径？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级我想按两层：设备档位和网络状态。低端机或弱网：只发`answer_submit`，并把批量上报间隔拉长；中端：`answer_step`按题型采样，比如选择题采，解答题不采；高端：过程全采但payload固定、上限比如每题最多50步。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收点我先想四个：幂等去重、离线补传、乱序可回放、以及性能。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 SDK联调这块我们预算紧，要跑在低端安卓上：你建议怎么做本地队列、批量上报、离线补传、去重，能给一组比较现实的性能指标/阈值吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的耗电<=1%这个怎么测？我们没有很成熟的工具链，可能测不准。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那`client_drop`事件要不要带具体丢了哪些task？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "收到。我回去跟导师把阈值和降级写进联调验收。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 移动端给的低成本实现是SQLite单表队列+批量POST(<=50条)+gzip；触发条件队列>=20/15秒/退后台；重试退避1m-2h最多8次，超限丢弃并上报`client_drop`计数。降级：低端机禁step、批量阈值提高；弱网只发submit。建议验收阈值：SDK新增<=300KB；写SQLite P95<=8ms；批量序列化+压缩 P95<=30ms；30分钟额外耗电<=1%(先用对照法看异常)；日均流量粗口径<=3MB/人/天。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口我倾向一个统一`/events/batch`，请求里带`tenant_id`和`events[]`，每条包含`event_type/payload/idempotency_key/trace_id`。响应返回逐条ack，告诉哪些成功、哪些需要重试、哪些丢弃。错误码我想分：可重试（429/503/timeout）、不可重试（400 schema/401 auth/403 forbidden/413 too large）。幂等语义：同一个idempotency_key重复提交，服务端返回成功但标记`duplicate=true`。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "请求：  \n- header：`Authorization`（短期token）、`X-Tenant-Id`、`X-SDK-Ver`  \n- body：`{batch_id, sent_ts, events:[{idempotency_key,event_type,created_ts,priority,payload,trace_id}]}`  \n响应：`{batch_id, server_ts, results:[{idempotency_key,status,code,message,duplicate,retry_after_ms}]}`  \nstatus取`OK/DUPLICATE/RETRY/DROP`。  \n服务端路径：校验租户与token->schema校验->按event_type路由到表->插入时用`idempotency_key`唯一索引；冲突则DUPLICATE；如果payload超限或schema错则DROP；数据库暂时不可用或限流则RETRY并给retry_after。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

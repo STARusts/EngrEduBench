@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阻尼协控接口核心实现背景下，用户与导师围绕并发防重、断点续跑、配伍校验与熔断降级、审计留痕持续沟通（8轮），其中在防双重用药与并发处理部分与后端开发主管沟通（1轮），在流图断点续跑与状态校验部分与协控流图设计师沟通（1轮），并最终形成包含事件入队、流图推送、配伍校验、熔断降级与审计留痕的接口核心闭环流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预警回调过来，拿参数去调流图引擎，走完返回结果。并发的话，加个Redis锁防重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失败了就重试，加个幂等校验。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预警触发后要调流图引擎，中间如果挂了怎么防双重用药？我本来想加个Redis锁。流图那边执行一半断了，状态能接上吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MQ加状态机。那我就写个事件监听器，收到预警发消息，消费者拿traceId去推流图。nodeId对不上就报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我管接口转发，药有没有冲突得问大夫吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "挂了肯定不能放行，出医疗事故。那就熔断，直接返回失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，接预警事件入MQ；第二步，消费者拉流图，带traceId和nodeId推；第三步，推之前调配伍校验；第四步，校验挂了直接熔断，不推。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加个切面打日志。核心流程就是：接事件 -> 异步入队 -> 拉流图(带状态校验) -> 配伍校验 -> 下发或熔断 -> 审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

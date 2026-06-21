@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在幕匣跨剧互动票务与叙事服务台上线运行的灰度发布与回滚校验背景下，用户与导师围绕灰度范围、分流比例、观测指标与回滚门槛/前置检查及最小流程持续沟通（8轮），其中在分流与监控阈值、回滚生效校验与日志合规审计部分与SRE运维工程师沟通（7轮），并形成可执行的“发布-观测-放量-暂停-回滚-验证”手顺与三条硬阈值。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "担心就是投票那块。之前不是接了riskCheck嘛，我怕灰度一上，接口有时候就慢，然后大家投不了票，剧情就断了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "范围……就投票接口？还有买票？我不知道是不是都得灰。比例就，先1%？随便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度怎么搞？我就知道点发布按钮。回滚要怎么验？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "稳定分桶是啥，就是随机吗？我怕它一会儿A一会儿B。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看这些指标在哪看？我没权限那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚是不是就是把版本切回去？那我怎么知道真回了，不是骗我。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "探针请求就是我手动curl一下？我手机点点也行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那风控那块回滚会影响数据吗？比如日志里之前说不能放UA原文，这个会不会被新版本搞漏了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE说了个分桶哈希，0.5%先走canary，不按IP。看指标就是成功率、5xx、riskCheck p99、超时和risk.degrade比例。回滚要验路由权重归零，再用固定userId探针看version，最后指标回到基线。还有UA原文出现在日志就算事故。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条……5xx多了就回。然后投票成功率掉了就回。riskCheck太慢就回。就这三条。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就：5xx大于0.2%五分钟；成功率掉1%十分钟；riskCheck p99大于300ms或者超时0.5%五分钟。行不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能做的……我就用Postman打一下接口？然后看返回码对不对。还有就是看日志里有没有UA。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我记不住太多，就risk.degrade、ruleId、challengeId，UA不能有。还有版本号header。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先0.5%分流到新版本。看5xx/成功率/riskCheck慢不慢，还有degrade多不多。没炸就到1%再到5%。一有超过阈值就先停放量。再切回旧版本。用固定账号打探针看version变了，再等指标回到以前。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

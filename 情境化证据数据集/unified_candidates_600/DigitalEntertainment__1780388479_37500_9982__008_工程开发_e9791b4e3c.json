@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在大模型输入端多模态特征融合背景下，与导师围绕融合方案选择、延迟预算与特征维度投影持续沟通（5轮），其中在Cross-Attention延迟评估部分与多模态算法工程师沟通（2轮），并最终确定采用轻量门控融合与可配置投影维度的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算上Cross-Attention。文本过Whisper，图像过CLIP，然后在融合层做QK匹配，模态间细粒度交互，不然“皱眉+说好”大模型理解不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "FLOPs还没细算，论文说增量不到20%。不过那是A100的数据，我们卡不行，我估摸可能加个几十毫秒？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要在融合层加Cross-Attention，把CLIP和Whisper的embedding做交叉注意力，推理延迟大概加多少？总预算800ms。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Concat太粗暴了，早期融合，没模态交互。门控稍微好点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拼接太糙了，门控我能接受，至少能学模态重要性权重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "写死行是行，但有些剧情节点表情权重高呢。还是用轻量门控吧，多几毫秒换点灵活性。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "特征维度对齐这块，CLIP输出512维，Whisper输出768维，我打算都投影到1024维对齐大模型输入。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大模型hidden_size是4096。投影到1024是觉得保留太多信息显存吃紧，拼起来刚好4096。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "门控融合，维度可配置。我去写投影层和门控计算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

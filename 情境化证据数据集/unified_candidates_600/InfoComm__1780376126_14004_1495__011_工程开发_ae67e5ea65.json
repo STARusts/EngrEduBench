@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微秒级时延性能极致调优背景下，与导师围绕旧脚本瓶颈定位、绑核与中断隔离落地及日志合规折中持续沟通（7轮），其中在系统硬配置缺失部分与测试与性能调优师沟通（1轮），并形成包含绑核、中断隔离及日志降级策略的脚本重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这脚本就是遍历流表改优先级，循环里还有一堆print，太糙了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用perf top看一下热点函数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "旧调优脚本压不到5us，还有啥硬配置漏了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天刚好在补DPDK的底层逻辑，它有个rte_lcore_worker_pfn做亲和性，我打算把这个机制迁移过来，把流表匹配线程绑到隔离的核上。应该能稳住时延。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "中断我用irqbind把网卡RX/TX分到别的核。内存这块，环形缓冲区定死2MB，满了就覆盖，不动态分配。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "覆盖了确实没法审计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "日志写进环形缓冲区的时延如果超过500ns，就降级只记流表ID不记全量。这样既有时延上限，又能保住核心审计字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

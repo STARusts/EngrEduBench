@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在临床试点部署准入背景下，用户与导师围绕有效性验证设计、合规红线及依从性监控工具链缺口持续沟通（6轮），其中在疗效指标与效应量阈值部分与精神科医师沟通（1轮），在基线匹配与脱落偏差控制部分与临床协调员沟通（1轮），在双模态数据出沙箱合规审查部分与合规与伦理专员沟通（1轮），并最终形成准入基线及Flink CEP补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "伦理审查和临床对接是卡点，我列了初步的准入Checklist，想对齐一下有效性验证框架和合规红线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我计划用对照实验看干预组的PHQ-9分数下降。但具体怎么控制基线差异，以及下降多少算临床有效，我目前只有直觉判断，缺乏严谨的统计口径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "临床试点的疗效评估，PHQ-9下降多少分算有临床意义？我们系统是双模态心绪追踪，这个效应量Cohen's d的阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "落地时，基线匹配和依从性追踪具体怎么操作？患者脱落率预计多少？我们怎么防偏差？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "疗效终点定PHQ-9下降>=5，Cohen's d>=0.5，用ITT分析控制脱落偏差。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "双模态数据出沙箱的合规审批，我之前只盯了脱敏算法，伦理委员会那边的口径我不熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "伦理审查对双模态心绪数据出沙箱有什么硬性要求？我们用了TimeGAN合成，但真实数据校验还得小样本出域，这怎么过审？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我整合下目前的准入基线：1. 疗效终点：PHQ-9下降>=5, Cohen's d>=0.5, 采用ITT分析；2. 伦理合规：双模态数据出沙箱需单独知情同意，审计留痕5年；3. 临床对接：分层随机化基线匹配，依从性作协变量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "监控工具我确实不太熟，之前只关注了Locust压测。对于依从性衰减这种时序模式预警，现有的定时任务轮询太重，我可能需要补一下流计算的事件驱动机制。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我接下来两周重点补Flink CEP在医疗时序数据上的应用，目标是写出一个依从性衰减的CEP规则Demo跑通，并把这个模式迁移到我们的预警微服务设计里，替换掉现在的轮询逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

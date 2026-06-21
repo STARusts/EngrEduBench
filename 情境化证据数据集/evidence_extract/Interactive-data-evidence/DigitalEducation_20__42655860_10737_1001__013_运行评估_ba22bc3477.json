@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在学习材料版权合规与引用溯源平台运行评估背景下，用户与导师围绕“合规拦截命中分析”的指标口径、分层维度、误拦截判定、抽样与留存/成本及告警阈值持续沟通（7轮），其中在事件流与可落地指标字段对齐上与数据分析师沟通（2轮），在误拦截审计口径与最小证据留存集上与法务合规负责人沟通（2轮），并收敛出可执行的看板与触发排查闭环。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先想偷个懒，直接用现成看板看拦截总量和命中率就算了，这样能过吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分母就…内容发布请求数？我看网关都有日志，拦截就是返回403的次数。然后命中率=403/总请求。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就按我们事件埋点的 action_type 来算？我记得有 BLOCK / WARN / PASS 之类的枚举。我可以用 Kibana 直接按字段聚合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误拦截就看申诉量？用户点“申诉”就算误拦截。没有申诉就当对的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 命中分析这块你能给我一套能落地的指标口径吗？我现在就知道 action_type、reason_code 这些字段，怕算出来没意义。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "label 这块是不是就先用“申诉通过”顶着？我怕复核推翻的数据要等很久。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还有个小问题：我想直接在 Superset 里拖拽字段做看板，能直接出这些吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。大概就是用 compliance_decision 事件，不用网关403。指标分三层：覆盖量（decision_id去重）、命中结构（BLOCK/WARN/DEGRADED、reason_code、rule_id/version贡献）、效果近似（误拦截两口径+整改耗时）。还要按 policy_version 把灰度新旧切开做对照。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抽样我就把被 BLOCK 的内容都保存下来，留着复核？或者存原文片段方便看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 误拦截这块你们怎么认定？还有我们为了复核需要留什么证据才够，用不着存原文吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“24小时内补齐授权后放行”算误拦截吗？我感觉很多是用户本来就没传字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 法务说误拦截必须有复核结论或申诉通过记录号，纯投诉不算。补证后放行不归误拦截，单列 evidence_missing_resolved。留存只要 decision_id、规则版本、授权要素快照、quote_graph_hash+条目数、脱敏来源标识；BLOCK审计记录至少180天，PASS/WARN采样更短。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标清单我先照抄三层：量、结构、效果。维度就 tenant、content_type、channel、reason_code、rule_id/version、policy_version。对照就是灰度 tenant A 新旧 policy_version。阈值我不太敢定，能不能先用默认的，比如误拦截率>5%就回滚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源成本…我只想到把 PASS 的事件采样 1%，BLOCK 全量留。查询就按天分区。要是还大，就再降采样？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能接受。就是“规则贡献度回钻”我怕没法看内容细节，只看 rule_id 会不会定位不出来？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按你这5条去做。看板我先做 action_rate、reason_top、rule_contrib 三块，policy_version 默认当筛选项。告警先上相对阈值那三条，PASS采样按 tenant 分层我再让数据那边配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

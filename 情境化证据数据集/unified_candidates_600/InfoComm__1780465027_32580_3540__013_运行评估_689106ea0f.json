@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估期C类流裕度报警与异常帧堆积背景下，与导师围绕异常帧溯源与降级策略持续沟通（6轮），其中在异常帧指纹定位与降级动作部分与异常溯源分析师沟通（1轮），分析了降级误伤风险并调整策略，最终形成保留B类流最低帧率的降级判定与执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看抓包数据里有一堆帧间隔不对的，是不是底层网卡FIFO溢出了？我准备去查驱动代码里的DMA接收环形缓冲区大小。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果是门控列表没对齐，帧应该在预定时隙进不来，会被丢弃，怎么会堆积？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种堆积的指纹怎么定位？现在产线还在跑，我们该怎么做降级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级就是直接把B类流全掐了保C类流。审计日志我加上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "视觉断了会出安全事故。那我保留B类流的最低帧率？比如从30fps降到5fps？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "判定条件是异常帧时间戳偏离量等于B类流周期。触发降级后，把B类流限流到5fps，保障C类流裕度。同时触发操作台声光报警提示视觉降级，并记录审计日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

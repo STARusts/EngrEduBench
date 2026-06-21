@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微交互留痕溯源系统边缘数据对齐联调背景下，用户与导师围绕对齐方案选择、验证实验设计与Mock工具补充持续沟通（6轮），其中在端侧性能开销及眼动丢帧补全部分与边缘端开发工程师沟通（2轮），最终敲定本地时钟加Web Worker对齐及前向填充降级的技术栈与验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我对比了两种思路。第一种是走WebRTC通道做NTP校准，拿到相对时间基线后对击键和停顿做插值；第二种是放弃网络校准，完全依赖本地`performance.now()`单调时钟，用滑动窗口做事件驱动对齐。NTP插值在弱网下抖动太大，我倾向方案二，本地时钟加滑动窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备构造两组对照：一组是理想时序流，另一组注入随机延迟和丢包。评价指标用对齐后事件序列的编辑距离，以及反演模型输入特征的偏移度。但我对端侧具体能不能拿到足够精度的单调时钟有点不确定，高采样率下性能开销也是个问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "浏览器里高频取`performance.now()`做击键时间戳，再用滑动窗口跟眼动流对齐，这个开销能接受吗？会不会阻塞主线程？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对于眼动仪偶尔丢帧导致的窗口内事件缺失，你们一般怎么补？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时写业务逻辑多，对底层时钟模拟工具不熟。现在只知道可以用Chrome DevTools的Sensor面板模拟地理数据，但怎么稳定复现微秒级时钟跳跃和随机丢帧，还没找到现成的Mock工具。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我计划写一个Chrome扩展，通过CDP的`EventEmulation`接口注入时间戳偏移，同时用脚本控制眼动数据源制造随机丢帧。明天下班前我争取把Mock脚本跑通，把实验跑起来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

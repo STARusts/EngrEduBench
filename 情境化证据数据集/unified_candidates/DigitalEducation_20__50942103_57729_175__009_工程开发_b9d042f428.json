@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在答题页作答行为采集SDK工程开发背景下，用户与导师围绕首版事件清单、硬禁采字段、离线缓存与验收测试持续沟通（7轮），其中在低侵入高价值事件与最小化采集设计上与客户端工程师沟通（3轮），在未成年人默认开关与离线缓存加密/保留/清除合规要求上与合规与隐私官沟通（2轮），并形成首版≤10事件、HMAC指纹与加密分片补发的实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开始答题、选项点击、文本输入、提交、切换页面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端工程师 事件要采哪些？怎么少采点还够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "粘贴也要采啊，那会不会很敏感？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那指纹是啥，直接MD5吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就HMAC。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "有session开始结束、前后台、进题出题、停留时长、输入变化、粘贴、撤销次数、提交成功失败、网络变化。差不多10个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能采剪贴板内容，不能采键盘每次输入，不能采坐标。离线就缓存一下，等有网再发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 采集SDK离线缓存、默认开关这些，有啥要求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加密存储是必须的？那是不是会很慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存储就本地加密文件。保留72小时。上报就有网批量发，失败就重试。清除就到期删掉，或者学校要求删。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按天分片就是好找吧。200条就是别一次发太多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存长度变化、时间点、hash指纹。不存原文内容。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用服务端salt做HMAC-SHA256，对作答片段做一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发生没发生、粘贴长度、时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "正常上报一条事件能到服务端；断网能缓存；有网能补发；缓存满了能丢旧的；加密读写不报错；退出登录能清掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把事件上报和离线缓存写掉。合规字段我就按你说的禁掉。测试点也照着跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

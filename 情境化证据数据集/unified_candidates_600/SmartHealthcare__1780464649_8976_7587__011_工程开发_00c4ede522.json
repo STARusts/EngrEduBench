@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在P99延迟红线压测背景下，用户与导师围绕模型推理加速方案的安全性与有效性持续沟通（8轮），其中在推理引擎优化部分与性能优化师沟通（3轮），并最终放弃砍层数与INT8量化，确定使用Nsight定位瓶颈并转TensorRT做FP16算子融合的优化步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推理这块太慢，我直接把相变推演模型层数砍一半，或者多挂两台GPU机器不就结了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "砍一半肯定快啊，大不了阈值调低点补回来。加机器最稳，反正云上资源多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型推理慢怎么搞？直接上INT8量化行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化掉精度就掉呗，反正前面还有图谱兜底。Nsight太麻烦，还要装驱动，我直接试INT8不行再改回FP16呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那咋办？量化不能用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就PyTorch直接跑的，转TensorRT还要写一堆配置，太费事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FP16不掉精度？那行，我就转TRT，FP16跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看同事用Nsight查过CUDA核耗时，我照着他那命令改改，挂上去跑一把看看。要是计算瓶颈我就转TRT。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先用Nsight看算子耗时，然后转TensorRT做算子融合上FP16，对比原模型看精度掉没掉。INT8先不动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在网关流控联调应对脉冲流量背景下，与导师围绕流控选型、一致性兜底及最终定论持续沟通（3轮），其中在超卖补偿机制部分与异步流控架构师沟通（1轮），在无锁队列工具选型部分与高吞吐网关开发沟通（1轮），并最终确定本地预占加异步对账冲正方案、JCTools工具链及降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了两种流控路线：一是基于Redis+Lua的分布式令牌桶，成熟但每次校验都有网络开销，P99延迟压不下来；二是基于Disruptor的无锁环形数组做本地预占，极致性能，但多网关实例下存在预占超卖风险。我倾向选方案二，微资产秒级清算对延迟太敏感，Redis方案天然受限。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "本地预占方案在微资产清算里，超卖风险有没有成熟的架构级补偿机制？我不想因为偶发超卖导致资金错乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Disruptor在网关流控联调里有哪些具体的坑？有没有更稳的无锁队列工具推荐？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "JCTools配合Netty EventLoop，这个组合轻量很多，回退风险也小。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认选方案二：本地预占+异步对账冲正。队列工具采用JCTools的MpscArrayQueue，不再用Disruptor。联调验收标准：单网关实例脉冲压测下P99延迟<10ms，异步对账冲正时延<1s，资金超卖率严格为0。如果JCTools在压测中出现序列错乱或内存泄漏，立即降级回Redis+Lua令牌桶方案，牺牲延迟保资金安全。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

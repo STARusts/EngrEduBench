@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘引擎现场部署验证背景下与导师围绕容灾、指标采集与精度检验方案持续沟通（7轮），其中在弱网指令容灾部分与边缘高可用架构师沟通（1轮），在异构节点指标采集部分与部署运维专员沟通（1轮），在精度检验口径部分与环境指标评估师沟通（1轮），并最终形成含MQTT降级、分架构镜像、边缘聚合及配对T检验的部署验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上很多边缘AI项目都用K3s，直接套这个发行版一键推过去行不行？压测都过了，部署应该很快吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "弱网的话，K3s不是自带轻量级容器网络和断点续传吗？算力波动我就用cgroup限核。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "精度验证我有点发懵，压测时说好INT8量化精度掉2%以内，到了现场真掉了我怎么发现？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "K3s在农田弱网下指令下发能保证确定性吗？现场节点部署，P99和脱盐率这些指标怎么采比较方便？有没有现成的Prometheus模板直接套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得加MQTT降级链路，还要分架构打镜像。指标用边缘Prometheus聚合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把反演结果导出来，用pandas算个差值，画个折线图看看走势？一般差别不大就放过了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "INT8量化后现场的反演精度，怎么检验才不会把噪声误判成模型劣化？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "说实话不太懂。平时算指标就用pandas求个平均数。P值和置信区间这块我不会算，也没写过这种检验脚本。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我下一轮得把这块补上。用Python的scipy.stats包，学一下怎么做T检验。目标是一周内写个自动比对脚本，输入FP32和INT8的结果，输出P值和置信区间，跑通后接入部署验证流程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边缘部署用K3s，但必须加MQTT本地降级链路保阀控指令确定性；2. 容器镜像分ARM和x86架构打；3. 指标用边缘Prometheus聚合网关，只传分位数结果；4. 反演精度验证用配对T检验，要求P>0.05且差值95%置信区间上限<2%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

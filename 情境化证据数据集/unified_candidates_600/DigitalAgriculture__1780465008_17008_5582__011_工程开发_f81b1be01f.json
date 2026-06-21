@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在调度微服务开发与联调背景下与导师围绕核心架构、容灾降级与鉴权审计细节持续沟通（5轮），其中在模型调用阻塞与降级数据源部分与调度中枢开发工程师沟通（2轮），在联调架构约束与审计日志字段部分与资源匹配调度架构师沟通（2轮），并最终形成调度微服务开发与联调的基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把运力匹配逻辑写成服务，然后调上一轮定好的模型接口就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡了就等呗，反正预测应该很快。联调我就找运力那边的人对一下接口文档。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型调用阻塞怎么弄？我准备直接同步调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调有啥架构约束？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用异步调模型，模型挂了用均值顶。然后接口加Token，记日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "本地缓存一份之前的？组件，我就用Spring Security加AOP切面？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级用的均值数据放哪？本地缓存行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "审计日志记哪些字段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级数据放Redis，取最近成功批次，全没就拒接。审计记操作人、时间、运力ID、结果和原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基线约束就是：1. 异步调模型；2. 降级走Redis缓存的历史批次，无缓存则拒接；3. 接口鉴权加Token；4. 审计日志记操作人、时间、运力ID、结果、原因。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

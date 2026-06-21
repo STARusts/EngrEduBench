@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端伪造样本压测与调优背景下，与导师围绕对抗样本构造、GPU算子监控、INT8量化退化及异步并发调优持续沟通（5轮），其中在对抗样本与算子监控部分与性能压测专家沟通（1轮），在量化推理耗时分布部分与模型工程化工程师沟通（1轮），并确定采用动态Batch与异步拆帧调优，修改脚本以压降P99延迟。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接拿网上开源的Deepfake工具包跑一批换脸视频？比如FaceFusion，生成几千个推过去，看网关P99延迟多高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对抗样本我确实造不出来，我就只会用现成脚本跑。GPU监控我就看nvidia-smi？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造极端对抗样本，还有怎么盯GPU算子级别的瓶颈。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "量化后的模型跑这种带扰动的极端样本，推理耗时会怎么变？怎么摸底？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测专家给了个FGSM脚本造对抗样本，还要用Nsight Systems盯算子。模型工程师说INT8量化遇对抗样本可能退化成FP16，耗时翻倍，得看P99长尾分布，不能看平均数。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前光看平均延迟确实不行，之前网关偶发超时可能就是长尾导致的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "锁死INT8精度掉太厉害肯定不行，活体鉴伪误杀了客户要投诉的。允许回退FP16的话，耗时翻倍网关肯定超时。我不太确定，能不能两边折中一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改压测脚本，加异步并发。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Nsight Systems这工具我以前没用过，正好这次学一下怎么抓算子耗时，以后排查推理瓶颈就不用瞎猜了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我改完跑一轮，如果P99压回去了，同时对抗样本的鉴伪召回率不低于92%，就算调优完成了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

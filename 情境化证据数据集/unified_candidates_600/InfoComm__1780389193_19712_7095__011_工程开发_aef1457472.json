@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在动态重构性能压测背景下，用户与导师围绕压测指标、事件注入、审计合规下的Flash写入瓶颈及注入参数持续沟通（6轮），其中在压测指标与事件注入部分与高可用评估师沟通（2轮），在Flash写入瓶颈与RAM缓冲区并发写保护部分与底层协议研发客沟通（2轮），并最终确定基于真实断连模型的压测方案与审计降级阈值。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么压测重构性能，有没有现成脚本直接跑的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能用JMeter，得测拓扑震荡，看握手时延。还要写C插件注入事件"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频繁重构存flash太慢咋办？我想先关了审计压测。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天刚看了个无锁队列的库，套在这个RAM缓冲区上是不是就行了？压测多核并发写的时候应该不会抢锁了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能关审计。得用RAM缓冲区暂存，无锁队列防并发抢写。压测看溢出率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

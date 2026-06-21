@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在铺放整流高可用评估背景下，与导师围绕直写内存断电防丢、NVM WAL机制验证与安全状态降级持续沟通（7轮），其中在断电瞬态指令完整性保障部分与安全高可用评估师沟通（1轮），并最终形成铺放整流高可用MVP五条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种容灾能不能上中间件？用ZooKeeper保状态，加Redis做指令缓存，断电重启后从Redis恢复，应该能防丢吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "直写内存断电指令全丢，这情况怎么搞高可用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "NVM映射，这个听起来像是有专门的驱动库。是不是调NVM的库就行了？UPS信号触发中断，我写个中断服务函数去调NVM写入？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本随机拔电源，看重启后指令丢没丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是缓冲区里的待执行指令条数，分满载和半载。对照组一组开NVM WAL，一组不开。看恢复后重放对不对。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近看了点IEC61508功能安全的东西，里面讲降级，是不是可以用看门狗触发保位？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "安全状态就是铺带头停转，张力锁死。所以看门狗超时也得触发张力锁死。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "IEC61508这块我确实没看透，只记住了看门狗这个词，回头我再重读降级那章。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，禁用任何容灾中间件。第二，掉电瞬态依赖UPS预警信号触发中断。第三，中断里把待执行指令缓冲区同步到NVM做WAL。第四，降级策略是封锁新指令，伺服保位停机，张力锁死。第五，恢复后从NVM重放指令。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

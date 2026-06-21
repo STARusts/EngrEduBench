@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在轨迹流清洗与时空索引联调背景下，用户与导师围绕边缘算力约束下的清洗逻辑、索引构建、带宽限制及乱序处理持续沟通（5轮），其中在时空索引设计与带宽压力部分与时空数据工程师沟通（3轮），在网关降级、稀疏传输与乱序处理部分与数据流联调专员沟通（4轮），并形成边缘轻量清洗加事件帧稀疏传输、云端精细索引加乱序容忍的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "清洗无非就是去重、补漏。索引直接用时间戳排序不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们那边的清洗和索引怎么搞？时间排序够不够？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这玩意儿在网关上跑得动吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构师那边说要在网关上搞GeoHash切片和聚合，你联调测过没？网关那点算力能行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "砍架构师那边吧。网关崩了啥都没了。要不这样，边缘只做最基础的异常点剔除和时间校准，GeoHash这种计算放云端？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "带宽能加吗？或者压缩一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态变化点？就是蜂停留和转向的点？这个我算法里能判断，侧偏好修正的时候就能打标签。行，我这边改输出逻辑，只推关键事件帧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时钟漂移乱序你那边能洗吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件帧格式我定义个结构体，只带时间戳、坐标、状态标志和侧偏好修正值。这样合规吧？不牵扯隐私数据吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

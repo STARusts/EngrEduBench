@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多端阅读器语音触发交互协议设计背景下，用户与导师围绕事件结构、跨端一致性、离线/弱网兜底与失败码规范持续沟通（6轮），其中在事件字段分层、eventId幂等与reasonCode联调部分与前端负责人沟通（4轮），在consent设计、speaker匿名ID最小化、保留周期与审计留痕部分与隐私与数据治理官沟通（3轮），并口头对齐协议v0.1骨架与两条验收红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "协议不就是接口嘛。发个请求，然后回分镜。反正别传音频就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "录完再提交吧，省事。实时我搞不来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就…用户ID、时间、章节ID？还有情绪桶。第二个不知道，统一用服务器算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 多端阅读器这块，语音触发协议要怎么定？我怕各端不一样，离线还乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "eventId 一定要吗？我随便用时间戳行不行，省一个字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那服务端回的 reasonCode 有啥用，我觉得用户也看不到。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "离线补发会不会把剧情搞乱？我想让它别补发了，丢了算了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选…离线降级吧。推进剧情感觉会出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与数据治理官 触发事件里要带一堆字段。哪些算敏感？consentFlag 怎么设计，撤回咋办？还要留审计吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "scope 我不懂。给个开关不就得了，作品里用就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "retentionDays 是写死在客户端吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是…端上报触发事件，不带音频。里面要 eventId 之类。服务端选 variant 回来。离线就别推进剧情，给个降级。授权要带版本和范围。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我怕各端 reasonCode 不一样，然后产品看埋点看不懂。还有 eventId 我容易忘。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

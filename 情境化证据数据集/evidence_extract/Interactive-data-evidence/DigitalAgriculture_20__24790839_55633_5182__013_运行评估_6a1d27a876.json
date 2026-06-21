@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段处方偏差根因分析背景下，用户与导师围绕偏差链路拆解、v1根因分类与单标签决策树及审计聚合字段增补持续沟通（10轮），其中在可判定字段最小集合与字段设计上与数据架构师沟通（1轮）、在新增字段的敏感性边界与访问审计要求上与合规与数据治理官沟通（1轮），并最终确定根因标签口径与字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先粗分三块：输入端（采样/检测/传感器/农事记录）、处方生成端（规则版本、模型漂移、阈值口径）、执行端（农机用量回传、人工替代操作）。但我现在不确定怎么把它们映射到我们看板那些聚合字段上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以先用execution_state和acceptance_state切一刀：如果execution_state=未执行或失败，偏差就先归到执行失败；如果执行成功但acceptance_state不通过，可能是回传数据缺失点多、gap大、或者clamp触发。剩下执行成功且验收通过但仍偏差>15%，才怀疑处方算法/规则或口径映射问题，比如施用面积、浓度换算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想加一个feature_availability_bucket，三级：FULL/PARTIAL/NONE。放在task审计聚合里就行，不展开具体缺失特征是什么。这样能区分是输入特征不全导致处方降级，还是数据都齐但结果偏了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "v1我想做6类：  \n1）执行未达成（设备/人没做）  \n2）回传链路问题（缺失点、时延、gap导致对账偏）  \n3）口径/映射错误（面积、单位、稀释倍数、批次换算）  \n4）处方降级（feature_availability_bucket=PARTIAL/NONE触发保守处方）  \n5）规则/模型版本问题（rule_version切换、漂移）  \n6）异常但未知（UNKNOWN、冷启动区域）"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优先级我会把“执行未达成”放第一，因为没执行谈不上处方；其次“回传链路问题”；再是“口径/映射错误”；然后“处方降级”；最后“规则/模型版本问题”；都对不上才UNKNOWN。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先用数据完整性指标做门槛：缺失点比例、最大gap、时延超过P95的，直接归回传链路问题，不去推断口径。只有数据链路正常（缺失点低、gap小、时延正常）但仍偏差大，才进入口径/处方端排查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 处方偏差根因分析想做v1分类。我们只能看task审计聚合字段，不下钻逐点轨迹。你觉得为支持判定，聚合里最小还需要加哪些字段？我这边想加feature_availability_bucket=FULL/PARTIAL/NONE。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "root_cause_evidence只放枚举挺好，能复现判定路径。data_latency_bucket我也能用来把“晚到导致偏差”单独拎出来。recon_method是我之前没想到的，确实能减少扯皮。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须我选recon_method和feature_availability_bucket。因为根因里“口径/映射错误”和“处方降级”都离不开这两个。data_latency_bucket我觉得可选，现有event_ts加上看板那套P95阈值也能推，但会麻烦一点、也更容易算错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 我们在task审计聚合里想加两个字段：feature_availability_bucket（FULL/PARTIAL/NONE，只表达处方引擎输入特征覆盖率，不暴露具体缺什么）和root_cause_evidence（枚举，如E_GAP_P95、E_WARN_CALIB、E_CLAMP等，用于审计复现）。这种会触碰检测数据敏感性或越权吗？权限还是沿用：农户只看自己聚合，运营看汇总+field列表，task详情临时授权24小时留痕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，feature_availability_bucket只做“拿到/解析成功”的覆盖率，不掺质量。root_cause_evidence也只保留系统/链路类枚举，不写业务判断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着写成v1决策规则：  \n1）execution_state∈{FAILED, NOT_EXECUTED} ⇒ 根因=执行未达成  \n2）acceptance_state=REJECTED 且 (缺失点比例高 或 最大gap>P95 或 data_latency_bucket=LATE) ⇒ 根因=回传链路问题  \n3）acceptance_state=UNKNOWN 或 WARN_CALIB/UNKNOWN标黄且冷启动标记 ⇒ 根因=未知/需校准  \n4）recon_method变更或与区域默认不一致 且 偏差>15% ⇒ 根因=口径/映射错误（优先人工复核）  \n5）feature_availability_bucket∈{PARTIAL,NONE} 且 偏差>15% ⇒ 根因=处方降级导致偏差  \n6）rule_version近期切换 且 同区域同作物大类偏差同步上升 ⇒ 根因=规则/版本问题  \n7）clamp触发且偏差方向一致（总量被上/下限截断） ⇒ 根因=处方安全阈值触发（需要复核阈值）  \n8）其余 ⇒ 根因=UNKNOWN"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我改成：  \n3）acceptance_state=UNKNOWN 或 出现WARN_CALIB ⇒ 根因=数据状态异常（UNKNOWN/WARN）并进入人工排查队列；如果同时满足规则2的链路条件，就仍归回传链路问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "任务量我们现在日均几千到一两万，按区域滚动三季分组会多些聚合计算。字段都是枚举或小字符串，存储压力应该不大；主要是计算P95阈值那块，能提前离线算出来就别在每次查询时算。data_latency_bucket如果落表，前端和运营侧也少重复计算，长期维护成本更低。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边最终建议：  \n- 根因标签v1主类：执行未达成 / 回传链路问题 / 口径或映射错误 / 处方降级 / 规则或版本问题 / UNKNOWN  \n- 判定策略：按优先级决策树单标签输出，证据通过root_cause_evidence枚举记录  \n- 审计聚合字段增补：feature_availability_bucket（FULL/PARTIAL/NONE，基于“拿到且可解析”覆盖率）、data_latency_bucket（ON_TIME/LATE/UNKNOWN）、recon_method（RAW_SUM/AREA_NORM/BATCH_NORM等）、root_cause_tag、root_cause_evidence（枚举，不含敏感业务原因）"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

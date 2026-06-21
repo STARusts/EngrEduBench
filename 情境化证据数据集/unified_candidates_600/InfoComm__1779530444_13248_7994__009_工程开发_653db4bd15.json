@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在64KB内存硬约束与多跳中继联调背景下，与导师围绕受限内存路由方案、长帧头畸变风险及物理层保底策略持续沟通（4轮），其中在省内存路由替代部分与中继协议栈开发者沟通（1轮），在长帧头畸变丢包调优部分与测试与调优工程师沟通（1轮），并确定源路由加波束辅助与极化码加自适应帧长妥协方案，着手设计帧结构与预留接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "常规AODV路由表一建就爆了。直接把表项硬砍到8个行不行？够跑最基础的跳数了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "节点内存就64K，常规路由表放不下，硬砍又容易断，有没有省内存的路由法子？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议那边说用源路由，把路径塞帧头里，节点不存表。再配合波束定向发，省泛洪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "源路由帧头比较长，在咱们这种畸变信道下是不是很容易丢包？有啥调优办法没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试说帧头得加截短极化码保护，帧长还要跟着SNR自适应变。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "截短极化码我之前没写过，有点没底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "源路由帧结构我熟，这就去画。极化码接口我先留好占位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

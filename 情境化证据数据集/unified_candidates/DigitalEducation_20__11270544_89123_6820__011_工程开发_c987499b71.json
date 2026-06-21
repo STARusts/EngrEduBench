@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联调测试与压测排查编排链路action_trace断链与reason_codes_final丢失背景下，用户与导师围绕复现分组、失败断言、最小日志与验收指标持续沟通（8轮），其中在压测脚本与采样/断言改造上与测试工程师沟通（3轮），在上下文串联/对象池与异步回调根因及最短修复上与后端工程师沟通（5轮），在压测语料与日志留存合规边界上与合规与隐私官沟通（2轮），并形成联调压测改动清单与下一步对照验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先不猜模型问题，先把请求分两类复现：一类正常对话，一类刻意触发治理（比如提示注入/敏感词）。压测下如果只在触发治理时丢字段，范围就缩到治理模块和编排引擎的交界。复现上我会固定同一个 conversation_id、同一套 prompt 版本，把并发从 50/200/500 拉上去，观察丢字段比例跟并发是否线性。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "失败条件我先定三条：  \n1）响应里 governance.action_final 不为空但 governance.action_trace 为空或长度突然变 1（只剩最后一步）。  \n2）hit_rules 非空但 reason_codes_final 为空。  \n3）degrade_mode_final 触发降级时不是 GUIDED_HINT。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小日志我想只抓 request_id、conversation_id、trace_id（如果有）、编排节点列表、每节点的 action 和 reason_codes，以及最终的 mask_stats 汇总。再额外抓 content_fingerprint 和 fingerprint_key_version，确认审计字段还在。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测下我们看到 action_trace 断链、reason_codes_final 丢失。你们压测怎么构造用例、怎么采样断言的？我需要能稳定复现。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我需要知道：你们脚本里 B 组是同一个用户连续对话，还是每条请求独立？我怀疑上下文串联在并发下被覆盖。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采样 1% 会不会漏掉断链的证据？断链可能不是缺字段，而是 trace 内部少节点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我回去跟导师确认：断言加三条失败条件；脚本加固定 conversation_id 的连续轮次；触发治理采样 10%；再加编排汇总事件的四个计数。还缺一个：degrade_mode=GUIDED_HINT 的断言也要进脚本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试侧建议我准备采纳三块：  \n- 压测脚本从“独立请求”改成“固定会话多轮”，更像课堂连续互动；  \n- 对触发治理的请求采样从 1% 提到 10%，否则 action_trace 缺节点很难抓；  \n- 加一个编排结束汇总事件，至少有 node_count_expected/actual、has_reason_codes、has_hit_rules。  \n风险是：汇总事件要后端配合埋点，而且要确认不写入原始文本，只用 request_id + content_fingerprint。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 压测下 action_trace 断链、reason_codes_final 偶发为空。你们 trace 串联怎么做的？并发/异步场景会不会丢上下文或裁字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对象池复用这点有证据吗？我想要一个能验证的点，不然改起来很大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 reason_codes_final 丢失可能是“聚合在 Context 里，但被新 view 覆盖了”？还是截断导致聚合为空？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "禁用对象池会不会压测直接扛不住？我们也要压测目标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有一个点：截断策略 N 条会影响 action_trace 可测性。我们断言需要“长度突然只剩 1”这种现象，如果你们正常就会截断到 N，也会误判。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我带回导师：根因候选是 context 对象池没 deep clear + 异步回调用了新 ContextView 覆盖，导致 action_trace/聚合丢；修复先做 deep clear 或临时禁用池做对照；可测信号补 trace_truncated 与 node_count_expected/actual，避免断言误伤。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先做对照验证：压测环境开关池化（on/off）+ 固定会话多轮脚本。若 off 时丢字段消失，基本坐实对象池问题。然后正式修复走 deep clear + 增加“归还前校验 trace 已清空”的断言。异步 ContextView 我会并行提一个修复，但我不确定改动面多大，可能要后端评估。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收我定三条硬指标：  \n- 在 500 并发、10 轮会话、B 组 20% 触发治理下：响应缺 governance.action_trace 或缺 reason_codes_final 的比例 < 0.01%；  \n- 触发降级时 degrade_mode_final 恒为 GUIDED_HINT，偏离视为 100% 失败；  \n- 汇总事件里 node_count_actual == node_count_expected 的比例 ≥ 99.99%，若 trace_truncated=true 也不影响这个对齐。  \n另外对审计字段：content_fingerprint 与 fingerprint_key_version 100% 存在且不回传原文。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 联调压测要混入“高风险提示”样例，日志里会有 content_fingerprint 等审计字段。压测数据集与日志留存这块，合规底线是什么？我们怎么做才不踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在的失败响应是 100% 落日志，这条会不会把“响应文本”也落下来？我担心测试框架默认把 body 打出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我回去让测试把“失败采样”从 dump body 改成结构化字段。并且压测语料用合成集，避免混入真实信息。留存 7 天自动清理，这块我不太熟你们的流程，可能得你们给一个现成的策略模板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动清单我这边确认五项：  \n1）压测脚本：新增固定 conversation_id 的多轮会话模式；B 组保留 20% 触发治理；加入三条断言（action_trace/ reason_codes_final / degrade_mode_final=GUIDED_HINT）。  \n2）采样策略：触发治理请求采样提升到 10%；失败不再 dump body，改落结构化字段（hit_rules、reason_codes_final、mask_stats、content_fingerprint、fingerprint_key_version、node_count_expected/actual）。  \n3）后端埋点：新增编排结束汇总事件 + trace_truncated 标记。  \n4）根因验证：对象池池化开关 A/B，对照压测；若坐实，修复为归还时 deep clear（优先），并补并发回归用例。  \n5）合规约束：压测语料用合成/授权数据，日志不落原文，隔离环境留存最长 7 天+最小权限审计。  \n我下一步先盯 1、2 的断言与脚本口径，跟后端把 3、4 的埋点和池化对照跑起来，把“丢字段比例”和 node_count 对齐率打出来，作为联调验收依据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

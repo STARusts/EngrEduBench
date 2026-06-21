@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在气溶胶粒子渲染压测帧率崩溃背景下，用户与导师围绕渲染性能优化方案及流场精度、帧率与显存的工程权衡持续沟通（6轮），其中在性能热点定位与Transform Feedback及对象池可行性部分与孪生渲染开发沟通（4轮），并形成基于距离分级的渲染折中方案与显存溢出降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "帧率确实崩了。单病区推演到5000个病原粒子时，Draw Call暴涨，帧率掉到8fps。我打算直接把渲染层从WebGL2升级到WebGPU，用Compute Shader做粒子计算，彻底解决CPU瓶颈。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "兼容性确实是个坑。但我看现有架构优化空间太小了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你测出来的性能热点到底在哪？是不是必须得换Compute Shader才能救？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降采样太粗暴了，流场细节丢了会影响溯源判断。Transform Feedback能不能用？把粒子更新逻辑移到Vertex Shader里闭环，绕开CPU循环。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Context Lost太致命了，比卡顿还严重。那是不是可以加个显存池预分配？把粒子生命周期分级，短命的用对象池复用，长驻的才走Feedback。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "寻优网格是核心不能砍。渲染这边，我放弃全量Transform Feedback。只对距离阻隔面2米内的关键粒子开启Feedback保细节，外围全量降采样合批。显存预算卡死在当前上限的90%，预留10%给突发气溶胶。一旦触顶，强制把外围粒子切换成纯色点云，放弃流场色彩映射。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就按分级渲染走。我这边出粒子筛选逻辑的Shader伪代码，你接渲染管线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

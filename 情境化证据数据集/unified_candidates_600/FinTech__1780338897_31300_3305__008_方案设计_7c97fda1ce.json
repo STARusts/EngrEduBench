@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在拦截网关高可用容灾方案设计背景下，与导师围绕降级策略底线、容灾架构选型与阈值验证实验设计持续沟通（8轮），其中在容灾架构选型与压测参数建议部分与高可用网关工程师沟通（2轮），并最终形成同城双活与Fail-Close降级架构及基于混沌工程的阈值验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关嘛，就搞个双机热备，加上熔断降级。用Sentinel配一下规则，鉴伪超时就算了，别把主链路卡死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "放行呗？不然用户转不了钱客诉率得多高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关鉴伪超时降级，金融场景是不是只能Fail-Close？还有容灾架构怎么搭才稳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就凭经验呗，先配个50ms看看，不行再调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测就JMeter猛打一波呗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Chaos Mesh我装过，就给Pod打注解杀节点那种。我之前只拿它试过重启，没想过能测阈值。对，可以用它注入延迟！我给鉴伪服务注入50ms延迟，看网关这边的P99是不是还在100ms以内，误杀率是不是飙了。这样就能反推阈值对不对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分两组？一组全正常流量打，看延迟；一组掺20%的伪造流量，看拦截准不准。对照组和实验组，这样算控制变量了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "容灾架构用同城双活加Fail-Close降级；阈值验证不用Jmeter硬打，改用Chaos Mesh注入鉴伪延迟和宕机，分常压和伪造混合两组，跑百万级请求测P99。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实只会暴力压测，混沌工程这招能直接模拟故障，比瞎猜阈值靠谱多了，验证方案这块我算补上了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,895 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“授粉收益智能合约调度系统”需求梳理背景下，用户与导师围绕设施草莓熊蜂箱授粉链路的痛点分类、验证动作与基线清单持续沟通（9轮），其中在作业完成/验收口径与责任边界部分与农业授粉顾问沟通（3轮），并形成待访谈验证的授粉链路痛点清单与假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "参与方我理解至少三类：种植者、授粉服务方（蜂农/设备队）、可能还有采购方或者合作社。链路大概是：种植者下需求→服务方排期进场→实际作业记录→过一段时间看坐果率和品质→按效果结算。争议点我猜主要在“到底有没有按时来”“作业质量咋证明”“坐果差是谁的锅”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先试着列：  \n1) 信息不对称：花期预测不准，农户说今天开花其实没开；服务方也不清楚地块位置、品种和花量。  \n2) 调度失败：同一片区域订单扎堆，蜂群/设备不够；遇到下雨大风临时改期，没人能快速重排。  \n3) 效果归因：坐果低可能是温度、农户没做好疏花疏果、也可能是蜂群弱；很难说授粉服务贡献多少。  \n4) 结算对账：按次结、按面积结、按效果结都有人不服；还有现场加单、临时取消的费用怎么算。  \n5) 证据留存：作业有没有做、做了几箱蜂、飞行活性如何，都是口头说，事后没证据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证我想先做两件事：  \n- 访谈：找3个种植户+2个蜂农+1个合作社，问上个花期发生过的纠纷细节，看争议集中在哪几步。  \n- 轻量数据核对：找一两个地块，拿到作业记录、天气、坐果统计，看看缺什么字段导致对不上账。  \n至于合约的必要性，我觉得是在“效果结算”上，大家互不信任，需要规则提前固化，证据能追溯，减少中间人扯皮成本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先选设施草莓或番茄，原因是设施里数据好采一点，窗口也更可控。露地苹果那种变量太多，我怕第一版就失控。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先覆盖熊蜂箱授粉，可能再加一个“人工辅助授粉/振动设备”当备选。因为熊蜂箱有“箱体进出场、活性”这种可记录项，能做证据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业授粉顾问 设施草莓用熊蜂箱授粉，链路里最常见的坑是什么？还有大家通常拿什么当“作业完成/效果验收”的依据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那行业里有没有比较通用的“最低交付标准”？比如说蜂箱到场+摆放位置+在棚内几天，就算履约？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果系统要做“按效果分成”，那是不是必须把“农户配合义务”也写进去，不然服务方风险太大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先收敛三条：  \n1) 进场时机和窗口错配：花量/盛花期判断不一致，导致蜂上早或上晚，直接影响主花序坐果，损失是产量和商品果率。现有手段靠经验+口头沟通，没统一口径。  \n2) 效果归因扯皮：畸形果率、坐果率等指标口径不一，而且受农户管理影响大，出问题双方各说各话，导致结算拖延、复购下降。  \n3) 证据弱：进退棚、蜂箱规格、棚内关键干扰（打药/温湿度突变）缺少可追溯记录，出争议无法还原事实，只能靠关系或妥协。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "调度这块我理解是：蜂箱数量有限，订单集中时要在多个棚之间分配；又有天气、花期变化导致临时改期。如果排不好，要么空跑成本高，要么错过窗口造成赔付或客户流失。现在多半靠微信群+纸笔排期，变更时同步不到位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线清单我这版是：  \n- 花期/花量信息不一致，导致进场时机错配  \n- 资源有限+变更频繁，人工排期重排困难，空跑/错失窗口  \n- 蜂箱质量与状态差异大，但缺统一记录口径  \n- 农户管理行为（用药/温湿度/补光）对效果干扰大，责任边界不清  \n- 效果指标口径混乱（坐果/畸形果/商品果），归因争议大  \n- 现场证据留存弱，对账与结算拖延  \n待验证假设：这些问题在草莓棚授粉里是高频且造成真实损失，不是个别案例。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉服务收益智能合约调度系统的需求梳理背景下，用户与导师围绕农户/服务方按“签字-执行-风险”分层并收敛最小画像字段集持续沟通（7轮），其中在访谈提纲字段定义与可观察问题设计部分与产品经理沟通（2轮），在敏感数据、授权最小化与证据链红线底线部分与合规与风控经理沟通（2轮），并形成两侧画像字段取舍与访谈覆盖象限要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按规模分两边。农户这边：小棚户、合作社/基地、还有公司化农场。服务方：蜂农个体、蜂业公司、还有带设备的综合服务队。大概这样，但我不确定要不要再按作物分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "农户侧我试着拆：  \n- A类：家庭棚户，自己管棚，签字人和执行人同一个。风险点是钱紧、临时改计划、也可能不按规范用药。  \n- B类：合作社或基地，签字人是社长/经理，执行人是棚管员。风险是信息传递断层，棚号/面积变更更频繁。  \n- C类：公司农场，签字和执行分离更明显，还有采购、财务要对账。风险是流程重，慢，但是更看重合规和可追溯。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "服务方我想到三类：  \n- 1类：流动蜂农，自己拉蜂箱到处跑，签字和执行同一个。更在意当天结钱、少填表。  \n- 2类：蜂业公司，有业务员签约、工人/司机执行。更在意排班效率和坏账。  \n- 3类：综合植保/农服公司顺带做授粉，可能外包蜂群。他们在意客户关系和服务口碑，效果分成可能不愿意背锅。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 画像字段你觉得怎么定？我们现在要覆盖农户和授粉服务方，两边都要能落到合约条款和调度约束上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些字段里，“地块主数据成熟度”和“证据接受度”我觉得很关键，能直接对上上个微场景的坑。那字段的取值我先做成三档：高/中/低，访谈时让他们自评+举例。这样可以吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 我们在做服务方和农户画像，哪些数据是敏感点？智能合约结算和争议证据链上，你觉得红线和底线分别是什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解下：我们画像里要单列“商业秘密敏感度”，不然服务方可能直接拒绝上平台。还有用药违规不适合自动扣钱，只能做触发器进入协商/仲裁。对吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先给“农户最小画像”10个字段：  \n1 经营形态（散户/合作社/公司）  \n2 签约人-田间负责人-财务是否分离（是/否/部分）  \n3 作物与设施大类（棚/露地+作物）  \n4 地块主数据成熟度（高/中/低，用可观察问题判）  \n5 计划稳定性（花期窗口内改期频次：低/中/高）  \n6 规范执行度（用药记录/进棚管理：强/弱）  \n7 结算偏好（周期+是否接受预付/质保金）  \n8 风险关注点（更怕坐果差/更怕爽约/更怕扯皮）  \n9 数字化能力（自填/代填；弱网程度）  \n10 商业秘密敏感度（产量价格/地块位置是否可共享）  \n服务方我也压到10个：  \n1 主体类型（个体/蜂业公司/综合农服）  \n2 运力规模（箱数/车数/班组）  \n3 作业模式（驻点/流动/跨区）  \n4 接单-排程-执行-验收角色是否分离  \n5 成本与痛点（运输/蜂损/空跑，选一个主项）  \n6 结算偏好（预付比例+对账周期）  \n7 效果分成接受度（可接受/只固定价/混合）  \n8 证据接受度（确认动作强度：低到高）  \n9 争议处理习惯（接受平台仲裁/线下私了/看关系）  \n10 商业秘密敏感度（蜂场位置/客户名单）  \n我删掉了“合规敏感点”单独字段，改成合在商业秘密敏感度里，可能有点粗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把农户的“风险关注点”和“结算偏好”合成一条“交易偏好与风险偏好”，用选项卡形式问：更看重低价、确定性、还是效果对赌。这样农户侧就空出一格给“数据授权态度”（只用于结算/可用于调度优化/可共享给采购方等）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉服务智能合约结算的合规与收益模型评审背景下，用户与导师围绕结算主模型、效果口径、证据链与争议条款持续沟通（8轮），其中在数据合规边界与留痕最低要求上与合规与风控经理沟通（3轮），在阈值/封顶与违约退款的可运营设计上与商业策略负责人沟通（3轮），并形成MVP结算方案与风险补充点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收益闭环我理解是：蜂农/服务方来干活，系统记录作业和结果，按坐果或品质去分成。踩雷我第一反应是数据不准导致扯皮，还有农户不愿意被采太多数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按工时最简单，但容易磨洋工也和结果没关系。按任务完成，比如到场、覆盖了棚区，算是折中，但还是可能没效果。按效果最贴近价值，但最容易吵：到底是不是授粉带来的，天气、品种也影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 数据这块我们要做授粉收益智能合约结算，按效果分成想落地。你给我划一下：哪些数据能收、哪些不能碰？还有争议时最少要留哪些证据才站得住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "争议证据最少要哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“按效果”的条款怎么写才不翻车？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须有：1）双边授权记录，农户和服务方都要能查到；2）抽样规则和对应的坐果/品质记录，不然效果没法算；3）争议流程，至少有复核和第三方兜底。坚决不做：1）采集身份证、人脸这类敏感；2）把全部原始照片视频都强制上链；3）只按效果不给基础费，风险太大容易吵翻。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主模型我倾向“基础服务费+效果浮动”，备选是“按任务完成+小额激励”。原因是纯效果不稳，纯任务又不体现价值；基础费能保证蜂农意愿，浮动把目标对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "效果可以先用“坐果提升”之类，但提升要对照组，我怕现实做不出来。更可行的是设一个“达标坐果率”，比如抽样点里坐果达到阈值就给浮动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业策略负责人 我们准备做授粉收益智能合约结算，MVP想用“基础费+效果浮动”。从可运营角度，你建议阈值怎么定、浮动怎么封顶、违约/退款怎么写才不至于每单都谈崩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我懂了。核心是把浮动做成档位+封顶，合同最小集，避免每单都定制。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“区间+确认人”。确认人我觉得先放合作社技术员或第三方农技服务站，比平台自己定更稳。平台自己定会被说既当裁判又当运动员。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想到两点：第一，证据链别要求太高频采集，不然一线执行不了，最后都靠补录。第二，抽样点数量要有上限，比如每棚固定几个点，照片也只要求关键节点，不是全程视频。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "风险我觉得在“确认人”这块，合作社技术员会不会偏向农户，或者人手不够导致确认变成走形式。可能要加一条：确认人也得留痕、可追责，不然还是扯皮。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在授粉收益智能合约调度系统方案设计背景下，用户与导师围绕花期与授粉窗口预测架构的输入/输出契约、确认机制、留痕与监控降级持续沟通（10轮），其中在数据合规边界与用途限制上与合规与风控经理沟通（2轮），在花期阶段标注最小集与照片触发采集上与农业授粉顾问沟通（2轮），并形成MVP采用规则+公共气象+人工确认的架构决策与数据域分层。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想了两套：\n1）轻量规则+气象：用积温/有效温度、品种花期参数，加上最近7天预报，算“始花-盛花-终花”区间，输出每天窗口评分；\n2）数据驱动：用历史工单+抽样坐果记录+微气候时序做模型，输出花期曲线和窗口概率。\n我倾向先上1，2做增强，但担心规则参数各地差异大。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "输出我想做两层：日级“可授粉/不建议”，再给日内两个时段（上午/下午）概率。因为一线也不会精确到每半小时填报。指标上用：窗口开始时间、结束时间、窗口等级A/B/C、置信度0-1。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解是：系统先给“推荐窗口”，再让合作社技术员确认。阈值比如：温度、风速、降雨、花量阈值。确认人签一下，作为窗口生效的依据之一。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 花期与窗口预测要做得准，常见想法是用地块定位、微气候、作物管理记录甚至工人到场轨迹来校准。哪些数据可以默认采？哪些必须不采或要单独授权？另外预测结果要怎么留痕才方便后面争议处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用途限制这一条我之前没放进预测模块里，我以为只是在合约条款里写。那技术上要怎么卡住？权限做得太重会影响一线效率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先改成三层数据域：\n- 预测最小域：地块匿名ID+品种+设施类型+公共气象+确认人手动填的“花期阶段”（选项式）；\n- 可选增强域：棚级坐标、棚内温湿度（日汇总，不要分钟级），需要单独授权；\n- 禁止域：个人轨迹、原始视频音频。\n接口上预测服务只吃前两域，且默认只开最小域。增强域要在地块上显式开关。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想做一个两周的试点验证：选两种作物（比如草莓和番茄）各3个地块，用规则模型每天出窗口A/B/C，然后让技术员确认并记录实际开花阶段。评估：预测窗口命中率（实际盛花期落在推荐窗口内的比例）、确认人改动率（系统建议被改的比例）、以及因为预测导致的调度失败次数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "标注用“抽样花量”会很重。我在想用技术员的阶段确认当标签，可能不够客观。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业授粉顾问 花期窗口预测这块我准备先上规则模型+技术员确认，但评估需要“盛花期/可授粉窗口”的标注。能不能给一个一线可执行的最小标注办法？最好是3-5步，别太重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我评估就用“技术员阶段档位”当标签了，会不会太主观？但确实省事。照片不强制的话，争议时证据是不是薄了点？"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我把照片变成条件触发：当确认人把系统从A改到C，或者连续两天把“盛花”改成“始花”，系统提示“可选补拍1张”，但不阻断流程。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按模块拆：\n- 数据接入层：公共气象拉取、人工阶段填报、可选棚内传感器日汇总；都打上数据来源与时间戳；\n- 花期规则引擎：基于品种参数+积温+设施类型给出阶段预测；\n- 窗口生成器：把阶段预测+未来3-7天预报转成窗口等级A/B/C和置信度；\n- 确认与发布：技术员对窗口做确认/调整，生成“生效窗口版本”，带确认人ID与签名；\n- 审计与复现：保存每次预测的版本号、输入摘要哈希、输出摘要哈希、有效期，供争议复核时回放。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "监控我先放三类：\n1）改动率：确认人对推荐窗口的调整比例，按作物/地区分桶；\n2）滞后误差：系统预测“始花日”与确认人记录“始花”之间的天数差；\n3）缺失率：气象/传感器/人工填报缺失。\n触发动作：改动率连续一周>40%就把该作物模板标成“需复核”，暂时降低置信度上限；缺失率高就自动切到“仅公共气象+人工阶段”的降级模式。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "两条我先写进确认与发布模块：\n- 确认必须实名到“合作社技术员/农技站账号”，不能用共享账号；每次确认记录设备指纹+时间戳，后面可审计；\n- 同一地块的确认人变更要有管理员审批，并留原因，避免随便换人来洗记录。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这版结论是：\n1）MVP用“规则引擎+公共气象+人工阶段确认”，数据驱动模型放到增强版，不依赖个人轨迹与原始媒体。  \n2）输出契约：按地块给日级窗口（开始/结束/等级A-B-C/置信度/有效期/预测版本），再给可选的上午-下午分段概率。  \n3）确认发布：窗口必须经确认人签名生效；确认记录可审计，禁共享账号，变更确认人要审批留因。  \n4）合规边界：默认不采个人定位、视频音频；棚级坐标与棚内传感器仅日汇总且需单独授权；预测结果用途限制到“调度与履约”。  \n5）留痕复现：保存预测版本号、输入/输出摘要哈希、生成时间与有效期；链上只放摘要，不上原始敏感数据。  \n6）监控与降级：看改动率、滞后误差、缺失率；超过阈值自动降置信度或切到最小数据域模式。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉调度与合约流程方案设计背景下，用户与导师围绕调度如何消费授粉窗口/置信度/降级状态、失败分类与合约结算对齐持续沟通（7轮），其中在置信度约束、候选集与降级到人工复核/规则调度部分与优化调度工程师沟通（2轮），在链上合约状态机、托管保证金与CANCELLED/EXPIRED触发及合规留痕部分与区块链与合约工程师沟通（2轮），并口头定版接口字段、reason_code/摘要hash留痕与KPI验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按事件流想：预测给出每个棚的授粉窗口和置信度，调度生成工单给服务方。工单里带窗口、截止时间、还有“最小数据域模式”的标记。执行完回来填作业记录，再触发合约结算。风险点是置信度低的时候，算不算违约，或者要不要先锁定一部分钱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬约束我觉得是窗口起止时间、作物类型、棚ID；软约束是置信度、路程成本、服务方负载。低置信度就把窗口放宽一点？或者先发“待确认工单”。资金我倾向托管，先锁10%-20%作为保证金，执行后按效果分成。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@优化调度工程师 调度侧如果输入只有“窗口+置信度+有效期+降级标记”，你们一般怎么把置信度用进约束？还有调度失败时怎么降级，不至于乱派？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "候选slot在窗口内切分这个可以。reason_code我能接住。那“人工复核队列”在系统里就是不自动派单，等农户或运营确认？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 履约状态机怎么设计，才能把“低置信度/需要人工复核/调度失败”都映射进去？还有托管保证金和结算触发建议怎么做比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听起来链上就是“摘要+状态”。reason_code也要上链一份，避免线下改口。那调度失败时就是不进DISPATCHED，直接EXPIRED或CANCELLED？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两块：调度对置信度用“惩罚项+候选slot数量”，不改窗口边界；降级时进NEEDS_REVIEW或规则调度；合约做状态机，链上放摘要hash、版本、reason_code。还缺的是“字段清单”和“失败策略的KPI”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着列：  \n1）输入给调度的预测包：棚ID、作物ID、window_start/end、valid_until、confidence、model_version、io_hash、degrade_mode（normal/minimal）。  \n2）调度输出工单：order_id、provider_id、planned_slot、reason_code、decision_trace_hash、review_flag。  \n3）置信度使用：进入软约束分数，不改变窗口硬边界；低置信度时提高备选slot数量和备选服务方数量。  \n4）降级触发：degrade_mode=minimal或confidence低于阈值，工单标review_flag=NEEDS_REVIEW，或切到规则调度。  \n5）失败分类：NO_FEASIBLE、SOLVER_TIMEOUT、PROVIDER_REJECT、WINDOW_EXPIRED。每类映射到合约CANCELLED/EXPIRED并带原因码。  \n6）留痕：工单/证据/评估都生成摘要hash，上链只写hash+时间戳+版本，不上原始数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值我没很确定，先用A/B：比如confidence<0.6进review；0.6-0.75加大备选；>0.75正常。验证用仿真回放：看准时率、窗口内完成率、人工复核占比。成本这块我只能想到限制review队列的容量，比如每天每区域最多X单进人工，否则就走“保守取消”避免拖着。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约我按你们说的状态机：CREATED->FUNDED->DISPATCHED->EXECUTED->VERIFIED->SETTLED；异常是CANCELLED/EXPIRED。对齐字段：  \n- CREATED写订单摘要：棚ID、窗口摘要hash、预测版本hash、价格规则ID、valid_until；  \n- DISPATCHED写工单摘要hash+reason_code+planned_slot；  \n- EXECUTED写作业证明摘要hash+时间戳；  \n- VERIFIED写效果评估摘要hash；  \n触发：调度失败不进DISPATCHED，走CANCELLED/EXPIRED并退款；NEEDS_REVIEW下允许无责取消或延后一次（要在valid_until内）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复核只看棚级任务信息、历史汇总、服务方可用性，不新增个人定位和音视频；如果要看更细的棚内传感器日汇总，得单独授权并留痕，且用途限定在“调度与履约”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阈值和KPI我先给两条：人工复核占比要有上限（按区域/天），否则成本爆；以及窗口内完成率、准时率要分三档置信度分别统计，避免平均数把问题掩盖。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计中梳理“坐果评估从田间证据到VERIFIED输入”的数据流背景下，用户与导师围绕事件/字段/冻结上链、置信度分档、质量门禁、复核容量与合规边界持续沟通（13轮），其中在评估口径、抽样复核与阈值配置部分与农业授粉顾问沟通（3轮），并形成坐果评估数据流MVP要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按最简单的想：作业结束后到一个“评估窗口”，窗口里采集坐果相关的数据，算一个坐果增量或达标分，然后把结果摘要上链。数据源我想到三类：农户填报、棚内传感器日汇总（有授权前提）、还有第三方抽检。担心点是：不让拍照/视频的话，现场证据弱，容易扯皮。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件我想是 DISPATCHED 后生成评估任务，EXECUTED 后开始计时。字段层面：作物/地块/品种、花期窗口、作业方式、预期坐果区间。数据进入：农户填报走App离线也行；传感器日汇总走IoT网关；抽检走第三方表单。冻结点：评估窗口结束那天晚上统一结算前冻结。签名…可能就是账号签个确认？置信度三档：高=传感器+抽检一致；中=只有一类数据但在合理范围；低=只靠填报。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业授粉顾问 坐果评估这块，如果不采现场照片/视频，你建议的最小可行评估口径是什么？输入需要哪些字段、采样怎么做、阈值怎么设，才能支撑后面的 VERIFIED？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抽样点固定编号这块我能落到数据模型里。双人复核是指农户+服务方各填一份？还是第三方？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "明白。阈值你说默认区间配置表，我担心一开始配不全。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先收束成一条主数据流：  \n- 原始记录：抽样表（抽样点ID、株数、花数、坐果数、时间、填报方角色），还有作业结束时间、作物配置（阈值区间、窗口天数）。  \n- 派生指标：每点坐果率、地块加权坐果率、两方差异、是否超10个百分点。  \n- 上链：只上“评估批次hash+版本+窗口起止+置信度档+结果码”。  \n质量门禁：缺字段/时间不在窗口内/抽样点未覆盖最低数量就判低置信度或无效。异常原因码：DATA_INCOMPLETE、OUT_OF_WINDOW、DISAGREE_TOO_MUCH、THRESHOLD_NOT_CONFIGURED。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分档我给个可算的：  \n- 高：农户与服务方两份抽样表都齐全；抽样点覆盖≥K（按面积映射）；两方地块坐果率差值≤10个百分点；且（可选）传感器日汇总存在并与趋势一致（比如温湿度未出现极端）。  \n- 中：两份表齐全但差值在10~20之间，或只有一方表但覆盖≥K且无明显异常。  \n- 低：只有一方表且覆盖不足K，或存在 OUT_OF_WINDOW、字段缺失但还能算出部分。  \n复核触发：差值>20 或 DISAGREE_TOO_MUCH 就进复核队列；复核队列每天/每区有容量上限，超了的先标记为“低置信度延后结算/按保守比例预结算”。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，那我改成：高档不强依赖传感器，传感器是“可用则提升置信度/减少复核概率”。没授权就走双填报一致性拿高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：抽样表这种原始记录要做不可改，只能追加更正记录。每次提交生成record_hash，服务端存审计字段：提交方、时间、设备类型（不含定位）、版本号。窗口截止时生成评估批次hash，上链。争议时对比链上hash和库里记录hash链。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保留策略我想三层：  \n- 热数据：近3个月保留完整抽样点明细，支撑争议和复核。  \n- 温数据：3~12个月只保留地块级聚合（坐果率、覆盖、差异、置信度、原因码）+原始明细hash索引；明细放低频存储。  \n- 冷数据：12个月后只留链上hash+聚合结果+必要审计字段，明细按合规要求可删或脱敏归档。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权我加一个“consent_flag”和“consent_scope”，scope里写清楚只用于调度与履约评估，不用于营销。撤回后，新数据不再采集，但历史评估批次hash还在链上；库里原文按保留策略走。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先列一版，后面你看哪里要补：  \n1）事件流：EXECUTED→开启评估窗口（7-14天可配）→双方填报抽样表（多次提交追加）→窗口截止生成评估批次→计算指标&置信度→产出 VERIFIED 输入→上链摘要。  \n2）关键字段：地块ID/作物大类/设施或露地/窗口起止/抽样点ID/抽样株数/花数/坐果数/填报角色/提交时间/口径版本。  \n3）置信度：高=双填报齐全+覆盖≥K+差≤10；中=双填报差10~20或单方齐全且覆盖≥K；低=覆盖不足K或字段缺失/超窗但可计算部分。传感器汇总若授权可作为加分减少复核。  \n4）质量门禁：缺关键字段→DATA_INCOMPLETE；提交时间不在窗口→OUT_OF_WINDOW；差>20→DISAGREE_TOO_MUCH；阈值没配置→THRESHOLD_NOT_CONFIGURED（降级不做收益判定）。  \n5）冻结&不可抵赖：抽样表追加式记录，record_hash链式关联；窗口截止生成评估批次hash，上链存hash+时间戳+版本+置信度档+结果码。  \n6）复核容量：按区域/天设置复核上限；触发条件差>20或异常码；超容量的先低置信度延后结算或走保守预结算。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉收益智能合约调度系统方案设计背景下，用户与导师围绕安全审计要点与容灾分级降级策略持续沟通（7轮），其中在合规留痕、字段最小化与争议取证清单上与合规与风控经理沟通（3轮），在合约防重放/重复结算、升级与离线预结算容灾设计上与区块链与合约工程师沟通（3轮），并汇总形成可验收的审计检查项与P0-P2容灾方案结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“钱、证据、权限、链上链下边界”拆。威胁面我想到的有：1）伪造或重放评估批次hash，想抬收益；2）接口被刷导致窗口内提交乱套；3）私钥/签名被盗；4）链下存的抽样表被改，链上只存hash但被人换数据；5）容灾时双写或者重复结算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 这套授粉收益智能合约调度系统在方案设计阶段，安全审计你最关注哪些点？最好给“必做清单+留痕字段+争议时怎么取证”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段分级里，“地块精确坐标单独授权”我理解是：日常结算只用地块ID+行政区，不用经纬度。那遇到争议需要定位证据时才解密坐标，对吗？会不会影响我们做时窗判断，比如花期预测跟微气候有位置相关。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问个落地的：你说的“导出包带水印与导出hash”，hash是链上存，还是只做内部审计？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 需要你从合约安全和容灾角度给建议：审计重点、可升级方案、以及避免重复结算/重放的设计点。我们链上存的是评估批次hash+时间戳+版本+置信度档+结果码。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "去重键你提了“订单/地块/时间窗”，但我们前面有“区域/天复核上限”，可能同一地块一天会有多个批次（复核后再出）。那合约里是允许后批次冲正前批次，还是直接拒绝后批次？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "离线预结算这里，我担心业务方会问“没上链算不算结算”。是不是可以定义两级：先给服务方一个可见的预估收入，但资金不动；等上链再放款。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这边我汇总下我理解的取舍：审计上先做最小化+留痕四问；合约上做去重、一次性、金额上限、冲正补差；容灾上做离线预结算但不放款。这里我有点不确定的是：链下抽样表hash链的head hash绑定批次hash，具体放在链上字段里还是链下索引就够？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向放在链上事件里：评估批次上链时，除了batch_hash再带一个sample_chain_head_hash。原因是争议时大家对“抽样链到底是哪条”别扯皮。代价是链上多一个字段，成本能接受。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给三档：  \n- P0（链不可用/网络分区）：停止FINAL结算，进入PREVIEW模式。链下只生成“待上链凭证”（包含批次hash、sample_head、版本、时间窗、签名），对外展示“预估/待确认”，不触发转账。恢复后按时间窗顺序补上链，发现已上链则跳过。  \n- P1（链下数据库主库故障）：切只读+从库接管，写入走队列缓冲。关键是“评估批次hash上链前”必须在至少两副本持久化，避免上链了链下丢记录。恢复后做对账：链上批次事件清单 vs 链下批次表，缺的批次走“证据缺失→暂停结算”。  \n- P2（单可用区故障）：服务多活或主备切换都行，但结算触发入口要单活，防双触发；其他提交接口可多活但要幂等键（地块ID+时间窗+提交方+提交时间戳）来防重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "一致性规则我改成：  \n- 必须同步：评估批次生成、批次hash/样本head的绑定、批次状态迁移（PENDING/SETTLED/ADJUST/REJECTED）。  \n- 可异步：原始作业明细、非关键日志、看板聚合指标。  \n灾难模式下错误码：  \n- 链不可用时，新增结果码CHAIN_UNAVAILABLE，收益判定照做但结算状态标PREVIEW；  \n- 库不可用导致缺字段，就沿用DATA_INCOMPLETE，但会自动进入“证据缺失暂停结算”；  \n- 时间窗还是OUT_OF_WINDOW，不因为灾难放宽，避免被利用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先提5条偏黑盒的：  \n1）同一batch_hash重复提交结算请求，链上只允许一次成功，其余返回DUPLICATE_BATCH。  \n2）对同一订单在已SETTLED后提交未引用旧批次的“全额结算”，必须被拒绝，只有ADJUST路径可过。  \n3）把口径版本从V1改成V2但不走升级审批流程（无多签/无时间锁），应无法生效，链上事件里必须能看到版本变更记录。  \n4）抽样表任意篡改一条记录会导致record_hash链断裂，校验失败且对应批次进入EVIDENCE_TAMPERED。  \n5）权限验证：提交者账号即使拿到接口token，也不能触发结算；结算触发只能来自授权签名集合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心点我按“审计-合约-容灾”收口：  \n- 审计：围绕四问（谁提交/用哪个版本算/谁批准复核例外/钱怎么分）留痕；字段最小化，精确坐标隔离授权；导出证据包带审批号与hash，必要时上链。  \n- 合约：批次一次性结算+订单/地块/时间窗去重；允许复核后走ADJUST补差且引用旧批次；金额上限按合同；批次上链携带sample_chain_head_hash绑定抽样链。  \n- 容灾：链不可用进入PREVIEW只生成待上链凭证不放款，恢复后补上链对账；链下故障优先保证批次状态与绑定信息持久化，其他数据可延后；多活场景结算入口单活，提交接口幂等防重；灾难期间新增CHAIN_UNAVAILABLE并保持原门禁码不放宽。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在授粉收益智能合约调度系统工程开发背景下，用户与导师围绕多源数据接入与治理的路线选择、去重防重复结算、审计回溯、压测验收与联调合规持续沟通（10轮），其中在幂等键/补偿/迟到数据与链不可用门禁实现上与后端工程师沟通（2轮），在主数据、质量门禁分层与血缘回溯到口径版本+证据hash上与数据架构师沟通（1轮），并拍板事件表+投影表+分层质量规则及验收口径与开发拆任务方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在卡在两条路上：一条是先把所有数据落到湖里再做治理，另一条是进来就强约束校验+事件化。想把技术栈定下来，免得后面联调反复。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据源我现在整理的有四类：1）工单/作业APP上报（含地块、蜂群/设备、时间窗、签到签退、照片）；2）IoT微气候（温湿风雨、站点坐标）；3）坐果/品质评估（人工抽样+可能有图像模型评分）；4）链上批次与凭证（批次hash、sample_chain_head_hash）。\n关键约束：字段最小化、精确坐标要隔离授权；时间窗+地块+订单要去重；链不可用要PREVIEW但不能放款。\n我倾向事件化那条，感觉对幂等和审计友好，但开发量大，担心把接入写复杂了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 我们多源接入这块要避免重复结算、还能审计回溯。你建议“落湖后治理”还是“入口强校验+事件化”？幂等键、重试、补偿怎么落地比较稳？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "入口只做轻校验，重规则靠投影/质量门禁，这个我能写。幂等键那块我担心APP端不一定有稳定client_event_id，现场弱网经常重复点提交。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想定成：当同一`order_id+plot_id+time_window+action_type`出现第二条，且差异只在`client_event_id`、提交时间这种，就当重复直接标`DUPLICATE`；如果`device_id/bee_hive_id`不同或者签到坐标差异超过阈值、照片hash不同，就进`REVIEW_REQUIRED`，不进入结算投影，等复核。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 多源数据接入要做治理：主数据、编码、质量规则、血缘。我们在做授粉收益智能合约调度系统，想走“事件表+投影表”。你建议哪些字段做主数据？质量门禁怎么做才不会拖慢开发但又能追溯到口径版本和证据hash？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来最关键的是：事件里必须带schema_version和calculation_version，投影再绑定source_event的hash集合，保证后面争议能回溯。L0/L1/L2分层也能避免我把接入写成“全拦截”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“入口轻校验+事件表+投影表+分层质量规则”，不走“先全量落湖再治理”。理由：\n1）我们红线是不能重复付款，事件化+幂等键能把重复提交收敛；落湖后治理会把重复带进后面，修起来更痛。\n2）审计要回到口径版本+证据hash，事件表天然适配。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收我先定三个指标：\n- 重复事件去重命中率：同指纹重复提交能被标成DUPLICATE的比例；\n- 结算投影的幂等性：同一批次重放事件不改变最终金额；\n- CHAIN_UNAVAILABLE时：结算状态必须停在PREVIEW，资金流水接口不被调用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以先用两档：\n- IoT走批量写入（同device按分钟窗口聚合成一条事件，payload里是多指标map），降低写放大；\n- APP作业上报保持逐条事件，保证审计粒度。\n压测就模拟两类流：IoT持续流+APP突发流，观察事件表写入延迟P95、投影更新延迟P95、隔离队列积压。阈值我先定P95写入<2s、投影<10s，隔离积压<1万条。这个数可能还得调。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂，我换成：\n- 投影延迟：必须小于我们结算批次的最小切分窗口（现在按小时批次的话，就要求P95<5分钟，确保小时内能稳定汇总）；\n- 隔离积压：按复核日处理能力估算，比如一天能复核5000条，就要求积压不超过两天量，超过就触发降级（比如只允许关键字段入隔离，附件延后）。这块我还得跟产品对齐具体人力。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我之前没太注意。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能做两点：\n1）日志里禁止打印精确坐标和原始照片URL，只打hash和plot_id；\n2）测试数据用脱敏样本：坐标网格化、照片用占位图或内部合规样本，生产附件访问必须带purpose_code和审批号，不满足就返回空。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉任务“任务-资源-时间窗-地块”排程引擎工程开发背景下，用户与导师围绕约束落码、事件输入输出幂等回放、链不可用与迟到数据不乱结算及合规日志门禁持续沟通（8轮），其中在约束建模/解释与确定性回放、对照测试和性能边界部分与优化调度工程师沟通（2轮），并形成三段式求解、原因码体系、锁定与ADJUST事件、以及最小测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把调度问题拆成两层：先算每个地块的可作业时间窗（来自花期窗口+微气候置信度），再做任务分配。约束我能想到的有：时窗、资源容量（蜂群/设备数量）、行驶时间、同一蜂群一天最多跑几单、还有“不能跨太远”。但我不太确定怎么把“效果结算”这块和调度引擎接起来，怕后面证据链对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我打算用统一的TaskEnvelope：`task_id、orchard_id、plot_id、service_type、window_start/end、priority、location_geohash、estimated_duration、resource_requirements`，再带`schema_version、calculation_version`。资源侧是`resource_id、resource_type、home_geohash、capacity_per_day、availability`。\n输出我想写成ScheduleProposal事件：`proposal_id、task_id、resource_id、start_ts、end_ts、score、constraints_summary_hash、source_event_ids_hash`。幂等就用`proposal_id`+`calculation_version`做唯一键。\n降级：求解失败就产出“UNASSIGNED”提案+原因码，不会进入任何结算投影，链不可用时状态机还卡在PREVIEW_VOUCHER，放款那条不会通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@优化调度工程师 约束求解这块，工程上你建议怎么建模？我现在只有时窗/容量/路程这些直觉。还想问：回放怎么做成可重复、可对照？迟到数据只出ADJUST候选，会不会影响重新排程？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个点不确定：你说固定随机种子+排序规则，那如果输入事件顺序不同会不会导致输出不同？我们事件接入那块是多源的，乱序很常见。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三段式：预处理生成可行性+原因码，求解先出初解再小范围精调，最后给未分配任务的主因解释。回放我会做快照排序+固定种子，指标按我列的四个。\n我暂时不想立刻上MILP全量大优化，只做“高优先级+近窗”这段精调，别把求解时间拖爆。可行性矩阵缓存我会做，但担心缓存键太细导致命中低，我想先按“距离+时窗粗桶”做一版简单缓存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "迟到数据我会把“调度快照”的时间范围限定为`now`到`planning_horizon_end`，已完成/已结算窗内的任务直接标成LOCKED，不进入重排集合。迟到事件如果指向LOCKED任务，就只发一个`ADJUST_CANDIDATE`类的调度解释事件，不回写排程。\n合规这块我之前没太关注调度日志。我可以把位置用`location_geohash`或者直接用“距离分桶”，解释里只放hash，比如“resource_home_hash、plot_hash、distance_bucket”。精确经纬度只在权限受控的地理服务里算距离，调度服务拿不到明文坐标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入事件我这边先接三类：`TASK_CREATED/UPDATED`（含时窗、地块、优先级、位置hash）、`RESOURCE_STATUS`（可用性、日容量、home位置hash）、`PREDICTION_WINDOW`（花期窗口和置信度，映射到task window）。全部强制带`schema_version、calculation_version`。\n输出事件：`SCHEDULE_PROPOSAL`（分配/未分配都出）、`SCHEDULE_EXPLANATION`（未分配原因码+证据hash）、以及`ADJUST_CANDIDATE`（迟到数据触发但任务LOCKED时）。\n原因码先做：`WINDOW_MISS、CAP_EXCEEDED、DIST_TOO_FAR、LOCKED_TASK、CHAIN_GATE、DATA_INVALID`。\n测试我想做：\n1）确定性：同一快照不同输入顺序，输出proposal一致；\n2）约束：时窗/容量/距离三类各一组；\n3）迟到：结算窗外事件只出ADJUST，不改proposal；\n4）链不可用：状态在PREVIEW_VOUCHER时proposal照出，但任何“放款相关事件”不产出（这块我只在门禁里断）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，我把`DATA_INVALID`拆了，并且在校验器里把`schema_version/calculation_version`缺失当硬失败进隔离队列。性能门槛我先定测法：每次回放固定输入规模，跑10轮取p95；内存我就用容器的RSS采样。阈值我不敢拍脑袋，先跑一轮基线再回来跟你对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "在授粉收益结算对账的智能合约工程开发背景下，用户与导师围绕链上交互最小化、结算窗与迟到调整流程、链下对账链路实现及测试验证持续沟通（8轮），其中在轻量合约接口（批次登记簿、Commit/Finalize、版本字段校验、单hash与Merkle取舍、每窗1个ADJUST与防重放）部分与区块链与合约工程师沟通（4轮），并产出接口清单、对账校验点与实现/单测计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“链上最小化”拆三块：1）链下算清楚收益分成，2）链上只存承诺（hash）和状态机，3）对账靠可重复计算的事件流水。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：迟到数据我们上个微场景说只出 ADJUST_CANDIDATE，不碰已结算投影，那在合约侧是要支持“补差”还是只允许下个结算窗体现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态我先粗列：DRAFT（链下生成）、COMMITTED（上链了批次hash）、FINALIZED（上链确认结算结果摘要）、ADJUST_COMMITTED（上链调整hash）、ADJUST_FINALIZED。\n事件上链我倾向只两类：commitBatch(hash, window_id) 和 finalizeBatch(result_root, totals, window_id)。调整也是同样两步。链下留存是明细、解释、source_event_ids_hash这些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 合约侧最小交互怎么设计？我们链下会产结算明细和解释，只想把hash/根上链；还要带 schema_version、calculation_version、source_event_ids_hash，以及隔离原因码（SCHEMA_MISMATCH、VERSION_MISSING、GEO_LEVEL_VIOLATION）。另外迟到数据只出 ADJUST_CANDIDATE，不改已结算投影，链上怎么接得住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说 finalize 时做版本 allowlist，这个 allowlist 放链上会不会变得很重？我们预算不太够做复杂治理。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Merkle root 和单hash我有点纠结。单hash便宜，但争议时没法只举证一条记录。我们有争议场景：农户说某次授粉没算进去，服务方说算了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那合约需不需要限制“一个window最多几个adjust批次”？否则会被刷。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我回去跟导师对齐我倾向：版本检查用“commit一致性”；先单hash；每窗最多1个adjust批次。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三条：\n1）批次登记簿：window_id 下 SETTLE 和可选 ADJUST，两步 Commit/Finalize；ADJUST 带 parent_hash 指向 settle_batch_hash。\n2）版本策略先走轻量：commit 里写 schema_version/calculation_version，finalize 必须一致且非空；allowlist先不做链上治理。\n3）争议举证先走单hash（result_hash）+ 链下整包校验；字段预留 result_root 以后换 Merkle。\n不采纳的是“链上资金划转合并 finalize”，我们现在结算钱还是链下打款，链上先只做确认和可审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实现上我拆成两个服务模块：\n- settlement-builder：消费回放事件流，按 window 聚合出结算明细包，生成 batch_hash/result_hash/source_event_ids_hash/version；落库并标 DRAFT。\n- chain-registrar：只管把 DRAFT 推上链，分两步写入 COMMITTED/FINALIZED。\n幂等：用 (window_id,batch_type,batch_hash) 当幂等键；commit/finalize 交易里也带同样字段，链上做“已提交/已最终化”检查。\n失败重试：链上交易回执失败就退避重试，但不重新计算 batch_hash；链不可用门禁：如果节点不可达，builder 继续产 DRAFT，但 registrar 停发交易并打标 BLOCKED，等恢复再补发。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我做两级存储：\n- 明细包只保留“压缩后的明细行+解释摘要”，并且对 geo 做 hash/分桶，遵循上次不落明文经纬度。\n- 超过 N 个 window 未上链就只保留 batch_hash/result_hash + 一个可重算指针（比如 event_offset 范围、source_event_ids_hash），需要时重算明细。\nN 我先拍 7 个结算窗，超过就触发清理。这里可能会牺牲一点查询便利，但省存储。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我没准数。我能做个小实验：用你们回放压测口径，模拟链不可用 1 天、3 天、7 天三档，观察明细包存储增长和重算耗时的 p95。然后选一个“存储增长不超过阈值、重算p95还能接受”的 N。阈值我想先按环境给的磁盘预算倒推。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限我打算分三层：\n- 农户端：只能看自己地块的结算明细行和解释摘要，不见别人的；\n- 服务方：看自己服务单关联的明细；\n- 审计/风控：能看全量，但地理信息依然是分桶，不给精坐标。\n留痕：每次生成批次包，把 batch_hash、source_event_ids_hash、calculation_version 写入审计表；隔离队列的原因码也写审计表，链上不写原因码，只保证版本字段和hash一致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我按合约侧两类批次、两步走：\n1）commitBatch(window_id, batch_type, batch_hash, schema_version, calculation_version, source_event_ids_hash, parent_hash可空)\n2）finalizeBatch(window_id, batch_type, batch_hash, result_hash(占位result_root), totals摘要)\n对账校验点三条：\n- 校验A：finalize 的 batch_hash 必须等于 commit 的 batch_hash，版本字段一致且非空；\n- 校验B：链下明细包 hash == 链上 batch_hash；明细包里每条记录引用的 source_event_ids_hash 与批次一致（保证回放确定性）；\n- 校验C：adjust 批次必须引用 settle 批次 parent_hash，且每 window 最多一个 adjust，净额=settle+adjust。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发末段端到端联调与压测背景下，用户与导师围绕builder→registrar→链→对账→调度回放链路的最小闭环、幂等/版本/乱序错误口径、链不可用三档压测与指标口径持续沟通（9轮），其中在自动化验收断言点、错误码语义与压测时长并发建议上与测试负责人沟通（3轮），在registrar幂等键与CAS状态机、链回执竞态与outbox落表及重启用例设计上与后端工程师沟通（2轮），并输出MVP联调+压测覆盖路径、三档实验与通过标准清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想分两块推进：先做端到端联调的“最小闭环”，并发先压在10以内，确保commit/finalize/settle/adjust走完，且校验A/B/C在链上都能复现。然后再做链不可用的三档实验：间歇性失败、持续不可用、部分节点抖动。压测指标我先抓两个：registrar本地存储增长速率、builder重算p95。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "问题是我不太确定“重算p95”的口径应该按批次还是按window。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "覆盖路径我先定5步：  \n1) builder生成window结算明细包（含source_event_ids_hash、明细行hash链），产出链下明细包hash；  \n2) registrar发commit(batch_hash, version, window_id)；  \n3) 链上回执+event落回registrar；  \n4) registrar发finalize(batch_hash, version)并触发对账：链下明细包hash==batch_hash、每条record引用的source_event_ids_hash一致；  \n5) settle落库后，调度系统按window回放生成“收益分配任务”，再走一次adjust路径验证parent_hash和净额关系。  \n成功判定：A/B/C都通过，同时“回放任务数、任务金额汇总”跟settle/adjust净额一致。落库我只盯registrar的batch表、receipt表、replay_task表三张，其他先不扩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等我打算在联调里直接注入重复请求：同一window同一batch_hash发两次commit，期待第二次返回“已存在/幂等成功”；finalize同理。版本不一致我准备做两组：commit version=v1 finalize version=v2，应该直接失败，并且不产生settle记录。错误我目前想统一成registrar返回错误码，比如 REG_VERSION_MISMATCH、REG_DUPLICATE_COMMIT。链上如果已经接到交易但本地没落库，我有点拿不准该怎么对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 端到端联调这块，我要把“幂等重复commit/finalize、版本不一致失败、链不可用门禁”都放进自动化。你希望验收口径怎么写？错误码/断言点放哪里更稳，才能后面压测也能统计？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解了：断言不要只看链上event，还要看registrar状态机和对账结果落库。重算p95按window更合理。finalize先到/commit后到这条我之前没想测，我得确认我们到底允许不允许乱序；如果不允许，就直接断言REG_HASH_MISMATCH还是更准确点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问一下链不可用三档实验，你希望每档持续多久、并发建议多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三层断言+对账结果落库，这样压测能统计。错误码我先不全扩一大堆：保留四个主码——REG_IDEMPOTENT_OK、REG_VERSION_MISMATCH、REG_CHAIN_GATED、REG_HASH_MISMATCH；另外加一个REG_PRECONDITION_FAILED，不然finalize乱序没法跟hash问题区分。  \n我暂时放弃“finalize先到/commit后到也允许继续”的兼容逻辑，联调阶段按不允许处理，遇到就precondition failed。原因是我们现在链回执已经够复杂了，再加乱序兼容排障成本太高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "builder侧我加两个可观测点：  \n- window产出计数：每分钟生成的明细包数（应该跟输入窗口一致，不因链失败下降）；  \n- 重算次数：同一window被重复build的次数。门禁触发时，registrar不发链交易，但builder仍生成明细包并把明细包hash落到本地队列/缓存。验证点：链不可用时window产出计数不掉，且恢复后registrar能把积压的batch按顺序commit/finalize，A/B/C仍通过。  \n这里我有点担心存储增长：如果链挂10分钟，明细包会堆很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先给一个保守上限：builder本地只保留最近48小时的明细包原文；更久的只留hash和必要索引（window_id、batch_hash、version、source_event_ids_hash），原文转到对象存储一份。链不可用时如果超过阈值，比如本地积压>2万window，就触发降级：只保留摘要+对象存储地址，回放时按需拉。  \n可测：压测三档里记录“本地磁盘增长MB/分钟”和“对象存储写入量MB/分钟”，以及恢复后重算p95是否抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 registrar这块我准备做端到端联调：重复commit/finalize幂等、版本不一致失败、链不可用门禁。你帮我确认下：链回执延迟或重复回执时，batch状态机怎么设计才不会乱？以及我们错误码怎么在工程上落地更稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边联调要加一个“链不可用期间重启registrar进程”的用例吗？这会不会太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP我按这8条执行：  \n1) 端到端路径：builder产出明细包hash→registrar commit→链回执→registrar finalize触发对账→settle/adjust落库→调度回放生成收益分配任务；  \n2) 低并发联调：并发≤10，先跑正常结算+adjust各1条，校验A/B/C全过；  \n3) 幂等：重复commit/重复finalize返回REG_IDEMPOTENT_OK，batch不新增、状态不回退；  \n4) 版本不一致：commit v1 + finalize v2 必须REG_VERSION_MISMATCH，且不产出settle；  \n5) 乱序：finalize先到直接REG_PRECONDITION_FAILED(sub_reason=FINALIZE_BEFORE_COMMIT)；  \n6) 门禁：链不可用时返回REG_CHAIN_GATED(retryable=true)，但builder每分钟window产出计数不下降；  \n7) 三档链不可用压测（每档15分钟+5分钟基线）：10%失败、100%不可用、1分钟周期抖动；固定输入每分钟2个window；输出指标：本地/对象存储增长、重算p95/p99（按window）、错误码分布；  \n8) 档2加重启：不可用期间积压outbox后重启registrar，恢复链后补发成功且A/B/C仍一致。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在授粉收益智能合约调度系统进入运行评估、需打通灰度上线与回滚演练背景下，用户与导师围绕灰度切流、门禁口径、回滚不丢账与可观测判据持续沟通（7轮），其中在切流/回滚剧本与告警门禁、outbox背压阈值部分与SRE运维工程师沟通（4轮），并形成最小可行演练剧本与合规留痕要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我的想法是灰度先挑一个园区+两种作物，链上结算先走10%，其余还是走旧的结算通道当对照。回滚的话，分两种：合约侧回滚（关新合约地址、回到旧地址）和业务侧回滚（链上结算直接旁路）。我不确定的是：旁路后这些window的outbox要不要继续积，还是直接丢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度上线授粉收益智能合约调度系统时，你建议怎么切流？回滚演练要怎么设计才不会把window/outbox搞乱？还有发布门禁指标你会盯哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚里你说的“registrar暂停消费outbox”，那builder还在产包会导致outbox一直涨。演练里是不是要加个上限，比如积压到多少就停止builder产window？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "门禁里“REG_HASH_MISMATCH必须为0”，这个会不会在灰度里被误报？比如流程失败也用了这个码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "演练时“只写不finalize”开关，我理解是把证据哈希和交易预提交跑通，但不触发最终结算事件？这样能测链路耗时但不会落账。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了SRE。灰度建议是能力开关+稳定分组哈希，10%-30%-100%阶梯。回滚演练分三段：业务旁路（新流量走旧通道）、registrar暂停消费outbox保留积压、完整回滚（服务重启+配置回退+清灰度分组）避免同一window双finalize。outbox不建议丢，要可补发对账。门禁盯：finalize端到端p95/p99、REG_CHAIN_GATED占比和持续时间、outbox积压增长、错误码分布（REG_HASH_MISMATCH必须为0）、对象存储写入速率和包体积增长。还提了背压门槛，按我们压测15分钟不可用推阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想做两套对照：\n1）同一园区同一作物下，新旧通道都算一遍，但只以旧通道出账，新通道只生成链上证据和预结算，拿来对账差异；\n2）真正链上出账只放10%，但要求这10%里结算金额、服务方分润、农户应收三项跟旧通道结果差异为0或者在一个很小的容差。\n停的条件：REG_HASH_MISMATCH一条就停；REG_CHAIN_GATED超过1%持续5分钟就旁路回滚；端到端p95超过基线两倍就先暂停灰度扩到30%。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，金额类我改成“严格一致”，允许的只有显示层四舍五入，但账务用最小币种单位比对。还有一个例外是链费或者链上手续费，如果我们单独计费就不参与一致性比对。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "判据我先列三条：\n- 每个window在registrar侧有唯一的finalize_id，灰度/回滚期间同一个window如果出现两个finalize_id就算事故；\n- 对账表里“window->交易哈希”要么为空（走旧通道/旁路），要么只有一个哈希且状态最终一致；\n- outbox积压清空后，补发的window数量应该等于不可用期间新增window数量，不能多也不能少。\n不过第三条我不太确定，可能还会有重试导致重复计数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规我想到的是：链上证据里不要带农户个人信息、手机号、地块精确坐标这种。只上链哈希和必要的业务ID。留痕点可以做两层：合约调用的操作人、开关变更要有审计日志；回滚触发原因要记录对应指标快照，比如REG_CHAIN_GATED比例和持续时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "5条我先按执行顺序说：\n1）设灰度分组：按园区/作物/服务方ID稳定哈希，先10%，并打开链上结算总开关；对照组全量走旧通道。\n2）观测门禁：REG_HASH_MISMATCH=0；REG_CHAIN_GATED>1%持续5分钟触发旁路；finalize端到端p95/p99按“明细包生成->finalize确认”采样。\n3）演练链不可用：按之前压测三档之一做15分钟不可用，确认REG_CHAIN_GATED可见、outbox积压增长可见、对象存储增长在预期。\n4）回滚演练：先做业务旁路回滚（新流量走旧通道），再做registrar暂停消费outbox保留积压，验证无双finalize；链恢复后补发并核对去重后的window_key计数。\n5）审计与合规：链上仅写哈希/业务ID不写PII；所有开关/分组/回滚操作记录操作者与原因，并绑定触发指标快照。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段做“坐果提升与ROI复盘”背景下，用户与导师围绕指标口径锁定、坐果提升归因与ROI区间拆解持续沟通（10轮），其中在数据等级与坐果/畸形果口径及结算粒度对齐上与产品经理沟通（2轮），在坐果提升阈值与超窗影响解释上与农业授粉顾问沟通（1轮），并形成复盘输出清单与后续图表产出要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拉了三块：1）作业侧：工单准时率、取消率、跨田调度次数；2）结果侧：坐果率、畸形果率，按地块和品种分了；3）钱侧：按合约结算的分成金额、争议单数量。最想先看坐果率提升是不是跟“窗口内完成授粉”强相关，不然ROI复盘会飘。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做两层对照：同一合作社里相近地块，用“有调度优化+合约结算”的地块对比“只用旧人工派单”的地块；再按花期窗口置信度分桶，高置信度桶里看差距会不会更稳定。缺口是：我不知道坐果率口径有没有被田里填报水分影响。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "坐果率现在是“盛花后14天的坐果数/开花标记枝条花朵数”，来自农户端巡田记录；畸形果率是采收前目测上报。抽样核验我们只有两块示范田有第三方巡检照片，其余基本是自填。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 坐果率、畸形果率这套指标在运行评估里怎么定口径更稳？现在主要靠农户自填，有没有你们之前设的校验或分层办法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那ROI复盘里钱侧怎么对齐？是按地块、批次还是按服务方？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主结论我想只用A+B地块，单位按window_key×plot×provider。坐果率口径改成10-14天首次有效观测。畸形果率先不进分成，只做风险提示。风险是：A地块样本太少，可能统计不稳，但至少不至于被自填带偏。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有两个想法，可能都不完美：\n1）同一地块跨两个窗口（早花、晚花）对比，看看调度前后“窗口内完成率”变化对应的坐果变化；\n2）用“调度系统触发的改派/加派”作为准实验变量：被改派的工单如果仍能窗口内完成，坐果是否更接近“正常按时完成”的组，而不是“超窗完成”的组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用：地块距离服务点、当天风速/降雨、窗口置信度、蜂群可用量紧张度（从供给侧日志里有一个capacity_level）。再把工单类型（蜂群/振动授粉设备）也加进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业授粉顾问 坐果提升在田间通常怎么看“有意义”？以及授粉超出花期窗口，对坐果影响一般是线性还是有断崖？我们现在按window_key做结算，需要你给个能解释给种植者的说法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三档解释更好讲。不同作物的“看得见”阈值我记下了：草莓3-5pp，梨苹果7-10pp。超窗是断崖式风险。我们按这些分档去看数据更直观。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "收益增量我先用区间法：\n- Δ坐果率（A/B）× 历史单果重中位数 × 近四周成交价的P25-P75，得到一个收益区间；\n- 再减服务成本：工单里有报价+里程估算；\n- 平台与链上成本先按单笔gas均值×笔数，加上争议单处理的人工时（运营那边有工单时长）。\n我担心的是：价格波动大，ROI区间会很宽。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我会在复盘里把ROI拆成三条带：\n1）只固定价格用中位数，看系统带来的纯作业效果；\n2）再放开价格区间，看市场风险；\n3）再把C等级数据算进去做敏感性，看最差会不会翻车。\n最后只用A+B作为对外结论，C只放附录。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）复盘样本：只用数据等级A+B，结算粒度window_key×plot×provider，坐果率取盛花后10-14天首次有效观测。\n2）坐果提升：按作物分组，授粉时效三档（窗口内/边缘+1天/超窗≥+2天）对比坐果率提升，标注草莓3-5pp、梨苹果7-10pp为“看得见”阈值。\n3）归因验证：用“系统改派/加派”作为准实验变量，控制距离、天气、窗口置信度、capacity_level、作业类型，检查窗口内完成率变化对应的坐果变化。\n4）ROI区间：收益增量=Δ坐果率×单果重中位数×价格P25-P75；成本=服务报价+里程+gas均值+争议处理工时；同时给“固定价格中位数”的窄口径对照。\n5）风险提示：畸形果率仅做质量风险看板，不入分成；对C等级数据单独做敏感性，避免被自填拉高结论。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估中复盘异常授粉坐果下滑背景下，用户与导师围绕异常分类、追因链路与结论口径持续沟通（9轮），其中在花期窗口与天气阈值规则部分与农业授粉顾问沟通（3轮），在证据分级、争议冻结与隐私审计留痕部分与合规与风控经理沟通（2轮），并形成可复用的“快速三问+5类标签+字段与动作”追因口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“结果异常”和“履约异常”分两层。结果异常是坐果率/畸形果率突然偏离同作物同棚型的基线；履约异常是准时率、窗口内完成率、改派次数、到场-开工-完工时长这些。追因上我想先做一个最小集合：时间窗偏移、天气突变、蜂群/设备状态、田间操作记录缺失或造假、以及调度策略引起的路程挤占。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "顺序我想从最硬的证据开始。第一步看窗口：花期窗口预测的start/end、置信度、当天是否有窗口更新；对比作业开始时间戳，算Δt=开工-窗口end。如果Δt>2小时且置信度>0.7，就先判“错过窗口嫌疑”。第二步看履约：GPS轨迹到场点、签入签出、工单状态流转是否有断点；如果轨迹缺失但有手填完成，先判“证据不足”。第三步看外因：天气站风速/降雨/温度是否越过授粉阈值，越过则标“外因高可能”。第四步才看调度：是否发生系统改派/加派，是否超capacity_level，路程是否异常上升。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2小时是我拍的，得找授粉顾问确认不同作物的容忍度；0.7也是经验值，可能要按模型calibration后的分桶来。结算上我理解现行是：证据不足不直接罚服务方，但会进入争议队列，先冻结该笔效果分成，直到补齐证据或超时按默认规则走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业授粉顾问 追异常授粉事件时，“错过花期窗口”这条你们田间一般怎么判？不同作物大概晚到多久就几乎没收益？还有天气阈值（风/雨/温度）哪些最关键，给我一组可用的经验范围也行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“窗口end 11点、晚到2小时高风险”这种能不能变成系统里统一规则？还是必须按作物×蜂种×棚型分表？我担心规则太细跑不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“外因”这块，你提风速>6m/s、有雨就停，这个在设施里还适用吗？我们有些棚里其实风雨不直达。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 异常授粉追因里，如果出现“轨迹缺失但手填完成”“照片时间不一致”这类证据问题，现行争议处理怎么走？哪些证据我们必须留痕才能经得住仲裁？另外定位/GPS算敏感数据，我们留到什么粒度合适？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们之前把“照片+定位”当强证据在用，这里你说照片只是B类。那遇到农户投诉说“照片是别处拍的”，我们怎么快速打回？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定4类异常：  \n- A 结果异常：窗口内完成但坐果显著低  \n- B 履约异常：未在窗口内完成/频繁改派  \n- C 证据异常：轨迹/照片/时间戳缺失或冲突  \n- D 外因异常：天气越阈值或窗口临时更新导致  \n排查顺序：先C再B再D最后看A（因为A最难解释）。  \n结论标签我想落成5个：错过窗口高可能、外因高可能、调度挤占高可能、证据不足、需人工复核。  \n动作上：错过窗口/调度挤占给调度组复盘；外因给农户解释并标注不参与分成争议；证据不足走48小时补证+冻结；需人工复核进风控工单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以在前面加一个“快速三问”筛掉大头：  \n1）窗口一致性：作业是否落在当日最新窗口里（含更新）  \n2）天气是否越阈值（按棚型权重）  \n3）证据是否达A+B最低要求  \n三问都通过但坐果仍低，才进入A类深挖：看作物批次、授粉方式、作业时长、蜂群状态这些。A类深挖限定时长，比如每单最多分析15分钟，不够就转人工复核或归到“原因不明待观察”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我给两个可计算信号：  \n- 路径异常：同一服务方同一天的实际里程/计划里程比值>1.3，且改派次数>=2  \n- capacity异常：任务开始前1小时内，服务方capacity_level=满或超分配，并出现跨区拉单  \n满足其一就标“调度挤占高可能”，再去看具体哪次改派把它推迟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成5条：  \n1）错过窗口高可能：Δt=开工-窗口end>作物阈值（先用120min保守）且窗口置信度分桶=高；证据字段=窗口版本、开工时间戳、到场围栏事件；动作=标记不进入效果分成争议优先级、推送调度复盘+对服务方提示。  \n2）外因高可能：天气越阈值（露地风速>6m/s或降雨>0；设施温度<10或>32、湿度高）且越阈时间覆盖窗口；字段=天气站/棚内传感、阈值版本；动作=给运营生成解释话术，结算按条款走但不罚履约。  \n3）调度挤占高可能：里程比>1.3或capacity满且改派>=2，且导致开始时间后移；字段=计划/实际里程、改派事件流、capacity_level；动作=调度策略回放，必要时下调该服务方后续接单上限。  \n4）证据不足：关键B类缺失（到场围栏或照片时间戳无法匹配）；字段=围栏事件、照片哈希/时间戳、状态流转；动作=冻结结算+48小时补证，超时按默认最低档或不结。  \n5）需人工复核：时间戳冲突、照片哈希重复、轨迹瞬移等可疑；字段=哈希比对结果、异常规则命中记录、访问审计；动作=风控工单+抽检比例上调。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，我改口径：错过窗口属于履约侧高风险；畸形果率只进质量风险看板，不进入分成计算与追责主依据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我容易漏这个。加到第4/5条动作里：证据查看/导出必须走权限与审计，运营侧只拿到“结论标签+关键理由”不拿原始定位点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "作物阈值表我还没底，120分钟是保守值但可能误伤瓜类。下一步我想把“瓜类/番茄/草莓”先各定一档阈值，再用上周投诉单回放看命中情况，命中太多就调。除此之外就按你这版推进。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的合约争议与仲裁闭环背景下，用户与导师围绕争议入口、指标、证据合规边界与资金冻结/释放机制持续沟通（9轮），其中在证据字段权限分层与留痕保留期部分与合规与风控经理沟通（2轮），在合约状态机与仲裁超时默认释放规则部分与区块链与合约工程师沟通（1轮），在争议发起方与现金流痛点数据部分与运营经理沟通（1轮），并形成证据分级+流程时限+托管比例与原因码口径的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "争议闭环我现在就担心两件事：一是冻结48小时之后如果还没结论，钱一直卡着，会被服务方骂；二是证据链我们现在说“运营只看结论”，那仲裁看啥，怎么保证他看得到又不越权。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "入口我想先收敛：只允许两类人发起，种植者和授粉服务方；采购方先不让点，避免三方乱。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "触发条件我先用两种：结算金额偏差超X% 或者异常标签命中（比如疑似超窗、疑似空跑）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指标我能想到的有：争议率、平均仲裁时长、争议后资金释放时长、仲裁结果被二次申诉的比例。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 仲裁闭环里，仲裁员/运营/当事双方分别能看哪些证据字段？我们现在定位原始明细短期保留、访问有审计，这套怎么落到争议场景不踩线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "仲裁员还能看到网格位置，这个我之前没想到。我怕服务方会说“看不到原始轨迹我不服”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 争议仲裁这块，合约里资金冻结、仲裁裁决、释放/扣罚怎么做成状态机？48小时冻结结束后，如果还没裁决怎么避免一直卡钱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：别把全款冻住，只冻“争议金额”；48小时是快速核查，后面转仲裁时钟；超时要有默认释放策略，不然拖死现金流。裁决只上摘要和哈希，不上证据本体。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先选折中：\n1）证据分级：默认给双方看结论+证据索引（围栏事件ID、抽样点编号、时间窗、哈希）；仲裁默认看网格化位置+抽样点材料；只有当“结论可能被推翻”时才走受限解密视图，但也不放原始坐标点，只放更细网格，比如50m格？我不确定尺度。\n2）时限：发起争议T+7天内有效；48小时快速核查；再给5个工作日仲裁。\n3）资金：不争议部分直接放；争议部分进托管。超时就先放70%给服务方，30%继续托管到裁决或到期自动释放给种植者？这里我有点卡，怕规则偏一方。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运营经理 线上这两周的争议/投诉里，通常是谁在发起？大家最痛的点是钱不到账还是觉得被扣？如果仲裁超时要默认释放一部分，你倾向偏服务方还是偏种植者？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我偏向：超时先放70%给服务方，剩下30%托管；如果最终判服务方败诉，允许在下个账期自动扣回，扣不回再走保证金。保证金这块我们之前有，但没完全跑通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流程我先串一下：\n- 发起：结算后7天内，双方可点争议，必须选原因码（金额偏差/异常标签/作业窗口异议/抽样异议）并填必填字段（结算单ID、地块ID、作物、时间窗、申诉金额/比例、联系人）。\n- 自动动作：争议金额进托管，非争议金额照常放；立刻冻结48小时进入快速核查。\n- 快速核查：系统把“标签命中+围栏事件+抽样点”证据包摘要生成哈希，双方只看摘要结论；若在48小时内任一方接受，直接执行。\n- 转仲裁：仍不接受就进仲裁，仲裁默认看网格化位置+抽样点材料，必要时走受限视图（双人审批+审计）。\n- 超时：5个工作日无裁决，合约先放70%给服务方，30%继续托管；裁决到来后再结清，多退少补，败诉方支持从后续账期抵扣。\n- 评估指标：争议率、平均从发起到Resolved时长、超时占比、二次申诉率、证据请求次数/人均、以及“争议后满意度”用运营回访打分。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原因码我先压到6个：\nA1 超窗作业（时间窗外）\nA2 围栏不符（不在地块围栏/跨地块）\nA3 抽样不足（抽样点缺失或不合格）\nA4 设备/蜂群异常（蜂箱状态异常导致效果不可信）\nA5 结算计算差异（公式/面积/单价）\nA6 作物阈值争议（不同作物阈值导致误判）\n仲裁结果原因码沿用同一套，再加一个R0 证据不足维持原判？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我先定：\n1）资金不全冻：只托管争议金额，48小时快速核查+5个工作日仲裁，仲裁超时先放70%给服务方、30%继续托管，裁决后自动多退少补并支持跨账期抵扣。\n2）证据分级不越权：双方只看结论+索引哈希；仲裁默认网格化位置+抽样点材料；受限视图需双人审批+审计，仍不提供原始坐标点。\n3）口径统一可复盘：争议原因码与异常标签同源（A1-A6），裁决摘要上链（结果+调整额+原因码+证据包哈希+签名），运行评估追踪时长、超时占比、二次申诉率、证据请求次数这些指标。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段完善影响调度与结算的模型漂移与迭代计划背景下，用户与导师围绕漂移信号、阈值来源、延迟/仲裁标签治理、分级响应、门禁与合规隔离持续沟通（9轮），其中在漂移监控项、阈值基线、冻结标签与影子/灰度迭代门禁部分与算法负责人沟通（3轮），并形成可执行的“监控→响应→迭代”闭环要点与近期落地安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按结果看：坐果率、结算调整额、争议率这些。只要这些波动大，就算漂移，然后回滚到上个版本模型，或者把模型权重调低，让规则兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入漂移就是传感器数据分布变了，比如温湿度、光照；还有作物品种、地块类型比例变了。性能漂移就是预测误差变大，比如花期窗口偏差，坐果评分跟抽检对不上。触发动作我就先定阈值，比如误差超过之前均值两倍就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标签延迟这块我没想太细。我感觉可以只用无争议的单子做训练和评估，争议单就丢掉，免得脏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 漂移监控到底监啥？阈值怎么定？我们坐果/品质标签还会被仲裁调整，这种延迟+可能被改的标签，线上评估和后续训练怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入漂移用PSI/KS分组看；性能漂移看MAE、校准、告警命中率。阈值用8到12周基线按P95，连续触发。标签分代理标签和裁决后标签，训练只用冻结标签；争议样本进困难池。迭代是月小季大，先影子再灰度，还要卡结算偏差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“结算偏差风险”的阈值，一般是用什么量？直接看分成金额变化吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先试一版：  \n1）监控分输入漂移和性能漂移，按作物-区域-服务方分组。  \n2）输入漂移用PSI/KS，超过阈值连续3次算异常；性能漂移看花期MAE、坐果评分校准、告警命中率。  \n3）标签两套：7/15天代理标签用来早期评估；裁决后标签用来训练。  \n4）争议单不丢，放困难池，等裁决后再入训练，或者降权。  \n5）响应分三级：提示/降级/冻结。提示只通知；降级是提高规则权重、缩小自动结算范围；冻结是停止模型更新并回到上个稳定模型。  \n6）迭代节奏：每月重训，季度做特征或结构改动，上线走影子→灰度→全量。  \n7）门禁加一条：影子评估时预估应付金额差异P99超阈值就不灰度。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那降级我改成两种：  \n- 结算继续自动出结果，但把高不确定工单的“可分成比例”先按保守档位算，比如只放70%进入即时可支付，剩余走延迟结算；  \n- 同时把这些工单打上风险标签（对应A1-A6里的相关原因码），强制增加抽检点位，后面如果争议就有一致口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放我能想到的是拿过去两个月的工单，拿当时的真实结算结果当对照，模拟如果触发降级，保守档位会少付多少、后面裁决会补多少。看两项：一是“误少付比例”别太高，不然服务方现金流会炸；二是“错多付金额”要压低，降低垫付风险。然后选一个平衡点当默认档位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我之前没太关注。大概做法是：漂移看板对外只给聚合指标，不给明细到地块；服务方只能看自己的分组，平台风控能看跨服务方的对比，但要留审计。位置数据继续用网格级，不下钻到点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要点我按最终版本说：  \n1）漂移监控两类：输入分布（PSI/KS）+ 性能退化（花期MAE、坐果/品质校准、异常告警命中/误报）。  \n2）分组维度与结算一致：作物-区域-服务方，另设新作物/新服务方冷启动监控。  \n3）阈值来源：近8-12周稳定期基线，按分位数阈值+连续触发N次，避免单日噪声。  \n4）标签策略：7/15天代理标签用于早期线上评估；“已冻结标签”（过仲裁窗口或已裁决）才进入训练集；争议单进困难样本池，待裁决后再用或降权用。  \n5）分级响应：提示（仅告警）/ 降级（自动结算照跑但启用保守档位+提高抽检比例+打风险标签与原因码）/ 冻结（暂停更新并切回上个稳定模型）。  \n6）迭代节奏：月度小迭代（重训/微调），季度结构性迭代；上线门禁：离线对比→影子评估→灰度。  \n7）结算风险硬门禁：影子模型下预估应付金额差异的P90/P99超阈值则不扩灰；阈值用历史回放定默认，并兼顾“错多付金额”与“误少付比例”。  \n8）合规与权限：监控与复盘只看聚合与网格级位置，服务方只见自身数据；跨方对比仅风控可见且审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

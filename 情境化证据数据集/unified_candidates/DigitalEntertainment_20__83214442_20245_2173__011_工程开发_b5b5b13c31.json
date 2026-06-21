@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在分支选择→生成→同步审核链路的压测与端到端时延优化背景下，用户与导师围绕压测口径、可观测指标与优化落地持续沟通（10轮），其中在链路拆分与压测建模部分与后端工程师沟通（4轮），并明确interactionId贯穿、分段耗时字段/一致性计数器、三类流量脚本及生成前置与会话条件更新等改动项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先用 k6 打接口吧，就选分支、seek重建、还有生成段落这几个。指标就 p95/p99 延迟、错误率。端到端我没太会量，可能就前端打点算一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "选择分支会：写会话状态、拉下一段生成、同步审核决定replace还是block，然后返回给前端。埋点有 reviewDecision/reviewLatencyMs/reviewCacheHit。别的我没加太多，就怕打正文违规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 压测这块怎么把一次“选分支→生成→同步审核→返回”的耗时拆开？我现在只有审核的几个字段，想补点能定位瓶颈的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "interactionId 之前没加，我以为 traceId够了。要客户端改的话会不会拖？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那缓存命中时 decision 丢失怎么查？我之前担心 seek 重建会拿到段缓存但没拿到decision。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "并发覆盖我没想到。我现在会话更新是直接 lastSegmentId 覆盖。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先回去跟导师对齐下，怕我理解偏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "导师，我问了后端工程师。他说压测别只压接口，要加 interactionId 串链路，然后日志加 sessionWriteMs/genLatencyMs/mergeLatencyMs/totalBackendMs 这类分段计时。另外做三种流量：纯选择、选择夹seek、还有弱网重试同interactionId。decision丢失可能是segment缓存命中但review缓存没命中，或者并发乱序把decision覆盖了。他建议会话写加 expectedPrevSegmentId 做条件更新，冲突就409。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜生成 genLatencyMs 最长。同步审核也可能波动，但我们有缓存。会话写入可能也慢，不过一般是redis应该还行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1) 纯选择场景，QPS逐步加到比如500，看 totalBackendMs 的p95别超过多少，比如200ms，错误率<1%。看 reviewCacheHit。  \n2) 选择+seek，每10次一次seek，主要看 decision 丢失率，呃就是 reviewDecision 为空的比例。  \n3) 重试场景，同interactionId重复打，保证不会生成两次，观察 genLatencyMs 有没有重复尖峰。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这块之前是兜底replace统一段，确实可能把错误吞了。那要不要对压测版本临时把兜底关掉？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我加两个计数。会话写的409我也加上，看看冲突多不多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "会话写入和审核不能并行吧，审核要看段。生成和会话写可以并行？我现在是先写会话再去生成。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这块我怕搞乱。我能先做个简单版：生成先走，写会话放后面，但返回前必须写成功，否则就返回错误？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那缓存TTL对齐我现在没改。segment缓存和review缓存是两套，默认TTL不一样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选把review TTL调长一点，至少覆盖segment TTL。因为改到“同一策略”我不太确定哪里配。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就先设成 segmentTTL * 2，上限比如30分钟。超过就还是30分钟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认下我接下来做的：k6里建三种脚本模型，header带interactionId；后端加分段耗时字段和那几个计数/错误码；把生成调用放到会话写之前；会话写入加 expectedPrevSegmentId 不匹配就409；review缓存TTL调成segment的两倍但最多30分钟。压完看 totalBackendMs 的p95/p99、fallback计数、409比例和rebuildMismatch。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

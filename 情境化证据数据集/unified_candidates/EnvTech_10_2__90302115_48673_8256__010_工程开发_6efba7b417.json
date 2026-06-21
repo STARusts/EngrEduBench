@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在热风险预测—干预调度链路的调度引擎压测实现背景下，用户与导师围绕压测口径、分段打点、失败分桶、可复现方案与日志脱敏持续沟通（7轮），其中在压测指标/失败模式与质量门禁部分与调度优化工程师沟通（4轮），在压测模板、升压步骤、退出条件与资源采集部分与测试工程师沟通（3轮），并整理出可执行的输入集字段、SLA、桶计数、质量门禁与退出标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐就是每秒多少次。时延就是响应时间。成功率就别报错。资源就CPU内存。质量…就看有没有排出结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度优化工程师 压测要怎么测？给个清单，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "无可行解就是不满足条件？那我把条件放松点不就行了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "超时桶是不是我就把超时设大一点，别超时就好了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道输入规模去哪拿，我这边就一个JSON。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。我还要测CPU内存就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是加几个指标：每秒多少请求，P95时间，成功率。失败分五个桶。还有质量别掉太多，10%以内。然后从JSON数一下规模。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就从收到请求到返回结果算一个时间。内部的…我也不知道怎么插。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，我就在代码里打时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TIMEOUT就是超过2秒。INVALID_INPUT就是JSON缺字段。INFEASIBLE我就看到返回空就算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是得写很多检查规则？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用脚本开很多线程请求接口，然后看日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测方案给个最简单的，我照着跑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我抽样100个是不是很麻烦，我就抽10个行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "知道了。退出标准里“内存85%”我怎么看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）跑并发10/50/100，预热2分钟，跑10分钟。  \n2）看RPS和P95。  \n3）失败分桶五个。  \n4）抽样检查没违背约束，目标值别降太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入三档：small/medium/large，每个都带N_block、N_action、N_res，从JSON里数。seed=42。  \nSLA：端到端P95 < 2s；求解器内部我先记“solve_ms”，目标<1.5s。  \n桶：INFEASIBLE、TIMEOUT、INVALID_INPUT、SOLVER_ERROR、CANCELLED，每个计数。TIMEOUT按2s判。  \n质量：硬约束违背=0；目标值均值比并发10的基线下降不超过10%。抽样small 10，另外50。  \n退出：SOLVER_ERROR连续>5次停；RSS>85%停；错误率>1%或者P95超SLA也停。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就不打印原始JSON了，只打印N_block这些数，还有桶。坐标就不打。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

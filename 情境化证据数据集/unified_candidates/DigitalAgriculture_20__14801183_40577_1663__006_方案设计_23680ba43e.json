@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计“因果与时序融合模型”背景下，用户与导师围绕模型结构、产量/建议输出口径、接口字段、缺图/缺作业记录降级与最小验证持续沟通（6轮），其中在作业干预建模、触发式自校准与缺视觉稳健部分与算法工程师沟通（3轮），在可采量口径、建议呈现与置信度表达部分与产品经理沟通（2轮），并形成模块边界与字段清单及验证要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想到用个时间序列模型预测产量，再加个因果模型纠偏。是不是直接上个现成库就行，给温湿度和照片结果喂进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "产量就按天吧，今天能收多少。纠偏可能是人没按建议做。建议…就按阈值规则套一下？比如湿度高就通风。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 作业记录怎么塞进时序预测里？还有自校准是不是直接在线训练就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "uplift是要我算AB测试那种吗？感觉很麻烦。能不能就把作业当特征，不当干预。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那自校准我就写成“每天自动更新一下参数”？反正有现成online learning。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是…时序模型先算未来几天能收多少，然后作业算成干预，不然会学歪。自校准别全量训，改一小层，触发式，坏了回滚。缺图就降级加置信度低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 产量口径要怎么定？还有建议怎么展示才不吓人，置信度要不要给百分比？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写成：输出3天区间+高中低。百分比就不放了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "效果对比…是不是要做A/B？基地也不一定配合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "地块ID、时间戳、温度、湿度、照片成熟度分、污染分…作业记录算一个字段？还有采收量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "work_action_intensity我怕一线不填，能不能全都默认low？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那最小验证是不是就跑一下历史数据，看MAE？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3条我有点不懂，就是让顾问说“别瞎推荐”对吧。我记成“方向别反”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是uplift那块我怕实现起来会卡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发机智蒸馏模块背景下，用户与导师围绕数据合规、算力限制、算法选型及Pipeline跑通持续沟通（5轮），其中在数据合规边界部分与知识产权合规师沟通（1轮），在算力与全量蒸馏可行性部分与算法工程师沟通（1轮），并最终确认脱敏正则+授权校验、LoRA rank 16、Faiss、跑子集验证Pipeline的蒸馏基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿交互日志丢给大模型微调呗。我看了Unsloth，跑LoRA挺快的，显存占用低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还要脱敏啊。那我不懂了，反正数据在库里，我写个SQL抽出来就能用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "日志里有学生名字和聊天记录，我要拿去微调，合规怎么说？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抹除名字简单，泛化咋搞？授权协议我哪知道签没签。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱机器就那几张卡，全量日志几十G，LoRA能跑下来不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我LoRA的rank设多少合适？我看别人设16，我想试试8或者32，看哪个收敛好。还有向量库，Milvus部署麻烦，Faiss本地跑是不是更快？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，先16，Faiss。那脱敏我就先写个正则去名字和手机号，授权字段我查一下。先跑几千条子集把流程走通。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

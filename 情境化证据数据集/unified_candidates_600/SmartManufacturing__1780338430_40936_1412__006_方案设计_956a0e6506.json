@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在维产联调引擎与接口规范设计背景下与导师围绕指令下发防呆、异常补偿与接口硬约束持续沟通（6轮），其中在防误操作与权限规范部分与联调调度架构师沟通（1轮），在补偿事务与状态回滚部分与后端联调开发沟通（1轮），并最终形成包含操作票人控复核、幂等、状态机补偿释放资源及向下兼容的四条接口硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得关键是解耦。用消息驱动，图谱状态一变，发个Event，MES和ERP各自订阅去改排产和派工单。用Saga模式保证最终一致性就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限加个OAuth2？审计就写个AOP切面存数据库。防重放加个时间戳和Nonce。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要往MES推排产调整指令，防误操作和权限规范怎么搞？我原想加OAuth和Nonce。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试3次，不行就进死信队列报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调指令下发失败，事务补偿和状态回滚怎么搞？我打算重试3次进死信。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，指令下发必须带操作票号，走人控确认复核；第二，接口必须幂等；第三，异常走状态机补偿，补偿动作要释放关联资源；第四，接口要兼容老版本字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

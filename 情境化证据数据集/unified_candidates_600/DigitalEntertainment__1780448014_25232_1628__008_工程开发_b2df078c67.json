@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧力场指令解码重构与算力受限适配背景下，用户与导师围绕轻量化解码方案、静态映射定点化、量化对齐与性能约束持续沟通（6轮），其中在端侧资源评估及查表实现方式部分与硬件端侧开发匠沟通（2轮），并最终形成纯C硬核静态查表定点重构、数组偏移无分支实现及L2范数验收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧解码逻辑绝对不能硬编码写死，太没扩展性了。我计划引入WASM Micro Runtime作为端侧轻量沙箱，云端下发编译好的WASM字节码，终端直接跑。这样以后力场流变模型怎么变，端侧都不用改固件，彻底解耦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查过WAMR，它有解释模式和AOT模式，AOT应该能压到微秒级。不过确实内存占用可能超。那退一步，如果不跑WASM，我也要做一个基于寄存器虚拟机的动态指令解码器，支持运行时下发力场描述符，终端按描述符动态重构力场，至少得把解码策略做成可插拔的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们端侧主控的SRAM和Flash大概是啥量级？跑个微型虚拟机或者动态解码器有空间吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "256KB确实太紧了。动态下发力场描述符这条路也走不通，解析描述符本身就耗时。只能做静态映射了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端FP32参数下传前，先做量化截断，转成INT16或者INT8的索引和系数。端侧收到包后，直接拿索引去Flash里的力场基表查基向量，然后用INT8系数做移位近似乘加。但我还是想留个口子，查表逻辑做成可配置的，用一个小的JSON配置表来定义查表策略，这样后续换硬件不用重编。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "砍掉JSON配置。查表逻辑直接写死宏定义。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "量化参数怎么对齐？云端截断的INT8系数，端侧移位还原的精度损失，需要一个验证口径，不然端侧重构出来的力场全走样了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案确认：端侧放弃一切虚拟机和动态解析，纯C硬核实现。云端侧量化为INT8索引加系数，端侧查Flash基表，移位乘加重构。误差验收用L2范数小于5%。我这就去写定点化解码内核。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "查表用switch-case还是数组偏移？数组偏移快但Flash占用可能多点，switch-case编译器优化后可能更省空间。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就数组偏移查表，无分支实现。我先把量化因子和查表偏移的宏定义写好，跑一轮端侧模拟器看L2范数误差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

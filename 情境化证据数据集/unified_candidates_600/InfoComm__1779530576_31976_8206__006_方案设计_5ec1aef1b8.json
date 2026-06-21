@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在容陷传输与高可用选路面临算力与SRAM硬限制背景下，用户与导师围绕绕开限制的选路机制持续沟通（5轮），其中在容陷切换设计部分与容陷安全设计师沟通（1轮），在路径表压缩存储部分与网络顶层规划师沟通（1轮），并最终形成预计算查表、位图编码、二次故障中断及审计留痕5条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只留主备两条路，断了直接切备路行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@容陷安全设计师 芯片算力跑不动实时重路由，SRAM不到1MB，容陷切换怎么设计？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预计算查表，不占CPU，这招行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压缩。@网络顶层规划师 预计算路径表太大SRAM放不下，怎么压缩存储？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就预计算路径，硬件状态机查表切换，表项用位图只存下一跳出端口。不占CPU，SRAM也够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下一跳挂了，再查表找备用下一跳？或者往上回溯一层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有表项下发权限，跟前面流表一样，谁配的预计算表谁负责，修改必须审计留痕，不能乱改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 抛弃实时重路由，用预计算路径；2. 硬件状态机查表驱动切换；3. 路径表位图编码，只存下一跳出端口；4. 二次故障标不可达并硬中断上送；5. 表项下发审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方图算法联调背景下，用户与导师围绕农机走位异常排查、降采样精度损失评估及改动确认持续沟通（5轮），其中在插值坐标系映射与分辨率对齐部分与算法工程师沟通（2轮），在降采样精度损失评估与重采样插值方法部分与测试与联调专员沟通（1轮），并最终形成插值前补POS偏移、插值后加双线性重采样对齐农机步长的改动方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口是通了，但农机端按处方图走位全乱套，喷头乱飘，算法给的数据肯定有问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "坐标偏得离谱。插值算法里什么高斯核、UTM投影，我看着头疼，没搞懂它怎么映射的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你插值算法里的空间参考系怎么映射的？格点分辨率多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "农机控制步长是1米，0.5米它处理不过来。POS偏移我好像没加进去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "POS偏移我补上。重采样我加在插值后面，把0.5米降采样到1米。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这我不知道怎么算。如果处方图从0.5米重采样到1米，精度损失能接受吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双线性插值行，我加在插值模块后头。漏检率测试就交给你跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

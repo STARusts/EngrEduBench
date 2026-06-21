@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在报文解析与标准化适配联调背景下，用户与导师围绕异构报文解析方案、日志脱敏方式和Mock联调策略持续沟通（8轮），其中在报文解析与内部契约定义部分与数据流与契约工程师沟通（2轮），并最终形成Adapter模式转StandardOrder、切面脱敏及核心通道用例Mock优先的联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上Jackson，大不了写点注解映射，以前都是这么干的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "8583啊，这玩意老掉牙了。我找个开源库拼一下？里面位图怎么解析的我还没细看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "8583和MX报文怎么解析转内部对象？开源库选哪个？我这边马上要写适配代码了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，写Adapter。那我就每个通道写个解析类，转成StandardPaymentOrder。精度我用BigDecimal兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "呃，忘了日志脱敏。我加个MaskUtils，打印前调一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "切面吧，写个注解@Mask方便，不用每个地方都手写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写几个Mock数据文件放resources里，需要的时候改改JSON发过去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "模板引擎生成用例这就有点麻烦了，得写一堆模板。我想把每种位图可能都覆盖了，得写多少模板？这周联调可能跑不完。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，全覆盖太耗时了。那核心通道先跑通？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，先跑通核心。测试用例先手写几条关键的8583和MX报文，边缘的后面再补。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

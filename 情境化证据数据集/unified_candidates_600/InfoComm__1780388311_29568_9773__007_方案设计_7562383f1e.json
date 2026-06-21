@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极弱信道端侧轻量智算与安全分发设计背景下，与导师围绕模型轻量化、特征安全分发及验证实验设计持续沟通（7轮），其中在端侧模型部署部分与轨量模型裁剪工程师沟通（2轮），在特征分发加密部分与安全隐私守护者沟通（2轮），并最终形成知识蒸馏与混合精度量化、特征拆分加密与混沌置乱方案及含攻击者对照的验证实验框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上TFLite跑MobileNet，加密就套个AES-256，现成的库一堆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要把MobileNet放端侧，怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力预算我不清楚，反正就那种单片机级别的吧。结构化剪枝听起来太麻烦，有没有一键量化的工具？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加密不用AES的话用啥？现成的RSA不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拆分子图？这也太复杂了，怎么拆啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "他们说不能用INT8量化，会掉点。要用混合精度。加密不能用AES，要把图拆开。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我昨天看了个博客，说INT8量化在注意力层会崩，得保留FP16。所以我准备在端侧试试混合精度，不搞一刀切了。拆图这块我确实不懂，没找到现成代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制变量就是信噪比吧，设置几个极弱信噪比的档位。对照组是全精度大模型和粗暴INT8小模型，实验组是混合精度蒸馏小模型。指标就看语义还原度，还有端侧推理时延。拆分加密也是一样，看窃听者能不能还原。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

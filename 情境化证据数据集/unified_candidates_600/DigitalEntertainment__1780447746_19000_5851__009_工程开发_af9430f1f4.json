@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在叙事状态机向量库读写延迟过高的背景下，用户与导师围绕记忆库读写性能调优方案及核心约束持续沟通（4轮），其中在索引参数与批量写入调优部分与向量库调优专家沟通（2轮），在批量写入接口封装与内存扩容策略部分与记忆向量引擎架构师沟通（2轮），并最终形成包含索引调参、动态降级、异步批处理写入及资源扩容的四项调优动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "读写慢啊？加个缓存不就行了，Redis那种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "向量库读写太慢怎么调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改几个参数，然后攒一波再写。M调32是吧，我记下了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "因果倒序？那咋办，我不懂这块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心约束就是，攒数据写的时候不能乱攒，得按顺序，然后查的时候可以稍微查不准，只要在调控就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "批量写入的接口怎么弄？我需要攒切片，还要保证时序。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抛事件，50毫秒窗口。好，那我就不用改状态机写入逻辑了，直接发事件就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存上升啊，应该够吧，机器挺大的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "内存不够了咋办？索引重建是不是很慢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "PQ压缩，冷热分片，后台重建。好，我这就去改配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "动作就是：1. 索引参数M改成32；2. 查询精度动态降级，跟阻尼调控配合；3. 写入改成发事件，50毫秒批处理；4. 内存用PQ压缩，冷热分片，配足K8s资源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

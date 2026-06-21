@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阻抑联调失败背景下，用户与导师围绕HVAC拒收与边缘节点溢出的根因定位及cgroup资源隔离修复持续沟通（7轮），其中在HVAC拒收原因部分与阻抑联动联调专员沟通（1轮），在边缘节点CPU打满原因部分与边缘算力调度专家沟通（1轮），并最终形成计算密集型与延迟敏感型任务不可混部的结论及隔离逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘端算流态的时候CPU直接打满，风险指令组装完发到HVAC网关已经晚了3秒多。HVAC那边直接拒收了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "HAC网关拒收是因为指令晚到了3秒吗？格式有没问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘节点CPU打满是怎么回事？沙箱算子把资源吃光了吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "HVAC拒收是因为指令晚到3秒触发过期保护，晚到的原因是边缘节点上沙箱计算抢了CPU，指令下发线程饥饿排了3秒队。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加cgroup做资源隔离呗。把沙箱计算和指令下发分开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不太懂，先给指令线程留个20%的CPU份额？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把沙箱进程丢进受限的控制组，指令下发放高优先级组。跑一圈看下发延迟能不能压回2秒内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能把计算密集型和延迟敏感型任务混部抢资源。算力挤兑会导致阻抑指令过期，整个干预闭环就断了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

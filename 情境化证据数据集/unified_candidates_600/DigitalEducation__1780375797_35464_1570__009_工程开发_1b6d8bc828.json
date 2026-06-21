@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在学程适配算法Pod配额缩减背景下与导师围绕轻量级算法选型、精度验收口径及压测数据脱敏持续沟通（5轮），其中在轻量级算法落地与流式脱敏实现部分与学程适配算法工程师沟通（2轮），并形成贪心加局部交换替代方案、次优率低于5%验收标准及特征哈希脱敏策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我原计划是直接上OR-Tools的CP-SAT求解器，这配置一跑肯定OOM啊。根本起不来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "OR-Tools肯定用不了了，有没有什么轻量级招能凑合用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "贪心加局部交换这个好弄，我之前写过类似的工具类。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向用贪心，因为KM是O(V^3)，我怕0.5核算得超时。贪心快，我直接复用之前的代码改改就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用JMeter压测一把，看看匹配成功率有没有掉到90%以下。没掉就上线呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接从生产库导一份上个月的请求数据。脱敏的话，把姓名和学号抹掉应该就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1G内存下怎么做流式脱敏啊？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备这么做：1. 用贪心加局部交换算法代替OR-Tools；2. 压测验收口径是对比历史最优解，次优率低于5%；3. 压测数据用JMeter发，数据做特征哈希和K-匿名化脱敏，不存原始ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

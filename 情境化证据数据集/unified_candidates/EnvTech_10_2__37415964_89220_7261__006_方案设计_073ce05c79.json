@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在分选线“识别—分道—落仓—回传”的控制接口方案设计背景下，用户与导师围绕控制链路边界、控制语义/时序、幂等与故障回传字段持续沟通并收敛逻辑接口草案（6轮），其中在现场控制链路/反馈信号/幂等键设计与故障码分层部分与物联网集成工程师沟通（2轮），并明确云-边缘-PLC分工及接口数据最小化约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是相机识别完，然后让机器打到对应桶里。接口就发个指令过去就行了吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PLC吧，反正现场都是PLC控。我们就对PLC发HTTP？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "带着就能对上账。就用图片的ID就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网了也能补传，然后不会乱。差不多这意思。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 现场分选线一般怎么控？要啥反馈？还有幂等怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "task_id就事件ID拼一下就行。反馈就ACK和DONE。故障码先不管？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就 task_id、目标桶ID、然后发给PLC。PLC回个done就行。故障就写个msg？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发：task_id、桶、时间。回传：task_id、状态、时间、msg。心跳：在线。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "task_id，event_id，chute_id，target_bin，valid_from，valid_to，priority？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回传就 status：ACK、DONE、REJECT、DUPLICATE？再带fault_code。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 故障码怎么分层？别太多，能用就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就分8类故障，带个code。retryable也带上。扩展就先不细。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "云直接控吧，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是云不直接碰PLC，云到边缘，边缘再到PLC。断网就边缘先顶着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能把原图URL放进去，运营会看到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我去跟集成那边对一下chute_id和target_bin怎么编号，还有把fault_class那8类记下来，别让他们乱写。然后接口里不放图链接。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

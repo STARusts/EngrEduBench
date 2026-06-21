@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在术中流计算与高可用架构设计背景下，用户与导师围绕流计算容灾与低延迟的平衡及验证持续沟通（4轮），其中在容灾恢复与状态后端选型部分与流计算架构师沟通（4轮），在低延迟要求与内存计算部分与性能调优攻坚手沟通（4轮），并最终形成Flink Memory状态+Unaligned Checkpoint及边缘降级兜底的高可用架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我原本想用Kafka收流，Flink算特征再调SMILE。但高可用我不敢定。万一Flink主节点挂了，推演断了，手术台上报警就没了，这锅太大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流计算和高可用架构怎么搞？要求推演不能断，延迟还得低。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我这两天刚看了Flink的容灾配置最佳实践，里面有个Unaligned Checkpoint（非对齐检查点），专门对付反压和快照慢的。能不能用这个折中一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们推演状态其实不大，就是当前概率和图拓扑。我之前没想过用非对齐检查点，看了文档才知道这玩意能绕过barrier对齐耗时。要不这样，状态后端用Memory加快照，开启Unaligned Checkpoint？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以设计个对比实验。控制并发推演流算子数量不变，变量是状态后端策略。一组用RocksDB+Aligned Checkpoint，一组用Memory+Unaligned Checkpoint。样本量跑5次，每次压测30分钟。提前定好验收标准：P99延迟低于800ms，恢复耗时低于5秒。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "底线是报警不能断太久，延迟也得起得来。OOM风险有点怕，但全用RocksDB肯定延迟不达标。我选Memory+Unaligned Checkpoint。OOM风险靠降级兜底，一旦监控到内存超80%，边缘侧直接断视频流，只传关键器械数据，让Flink扛住不挂。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

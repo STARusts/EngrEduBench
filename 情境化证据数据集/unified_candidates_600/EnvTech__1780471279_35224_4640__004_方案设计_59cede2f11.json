@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘声学阵列网络架构设计及严苛预算红线背景下，用户与导师围绕硬件选型、LoRa容量占空比限制及雨天突发流量拥堵风险持续沟通（5轮），其中在组网成本与本地聚合策略部分与边缘物联架构师沟通（1轮），并最终形成基于VAD数据与丢包率/延迟指标的方案推翻条件及流量模型估算计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "200块只能选低端MCU了。网络方面，4G模块太贵，LoRa模块便宜，但LoRa网关也要钱。我觉得可以全用LoRa星型拓扑，节点连网关，网关再上云。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "雨天VAD误判率一高确实可能堵。我对低功耗网络的容量规划没概念，得去补一下LoRaWAN在突发流量下的吞吐量测算方法，看能不能在预算内调通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预算卡得很死，单节点200，年通信50。我原想说用LoRa，但担心雨天VAD触发多会堵。这种预算下组网怎么做最划算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果做本地聚合，假设我们对比两种方案：A是LoRaWAN本地聚合后发网关，B是LTE-M单节点直连。关键变量就是VAD触发率和单包特征大小。如果雨天触发率飙升，LoRa本地缓存溢出，是不是就说明LoRa方案不行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿上一阶段跑的那周VAD截取率数据来估算。假设雨天触发率翻倍，算一下LoRa的发射占空比限制够不够用。如果缓存溢出丢包率超5%，就推翻LoRa方案换LTE-M。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周重点补LoRaWAN占空比计算和本地聚合策略的文档，用上周的VAD数据跑一下流量模型估算，看能不能把方案A的参数定下来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

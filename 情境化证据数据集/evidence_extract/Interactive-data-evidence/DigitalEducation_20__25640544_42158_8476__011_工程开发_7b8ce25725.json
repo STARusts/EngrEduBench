@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在错因推断服务工程开发背景下，用户与导师围绕链路跑通、可解释输出、是否更新诊断、幂等状态机与接口语义持续沟通（8轮），其中在cause体系/输出字段/评测单测口径与evidence_code schema部分与算法负责人沟通（2轮），在表结构冻结快照、错误码、接口与可观测规范部分与后端负责人沟通（1轮），并形成V0实现清单与对齐交付项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先把服务骨架搭起来：消费`submit`事件做一次推断，`step`先不强依赖。核心是输入输出契约和推断的最小可用逻辑。我想先定一个`inference_job`：以`user_id+paper_id+attempt_no`做聚合键，拿到该次提交的题目、答案、知识点映射，然后输出错因topK+解释字段，再写回诊断结果表给练习生成用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分两层：第一层规则/统计兜底，第二层留模型接口但先mock。兜底规则我倾向做“错因候选生成器”：  \n1）题目维度：根据题型+标准答案比对，得到错误类型（如计算错、概念混淆、审题漏条件）。  \n2）知识点维度：从题库带的`kp_ids`，结合学生历史在这些kp上的错率，给“薄弱点”打分。  \n3）行为维度：如果只有submit，就用作答时长/改答案次数等聚合特征；有step再加“中间过程偏差”。  \n输出先保证结构化：`cause_id/cause_label/evidence/snippet/confidence`。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "聚合我打算做“只对submit触发推断”，step只作为可选增强，靠`attempt_no`把step归档进`attempt_feature`表，推断时读“当前已入库的特征快照”。如果step晚到，就不回填旧诊断，避免反复改结果；除非我们引入“诊断可更新版本号”。解释可追溯：evidence只引用可还原的数据片段，比如“选项B vs 正确C”“公式缺项：未使用条件x”“单位换算错误：cm→m”，并带`evidence_source`（answer_diff/rule_hit/history_stat）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先不更新，先保证稳定性和可测。step增强先留在下一迭代：把step写入特征表，但不触发重推断；后面如果要升级，就加`diagnosis_version`和“同attempt最多更新一次”的阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 错因推断服务这块，我们现在要落地一个可运行版本。你们那边能给：1）cause_id/label的最小集合与版本策略；2）服务输出字段最小必需；3）规则兜底怎么评测、单测口径用什么吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "粗心那类你说谨慎用，是怕误伤？那我V0就先不输出“粗心”，只在置信度特别高时才给“计算错误/符号错误”。另外evidence_payload这块，你们希望payload结构固定吗？还是不同code不同结构？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳三点：  \n1）诊断结果里加`cause_taxonomy_version`，先固定`2026Q1_v0`，后续改分类只加版本不改历史。  \n2）V0只做九小类里偏客观的：漏条件/错读单位/概念混淆/公式误用/计算错误/符号错误；“粗心”先不出，避免误伤。  \n3）evidence走`evidence_code + payload`，V0先实现四个code；单测按“规则级”做，每条规则构造样本断言命中和payload schema，另外加“同输入同输出”的确定性测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把诊断结果表设计成“attempt_key唯一”。写入用upsert，但因为我们决定不更新，所以第一次成功后再来直接返回已存在结果，算DUPLICATE。失败重试的幂等就靠“同一attempt_key只允许从NULL→READY一次”，状态机里`PENDING/RUNNING/READY/FAILED`，从`FAILED`允许重跑覆盖，但要保留`run_id`和`fail_reason`。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "会留一份最近一次失败原因在主表，再单独写一张`inference_job_runs`记录每次运行的`run_id/start_ts/end_ts/error_code`，主表只存当前状态和最终结果引用`result_id`。这块我实现得来，但日志链路我不太确定要怎么串，怕查一次问题要翻好几处。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 错因推断服务我打算做attempt_key唯一幂等、状态机PENDING/RUNNING/READY/FAILED，并记录runs表。你看表结构、错误码、以及对外接口返回（含重复、重试）有什么建议？我们入口`/events/batch`已经有OK/DUPLICATE/RETRY/DROP那套风格。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "输入冻结这点我之前没强调：确实要把推断依赖的题干关键字段、标准答案、单位字段、kp_ids在submit时就落一份快照，避免题库修订后结果漂移。TTL我得想下，可能跟合规的数据保留一起定，但我不太清楚默认放多久合适。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小接口两条：  \n- `POST /diagnosis/infer`  \n请求：`{attempt_key, submit_event_id, force?:false}`；`force`默认false（V0不允许覆盖READY）。  \n返回：`{job_id,status,retry_after_ms}`，status可能`READY/RUNNING/CREATED/DUPLICATE/FAILED`。  \n幂等：同attempt_key若READY，返回`DUPLICATE`并带现有`job_id`；若RUNNING/CREATED，返回当前状态；若FAILED可再次触发生成新run但job_id不变。  \n- `GET /diagnosis/result?attempt_key=`  \nREADY返回`{attempt_key,cause_taxonomy_version,top_causes[],generated_at}`；非READY返回202+`retry_after_ms`。  \n状态流转：CREATED(PENDING)→RUNNING→READY；异常→FAILED（保留error_code）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，我把对外返回的`result_code`和`job_status`拆开：  \n- result_code：`OK/DUPLICATE/RETRY/ERROR`  \n- job_status：`PENDING/RUNNING/READY/FAILED`  \n`POST`如果发现READY就`result_code=DUPLICATE, job_status=READY`。force先去掉，只留内部调试开关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边落地三块：  \n1）数据层：`attempt_snapshot`写入（从submit事件抽取并冻结字段）+`inference_job/inference_job_run`三表与attempt_key唯一索引。后端负责人帮我过一下字段最小集。  \n2）推断执行：V0规则引擎实现四个evidence_code、九类里先落6类；输出`cause_taxonomy_version=2026Q1_v0`，低置信不进top3。算法负责人给规则样例和cause映射表。  \n3）接口层：`POST /diagnosis/infer`与`GET /diagnosis/result`，对外`result_code`与`retry_after_ms`，内部状态机幂等；结构化日志不打答案明文。测试负责人可以按“规则级单测+幂等/重复触发用例+同输入同输出确定性”写覆盖。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

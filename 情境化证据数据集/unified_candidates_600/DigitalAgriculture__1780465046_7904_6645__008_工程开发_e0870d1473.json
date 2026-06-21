@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在根域微环境靶向调控系统感知节点驱动开发背景下，用户与导师围绕多源异构传感器接入、低功耗唤醒、短板补充计划及开发约束与验收口径持续沟通（5轮），其中在FDR驱动时序实现与低功耗唤醒及验证部分与嵌入式开发工程师沟通（2轮），并最终确定驱动开发约束与量化验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我初步规划用STM32L4系列做主控，它的LPTIM和低功耗模式适合田间电池供电场景。水肥气热这几类传感器，温湿度用I2C，FDR水分传感器因为要发激励信号，得用定时器配ADC。唤醒策略上，设定一个采集周期，通过RTC自动唤醒。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FDR传感器的驱动时序在STM32L4上具体怎么实现能保证精度？我担心普通定时器中断会有抖动，影响ADC同步采样。另外低功耗休眠期间怎么保持采集周期的精准？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "硬件PWM加DMA确实更稳。LPTIM我之前接触不多，一直以为RTC是低功耗唤醒的唯一选择。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这种硬件级同步的驱动，怎么验证时序是否真的对齐？肉眼可看不出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把FDR驱动模块的接口定义好，PWM和DMA配置参数化。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不过LPTIM的寄存器配置和低功耗状态机我确实不熟，这块我得赶紧补一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今天下午会去翻STM32L4的Reference Manual里LPTIM那章，重点看异步计数器和唤醒逻辑。然后在开发板上跑一个LPTIM唤醒的Bare-metal测试，用逻辑分析仪抓一次唤醒到PWM输出的间隔。搞通之后，我会把这套低功耗时序模板直接复用到根域微环境靶向调控系统的所有节点固件里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "约束有三点：1. 主控STM32L4，FDR驱动必须硬件PWM+DMA；2. 唤醒源从RTC改为LPTIM，保证微秒级抖动；3. ADC必须开启内部基准自校正。验收口径：逻辑分析仪下PWM与ADC触发波形零偏移，唤醒间隔误差小于2%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

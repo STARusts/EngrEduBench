@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微势特征提取与寻优引擎联调背景下，用户与导师围绕接口数据格式冲突及折中方案持续沟通（4轮），其中在引擎输入格式与零拷贝可行性部分与核心寻优引擎开发沟通（2轮），在流态上下文保留与状态压缩可行性部分与量化策略研究员沟通（2轮），并最终形成128维潜空间向量接口协议。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "输入接口是哪个？直接传Flatbuffers对象行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎那边说只要8个标量，不要完整状态机，你看砍掉流态上下文对寻优有影响吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "引擎嫌状态序列太重影响延迟，研究员说没状态寻优就是瞎搞。我都不知道该传啥了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点不就是嫌解码慢嘛。研究员那边又必须要有上下文信息。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我不传Flatbuffers对象，也不传状态序列，我把状态压缩成一个定长数组，比如128维的float，你这边能直接用吗？不用解码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "把流态状态序列压成128维的float数组，能做到吗？信息够不够寻优用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "引擎接受定长数组零拷贝，研究员用潜空间向量输出128维。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "马上改输出层，把Flatbuffers转成128维数组往下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声景数据湖构建背景下，用户与导师围绕海量声景切片与微气候指标的流批一体存储、Schema设计、人声合规隔离及入湖链路技术栈持续沟通（8轮），其中在流批一体存储与Schema设计、人声隐私合规风险及VAD隔离方案部分与数据湖构建者沟通（3轮），并最终形成边缘网关VAD打标与Flink路由写湖的入湖链路及人声隔离权限降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上云呗。弄个时序数据库存指标，对象存音频。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序库用InfluxDB，音频存MinIO。模型要啥我就从MinIO捞呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "PCM流和微气候指标怎么存，后面模型训练要方便取数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "人声？这固件那边没管啊。我只管存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说音频里可能有人声，要处理，不然违规。但我这边只做数据接收，这活儿不该我干吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "丢了最省事。有人的声音又不是我们要的动物声纹。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不能丢，要隔离，入湖怎么做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个VAD在流处理里算，会不会卡？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Flink吧。Kafka接PCM流，Flink消费，里面跑VAD模型打标，然后写InfluxDB和MinIO。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那，那放边缘网关？网关算力也有限啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路是：边缘网关做VAD检测并打标，数据进Kafka，Flink消费Kafka按5分钟时间窗切分，含人声标签的切片写MinIO特殊路径并记录InfluxDB，普通切片常规写。权限上，普通接口不返回人声切片。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

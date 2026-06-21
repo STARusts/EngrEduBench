@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估复盘背景下，用户与导师围绕场控卡顿真实原因、延迟优化方案及迭代优先级持续沟通（6轮），其中在场控体感延迟与预览不同步部分与场控体验复盘师沟通（1轮），在WebTransport弱网熔断机制有效性部分与视效时序监控专员沟通（1轮），并最终形成协议升级带压测重标与预览同步复用对齐算法的迭代规划约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "后台报错我扫过了，场控组抱怨操作卡，指令发不出去。我琢磨着把指令队列全改异步非阻塞，多加几层重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "场控那边到底哪里卡？我后台没看见超时啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "加异步重试根本没用，这是链路延迟。不同步问题，是不是时序对齐算法的边界没覆盖到预览模式？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟这事，我之前看一篇讲WebTransport的论文，比WebSocket省握手。我写进学习日志了，这次正好能迁移过来试一把。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "换WebTransport的话，弱网下延迟抖动和熔断触发还能复现吗？之前复盘的结论在它下面还成立吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "换协议后，之前复盘结论只在TCP场景有效，QUIC下得重标。迭代规划里必须加一条：协议升级必须带压测重标。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "延迟优化影响全场控体感，P0。预览不同步只影响编排效率，P1。我先把WebTransport压测验证做完，预览先放放。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

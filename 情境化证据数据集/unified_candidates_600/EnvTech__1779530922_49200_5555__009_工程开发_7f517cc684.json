@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演中枢技术选型背景下，用户与导师围绕致灾链图谱和规则引擎架构设计持续沟通（4轮），其中在图谱存储与规则引擎选型部分与知识图谱工程师沟通（2轮），用户最终放弃JanusGraph与Drools，确定采用Neo4j与Flink CEP的轻量化方案，并明确LLM旁路辅助需人工审核及规则触发审计留痕的边界约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "考虑到致灾链推演的复杂度和未来扩展性，我准备用JanusGraph做分布式图存储，结合它的OLAP能力做深度图推理。规则引擎上Drools，用ReteOO算法处理气象流的复杂模式匹配，顺便我还想接入一个LLM做规则的自适应生成，这样遇到未知气象组合系统能自己推导新规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从你的专业角度看，气象致灾链的图结构特征真的不适合用分布式图库吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "单机Neo4j会不会有单点风险或者瓶颈？不过毫秒级延迟确实比JanusGraph的OLAP快。那规则引擎呢？Drools是不是也过度设计了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "致灾链深度浅，规则偏向时序触发。那我放弃JanusGraph和Drools。用Neo4j存图谱，Flink CEP做时序规则匹配，推演时从Neo4j拉取关联子图到内存遍历。但LLM生成规则我还是想保留，可以用来辅助运营人员配置新规则，不参与实时推演"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选型确定：图谱存储用Neo4j，运行时子图加载至内存；规则匹配用Flink CEP + 自定义AST规则树，不上Drools；LLM仅作为旁路辅助规则生成，产出需人工审核入库。边界约束：致灾链遍历深度限制在5跳以内，超过则截断；规则触发必须记录审计日志（触发条件、图路径、时间戳），用于事后复盘定责；LLM生成的规则必须打上“待审核”标签，不得自动生效。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

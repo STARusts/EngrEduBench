@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在信道估测与重导轨迹联调背景下，用户与导师围绕CSI反馈与相移下发的时序对齐方案持续沟通（5轮），其中在物理层时序对齐硬手段与失败复现部分与轨迹联调测试员沟通（3轮），并最终放弃脚本与PTP库，形成基于FPGA双时间戳与示波器验证的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时序对齐？我之前看网上有现成的PTP精确时间协议库，直接套上去不就行了？或者用抓包工具看时间戳？这样多省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "精度不够啊？那总不能让我手写对齐逻辑吧，太容易出bug了。有没有那种能自动比对时序的脚本？我看别人联调都是写个Python脚本拉对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信道估测反馈和相移下发的时序对齐，用Python脚本或者PTP库能搞吗？如果不行，到底怎么弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "硬手段？不会是让我拿示波器一个个量吧？那得多慢啊，根本没法自动化。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FPGA打双时间戳还要接示波器验证？这就有点麻烦了。不过既然覆盖率都掉0了，好像也没别的招。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那失败复现怎么弄？总不能每次都盯着示波器看吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只能放弃脚本和PTP库了。方案就是：1. FPGA里在CSI接收和相移触发两个节点打时间戳；2. 用示波器抓边沿验证时间戳的真实时差；3. 时差超2微秒的，存双时间戳和波形用于复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

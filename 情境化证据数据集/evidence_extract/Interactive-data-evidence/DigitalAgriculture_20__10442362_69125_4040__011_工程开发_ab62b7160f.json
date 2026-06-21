@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在仓储风险预测落地到干预工单与设备联动控制的工程开发背景下，用户与导师围绕工单证据快照字段、状态机、策略引擎映射、幂等/回滚与两周MVP范围持续沟通（10轮），其中在设备命令粒度与ACK/断网幂等等接口契约上与物联接入工程师沟通（3轮），在审计留存字段、审批权限与留存期/复现要求上与合规与审计负责人沟通（2轮），并形成最小可交付的字段清单、接口契约与测试要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想按“决策—工单—执行—回写”四段做闭环。边界上先不做太复杂的优化调度，先做到：同一批次同一仓位在一个时间窗内只产生一张可追溯工单；控制动作必须可回滚、可人工接管；所有动作都要带预测版本和证据快照，方便事后审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工单最少要有：batch_id、仓位key、asof_time、window_days、预测输出（p50、区间、risk_level、confidence、influence_factors、data_quality摘要）、model_version+artifact_hash+training_snapshot_id、触发规则版本（policy_version）、建议干预动作列表和优先级、预计持续时间、执行前环境摘要（温湿度/CO2等的最近值）、幂等键、创建人/系统来源。回滚需要记录“执行计划版本”和“已执行到哪一步”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态我先定 8 个：Draft（生成）、PendingApproval（待审核，默认中高风险进入）、Approved、Dispatched（已下发到边缘/设备侧）、Executing、Succeeded、Failed、Canceled。转换规则：  \n- Draft→PendingApproval：risk_level>=High 或 confidence<阈值但风险高；  \n- Draft→Approved：低中风险且置信度够，走自动；  \n- Approved→Dispatched：策略引擎选定动作并拿到设备能力确认；  \n- Dispatched→Executing：边缘回ACK开始执行；  \n- Executing→Succeeded/Failed：结束回传结果；  \n- 任意→Canceled：人工撤销或新工单覆盖旧工单。  \n失败处理上要分：可重试（网络/设备忙）和不可重试（设备不支持/安全互锁），不可重试要自动降级成“人工任务”并通知。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联接入工程师 设备联动这块：我们想做工单下发控制动作（通风、除湿、分区倒垛提示、优先出库标记）。设备侧你们能提供哪些命令/回执字段？ACK是到“接收”还是到“执行完成”？断网补传、重复下发怎么保证不乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拒绝码这块你们能标准化吗？我们要在工单里区分“设备拒绝”和“通讯失败”，以及建议的降级动作。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "控制粒度如果只能写点位，那“分区倒垛”这种就只能出人工任务，对吗？"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我会把工单的action拆两类：control_action（可下发到设备）和manual_action（给仓库人员）。每个action都有capability_check结果：SUPPORTED/UNSUPPORTED/CONDITIONALLY（比如夜间禁用）。  \n降级策略：control_action下发失败且error_category=DEVICE_REJECT/SAFETY_LOCK时，工单不重试，自动生成一条manual_action，比如“调整为白天执行/联系值班电工切换模式”；NETWORK类可重试N次，超过N次转人工并标注“通讯问题”。这样审计上也能看到我们没硬推。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "映射我会做成规则表+阈值配置，输出policy_version。输入只用：risk_level、confidence、p50/区间、以及influence_factors里的“相关性声明”。在工单里把influence_factors展示为“可能相关因素”，加免责声明，不把它当因果。  \n动作映射先简单：  \n- High & confidence高：优先“除湿/通风”控制；并附带“加密抽检频次”人工动作；  \n- Medium：只建议轻量通风或延迟观察，避免频繁启停；  \n- Low：不出控制，仅记录。  \n可测试上：每条规则写成可回放的case，用固定预测响应做快照测试，避免改规则引起隐性变化。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我会在策略侧加“抑制窗口”和“最小运行时间”两个硬约束：  \n- 同一仓位在cooldown_minutes内不重复触发同类控制动作；  \n- 除湿/风机一旦启动，除非出现安全互锁/人工取消，至少运行min_runtime_minutes。  \n并且把预计能耗做成可选字段先不算精确值，只记录“运行时长*设备额定功率(如有)”的粗估，后面再细化。这样避免无上限地抖动控制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计负责人 工单与联动控制的审计点：我们会在工单里写预测结果、模型版本、策略版本、执行回执。请给必须留存字段、审批/取消权限边界、是否需要电子签名或双人复核、日志/工单留存期，以及审计抽查时需要能复现到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "复现里提到“原始传感不必全留”，那我们工单里只留聚合摘要+hash，原始明细按更短周期存，合理吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP我建议这样定：  \n1）工单核心字段：work_order_id、batch_id、slot_key、trigger_asof_time、prediction_snapshot（含p50/区间/risk_level/confidence/influence_factors声明/data_quality/model_version+artifact_hash+training_snapshot_id）、policy_version、actions（区分control/manual，含priority、cooldown、min_runtime）、status、owner、approval_chain（可空）、idempotency_key。  \n2）接口契约三条：  \n- 创建工单：POST /workorders（输入batch_id/slot_key+asof_time+window_days，可选force），返回work_order_id+状态；  \n- 下发控制：POST /workorders/{id}/dispatch（后端→网关/边缘），返回command_id；  \n- 回写回执：POST /workorders/{id}/callbacks（边缘→后端），回传ack_level+error结构+observed_state。  \n3）幂等：创建用(batch_id,slot_key,trigger_asof_time,policy_version)做幂等键；dispatch用command_id去重；callback按(command_id,ack_level)去重。  \n4）回滚：先只做“取消后不再下发新命令”，以及“需要人工确认才执行反向点位”的占位，不做自动反向控制，避免误伤。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "反向点位我会加硬门槛：只有状态在Dispatched/Executing且设备支持完成ACK或读回点位能确认当前在运行，才允许生成“回滚建议”，并要求质检+仓储主管双签才会发“停机/恢复自动模式”命令。否则只允许取消工单，不做设备回滚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试上我会把回执模拟分三组用例：  \n- 正常：接收ACK→执行ACK→（可选）完成ACK；  \n- 异常：NETWORK重试、DEVICE_REJECT直接失败、SAFETY_LOCK失败；  \n- 幂等：重复dispatch、重复callback、乱序callback（先执行后接收这种要判为异常但不崩）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网补传我需要你帮我拉物联这边一起做个可复现的集成测试窗口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

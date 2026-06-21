@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农产品合规模块化溯源与营养标签平台的工程开发背景下，用户与导师围绕“批次采集入库→对账→差异清单”链路的误报未对齐排障与修复持续沟通（7轮），其中在入库字段标准化差异定位上与后端负责人沟通（4轮）、在弱匹配时间窗口口径上与数据架构师沟通（1轮），并最终明确对账键改造、弱匹配门槛、reason_code与回归测试及日志脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集有两路：一个是加工厂的批次事件API，一个是检测机构的检验报告文件入库。对账我按 batch_id + sku + production_date 去匹配。报错里差异类型是 MISSING_RIGHT，有 37 条。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看的是我们后台列表里展示的 batch_id 字段。对账里我用的也是 batch_id。内部主键我没用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对账任务日志里有 trace_id，但采集那边我没特意带进来。我记得我们审计那块是对“更正/发布”有trace_id，这里是不是也要加？我没想好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "left 是加工批次事件表 batch_event，right 是检验报告表 lab_report。MISSING_RIGHT 表示 left 有 right 没有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 批次采集和检验报告入库这块，batch_id/sku/production_date 有没有做过标准化？我对账老出 MISSING_RIGHT。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这听起来就是三种不一致都中了。那我对账按 batch_id+sku+production_date 肯定对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我对账用的是 batch_event.batch_id、lab_report.sku、lab_report.report_date 截断那列。normalized_batch_id 我没用到。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我有点怕改大了。现在是开发阶段第一个小场景，我先做方案1比较稳？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 后端说两路入库标准化不一致：API侧会trim、全角转半角、sku映射成canonical；检验报告侧 batch_id 原样、sku原样，日期还可能用报告日期。建议先对账用 normalized_batch_id + canonical_sku + production_date（报告侧补这些字段），或者长期做 batch_master_id。我倾向先用第一种把闭环跑通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理由是改动面小：对账SQL换成标准化字段，然后检验报告解析器加三个派生字段。验证的话，我打算挑现在那 37 条里抽 5 条，修完再跑对账，至少这些要从 MISSING_RIGHT 变成 MATCH 或者变成“弱匹配”。另外加一组构造数据：batch_id 带空格、全角数字的，也要能匹配上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间窗口我不确定。是不是就同一天？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 对账里如果检验报告拿不到 production_date，只用 normalized_batch_id+canonical_sku 做“弱匹配”，时间窗口默认该怎么定？有没有口径建议？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们表里有 sample_time，但我之前没用。那我按这个来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我按你说的五条列下：\n1）对账匹配键改成：`normalized_batch_id + canonical_sku + production_date` 优先；production_date 缺失时不直接匹配，走弱匹配逻辑。\n2）检验报告入库补三个派生字段：normalized_batch_id（trim+全角转半角）、canonical_sku（走同一套映射）、production_date（能取到就取，取不到置空），另外确保 sample_time 字段解析出来。\n3）弱匹配条件：normalized_batch_id 和 canonical_sku 一致，且 sample_time 在生产日期后 14 天内；缺 sample_time 就输出 NEED_REVIEW，不自动对齐。\n4）对账输出增加 reason_code：比如 `BATCH_ID_NORMALIZATION_DIFF / SKU_CANONICAL_DIFF / DATE_MISSING / OUT_OF_WINDOW`，便于排查，不只给 MISSING_RIGHT。\n5）测试：回归两类用例，一类是历史37条抽样复跑；一类是构造含空格/全角/前导零的 batch_id、不同sku别名、sample_time 超窗的边界，确认不会误匹配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会只打批次键和时间，不把报告里的人员字段写进日志里；窗口参数我做成tenant配置，默认14天。今天先把对账误报这块修到能复现-能消掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

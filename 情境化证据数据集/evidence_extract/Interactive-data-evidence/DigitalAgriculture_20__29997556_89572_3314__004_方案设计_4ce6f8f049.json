@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业双模孪生平台方案设计的多源数据质量策略背景下，用户与导师围绕质量维度拆分、门禁点与失败处置、原因码体系、双时间轴KPI及与冲突裁决/审计衔接持续沟通（7轮），其中在阈值设定与遥感质量字段部分与农业业务顾问沟通（3轮），在质量字段落层、QualityFact与血缘/双时间轴口径部分与数据架构师沟通（2轮），并确认质量分层、门禁处置、数据结构与指标口径写入方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会先按数据域拆：Observation、Feature、TwinState、主数据(MDM)分别设质量门。然后按双时间轴，把event_time和ingest_time的异常也纳进质量问题类型。最后要能回写到冲突裁决里，形成“证据集+原因码”，否则处方解释没法闭环。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Observation我会抓：完整性（必填字段）、范围合理性（比如土壤含水率0-100%）、一致性（同设备同一时刻不应该跳变太离谱）、时序性（event_time不能超过当前太多）、唯一性（幂等键去重）。门禁点我倾向于在ObservationIngested之前做轻校验，之后做重校验。失败处理：硬失败隔离进“quarantine”，软失败打标签但允许进入，后续在TwinStateUpdated里降低权重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业业务顾问 田间传感的观测值，哪些适合设硬阈值直接拒绝？哪些更适合用“相对变化”或“生育期阶段”来判断异常？另外你建议的典型阈值来源是什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些阈值如果按农场历史分布来定，是不是每个地块都要一套？那策略会很碎。有没有更“可运营”的分层？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那对遥感Feature呢？云、阴影这些问题怎么在质量里表达，避免直接把Feature当真？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我采纳分层：全局默认（作物+气候带）→农场级校准→少量重点地块特例。阈值不只是一对上下限，还要有“条件标签”，比如“雨后24h”允许含水率快速上升。轻校验我定义为：字段齐全、类型单位、物理不可能值、幂等去重；重校验包括：相对变化检测、和生育期阶段一致性、跨传感器一致性（如雨量与含水率联动）。轻校验在入口做，防止脏数据污染下游；重校验在入库后异步做，输出质量标签和原因码，参与冲突裁决权重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我倾向于三段式：域-类别-细项。比如OBS-RANGE-TEMP_OOR（温度越界）、OBS-TIME-EVENT_FUTURE（事件时间过未来）、OBS-CONSIS-SPIKE（尖峰跳变）、FEAT-RS-CLOUD_HIGH（云量过高）、MDM-GEO-OUTSIDE_FIELD（点位出田块边界）、TWIN-FUSE-LOW_CONF（融合后置信度低）。每个原因码绑定：严重级别（block/quarantine/tag）、解释模板、以及建议动作（如“触发设备校准工单”或“使用插补/遥感替代”）。"
+              },
+              {
+                "behaviorLabel": "设计/取舍",
+                "behaviorEvidence": "这里需要把质量状态也走事件。我的想法是：TwinStateUpdated里携带一个“quality_snapshot”（各输入源置信度、是否有quarantine输入、当前总体置信等级）。如果后续重校验发现问题，再发一个“QualityRevised”或“ObservationInvalidated”事件，事件引擎订阅后可以撤销/降级告警，处方里也要留痕“已修订”。代价是业务要接受告警可能被回收。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 质量策略里我们准备做轻校验入口、重校验异步。你建议质量字段/标签放在Observation/Feature各自表里，还是做独立Quality域？另外event_time/ingest_time分离后，质量指标（延迟、回传、缺测）口径怎么定义，才能支撑审计与融合？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果QualityFact太大，会不会拖慢？我们有时序数据和遥感栅格，量很恐怖。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把质量KPI分三组：  \n1）入口健康：Observation轻校验拦截率、幂等重复率、字段缺失率；  \n2）时效与回传：P95到达延迟(ingest-event)、回传占比（event落后超过阈值的比例）、缺测率（按采样计划在event轴计算）；  \n3）可用性与影响：可用Feature覆盖率（云导致不可用的地块-日期占比）、TwinState总体置信度分布、告警撤销/修订次数（质量修订导致的补偿）。  \n验收我倾向于按试点农场一周窗口出报表，阈值先给目标区间，不承诺行业通用绝对值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "质量是裁决的输入为主：每条Observation/Feature先有质量标签和置信度，再进入融合策略，融合输出TwinState及其置信等级，这是裁决输出的一部分。裁决还会反向产出“拒绝证据集+原因码”，这个原因码可以复用质量原因码体系，但要区分“数据本身坏”(QC)和“在当前情境下不采纳”(FUSE_DECISION)。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "需要最小化。审计里存证据摘要而不是全量原始值，尤其是可能带敏感经营信息的农事记录和设备轨迹。第三方遥感的质量掩膜如果受许可限制，TwinState里只能存“引用的SourceProfile版本+可解释的等级”，不把掩膜原数据导出。对外导出/训练集纳入时，质量事实表也要跟着许可筛选，避免把不允许的数据间接暴露。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认口径：  \n1）质量分层：默认包（作物+气候带）→农场校准→少量重点地块特例；阈值带适用条件标签（如雨后窗口、生育期）。  \n2）门禁与处置：入口轻校验做block/quarantine/tag；入库后重校验生成reason_codes与置信度，参与融合权重；TwinState携带quality_snapshot并支持版本修订补偿。  \n3）数据结构与KPI：数据旁存关键质量字段，另建QualityFact做追溯统计；KPI按入口健康/时效回传/可用性影响三组，双时间轴口径分别计算新鲜度与到达延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

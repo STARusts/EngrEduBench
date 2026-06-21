@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在音游产品方案设计背景下，用户与导师围绕账号分级、支付链路、订单/权益字段、风控接入与退款回收持续沟通并收束V1写稿要点（9轮），其中在支付风控分层与接口动作码设计上与安全工程师沟通（3轮），在未成年人支付限制、数据最小化与审计留痕要求上与合规与内容安全经理沟通（2轮），并最终形成可写入方案稿的6条“账号支付与风控设计”条目。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想拆成四段：账号体系、支付中台、订单与权益、风控。账号我倾向全做成无密码+设备密钥，登录全走passkey，风险最小。支付就统一收口到一个支付网关，订单里把订阅和道具都归一成entitlement发放，风控在下单前做预检，下单后做后验。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "游客态我不太想留，太多漏洞。但线下可能要。那就游客态只允许免费内容+房间试玩，不能UGC发布、不能排行榜、不能买道具。要买就引导绑定手机号/第三方账号。风控我觉得所有付费都要先做，尤其订阅首购。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "订单字段我先拍一版：order_id、user_id、scene(订阅/道具/礼包)、sku_id、price、currency、channel、client_ts、server_ts、device_id、ip、risk_token、status(created/paid/fulfilled/refunded/closed)、idempotency_key。权益：entitlement_id、effective_from/to、source_order_id、scope(全端/单端)、revocable。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我其实想上实时特征+模型，像交易反欺诈那套。客户端传设备指纹、行为序列、加速度/触觉设备特征，能区分脚本。服务端算画像、黑名单、相似群组。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 支付和订阅这块，风控最小可行怎么做？要卡哪些环节，返回什么动作比较好？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“交易后再判定”，会不会用户都付了还不给发权益？体验很炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那风控接口要怎么插？我倾向每个请求都实时评估一次，拿到一个risk_score。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全经理 未成年人在我们这套音游订阅/道具支付里要怎么限制？另外风控数据存哪些算越界，留痕要什么颗粒度？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "未成年人额度那块我不太想写死，怕改来改去。我们能不能只做一个policy表，按地区/年龄段配置？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这边我先总结我能落地的一版：  \n- 账号：游客态仅试玩；付费/UGC/榜单必须正式账号；未成年人账号加支付与内容限制。  \n- 支付链路：order创建→risk_precheck→拉起支付→回调验签→risk_postcheck→发权益(可Limited)。  \n- 风控动作：Allow/Challenge/Deny/Review，业务只认decision+reason_code，不硬绑score。  \n- 数据：设备匿名ID、ASN/地域、交易事件聚合，不碰原始触觉/动作序列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "退款我想做成：Paid后才允许Refunding→Refunded；Refunded触发entitlement_revoked。订阅的revoked要考虑周期，按支付渠道返回的有效期来。道具如果已消耗就不退，未消耗可退。然后所有变更写order_log和entitlement_log。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我容易又想搞很精细的权益系统……但最小可行的话：把SKU分两类：consumable(消耗品)和non-consumable(权益/订阅)。退款策略也跟着配。部分退款先只支持订阅按剩余天数，其他先不做。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧。V1写这6条：  \n1）账号分级：Guest/Registered/Minor；Guest仅room试玩与全年龄Listed内容，不可支付、不可UGC、不可榜单。  \n2）订单主链路：CreateOrder(含idempotency_key) → RiskPrecheck → PayStart → PayCallback(验签) → RiskPostcheck → FulfillEntitlement。  \n3）风控返回：decision(Allow/Challenge/Deny/ManualReview)+reason_code；Challenge=要求重新鉴权/重新绑定，不直接封号。  \n4）权益模型：entitlement_id、type(subscription/nonconsumable/consumable)、state(Active/Limited/Revoked)、effective_from/to、source_order_id、revocable。  \n5）退款：RefundRequest→ProviderRefund→RefundCallback(验签幂等)；触发entitlement_state变更。是否可退、是否回收按sku配置；部分退款仅走人工。  \n6）日志与合规：order_log、risk_log、entitlement_log统一原因码体系；风控数据最小化（匿名设备ID、地域/ASN、交易聚合特征），未成年人支付按policy表参数化并默认从严。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

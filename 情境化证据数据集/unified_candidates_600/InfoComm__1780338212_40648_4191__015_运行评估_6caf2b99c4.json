@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在现网回放频切异常归因背景下，用户与导师围绕频切异常对防撞指令的影响及现网验证方法持续沟通（6轮），其中在频切异常分类与排查抓手部分与异常复盘迭代师沟通（1轮），在频切期间指令双发机制与trace追踪部分与全链路联调专员沟通（1轮），并最终形成频切异常归因口径与真丢指令判定逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "频切异常不就是乒乓切换嘛，终端飞太快基站没来得及切。归因就看切换失败率呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这玩意怎么拆？我只知道看切换失败率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "频切异常不能只看失败率。得看发起时延、执行时延和原因码。还有如果防撞指令队列溢出丢了最致命。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就把频切时间点和防撞指令下发时间点对齐？看频切期间有没有指令下发记录。如果没有，就是丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频切的时候防撞指令trace怎么查？主链路日志里找不到是不是走旁路了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "频切时有双发机制，得查备链路ACK。没ACK才是真丢指令，这时候防撞告警就是真险情。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先按发起时延和原因码拆出超时和拒绝的，然后在切换态时间窗里搜双发日志，看备链路ACK。没ACK的就是真丢指令导致的实险情。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

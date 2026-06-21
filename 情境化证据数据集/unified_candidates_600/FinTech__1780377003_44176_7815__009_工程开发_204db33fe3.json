@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在密态联邦异构信贷风控引擎工程开发背景下，用户与导师围绕安全聚合算子的求交协议选择、定点数放大因子边界及对照验证方法持续沟通（8轮），其中在密态求交合规红线部分与隐私架构师沟通（1轮），在定点数溢出与放大因子部分与联邦开发工程师沟通（1轮），并最终形成算子实现与验证约束总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "安全聚合算子这块我打算直接套个开源的Paillier库，多方加一下就完事了"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度不一样就补零呗。Hash求交加个随机盐不就安全了？溢出这事儿，Python大整数本来就不会溢出啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态求交用Hash加盐到底行不行？还有算子里面Python大整数是不是就不用管溢出了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1e12这么容易超？那我缩小点，1e4行不行？OPRF我不懂怎么实现，没写过这种底层协议。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚去翻两篇OPRF的论文，看看有没有现成的C++扩展包能调。模数边界这块，我去查查Paillier的源码，推一下最大放大因子。明天下午之前把这两个点搞明白，然后改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定不能只看没报错啊。我弄几个小数据集，跑一遍密态聚合，看看解密出来的结果对不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "密态求交必须用OPRF协议，不能搞Hash加盐；定点数放大因子要根据Paillier模数严格推算，不能拍脑袋定1e6；验证要跑明文和密文的对照实验，误差卡在1e-4以内。我先把这几条改了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

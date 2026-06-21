@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段高并发反演推演吞吐量不足背景下，用户与导师围绕推理层卡顿定位与性能调优工具使用持续沟通（7轮），其中在流式引擎与反演图耦合卡顿点定位部分与流式计算开发工程师沟通（1轮），在特征拼接异步化与算子融合优化部分与算法反演工程师沟通（2轮），并最终确定使用ONNX Profiler排障画火焰图以制定算子融合方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了下，QPS一高就卡。我觉得是不是机器不够？加两块GPU应该就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志里看到反演算子那块耗时特别长。但具体怎么长的不清楚，日志就打了个总时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎那边是不是背压把流卡住了？并发一上来反演就超时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征拼接能不能改成异步？别让流式窗口死等。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加time打点，或者看框架原生日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天刚好刷到一篇讲ONNX Runtime Profiler的帖子，里面提到能导出每个算子的执行耗时和内存占用。是不是可以把反演模型转成ONNX格式，然后用Profiler跑一遍？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以如果只看平均耗时会掩盖这种分支切换的毛刺。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

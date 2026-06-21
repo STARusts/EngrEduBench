@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在容陷探测与链路切换联调背景下，用户与导师围绕微秒级容陷探测实现、切换时序与GCL对齐及流表避让持续沟通（7轮），其中在微秒级容陷探测与时序对齐部分与容陷安全设计师沟通（1轮），在流表切换避让GCL开窗部分与转发面实现工程师沟通（1轮），并最终形成4点联调约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接写个脚本拉主备链路，用BFD测连通性，断了就切。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "微秒级BFD调不上去啊。那只能把检测做到硬件里？但具体怎么注入我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "BFD肯定不行，硬件探测具体怎么做？还有切换时序怎么对齐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撞上就丢包呗。我不太懂怎么避让，流表直接刷不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "容陷切换时如果撞上GCL开门窗口怎么处理？流表能直接刷吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 探测用带内OAM物理层帧头注入，不用BFD；2. 切换必须在GCL保护时隙执行；3. 流表用双表原子更新，切表时锁GCL寄存器；4. 探测中断优先级最高。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

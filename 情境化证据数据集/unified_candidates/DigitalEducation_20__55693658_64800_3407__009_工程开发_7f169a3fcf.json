@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发实现规则量表引擎背景下，用户与导师围绕最小可审计可回放的评分+解释模块输入输出契约、规则子集、trace与错误码收敛持续沟通（6轮），其中在证据特征获取与鉴权/403/429处理上与后端工程师沟通（4轮），在hash稳定性与单测/集成测/端到端策略上与测试工程师沟通（3轮），并形成6条开发落点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成一套DSL，能表达维度、权重、阈值、扣分项，还能写一些逻辑，比如证据不足就不允许出高分。最好再做个可视化编辑器，教师也能改规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我理解是rubric_version和evidence_refs，还有可能有submission_id用来查更多特征。输出给反馈服务：每个维度的score、level、理由，外加每条理由引用哪些evidence_id。然后整体一个总分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本一致性我想用rubric_version当主键，规则定义存数据库，拉出来执行。规则表示我倾向用json格式树，比如and/or、compare、threshold。执行的时候生成一个trace，里面记录每个节点的输入值和结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 证据服务现在能给量表引擎哪些“特征化证据”？我手上只有evidence_id/type/digest/created_at。能不能根据submission_id批量拉证据的结构化字段，比如题号、得分点、关键词命中之类？还有权限校验是在证据服务做还是引擎要做一遍？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "feature_map大概都有哪些固定键？我怕规则写死键名，后面证据类型一多就炸。还有digest缺失这种错误，是证据服务报还是引擎报？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "引擎输出trace你建议放在哪里？我想每次都写全量trace到审计表里，方便回放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那权限就交给证据服务，避免我重复做。最后一个：引擎调用证据服务如果403，是不是直接映射成反馈接口的403？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。证据服务能用submission_id批量列证据，并提供feature_map（结构化键值），而且权限在证据服务层强制做，403/429会直接出来。trace方面后端建议别全量落库，默认只记录命中规则节点ID和关键断言结果，调试再开debug_trace走短TTL存储。digest缺失主要是我们反馈接口入参挡，不是引擎自己拉证据会遇到。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小子集我建议先做：  \n1）规则结构：按dimension组织，每个dimension下面是若干rule，rule有id、when、then。  \n2）when支持：all/any、exists(key)、compare(key, op, value) 其中op先支持 >=、>、==、in。key来自feature_map里的numeric_signals或criteria_flags。  \n3）then支持：set_level(level_id)、set_score(score)、add_citation(evidence_selector)；evidence_selector只允许按evidence_type或tag筛选，返回evidence_id列表，不涉及原文。  \n输出：dimensions:[{dimension_id, score, level_id, matched_rule_ids, assertions:[{rule_id, passed}], citations:[{evidence_id, span_range:null}]}]，再加total_score和engine_version、rubric_version。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码我先压到这几类：  \nE_RUBRIC_NOT_FOUND（版本错）  \nE_RUBRIC_INVALID（规则json不合法）  \nE_EVIDENCE_FORBIDDEN（403）  \nE_EVIDENCE_RATE_LIMIT（429重试耗尽）  \nE_FEATURE_MISSING（关键key不存在）  \nE_INTERNAL（其他）  \nreason_code：R_NO_EVIDENCE、R_INSUFFICIENT_SIGNAL、R_RULE_CONFLICT（两条rule都命中且then互斥时）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就规则里加priority int，按priority升序执行，第一条命中就停。hash稳定我会做两件事：  \n1）对feature_map取值前做key排序，序列化时用canonical JSON；  \n2）citations里的evidence_id排序，matched_rule_ids排序。  \n不过我担心canonical JSON自己写会踩坑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 量表规则引擎这块你们打算怎么测得稳定？我这边输出需要hash可重复、matched_rule_ids/citations顺序固定。你希望我们在单测/集成测里怎么验证这些？还有403/429这些错误映射，你们更倾向测引擎层还是走反馈接口端到端？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "hash金样本会不会因为规则加字段就全挂？我想把hash只算关键字段，不然每次改点非关键元数据都要更新。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端到端冒烟你们只测少量，那我是不是可以把大部分规则组合都放在引擎单测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试那边建议三层测：引擎单测用固定rubric+feature_map直接断言输出数组，hash重复性跑N次一致；引擎集成测mock证据服务覆盖403/429/空证据/特征缺失，验证错误码和分桶计数事件；端到端只做少量冒烟，盯引用约束和上个微场景的失败用例不回归。hash输入字段他们建议固定一张“覆盖字段表”，只算rubric_version/engine_version和每维度的关键结果，别把描述文本算进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解的落点是：  \n1）规则定义最小模型：rubric_version下按dimension组织，rule含id/priority/when/then；priority升序第一条命中即停。  \n2）when最小操作符：all/any、exists、compare(>=,>,==,in)，key取feature_map的numeric_signals或criteria_flags。  \n3）then最小动作：set_level、set_score、add_citation(按evidence_type/tag筛evidence_id)，不允许原文与span_range。  \n4）引擎输出：每维度score/level_id/matched_rule_ids/reason_code/citations(evidence_id)，再加total_score、engine_version、rubric_version、审计hash。  \n5）错误码集合：E_RUBRIC_NOT_FOUND/INVALID、E_EVIDENCE_FORBIDDEN、E_EVIDENCE_RATE_LIMIT、E_FEATURE_MISSING、E_INTERNAL，映射到反馈服务并做分桶计数。  \n6）可重复性：citations和matched_rule_ids排序；hash只覆盖固定关键字段表，CI用金样本测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

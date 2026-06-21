@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网涌动感知探针架构设计背景下，用户与导师围绕探针选型约束、架构冲突与折中方案持续沟通（7轮），其中在协议解析与性能开销部分与探针开发工程师沟通（2轮），在数据脱敏与合规部分与合规与安全审计员沟通（2轮），并最终形成内核态自研解析脱敏与用户态开源汇聚的折中架构及四项核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接复用开源的eBPF采集框架，比如Pixie那种，挂上去就能抓信令，省得自己从头写底层采集逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开源框架都有现成的仪表盘，抓包过滤也全，应该够用吧？顶多我再加几行正则把手机号抹掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "开源eBPF库直接挂载到AMF/SMF容器上抓信令，这方案可行吗？我看网上很多云原生监控都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那脱敏呢？开源框架带的过滤规则，我把IMSI字段屏蔽掉，应该就合规了吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量拷贝不行，解析还得自己写，这开源框架岂不是一点用都没有？这也太麻烦了，有没有稍微改改就能用的折中办法？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设方案A是开源框架加Lua插件做脱敏，方案B是自研eBPF核心解析模块。关键变量是单板CPU开销增幅和信令解析漏包率。如果方案A的CPU开销增幅超过基线15%，或者漏包率大于0.1%，就否决A选B？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就起两个Pod，一个跑开源版，一个跑自研版，用压测工具打点SIP注册信令，看看监控曲线。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实只调过封装好的API，底层Map机制和3GPP加密细节我不熟。我这两天得去补一下eBPF的Perf Buffer与Hash Map的差异文档，还有TS 33.501里SUCI的加密流程，不然脱敏逻辑肯定写不对。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开源框架的汇总和导出模块挺成熟的，解析和脱敏必须自研。能不能在内核态用自研eBPF做协议解析和脱敏，只把特征指标通过Map传到用户态，用户态再用开源框架的汇聚模块做聚合上报？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定这个架构方向。内核态自研解析脱敏，用户态开源汇聚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，采集必须内核态无侵入挂载；第二，协议解析与脱敏逻辑自研，明文信令禁止出宿主机；第三，用户态复用开源聚合模块；第四，CPU开销增幅基线约束在15%以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在配网末端电压潜越反演算法架构设计背景下，与导师围绕算法选型、物理可解释性、时延红线及对照组设计持续沟通（7轮），其中在反演数学基座与物理约束部分与算法设计师沟通（1轮），在边端部署时延与云边切分部分与系统架构师沟通（1轮），最终确认PINN约束反演与云边协同切分架构及3台区对照方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找个现成的时空图框架，把台区拓扑和量测数据灌进去，应该就能出反演结果吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "框架文档说支持GPU加速，延迟应该还行。物理解释这块，加个梯度回传看看权重不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电压越限溯源反演用现成GNN框架怎么搞？有没有更方便的算子能直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用那种开源的GNN框架，在边缘侧跑延迟能卡住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "纯套GNN不行，物理意义不明还会爆延迟。得加物理约束，还要云边切分。有没有那种把物理方程封装好的库能调？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "PINN这块真不太懂，物理方程嵌入和雅可比求逆没自己写过，心里没底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "短板就是不知道怎么把配网潮流方程嵌进神经网络损失函数里。我这周末去搜两篇PINN在配网状态估计的论文，把里头的代码demo跑通，看看人家怎么写雅可比那块的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法用PINN，不用纯GNN；部署云边切分；3个台区跑对照看延迟和误差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

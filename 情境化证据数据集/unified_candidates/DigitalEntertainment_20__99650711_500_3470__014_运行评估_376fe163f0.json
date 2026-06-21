@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度期内容风险监控与告警设计背景下，用户与导师围绕监控信号分类、指标口径与分组、告警阈值/持续与接警路由持续沟通（7轮），其中在事件口径/基线/业务阈值部分与数据产品经理沟通（2轮），在链路健康阈值与升级路由部分与SRE运维工程师沟通（1轮），并最终形成5条以内告警清单及审计白名单合规边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就盯命中率吧，掉了就告警。还有5xx也要告警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "嗯……就是合规规则、模型、还有导出。差不多三类？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "导出成功率？审核拦截数？证据链我不太懂，健康就延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据产品经理 监控这块要怎么定指标口径？基线怎么取？阈值给个建议。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线是取7天同小时段的p50 p90，然后阈值就加0.5%加2%，还有无证据导出超过0.2%。对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据新鲜度也要告警？我以为只有业务指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我试下：  \n1）高危放行率高于基线+0.5%，10分钟。按risk_type。  \n2）低危拦截率高于基线+2%，15分钟。  \n3）无证据导出占比>0.2%，5分钟。  \n4）5xx比例高。  \n5）数据延迟p95高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那第4条改成“导出相关接口5xx比例”。阈值……1%？持续5分钟？第5条数据延迟就p95>2分钟持续10分钟？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 导出链路、风控判定链路、事件采集链路健康指标阈值给一版，还有接警和升级怎么走？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就是导出5xx 0.5%，风控5xx 0.3%，审计事件延迟90秒，丢失0.1%。P1叫SRE，内容问题再拉运营和风控。对吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "命中率掉30%那条也算业务告警？我以为是发布门禁。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我说下：  \n1）灰度桶高危放行率=high_risk_pass/high_risk_total，超过基线+0.5%，10分钟，按risk_type分组，接警先SRE再拉内容运营。  \n2）灰度桶低危拦截率超过基线+2%，15分钟，按内容类型分组，接警内容运营优先？  \n3）灰度桶无证据导出占比=export_success且evidence缺失/export_success，大于0.2%，5分钟，SRE+内容运营。  \n4）灰度桶仲裁拦导出命中率比基线掉30%，15分钟，触发回滚，SRE执行。  \n5）链路：export_api_5xx>0.5% 5分钟 或 decision_5xx>0.3% 5分钟 或 audit_drop_rate>0.1% 5分钟，P1到SRE。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是业务告警都先SRE，再@运营。审计延迟p95>90秒10分钟是P2。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须有risk_type、rule_id、model_ver、confidence、团队、内容类型。不能进原视频、帧图、文本原文？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

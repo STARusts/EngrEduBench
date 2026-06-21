@@ -1,0 +1,619 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在众包教案演化与教学机智蒸馏系统需求梳理背景下，与导师围绕演化机制、蒸馏输入源及隐私版权冲突取舍持续沟通（7轮），其中在教案版权流转风险部分与知识产权合规师沟通（1轮），在日志脱敏与蒸馏效果冲突部分与安全与隐私架构师沟通（1轮），并最终确定意图标签脱敏与CC协议的取舍方向及验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡在没法动态调。我想让一群老师一起改教案，像Git那样合并。然后拿上课的交互日志，让大模型提炼出应对策略，给新手当外挂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种众包教案的版权一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上课日志蒸馏呢？能避开隐私坑吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应对突发的关键是对话动作和策略标签，具体说了啥其实不重要。我猜，只要动作序列和意图标签，脱敏掉原文，应该还能蒸馏出策略？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以先拿一批脱敏后的日志跑个基线模型，看Loss降不降。如果不降，说明假设不成立，得加字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "版权我倾向于用CC BY-SA协议，要求贡献者授权，衍生同样开源。这样商业化可能受限，但至少能跑起来，不惹官司。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对数据脱敏的具体法规红线完全没概念，刚才说的意图标签方案能不能过审，我心里没底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周要把《个人信息保护法》里关于未成年人数据的条款看一遍，整理出一份脱敏字段清单给隐私专家审，清单过审才算补到。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求与战略背景下，用户与导师围绕“教学机智”概念界定与商业闭环设计持续沟通（6轮），其中在机智界定部分与教育业务架构师沟通（1轮），在商业闭环与算力成本部分与商业模式分析师沟通（1轮），并最终确认低频复杂情境界定、SaaS加按量付费闭环及fork且执行为有效贡献的需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育业务架构师 机智怎么界定才能让模型学？@商业模式分析师 算力成本高，这生意怎么闭环？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "机智就是“异常情境+应对策略”对。收费靠SaaS和按量，数据靠贡献抵扣。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打瞌睡算吧，这也是异常。刷数据，加个审核？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防刷这块，是不是得设定个数据质量门槛？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "界定就是：针对低频复杂情境的应对策略对。闭环是：SaaS基础订阅加按量调用，飞轮靠高质量贡献抵扣，有效贡献门槛是采纳率或交互深度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "fork算，确实容易互刷。得加个约束，fork后还得真实执行过机智策略才算有效采纳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基线：1.机智界定为低频复杂情境应对策略；2.商业闭环SaaS加按量；3.有效贡献为fork且执行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在众包教案版权与数据合规背景下，用户与导师围绕职务作品确权、数据脱敏标准及衍生版权分配持续沟通（4轮），其中在确权路径与脱敏落地解法部分与知识产权合规师沟通（3轮），并最终形成授权换服务、PII加泛化脱敏及平台独占运营的合规基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "开源协议呗，像代码fork一样，加个CC协议或者GPL，谁改谁负责。数据脱敏我后面写个正则替换一下名字就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "体制内老师的教案fork，版权怎么搞？还有上课交互日志拿来蒸馏，脱敏怎么才算合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那让学校盖章放弃版权？日志脱敏就把名字身份证手机号全抹掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "学校不盖章，怎么拿授权？脱敏除了抹身份证还得干啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "授权换服务可以，老师有动力。脱敏要加泛化。那衍生版权呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规师说不用学校盖章，让老师签平台使用授权，换SaaS免费额度。脱敏除了删身份证，还得把小众特征泛化掉，免得被反推。衍生教案老师有署名权，运营权归咱们。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。合规基线：1.授权换服务；2.PII加泛化脱敏；3.平台独占运营。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求阶段合规基线已定背景下，用户与导师围绕新手教师辅助痛点、验证有效性及指标定义短板持续沟通（7轮），其中在验证方法与痛点深入部分与教育业务架构师沟通新手卡壳环节与验证指标（2轮），并最终形成新手辅助战略规划与指标补充计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "新手就是卡壳嘛。学生一问偏了，教案没写，当场接不上话。咱们机智库推个话术过去就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找几个新手试一把不就知道了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们想给新手推应变话术，但不知道咋验证它真管用。新手上课卡壳，到底卡在啥环节？我们介入后看啥指标算成功？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白了，不是光塞话术，是帮他把节奏续上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那脱轨事件咋定义？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但“顺了”这个标准，我其实不太会定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我把“脱轨事件分类”和“恢复率计算”加到待学清单里，今晚去查两篇教育测量的论文，看人家怎么定义课堂流畅度，明天把指标口径定下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心主张：解决新手教学节奏断裂，不是简单填空。验证方向：抓高频脱轨事件样本，测系统介入后的课堂恢复率。具体指标口径我查完论文再定。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在众包教案演化系统方案设计背景下，与导师围绕版本图谱存储与并发合并架构选型持续沟通（5轮），其中在图库选型部分与数据流架构师沟通（1轮），在并发合并策略部分与众包系统设计师沟通（2轮），并最终形成Nebula图存加CRDT与日志回放双轨架构基线及验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是用图库存版本树，类似Git那种分支合并。并发的话，加锁呗，或者用OT算法。但我对图库的深度选型心里没底，并发这块理论也弱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "图库我就用过Neo4j做简单关系查询，分布式图库和CRDT这类无冲突数据结构只听过没写过。我这两天得把NebulaGraph的架构白皮书看一遍，再跑个CRDT的Demo，搞懂分片和合并逻辑，后天之前弄完。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "教案版本图谱用图库存，Neo4j和NebulaGraph在演化树这种场景，选哪个更合适？我们会有高频的分支查询。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多人同时改一个教案节点，OT算法太复杂，有没有轻量点的方案？加锁行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "CRDT的LWW策略，丢编辑能接受吗？教案内容丢了算事故吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家建议Nebula做图存，并发用CRDT(LWW)处理元数据加操作日志回放保正文。演化树合并用三路合并。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设是Nebula加CRDT在100并发分支合并下，冲突率比关系库加行级锁低30%。验证变量就是并发数和节点深度。如果冲突率压不到5%以下，就说明LWW兜不住，得换OT。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在日志采集与流式处理架构设计背景下，与导师围绕脱敏策略取舍及流图设计持续沟通（6轮），其中在流式处理与延迟部分与数据流架构师沟通（2轮），在合规脱敏要求与隐式隐私风险部分与安全与隐私架构师沟通（3轮），并最终形成端侧正则脱敏+Kafka+Flink+NLP重脱敏入图+Milvus的数据流规划基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Filebeat收到ES里？或者直接写库？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 日志采集这块怎么搞？@安全与隐私架构师 合规这边有什么要求？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就先脱敏再发Kafka，不就完事了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端侧轻量？那就端侧脱敏吧，快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就端侧脱敏防明文，服务端再过一遍重度脱敏？反正最后入库前得洗干净。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先跑起来再说啊，规则后面再补。端侧脱敏去身份，Kafka收，Flink洗，洗完入湖前再过一次NLP脱敏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就向量库呗，Milvus。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课堂情境与策略匹配链路设计背景下，用户与导师围绕实时检索时延矛盾、预取方案及缓存降级策略持续沟通（5轮），其中在业务时延要求部分与教育业务架构师沟通（1轮），在算法推理耗时部分与算法架构师沟通（1轮），在流式管道预取落地部分与数据流架构师沟通（1轮），并最终形成Flink预取缓存及未命中降级弱提示的匹配链路基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接查Milvus呗？把当前课堂情况向量化，然后去搜相似度最高的策略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育业务架构师 课堂里出状况，老师等咱给策略，最多能等多久？@算法架构师 咱们那个蒸馏策略检索，一次链路跑下来要多久？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要500毫秒，一个要1.5秒。这怎么搞？不能等出事了再查吧，能不能提前查？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 Flink那边能不能根据课堂进度，提前把可能用得上的策略拉出来缓存着？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Redis查肯定快，500毫秒没问题。预取放Flink也不影响推理。就按预取来呗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没命中就不管了？或者给个弱提示？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，没命中就降级，不弹强干预的弹窗，只在侧边栏闪一下弱提示。预取的K值和窗口大小做成可配置的，上线再调。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在众包教案并发编辑防冲突机制设计背景下，与导师围绕防冲突方案选型、实验验证设计与工程落地持续沟通（6轮），其中在协同编辑防冲突思路部分与众包系统设计师沟通（1轮），在CRDT开源库与定制Schema部分与后端开发主程沟通（1轮），并最终形成CRDT+Yjs定制Schema防冲突基线、实验验证方案及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多人同时改，最简单的就是加锁呗，谁先点编辑谁锁住，其他人只能看。或者像Git那样，最后提交的人手动解决冲突。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这教案众包，好多人一起改，不想用悲观锁也不想用Git merge，有啥现成的套路没？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "CRDT听起来挺牛，不用管顺序最后能一致。但这算法听着就头大，我肯定写不出来，平时也就写写数据库行锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿Jmeter压一下接口呗，看看崩不崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是同时编辑的人数和操作频率呗。对照组就拿我刚才说的悲观锁方案。指标看冲突解决耗时，还有文档最终状态是不是一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CRDT这东西，咱们工程上有现成的轮子能套不？自己写肯定凉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "有开源库就行，Schema映射我能搞，不就是定义数据结构嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚回去翻Yjs的文档，重点看它怎么定义共享数据类型。明天争取在本地把Yjs和咱们的教案JSON Schema跑通一个最小Demo，看看结构化数据合并的效果。总比我自己从零写算法靠谱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "防冲突基线：CRDT+Yjs定制Schema；实验设计：并发度与频次为变量，悲观锁为对照，看延迟、一致性和操作丢失率；学习任务：今晚看Yjs文档，明天跑结构化合并Demo。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在众包教案演化系统并发基线敲定背景下，用户与导师围绕演化树节点模型、合并接口设计、与Yjs结合及互斥修改拦截持续沟通（6轮），其中在节点模型与合并接口设计部分与众包系统设计师沟通（1轮），在持久化选型与互斥拦截实现部分与后端开发主程沟通（1轮），并最终确认演化树核心逻辑基线、验证方案与补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用图数据库存节点呗，接口照着Git那套写，commit, merge, checkout。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就存个parentId。入参传两个分支ID，出参返回新commit ID。Yjs的话，我在接口里调一下它的merge方法不就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "演化树节点模型和合并接口怎么搞？跟Yjs怎么结合？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要加State Vector字段，合并时算公共祖先。我大概懂了，冲突标记也要返回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这Yjs应该处理不了吧？我还没想那么细。验证我就写个单测跑一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "演化树用Neo4j还是MySQL？互斥修改在接口层怎么拦？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Pre-merge Hook这种拦截器我没写过，CTE递归查询我也只会最简单的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚去看TypeORM的Entity Subscriber文档，看怎么写Hook。然后写个脚本造两条互斥修改的分支数据，跑一下Merge接口，看返回是不是拦截报错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演化树基线：MySQL邻接表+存State Vector+Pre-merge Hook拦截；验证：造互斥数据测Hook拦截；今晚补学：TypeORM Entity Subscriber和CTE递归。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发机智蒸馏模块背景下，用户与导师围绕数据合规、算力限制、算法选型及Pipeline跑通持续沟通（5轮），其中在数据合规边界部分与知识产权合规师沟通（1轮），在算力与全量蒸馏可行性部分与算法工程师沟通（1轮），并最终确认脱敏正则+授权校验、LoRA rank 16、Faiss、跑子集验证Pipeline的蒸馏基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿交互日志丢给大模型微调呗。我看了Unsloth，跑LoRA挺快的，显存占用低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还要脱敏啊。那我不懂了，反正数据在库里，我写个SQL抽出来就能用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "日志里有学生名字和聊天记录，我要拿去微调，合规怎么说？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抹除名字简单，泛化咋搞？授权协议我哪知道签没签。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱机器就那几张卡，全量日志几十G，LoRA能跑下来不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我LoRA的rank设多少合适？我看别人设16，我想试试8或者32，看哪个收敛好。还有向量库，Milvus部署麻烦，Faiss本地跑是不是更快？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，先16，Faiss。那脱敏我就先写个正则去名字和手机号，授权字段我查一下。先跑几千条子集把流程走通。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在端到端联调效能瓶颈背景下，与导师围绕硬编码检索脚本重构与Faiss参数调优方法持续沟通（6轮），其中在Faiss检索与LoRA推理调优部分与算法工程师沟通（2轮），并最终形成nprobe可配置化与8bit量化的重构及验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耗时全卡在Faiss检索和LoRA推理那块。召回率低，我猜是因为子集数据量太少，特征没凑够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调发现蒸馏推理P99要2秒，召回才15%。Faiss检索和LoRA推理都慢，这烂脚本怎么改？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "8bit量化掉点严重吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化误差0.02可以接受。我回去改这俩参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差0.02就是量化精度够用吧。误差来源，可能是特征提取模型本身的能力不行？我对Faiss的nprobe参数调优其实不太熟，之前一直用的默认值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去翻Faiss的官方调优指南，把IVF的参数关系理一下。刚才他说nprobe 32是折中，我自己跑一遍不同nprobe的benchmark，画个延迟-召回曲线，这样定参数心里有底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先把nprobe改成可配置的变量，加上8bit量化的模型加载逻辑。跑全量验证看P99能不能压到500ms以内，召回率目标先定40%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改nprobe和量化，验证P99和召回，盯Top5分布。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在众包教案演化与教学机智蒸馏系统准备上生产跑基线验证背景下，用户与导师围绕基线验证指标口径、合规红线及部署策略持续沟通（6轮），其中在日志脱敏链路部分与安全与隐私架构师沟通（1轮），在教案演化树版权授权部分与知识产权合规师沟通（1轮），并最终形成切断蒸馏入流、补全NER脱敏与授权协议表、重写验证脚本跑分组基线的调整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "众包教案演化与教学机智蒸馏系统联调完了，nprobe改成变量，8bit量化也加上。P99现在480ms，召回率42%。我准备切1%流量上生产环境，跑基线数据验证了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏之前联调不是过了吗？就正则替换了姓名手机号。教案是大家众包提交的，版权应该没啥事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生产环境部署前，日志脱敏这块，我们现在用的正则替换姓名手机号，能上线吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加NER模型？这改动太大了，蒸馏链路刚跑通，加上去延迟肯定爆，P99又压不住了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "教案演化树合并出来的教案，版权算谁的？我们系统现在只记了初始提交者ID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "又要补授权表，又要加NER脱敏，基线验证今天跑不了了。我先把蒸馏入流断掉，只部署教案演化服务行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Top5分布我看了日志，没大变化。分组比较是比什么？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "效应量计算和NER接入我没搞过，分组变量也不知道怎么定才科学。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚看两篇教育数据PHI脱敏的论文，学下NER接入方式。明天把学科和课堂活跃度作为分层变量，重写验证脚本跑A/B测试看效应量。目标是一天内把脱敏方案定下来，两天内跑出分组基线。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在教案演化收敛监控背景下与导师围绕收敛指标、强制覆盖危害及自动合并阈值持续沟通（7轮），其中在健康收敛定义与阈值验证部分与数据洞察分析师沟通（2轮），并最终形成收敛监控三要素方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我配了Grafana面板，看每天新增分支数和合并请求频率。只要合并频率跟着分支数涨，就算活跃吧。不收敛的话，我设个告警，连续三天合并率低于20%就发飞书。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变异系数？这我不太会算。我目前面板里只有增删改的计数。强制覆盖确实有，后端说为了防卡死默认开了一段时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "教案演化树怎么算收敛？我目前只会看合并率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合并深度我懂了，就是看离主干多远。策略命中方差是看新教案有没有带来新的教学机智对吧？如果没有新机智，就算合并了也没用。我回去把强制覆盖先全关了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先人工审一遍，把冲突的分支全捋顺，保证主干绝对干净。哪怕慢点也不能乱合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自动合并我怕合错了，教案乱套了后面更难收场。人工审虽然慢，但我可以加人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "5%的方差波动允许自动合并，这阈值靠谱不？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把面板加上合并深度和策略方差这两个指标，告警规则改成：方差超5%或采纳率跌10%就触发。强制覆盖现在就关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指标是合并深度和策略命中方差；阈值是方差波动5%、采纳率跌10%；熔断是自动合并回滚并切断该分支蒸馏。强制覆盖已关闭。"
+              }
+            ]
+          },
+          {
+            "microScene": "在线上策略库匹配命中率突降排查与修复背景下，用户与导师围绕命中率跌坑原因、止损降级方案及低成本重训路径持续沟通（6轮），其中在命中失败Case共性分析部分与数据洞察分析师沟通（1轮），在特征表征优化与增量微调方案部分与算法架构师沟通（2轮），并最终形成网关拦截止损、构造困难负样本及LoRA增量微调的三步修复策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看检索服务的日志，是不是ES或者Milvus挂了，或者超时了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "昨晚8点那波命中失败的Case，共性是啥？是不是都是某一类异常？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种特征挤一起怎么弄？是调大检索的温度系数，还是得重训蒸馏模型？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缺困难负样本。那就加一批“纪律异常”的负样本进去，重跑蒸馏流程呗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力确实贵，之前跑一次要小半天。误伤这块，要不先在前端加个提示，说建议仅供参考？或者直接把纪律类的异常降级，不返回策略了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在网关层加个规则，如果识别到输入日志包含“纪律”、“吵闹”这类实体，直接拦截，不走检索链路，返回空。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "增量微调？拿昨晚那些错误的Case构造一批困难负样本，只跑这部分数据的微调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我改下蒸馏脚本，加上LoRA配置，把昨晚的错误Case洗成困难负样本集。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关拦截马上能上线，LoRA微调跑完大概一小时，跑完看命中率能不能回到80%以上。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在教师减负效果与机智采纳反馈评估背景下，与导师围绕真实体感量化、采纳留存率指标定义与合规验证持续沟通（6轮），其中在一线体感与运营反馈机制部分与教育产品运营沟通（3轮），在留存率阈值与合规性部分与数据洞察分析师沟通（1轮），并最终形成采纳留存率指标与快捷反馈组件的评估闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推荐接口调用量上去就说明好用，老师省事了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "一线老师对咱们推的机智策略反馈咋样？有没有骂娘的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改一遍也比从头写快吧？他们就矫情。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，这可能是LoRA没训好？不对，命中率都85了啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端加个监听，看文本编辑器的diff。如果修改比例小于20%，就算留存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拍脑袋想的，一般不都这么定吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "看老师编辑diff算不算隐私？还有我们要算采纳留存率，修改比例阈值定多少合适？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "前端算diff比例，小于30%打点上报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加按钮简单，前端加两个tag就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端加埋点和按钮半天，后端加个字段存反馈也快。明天上线能看数据。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估策略库泛化边界与迭代规划背景下，与导师围绕泛化边界界定、失效复现与迭代规划持续沟通（4轮），其中在泛化边界量化与复现部分与数据洞察分析师沟通（1轮），在迭代规划排期部分与教育产品运营沟通（1轮），并最终确定不跨学段外推的安全边界与短期归因补标签的迭代策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看大盘数据呗，命中率掉下来就说明不泛化，下线或者重训就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "策略命中率掉下来，怎么判断是场景不匹配还是策略本身不行？复现具体怎么做？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据那边说要切片A/B，还要锁版本重放。迭代规划咱们怎么排？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "实验思维我确实不太熟。切片A/B和重放脚本我能听懂大概，但要我自己写重放逻辑有点悬。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找测试要个重放模板改改，这周跑通一个失效case。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "泛化边界咱们就按学段和学科切片，不跨段外推？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，泛化边界不跨学段外推，失效必须用重放脚本复现；第二，迭代先做归因补场景标签。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

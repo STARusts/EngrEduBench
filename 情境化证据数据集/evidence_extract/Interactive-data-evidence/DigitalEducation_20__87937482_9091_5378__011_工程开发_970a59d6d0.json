@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在纠错链路端到端压测优化背景下，用户与导师围绕压测口径、A/B方案取舍、最小观测点与分阶段优化决策持续沟通（9轮），其中在指标与验收阈值及压测合规数据上与测试负责人沟通（2轮），在分段观测埋点与证据链异步/日志采样优化方向上与后端工程师沟通（3轮），并形成先分段压测基线+低风险日志优化、再按`t_store`占比触发异步写入的执行条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不知道从哪开始。压测要用啥？我也不懂目标延迟是啥意思。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A吧。感觉简单。就打一条接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测要测啥？给个标准。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "P95是啥？800ms是拍脑袋的吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "隐私还管压测啊，我就随便打点假数据不行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用你说的P95<800ms、错率<0.5%。我记不住太多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 端到端压测怎么搞？要看哪些点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步是说先不存？那不是丢了吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采样我懂点，就是少记点日志。那怎么跟隐私扯上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在选B？我还得改代码加这些t_parse之类的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "B先。因为要知道慢在哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加…t_total，还有t_model、t_store。验收就是P95<800ms，错率<0.5%，15分钟别变差。风险…别用真数据，别全量打日志。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不想改。怕改坏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 证据链写入要现在就异步吗？还是先测？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先测，不改异步。只改日志？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先压一轮，顺便把日志少打点。要是t_store很大，超过40%还是P95被它拖，就改异步。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

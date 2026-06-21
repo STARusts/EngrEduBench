@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在叙事地图低代码编辑器MVP冲刺开发背景下，用户与导师围绕存储形态、草稿/发布拆分、接口契约、幂等键与system_hint提示码持续沟通（8轮），其中在编辑器数据结构与前端校验/保存节奏上与前端负责人沟通（4轮），在发布幂等与运行时状态写入及提示码覆盖范围上与后端负责人沟通（2轮），并最终明确以draft/publish两份JSON+4个核心接口支撑“画图-保存-发布-拉取预览”链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卡在怎么存。先丢一坨 JSON 到库里行不行？我不想拆一堆表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就 id、坐标、文案、下一步id 列表。连线就从A到B。差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 低代码编辑器这块，最小字段你给我个能跑的。拖拽节点连线保存，怎么设计数据结构不容易炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "环也要管？我就想先能连来连去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那保存接口我就一个 /saveGraph 不行？草稿发布都用它。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。你说的 guard 我就都当字符串存进去？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了，大概。那我回去就按这个塞 JSON。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口就：保存草稿、发布、拉草稿、拉发布。字段就 graph_id、nodes、edges。发布就加个 version。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 幂等键怎么加？发布接口、还有你们说的状态写入接口。提示码是每个接口都要带吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态写入我以为是存图的状态。原来是运行时上报？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不想做太多接口契约，改来改去烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就两份JSON。draft一份，publish一份。拆表后面再说。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "DFS 检环我不会写很复杂的那种，我就随便递归下行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，这个我照抄。system_hint 我就直接在返回里塞字符串。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四个接口：草稿存取、发布、取发布。发布带 request_id 做幂等，返回 publish_version 和 snapshot_id。发布时后端也检一下图，先不让有环。返回里带 system_hint，能塞 STATE_WRITE_DELAYED 这种。就这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

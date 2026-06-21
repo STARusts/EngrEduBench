@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在物料缺配异常熔断测试背景下，用户与导师围绕异常注入方式、状态机路径覆盖、阈值边界精确性及审计留痕持续沟通（10轮），其中在熔断状态机跳转与路径覆盖部分与韧性策略开发者沟通（2轮），在熔断指令下发审计留痕部分与工控安全评估师沟通（1轮），并形成基于Mock报文注入、覆盖三路径、卡阈值及校验审计日志的测试方案，决定先跑通签名逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测熔断啊，我就造点假数据，让物料不够，看它是不是停机就行了呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对对，降级。我就把库存写成0，让它走降级。时序啥的，跑起来看日志不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@韧性策略开发者 问问熔断状态机咋跳转的，我这边写测试用例。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原来有三个路径。那我写三个用例，库存0，寻优超时，还有恢复了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "改数据库最快吧，直接把库存改没。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@工控安全评估师 审计留痕怎么搞？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "还要校验日志字段啊。行，我把这三个字段加上，查日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拦截报文，我就用个Mock工具把边缘侧收到的物料报文给挡住，发个空包过去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我不破坏签名，就改里面数值。这挺麻烦的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就设个时间嘛，比它大一点点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

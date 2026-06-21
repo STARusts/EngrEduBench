@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在干预通路接口设计背景下与导师围绕接口范式、数据边界与验证实验持续沟通（6轮），其中在接口范式与契约定义部分与接口协议设计师沟通（1轮），在Payload字段透传与合规部分与合规伦理审计师沟通（1轮），并最终形成基于MQ与AsyncAPI的异步事件驱动范式、数据最小化Payload边界及采用MAB与分层随机化的验证实验定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我直觉是发HTTP请求推给他们，最直接。不过最近我刚补学了AsyncAPI的规范，感觉用来定义消息网关的事件挺合适的，比OpenAPI更适合异步场景，想把这套规范迁移过来试试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用AsyncAPI定义事件驱动接口，是不是更合适？具体契约应该怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Payload里放什么？是不是把学生ID和SHAP值都塞进去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我能把学生ID、风险分、SHAP归因全传过去吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Payload只留：脱敏ID、风险等级、Top3归因标签、干预指令类型。这样既满足下游执行干预的最低信息需求，又卡住数据越界。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传统做法是A/B Test，切一部分流量走新接口。但我最近刚好学了Multi-Armed Bandit（多臂老虎机）算法在灰度里的应用，感觉比硬切A/B好，能根据干预转化率动态调权，减少无效干预对学生的打扰，同时加速收敛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学生之间有社交传染，如果个体随机化会引入混淆变量。所以随机化单位不能是单个学生，得按学院或者班级做分层随机化，保证同一个班走同一条通路。这样样本量可能不够平滑，需要跑至少两周看完整学情周期，功效分析得按班级维度重新算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "干预通路接口定调：1. 范式采用MQ异步事件驱动，用AsyncAPI规范定义契约；2. Payload严格数据最小化，仅含脱敏ID、风险等级、Top3归因标签和干预指令；3. 验证实验采用MAB动态调权替代硬切A/B，以班级为分层随机化单位控制社交传染变量，实验周期不少于两周。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

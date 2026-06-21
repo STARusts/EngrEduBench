@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在众包教案演化系统方案设计背景下，与导师围绕版本图谱存储与并发合并架构选型持续沟通（5轮），其中在图库选型部分与数据流架构师沟通（1轮），在并发合并策略部分与众包系统设计师沟通（2轮），并最终形成Nebula图存加CRDT与日志回放双轨架构基线及验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是用图库存版本树，类似Git那种分支合并。并发的话，加锁呗，或者用OT算法。但我对图库的深度选型心里没底，并发这块理论也弱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "图库我就用过Neo4j做简单关系查询，分布式图库和CRDT这类无冲突数据结构只听过没写过。我这两天得把NebulaGraph的架构白皮书看一遍，再跑个CRDT的Demo，搞懂分片和合并逻辑，后天之前弄完。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "教案版本图谱用图库存，Neo4j和NebulaGraph在演化树这种场景，选哪个更合适？我们会有高频的分支查询。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多人同时改一个教案节点，OT算法太复杂，有没有轻量点的方案？加锁行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "CRDT的LWW策略，丢编辑能接受吗？教案内容丢了算事故吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家建议Nebula做图存，并发用CRDT(LWW)处理元数据加操作日志回放保正文。演化树合并用三路合并。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设是Nebula加CRDT在100并发分支合并下，冲突率比关系库加行级锁低30%。验证变量就是并发数和节点深度。如果冲突率压不到5%以下，就说明LWW兜不住，得换OT。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

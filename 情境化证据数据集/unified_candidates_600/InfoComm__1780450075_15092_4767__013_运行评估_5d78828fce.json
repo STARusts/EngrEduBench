@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度切流运行评估背景下与导师围绕线上无标签反演准确率监测、健康度下界设定及降级处置持续沟通（3轮），其中在无标签准确率评估部分与威胁反演算法工程师沟通（1轮），在分布指标实时计算部分与运维监控工程师沟通（1轮），并最终形成基于置信度滑动窗口合成健康度、85%下界触发降级及模拟攻击校准的监控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "线上不是有Prometheus吗，把反演结果打点，算个TP、FP，Grafana出个图就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@威胁反演算法工程师 线上没标签的情况下，反演准确率怎么算啊？有没有那种无监督评估的现成库可以直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控工程师 这种分布指标在线上怎么实时算？Prometheus能算分布吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是看置信度方差和均值，加上注入攻击成功率，合成健康度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能用工具自动跑个基线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "风险挺大的，可能直接被穿透。那下界得严点。要不就定85%？低于85%就不让切流，直接降级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感觉得留点余量。我看网上很多安全系统准确率基线都设80%以上。如果低于这个，说明模型不可信，这时候应该停止向拟态隐遁发高置信度调度指令，只保留基础防御。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就按这个配监控大盘和告警规则。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

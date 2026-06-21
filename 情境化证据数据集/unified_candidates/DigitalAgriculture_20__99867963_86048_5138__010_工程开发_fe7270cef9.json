@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发末段端到端联调与压测背景下，用户与导师围绕builder→registrar→链→对账→调度回放链路的最小闭环、幂等/版本/乱序错误口径、链不可用三档压测与指标口径持续沟通（9轮），其中在自动化验收断言点、错误码语义与压测时长并发建议上与测试负责人沟通（3轮），在registrar幂等键与CAS状态机、链回执竞态与outbox落表及重启用例设计上与后端工程师沟通（2轮），并输出MVP联调+压测覆盖路径、三档实验与通过标准清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想分两块推进：先做端到端联调的“最小闭环”，并发先压在10以内，确保commit/finalize/settle/adjust走完，且校验A/B/C在链上都能复现。然后再做链不可用的三档实验：间歇性失败、持续不可用、部分节点抖动。压测指标我先抓两个：registrar本地存储增长速率、builder重算p95。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "问题是我不太确定“重算p95”的口径应该按批次还是按window。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "覆盖路径我先定5步：  \n1) builder生成window结算明细包（含source_event_ids_hash、明细行hash链），产出链下明细包hash；  \n2) registrar发commit(batch_hash, version, window_id)；  \n3) 链上回执+event落回registrar；  \n4) registrar发finalize(batch_hash, version)并触发对账：链下明细包hash==batch_hash、每条record引用的source_event_ids_hash一致；  \n5) settle落库后，调度系统按window回放生成“收益分配任务”，再走一次adjust路径验证parent_hash和净额关系。  \n成功判定：A/B/C都通过，同时“回放任务数、任务金额汇总”跟settle/adjust净额一致。落库我只盯registrar的batch表、receipt表、replay_task表三张，其他先不扩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等我打算在联调里直接注入重复请求：同一window同一batch_hash发两次commit，期待第二次返回“已存在/幂等成功”；finalize同理。版本不一致我准备做两组：commit version=v1 finalize version=v2，应该直接失败，并且不产生settle记录。错误我目前想统一成registrar返回错误码，比如 REG_VERSION_MISMATCH、REG_DUPLICATE_COMMIT。链上如果已经接到交易但本地没落库，我有点拿不准该怎么对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 端到端联调这块，我要把“幂等重复commit/finalize、版本不一致失败、链不可用门禁”都放进自动化。你希望验收口径怎么写？错误码/断言点放哪里更稳，才能后面压测也能统计？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解了：断言不要只看链上event，还要看registrar状态机和对账结果落库。重算p95按window更合理。finalize先到/commit后到这条我之前没想测，我得确认我们到底允许不允许乱序；如果不允许，就直接断言REG_HASH_MISMATCH还是更准确点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问一下链不可用三档实验，你希望每档持续多久、并发建议多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三层断言+对账结果落库，这样压测能统计。错误码我先不全扩一大堆：保留四个主码——REG_IDEMPOTENT_OK、REG_VERSION_MISMATCH、REG_CHAIN_GATED、REG_HASH_MISMATCH；另外加一个REG_PRECONDITION_FAILED，不然finalize乱序没法跟hash问题区分。  \n我暂时放弃“finalize先到/commit后到也允许继续”的兼容逻辑，联调阶段按不允许处理，遇到就precondition failed。原因是我们现在链回执已经够复杂了，再加乱序兼容排障成本太高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "builder侧我加两个可观测点：  \n- window产出计数：每分钟生成的明细包数（应该跟输入窗口一致，不因链失败下降）；  \n- 重算次数：同一window被重复build的次数。门禁触发时，registrar不发链交易，但builder仍生成明细包并把明细包hash落到本地队列/缓存。验证点：链不可用时window产出计数不掉，且恢复后registrar能把积压的batch按顺序commit/finalize，A/B/C仍通过。  \n这里我有点担心存储增长：如果链挂10分钟，明细包会堆很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先给一个保守上限：builder本地只保留最近48小时的明细包原文；更久的只留hash和必要索引（window_id、batch_hash、version、source_event_ids_hash），原文转到对象存储一份。链不可用时如果超过阈值，比如本地积压>2万window，就触发降级：只保留摘要+对象存储地址，回放时按需拉。  \n可测：压测三档里记录“本地磁盘增长MB/分钟”和“对象存储写入量MB/分钟”，以及恢复后重算p95是否抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 registrar这块我准备做端到端联调：重复commit/finalize幂等、版本不一致失败、链不可用门禁。你帮我确认下：链回执延迟或重复回执时，batch状态机怎么设计才不会乱？以及我们错误码怎么在工程上落地更稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边联调要加一个“链不可用期间重启registrar进程”的用例吗？这会不会太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP我按这8条执行：  \n1) 端到端路径：builder产出明细包hash→registrar commit→链回执→registrar finalize触发对账→settle/adjust落库→调度回放生成收益分配任务；  \n2) 低并发联调：并发≤10，先跑正常结算+adjust各1条，校验A/B/C全过；  \n3) 幂等：重复commit/重复finalize返回REG_IDEMPOTENT_OK，batch不新增、状态不回退；  \n4) 版本不一致：commit v1 + finalize v2 必须REG_VERSION_MISMATCH，且不产出settle；  \n5) 乱序：finalize先到直接REG_PRECONDITION_FAILED(sub_reason=FINALIZE_BEFORE_COMMIT)；  \n6) 门禁：链不可用时返回REG_CHAIN_GATED(retryable=true)，但builder每分钟window产出计数不下降；  \n7) 三档链不可用压测（每档15分钟+5分钟基线）：10%失败、100%不可用、1分钟周期抖动；固定输入每分钟2个window；输出指标：本地/对象存储增长、重算p95/p99（按window）、错误码分布；  \n8) 档2加重启：不可用期间积压outbox后重启registrar，恢复链后补发成功且A/B/C仍一致。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

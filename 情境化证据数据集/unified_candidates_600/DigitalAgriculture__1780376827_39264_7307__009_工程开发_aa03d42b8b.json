@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边端疾病识别模型实现背景下，与导师围绕多模态模型结构与融合机制持续沟通（4轮），其中在边端部署风险部分与边缘计算架构师沟通（1轮），在音频网络选型与融合精度部分与多模态算法设计师沟通（1轮），并最终形成视觉YOLOv5s与音频1D-CNN的决策级加权融合基线架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "视觉部分我熟，用YOLOv5s检测体态异常，音频部分我打算用ResNet18提特征，然后把特征拼一起，过几层全连接，输出是不是生病了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没具体查，不过PyTorch里这么写很顺，边端转ONNX应该也能转吧？大不了INT8量化一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原想用YOLOv5s加ResNet18做特征拼接，再全连接，在边端跑这种方案行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果改决策级融合，音频不用ResNet18的话，提特征用什么网络？决策级融合精度会不会掉很多？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说NPU跑全连接和残差容易挂，建议决策级融合，各跑各的。算法设计师说音频换1D-CNN，精度后面再补。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先0.5和0.5吧，简单。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "视觉和音频分两条推理流，最后Logits加权和输出。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

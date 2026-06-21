@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计的“溯源事件与数据流”背景下，用户与导师围绕事件组织A/B路线、离线补传、重试幂等与证据导出决策持续沟通（11轮），其中在事件中心接口与失败策略上与解决方案架构师沟通（4轮）、在证据链时间字段与数据最小化要求上与合规与数据治理官沟通（2轮），并最终选定A方案并口头收敛接口、最小字段、分发流与错误码口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件就按入库、出库、运输、施用这些走，数据从边端到云端，再到查询。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就A吧，统一一点比较好，感觉不容易乱。调用方就是网关和渠道端。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 事件中心和分散写入，接口怎么规划？失败重试怎么做才不乱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听起来A更像一条路。就是大家都往一个口子打。event_id和seq_no我记下了，返回409就算重复成功。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 证据链这块，事件里要放哪些时间字段才算能取证？还有最小化怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，我懂，就是三种时间都要，但以receive_time为准，claimed_time不算。位置网格化，图片只放hash。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就选A。因为离线会堆很多事件，走一个入口至少重试规则一致。证据包也集中导出比较省事。风险点就是事件中心挂了就麻烦，要做备份？还有Schema变更。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "调用方：网关、仓库PDA、渠道端、合作社后台。最小字段：batch_id、event_type、record_time、receive_time、source_id、actor_id、grid、evidence_hash、signature。写入后就进事件库，然后给查询和风控用。失败码就200成功，409重复，4xx不重试，5xx重试。离线超过48小时就加个标记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那receive_time服务端写。幂等用event_id加source_id。顺序就按seq_no。风控和查询就……写完再异步用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我试试。写入先到事件中心，事件中心落库成功才算。然后把事件摘要给查询索引，再给风控。风控如果重复收到就靠event_id去重，不重复算分。补偿就是风控那边如果没处理，就重拉事件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 风控/查询怎么订阅事件？重放怎么做才不会重复预警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，风控重放只更新状态，不重复通知。offline_tier也能直接打上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我说下：  \n1）统一`POST /events`写入；  \n2）客户端带event_id、source_id、seq_no；  \n3）服务端生成receive_time并算offline_tier；  \n4）事件原表只追加；  \n5）分两条流：查询索引、风控评分；  \n6）错误码200/409算成功，5xx重试退避，4xx不重试；  \n7）不存原图和轨迹，只存evidence_hash和网格；  \n8）claimed_time只展示不取证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

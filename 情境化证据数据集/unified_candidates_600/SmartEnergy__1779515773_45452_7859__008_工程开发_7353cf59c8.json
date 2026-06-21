@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在核心控制链路唤醒策略与频响算法实现背景下，与导师围绕求解器选型、唤醒与分配解耦及边缘侧轻量化持续沟通（4轮），其中在唤醒与分配解耦部分与频响控制设计师沟通（1轮），在求解器可行性与边缘侧轻量规则引擎部分与算法实现工程师沟通（2轮），并最终形成唤醒位图硬编码与分配OR-Tools预热的实现约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我想直接上优化求解器，比如OptaPlanner或者OR-Tools。手写分配逻辑太容易出bug了，用现成的框架比较稳，调调参就能出结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没细想，感觉求解器一把梭应该也能跑出来吧？如果慢的话，我就加多线程并发算。唤醒和分配，是不是可以放一起算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "唤醒和分配解耦的话，控制流上具体怎么切？求解器能同时包揽这俩吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分配这块用OR-Tools或者OptaPlanner，在秒级约束下可行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说唤醒和分配必须拆开。唤醒不能用求解器。分配用OR-Tools，但得预热。唤醒我打算用Drools规则引擎，配一下规则文件就行，也挺快的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Drools在边缘侧是不是太重了？有没有更轻量的规则引擎，或者不写引擎直接硬编码？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那唤醒策略改用位图筛选加硬编码规则，不上Drools了。分配还是用OR-Tools，做JNI封装和模型预编译，保证单次求解在200ms以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "唤醒策略：和分配逻辑解耦，采用位图筛选加本地策略硬编码实现，不用Drools等重框架。频响分配：采用OR-Tools求解器，通过JNI封装调用，必须做模型预编译和预热，单次求解耗时约束在200ms以内。冷启动逻辑放在网关初始化阶段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在制种区风媒串粉推演与物理阻截调度系统流场建模背景下，用户与导师围绕微气象花期耦合、模型验证假设及合规接口持续沟通（8轮），其中在数据特征与插值部分与农业气象规划师沟通（1轮），在流数据耦合架构选型部分与微气象系统架构师沟通（1轮），并最终确定风场驱动源项、边缘估算云端仿真、验证假设及示踪反馈接口四条方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上CFD仿真算流场。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就把气象站的风速风向和花期数据一起丢进模型算，应该就行了吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想细。尺度对齐是个大问题，我搞不定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业气象规划师 我们做流场建模，微气象数据和花期数据怎么拿？空间插值怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "风场驱动，花期控源项。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微气象系统架构师 架构上怎么支持这种流数据耦合？选什么库？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说风场是驱动，花期是源项，要用克里金插值处理地形。架构上用流计算加时空数据库，边缘算插值，云端跑仿真。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成本的话，云上按需开机器应该不贵吧。准不准，我们可以拿历史气象数据比对一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我们就在模型里加个对照组，看捕获率一不一致？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证假设就是比对模型预测和实地示踪捕获率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "之前合规要求系统要支持对照和示踪采集给特批用，这个接口我在流场建模这块必须留出来，把示踪数据作为模型修正的反馈源，特批验证也能用上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我不太熟，只懂点皮毛。我得赶紧补一下TimescaleDB和流计算框架的官方文档，重点看时空索引和窗口函数怎么用，争取这周看明白怎么建表和接入流数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

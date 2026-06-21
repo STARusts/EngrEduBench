@@ -1,0 +1,528 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在碳配额期现套利与衍生品定价引擎立项背景下，与导师围绕市场缺口识别、研究假设构建、知识补学及合规数据边界持续沟通（7轮），其中在底层资产差异与模型失效原因部分与碳金融产品经理沟通（1轮），并最终明确业务缺口、研究假设、补学计划与合规红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做碳配额期现套利寻优与衍生品定价引擎。现在碳市场要扩容，衍生品也快出了，期现之间肯定有价差，我想做个系统抓套利机会，顺便把衍生品定价算准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺口就是价差大呗，现有体系可能没针对碳做过优化？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@碳金融产品经理 碳配额期现套利和传统大宗商品套利比，核心差异在哪？为啥传统模型会失效？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是，如果不考虑履约期衰减，套利信号就是错的。变量就是，履约期时间？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑回测对比一下应该就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂履约期具体怎么影响价格曲线。我接下来两周，每天花一小时看三篇碳市场微观结构的论文，重点看期限结构那块，整理出衰减因子的推导逻辑，到时候把推导笔记发你看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据肯定脱敏，模型公平就是别偏袒大户。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据获取只拿交易行情和配额登记公开数据，不碰企业隐私。模型定价只基于市场微观结构，不引入企业标签分档，避免误伤。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在碳期现套利业务推演背景下与导师围绕衰减因子下的套利流转、持仓约束与对手方风控持续沟通（4轮），其中在跨期结构与平仓机制部分与碳金融产品经理沟通（1轮），在无隐私下的对手方风险防范部分与合规风控专家沟通（1轮），并最终形成跨期结构套利信号、履约日历持仓约束及流动性熔断风控三条业务结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就还是捕捉价差，然后开仓，等价格回来了平仓赚差价，把衰减因子加到算价差的公式里就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳市场期现套利业务流怎么拆？跟传统商品有啥不一样？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不知道对手方是谁。这咋防？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不拿企业隐私，对手方违约风险咋防？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "区别在于，持仓周期不能自己定，得卡在履约日历里；还有风控不看对手方是谁，看市场流动性不够就直接拦住。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在碳市场量化引擎需求梳理背景下与导师围绕用户画像维度及服务承诺边界持续沟通（4轮），其中在画像特征拆解部分与碳金融产品经理沟通（1轮），并最终确定四类核心画像标签及对应的服务边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳市场的量化机构，跟一般的量化有啥区别？画像标签怎么打？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "承诺流动性不够的时候一定拦住，还有到期前一定帮他们平仓？"
+              }
+            ]
+          },
+          {
+            "microScene": "在碳金融合规与准入评估背景下，用户与导师围绕碳衍生品合规红线、私有部署审计冲突及准入硬约束持续沟通（6轮），其中在合规红线与审计冲突部分与合规风控专家沟通（1轮），并最终形成包含资质前置校验、卖空禁令、资金穿透审查及审计接口强制开放的四条准入硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "准入就是看他们资质合规不合规，别让不合规的机构进来用我们的引擎就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "履约约束就是他们得交碳配额，不能欠着。准入条件就是他们得证明自己有配额？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳衍生品套利的合规红线是啥？还有本地化部署跟审计留痕冲突怎么解？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "准入硬约束，第一，必须承诺履约期前不违规卖空；第二，资金来源得干净；第三，私有部署的客户必须开放审计接口给我们和监管查数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须前置校验碳市场交易资质，审计接口要写进协议强制执行。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在定价引擎商业价值闭环设计背景下与导师围绕机构付费意愿、收费口径与资金流转持续沟通（5轮），其中在机构付费逻辑与收费模式部分与碳金融产品经理沟通（1轮），并最终明确“订阅+调用”商业模式及历史回测验证前置条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "凭能赚钱呗。我们收手续费，或者做成SaaS按月收。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按利润分成吧，客户赚了才分，他们肯定乐意。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这钱到底怎么收？机构愿意为啥付钱？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没想透。我回去把碳市场微观结构和付费意愿的研报看几篇，记在笔记里，把分成这种错误思路划掉。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在碳配额期现套利架构设计背景下，用户与导师围绕行情解耦、价差时延一致性权衡及碳微观结构约束持续沟通（6轮），其中在碳价差信号捕捉部分与量化策略架构师沟通（1轮），在低延迟实现部分与高并发系统架构师沟通（1轮），并最终敲定快照逐笔双路校验与CPU主计算FPGA旁路加速的架构选型。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "解耦肯定要，直接Kafka接行情，然后算价差，要快，低延迟就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@量化策略架构师 碳价差信号捕捉架构怎么搞？@高并发系统架构师 低延迟怎么弄？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂碳市场微观结构怎么影响架构。我这两天去看碳市场逐笔和快照的数据样本，搞懂流动性枯竭时盘口长啥样，然后把这个特征带回架构里，看看双路校验的流控怎么加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构选型：1. 行情用快照加逐笔双路校验，过滤虚假信号；2. 计算用CPU集群主计算，FPGA旁路加速解码；3. 时序对齐在CPU侧做。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在衍生品定价模型数据流设计背景下，与导师围绕数据喂入方式、流批切分、对齐逻辑及推送频率持续沟通（6轮），其中在模型输入与流批属性及推送频率部分与衡生品定价研究员沟通（2轮），在流批架构与对齐器设计部分与数据流开发工程师沟通（1轮），并最终形成定价数据流MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "定价模型输入到底有哪些？哪些要实时哪些不要？这种输入流式和批式怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现价走流，波动率走批然后放缓存，到引擎前面再拼起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用上一个值先顶着呗，不然还能咋办。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1分钟一次？算力应该够了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据流MVP：1. 现价走FPGA流式管道；2. 波动率和利率走离线批计算，1分钟推一次缓存；3. 引擎前加对齐器，按时间戳拼数据，缺参数用前值填充；4. 对齐后喂给CPU算定价。"
+              }
+            ]
+          },
+          {
+            "microScene": "在动态对冲高可用容灾方案设计背景下，用户与导师围绕容灾架构选型（主备切换、双活脑裂与成本、热备重放）及核心约束持续沟通（7轮），其中在微秒级容灾架构与状态保存部分与高并发系统架构师沟通（1轮），在切换瞬间重复发单与漏单合规红线部分与合规风控专家沟通（1轮），并最终确定同城热备加重放方案及落实幂等键与校验约束至设计文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄个主备切换吧，主机挂了自动切到备机，保证服务不断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就同步一下状态呗，在数据库里记一下发到哪了，备机起来先读库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态对冲节点要是挂了，怎么保证微秒级切过去，而且订单状态不乱？数据库同步是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "容灾切换瞬间如果出现重复发单或者漏单，合规那边怎么判定？有什么红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说要用同城双活，状态放内存网格里共享，发单得带幂等键。合规说超限必须熔断，不能盲目对冲。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "脑裂确实没想过。双活成本高是高，但安全嘛，贵点就贵点呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重放的话会不会慢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太确定现在的指标定多少。"
+              }
+            ]
+          },
+          {
+            "microScene": "在期现跨市套利接口规范设计背景下，用户与导师围绕熔断层级、接口防重发、单边敞口防漏及强平指令通道持续沟通（8轮），其中在熔断红线部分与合规风控专家沟通（1轮），在接口防重发部分与高并发系统架构师沟通（1轮），并最终形成包含ReqID防重发、三级熔断强平专线放行及单边熔断同步撤单的接口规范核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "熔断就价格跌超限停机呗，接口统一RESTful，大伙用着顺手。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规风控专家 碳市熔断都有啥红线？@高并发系统架构师 接口咋防重发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "撤单失败就再撤呗，强平肯定得放行啊。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天看了篇讲“单边断网单边挂单撤销”的，里面提了个超时自动转异步对冲，我觉得可以加上。就是断网了就自动转异步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，设个超时时间，比如3秒。误伤的话，就跑测试呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "ReqID防重发，熔断分三级但强平走专线放行，单边熔断要同步撤单，失败进队列。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳配额期现套利寻优模块开发背景下，用户与导师围绕盘口数据滑点估算的精度与合规冲突及替代方案持续沟通（8轮），其中在数据落地存储方案部分与套利算法工程师沟通（1轮），在裸数据落盘合规性部分与合规风控专家沟通（1轮），并最终形成改用脱敏聚合行情加滑点扰动模型及回测偏差率小于2%验证口径的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拉全量盘口快照算，这样精度最高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优模块要用全量盘口快照算滑点，存本地怎么搞比较好？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "套利模块需要本地落盘全量盘口裸数据做回测，这能过审吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我两边都想顾着，但不知道具体咋弄。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂行情脱敏后怎么做高精度滑点拟合。我今晚查一下差分隐私在行情快照上的应用案例，跑几个小脚本试试加噪后的数据还能不能用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我弄个对照测试。拿同一组寻优参数，分别跑裸盘口和脱敏盘口，对比两边算出的期现价差和执行成本。如果偏差率在2%以内，就当脱敏数据可用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻优模块不落盘裸数据，改用脱敏聚合行情加滑点扰动模型来算价差。验证口径是回测偏差率小于2%。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在行情数据高频订阅与回测联调背景下，与导师围绕实盘与回测逻辑一致性、事件驱动抽象层统一及防重容灾红线持续沟通（10轮），其中在行情流接入与流批一体管道设计部分与数据流开发工程师沟通（1轮），并最终确认统一事件抽象层与算子挂载方案，明确防重幂等与容灾红线，准备编写数据源接入与事件抽象层。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "实盘用Kafka接行情，回测就读历史CSV文件，写个适配器转一下就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实容易不一致。那我就统一一下接口？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳市场行情流具体怎么接？回测和实盘的代码复用怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回测触发，就按时间戳顺序往下跑呗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "乱序和延迟这我确实没想过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "统一事件抽象层，一套算子挂载，回测注入水位线。这样实盘和回测逻辑就一致了，偏差率就能验证了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防重的话，加个去重算子？容灾我不太清楚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写事件抽象层。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在定价引擎并发性能压测与调优背景下，与导师围绕压测方案设计、参数提取及调优路径持续沟通（2轮），其中在压测数据构造与P99延迟部分与量化测试工程师沟通（1轮），在调优策略与热点定位部分与高并发系统架构师沟通（1轮），并最终形成基于perf火焰图定位、网格化采样及单核SIMD与无锁改造的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就用JMeter多线程并发请求定价接口，看看QPS和延迟，如果慢了就加机器或者加线程数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Jmeter直接压定价接口行不行？还有请求分布怎么模拟？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那如果P99延迟太高，我怎么调优？加线程不行的话，加缓存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试说要拿真实参数造数据，看P99延迟。架构师说不能用缓存，要找热点函数，然后用SIMD或者GPU加速。我这就去写脚本造数据，然后加GPU。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工具嘛，就用JProfiler大概看看吧。提取参数，就，就随机抽一段历史数据直接发过去？"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发熔断机制边界异常测试背景下，用户与导师围绕熔断触发后状态机转换、资金穿透风险、定价引擎重试误差及混沌工程应用持续沟通（7轮），其中在状态机测试设计与积压行情误差边界部分与量化测试工程师沟通（2轮），在风控红线与强平逻辑部分与合规风控专家沟通（1轮），并最终形成基于Chaos Mesh注入故障、覆盖强平路径及超时定价标失效的硬约束测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备写个脚本猛发订单，把熔断打出来，看看系统会不会崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "熔断一出来我就全撤了，回滚不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "熔断触发瞬间的边界测试，一般要怎么设计啊？特别是那些挂单和半成交的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风控这边，熔断时有什么红线是不能碰的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态机三条路径，熔断禁止开仓，部分成交强平。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备就按这三条路径写用例。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重试的时候引擎先停一下？或者加个锁？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了一点Chaos Mesh。可以用来搞网络故障。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Chaos Mesh的NetworkChaos，在熔断触发时把订单服务的网络断开，测撤单重试。不用自己写脚本卡网络了，复现率能稳定点。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在碳配额期现套利引擎灰度部署背景下，用户与导师围绕灰度切流维度、回滚红线与统计显著性判断持续沟通（6轮），其中在切流维度部分与运维发布专家沟通（1轮），在数据验证部分与业务监控分析师沟通（1轮），并形成按资金切流及置信区间无劣化扩容的灰度方案与统计学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度嘛，先切1%的流量看看，不出错就慢慢加，出错就回滚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维发布专家 灰度切流怎么定维度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务监控分析师 监控验证怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按资金切10%低频账户，看年化收益和波动率偏移，跑3天，95%置信区间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "低0.3%说明收益变差了，肯定不扩容，得回滚查问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没搞懂，统计那套我不熟，看到数变小就觉得不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我接下来2周内学完A/B测试的统计显著性原理和置信区间计算，然后自己用Python写个灰度指标校验脚本，把区间重叠的自动判定逻辑加进去，下个微场景验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在碳配额期现套利灰度运行评估背景下，用户与导师围绕灰度期实效指标监控口径、Delta偏移原因及应急操作序列持续沟通（7轮），其中在实效指标定义与阈值设定部分与业务监控分析师沟通（2轮），在Delta偏移触发原因与监控验证部分与量化策略架构师沟通（1轮），并最终确定监控口径、1.5标准差阈值及降级对冲应急操作序列。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要就看赚没赚钱，年化收益率还有胜率这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成本也很重要。那就加上滑点、手续费这些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期间要盯哪些实效指标，尤其是期现错配和模型偏移的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要看基差、冲击成本和Delta。不能只看赚钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Delta偏移大，就是，就是没对冲好呗。因为碳价波动太大，模型跟不上？反正就是敞口没收住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳市场里Delta偏移大一般啥原因啊？监控数据上怎么看出来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "是因为政策发公告，波动率曲面变陡，模型没跟上。监控要看偏斜度，超过2个标准差就是偏移了。校准频率可能太低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就设2个标准差吧。同时报警的话，我就，就先暂停交易？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控口径：基差收敛率、冲击成本溢价、Delta偏移度。阈值1.5个标准差。同时报警的操作：先降级对冲压敞口，留观察仓拿数据，不直接停。"
+              }
+            ]
+          },
+          {
+            "microScene": "在降级对冲报警触发异常背景下，用户与导师围绕延迟与滑点归因、整改对策及风险约束持续沟通（9轮），其中在压测明细与异常归因部分与量化测试工程师沟通（1轮），在执行逻辑调整对策部分与策略迭代规划师沟通（1轮），并最终形成线程池拆分绑核与盘口深度预估及敞口强平的整改落盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是系统扛不住吧，得加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才滑点和延迟飙了，具体是哪段出问题了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风控卡线程和盘口薄导致滑点，怎么改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个应该没啥问题吧，转限价单就是慢点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因结论：延迟是因为风控和定价没隔离抢占了算力；滑点是盘口薄市价单冲击。整改项：拆分线程池；盘口薄用限价单，加个敞口强平。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值设个2秒？线程隔离就改改配置吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在碳期权定价偏差较大背景下，用户与导师围绕定价偏差归因、模型外推失效边界及事件流处理短板持续沟通（6轮），其中在模型外推边界部分与策略迭代规划师沟通（1轮），在波动率异常复现部分与衍生品定价研究员沟通（1轮），并最终敲定引入跳跃扩散项与带标签事件流回放的迭代规划及Demo验证任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型迭代嘛，就是看哪个参数飘了，重新跑一遍拟合把它拉回来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失效就是算出来跟实际差太多呗。复现就把当时的数据拉出来重跑一遍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@策略迭代规划师 定价模型外推边界在哪？@衍生品定价研究员 波动率异常怎么复现？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "外推边界就是政策冲击的时候，不能光用K线。迭代就是加跳跃项，复现要带事件标签。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确实没做过事件打标签。之前看了点流式数据处理的文章，还没上手练。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周就写个事件回放Demo，把带标签的事件流回放套进去跑通。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

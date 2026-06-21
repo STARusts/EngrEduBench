@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收口的端到端压测与边缘调优背景下，用户与导师围绕两条压测用例定义、eventId稳定性验证、观测指标与阈值及边缘侧调优动作持续沟通（11轮），其中在最小压测矩阵与故障注入/通过标准上与测试工程师沟通（4轮），在压测日志字段脱敏与TTL/死信口径合规上与合规与数据治理官沟通（2轮），并形成可执行的压测矩阵、验收判据与边缘侧改动清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把压测搞得更“体系化”点：做一个全链路数字孪生回放，把嗅探节点的气味摘要流、环境信号、边缘推理、事件上报、工单、推送、前端 ack 全部模拟出来。然后再做故障注入，比如弱网、乱序、重复上报、边缘缓存溢出，最后用一套统一追踪把 eventTime/createdAt/sentAt/ackAt 都串起来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用例1是“低风险持续流”：比如每个节点每分钟 1 个低风险事件，持续 30 分钟，节点数从 50 拉到 500。看创建时延、通知时延的 P50/P95/P99，死信占比，边缘缓存溢出率（低风险 100 FIFO 丢弃数量）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用例2是“高风险突发”：比如 1 分钟内 10% 节点同时触发高风险事件，且每个节点 10 秒内重复上报 3 次（模拟抖动）。看 eventId 幂等是否生效、是否只生成 1 个工单、推送是否重复、以及高风险缓存“只保最新50条+dataLossFlag”是否正确。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向做成“内容寻址”：eventId = hash(digestId + eventTimeBucket + deviceId + riskLevel)。这样重复上报会一致；不同事件通常不同；重启也能算出来。然后压测里故意把同一 digestId 重放，看后端的幂等命中率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把 eventId 生成绑定到“边缘事件对象创建时”的单调序列+设备唯一标识？比如 deviceId + bootId + counter。重启后 bootId 变，counter 归零，就能保证唯一，但重复上报还是同一个 eventId，因为缓存里保留这个 event 对象。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 端到端压测我需要最小矩阵：两条用例（低风险持续、高风险突发）+ 弱网/乱序/重复/重启/缓存溢出。你这边建议怎么注入、怎么量化通过标准？我们可观测点目前有 eventTime/createdAt/sentAt/可选 ackAt。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“后端短暂500”注入，会不会把我们带到运维容量规划那块？我怕导师说越界。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值里 P95 这些是你经验值还是项目要求？我担心被问“为什么是2秒/5秒”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把测试工程师那套收敛成“可执行”的最小矩阵，不做孪生回放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "两条用例各跑 3 个档位：节点数/事件率逐步拉升（比如 50/200/500），每档 30 分钟，另外对用例2再加 10 分钟突发尖峰。注入点固定 5 类：弱网延迟、丢包、乱序、重复上报、边缘重启；再加一个“缓存溢出必现”的边缘侧场景。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "通过判据我想用“基线阈值”：先跑无注入拿到 P95，然后验收线 = max(固定红线, 基线P95*1.5)。固定红线先给一版：用例1创建 P95<2s 通知 P95<5s；用例2创建 P95<3s 通知 P95<6s；死信<0.1%；幂等命中>99%；高风险重复推送<0.5%；缓存规则符合（低风险 FIFO 丢、上限100；高风险只保最新50并置 dataLossFlag）。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘侧我怀疑三块：\n1）缓存结构：如果用链表+频繁序列化，会导致 CPU 抖动，影响 eventTime 到 sentAt 的差。\n2）重试策略：如果重试没做退避，弱网下会把队列挤爆，触发低风险被丢得太多，甚至挤占高风险发送窗口。\n3）eventId 稳定性：重启时 bootId 变化，可能出现“同一现实事件被当成新事件”，导致工单重复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我先不追求跨重启合并。那我把 eventId 做成 deviceId+bootId+counter，并且把“同一个 event 的重发”从缓存里取同一个对象。乱序这块我打算在边缘侧加一个 sentSeq，后端只做幂等，不做排序。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 压测要观测 eventTime、工单 createdAt、推送 sentAt、可选 ackAt，还有边缘侧 bootId/counter/sentSeq、缓存溢出计数、dataLossFlag、死信占比。我们日志里怎么打才合规？尤其是压测环境里会不会不小心带出地块名、人员信息。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码我们现在好像没统一。是不是要补一套 deadLetterReason？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去会把 deviceId 改成 deviceKey hash，再把链路追踪 id 当技术字段按 30 天 TTL 留。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘侧调优我先落四条：\n1）缓存结构换成环形队列：低风险容量100，溢出直接覆盖最旧并记 dropLowRiskCount；高风险容量50，溢出覆盖最旧但额外置 dataLossFlag=true，并记 dropHighRiskCount。\n2）发送队列双通道：高风险优先队列，低风险后台队列；避免低风险重试挤占高风险。\n3）重试退避：同一 eventId 的重试指数退避+上限（比如 1s/2s/4s capped 8s），并限制并发 inflight 发送数，避免弱网风暴。\n4）eventId 生成改为 deviceKey+bootId+counter，且 event 对象持久在内存直到 ack 或 TTL 到期，重复上报复用同一 eventId。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我设：低风险事件对象 TTL 10 分钟；高风险 30 分钟。超过 TTL 还没确认就当失败结束，计入 retryExhaustedCount，并且只留摘要计数不留对象。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先定一个保守线：压测峰值时边缘进程 RSS < 180MB，CPU 平均 < 60%（1核）。如果不达标，再回头砍发送队列里保留字段，或者降低日志采样率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

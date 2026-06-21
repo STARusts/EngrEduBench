@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在链下网关性能压测与优化背景下，与导师围绕压测策略、工具链选型、瓶颈预期、协议兼容优化及资源成本持续沟通（8轮），其中在工具链与施压调优、内部耗时观测及JVM定位部分与链下网关开发工程师沟通（3轮），并形成压测与优化基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关核心是异步非阻塞路由，我打算分两阶段。先单机基准压测，摸清路由分发和PSI计算的单点极限QPS；再全链路混合压测，带着估值引擎和上链异步队列一起跑。重点关注P99延迟，质押风控对尾部延迟极敏感。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工具这块，我之前主要用Wrk做简单HTTP打流，但这次涉及动态PSI阈值和复杂的路由逻辑，还需要观测JVM和内部队列堆积，Wrk可能不够。施压模型上，我准备基于历史质押请求特征造一份随机流量模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原本想用Wrk，但感觉观测不到内部队列和线程池状态，施压端也容易撞上连接数限制。对于这种带业务逻辑的路由网关，压测工具和施压机配置有什么讲究？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多机分布式施压确实能避免施压端瓶颈。观测侧呢？我想看P99延迟，但JMeter自身统计的延迟包含了施压机采样误差，怎么拿到更准的网关内部耗时？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "隔离线程池这招很关键，上链本来就是慢动作。我如果用Gatling写施压脚本，配合Prometheus的Histogram桶配置，应该能拿到真实的路由P99。压测过程中如果发现内存泄漏或GC频繁，一般怎么快速定位？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Gatling + Prometheus Histogram + JMC飞行记录器，这套组合能覆盖从外部施压到内部耗时再到JVM瓶颈的全链路观测。我去把施压脚本和观测面板搭起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我预期瓶颈在两个地方：一是PSI计算如果涉及复杂特征反序列化，CPU可能打满；二是路由给估值引擎的异步队列，如果下游消费慢，队列积压会导致内存飙升。我准备重点优化特征反序列化，看看能不能把JSON解析换成Protobuf或者换更快的Json库。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口对外必须是扁平化JSON。我可以在网关内部做一层转换：入口JSON快速解析为内部Struct，内部流转用零拷贝的Struct直接操作，出口再序列化回JSON。或者换一个极简的JSON库比如Jsoniter，避免大动干戈改协议。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "成本方面，如果为了抗峰值配了太多网关实例，平时闲置率会很高。压测时我得摸清单实例的极限，上线后可以根据基线设置合理的HPA（水平自动扩缩容）触发阈值，避免过度分配资源。这也是工程上的可持续性考量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本次压测基线定这几点：1. 工具链采用Gatling分布式施压 + Prometheus Histogram内部耗时统计 + JMC飞行记录器；2. 核心观测指标为路由P99延迟、异步队列堆积深度和Young GC频率；3. 优化切入点为JSON解析换Jsoniter及内部零拷贝Struct流转；4. 压测产出需明确单实例QPS极限，作为线上HPA扩容的基准阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

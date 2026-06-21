@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在战局微观态重构数据流转设计背景下，用户与导师围绕状态维护选型、恢复延迟、数据格式协同及状态膨胀持续沟通（7轮），其中在确认渲染侧硬性要求部分与战局重构渲染主程沟通（1轮），并最终形成战局重构流转约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "清洗后的信令本质是离散事件流，要重构成连续的战局微观态（位置、血量、技能CD等），核心是状态维护。两条路：一是继续在Flink里用Keyed State做增量计算，直接输出状态变更；二是把事件 Sink 到 Redis 这种内存库，下游渲染引擎去拉取聚合状态。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不只。Redis方案读写延迟对渲染端不友好，且如果 Redis 宕机，状态恢复依赖重放 Kafka，时间太长。Flink 算子状态天然支持 Exactly-once，延迟也能压到毫秒级。我倾向 Flink 状态计算，但 Flink 状态后端如果用 RocksDB，大状态恢复时会有秒级延迟，这对观演流是致命的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们倾向用 Flink 算子状态维护微观态，不用 Redis。你们渲染侧对状态恢复时间有什么底线要求？另外重构出的状态数据结构，你们希望怎么拿？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主程那边要的是增量事件流，不要拉取。恢复时间必须压在 500ms 内，数据结构要 FlatBuffer 零拷贝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "恢复速度可以开 Flink 的 Local Recovery 和增量 Checkpoint 来优化，最差情况用算子级别的快照缓存加速。格式上，Avro 作为流转标准不能破，否则 Schema Registry 就废了。可以在 Flink 算子输出端，把 Avro 转成 FlatBuffer 再推给渲染引擎，加一层转换算子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Avro 转 FlatBuffer 是内存操作，微秒级开销，可接受。状态膨胀这块，微观态其实主要是英雄和塔的状态，实体数有上限，状态大小是 O(1) 的，不会无限膨胀。但具体峰值内存占用，得跑一次压测才能定算子内存配额。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃 Redis 聚合，采用 Flink Keyed State 做微观态增量计算，直接输出变更事件流；第二，状态恢复必须开启 Local Recovery 和增量 Checkpoint，恢复时间红线 500ms；第三，流转层保持 Avro 格式与 Schema Registry 兼容，输出到渲染引擎前由专有算子转换为 FlatBuffer；第四，算子内存配额需根据压测结果设定，状态规模理论上界为 O(1)。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

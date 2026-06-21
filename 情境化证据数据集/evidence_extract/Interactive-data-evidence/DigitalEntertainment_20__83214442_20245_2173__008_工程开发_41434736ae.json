@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在叙事律动共创引擎进入工程开发、需落地剧情图编辑器且受预算与低配性能约束的背景下，用户与导师围绕剧情图数据模型拆分、增删改校验、撤销重做与预览联动持续沟通（7轮），其中在轻量状态管理/命令栈/校验分层与compile产物设计上与前端工程师沟通（4轮），并最终明确GraphDoc+CompiledGraph、command栈上限与节流/版本/日志边界的实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在剧情图编辑器的实现：图结构怎么存、怎么改、怎么跟预览联动"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本来想直接用一个现成图编辑库省事，但你说预算紧，我就有点慌。那我就自己写画布+节点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就 id、title、text、choices。边就是 fromId、toId、choiceId。然后还有个 startId。大概这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想都放一起，一个 JSON 全存。位置也塞 node 里，加 x y。运行时就忽略。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "compile() 是每次拖一下就跑？那不炸了吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端工程师 剧情图编辑器我想自己写轻量的。节点拖拽、连线、撤销重做、校验这些，怎么做比较省钱省事？我怕一堆状态乱掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撤销重做用 command，我之前只会存整份 JSON 快照。command 里要存啥？改一个字段也要写类？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步 worker 做环检测我没做过。我能不能先不做，直接点“校验”按钮再跑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还担心预览联动：编辑器里选一个节点，右边预览从这个节点开始走分支。这个 compile 怎么对？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先照前端说的：GraphDoc 拆 nodes/edges/ui，ui 里放 viewport、selection、layout。撤销重做不用整份快照，改成 command 列表，MOVE_NODE 合并。校验分两档，实时只做简单的，复杂的先手动触发或 debounce 放 worker。预览只吃 compile 出来的索引结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1000？感觉够用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "长文本我差点就按每个 keypress 记历史了，那确实爆。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "schema_version 我能加在根上。只读打开怎么做？我可以直接禁用编辑按钮。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前调试会 console.log 整个 node content……那我收一下，只打 id 和长度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这三条我能照着开干。worker 和环检测我先留口子，先把 command 和 compile 跑通再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

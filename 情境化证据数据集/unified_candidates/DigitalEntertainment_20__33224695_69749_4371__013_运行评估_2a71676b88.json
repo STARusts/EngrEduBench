@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估收尾需48小时跑通用户反馈闭环MVP背景下，用户与导师围绕反馈入口统一、结构化字段、会话元数据自动关联、归因与排期及用户状态机持续沟通（10轮），其中在元数据留存与告知合规边界上与合规与版权经理沟通（2轮）、在反馈-指标联动最小看板口径上与数据分析师沟通（1轮），并形成6条可执行闭环要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先把反馈入口凑齐吧。现在工单、群里吐槽、还有B站评论这种都散。先统一到一处，不然没法算量。然后我不确定怎么把反馈和`route_version`、`tenant_id`这些连起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "字段…我想要：问题类型、严重程度、发生平台、地区、时间、用户说的现象。再加一个“是否复现”。但“问题类型”我怕填得很乱。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "会话键…得让前端或SDK带一个`session_id`？用户反馈里让他粘贴？这体验很差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与版权经理 反馈工单里我们想自动带一串元数据：`session_id/route_version/model_version/codec/platform/region/tenant_id`，还有延迟桶、错误码，比如`ERR_FRAME_SEQ`。不存音频。这样存合规吗？要不要告知用户、保留多久？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果用户说“我被冒用声音了”，我们这边能不能用`session_id`追到是谁在用？还是说也不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须做的：`session_id`别用用户ID，做随机；元数据能存但目的写清楚；工单里提示别提交隐私；会话关联的数据留存短点，7到30天。先不做的：侵权处置的完整流程细节先按合规现成的走，我们只接入口和能定位到租户。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个规则：同类问题在某个`route_version`上占比突然高，就标成“疑似版本问题”。比如质量类里“吞字”，同一租户或同一平台集中出现。然后去对照组看是不是也涨。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先人工选吧？运营或者客服点选分类。文本我怕搞NLP会跑偏。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就把表单做成：问题大类、质量子类可多选、是否影响发布、是否每次发生、出现频率、使用角色包/音色名、端（Web/iOS/Android）、网络类型（WiFi/4G）。再自动带元数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我试个粗的：P0/P1/P2。P0是影响播出或大面积，比如401/403登录不了、E2E延迟爆了、`ERR_FRAME_SEQ`高；P1是质量明显退化且能复现；P2是主观偏好，比如“更想要更甜的情绪”。修复成本我不太会估。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证方法就是看`clip_rate`、`vad_speech_ratio`、延迟P95、错误码占比，在灰度和对照里比。再加反馈量是不是下降。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 我们要做用户反馈闭环MVP。想要一个最小看板：能把反馈工单按`route_version/tenant_id/region/codec/platform/model_version`切分，看到反馈量、P0/P1数量趋势；同时能联动关键代理指标（`clip_rate`、`vad_speech_ratio`、延迟P95分层、`ERR_FRAME_SEQ`会话占比、401/403）。最少需要哪些图/表？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "反馈率用会话数当分母，这个我之前没想。那“总会话数”就从我们已有埋点里拿。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节奏…我想：每日值班看P0，2小时内响应；P1每周例会评；P2攒到月度。响应动作就是先看是否集中在灰度版本或特定维度，再决定回滚或提修复。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能。状态机简单点他们才会用。再加个“需要用户补充信息”的模板，比如让他选网络类型、给复现步骤，不要让他发音频。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我…可能就把明细留短期，7到30天，过期后只留按天聚合。看板默认看聚合，只有排查时才查明细。这样存储压力小点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）反馈入口统一：工作台内置“反馈问题”按钮+工单，强制结构化选择（问题大类、质量子类多选、频率、是否影响发布、平台/网络/角色包）。  \n2）自动关联元数据：`session_id`随机短期有效；自动带`route_version/model_version/codec/platform/region/tenant_id`、延迟分桶、错误码（含`ERR_FRAME_SEQ`、401/403）。  \n3）合规边界：不存音频；提示别提交隐私/侵权内容；元数据7-30天，长期只留聚合；权限分级+审计。  \n4）归因方法：按“反馈率=反馈会话数/总会话数”做维度交叉；灰度对照按`route_version`对比，联动`clip_rate/vad_speech_ratio/延迟P95/ERR_FRAME_SEQ`等指标找聚集。  \n5）优先级与节奏：P0 2小时内响应并判定是否回滚/止血；P1 周度评审排期；P2 月度收集进路线图。  \n6）对用户状态机：已收到→待复现→已定位→修复中→已发布/无法复现/产品建议，并提供“补充信息”模板但不收音频。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

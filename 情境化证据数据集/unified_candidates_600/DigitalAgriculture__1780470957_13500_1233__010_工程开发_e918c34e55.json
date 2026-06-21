@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳汇信贷引擎开发背景下，用户与导师围绕规则解耦与异常容错持续沟通（5轮），其中在规则配置化需求部分与绿色金融产品经理沟通（1轮），在规则冲突与异常值测试部分与测试调优工程师沟通（1轮），并最终形成信贷引擎三大核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接在 `CreditEvalService` 里写逻辑呗，根据碳汇量分级，if-else 判定额度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这确实麻烦。那我用 Drools 规则引擎？把规则抽成 DRL 文件。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳汇数据转评分这块，规则是写死还是怎么弄？你们后面会经常改规则吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Drools 我怕玩不转，搞个 JSON 配置行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信贷评分这块如果做成规则配置化，测试的时候要注意啥？比如碳汇值特别小或者特别大的时候。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "JSON 配置是不是搞不定这种复杂的交叉逻辑？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误伤这个我确实没想。我加个前置校验，如果 `carbon_flux` 是 null 或者 0，信评流程先挂起，发告警让人工复核，不直接出分。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

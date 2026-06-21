@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在情绪流态反演与特征对齐联调背景下，用户与导师围绕时间戳对齐卡点、理论方案与工程实际差距及决策方向持续沟通（5轮），其中在硬件时钟偏移与PTP同步方案部分与信号对齐研发沟通（4轮），在算法容忍层与降级模式部分与情绪算法架构师沟通（3轮），并最终形成短期软对齐加降级兜底、长期硬改驱动的对照验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上多觉异构信令时间戳对齐可以用动态时间规整DTW，或者卡尔曼滤波预估。我看论文里都能做到毫秒级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们俩联调跑通没？时间戳对齐现在什么情况？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "卡尔曼滤波不就是把抖动滤掉吗？加上递推估计应该能逼近1毫秒吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我确实没处理过硬件时钟漂移。那实际能给的最低抖动是多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看只能上PTP了，不然算法那边反演全废了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一周太久了。能不能先软对齐凑合跑，同时改硬件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可以做对照实验。一组是5毫秒软对齐加降级模式，一组是2毫秒PTP对齐加容忍层。测情绪特征向量的余弦相似度衰减，如果5毫秒下降不到5%，就先软对齐顶着。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块完全短板了。我今晚得把IEEE1588 PTP协议和FPGA时钟同步机制啃下来，至少看懂驱动层怎么给应用层抛时间戳"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

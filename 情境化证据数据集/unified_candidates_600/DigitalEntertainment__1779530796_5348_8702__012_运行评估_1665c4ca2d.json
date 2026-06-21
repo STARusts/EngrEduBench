@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在超写实数智人系统推全量后搭建线上大盘背景下，用户与导师围绕大盘核心指标、技术选型及告警阈值设定持续沟通（4轮），其中在大盘搭建方式与指标暴露部分与SRE运维观测师沟通（2轮），在告警阈值设定与动态基线方法部分与质量回溯分析师沟通（1轮），并最终形成放弃自研流算、采用Prometheus与Grafana及动态基线的大盘方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想引入一套实时流计算引擎，对全量音姿切片做滑动窗口的偏移量分析，这样能抓到最细粒度的抖动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心肯定是音姿同步率。我准备算每个音素对应BlendShape的余弦相似度，如果低于0.85就报警。另外还要加个口型穿模频次的大盘，把所有物理法则强约束的拦截事件汇总起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原本想用Flink算全量相似度，但导师觉得太重。线上音姿同步率大盘，你们一般怎么建？指标怎么暴露比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用拦截率反推同步率？这有点粗糙吧，有些微抖动可能没触发拦截但用户已经感知到了。不过延迟P95和拦截量确实好采集。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那告警阈值呢？我之前压测单帧是30ms，P95延迟定40ms够吗？穿帮拦截量这个绝对值怎么定阈值？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在我们要给音姿延迟P95和穿帮拦截量定告警线。我拍了个40ms，你觉得靠谱吗？另外穿帮拦截量这个绝对值怎么定阈值？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实只会拍脑袋定死值，对线上指标的统计分布特性理解不够。我接下来一周每天花1小时学《SRE实战中的统计学方法》，把动态基线的计算逻辑搞懂"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "然后把SDK的延迟上报指标改成Histogram格式，方便Prometheus直接算分位数和置信区间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃Flink全量计算和自研大盘。指标采集用Prometheus SDK暴露Histogram，大盘用Grafana。核心盯两个：端侧音姿延迟P95（阈值待定，需跑线上7天数据做假设检验出基线），以及穿帮拦截量（用7天动态基线监控突变）。微抖动监控先不上大盘，后续有投诉再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

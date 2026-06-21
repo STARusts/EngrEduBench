@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估中复盘“疑似窜货”告警暴涨但被投诉误报的异常处置背景下，用户与导师围绕复盘证据、事件链追溯与最小必填项模板持续沟通（10轮），其中在误报分型与取证字段部分与算法工程师沟通（3轮），在告警到处置留痕与合规审计记录部分与运维值班经理沟通（1轮），并形成5步可执行复盘流程与6条必填项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间窗就比如昨晚10点到12点。关键读数是风险分和触发规则。ID再加门店ID、设备ID。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是模型太敏感，或者数据采集不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 误报一般怎么分？要查哪些字段能证明是误报还是确实窜货？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就按三类去查就行。字段我记下了：batch_id、store_id、device_id、还有ingest_ts这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对照就是找以前同批次？我感觉同批次不太有以前吧，那就找同品类批次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维值班经理 昨晚那波告警到处置，值班这边一般会留下哪些记录？我想复盘要用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第1步输入就是告警列表，输出是这波告警的样本集合，比如top批次、top门店。  \n第2步三类：错配、延迟、阈值漂移。判据就是看mapping版本不一致是错配；ingest和event差很大是延迟；灰度占比和配置不一致是漂移。  \n第3步对齐event_ts和ingest_ts。  \n第4步写告警ID、工单号、做了哪些操作。  \n第5步短期止血就是先降级规则，长期根治就是修主数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "决策依据就写当时风险分暴涨，命中集中在几个门店，然后灰度比例也不对，所以降级。影响范围写涉及多少批次多少门店。合规留痕写谁操作的、有没有权限、导出记录。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写清楚证据，别直接说模型错了。再就是把数据问题、主数据问题也写进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可复算就把查询条件写进去，比如用哪些ID、时间窗、还有rule_id/model_version。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我估计会漏第6条，合规留痕这块我老忘。提醒的话就每次复盘模板里把工单号和审批人放最上面，没填不让过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

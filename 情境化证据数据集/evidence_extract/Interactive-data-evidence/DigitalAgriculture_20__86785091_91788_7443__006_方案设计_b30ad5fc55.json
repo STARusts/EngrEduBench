@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在作业计费平台方案设计的“数据流与接口规范”背景下，用户与导师围绕终端上报—核验—结算链路、同步/异步边界与字段口径收口持续沟通（7轮），其中在终端弱网重传与轨迹上报幂等部分与物联网接入工程师沟通（3轮），在结算单资源拆分、settlement_id 幂等与快照追溯部分与结算与对账工程师沟通（3轮），在数据最小化、权限隔离与审计保全部分与合规与风控经理沟通（2轮），并整理出6条最小数据流与接口规范要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就是三块：采集上来一堆轨迹，算完指标，最后出账单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接口的话，能不能就按常见的 REST 模板来，字段都放 JSON 里，省事点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "job 里我记得要有 job_id、tenant_id、machine_id、driver_id、coop_id、plot_id。plot_version 也要带。然后时间窗，作业类型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 终端上报 job 相关数据，接口怎么定比较稳？弱网、重传、时间这些要怎么写进规范里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "sequence_no 是每个 job 一套，还是设备全局一套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线开始作业，不调 start 也能上报 tracks？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@结算与对账工程师 结算这块接口要怎么定？我们要 settlement_id 幂等键包含 tenant_id/job_id/rule_version/billing_policy_version，还要存 plot_version 和配置 hash，这些怎么传、怎么查？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 settlement_id 是不是就拼接字符串再 hash？我怕各语言实现不一致。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "仲裁那块要不要在 settlement 里加个 evidence_url 之类？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我大概按三段写：终端 tracks 上报；核验发布 JobQualityVerified；结算 compute 用 settlement_id 幂等。字段我就照他们说的填。只是我有点分不清内部事件和外部接口，怕写错边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "外部接口我写两类：\n1）GET /jobs/{job_id} 给终端拉任务：返回 tenant_id、job_id、machine_id、driver_id、coop_id、plot_id、plot_version、time_window_start/end、op_type，还有规则版本和计费策略版本？\n2）POST /telemetry/tracks：tenant_id、job_id、sequence_no、chunk_id、points（ts、lat、lon、speed、heading、quality_flag，可能带 depth_proxy、engine_on）\n\n内部这块：\n3）事件 JobQualityVerified：tenant_id、job_id、rule_version，指标那一串（effective_area、invalid_area、billable_area、overlap_rate、miss_rate、speed_compliance_rate、quality_score/quality_factor、confidence、need_review、diff_reason_codes、excluded_distance 可选），再加 plot_version、config_hash\n4）POST /settlements/compute：tenant_id、job_id、rule_version、billing_policy_version、settlement_id（按四段拼接 hash），返回 amount 和一些 line。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权限我不太会写，是不是直接网关鉴权就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 接口规范这块，最小的合规要求怎么写？主要是终端上报轨迹、合作社查结算这些，授权和留痕要到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 need_review 的时候，是不是要把原始 points 全存很久？存储成本会爆。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）job 主数据最小集：job_id、tenant_id、machine_id、driver_id、coop_id、plot_id、plot_version、time_window_start/end、op_type；同时下发 rule_version、billing_policy_version 但终端不解释。\n2）终端上报轨迹：POST /telemetry/tracks 批量点，带 tenant_id、job_id、sequence_no（job 内递增）、chunk_id；服务端按（tenant_id,job_id,sequence_no）去重，回 ack_sequence_no 支持重传。\n3）核验输出：发布 JobQualityVerified（tenant_id、job_id、rule_version）+ 指标只用那套：effective_area、invalid_area、billable_area、overlap_rate、miss_rate、speed_compliance_rate、quality_score/quality_factor、confidence、need_review、diff_reason_codes、excluded_distance（可选）。\n4）核验快照必带：plot_id、plot_version、config_hash；用于结算后不可覆盖，只能追加复核结论。\n5）结算接口：POST /settlements/compute 幂等；settlement_id = SHA256(tenant_id|job_id|rule_version|billing_policy_version)；重复调用返回相同结算结果，并能查询 plot_version、config_hash。\n6）权限与审计：所有接口做 tenant_id 作用域校验；合作社/机手只能查自己关联 job/settlement；compute 与查询都记录 audit_log（主体、时间、job_id/settlement_id、结果码）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在加工微缺陷图谱系统感知端联调与数据接入背景下，用户与导师围绕多模态数据接入协议、时序对齐方案及验证方法持续沟通（8轮），其中在多模态流式接入部分与数据工程师沟通（1轮），在时序对齐验证口径部分与联调测试专家沟通（1轮），并最终形成边缘端Protobuf转译、PTP对时、对照实验验证P99偏移及乱序包报警的四条接入约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Kafka收，然后转成JSON存起来，时间戳打在数据包头上就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，JSON确实大。那我换Protobuf。时间戳漂移的话，我，我收到数据后按到达时间排个序不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 感知端多模态流式接入怎么搞？JSON太慢了，时序也对不齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联调测试专家 时序对齐的验证口径是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据工程师说边缘端用PTP对时和Protobuf压缩，测试专家说偏移要小于半个周期，还得测乱序包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就是因为采样定律吧。验证的话，我跑一遍看看日志有没有报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太清楚，PTP协议底层细节我还没看过，因果推断那块也是半懂不懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚先把IEEE 1588 PTP协议规范看一遍，重点看时钟同步精度怎么算。然后我自己写个脚本，往Kafka里注一批带固定时延的模拟振动数据，跟真实对时数据对比一下分布，把结果记在实验日志里，再改接入代码的容错逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，边缘端做协议转译，用Protobuf不用JSON；第二，边缘侧必须跑PTP做时钟锁相，不能靠云端到达时间排序；第三，开发期验证要注入固定时延数据做对照，保证P99偏移小于半个采样周期；第四，乱序包必须有丢弃或报警机制。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

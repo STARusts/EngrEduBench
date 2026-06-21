@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在原创度剥离算子需纯CPU运行联调背景下，用户与导师围绕替代方案选型、架构接入与验证口径持续沟通（3轮），其中在低成本替代方案与特征映射调优部分与算法工程化工程师沟通（2轮），并最终确定采用离线特征加XGBoost残差判定方案及特征对齐验证重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原先Notebook里验证的是基于BERT的交叉编码器，这东西CPU推理延迟肯定炸。得把计算图拆解或者换轻量模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原先的BERT交叉编码器如果要全量迁到CPU环境，除了ONNX转换，还有什么低成本替代能保住核心区分度？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "离线特征库加XGBoost做残差判定？这思路行，彻底解耦了线上GPU依赖，而且树模型对流式特征拼接更友好。INT8量化虽然改动小，但只要文本一长，精度抖动就会触发误判，后期调参成本太高。我倾向方案二。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流式解析输出的是多模态特征向量，我需要加一层特征对齐映射，把实时流向离线特征库的Schema对齐。联调验证口径：注入标准机辅代笔流和纯人写流，要求残差判定输出的原创度评分AUC不低于0.85，且P99延迟在50ms以内。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "BERT基线是0.89。0.85是我预估树模型残差判定的下限，应该能覆盖住大部分代笔识别场景。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "具体的特征对齐实验我还没跑过，可能需要@算法工程化工程师 配合调几版特征映射矩阵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反压逻辑我会复用之前算子链强制拆分的方案，隔离好算子间的反压。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就这么定：工程化走离线特征+XGBoost残差判定，联调重点抓特征对齐映射和AUC验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

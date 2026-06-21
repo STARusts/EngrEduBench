@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在群智调度接入图引擎的并发状态同步背景下，用户与导师围绕流控机制、脏状态风险与交互协议持续沟通（8轮），其中在高并发状态机同步与回滚部分与数据流控架构师沟通（2轮），最终放弃Redis锁，采纳事件溯源思路，定义推演事件协议并补充LineageID，明确JSON Schema定义任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用Kafka把请求解耦一下。群智算法那边算完，发个消息过来，图引擎这边消费消息更新状态。这样比较快，而且Kafka能扛并发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个分布式锁？用Redisson锁住状态节点，算完再解锁。我看网上很多人处理并发状态都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用Kafka加Redisson锁，但他说会脏状态和长事务。有没有更方便一点的办法，或者现成的流控框架能直接套的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "事件溯源？听起来挺复杂。我理解就是全记日志，失败了重放？那读状态岂不是很慢，每次都要重放事件？能不能还是用Redis存当前状态，但加个版本号，失败了用版本号回滚？这样实现起来简单点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果不用Redis存状态，事件溯源的快照存哪？还是Neo4j吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "三个动作。推演发起事件包含：推演ID、目标节点ID、初始上下文。推演完成事件：推演ID、结果节点ID、变更属性集。推演中断事件：推演ID、熔断原因、回滚快照版本。这样行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对，漏了这个。加上LineageID。那并发联调这块，我就按事件溯源的思路，把群智调度和图引擎的交互改成事件驱动，先不写Redis锁了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

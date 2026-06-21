@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘端到云端集成测试背景下，与导师围绕数据闭环、状态一致性与时延归因持续沟通（7轮），其中在断流重连数据对齐部分与数据闭环架构师沟通（1轮），在时延边界压测与耗时拆分部分与边缘联调工程师沟通（2轮），并最终形成包含快照对齐、时延卡控与归因拆分的验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我加个断线重连逻辑？数据先存本地队列？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断流重连后，边缘积压的数据怎么推给云端才不会打爆状态机？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补上逻辑时钟和快照。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延边界压测怎么定啊？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近刚好学了k6压测脚本，正好拿来测这个接口，比以前用postman一个个点快多了，能直接出丢包率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95时延大概35ms，超了点。丢包率1.5%。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拆不出来。k6只测了接口总耗时。序列化我我单独没测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么把序列化耗时单独拆出来测？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在发送前后打点算差值。我这就去改k6脚本加上tag。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "快照对齐，时延卡30ms，拆分序列化耗时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

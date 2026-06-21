@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联调与控制下置背景下，用户与导师围绕指令下置接口设计、IT/OT时序失配与代码重构持续沟通（5轮），其中在OT侧协议与安全校验部分与联调控制下置员沟通（3轮），在爬坡指令延迟容忍上限部分与寻优调度引擎师沟通（1轮），并最终形成基于OPC UA异步写加回调及重试机制的下置接口重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接开个gRPC接口把引擎师的寻优结果拿过来，转成阀门开度百分比往下发就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用gRPC直接推阀门开度，能行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "握手指令拿令牌这个流程具体怎么串？我这边寻优引擎算出来结果可能不是固定频率吐的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "引擎那边吐数频率和阀门控制周期对不上的问题，我不太确定怎么缝合。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是做个消息队列缓冲一下，寻优引擎丢进去，下置那边按100ms去捞。但这样会不会导致指令延迟太大，爬坡跟不上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "缓冲队列方案会导致指令延迟，咱们爬坡寻优对下置延迟的容忍上限大概多少毫秒？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "50ms？那队列缓冲肯定废了。看来得把寻优引擎的输出直接绑到OPC UA的写回调里，跳过中间缓冲。但这要求寻优引擎也得在100ms内算完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把下置模块做成一个独立的协程，监听寻优结果。一拿到结果立刻调用OPC UA的同步写方法。不过OPC UA的C++库我不熟，可能得花时间查API。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "异步写加回调，重试两次，超时发停机指令。这逻辑我理清了。我去重构这块下置接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

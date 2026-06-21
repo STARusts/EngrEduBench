@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农机调度引擎开发与并发单测死锁背景下，用户与导师围绕死锁定位、拒绝加锁妥协、制定并发补学与压测验证方案及日志脱敏持续沟通（4轮），其中在GraphX框架死锁原因与解耦方案部分与核心调度开发工程师沟通（2轮），并形成无锁队列解耦改造方向、补学计划及压测验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只要农机请求一多，引擎直接卡死，啥反应都没了"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CPU没满，就是不动了。我用了开源的GraphX框架做路径规划，日志就打了句\"calculating\""
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想是不是框架本身不支持高并发，要不要我在外面套个线程池加个锁？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这框架我之前只用来写过单机版，多机并发这块我不熟"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用GraphX做多农机路径分配，并发一高就死锁，这种是不是得换框架？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拆事务听着挺麻烦的，无锁队列是不是得自己写？有没有能直接替换GraphX权重更新模块的开源组件？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我对CAS和无锁并发编程真没底，怕改崩了。导师，我能不能先加个粗粒度的读写锁顶一下？无锁的方案我怕测不通。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对多线程底层机制不了解，只会调包"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证方案我打算这么定：写个压测脚本，先单线程跑100次路径计算做基准，然后多线程加锁跑一次，再改成无锁队列跑一次，对比死锁复现率和耗时。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先写个最小化的无锁队列测试用例"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

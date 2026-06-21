@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在互作阻截性能调优背景下与导师围绕规则匹配低延迟优化及规则热更新并发处理持续沟通（4轮），其中在计算密集型低延迟方案部分与性能调优极客沟通（2轮），在规则拓扑与矩阵导出部分与互作阻截策略师沟通（1轮），并最终确定位图预编译加AtomicReference双缓冲方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了火焰图，时间全耗在规则树遍历上了。我想把规则全塞Redis里做匹配，或者直接换Drools引擎把现在的硬编码if-else替换掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则树遍历太慢，Redis和Drools能上吗？内存和GC会不会炸？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着是快，但脏器互作关系那么复杂，怎么编译成BitSet我不太会弄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脏器互作依赖关系能导出成矩阵吗？我要做位图预编译。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "矩阵和向量能拿到。那就用位图方案吧。我写个脚本把矩阵转BitSet。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果线上规则库更新了，内存里的BitSet怎么替换？直接改引用会不会把正在匹配的请求搞出并发问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，就位图预编译加AtomicReference双缓冲。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写矩阵转BitSet的脚本，匹配逻辑改成位运算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在账本服务与结算实现的工程开发背景下，用户与导师围绕结算最小闭环、接口字段、幂等键优先级、unknown处理、冲正与最小证据留存持续沟通（8轮），其中在账本分层、drop_id幂等、状态机与对账口径上与后端工程师沟通（2轮），在审计追溯、最小权限与unknown合规计费边界上与合规与风控经理沟通（2轮），并明确本周跑通入流水-推进-结算-冲正用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段…就是站点ID、重量、时间？场景就是断网…还有 unknown？还有重复上传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 幂等键和状态机要咋弄？对账口径怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "drop_id 是设备那边给？我现在手里只有 trigger_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。那我就用 drop_id，状态就那几个。unknown 就低价。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 账本这块最底线是啥？unknown 还能不能结算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "懂了，那就 unknown 都先不算钱，等复核。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口…就是创建账本、算钱、查账？字段就站点、重量、品类、金额。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那…  \n1）入流水：site_id、drop_id、weight、class、time。  \n2）状态推进：drop_id、status。  \n3）出结算：site_id、start、end、amount。  \n4）查账：site_id、start、end。  \n5）冲正：drop_id、reason。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我补：  \n入流水加 request_id、entry_type、source_system。  \n出结算加 currency、billing_policy。  \n冲正加 remark、operator。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都传吧，优先 request_id？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "记住了，幂等用 drop_id 加类型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先把按量计费做了吧，最简单。溢价分成先不管。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "金额=净重×单价。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用 weight_net。没有就用 gross？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存图片链接？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂，存 hash 和版本号这些。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "幂等用 drop_id 加 entry_type 做 key，request_id 只是查问题。unknown 进账本，先不直接算钱，按 billing_policy 走，能手动复核。冲正就是不改原记录，加一条 reversal，然后结算重算，还要记操作人和原因。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用例就是：投放一次，进流水，推进到 settled，出一个周期结算单；再来一次冲正能把金额变回去；unknown 能落账但不出钱。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

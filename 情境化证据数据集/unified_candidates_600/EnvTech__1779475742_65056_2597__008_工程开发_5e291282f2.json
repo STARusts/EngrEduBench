@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧特征抽取工程开发背景下，用户与导师围绕端侧抽取逻辑、特征分流及算力验证方法持续沟通（4轮），其中在eDNA端侧特征抽取与分流部分与基因测序算法匠沟通（1轮），在声景端侧特征抽取与分流部分与声景特征提取匠沟通（1轮），并最终形成端侧双路分流抽取基线及树莓派算力实测与降级预案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算把eDNA和声纹分开处理：eDNA序列端侧只做轻量级哈希比对，声纹端侧提取MFCC特征。这样计算开销应该可控。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "eDNA序列在端侧怎么做特征抽取？全序列比对肯定跑不动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声景端侧怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端侧特征抽取分两路，eDNA路提k-mer频次进LDP，哈希脱敏明文传；声景路提基础声学特征，按物种敏感度分流，敏感进LDP，本底噪声明文传。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怎么量化验证端侧算力确实不超限？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对端侧profiling工具链缺乏了解，这是当前的能力缺口。我今晚花两小时看下TinyML和ESP-IDF的内存与时延分析文档，把profiling方法补起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证设计上，我准备在树莓派4B上模拟端侧环境，跑k-mer频次统计和MFCC提取，测量单次推理时延和峰值内存，对照感知节点部署师给的算力上限阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果超限，就降级k的长度或MFCC的阶数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我马上更新代码仓库的feature分支，把双路分流逻辑先写出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

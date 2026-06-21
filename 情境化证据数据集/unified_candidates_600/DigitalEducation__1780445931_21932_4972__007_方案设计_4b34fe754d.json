@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在联邦隐私计算与流转设计背景下，用户与导师围绕推理阶段特征流转保护、TEE性能折损、差分隐私准确率损失验证及审计留痕持续沟通（7轮），其中在推理流转合规红线部分与隐私合规官沟通（1轮），在TEE与算法脱敏端侧开销对比部分与情感计算架构师沟通（1轮），并最终形成特征哈希加差分隐私扰动、动态隐私预算与审计留痕节点的流转定稿及验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上联邦学习就是数据不出域嘛，我们在端侧做特征提取，然后把梯度加密传到云端聚合，这样应该就合规了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推理阶段的特征流转，合规上有什么死规定？是不是只要不传原图原声就行了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我们用TEE把推理隔离起来，特征在enclave里算，出来的只有极性标签，这样总够安全了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力损耗这块我确实没底，TEE听着很完美，但跑起来到底多耗资源我没数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧跑TEE和做算法脱敏，性能和耗电差多少？有没有轻量级的替代方案？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "特征哈希加差分隐私我前两天刚好在看相关论文补课，之前一直以为差分隐私就是随便加点高斯噪声，看完才知道核心是隐私预算epsilon的控制。我们可以把epsilon作为参数，根据场景敏感度动态配置，注入到StateTransitioner的路由条件里！"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，可以设置对照组。控制变量就是epsilon值，比如设0.1, 0.5, 1.0几档。看EmotionEvaluator输出的情感极性准确率下降多少。如果下降不超过5%就认为可接受。样本量，就，大概跑个几百条数据吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在EventReceiver收到数据后，加个AuditLogger节点，记录数据类型、脱敏方式和请求来源，只记元数据不记特征本身，这样满足留痕又最小化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

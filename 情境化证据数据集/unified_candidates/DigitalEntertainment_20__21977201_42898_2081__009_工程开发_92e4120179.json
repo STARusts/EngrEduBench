@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在数字藏品溯源与二创授权平台开发的素材入库指纹生成落地背景下，用户与导师围绕异步任务表设计、幂等键、审计字段、状态机与失败可重试持续沟通（12轮），其中在任务表结构与event_id/decision_id挂接上与后端负责人沟通（3轮），在指纹产物落库字段、payload存储与失败类型上与多模态工程师沟通（2轮），并收敛出最小fingerprint_job字段清单与worker领取执行流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在到素材入库要做指纹生成，我有点懵，先从哪块写？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，两个都混一起了。入库就上传文件，然后算一下。算失败就算失败？我也不知道怎么记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上传完就直接跑个函数。跑完把指纹存表里。大概这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "生成一次吧，不然浪费。重复上传就直接返回之前那个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 指纹生成任务表怎么搞？我现在就想插一条任务然后跑，字段要啥，event_id 和 decision_id 怎么放？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就 unique asset_id 就行了？tenant_id 也要？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "decision_id 我没懂。不是生成指纹吗，为啥要这个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。我还要问多模态吗？算出来就是个 hash 吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多模态工程师 指纹生成我落库要存啥？我只知道算个 hash。还有失败都算啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload 放对象存储，那我就只存个链接？会不会丢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我把这些记不住。就，任务表一张，指纹表一张，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "幂等就是 tenant_id+asset_id 不重复。状态就是 pending 跑起来变 running，成了 succeeded，失败 failed。审计字段就 user_id tenant_id event_id decision_id 时间。差不多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就失败也改回 pending？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "锁我不会写，很容易错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 decision_id 怎么来？我接口里随便生成个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能不能先不签名，先跑通？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那现在我就要一个 job 表字段清单，别再加了。我照着建表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我估计会忘 action_type，还有 spec_hash 这种。我就写个 spec 行不行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

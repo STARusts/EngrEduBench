@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在频移反演算子拆解背景下，用户与导师围绕算子流水线拆分、定点截位与时序折中及验证口径持续沟通（5轮），其中在浮点精度与失锁风险部分与波束织合算法专家沟通（2轮），并形成接口降定点、累加器展宽防溢出、流水级数限约束及残差1e-3验证的拆解决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就按功能模块拆呗，先做频偏提取，再做矩阵反演计算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资源确实紧张，浮点是不是太重了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "失锁肯定不行，但资源爆了也上不了板啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不接口改成定点，但多留几位？或者拆成多级流水？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我定点化截位规则没吃透，我这就去查定点化手册，把截位误差传播机制搞明白，写个C model先跑通截位逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑对比测试，拿MATLAB浮点结果和C model定点结果比，差得不多就算过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对，先跑极值边界，门限就按频偏残差1e-3卡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

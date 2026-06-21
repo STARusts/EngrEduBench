@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极端汇震容灾设计背景下与导师围绕容灾架构取舍、降级合规收口及混沌工程验证持续沟通（9轮），其中在流计算与ZKP容灾取舍部分与高可用架构师沟通（3轮），并最终形成同城多活加异地冷备方案、降级窗口收口策略及分阶段混沌验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接上异地多活，保证全链路高可用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多副本同步一下状态？保证最终一致就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端汇震下，流计算和ZKP模块的容灾怎么做取舍？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，有风险。那还是A方案强一致多活吧？这样没滑点也没裸奔。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，那就B方案。滑点和裸奔风险只能先接受了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只能选B方案同城多活加异地冷备。汇震时流计算降级快照对冲，ZKP异步补证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补证的时候补上审计日志？反正最后是一致的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近刚好在看Chaos Mesh的文档，里面有金融流计算的故障注入案例。我们可以用混沌工程来测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "注入网络断开和CPU打满。指标就是看能不能切到快照对冲，还有补证能不能在时间内完成。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 容灾选B方案同城多活加异地冷备；2. 汇震降级策略是流计算切快照，ZKP异步补证；3. 降级窗口期加标记，补证超时直接回滚；4. 用混沌工程分三阶段注入验证，补证成功率卡100%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

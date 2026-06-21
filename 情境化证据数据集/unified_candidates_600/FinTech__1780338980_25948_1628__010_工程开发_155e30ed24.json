@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高并发贴现调度与优化背景下，用户与导师围绕贴现请求削峰与异步处理方案及验证标准持续沟通（3轮），其中在IO密集型调度解法与验证指标部分与性能优化工程师沟通（3轮），并最终形成入口MQ削峰加虚拟线程的调度方案及包含QPS、P99与连接池指标的验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用RabbitMQ把贴现请求先接住，做削峰填谷。然后消费端用Spring WebFlux异步处理，我看网上很多高并发方案都是这么配的，应该比较稳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只要接口返回Mono或者Flux，应该就不会阻塞主线程了吧？我之前写接口都是这么返回的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想问下有没有更方便的法子，不用大改代码又能解决阻塞的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "虚拟线程我听说过，但一直没敢用，怕坑多。而且这东西怎么跟Spring Boot整合啊，我现在的调度器都是基于ThreadPoolExecutor写的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没实操过。但我可以用JMH跑个基准测试，对比下传统线程池和虚拟线程在模拟图谱查询时的吞吐量。如果确实提升明显，我就把这玩意儿学了用到项目里。不过连接池这块我没底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去翻Spring Boot 3.2关于虚拟线程的文档，把JMH测试用例写出来，把专家说的这两个指标加进去。MQ还是保留做入口削峰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

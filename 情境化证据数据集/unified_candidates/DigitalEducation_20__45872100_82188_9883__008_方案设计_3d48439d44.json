@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育平台方案设计收口并准备评审的背景下，用户与导师围绕身份权限、敏感数据保护及高可用可恢复方案持续对齐取舍与MVP边界（9轮），其中在安全基线与审计/导出防泄露部分与安全工程师沟通（2轮），在SLA/RTO/RPO分级与高可用分层/容灾监控部分与解决方案架构师沟通（2轮），并形成可直接用于评审的三段要点与验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想到两块：鉴权别放水，还有别宕机。细的我不太敢拍板，比如要不要双活、要不要上很重的风控。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "外部接入就按上一段接口的token校验+限流。证据入库我觉得要加队列缓冲，别一下打爆。诊断计算就异步跑，失败重试。报告查询就做缓存？审计就落表，别乱写内容。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 这平台在方案设计阶段，安全基线你给我一套最小必选项行不行？就按外部接口、内部服务、数据存储、审计这些分块说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来就是：token要短、要能撤，权限要按学校隔开，所有资源都要带tenant_id强校验。还有加密和密钥别散落。审计只写最小字段，别把可读内容塞进去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "导出我差点没想到。那我加个“导出限频+审计+水印”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 高可用这块，你给我个分层思路和指标吧，别太重，我们明天要评审过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "你这个我能用。就是双活跨城先不做，先多AZ。队列堆积和任务成功率要监控。降级就显示上一次结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，任务状态我会让后端那边记住要有。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 我把两边问的点带回来了，但我可能转述不全，你帮我挑重点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "安全这段我就写：外部系统用短期token或双向TLS，token能撤；按学校租户隔离+RBAC，所有证据/报告强校验tenant_id；传输TLS+存储加密；密钥集中管+轮换；审计只落最小字段；导出做限频+水印+审计。  \n可用这段：按服务分级SLA，接入和查询99.9；接入链路走网关多实例+队列缓冲；计算异步worker可扩；数据库多副本+备份；多AZ；失败就降级显示上次报告。  \n追溯：trace_id、evidence_id串全链路，再加任务状态表，入库失败能回放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "指标我就按重要性分的，接入不能挂，计算可以慢点。证明…我没有数据支撑，只能说业务直觉。对接搞死这块，我想把“mTLS vs token”做成两档，默认token+签名，学校网络条件好再上mTLS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只能粗估：按一个学校同一时间上课，可能几百人同时交作业，证据事件就几百到几千每分钟。然后我们压测就按这个量级起步，看队列堆不堆。更细我真算不出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP我选：先不做跨城灾备；mTLS不强制；导出先做限频+水印+审计，不搞审批流；限流按source_system配额，超了就RATE_LIMITED并标retryable。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按这三块讲，别再往跨城双活那边发散了。导出、限流、tenant强校验我会重点盯住别漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在云端算力受限背景下与导师围绕推演结果转视角路由、轻量级视点插值与状态路由及约束校验持续沟通（4轮），其中在视角平滑与视点插值部分与实时渲染调优师沟通（1轮），在置信度与路由绑定部分与导播决策引擎开发沟通（1轮），并最终形成基于FSM与预计算模板的视点下发方案及约束规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用UE的虚拟摄像机组件呗，自带平滑跟随和阻尼，照着官方文档配一下参数就行，根本不用自己写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端视角平滑怎么做？有没有轻量级组件能直接Import进来用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "球面插值？Slerp是吧。这Unity里也有现成的Vector3.Slerp。所以服务端就只算坐标，然后直接把坐标发下去？中间过渡不管了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "置信度分值怎么跟视角路由绑？不能用强化学习，算力不够。有没有现成的决策树模板能套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "FSM加预计算模板？行，FSM有开源库，直接套。所以就是推演出高分节点，就查表切视角，然后用Slerp算起终点发下去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "带阻尼，状态跟图谱节点对齐，只发向量参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在跨域特征对齐与联邦建模开发背景下与导师围绕特征口径校验、联邦聚合容错及拦截日志合规持续沟通（6轮），其中在口径校验部分与数据对齐架构师沟通（1轮），在拜占庭容错部分与联邦学习工程师沟通（1轮），并形成带口径拦截器、范数校验半异步聚合及合规留痕日志的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用之前方案选定的PSI协议做特征对齐，然后接FedAvg跑联邦建模。先把PSI的求交代码跑通，再把FedAvg的梯度聚合逻辑写完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "掉线我加个超时重试就行了。假梯度这块我还没细想。业务语义对齐，只要大家表结构里字段名一样，类型对上，不就自然对齐了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "字段名一样为啥不行？我该怎么加校验？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拜占庭容错机制怎么开发？FedAvg里怎么防假梯度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征对齐得加个口径校验拦截器，查特征元数据字典；联邦聚合不能光用FedAvg，得把聚合逻辑拆开，加梯度范数校验挡假梯度，还要支持半异步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就打印“校验失败”呗，把报错信息打出来，方便我查问题。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对齐拦截器和聚合Aggregator的开发点我调整一下：对齐前置校验元数据字典，聚合带范数校验和半异步支持，拦截日志必须记明机构节点ID、特征名和失败原因，不能只打报错信息。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

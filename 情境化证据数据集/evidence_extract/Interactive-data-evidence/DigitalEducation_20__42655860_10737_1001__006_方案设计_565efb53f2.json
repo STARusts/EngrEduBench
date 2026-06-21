@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计需打通编辑器与资源库并嵌入引用链路与证据留存的背景下，用户与导师围绕接入点、版本绑定、最小事件集与校验降级持续沟通（8轮），其中在接入形态与接口边界上与解决方案架构师沟通（3轮），在编辑器嵌入可行性与快照采集上与前端负责人沟通（3轮），并形成混合接入、事件/接口与发布强校验的方案口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是做个编辑器插件，嵌进去就行。资源库那边就走API。只是不确定插件要做到多重，网上很多都是直接加个“引用来源”表单就结束了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "编辑器事件……可能是插入图片/音频/视频、粘贴文字、导出发布。资源库能力是查素材元数据、拿授权信息、还有回写引用记录？我不太确定回写是不是必须。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我以为跟最终发布走就够了，不然每次保存都记一条会很爆炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 接编辑器和资源库，一般怎么切？我想要最省事的方式，但也得能把引用链路写回去。接口边界怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“接入层”，是不是就相当于搞个网关？我们现在不想引入太多新东西，有没有更轻一点的方案？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那资源库“引用回写”，会不会把资源库搞得很重？它要存很多content引用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 编辑器嵌入这块，插件能抓到哪些事件？有没有办法不用改太多编辑器代码，还能拿到插入素材、发布这种动作？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "位置信息是指片段Fragment吗？上次我们说Fragment只对高风险媒体截取启用，我怕前端这边搞得很复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师是复制粘贴来的图片，不是从资源面板选的，是不是就没asset_id了？那我们是不是得强制走上传，自动变成asset？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我大概懂了，就是别在编辑时把老师卡死，把硬拦截放到发布。只是我担心大家会吐槽“发布前一次性报错太多”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“混合型”：能用资源库链接就用链接，复制粘贴的就引导上传变asset。事件集就抓四个：attach/detach、save带version、publish、还有前端说的snapshot。降级上，校验挂了草稿能保存但打个“待校验”，发布必须拦住。\n取舍理由就是：纯链接最干净但老师很多素材不是库里的；纯上传又会让资源库压力大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是存储吧，音视频会很大。还有后续要不要指纹、证据P0之类的，也会多存一份。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入库：老师本地上传的图片/音视频必须入库生成asset_id；从资源库选的就不重复存。只存引用：外链URL的先允许草稿，但发布不允许外链？这块我不太确定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "快照只上传“资源清单+asset_id+引用声明字段+必要的位置信息”，不上传正文内容；如果必须传正文片段，只在高风险媒体的证据P0里传，而且要权限+审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行。用hash我能理解，就是对齐版本，不传内容。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终版：  \n1）接入方式：编辑器侧“资源面板链接为主+本地粘贴引导上传入库”为辅；公开分发禁外链直出。  \n2）事件/接口：编辑器调统一接入API，最小事件是asset_attach、asset_detach、content_save(version_id)、content_publish；发布前发content_snapshot（资源清单、asset_id、声明字段、位置索引、content_hash）。资源库提供Asset查询、授权校验、可分发URL；引用关系权威存平台引用服务，资源库可选存被引用索引。  \n3）校验与降级：草稿期校验失败可保存但标“待校验”；发布必须强校验+P0证据落库成功才放行；证据采集遵循P0/P1/P2分级，文本不采片段，争议工单再按权限采集。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

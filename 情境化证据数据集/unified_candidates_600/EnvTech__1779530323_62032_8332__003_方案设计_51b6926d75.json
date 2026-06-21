@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在有限算力下的微污染溯源架构设计背景下，与导师围绕推演与图谱的算力妥协、选型、容错及验证持续沟通（8轮），其中在低算力推演选型部分与气象扩散建模专家沟通（2轮），在内存图替代Neo4j部分与图谱算法工程师沟通（1轮），并形成AERMOD批处理与内存图加快照持久化的架构妥协方案及验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着图谱用Neo4j存，扩散推演上CFD模型，精度最高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "8核？这咋跑CFD啊，网格一多直接卡死。那我只跑高斯烟羽模型？但图谱那边查询如果也占内存，会不会挤爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种条件下，气象场和排放清单耦合的推演怎么设计？能不能用高斯烟羽模型凑合？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AERMOD？我之前没调过这个模型的参数，它跟我们的微观排放清单怎么接？接口是文件还是内存流？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我图谱那边如果也吃内存，两个容器怎么分？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我对AERMOD的内存占用和地形预处理细节没底。这块我得补一下。今天下班前我要把AERMOD的官方文档跑一遍，重点看AERMAP的内存峰值，明天给出具体资源分配预估。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证的话，我假设AERMOD能在8核下做到2分钟内出结果且浓度误差小于15%。对照组就是纯高斯模型。我拿历史重污染天的数据，分别跑这两个，看哪个能在资源内跑完且误差达标。CFD就不测了，肯定跑不动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用Neo4j，只用内存里的轻量图结构做污染源关联查询，能省下多少资源？我们需要把内存挤给气象预处理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "百万级够用了，我们这片区重点源也就几千家。那我就定下来：图谱用内存图，不上Neo4j；扩散推演用AERMOD替代CFD，用批处理接数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "持久化可以每次更新图后异步写个JSON快照到磁盘。AERMOD挂了，可以用shell脚本拉起重跑，反正它是批处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论是：扩散推演架构弃用CFD和纯高斯，选用AERMOD，采用微站数据批处理输入方式；图谱存储弃用Neo4j，改用内存图加磁盘JSON快照持久化。验证假设：在8核32G*2容器下，AERMOD推演延迟<2min且浓度误差<15%（对照组为高斯模型）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

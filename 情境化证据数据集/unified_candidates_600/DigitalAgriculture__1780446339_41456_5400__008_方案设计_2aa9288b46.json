@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在适采指令下发与调度背景下，用户与导师围绕指令解耦、并发防重、容错重发及压测实验设计持续沟通（8轮），其中在指令闭环与状态机部分与系统架构师沟通（1轮），在并发抢占与乐观锁部分与微服务开发专家沟通（1轮），并最终形成基于MQ异步下发、状态机闭环、乐观锁防冲突及ACK确认的技术选型与压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接发消息呗，我看网上好多人用RocketMQ，吞吐量大，发个主题，采工终端订阅就行了。调度的话，加个XXL-JOB定时扫表派发任务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抢的话，加个锁？我之前用Redisson挺方便的，加个注解就搞定。延迟这块，XXL-JOB可以把频率调高点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 指令下发解耦怎么做？我本来想直接MQ广播就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微服务开发专家 并发抢占除了加Redisson锁，还要弄啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能光靠MQ广播，得弄状态机和ACK确认。并发用乐观锁版本号，别用Redisson硬锁。延迟队列做重发。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "变量就是并发数呗。分组，一组用乐观锁，一组用悲观锁？我最近在看Seata的AT模式源码，它也是用全局锁和回滚日志，我想着能不能把Seata这套直接套进来做分布式事务，就不需要我自己写锁了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "采摘要是卡住回滚就全堵死了。那我还是用专家说的乐观锁加补偿。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测这块，我就建两组对照，变量是并发请求数从100到1000递增，观测指令确认延迟和死锁率。样本量跑5分钟取稳态均值，功效分析我就看P99延迟是不是在2秒内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用RocketMQ做异步下发和延迟重发，微服务里建指令状态机，用乐观锁版本号防并发抢占，采工终端ACK确认。压测按刚才说的方案跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

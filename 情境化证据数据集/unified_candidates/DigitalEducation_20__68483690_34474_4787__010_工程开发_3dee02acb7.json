@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在诚信评分引擎联调背景下，用户与导师围绕评分输入契约、reason_codes两类拆分与重复评分一致性持续沟通（6轮），其中在payload字段与timeline_hash/risk_events聚合规则上与机器学习工程师沟通（4轮），在幂等键与重复/冲突事件写RejectEvent方案上与后端工程师沟通（3轮），并确定按quality/integrity分列、补payload_hash与隐私最小化的联调落地要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就把getEvidenceGraph取两层，然后把节点都扔过去算分？reason_codes我也放Attempt里了，反正都写进去就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入结构我就照事件来，event_type、timestamp，然后引擎自己聚合。两类…就是高危和低危吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@机器学习工程师 评分引擎联调要我传啥？reason_codes两类怎么分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "risk_events数组是不是把每条事件都列进去？我直接把timeline当risk_events行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "timeline_hash我就用submission_id拼一下？重复就一样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了，那阈值我是不是也要一起传？比如超过多少算风险。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那我回去改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我大概就是从timeline里算coverage，然后把reason_codes分成quality_codes和integrity_codes，再传给评分引擎。幂等就…同一个submission算出来hash不变就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GapEvent就count一下，然后range的秒数加起来。RejectEvent…我觉得算风险吧，反正拒绝了。乱序就排序timestamp。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就再按event_id排一下？重复的就去重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 幂等键现在是啥？重复上报和payload冲突怎么判？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那CONFLICT_EVENT就没法弄了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就让你加hash？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那选A吧，省事，反正重复也不多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就B，做payload_hash。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，我不传文本。我就传event_id列表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，我就照这五条弄。reason_codes拆成两列，然后hash按排序算，RejectEvent都算quality。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

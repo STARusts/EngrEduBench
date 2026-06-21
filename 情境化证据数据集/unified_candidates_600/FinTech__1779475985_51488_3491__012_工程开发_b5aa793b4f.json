@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端场景注入排查FPGA到内核旁路微秒级时延毛刺背景下，与导师围绕零侵扰观测方案、探针埋点与毛刺归因验证持续沟通（4轮），其中在硬件Trace与PCIe TLP延迟观测部分与微秒Debug猎手沟通（1轮），并最终确定ILA与MMIO同源时钟观测方案及硬亲和对照实验归因策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果在内核旁路里加探针钩子，本身就会引入几百纳秒甚至微秒的抖动，可能把真实毛刺掩盖掉。我有点拿不准怎么做到零侵扰观测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么在不引入额外时延的情况下观测这段交互？特别是PCIe TLP包间的延迟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直局限在软件态观测，没想过把硬件时钟直接透传到内核态做无锁记录。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把ILA的触发配置脚本化，然后在旁路驱动里加上MMIO时钟锁存逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备在极值特征提取模块输出到PCIe DMA发起这段埋探针，这是最容易积压的地方。验证的话，我打算做对照实验。假设毛刺主要来自PCIe重传或者内核旁路的CPU缓存未命中。变量是是否开启旁路线程的CPU硬亲和绑核。两组跑同样的极端行情注入，对比ILA抓到的TLP间隔分布。如果绑核组长尾收敛，说明是软调度抖动；如果不收敛，说明是PCIe链路层重传，得去调FPGA的Credit逻辑。这样就能把毛刺归因边界划清楚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

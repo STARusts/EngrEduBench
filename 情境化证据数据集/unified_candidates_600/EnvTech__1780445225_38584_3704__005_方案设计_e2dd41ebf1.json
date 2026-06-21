@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在生境连通演进预判的时空图网络架构设计背景下，与导师围绕图网络选型、边权更新与算力控制持续沟通（5轮），其中在时空图选型与防OOM部分与图算法设计师沟通（2轮），并最终形成动态演化图网络选型及局部子图演化复用隐状态的架构要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用过GraphSAGE做推荐，直接套过来应该就行，跑个连通度预测，把特征扔进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生境连通这块，图网络该怎么搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力预算这块我还真没细算。我只管特征工程和跑通模型，训练资源都是申请的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阻力面不是有不同时间切片嘛，我猜是按时间步把阻力值刷进去，重新算连通度？但这样每一步都要全量重构图，肯定慢啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种大规模动态图有没有省资源的做法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选型不用GraphSAGE了，用动态演化图网络。边权按阻力面时间切片更新，但只更新阻力值发生显著变化的局部子图。没变化的子图复用上一时间步的隐状态，这样不用每步全量重构，防OOM也能降计算量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工控指令语义审计与零信任防护平台引擎开发背景下，用户与导师围绕Modbus协议解析方案及FSM验证方案持续沟通（5轮），其中在二进制流解析结构选择部分与语义解析算法工程师沟通（1轮），并最终确定采用Ragel生成FSM及设计对照验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先把Modbus的指令拆解搞出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用正则匹配功能码和寄存器地址呗，后端处理HTTP报文都这么干的，大不了多写几个case。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "解析Modbus这种二进制流，正则是不是不行？一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我以前只写过业务单据的状态流转，这种字节流的状态机没写过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态多了不会爆炸吗？性能怎么保证？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没底。我平时写Web接口只看QPS，字节流状态机没测过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我记得Ragel可以把协议规约转成C的状态机代码，性能很高。我去看它的文档，看完试着把Modbus的规约转成Ragel脚本跑跑看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备弄两组对照。一组是手写正则的简单解析，一组是Ragel生成的FSM。拿抓包的真实Modbus报文回放，看状态转移覆盖率，还有解析延迟的P99。如果FSM的P99比正则还高，就说明状态设计有问题。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

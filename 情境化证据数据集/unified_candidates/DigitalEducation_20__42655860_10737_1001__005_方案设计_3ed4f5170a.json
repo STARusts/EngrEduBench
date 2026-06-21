@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育平台方案设计的引用链路与审计建模背景下，用户与导师围绕引用链路最小节点、证据留存与隐私最小化取舍持续沟通（6轮），其中在实体/关系与证据分级建模上与数据治理经理沟通（2轮），在“推断引用”可用于提醒/拦截/举证边界上与法务合规负责人沟通（2轮），并形成声明/推断区分、证据分级与事件快照的可执行决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是用现成的血缘工具那种图，节点边一画就行。只是这里的“引用”是不是要分好多类型，我不太确定要细到哪里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点我猜是“素材”吧，比如一张图、一段文字、一个课件文件。证据…可能就是来源链接、上传人、时间？再加个授权截图之类的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 引用链路数据模型一般怎么拆？我担心要是记太细，会不会把老师的编辑过程也全暴露了；记太粗又不好追溯。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：平时只存“谁引用了啥+当时规则判定”，真要扯皮再用工单去翻更细的证据，对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那Fragment就是只在部分场景开，不然会无限膨胀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "取舍上，默认不做片段级和编辑过程日志，主要留P0那套：来源ID、时间、谁干的、授权状态快照、规则版本。遇到视频截取、截图这种再开Fragment+P1证据。P2只在工单里给管理员看，还要留审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点想偷懒…用相似度检测自动打点，直接给出“疑似来自XX”，然后链路就算有了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据模型里要加一个字段区分？比如 citation_type=declared / inferred？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 推断出来的“疑似引用”，在合规上能用到什么程度？能直接拦截分发吗，还是只能提示补充来源？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "所以推断最多就是“推你一把”，不能当锤子。那我之前想的“自动补全链路”不成立。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "关系表里加：relation_kind=derivation/citation；relation_source=declared/inferred；confidence（只有inferred有）；evidence_level=P0/P1/P2；再挂rule_version_id。实体这边 Asset有source_id、source_type、access_mode（从上个微场景来的）、license_status_snapshot；Content有visibility（内部/班级/公开）和owner_party_id。Party只放用户ID和组织ID，不放手机号邮箱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "在关系上加created_at就够？或者加一个valid_from/valid_to？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点怕这会变很重。事件多了存储会爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们最后的选择是：默认不采P2，不强制每次粘贴填来源；用推断做提示，在“公开分发+来源空+高置信”时触发复核甚至阻断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）引用链路模型：Asset/Content/Party为核心，Fragment只对高风险媒体截取启用；关系分Derivation和Citation。  \n2）证据分级与访问：P0必留并可审计；P1按风险；P2默认不采，若在争议工单采集也要权限+审计。  \n3）声明与推断并存：relation_source区分declared/inferred，推断只能做提示与触发复核，不能当作侵权事实直接举证；公开分发场景可更严格。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

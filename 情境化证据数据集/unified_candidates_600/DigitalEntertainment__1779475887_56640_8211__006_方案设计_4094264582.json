@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨次元演艺信令网关高并发与容灾设计背景下，用户与导师围绕网关架构选型、容灾同步、协议降级及入口鉴权持续沟通（7轮），其中在长连接架构与多活容灾部分与实时交互协议师沟通（1轮），在压测实验设计与专线降级策略部分与信令工程研发师沟通（1轮），并最终形成网关无状态、多活容灾、协议降级与入口鉴权的闭环骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用SpringBoot起几个实例，前面挂个Nginx不就完了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这信令网关架构该怎么选？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测和降级怎么做？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没弄透。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把那套降级思路搬过来，如果QUIC握手失败或者流控卡死，网关自动降级成UDP裸包发送，至少保证信令不丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个Token校验？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Netty做网关，Redis存Session，多活接入，退避重连。压测分TCP和QUIC两组，专线断了就降级异步或短轮询，QUIC不行就切UDP。网关入口加防篡改和频控。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

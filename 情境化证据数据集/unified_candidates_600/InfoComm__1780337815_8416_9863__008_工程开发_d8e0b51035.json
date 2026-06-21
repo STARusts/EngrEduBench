@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在产线重构控制逻辑联调背景下，用户与导师围绕边缘模型到PLC的指令下发对接、时序对齐、安全校验及降级逻辑持续沟通（5轮），其中在南向指令下发协议与时序安全约束部分与工控联调工程师沟通（1轮），在异常降级触发逻辑部分与边缘算法工程师沟通（1轮），并最终形成包含协议转接对齐、禁用默认权限及下发安全停车位寻优结果的三点联调闭环逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就直接把模型输出写成指令发给PLC呗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "风险点？就转个格式呗，可能格式转错了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@工控联调工程师 模型结果怎么发给PLC，时序和安全有啥要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘算法工程师 那推理要是超时或者不准，怎么触发降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是用OPC UA转Modbus，要在空闲窗口发，还得过网关校验签名。降级就是超时或者置信度低，就发上一拍的稳态配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，上一拍是稳态的，发了总比不发好吧？证书就按默认配置开呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就这三点，我去改联调脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

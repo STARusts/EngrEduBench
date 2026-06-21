@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在剧透防护沉浸短剧平台方案设计背景下，用户与导师围绕内容语义分段定义、标注最小集、可解释留痕、版本回滚与人工复核分层持续沟通（7轮），其中在短剧分段稳健切法与置信度证据产出部分与算法工程师沟通（4轮），并收敛为锚点段/业务段两层分段及machine baseline+human patch的标注流方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分三层：镜头切分、场景段、剧情事件段。镜头给播放器做自然断点，事件段给剧透风险识别。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主键我想用时间轴区间，比如 start_ms/end_ms，加上hash。漂移的话…用版本号？每次模型升级就整套标注换个版本。关键标签我觉得至少要：是否剧透点、剧透严重度、推荐遮罩方式、允许seek吗。其他的先放着。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 短剧这类内容做语义分段，你建议用什么切法最稳？还有你们能给每段打什么置信度/理由，方便我们后面做复核和回滚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信度和理由这块能给吗？比如为什么判定这段是“反转”或“剧透点”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一期只做“关键事实揭示”这种可定义标签，是不是会影响沉浸？我本来想做情绪曲线配合遮罩强度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心事件段映射到时间结构段会很碎，段太多标注量爆炸。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 算法那边建议两层段：密的“锚点段”（音视频结构稳定，可复现）+ 稀的“业务段”（基于字幕事件抽取，再映射到锚点段聚合），标注主要挂业务段。可解释信号能给：概率margin、触发字幕证据、ASR低置信导致的“需复核”标志。一期别碰“反转/情绪曲线”这种高语义。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用“事件”为单位，但事件太多会拖慢人工复核。那折中一下：业务段以“剧情推进节点”为单位，比如一次目标变化、一次事实揭示。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "标签我先给：  \n1) spoiler_risk：none/low/med/high  \n2) spoiler_type：身份/关系/结局/关键事实（可选其一）  \n3) protection_action：遮罩/模糊字幕/提示条/不处理  \n4) safe_breakpoint：true/false（适合作为自然断点）  \n5) need_review：true/false  \n6) evidence_span：字幕起止索引或片段id"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我原来想全量版本号，但听起来成本大。改成：锚点段版本随内容发布固定；业务段和标签按“模型版本+规则版本”生成，增量重算只影响部分段。段引用的时候用 segment_id + labelset_version。回滚就切回旧labelset_version。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加个人工优先级？比如 label_source=machine/human，human写入后锁住，不被重算覆盖。或者做patch层：machine baseline一层，human patch一层，读取时merge。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "merge我想：同一segment同一key，human patch覆盖machine baseline；如果human只改spoiler_risk，不动evidence_span，就保留machine的证据。冲突记录存 diff：old_value、new_value、operator、reason_code、timestamp。这样后面误判申诉能对齐到具体改动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级原则：  \n- 只存锚点段边界，业务段数量设上限，比如每集最多N段，超过就按置信度合并相邻段；  \n- 标签最小集固定，新增标签必须证明能提升完播/降低跳看，否则不加；  \n- 低置信或ASR缺失直接need_review，不强行产出复杂标签，避免后面维护一堆脏数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第3条里 protection_action 我想强调“建议值”，别让人以为标注员能决定强制遮罩。第2条的N先别写死数字，我怕拍脑袋，先留成可配置，后面用MVP A/B看每集平均段数和复核耗时再定。其他就按你这6条走。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

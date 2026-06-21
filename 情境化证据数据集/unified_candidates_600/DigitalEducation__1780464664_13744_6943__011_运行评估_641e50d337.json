@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在推演调控引擎上线验证背景下，用户与导师围绕灰度策略、回滚阈值、线上验证设计及Istio配置短板持续沟通（7轮），其中在灰度切流与影子流量配置部分与运维部署工程师沟通（2轮），并最终形成按学区灰度、影子流量并行验证、配对t检验及补齐Istio实操的部署验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接全量切过去，然后用真实数据跑一轮，对比一下历史调配结果，算算RMSE和MAE，看模型是不是真的准了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传统调配虽然慢但稳。那我们搞个A/B Test？分50%流量给新引擎？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种推演调控引擎，一般怎么灰度切流比较安全？我怕直接切一半出大事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按学区灰度，懂了。那我就选两个边缘学区先上。监控延迟和降级率。如果出问题，直接把那两个学区的路由切回旧引擎对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "线上验证的话，不能只看误差绝对值。我设计个配对样本t检验。对灰度学区，同时跑新旧引擎的推演，但不执行新引擎的指令，只记录。比较两者与实际后续生源变化的偏差。设定置信区间95%，如果P值小于0.05，且效应量Cohen's d大于0.5，才说明新引擎不仅仅是统计显著，而且实际效果提升显著。这比只看RMSE严谨多了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "影子流量和Ingress配置，我只在论文里看过Istio能做流量镜像，具体怎么配VirtualService和DestinationRule，我有点没底。平时我也就会写写Python脚本，K8s这块实操太少，真怕配错把正常请求搞挂了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我定个目标：这周三前，把Istio官方文档里Mirroring那章看完，并在本地Minikube上配通一个基于HTTP Header的流量镜像规则。然后我就能把这个Header打标规则用到咱们灰度学区的请求路由上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，灰度策略选两个非核心学区，用Istio配影子流量，新引擎结果写影子表不入库；第二，监控指标是P99延迟和降级率，阈值3秒和5%，超了就回滚；第三，验证方法用配对t检验，看新引擎偏差是否显著小于旧引擎，效应量Cohen's d要过0.5，置信区间95%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

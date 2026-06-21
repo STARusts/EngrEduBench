@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧多模流集成调试背景下，用户与导师围绕音视频对齐、弱网降级、计算隔离及解码方案持续沟通（8轮），其中在流对齐与弱网降级部分与前端集成工程师沟通（1轮），在端侧重计算隔离部分与特征提取工程师沟通（1轮），并最终形成PTS对齐、丢包降级、Worker隔离及WebCodecs兜底四项端侧集成约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧流对齐到底怎么搞？弱网断了总不能干等着吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐窗口设100ms吧，降级就20%丢包。推理卡了，我把它放异步里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧跑特征提取，怎么不卡UI？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用的MSE（Media Source Extensions）。不过最近我看了一篇关于WebCodecs的分享，说它直接操作解码帧，延迟比MSE低很多，我想把它迁移过来，这样端侧处理延迟能从百毫秒级降到十毫秒级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "兼容性确实还差些，主要是Safari。但我可以做个特性检测，不支持就降级回MSE。这样既能提升新浏览器性能，又不影响老用户。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，音视频按PTS对齐，窗口卡在100ms；第二，丢包超20%切音频加关键帧降级；第三，推理走Web Worker隔离；第四，解码优先用WebCodecs，不支持降级MSE。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

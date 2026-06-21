@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户围绕靶向指令下发链路设计与导师持续讨论停限产指令的可靠送达、防重机制与业务合法性（6轮），并在指令下发可靠链路与防重机制部分与微服务与接口设计师沟通（1轮）、在指令下发合规凭证部分与环保合规分析师沟通（1轮），最终形成靶向指令下发链路核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个接口推给他们呗，或者丢消息队列里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "消息队列可以重试吧。防重的话，加个唯一ID？但具体怎么弄没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微服务与接口设计师 管控指令下发，怎么保证不丢也不重？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环保合规分析师 指令下发要带什么合规凭证？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事务消息保送达，幂等键防重，必须挂文书编号和证据快照，要有签收回调和补偿，下发动作全量审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在光阵云遮微态重构系统方案设计背景下，用户与导师围绕云边架构选型、算力拆分、对照实验与边缘部署短板持续沟通（8轮），其中在链路延迟部分与系统架构师沟通（1轮），在云边算力拆分部分与算法设计师沟通（1轮），并形成轻量通信与算力拆分原则、实验反驳标准及部署补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用KubeEdge这种通用框架做云图下发和边缘推演，百毫秒响应能保住吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云图预测和微态重构算法，在云边怎么拆分比较合理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说通用框架延迟太大不能用，得走局域UDP直控；算法师说云端跑重模型推轨迹，边缘跑轻量模型算微调。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全放边缘的话，边缘网关跑不动重模型吧？算力不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就跑两组试试？一组用我们的拆分方案，一组全放边缘，比一下延迟和重构误差？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "C++和边缘部署这块我不太熟，只会用Python跑模型推理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天先把ONNX Runtime在ARM上的C++部署文档过一遍，照着官方示例把一个简单的LSTM模型转过去跑通，看看延迟能降多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，严禁使用KubeEdge这类重框架，边缘侧不走消息中间件；第二，算力拆分原则：云端跑重模型推演轨迹，边缘跑轻量模型重构微态；第三，验证指标：云边拆分方案的端到端延迟不得比全边缘方案多10ms，重构误差率得降5%以上；第四，我本周要补学ONNX在ARM上的C++部署加速。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在频谱侦测模块开发背景下与导师围绕开源流图改造、能力缺口与验证口径持续沟通（6轮），其中在FFT加窗插值部分与频谱认知工程师沟通（1轮），在频段避让与白名单硬过滤部分与合规与频谱审计师沟通（2轮），并最终决定自行编写底层FFT加窗插值及写死只读白名单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网上找了个开源的GNU Radio流图，直接套进来应该就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "它有Python API啊，我调一下FFT点数和采样率就行了，不用改C++底层吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@频谱认知工程师 开源库的FFT接口能直接用吗？@合规与频谱审计师 应急频段是不是随便扫都行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能不能在配置文件里把卫星频段禁掉，FFT就先不管了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不知道怎么测，加窗插值这些我也没写过，以前都是跑个demo看有输出就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去GitHub上搜个FFT加窗的Verilog项目，照着改个最小测试例用ModelSim跑仿真，把改的参数记到日志里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就对比一下加窗前后的频谱图，看有没有漏掉窄带信号。阈值我设个经验值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那底层FFT加窗插值我自己写，扫描频段写死白名单。验证就对比加窗前后的信噪比提升。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

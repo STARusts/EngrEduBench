@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在将预测结果落地为可执行柔性调度计划的接口设计背景下，用户与导师围绕调度引擎的异步任务形态、六态返回、请求体组织与降级规则持续沟通（7轮），其中在幂等/状态机/部分成功与返回结构上与后端工程师沟通（4轮），在硬约束与规则降级可审计上与环境工艺顾问沟通（3轮），并明确需实现异步job接口、返回字段与合规审计约束及联调mock用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@后端工程师 调度这块接口你们打算怎么做？我就想知道怎么调用最省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那计划就一串时间点+值就行吧？我直接给前端画图。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等这块我有点懵。是不是同一个 job_id 重复用就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果算一半超时，直接 FAILED 就好了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@环境工艺顾问 调度计划里有哪些东西不能乱给？我怕给错值现场骂我。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把这些写成 if 判断，超过就截断？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "规则库是不是就随便写几条？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端说用 job_id 那套，异步的。还要 Idempotency-Key。工艺那边说有压力范围、进料别跳太快、机组也有限制。然后解不出来就 PARTIAL 或降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就放预测产气量吧，再放个站点 id。别的从库里查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预测过期就 degraded？或者算太久也 degraded。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "action_source 这个我容易忘，我记一下。"
+              },
+              {
+                "behaviorLabel": "使用现代工具",
+                "behaviorEvidence": "我用 Swagger 的 schema 把它设成必填。然后 CI 里跑个接口契约测试，少字段就不过。这个我会弄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就打 constraint_key，不打具体数值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "做得到。我就照这个拼 JSON。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

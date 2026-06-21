@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用消息队列传一下吧，我看现在的项目好像都是这么接数据的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐量要大，不能断掉。至于选哪个，我还没想好，是按网上的教程用 Kafka 吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 这边数据量特别大，每秒几十万条，我们是用 Kafka 还是有别的更好的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "架构师，我对 Pulsar 那个存储层不太熟。如果只是为了吞吐量，Kafka 应该够用了吧？我主要怕配不好会出问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构师说 Kafka 可能有分区和平衡的问题。我觉得还是保险一点，用大家用得最多的，后面出事了也比较好查资料解决。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@大数据工程师 导师让我问问，Flink 怎么接 Kafka 的数据才能保证不堵塞？还有那个 Exactly-Once 到底怎么实现？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得在算子那边弄个限流就行了，先把系统保住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RocksDB 是存到磁盘上的吧？那速度会不会慢？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太懂怎么测这个 IOPS，要不先按默认的来，等上线测试的时候再看压力？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的结论是：用 Kafka 保证吞吐，Flink 开 Exactly-Once，状态存在 RocksDB 里。具体限流的数，我记下来了，等会查一下服务器规格再填。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写：1. Kafka 设 3 副本；2. Flink 选增量 Checkpoint 和 RocksDB；3. 搞个备用链路防止主链路挂掉。这样行吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

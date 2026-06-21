@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估中定位线上“音频识别失败”归因背景下，用户与导师围绕失败定义拆分、归因树分桶、看板最小字段与合规边界持续沟通（7轮），其中在端侧可观测错误码与埋点字段部分与前端负责人沟通（3轮），在算法侧失败类型/质量标记与置信度分桶部分与语音算法工程师沟通（3轮），并确认第一版failure_bucket口径与优先验证权限和vad_no_speech占比。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……读者说喊了没反应。还有就一直转圈。反正就失败了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我没记住。我就看见一堆 0 和 -1 之类的。也可能是网络吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉就权限。用户老是不给。还有就是吵，地铁里那种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 现在识别失败到底哪里挂的？能给我些码吗，别只写失败。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "vad_no_speech 是不是就是用户没说话？那就算他的问题了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 upload_failed 和 timeout 就是网络。那我就都放网络里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我记不住这么多分法。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "权限剥离。upload_failed、timeout也剥离。剩下 vad_no_speech、server_error、confidence_low 算识别失败？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 线上你们返回的失败都有啥？我看就成功失败两种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "reject 就是用户说得不像角色？那就别算bug了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "quality_flags 听起来很多。是不是都要埋？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分桶就是：权限、网络、服务挂、质量差。字段就 error_code 和 confidence 桶，还有 session、chapter、user hash。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就权限和 vad_no_speech。因为看起来最多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看看失败里这俩占比。按 error_code 数一数就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不拿音频。置信度我就用你说的桶。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

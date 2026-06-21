@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在高并发分发压测与状态修复背景下，与导师围绕压测工具选择、状态修复预案及压测分析边界持续沟通（4轮），其中在链上与非链端压测工具及指标部分与压测与稳定性保障工程师沟通（1轮），在图状态机分叉冲突修复预案部分与状态机开发主管沟通（1轮），并最终形成协同压测与快照回放降级修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测的话，用JMeter配置并发线程组，模拟万人同时触发剧情分叉和确权，看TPS和响应时间。状态修复就简单了，出问题直接数据库事务回滚，保证一致性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，区块链是不可变的，交易上链就不能改。图数据库分叉回滚也会丢掉用户的剧情选择。这块我确实没想清楚，状态崩了该怎么修？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微剧爆火时链上和非链端的压测工具怎么选？指标看什么？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图状态崩了或者分叉冲突了，不用回滚的话，修复预案是什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Locust写协程压测更轻量，适合我们这种高并发接口，我准备把压测脚本换成Locust。状态修复这块，用快照加日志回放，分叉走合并，不用回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Locust只能测接口层。链上瓶颈得看Pending交易池深度和Gas Price波动曲线。如果Gas飙升，说明节点拥堵。根据之前测试网的跑批结果，置信区间大概在TPS 500到800，超过800节点同步就会严重延迟。这时候必须触发降级，把铸产请求丢到消息队列里延迟处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明确了。Locust压接口，链端盯Pending Pool；修复靠快照回放和MQ降级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

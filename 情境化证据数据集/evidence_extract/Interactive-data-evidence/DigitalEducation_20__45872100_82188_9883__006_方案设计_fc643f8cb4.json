@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在干预策略工作流编排的方案设计背景下，用户与导师围绕诊断触发-确认-下发-复测-结案闭环、灰度与审计及A工作流引擎vsB轻量状态机选型持续沟通（7轮），其中在扩展性/权限审计/灰度路由上与解决方案架构师沟通（2轮），在策略包字段/任务拆分/幂等重试与原因码上与后端负责人沟通（2轮），在审计可存数据边界上与合规与隐私官沟通（1轮），并最终明确一期采用B并口述最小节点与审计边界规格。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想的很粗：诊断出来某个素养点低，就给一组对应的练习或微课，然后一周后再测一次，看有没有提升。就这样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先别全自动。先让老师点一下确认，不然推错了就尴尬。只是我不清楚确认要放在哪一段，怕老师嫌麻烦就不点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直觉想用工作流引擎那套，画图直观。担心的是会不会太重，后面维护成本高；但状态机那套我怕一改流程就要改一堆逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 现在我们做干预策略工作流编排，有两条路：工作流引擎 vs 轻量状态机。你从扩展性、审计权限、灰度三点讲下怎么选？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说一期选轻量状态机，但又要配置表和审计事件。那不就也挺复杂？灰度路由这块，B也能做吧，就是分流到不同配置版本？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是：先别上完整工作流引擎，用轻量状态机也行，但要把流程当成有版本的配置，不然以后改不动。然后每一步迁移都记审计事件，证据只留ID列表。灰度就是按试点班级把入口分到不同流程版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 干预策略工作流我们在纠结工作流引擎 vs 轻量状态机。你从实现角度讲：干预“策略包”最小字段要有哪些？任务怎么拆？还有幂等/重试这类怎么在方案里写清楚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "策略包字段我大概能抄这个结构。幂等这块我理解成：同一个plan下发多次也不会多出两份作业。原因码就是比如“题库接口超时”这种？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选B。原因就是一期团队可能扛不住引擎那套治理，先把流程版本+审计事件+任务中心做出来，能跑闭环。A的收益我认可，但放二期再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）入口：diagnosis_ready 进来先按试点班级名单和学科路由到 flow_version（比如 v1_gray）。  \n2）生成候选：系统基于规则生成 plan_candidate，带 diagnosis_snapshot_id、指标编码、资源ID列表。  \n3）确认：默认 teacher_confirm，老师只能在允许范围内调整（比如删减或改截止时间），确认后才下发；班级级干预可以走教研发布模板。  \n4）下发：创建下发任务实例，外部动作都带 idempotency_key，失败回“待处理”并挂 reason_code。  \n5）执行回收：只接收证据ID与摘要引用，不额外落学生明细。  \n6）复测：按 retest_plan 在窗口内触发，生成 retest_done 后做提升判断，满足阈值就结案，不满足进入二轮干预或转人工。  \n7）审计：每次状态迁移写 audit_event，字段至少有 from/to、operator_role、timestamp、reason_code、evidence_id_list、flow_version、plan_id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 干预工作流里我们想在审计事件里留 evidence_id_list，方便追溯。有人提“摘要引用”也记录下，担心泄露。你给个方案设计层面的边界：审计里能存什么，不能存什么？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了，摘要别乱写，改成 reason_code+rule_id 这种。那我第5条改成“证据只留ID+类型，不落可读摘要”。个体审计也只在试点范围开放。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

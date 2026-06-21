@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在告警看板与权限开发背景下，用户与导师围绕告警分类字段、去重规则、状态流转、后端授权与审计及脱敏要求持续沟通（9轮），其中在验收用例与401/403及脱敏校验部分与测试工程师沟通（3轮），在token/scope设计与审计失败处理部分与安全工程师沟通（2轮），并明确V1接口与实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板就做个列表呗，告警按时间排。权限就登录了才能看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "等级就红黄蓝？来源就是预测那边和调度那边。定位就到街区就行。触发条件就是温度高了就告警。展示字段…就时间、地点、温度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就四类：热风险超标、脆弱人群超标、设备离线、调度失败。字段：类型、级别、时间、街区、数值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "去重就是不让重复显示。用时间一样就算重复？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 告警看板要怎么测才算过？去重是不是只要不重复就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "去重窗口一定要10分钟吗？我能改成1小时省事吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权限那块，403和401我老弄混。随便用一个行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳四类告警。字段加上状态、负责人、关联单。去重就是类型+街区+10分钟。状态是新建确认关闭。权限就是没登录401，没权限403。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端用 if 判断隐藏字段，不给看就不显示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就后端根据token里的角色，查一下他属于哪个区，然后接口where一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 token里直接放role和district就可以了吧？我怕做复杂了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计失败要阻断吗？阻断就更安全？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把审计都放行行不行，先把页面做出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就：看列表算读取，失败也能看；看明细也算读取；确认关闭算写入，审计失败就不让改。导出我先不做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，那导出接口就先关着，只有全市角色能用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把列表接口加上fingerprint和count，再把401/403分开。明天我说清楚哪条没过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

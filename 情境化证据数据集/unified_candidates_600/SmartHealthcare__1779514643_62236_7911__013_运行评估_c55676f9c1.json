@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估流场漂移与算子衰减监控背景下，用户与导师围绕监控方案选型、资源约束及报警阈值验证持续沟通（4轮），其中在算力资源与轻量级替代部分与运维监控SRE沟通（1轮），在算子衰减特征与监控指标部分与寻优算子开发沟通（1轮），并最终形成基于Prometheus滑动窗口的轻量级监控与回放验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要实时抓漂移，单机脚本肯定不够看。我准备引入Apache Flink做实时流处理，把CFD求解器的中间态数据和寻优算子的梯度数据全接入Flink。然后用Flink CEP定义复杂事件序列，做动态基线检测，一旦流场速度场向量的范数偏离动态基线就报警。这样还能做多维下钻，排查是哪个边界条件出了问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们目前病区节点的CPU和内存余量，能撑住Flink JobManager和TaskManager的开销吗？我预估流场数据吞吐大概每秒5万条。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "3-sigma是不是太糙了？万一漂移是缓慢偏移，3-sigma可能迟钝。寻优算子的衰减是突变多还是渐变多？如果渐变多，我是不是得搞个双滑动窗口，一个看短期一个看长期，对比均值偏移来抓渐变衰减？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "双窗口窗口期确实难调，没有历史数据支撑我也定不下来参数。行，那我放弃Flink和双窗口方案。回到轻量级路线：用Prometheus拉取流场和算子指标，1分钟滑动窗口计算均值和方差，流场速度场范数超3-sigma报漂移，Value Loss超基线5%报衰减。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以拿基线验证阶段那2小时的稳态数据做回放。如果阈值太紧导致误报，我适当放宽到4-sigma。衰减5%这个线，我刚才看李工给的过去12小时数据，最大波动在2.3%，5%留了足量buffer，应该不会误报。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写Exporter和PromQL，先跑回放验证看误报率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

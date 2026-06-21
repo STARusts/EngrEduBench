@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业方案设计中为“编排—派工—核验—结算”链路制定人地物数据流与接口契约背景下，用户与导师围绕数据域划分、权威源、读写流向、接口字段与错误码持续沟通（9轮），其中在主数据最小字段集、事件投影快照与租户隔离上与数据架构师沟通（3轮），在人员信息与核验证据访问控制、保留期与审计要求上与合规与隐私官沟通（1轮），并形成可评审的最小接口规范要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "人就是工人和班组，地是地块，物我理解是作物和设备。主数据就这些，事件就是派工、打卡、核验那种。接口我就按模块拆开就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "技能应该是农服组织那边填，地块边界基地管理员填。证据引用就……挂在任务上，放个url？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "- 人：worker_id、team_id、skill_tag？  \n- 地：plot_id、boundary、crop_id  \n- 任务：task_id、process_id、assigned_worker_id、时间  \n- 核验：verify_event_id、task_id、照片id  \n- 结算：settlement_id、task_id、amount"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 人地物这块，主数据最小字段要哪些？还有事件和快照怎么放一起，接口里怎么体现租户隔离？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据不用url，要evidence_id。事件投影出快照。路径带tenant_id。那地块边界是直接存geo_boundary吗？会不会太大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕移动端离线拿不到完整边界就没法做位置核验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主数据要带tenant_id/org_id。任务状态别直接改，用事件投影。证据用evidence_id走受控下载。地块边界要分完整和简化，下发看policy。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我试下：  \n- 编排：读Worker/Plot/CropCycle，然后算出Task。写Task快照？  \n- 派工：读Task列表，写TaskAssignment？  \n- 核验：读Task，写VerifyEvent+证据。  \n- 结算：读Task状态和VerifyEvent结果，写Settlement。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "任务生成响应要有task_id、task_version、task_state？派工assign要有assignee_worker_id、planned_start/end。核验verify-events就有verify_event_id、task_id、task_version、event_type、actor、client_time、uptime、device_id、evidence_refs。错误码就CONFLICT_TASK_VERSION。幂等按verify_event_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "派工用assign_event_id？也做事件？拒绝就返回FORBIDDEN？或者CONFLICT_TASK_VERSION同一个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 人员信息和核验证据这块，接口规范里哪些要强制？比如手机号、照片下载、保留期这些怎么写才不踩线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那派工端看到证据就只能看到有无，不给下载。明文手机号也不给，改成token或者掩码。保留期也要在响应里提示。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）数据域：主数据（Worker/Plot/CropCycle/Device）、任务快照（Task/Assignment/Settlement）、事件（VerifyEvent/AssignEvent/StatusEvent）、证据（Evidence）。  \n2）权威源：人技能/组织来自农服org维护；地块边界基地维护；核验与派工都走事件追加，快照由服务端投影。  \n3）接口路径：统一/tenants/{tenant_id}/…，token里tenant对齐；再用org_id/farm_id做权限范围。  \n4）事件上送字段：event_id(含verify_event_id/assign_event_id)、task_id、task_version、event_type、actor_id/role、client_time+uptime、device_id、payload_schema_version、可选evidence_ids。  \n5）冲突/错误码：CONFLICT_TASK_VERSION、INVALID_TASK_STATE、FORBIDDEN；服务端对event_id幂等。  \n6）隐私审计：Worker不返回明文敏感信息；证据用evidence_id受控下载，需purpose_code并产生日志audit_id；响应给evidence_retention_until。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一条：Plot边界分完整和简化两级，移动端默认下发简化边界或中心点+半径，按policy升级，离线也能用。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

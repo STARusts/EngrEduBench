@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在实体教具流转履约率下降及设备损毁背景下，用户与导师围绕异常定界、死库存影响及处理策略持续沟通（8轮），其中在流转异常分类与定界逻辑部分与流转履约审计员沟通（3轮），并最终形成异常四分类、损毁判定标准及签收未入库触发人工核实的复盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了一眼大盘，履约率从95%掉到82%了。损毁那几单我看了下，都是走顺丰的，感觉是物流暴力分拣。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种定界是不是得看日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "教具流转异常怎么拆？我只知道看物流轨迹，这定界逻辑是啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那现在损毁那几单，是不是就是IoT_Lost加上Log_Stall？我怎么判断是物流搞坏的还是教具本身质量不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过大盘履约率掉到82%，大部分单子好像没这么严重，就是卡在哪了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这入库对不上的问题，我要不要写个脚本去校验单号？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源一直显示在途，调度引擎以为没货可用，就不派单了呗。那真缺教具的学校就等死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我改下调度引擎的逻辑，如果签收后超过2小时没入库确认，自动发个确认请求给学校侧接口，强制完成流转。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就发告警给人工客服，让客服去核实？但这增加运维成本了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "异常分四类：调度超时、物流停滞、设备失联、签收未入库。损毁看加速度超20g。签收未入库的，2小时未确认就触发人工核实工单，不能强制完成。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

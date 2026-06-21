@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在侦估智调联调与性能优化背景下，用户与导师围绕全链路延迟保障、审计日志异步化防丢及压测验收口径持续沟通（5轮），其中在审计日志异步方案性能与可靠性验证及压测模型构造部分与联调测试工程师沟通（2轮），并形成WAL加Disruptor异步刷库方案及区分预热稳态的压测验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联调关键是把TraceID从侦测侧透传到引擎侧，出了问题能溯因。性能方面，我打算分两步：先跑通正常流量验证逻辑闭环；再注入高并发流量，重点看Aviator脚本执行和沙箱ClassLoader的耗时。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我对全链路压测的流量模型构造不太确定，特别是怎么模拟信用微变的高频突发特征。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我光顾着算引擎计算耗时，把审计日志IO给忽略了。同步写库肯定不行，主链路阻塞风险太大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前对高并发下审计日志的防丢机制一直比较模糊，只想到用普通内存队列异步刷盘，但节点宕机丢数据的风险没法交差。最近刚看了Disruptor无锁队列配合WAL预写日志的机制，正好能用到这。我打算把智调引擎的审计日志先顺序写本地WAL文件，再推入Disruptor环形缓存，由异步线程批量刷入DB。即使DB短暂抖动，缓存能抗；即使节点宕机，WAL也能恢复，主链路完全不阻塞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对于这种既要留痕又不能拖慢主链路的WAL加异步队列方案，在压测时一般怎么验证它的性能损耗和可靠性？特别是本地IO的耗时评估。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那压测验收标准就定为主链路P99延迟低于50ms，且DB宕机10秒内无日志丢失。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "另外，如果P99出现抖动，我怀疑会是Aviator脚本首次编译或JVM的Young GC引起，压测时能抓一下火焰图确认吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本轮确认点：1. 全链路TraceID透传打通；2. 审计日志采用WAL本地预写加Disruptor无锁队列异步刷库，避免主链路IO阻塞且保证宕机不丢；3. 压测模型需包含突发高频特征，验收口径为主链路P99小于50ms且DB宕机10秒内无审计丢失；4. 压测结果需区分预热期与稳态期，排除Aviator编译与GC停顿的干扰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

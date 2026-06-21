@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在融券回转套利系统行情网关吞吐调优背景下，与导师围绕反压策略、时序对齐及验证口径持续沟通（7轮），其中在反压与时序对齐部分与流式架构师沟通（1轮）、与数据工程Owner沟通（1轮），并最终确认补学信用流与水线配置及脉冲发生器验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看直接上Netty加Kafka就能顶住吧？网上说这俩组合能到百万级TPS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳漂移我就把时间戳字段改长一点？反压，Kafka不是自带反压吗，消费者跟不上生产者就积压呗。不行就加机器加分区。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就想用Kafka和Netty快速搭起来，极端脉冲行情下反压和时序对齐有没有什么方便的配置项？或者现成的中间件能直接搞定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "大概意思是Kafka靠不住，得在Netty里写信用流逻辑？时序还得自己按发号对齐？有没有类似Spring WebFlux的东西能包装一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没写过这种底层的东西，平时都是调API。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不用JMeter用什么？写个main方法发数据？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢弃率0？延迟1秒内？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "补学Reactor信用流和Netty水线配置。验证就是写脉冲发生器，打10倍流量，看回传延迟是不是在5毫秒内，丢弃率不超0.01%。时序对齐按交易所发号来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

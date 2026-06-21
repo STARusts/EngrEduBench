@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘端路权协商与数据流设计背景下，与导师围绕算法选型、数据对齐及算力过载降级策略持续沟通（6轮），其中在算法实时性与极低算力下降级部分与算法工程师沟通（2轮），在多源位姿数据对齐部分与通信协议专家沟通（1轮），并最终形成算法双模加精简保底、数据对齐及过载降级三条设计红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算法之前查文献看到有时间窗和势场法两种。数据流直接走ISOBUS协议行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "势场法在边缘端跑得动吗？时间窗是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "位姿数据怎么对齐？老农机没有新接口吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力消耗这块我确实没细想。是不是得加个过载监控？网关温度高了就切静态路权？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算力不够的话，时间窗跑不动，势场法也卡，是不是只能全停等云端接管？但这样机群就全停了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "势场法在极低算力下能跑吗？比如只留10%资源。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，算法常态跑时间窗，紧急切入势场，算力过载降级为精简势场保底；第二，数据流在网关将CAN和ROS统一转Protobuf，50Hz频率输入；第三，算力过载不切静态路权，触发精简势场保底不撞。逻辑上通了，降级链路是完整的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

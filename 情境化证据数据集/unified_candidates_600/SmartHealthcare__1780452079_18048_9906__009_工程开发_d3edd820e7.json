@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在血流动力学反演与证候图谱联调测试背景下，用户与导师围绕异常特征清洗、图谱容错降级、边界测试覆盖及性能指标持续沟通（5轮），其中在图谱容错与极值置信度部分与知识图谱工程师沟通（2轮），在反演特征校验截断部分与算法工程师沟通（1轮），并最终形成四项联调硬指标与修订脚本方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口通了，正常数据推过去，图谱能返回证候。但反演稍微出点异常，比如某个特征值算出来是NaN，图谱那边直接报错挂了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才推过去一组特征，里面缺了个血管顺应性指数，图谱推理直接抛异常了。这能不能搞个降级逻辑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演这边呢？有时候TRT推理出来的特征方差太大，甚至有负数，这咋整？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边加个特征清洗逻辑，clip一下，NaN补0。图谱那边缺核心特征返\"不明\"，缺非核心走兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极快极慢的还没试。测试用例我就写了正常脉、滑脉、涩脉几个典型的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极值脉率，比如心率180以上的，图谱推理会超时吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加特征校验层，图谱侧加置信度标签和兜底，单次延迟50ms内。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改脚本，把这几个校验和断言都加进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

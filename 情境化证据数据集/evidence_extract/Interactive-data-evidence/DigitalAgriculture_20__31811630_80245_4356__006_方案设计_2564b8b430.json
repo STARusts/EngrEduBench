@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在处方从快照生成到可执行任务的可解释决策流方案设计背景下，用户与导师围绕模型/规则组合、可调空间、模板候选、审计与不可逆解释持续沟通（9轮），其中在候选生成、不确定性与训练推理口径一致的落地做法上与算法负责人沟通（4轮），并形成7节点决策流及版本绑定与解释字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我倾向拆四段：数据快照锁定→特征派生与质检→模型/规则联合决策→处方编排到任务。关键是每段都写入版本指纹，最后处方解释只引用“派生特征贡献+规则命中”，不回指原始基因型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用“规则守门+模型评分”的串联：先跑硬性规则（质量红线、作物禁忌、农机约束），不满足直接拒绝或降级；满足后进入模型给出候选处方及置信度；最后再跑一层业务规则做微调和约束收敛。解释上可以把三层分别呈现：守门规则为什么挡、模型为什么选、微调规则改了什么。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "给每个处方参数定义一个“可调区间来源”。比如播量、氮磷钾、灌溉量：模型输出一个推荐值+推荐区间；规则只能在区间内改，超出区间必须触发“人工确认”并记审计。区间的来源写入：model_version + calibration_rule_version。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 处方生成这条链路，我们要可解释模型与决策流：你给我一个可落地的组合方式（模型+规则）和解释粒度。约束：基因型高敏不出域；血缘粒度 field_snapshot+variety_snapshot→prescription_version→task→execution_record；并固化 feature_schema_version、agg_rule_version、model/rule 版本。你建议解释对象和置信度/区间怎么做，才能避免训练推理口径漂移？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“候选处方”是怎么来的？如果要枚举会很重；如果直接回归一个处方再裁剪，解释就断了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不确定性你建议怎么出？我不想引入太重的贝叶斯全套。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "训练/推理口径一致，你这里怎么落到版本引用上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳三层结构：可行域→模型打分→选择，并把“可行域”做成明确产物 feasible_mask。候选生成我偏向模板候选（B），原因是能直接映射农机参数，也更利于解释；但要控制组合爆炸，按作物/区域配置每个模板集合的规模上限。\n不确定性我采纳“分位区间+OOD标志”，校准先留接口，后续再上。\n口径一致这块我会强制：prescription_version 里写入 feature_schema_version、agg_rule_version、model_version、calibration_version（可空）和 explain_schema_version；推理时版本不匹配直接降级到规则处方或要求人工确认。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "模板作为“处方模板库”，按 crop_type + region + machine_capability 分组，每组最多比如 50 个候选；模板由农业栽培顾问维护，发布时需要审核并写审计；模板版本 template_set_version 写入处方血缘。解释里要包含 template_id 和“模板来源标签”（如高产稳健/节本保守），但标签是人工配置，不从模型反推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不会。模板只描述管理措施空间，不包含基因型字段；模型解释只用派生特征贡献（如“成熟期热量不足风险高”这类），不展示可逆的基因位点或原始向量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我认为必须审计的：\n1）处方发布（prescription_version 状态从 draft→released）。\n2）人工确认（包括映射人工确认、版本不匹配时的人工放行）。\n3）模板修改/发布（template_set_version 变化）。\n4）规则集发布（rule_version）。\n其余如模型打分中间值、候选排序可以留可追溯日志，但不必做强审计，只要能回放到快照与版本指纹。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，拒绝/降级要作为事件写入：decision_event（event_type=reject/degrade），带原因码、触发规则版本、输入快照id、以及是否走人工确认。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "节点我压到7个：\nN1 Snapshot Lock：输入 field_id、variety_id、time_window；输出 field_snapshot_id、variety_snapshot_id。\nN2 Data QC：输入 snapshot ids；输出 qc_pass、qc_flags（含红线/软告警）。\nN3 Feature Build：输入 snapshot ids + feature_schema_version + agg_rule_version；输出 feature_vector_id（派生特征）+ ood_features。\nN4 Feasible Set：输入 feature_vector_id + rule_version + machine_capability；输出 feasible_mask + reason_codes。\nN5 Candidate Gen：输入 template_set_version + feasible_mask；输出 candidate_list（template_id+参数）。\nN6 Model Score：输入 candidate_list + feature_vector_id + model_version；输出 scores + uncertainty + top_feature_contrib。\nN7 Select & Package：输入 scores/uncertainty + selection_policy_version；输出 prescription_version（含各版本指纹、解释、task_mapping）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "解释产物我建议 8 个字段：\n1）reason_codes：规则命中原因码列表（含 rule_version 引用）。\n2）top_factors：派生特征TopN（名称、方向、相对贡献，不含数值原始尺度）。\n3）uncertainty_level：低/中/高。\n4）ood_notice：是否“相似样本不足”的提示文案码。\n5）template_id：选中的模板标识。\n6）delta_from_template：在可行域内的调整幅度（分档，不给精确可逆特征）。\n7）data_warnings：软告警摘要（如时间窗缺口）。\n8）trace_token：可追溯令牌（农场端只能看到 token，企业/内部可用它回查到 prescription_version 与快照血缘）。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条：\n1）决策流定为 7 节点：快照锁定→质检→特征派生→可行域→模板候选→模型打分→选择封装到处方与任务。\n2）处方版本必须固化 feature_schema_version、agg_rule_version、rule_version、template_set_version、model_version、selection_policy_version、explain_schema_version；版本不匹配触发降级或人工确认并记录 decision_event。\n3）解释对外仅含规则原因码+派生特征贡献+不确定性/相似度不足提示+模板信息+trace_token；不回传原始基因型与可逆细节，满足“高敏不出域、农场端不可逆解释”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

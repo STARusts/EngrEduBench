@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在节奏驱动渲染联调背景下，用户与导师围绕时间基准选择、事件队列触发、seek/暂停/倍速一致性及事件契约与观测口径持续沟通（11轮），其中在时钟抽象与迟到策略上与客户端工程师沟通（3轮），在事件分段拉取与分支失效接口上与后端工程师沟通（3轮），并明确Clock+RhythmEvents字段、policy与日志/ack规则及最小验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是搞个 timeline，然后每帧读当前 time，对一下有哪些事件要触发。graph 的节点进出也能映射成事件。怕的是时间漂，音频和画面不同步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时间基准用音频吧，毕竟节拍跟音乐走。事件就预先按时间排序，播的时候把小于当前 t 的都 pop 出来触发。轮询的话我放在 rAF 里，每帧看一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端工程师 节奏驱动渲染这块，时间基准用啥比较稳？音频 currentTime、系统时间、还是自己计时？seek/倍速怎么处理不乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "音频没 ready 时用回退时钟，那切到音频时钟会跳吧？事件会一下子补发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件超过 200ms 不补发这个阈值咋定？我怕把关键镜头切换丢了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那和我这边 CompiledGraph 怎么连？我现在 compile 出 outgoing/nodeIndex/start，还有 diagnostics。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先不搞太复杂，节点上加个 duration，edge 上可选延迟。跑图的时候累加就出来了。BPM 那套我还没接上，先用秒。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件对象我能先定成：id、timeMs、type、payload？再加 policy？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ack 是每个事件都回？那太多了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志我就打 id 和时间差，不带文本。choice 的文案我也不打。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 节奏事件我这边准备出 RhythmEvents 数组。服务端要怎么给客户端？一次拉全量还是分段？字段需要哪些，才能支持 seek/分支？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "hash 这个是不是很重？我能不能不做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分段拉取窗口大小你说 10s，万一剧情很短就浪费？很长就一直拉？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在担心的是：我本地 compile 出来的顺序，和服务端下发的不一致，会不会导致同一段剧情镜头乱跳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先做本地 mock：从 CompiledGraph start 跑一条默认路径，生成 events，给播放层吃。分支先只做 invalidateFromTimeMs=now，简单点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能加个测试开关，画面上显示 mediaTime 和最近一次事件的 lateByMs。然后故意让渲染卡一下，看 mustRun 事件还会执行，drop 的不执行。seek 的话手动拖进度条，看队列 cursor 重新定位是不是对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "倍速我用 clock.rate，队列就是用 now() 读的 mediaTime，不需要额外算。就是 UI 上可能抖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我说下我记住的版本：\n1）有个 Clock 抽象，主用音频时钟，没 ready 用回退时钟；切换用软对齐保证时间连续。\n2）事件结构：eventId、timeMs、pos(可空)、kind、policy、payload、sourceNodeId/edgeId。\n3）队列：按 (timeMs,eventId) 排序，rAF 每帧 pop 掉 timeMs<=now 的事件执行；seek/分支就二分定位或直接 invalidateFromTimeMs 丢尾巴重建 cursor。\n4）迟到处理：mustRun 迟到也执行并带 lateByMs；dropIfLate 超阈值丢；弱事件可以 coalesce。\n5）联调日志只打 id/kind/source/lateByMs，不打文案正文；ack 先只对 mustRun 回或者采样。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度5%运行评估背景下，与导师围绕信令下发延迟与并发监控指标口径及置信度验证持续沟通（5轮），其中在P99延迟与并发水位监控口径部分与视效时序监控专员沟通（2轮），并最终形成基于P99与ACK超时率的监控指标清单及录播信令流回放验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发就看QPS有没有超限嘛，延迟看平均耗时就行，之前单测的时候平均也就十几毫秒。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "1%超200毫秒，这我怎么算？光看大盘平均肯定看不出这个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令下发延迟的P99怎么算？并发上来的时候，监控水位怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "P99 150ms，ACK超时率千分之一。那现在5%灰度里，这俩数据是多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控专员说现在P99是120ms，超时率万分之二。不过他说样本不够，没经过真脉冲压测，置信度不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要不咱们在灰度里造点脉冲？把信令集中发一下试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对比回放时的P99和超时率，跟单测时的基线对比？如果回放P99不超过150ms，超时率不超千分之一，就算验证通过了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控指标：信令下发P99延迟≤150ms，ACK超时率≤1‰，并发水位看线程池占用率。验证方式用录播信令流回放，绝对不能在生产造脉冲。回放结果跟基线对比，P99和超时率不超标才算过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

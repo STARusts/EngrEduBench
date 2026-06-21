@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发既定ARM算力背景下，与导师围绕边缘声纹特征提取方案的算力约束与折中替代持续沟通（6轮），其中在Transformer算力评估及TCN特征维度对齐部分与图谱构建工程师沟通（2轮），并最终形成1D-TCN替代方案与对照实验验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我想用MFCC加上基于Transformer的时序特征聚合，把声纹图谱的语义分辨率拉满。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "精度优先嘛，图谱的节点关系如果提取不细，后面声障调控根本没法对齐。算力不够可以换更高端的边缘芯片，或者加计算节点嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算在边缘节点上用轻量Transformer做声纹时序特征聚合，你评估下现有的ARM Cortex-A55算力能不能跑起来，特征输出延迟控制在50ms内可行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "OOM了图谱就断了，这肯定不行。但纯用MFCC对瞬态声纹的区分度太差了，我之前试过，马路刹车声和鸣笛声在图谱上经常撞车，特征空间塌缩得厉害。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对边缘侧轻量级时序特征算子确实不太熟，之前一直研究云端大模型这块。我马上去看下最近TinyML领域有没有替代Transformer做局部时序依赖提取的方案，比如TCN或者某种特定的RNN变体，半小时内给结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "查到了，可以用1D-TCN（时间卷积网络）替代Transformer。TCN的因果卷积结构天然适合流式声纹输入，而且并行度高，在A55上INT8推理能压到30ms以内。虽然长距离依赖捕获不如Transformer，但对于城市瞬态噪声，感受野覆盖200ms足够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以设计对照实验验证。提取测试集里刹车和鸣笛的样本，分别跑原版Transformer和TCN，对比图谱节点嵌入向量的余弦相似度。如果TCN在200ms感受野下，类间距离衰减不超过5%，就认定它区分度达标，可以替换。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输出64维。你那边图数据库的Node Property Schema按64维对齐，我这边代码把特征聚合层换成TCN，接口定义我等下推到你仓库里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

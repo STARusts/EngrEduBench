@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在调度延迟优化与防抖动背景下，与导师围绕指令延迟与泵阀震荡的解决方案及参数校准持续沟通（6轮），其中在防抖动与延迟优化解法部分与性能调优专家沟通（2轮），并最终形成异步边缘下发、斜率限幅防抖与SciPy拟合前馈增益的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟的话，把下发频率调低点？防抖动我加个死区，温度变化小于0.1度就不发指令。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控指令下发链路延迟大，还有泵阀执行器容易震荡抖动，怎么搞？我加死区他说不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异步事件驱动我懂，就是把下发逻辑放边缘节点。前馈补偿和变化率限幅这个，我之前没写过这种控制器逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改下发链路改成边缘直发，然后在泵阀控制代码里加上斜率限制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5%是专家刚说的。前馈参数我寻思着跑几组历史数据试一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚学了用Python的SciPy做曲线拟合，本来拿来做测试数据平滑的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SciPy能算偏导，我直接拿它拟合稳态数据求斜率，这比手算快多了，参数也有依据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，下发链路改异步，边缘侧直发降延迟；第二，泵阀控制加斜率限制器，单次变化卡在5%以内防抖；第三，用SciPy拟合稳态工况数据算前馈增益基准，替代瞎试参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

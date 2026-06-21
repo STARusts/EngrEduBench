@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在作业证据链智能督学系统灰度上线与回滚抽查准备背景下，用户与导师围绕灰度验证标准、回滚可证明性及审计链路串联持续沟通（6轮），其中在分流策略、观测指标、回滚阈值、故障注入与权限403防泄露验证部分与SRE运维工程师沟通（7轮），并形成可执行的灰度+回滚验证清单与operation_id串联审计口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度发布、回滚验证这块，你想让我先盯哪些数据，才算“能证明灰度没把系统搞坏”？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着用现成的发布平台，先 1% 然后 5% 这样，盯一下 5xx 就行了吧。回滚也就点一下回到上一版。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行，那我找谁问比较对口？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布这块，分流一般怎么配？我需要盯啥指标才算过关？还有回滚要怎么验证，不是点回去就结束吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值就是看 5xx 吗？我看平台也有成功率那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "新旧版对比，是要我写一堆 SQL 去比吗？有更省事的看法吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚触发条件怎么定？我怕一抖动就回滚，显得我很怂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障注入也要在灰度里做？我以为那是压测阶段才搞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "403 不泄露这个怎么验证？我能不能只看状态码数量，别看内容？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心日志里会有多余字段。要不我直接把日志级别调到 warn？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了 SRE。他给的灰度是按用户分桶，0.5%→1%→5%→20% 这样往上。指标不是只看 5xx，要按版本/桶看：列表、详情、预览三段各自成功率和 p95/p99，对照你之前定的 p95<800ms、p99<1500ms、失败率<0.5%。然后权限这块要专门做越权请求，确认都 403 且响应体不带学生名、作业标题这种。回滚条件也有一版：10 分钟失败率超 0.5% 就硬回，或者 p99 超 1500ms 持续 15 分钟，还有“审计缺失率>0”也得回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我不是很会。我猜就是看日志里同一个 trace_id 出现在三个接口里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们现在好像默认全链路都有 trace_id。我能不能就用 trace_id，省得加字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 审计串起来这块，你们一般用 trace_id 还是搞个业务 operation_id？我现在想省掉加字段，但怕不稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "operation_id 要是没传会怎样？会不会又变成一堆兜底逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "@导师 SRE 建议审计串联别只押 trace_id，最好加 operation_id。理由是前端重试、预览异步这些会让 trace_id 断。做法是用户点“查看证据链”时生成 operation_id，然后列表/详情/预览都透传，审计表写 operation_id + trace_id。灰度里就盯 operation_id 的缺失率，缺失高就先别升比例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n1）灰度按用户分桶，先 0.5% 跑半小时，没问题再到 1%、5%。  \n2）每一步都看三段链路（列表/详情/预览）的成功率和 p95/p99，对照 p95<800ms、p99<1500ms，失败率<0.5%。  \n3）权限要跑越权用例，确认都是 403，而且响应体别带资源细节。  \n4）审计要看：失败也得落，原因是枚举值，不写底层异常。  \n5）operation_id 要能把三段串起来，灰度桶里缺失率不能高。  \n6）触发回滚：失败率连续 10 分钟超 0.5%，或者 p99 超 1500ms 持续 15 分钟，或者审计缺失出现。  \n7）回滚后再观察 30 分钟，指标回到基线区间。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

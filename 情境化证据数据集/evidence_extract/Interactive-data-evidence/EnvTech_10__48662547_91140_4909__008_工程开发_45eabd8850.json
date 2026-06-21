@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发中设计“预警推送与工单”机制背景下，用户与导师围绕风险变化的幂等、乱序免疫、48h内外更新策略与工单去重持续沟通（7轮），其中在事件键与重试去重落地部分与后端工程师沟通（3轮）、在自动化门禁用例矩阵部分与测试工程师沟通（5轮）、在推送个人信息最小化与审计保留期部分与合规与数据治理官沟通（1轮），并汇总形成可交付的实现要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解这里要把“风险评估结果”当成一等数据对象，不直接拿 fusion 表做触发。初版想法是：预测/规则服务产出 assessment，预警服务订阅 assessment 事件，再决定是否推送、是否开工单。幂等上我倾向于用 assessment_id 作为全局幂等键，推送任务和工单都绑定它。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "更新策略这块我不太确定：如果 48h 内 fusion revision 导致风险等级从 2 变 3，是发一条“升级”还是把旧预警作废？工单也类似，已派发的工单要不要自动变更优先级，还是只追加一条变更记录。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“每个预警一张工单”，预警有版本。去重键可以是 `(waterbody_id, window_end, rule_set_version)` 先定位同一时间窗，然后用 `assessment_version` 递增覆盖。48h 内允许覆盖预警主记录并留 revision，48h 外不覆盖，只追加 revision 记录，这样和融合那边一致。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推送我想拆两类：首次触发（创建预警）一定推；后续变更（升级/降级/解除）只推一次“状态变更”，不把每次小幅波动都推，避免骚扰。阈值可以用“等级变化”或“跨过告警阈值”触发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 预警推送和工单要落地幂等、乱序免疫、失败重试不重复发。你会怎么设计事件、幂等键、以及“更新/作废”的数据结构？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "assessment_seq 这个点我之前没写进去，明白了。UPDATE_WARNING 的时候，你更倾向“覆盖主表”还是“新建一条 warning 记录，旧的标 superseded”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "推送升级/降级/解除事件里要放哪些字段，才能让接收方看得懂且后续能追溯？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 预警推送与工单这块要做自动化测试门禁。你帮我列一份覆盖乱序/重复、48h 内外回填、推送重试不重复、工单去重与变更记录的用例清单，尽量能落到可执行断言。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见合在一起回到主线上：预警以 warning 主表为锚，48h 内覆盖主表 + 写 warning_revision；48h 外只写 revision 并打 late_revision_flag。乱序靠 assessment_seq，旧 seq 落 ignored_event。推送和工单都用唯一约束幂等：push_task 唯一键 `(assessment_id, channel, template_code)`，工单唯一键 `warning_id`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还剩一个我拿不准的决策点：降级要不要推送。推太多会扰民，不推又怕现场没感知“风险下降”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我建议默认只推“首次触发、升级、解除”，降级默认不推；例外条件是：如果已经生成工单且优先级因此下调，推给工单负责人一条站内通知，不走公众短信渠道。验证上先用一周的内部演练：统计“推送总量/有效处理工单数/人工确认次数”，目标是推送量相对“全量变更都推”至少降低一半，同时不增加漏处置。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计字段我先按最小集：warning_revision、work_order_change_log、push_task 都要有 `triggered_by`（SYSTEM/MANUAL）、`reason_codes`、`diff` 或变更前后值、`fusion_feature_revision`、`assessment_id`。推送内容里不放遥感 URI，只放等级、时间窗、建议动作、以及数据源可用性标记。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我倾向三个读接口：  \n1）`GET /warnings?waterbody_id&status` 返回当前 warning 主表字段 + latest_seq + late_revision_flag + linked_work_order_id；  \n2）`GET /warnings/{warning_id}/revisions` 分页返回 revision 列表（包含 reason_codes、diff、generated_at）；  \n3）`GET /work-orders/{order_id}` 返回工单详情 + change_log 摘要。  \n写接口先内部用：`POST /assessments/events` 接入评估事件，服务内自己判幂等，不让前端直接写预警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 预警推送与工单要做审计留痕。推送对象可能涉及手机号/姓名/岗位。开发实现里：哪些字段能存，哪些必须脱敏或哈希？审计日志保留期、访问控制有没有硬要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规这块我接住了：push_task 不存明文联系方式，用 receiver_id + contact_hash；所有变更带 trace_id；审计日志 180 天，后续可调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）数据锚点：warning 主表承载当前口径，warning_revision 承载所有变更；48h 内覆盖主表并写 revision，48h 外只写 revision + late_revision_flag。  \n2）乱序免疫：assessment 事件带 assessment_seq；只接受 seq 递增更新，旧 seq 记 ignored_event（原因 OUTDATED_SEQ）。  \n3）幂等：push_task 唯一键 `(assessment_id, channel, template_code)`；work_order 唯一键 `warning_id`；重复事件返回可区分 DUPLICATE_ACCEPTED/ORDER_ALREADY_EXISTS。  \n4）推送策略：默认推首次触发、升级、解除；降级不走公众渠道，仅对工单负责人发站内通知（如果优先级下调）。  \n5）合规：push_task 不落手机号明文；所有变更带 actor_id + trace_id；不落遥感 URI。  \n6）测试门禁：覆盖 CREATE/UPDATE/CLOSE、乱序 seq、重复事件、48h 内外回填两路径、推送失败重试不重复、工单去重与变更记录断言。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

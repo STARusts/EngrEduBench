@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在“烟羽碳通量突然跳高但工况未变”的异常溯源与工况联调背景下，用户与导师围绕排查顺序、异常阈值、最小复现与可审计输出持续沟通（7轮），其中在反演置信字段与失真条件上与算法工程师沟通（3轮），在断网回补/缓存降级导致时间对齐语义上与边缘计算工程师沟通（1轮），在故障注入用例与验收口径上与测试工程师沟通（1轮），并形成分类树规则与锁定对齐基准为source_ts的联调用例方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向从“对齐”开始。因为核算那边我们刚加了版本追溯和 audit_log，起码能说清因子没被人改。现在更像是数据/工况错位导致的。比如时间戳漂了、边缘缓存回补乱序、或者工况标签窗口跟分钟窗对不上，导致同一段排放被套了错误工况。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "顺序我先定三步：  \n1）从异常点的 run_id 往回查：分钟窗的 input_ref（原始采集批次）和 methodology_profile_id、factor_set_version，确认核算侧没换口径。  \n2）核对同一时间段的多源：CEMS（流量、浓度）、烟羽视觉反演通量、以及工况 PLC 标签。把它们对齐到同一 timeline，看是“一个源跳”还是“都跳”。  \n3）如果只有烟羽反演跳，优先看边缘预处理/模型置信度；如果 CEMS 也跳，就看采集链路、仪表漂移或实际排放。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "异常阈值：先不用复杂统计，先做工程阈值+置信度门控：比如通量超过最近 2 小时中位数的 3 倍且持续≥3 个窗，同时模型置信度低于某阈值则标记“疑似数据问题”，置信度高才算“疑似真实排放”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你们烟羽反演这块现在输出的置信度字段有哪些？具体怎么算的，哪些输入质量问题会让置信度失真？还有你们有没有“可疑但不确定”的分类标记？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "你说的“风速计卡常数”我之前没想到。那 `quality_score` 不是简单可用作异常真伪判断。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们有提供“风速合理性”单独指标吗？比如和厂区气象站对比，或者变化率阈值？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我这边排查分支里应该把 `wind_speed_stuck` 和 `sensor_health_flags` 放到第一层，而不是只看 quality_score。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们现在 `ci95` 的计算里，风速不确定度是固定值还是按健康状态动态调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就更要把卡死检测的 flag 接到异常溯源里。否则通量跳高时我们可能误判为真实排放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版分类树（偏工程可落地）：  \nA. 数据链路类（优先排）：如果同窗 `sensor_health_flags` 有相机过曝/欠曝/镜头污染/风速计丢包，或 `wind_speed_stuck=1`，则异常归为“传感质量风险”，下一步找硬件接入/现场确认。  \nB. 反演不确定类：健康 flag 正常，但 `ci95_high - ci95_low` 超过 `flux` 的 60%（相对区间过宽），标“反演不确定”，下一步做工况对齐核验和可视化回放看烟羽遮挡/逆光。  \nC. 可能真实排放：健康 flag 正常、相对区间 ≤60%，且通量突增持续≥3窗；再看 CEMS 是否同步上升（比如浓度或流量任一明显上升），同步则“疑似真实排放”，不同步则“跨源冲突”进入对齐排查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小复现我需要同一时间段（比如异常前后各 30 分钟）的四条序列：  \n1）边缘反演输出：flux、ci95、quality、flags、wind_speed_stuck；  \n2）CEMS：流量、浓度、设备状态码；  \n3）PLC 工况：关键阀位/负荷/旁路开关这类离散标签；  \n4）系统内部对齐用的时间基准：每条数据的 source_ts、ingest_ts、align_ts（最终窗口时间）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "复现手段：对同一段数据做两次回放，一次按 source_ts 对齐，一次按 ingest_ts 对齐，看冲突是否随对齐策略变化而消失；如果消失，说明是时间戳/乱序；如果不变，更像传感问题或真实排放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 边缘侧在断网回补、缓存水位触发降级时，数据上报的时间字段会怎么表现？source_ts/ingest_ts 有没有可能被重写？窗口聚合是按哪个 ts？另外乱序到什么程度会被你们丢弃或重排？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那基本坐实一条：云端对齐必须用 source_ts，ingest_ts 只能用于传输诊断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需要在联调里加个“对齐基准=source_ts”的硬约束，并且如果发现对齐基准被切走要明确告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 联调里你能帮我设计几类故障注入用例吗？重点是：断网回补导致 ingest_ts 集中、风速计卡常数但不丢包、相机过曝/镜头污染、以及 PLC 工况标签延迟。希望每个用例都有：注入方式、期望的异常分类、以及验收字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第 1 条我想再加一个断言：如果有人把对齐基准切成 ingest_ts，要直接产出明确错误/告警，不然联调时很难看出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第 2 条里，卡常数风速可能导致 flux 也稳定但偏大，系统应该在工作台显示“风速卡死”比“排放上升”更靠前。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "证据我准备最小化三件事：  \n- 触发分类的原子条件：比如 `wind_speed_stuck=1`、`sensor_health_flags` 的位、`plc_lag_sec` 数值、`ci95` 相对宽度。  \n- 对齐信息：用的是 `source_ts` 还是 `ingest_ts`，以及该窗的 skew 指标（ingest-source）。  \n- 可回放引用：run_id + input_ref，能把同一窗的多源数据拉出来复现同结论。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则：A 传感质量风险优先（flags 或 wind_speed_stuck）；B 不确定类看相对 ci95 宽度；C 真实排放要跨源同步且持续≥3窗，不同步就进对齐排查。  \n字段：边缘侧用 flux/ci95/quality/sensor_health_flags/wind_speed_stuck；对齐必须显示 source_ts/ingest_ts/align_ts；另外要有 plc_lag_sec 和 edge_seq_regress。  \n用例：断网回补验证 ingest_ts 堆积不影响对齐；风速卡常数触发 wind_speed_stuck；相机过曝/污染触发 flags；PLC 延迟触发 plc_lag_sec 超阈。  \n验收：每个用例能用 run_id 回放，分类结果一致；对齐基准=source_ts，并且对齐错误时要能在联调日志/工作台里看出是 ingest_ts 导致的错配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

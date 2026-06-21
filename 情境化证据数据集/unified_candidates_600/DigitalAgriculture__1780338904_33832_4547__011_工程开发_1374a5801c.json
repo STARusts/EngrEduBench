@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云端调度引擎高并发卡死瓶颈诊断与重构背景下，用户与导师围绕并发模型缺陷、锁降级切分维度及重构方案持续沟通（6轮），其中在并发模型诊断部分与性能优化工程师沟通（1轮），在跨区交接状态同步部分与核心调度开发工程师沟通（1轮），并最终形成包含锁降级、CAS更新、并行寻路及快照版本号交接的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先用JMeter或者wrk压一下看看是不是线程池满了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这代码里给农机状态更新加了一堆synchronized，而且路径规划用的是单线程遍历。我想着，是不是直接把synchronized换成ReentrantLock，或者加个Redis缓存就能快一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有什么现成的并发框架或者中间件能直接替换掉这块逻辑的？我不想从头改算法。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Java里有没有那种自带分段锁的并发集合，我直接把HashMap换掉行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按农机ID切？或者按地块区域切？我不太确定哪种不会出错，万一切错了农机跨区协作时状态就不一致了。有没有那种自动识别锁冲突的工具能帮我划分一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在地块边界上，两台农机如果要跨区交接，它们的状态更新锁不一样，怎么保证同步不出错？有没有现成的分布式锁组件能直接加上？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边界交接用事件快照和版本号校验，不加分布式锁。所以这版重构方案就是：1. 把全局大锁降维成地块级细粒度锁；2. 位姿更新用CAS；3. 寻路改成ForkJoinPool并行；4. 跨区交接用快照加版本号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

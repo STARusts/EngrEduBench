@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业取证链路方案设计背景下，用户与导师围绕边端采集点位、断网离线缓存补传与离线补录不污染证据链持续沟通（11轮），其中在边端事件队列/不可变日志、时间字段与设备验签强弱采信设计上与物联网架构师沟通（3轮），在离线>7天佐证的数据最小化、留存与脱敏规则上与合规与数据治理官沟通（2轮），并复述形成可执行的边端采集与离线策略六条。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是边上先把数据采到，本地存着，等有网再传上去。底线就是别丢数据，别乱改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点位…入库出库要扫，门店卖给农户也扫，农户施用也扫。离线动作就是也能扫吧，不允许就是不让删。证明的话，就打个离线标记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 离线的时候事件怎么缓存、怎么补传，时间怎么处理？设备身份也说下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那手机离线也签名吗？手机不太好搞吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "嗯…我理解就是边端写个队列，传的时候按幂等键去重。手机时间不可信，就用云端接收时间。强采信是仓库网关和门店手持机，弱采信是农户手机。离线允许扫和录入，不允许改、删。字段就是有event_id、idempotency_key、edge_time、receive_time、time_quality、device_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个哈希？然后签名？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "签就是设备签事件内容的哈希，云端验签。强弱就是看device_id是不是在设备清单里、能验签就是强，不行就是弱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打离线标记，time_quality写UNKNOWN，然后用receive_time当准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能…就是三种时间都留着，取证看更硬的时间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "设个7天？超过就不让传？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 离线超过7天补录要佐证的话，能采什么数据不踩线？要保留多久，怎么脱敏？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们就不传照片了，只传hash就行。位置也模糊成乡镇。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是离线时长超过48小时触发；另一个是同一device_id一天补录太多条触发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，这个我记下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）边上采集有手机扫码和网关，先写本地追加日志，断网就排队等补传。  \n2）字段有event_id、幂等键、carrier_id、类型、主体ID、device_id，三种时间，还有time_quality、offline_flag，再加hash和签名。  \n3）能验签的是强，不能的是弱，证据包要至少两条强的。  \n4）claimed_time跟record/receive分开，取证不靠claimed_time。  \n5）离线≤48小时正常，48到7天降级要复核，超过7天要佐证或关联上游强事件，不然不算证据包。  \n6）不传原图，不搞精确轨迹，用摘要和网格位置，摘要留得短一点，导出要裁字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

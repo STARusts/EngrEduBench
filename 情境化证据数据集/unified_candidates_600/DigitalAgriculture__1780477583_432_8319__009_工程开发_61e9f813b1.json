@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在禽舍非平稳强噪边缘端声纹处理背景下，用户与导师围绕降噪方案选型、特征筛选、算力切分降级、温控降频及数据脱敏持续沟通（5轮），其中在降噪与特征选型部分与边缘算法工程师沟通（1轮），并最终形成OMLSA+IMCRA+GRU降噪、MFCC+F0+Harmonic Ratio特征集、算力切分降级、温控降采样及数据脱敏审计的工程闭环。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传统谱减法计算快，但强噪下容易产生音乐噪声，把真实的短促鸣叫给抹掉。我倾向用自适应维纳滤波打底，再试试轻量级的DCCRN做残差降噪。特征方面，MFCC肯定是基线，但种禽发情和应激的叫声谐波结构差异大，我想加上共振峰Formant来增强区分度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "维纳滤波和谱减法都不太行，边缘端算力限制下，降噪方案怎么选？轻量网络推理延迟怎么控？特征提取除了MFCC，针对种禽发情/应激鸣叫，哪些特征区分度高且计算开销小？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我对GRU残差降噪和pYIN的算力开销还有点虚，如果在边缘端同时跑，会不会互相抢资源导致帧丢失？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GRU模型量化成INT8跑NPU，pYIN用NEON指令集优化跑CPU。我设个NPU占用率阈值，比如80%，一旦超过或者帧延迟超限，就自动关闭GRU，只保留OMLSA+IMCRA打底。这样能保底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "发热降频确实没细想。我加个温控守卫进程，温度超75度主动降采样率，从48k降到16k，牺牲高频保实时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "录音数据这块，我只传声纹特征向量到云端，原始音频流边缘端留存72小时后覆盖，不外传。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先写OMLSA的C++实现和pYIN的NEON优化，把这两个核心模块跑通。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

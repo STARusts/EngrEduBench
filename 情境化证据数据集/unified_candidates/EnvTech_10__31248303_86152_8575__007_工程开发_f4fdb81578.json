@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微塑料排放在线监测与溯源系统采集网关到平台联调背景下，用户与导师围绕断网重连导致 raw 重复入库、TIME_SKEW 与 agg/raw 对账不一致的复现与收敛修复点持续沟通（8轮），其中在补传分段/ACK/序号与时间同步策略上与物联网架构师沟通（3轮），在平台幂等落库、聚合触发与事务边界及 watermark 对账口径上与后端工程师沟通（2轮），并形成网关补传与平台幂等/聚合改造及断电试验验收清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现步骤很稳定：模拟站点离线 8 分钟，网关本地缓存满一批后重连开始补传。症状：  \n- raw 表里同一站点同一时间段出现两份数据，payload 相同但 ingest_id 不同；  \n- agg 表有一段窗口缺失，但 raw 明明在；  \n- 同时审计里出现 TIME_SKEW=2（可信度降级），但并不是丢数。  \n猜测：网关补传没做到“分段窗口 + ACK”，平台侧也没用幂等键，导致重试当新数据；另外重连后网关时间同步飘了几秒，触发 TIME_SKEW。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对账是我们做的站点分钟级计数：raw_count 和 agg_count 按窗口聚合应该相等。现在 agg_count 少一段，raw_count 正常偏多（因为重复）。TIME_SKEW 是接入服务里根据“设备时间 - 平台接收时间”的绝对偏差打标，阈值 3s、10s 两档，我现在看到的是 10s 档。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 断网重连补传时，我们现在会重复入库、出现 TIME_SKEW、agg/raw 对不上。你建议补传分段、ACK 粒度、序号/幂等标识、时间同步怎么做，才能在不稳定网络下稳住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "boot_id 我们现在没带，只有 msg_id（UUID）和采样时间。device_seq 需要设备侧改固件吗？如果要改，周期会拉长。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TIME_SKEW 的阈值我想先不动，但要避免它影响 agg。你建议 agg 用哪个时间？event_time 还是 recv_time？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从物联网那边拿到的结论我先筛一版：  \n- 补传按固定窗口段切分，每段单独 ACK；  \n- 幂等键别用 UUID，换成可排序的 seq：短期先由网关生成 gateway_seq，并把 seq 持久化；  \n- TIME_SKEW 只做可信标记，不做丢弃；event_time/recv_time 分离，agg 用 event_time 但加 watermark，迟到走单独通道；  \n- 重连补传做站点级限流，避免把平台挤爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先实现“网关生成 seq + 平台幂等 + watermark”，固件改 device_seq 放后面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 现在网关断网重连补传，会造成 raw 重复入库、agg 缺窗口、TIME_SKEW 打标。我们准备加“窗口段 ACK + gateway_seq 幂等 + watermark”。平台接入服务这边你建议怎么落：幂等键、唯一约束、去重缓存、agg 触发点和事务边界怎么设计，才能保证 agg/raw 对账一致？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里有个点我想确认：你说“窗口重算覆盖”，那补传期间一个窗口会被多次触发聚合，数据库会被扫很多次。成本会不会太高？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回到导师这里把“开发改动清单 + 验收口径”定下来，避免联调变成拍脑袋。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我准备这么落：  \n1）网关侧：补传按 300s 窗口段切分，每段带 boot_id、seq_range；ACK 按段回；gateway_seq 持久化（先 sqlite）。站点级限流。  \n2）平台接入：raw 表加唯一键（site_id, stream, boot_id, seq），写入用 upsert，冲突记 dup_drop_total；TIME_SKEW 只进 quality_flags。  \n3）聚合：ACK 段完成后发 window_finalize，再触发窗口重算覆盖写 agg；加 watermark（lateness=120s），迟到进 late_raw，并带 raw_in_agg 标记用于对账。  \n4）对账验收：按站点+窗口比对，要求 raw_in_agg=true 的计数与 agg 的 input_count 相等；dup_drop_total 非零时必须可解释（重试导致）。  \n我担心的两点：a）唯一键变更会影响现有查询；b）sqlite 持久化会不会在网关掉电损坏。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "试验我这样设计：网关本地写 seq 时采用事务提交；每发 100 条强制 fsync；再做三组断电点：未提交、已提交未 ACK、已 ACK 未清理缓存。验收是“平台 dup_drop_total 上升但 raw 总量不缺，seq 不倒退导致的数据洞为 0”。fsync 频率我拿不准，可能要在树莓派上测一下写放大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "收到，我把路由键定成三类：realtime_raw、backfill_raw、audit_log，限流器对 backfill_raw 更严；审计单独队列。TIME_SKEW 的解释我也会在联调汇报里强调：它是可信等级，不等于丢数。容灾那套回补顺序和“导出校验链”覆盖点，等我们做桌面推演时一起验证，过不了就按你说的回调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

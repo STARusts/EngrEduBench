@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在校园数字实验安全实训平台开发背景下，用户与导师围绕训练内容制作流水线MVP的范围/DDL、版本不可变、状态机、发布回放与审计留痕持续沟通（8轮），其中在内容颗粒度/审核级别/字段锁定与素材引用部分与内容制作负责人沟通（4轮），在版本表结构/发布事务/并发冲突与回放查询部分与后端负责人沟通（3轮），并收敛为6条可验收实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先说个粗方案：内容分成场景脚本、题目、素材三类，统一挂在content_version下面；审核走一条状态机。纠结点是版本策略：要么全量快照一份；要么差量+基线。MVP我倾向全量快照，牺牲点存储，换稳定和回放简单。你看会不会踩坑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容制作负责人 我这边在做训练内容制作流水线MVP，想确认三件事：1）脚本/题库/素材你们一般怎么拆颗粒度，哪些是必须一体版本的；2）审核流到底需要几级、常见退回原因；3）发布时你们希望锁哪些字段，后面改动要怎么留痕。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "素材这块我之前想直接存URL，看来会导致回放漂。你说asset_id+hash，我理解是：素材本体可以不跟版本复制，但版本里记录引用时的hash，回放校验hash一致才算同一份，对吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备这样落：  \n- 内容模型按“课程包-场景-步骤”，场景作为最小发布单元；题目和答案解析跟content_version一起冻结。  \n- 素材不直接存URL，改成asset_id+hash；content_version里冻结引用关系。训练端校验hash，异常就占位+上报。  \n- 审核先两级：内容负责人自检→安全官合规审；退回原因做标签+备注，方便统计。  \n- 发布后锁脚本文本、步骤顺序、题目答案解析、风险标签、素材引用hash；改动一律新版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想快照“结构化内容”：场景、步骤、题目、选项、解析、风险标签、引用列表；素材本体不快照，只记录asset_id+hash。这样回放一致性主要靠hash校验兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据库层面我可以加约束：published状态的记录禁止update，只能插新版本。实现上用“版本表+内容表按version_id分区式写入”，更新只发生在draft版本。可能还需要把发布动作做成事务：锁定draft，复制生成immutable版本，状态切到published。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 内容制作流水线MVP我在落地，想确认：1）content_version不可变你建议怎么做（表结构/约束）；2）发布动作怎么保证原子性；3）并发编辑冲突怎么处理，MVP需要做到什么程度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload_json快照我能接受，省得拆一堆表。draft内容怎么存？也用snapshot？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发409也够，正好前端提示“刷新后再编辑”。我回去跟导师对齐一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳“版本头表+快照表”：content_version+content_snapshot，用payload_json存scene/step/question/asset_ref。原因是MVP快，回放逻辑也直。  \n不采纳的是“开发环境就上数据库权限隔离”这块我可能先做成可配置：线上严格禁UPDATE，开发/测试先靠代码层限制+审计，避免本地调试被卡死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节点我按四段：  \n1）制作：创建draft版本，写入scene/step/question/asset_ref快照；每次编辑rev+1。  \n2）提交审核：draft→in_review，冻结编辑入口（除非退回）。  \n3）审核：in_review→approved 或 rejected（带reason_tag+note），rejected回到draft可继续改。  \n4）发布：approved→published，生成新的published version_no，写入published快照，填effective_at/expire_at；旧published版本如有冲突则写expire_at作为失效点。回放按decision_time找命中的published版本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想做两层：  \n- 操作审计：记录actor、action、version_id、timestamp、from_status/to_status、reason_tag。  \n- 内容差异不做全文diff，MVP只存payload_hash变化和变更的kind列表，必要时能定位到哪个快照变了。  \n敏感这块我不太确定哪些算敏感，但至少不往审计里塞学生个人信息，这条流水线主要是内容侧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我把这轮定下来的点压成6条：  \n1）内容结构按课程包-场景-步骤，场景为最小发布单元；题目答案解析随版本冻结。  \n2）版本存储用content_version头表+content_snapshot快照表，payload_json+payload_hash；published快照只读不可变。  \n3）素材用asset_id+hash引用，版本里冻结引用关系；训练端hash不一致就占位+上报。  \n4）状态机：draft→in_review→approved/rejected→published；rejected回draft并带reason_tag+note；draft编辑用rev乐观锁，冲突返回409。  \n5）发布用事务生成新published版本并写effective_at/expire_at；回放按decision_time命中有效窗口内最大version_no。  \n6）审计留痕：记录actor/action/status流转、reason_tag；内容变更只记kind列表+hash，不做全文diff。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

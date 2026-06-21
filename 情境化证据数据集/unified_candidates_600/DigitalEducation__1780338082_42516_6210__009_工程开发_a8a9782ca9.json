@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边云算力调度与压测背景下，与导师围绕弱网调度方案、压测数据来源与脱敏、自治调度阈值设定持续沟通（6轮），其中在调度触发机制部分与弹性调度研发沟通（1轮），在压测数据构造与脱敏合规部分与容灾降级测试员沟通（1轮），并最终形成边缘自治调度、Chaos Mesh弱网压测及队列长度阈值20的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力调度的话，理论上可以用HPA，根据CPU利用率设阈值，超过80%就扩容云端推理实例来分压。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "书本上一般推荐70%到80%之间。实际压测还没跑，我对压测工具不太熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力弹性调度，HPA阈值在弱网下怎么定？还有压测指标主要看啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用云端下发扩容，边缘自己根据队列深度自治。压测看P99和溢出率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "队列长度阈值定多少合适？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "肯定不行，涉及隐私。压测数据构造和脱敏合规的事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用Chaos Mesh模拟50KB/s上行和间歇断网，配合合成数据压自治调度。日志里也把ID哈希掉。这样压测能贴近真实弱网，也不违规。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "根据排队论，M/M/1模型下，利用率ρ不能趋近1，否则队列长度方差爆炸。边缘节点算力弱，我设队列长度阈值20。超过20就触发降级，把低优先级的请求丢弃保核心。这个20只是理论基线，压测时看P99是不是在3秒内，不在就往下调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

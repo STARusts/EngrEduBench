@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在物理层核心设计背景下，与导师围绕声光异构联合编码与自适应均衡机制持续沟通（5轮），其中在多径抵消与异构编码增益部分与均衡算法工程师沟通（1轮），并最终形成变步长LMS均衡、MAC层跨信道映射、光退声降级重传及算力预算四条基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "声信道多径重，我打算声用LDPC抗衰，光用RS码纠突发。均衡就上LMS算法，通用好调，DSP里跑着省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多径抵消咋整？联合编码又怎么搞出增益？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说LMS得换成变步长LMS或者RLS，RLS算力吃不消就选变步长。编码要在MAC层做，声光包互为冗余。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长因子，就根据信噪比动态调呗，信噪比低步长小点？光断了重传，就全压给声链路发呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力预算我不太确定DSP能剩多少，时延的话，均衡收敛得压在几十毫秒内吧？降级重传这块我确实没细想，得找搞协议的定一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 均衡用变步长LMS，步长因子挂钩反演特征值扩散度；2. 联合编码在MAC层跨信道映射，声光包互为冗余；3. 光退声重传做降级选择，不保全量；4. 均衡加编码算力开销压在DSP总预算40%内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

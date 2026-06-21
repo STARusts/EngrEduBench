@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在评分服务工程开发的联调与压测背景下，用户与导师围绕端到端链路跑通、接口幂等/超时/重试、压测方法与降级限流策略持续沟通（7轮），其中在幂等键/重试边界/状态机与压测拆分部分与后端工程师沟通（2轮），在同步响应最小字段、模型瓶颈与证据最小集部分与评分模型工程师沟通（1轮），并形成联调必过用例、容量曲线压测方案与合规样本/日志约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先从三条线并行：1）联调最小闭环：提交作业→转写完成回调→评分→拿到证据链字段；先拿一条标准样本跑通。2）接口契约：评分请求里哪些字段必须和P3指针强绑定，哪些可选；响应里置信度、证据、可复核信息怎么落。3）压测：先做“评分服务单点”再做“带队列的端到端”，指标我想先盯P95/P99、错误码分布、队列堆积和资源上限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "固定输入我想做两套：A是转写文本固定，绕过ASR，把评分服务当纯评分推断；B是真实音频走完整链路，验证证据链里的时间戳和hash。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等我倾向用attempt_id或submission_id+rubric_version做幂等键，重复请求应该返回同一个score_id和同一组evidence_pointer。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测通过口径：先定两个档位，比如50rps、200rps，P95 < 800ms、错误率<0.5%（不含我们主动限流/降级的情况），同时队列延迟不超过某阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 评分服务联调这块，想确认三件事：1）评分API的幂等键你建议放哪几个字段组合？2）联调链路里转写回调和评分调用的重试边界怎么设，避免重复扣费/重复写证据？3）压测我们怎么拆：单服务、带队列、端到端分别关注哪些指标和阈值比较合理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等键用submission_id+rubric_version+scorer_version我认可，这样复评分也能区分版本。重试只放429/5xx也好，避免重复写证据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想追问：证据链写入如果成功但模型推断失败，或者反过来，怎么避免“半条记录”？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "压测容量曲线我可以用阶梯压上去找拐点，不先锁死指标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@评分模型工程师 评分接口联调与压测我需要你这边给约束：1）评分响应里哪些字段是“必须同步返回”的，哪些可以后置异步拉取，避免拖慢P99？2）模型推断主要瓶颈是CPU、GPU还是外部依赖？3）为了可复核，证据字段最小集合你认为是什么（别太理想化，落地可用就行）？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同步返回就收敛到score/confidence/版本/evidence_digest/短解释，其它走异步拉取，这能压低payload和P99。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "瓶颈是CPU/内存，批量会抬尾延迟，那压测时我想分别测“单条低延迟模式”和“批量吞吐模式”，看我们选哪条曲线更符合课堂场景。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据最小集合我也记下了，尽量只用hash和索引，不回传大段文本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调我拆四个必过用例：  \n1）纯评分（固定转写文本）：同一submission_id重复请求3次，期望同一score_id、evidence_digest一致；并验证DONE状态不可逆。  \n2）回调去重：同一transcript_id回调2次，只触发一次评分，第二次只做状态确认。  \n3）可重试错误：人工模拟429/503，客户端按退避重试，最终仍落一条记录，不产生重复证据指针。  \n4）不可重试错误：400/403/422直接失败，FAILED带reason_code，且不再触发自动重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测我按两条路径：  \nA 纯评分低延迟模式：目标是找拐点，阶梯从20→50→100→150rps；指标看P95/P99、CPU、内存、GC/抖动、错误码分布。通过标准先不定死绝对值，先产容量曲线，找出在P99开始飘、错误率上升的拐点rps。  \nB 端到端（含证据指针落库+队列）：固定并发数逐步上调，观测队列积压、消费者lag、DB写入延迟、幂等冲突率；重点看在失败重试下是否出现“重试风暴”导致积压无法回落。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还缺一块：在“批量吞吐模式”下，尾延迟怎么定义为可接受，需要你给场景期望。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级我倾向三层：  \n1）评分同步返回最小字段，完整证据异步；当压力大时直接不生成完整证据，只保留evidence_digest+segments_used，标记evidence_level=MIN。  \n2）超时：超过比如2s就返回“已受理/处理中”，前端轮询score_id，避免长连接拖垮。  \n3）限流：达到并发阈值返回429，客户端按退避重试；服务端对同一submission_id的并发请求做合并（singleflight思路），避免穿透。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证上我会用同一submission_id并发打10个请求，观察后端日志里推断只执行一次、其余命中幂等或等待同一结果；同时DB里只出现一条score记录、evidence_digest一致。具体实现我不碰代码细节，让后端按他们的方式做。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测样本我会用脱敏文本与合成音频，保证不含真实姓名、学校、班级等；评分响应里的explain_snippet也限制长度并默认不打入请求日志，只记录hash与长度。联调必须用的真实音频如果有，也只在封闭测试环境走，加密存储TTL照之前P3规则走，不进入通用日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算力路由协同调度联调背景下，用户与导师围绕联调超时与路由寻路异常排查、接口契约比对及修复方案持续沟通（5轮），其中在调度模块解析权重报错部分与算力编排调度工程师沟通（1轮），在信令包字段比对部分与通算联调测试员沟通（1轮），并最终形成在引擎输出加适配层映射字段的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "调度那边疯狂报超时，路由寻路结果也全乱套，根本没按语义优先级走。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我光看日志了，引擎这边打分是出来了，但后面一长串timeout，我也看不懂是卡在哪了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度模块接收语义权重那块是不是有Bug？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TinyBERT推理出来的得分我明明塞进返回结构里了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我看下引擎到调度的信令包，字段是不是对不上？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "是我写TinyBERT输出层的时候图省事，直接用了HuggingFace模型默认的输出key。我改一下映射。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "在引擎输出那里加个适配层，把`weight`映射成`importance`。这样模型底层的输出逻辑不用动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

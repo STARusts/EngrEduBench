@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在课件可达性自检替代引擎进入运行评估、准备灰度发布背景下，用户与导师围绕灰度范围、监控阈值、回滚动作与验证标准持续沟通（9轮），其中在回滚阈值/窗口、在途任务处理与回滚后验证细则上与SRE运维工程师沟通（5轮），并最终整理出按tenant_id灰度与分级降级/回滚的可执行规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "课件可达性自检替代引擎现在要进运行评估了，我这边在准备灰度发布，但我不太确定回滚要怎么设才算“能用”，想先把回滚触发条件和动作定下来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度范围我想先给一小部分老师开，可能按租户？或者按老师账号。回滚我就把功能开关关掉？但关掉后正在跑的任务咋办我没谱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在有个总开关，另外生成那块有个开关。检测和生成是串一起的，审计是采纳时写的。按tenant_id切是能切的，就是配置得写规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布回滚这块，你给我个可执行的方案：触发阈值怎么定、回滚动作怎么做、在途任务要不要停。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值呢？我怕我写得太主观。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "在途任务怎么处理？我怕一回滚就一堆半成品。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚到哪一版？我们是同一套服务，只是开关控制。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚后怎么验证“好了”？光看告警消失够吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计这点我差点忽略。我理解是：即使功能回滚了，采纳入口如果还在，就必须保证写审计；如果采纳入口也关了，那就没采纳动作了，也就不会写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了SRE，他给了回滚触发器和在途任务策略。我想用按tenant_id白名单灰度，1%→5%→20%，触发就先功能回滚（关白名单+总开关），在途任务“继续跑完但不展示”，然后做监控+冒烟验证。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我先选这三个：  \n1）关键接口5xx>1%持续5分钟就回滚；  \n2）首屏P95>2s持续10分钟回滚；  \n3）任务队列长度一直涨10分钟且完成率<80%回滚。  \n外部依赖超时我先不写进触发器，怕一抖动就回滚太频繁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在只有总开关和生成开关。那“只检测不生成”能做，字幕算生成的一部分，关生成就全没了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "窗口是指观察多久再升级动作？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写：外部依赖超时>2%持续5分钟 → 先关生成；关了之后等10分钟，如果首屏P95还是>2s或者5xx还是>1%，就关总开关。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只想到把worker并发降下来，比如把并发从N降到1/2N？但具体数我不太会算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我先定全局K=5，每租户1个。我们灰度本来租户就少，应该够用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回滚后验证我写：  \n- 我这边用灰度租户挑一份小课件跑检测页，确认首屏<2s、详情<1.5s、翻页<1.5s；轮询>=3s，超过60s有提示；  \n- 监控上看5xx<1%、P95回到阈值内、队列不再增长；  \n- 采纳审计还在写：tenant_id/user_id/resource_id/issue_id + adopted_hash + gen_input_hash + timestamp，且不落evidence、URL脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在碳污协同量化链进入核证结算与审计接口设计背景下，用户与导师围绕云侧证据包封装、抽查复算接口、冻结与争议整改及结算对账持续沟通（8轮），其中在披露边界与核证状态机部分与合规与核证负责人沟通（2轮）、在先结算后补证据的产品诉求冲突部分与产品经理沟通（1轮），并形成证据包结构、核证API与结算域隔离的方案口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“核证读得懂”和“结算算得清”拆两条主线。证据包我倾向于两层：外层是项目级索引+权限，内层是按Step串起来的可回放对象集合。接口面上要有：提交/冻结/核证抽查/出具意见/争议与整改/最终结算确认。两种碳模式和工艺分支，我想在包里做成“路径声明”，把实际走过的Step序列固定下来，核证端不用猜。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "索引我先列最小集：project_id、site_id、crediting_period、carbon_mode（两种模式枚举）、process_branch（工艺分支枚举）、step_chain_head_hash、step_count、data_grade_summary（A/B/C统计和剔除比例）、uncertainty_summary（总不确定性区间+保守扣减比例）、factor_ref_manifest_hash、signer_set（施工方/监测方/模型方/业主签名摘要）、dispute_link_count。冻结点我认为至少两段：期初基线锁一次，期末量化结果锁一次；中间Step可以追加但不能改，改只能走“更正Step”并挂争议。权限上冻结应该是项目业主发起、系统强制要求监测方与模型方共同签署才生效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核证端我给三类API：1）EvidencePackage.getIndex(project_id,period) 返回索引+链路图的最小信息；2）EvidencePackage.getStep(step_id) 返回单Step的输入指针、方法版本、关键参数摘要、输出、不确定性、扣减规则、签名与争议关联；3）EvidencePackage.requestReveal(pointer_id,scope) 用于在权限允许下揭示原始数据或脱敏片段。复算的话再加一个 Quantification.replay(step_id|chain_id, method_version_lock) 返回复算结果与差异对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证负责人 核证抽查场景下，证据包里哪些信息必须对核证方可见到“可复核”级别？哪些可以只给摘要/哈希承诺？另外争议与整改闭环在接口里通常要什么状态与留痕？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "核证这块我理解成两层披露：默认给可复核最低披露，命中抽查或触发升级就揭示A档全量。坐标这点我之前只想着直接脱敏，没把“施工单元映射证明”讲出来，需要补上。争议状态链我会按你说的状态机做，另外把每次Clarification绑定受影响Step集合和差异摘要，避免核证说我们改了但没说明改哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把它当成“执行路径证明”。证据包里加一个 PathManifest：  \n- declared_carbon_mode：比如 Mode-A（修复过程减排）/Mode-B（协同效益含污染物去除带来的间接减排）  \n- declared_process_branch：原位/异位、热脱附/化学氧化/固化稳定等  \n- required_step_set：该路径要求的Step模板清单（带版本）  \n- executed_step_chain：实际执行的step_id序列+每个step的hash  \n- missing_or_skipped：如果有跳过，必须给出理由与核证允许条款引用  \n核证端看到manifest就知道“该看哪些Step、哪些是必须的”，不用从头读。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 你说的“先结算后补证据”具体是怎么想的？在核证结算接口里，你希望把证据包放在什么位置，核证没完成时结算单的状态怎么走？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于折中但要把语义切开：产品要的现金流我们用“预估单”支持，但不进入信用结算域。结算域只能接受已冻结且核证通过的证据包。否则我们会把核证链路搞脏，后面争议扛不住。产品这边如果担心流程重，我可以把核证端看到的默认披露做得更轻，抽查再揭示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "两个对象：  \n1）EstimateStatement（预估声明）：来自量化链的“可回放但未核证”的额度估算，允许引用Step链，但必须标注 data_grade_summary 与“不可用于信用发行”。  \n2）VerifiedSettlement（核证结算）：必须绑定 frozen evidence_package_id + verification_id。  \n\n三条状态规则：  \n- 规则1：VerifiedSettlement.create 前置条件是 EvidencePackage.status=Frozen 且 Verification.status=Verified。  \n- 规则2：EstimateStatement 可以在 EvidencePackage=Submitted 或 UnderReview 时生成，但任何对外导出必须带水印字段 usage_scope=FinancingOnly。  \n- 规则3：一旦发生争议（Dispute.status=Open）且影响到结算相关Step集合，VerifiedSettlement 自动进入 Suspended，直到 Dispute 关闭并重新核证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在接口里加一个 ReviewNavigator：  \n- listFlags(project_id,period,flag_type=anomaly|sensitive|settlement) 返回触发清单，每条包含触发原因、涉及step_id集合、数据等级从B/C升到A的证据指针。  \n- getImpact(flag_id) 返回对最终额度的影响：影响的扣减项、前后差异摘要、不确定性变化。  \n这样核证方先看旗标，再点进Step回放，不用扫全链。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把 factor_ref_manifest 设计成结构化数组：factor_id、source、scope、publish_date、data_grade、selected_reason_code（比如适用范围不符/保守性更高/法规要求）+selected_reason_text。核证端可以按reason_code聚合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "共识我按四块落点：  \n1）证据包 EvidencePackage：外层Index（项目/周期/模式/分支/链头hash/数据等级摘要/不确定性与扣减/因子清单hash/签名集合/争议计数），内层Step对象可回放；PathManifest固化执行路径。  \n2）核证接口：getIndex/getStep/replay + requestReveal按权限定向揭示；ReviewNavigator按旗标（异常/敏感/结算）定位A档升级与影响面。  \n3）结算域隔离：预估用 EstimateStatement（FinancingOnly），正式用 VerifiedSettlement；正式结算前置条件=证据包冻结+核证通过；争议影响结算则自动挂起。  \n4）披露边界：默认“可核证最低披露”；factor_ref与方法学全文可见；商业机密用哈希承诺，抽查命中再揭示；审计留痕记录查看/下载/揭示行为。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

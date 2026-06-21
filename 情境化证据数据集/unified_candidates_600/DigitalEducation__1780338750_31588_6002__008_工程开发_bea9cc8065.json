@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发表情与笔触特征提取背景下，用户与导师围绕算力开销、笔触特征、合规红线及差分脱敏方案持续沟通（8轮），其中在端侧性能与笔触属性部分与前端开发工程师沟通（1轮），在人脸特征脱敏合规部分与隐私合规官沟通（1轮），并确定差分脱敏上报方案，准备编写差分计算与上报代码框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着表情直接套个MediaPipe的FaceMesh，笔触就听前端说用Canvas的事件打点？但我不确定这两个数据怎么对齐，而且前端那边说帧率不稳，我怕传过来的数据没法直接用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力开销我确实没细想，就觉得别人也这么用应该没事。笔触停顿和力度，前端能拿到这些数据吗？合规红线是指不能存人脸图片吧？只要我不存原图，只存坐标应该没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想在浏览器端跑MediaPipe FaceMesh抽人脸特征，再拿Canvas的PointerEvent做笔触打点，这样搞性能吃得消吗？笔触事件能拿到力度和倾斜度吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前端抽出来的人脸特征点坐标，我不存原图，直接把坐标数组传给后端做认知演算，这样合规吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端说FaceMesh最好放Worker里，不然低端机卡，帧率可能得降。笔触事件能拿压力和角度。合规那边卡得很死，不让传原始坐标，只能传差分，还得做授权撤销。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "差分对齐宽容度更高是啥原理？我有点懵，就是算 delta 对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差分脱敏的逻辑我能写，就是在端侧算 delta 嘛。但停顿间隔多少算滞碍？压力变化率多大算异常？这些阈值我拍脑袋定肯定不行，之前吃过亏的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就先写端侧的差分计算和上报模块，阈值留个配置项空着。授权撤销的接口我也得配合前端预留一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

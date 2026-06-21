@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在固废智能分选与溯源系统进入工程开发、需启动设备接入与网关开发背景下，用户与导师围绕设备清单与协议核实、网关事件结构/触发对齐、离线48小时缓存与可持续存储及日志规范持续沟通（6轮），其中在现场设备接入协议/触发与时间对齐边界上与物联网集成工程师沟通（2轮），在离线落盘断点续传、降级策略与事件ID幂等设计上与边缘计算工程师沟通（2轮），并最终明确本周模块边界与最小链路测试目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在要开始工程开发这块，先把设备接入和网关搞起来，但我不太确定从哪儿下手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就相机、称重、RFID吧，再加个分选机的控制。差不多这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "相机就网线吧，协议就…HTTP？称重可能串口。RFID也是串口。主从我不清楚，反正网关收数据就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 现场这几类设备具体怎么接？协议和频率给我说下，越简单越好。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "触发就让PLC来吧，时间戳就用网关时间。应该就可以。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关这块离线缓存、48小时、降级这些要怎么做？我就想知道我代码里要写啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件ID是随便搞个时间戳吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "知道了，那就用UUID吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，我去问导师确认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "物联网那边说相机RTSP或SDK抓拍，称重Modbus RTU 5到10Hz，RFID要触发读窗去重，PLC主要读状态不下发动作。边缘那边说要做离线落盘、断点续传、云挂了要降频，还提了事件ID幂等。我先用UUID应该也能行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件字段就…设备ID、时间、值。稳定值就是多读几次差不多。缓存大小我没算，反正硬盘挺大的吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，差不多就是加几个字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "trace_id先不做吧，先都空着，后面再串。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PLC上升沿…就是读状态从0变1？可以吧，我去做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点位物联网给。轮询就1秒一次？错过就…再触发一次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，我去问物联网把触发保持确认下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。N就3？δ就1公斤？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了，就做成配置。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不存图了？只传事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，这个我能做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，我记着。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这周就写：设备数据进来变成统一事件；再加离线落盘和恢复补传；称重稳定判断做成配置；PLC触发生成trigger_id；图片就按触发存一张，超了删最老，还要打标记。RFID日志不全打出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

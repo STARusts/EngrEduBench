@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在交互断链归因背景下，用户与导师围绕从理论推演转向实操数据验证持续沟通（6轮），其中在实操证据抓取部分与异常复盘与体验迭代师沟通（1轮），在因果链ID串接与快照查询部分与时序拓扑编排师沟通（1轮），并最终形成基于Causal-TraceID与增量快照的四步归因复盘实操步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按经典可靠性理论，先建故障树，查时序拓扑的因果链，再查总线的吞吐瓶颈。理论上是状态机死锁和总线拥塞互为因果，我可以用FTA分析法推演。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只推演了逻辑，没想好怎么验证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种交互断链的实操归因，一般怎么抓证据？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来还得对齐设备Dump。我之前只想着看服务端状态机日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "串接应该靠TraceID？防打爆的话，我不太确定，是不是要做采样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断链时，因果链的TraceID怎么串接的？状态机回滚的快照日志能直接拿来做归因对照吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Causal-TraceID反查增量快照，不用全量Dump，也不会漏帧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "归因复盘实操步骤：1. 断链触发时，提取断链点的Causal-TraceID；2. 用该ID反查时序拓扑的增量快照，定位先挂起的节点；3. 交叉比对感知总线的对应时间窗丢帧记录；4. 确认是物理设备卡死还是调度超时，不依赖全量Dump和理论推演。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在多机航线与处方图生成背景下，与导师围绕航线分配取舍、处方图生成、药量校验及畸变校正持续沟通（9轮），其中在多机分配约束部分与多机调度开发者沟通（1轮），在像素转指令及畸变矩阵补偿部分与空间数据流设计师沟通（2轮），并形成区域预分配加药量校验、Z字航线、三级处方图查表及内参矩阵补偿畸变的MVP开发口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按面积平分？把地切成三块，每架飞一块。虫多的地方多喷点药。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按面积平分航线不行，多机分配一般怎么做？要考虑哪些约束？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Voronoi图划分，牛耕法航线，药量电量双约束。听着比面积平分靠谱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实，Voronoi现成库我不熟，调参估计得卡住。要不第一版还是按区域预分配，但是加上药量监控？飞之前根据处方图算一下总需药量，超了就换下一架？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "虫害识别框怎么转成喷洒流量指令？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "航线就先区域预分配，起飞前算药量，超了不飞。用Z字航线。处方图这块，像素框用POS和相机参数转经纬度，按网格算密度，分0/1/2三档。飞控查档位发PWM。复杂的Voronoi和更细分级后面迭代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按药箱容量留10%余量？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用OpenCV的undistort函数先去畸变再投影？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "畸变校正直接在投影矩阵里补偿怎么做？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

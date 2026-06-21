@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧亚秒级预警流线设计背景下，用户与导师围绕算力约束、缓冲区防碎片、多源数据同步与插值算法持续沟通（8轮），其中在网关算力与内存分配部分与边缘计算开发沟通（1轮），在模型量化与推理耗时部分与算法实现工程师沟通（1轮），并最终确定环形缓冲区、INT8量化、代谢插值对齐及算力余量方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上用流水线并行最干净。脑电和代谢数据分两个通道进来，用双缓冲接住，然后无缝送进预判模型。数据不阻塞，吞吐量最高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在床旁网关还能给预警流线分配多少内存和NPU算力？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你的级联预判模型，在1.5TOPS的NPU上跑一帧要多久？内存占用多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "内存只给256MB，算力1.5TOPS。模型必须做INT8量化，不然跑不动。量化后一帧80ms，精度掉0.5%。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "80ms一帧的话，双缓冲有点浪费内存空间。我觉得用单缓冲加滑动窗口截断更省。采集线程把数据填满窗口，直接触发NPU推理，推理完原地覆盖写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用环形缓冲区？预分配一块固定大小的连续内存，读写指针循环移动。这样就不会有碎片了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代谢指标插值重采样，对齐到脑电的时间戳，然后拼接到输入Tensor里一起送进模型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "线性插值就够了，误差在允许范围内。放CPU上算，不占NPU算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。环形缓冲区，INT8量化，代谢插值对齐，算力留20%余量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

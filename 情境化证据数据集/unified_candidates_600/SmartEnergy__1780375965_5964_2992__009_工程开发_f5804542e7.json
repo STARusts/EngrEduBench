@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在相变流控核心算法边端工程化落地背景下，用户与导师围绕部署资源约束与合规要求持续沟通（7轮），其中在板卡内存与算力硬约束部分与嵌入式开发主管沟通（1轮），在ONNX算子支持与量化精度损失部分与算法工程师沟通（1轮），并最终形成模型剪枝、混合精度切分、日志预留与延迟优化的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把Python训练好的相变预测模型转成C代码呗，用ONNX跑一下生成，然后交叉编译丢到板子上跑就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力的话，板卡上不是有NPU嘛，应该够用吧。延迟这块，我还没细看，反正模型跑完直接发指令就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端板卡跑相变预测模型，内存和算力大概能分多少？延迟怎么卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "相变预测模型转ONNX在NPU上跑，动态shape怎么搞？量化精度掉得厉害吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "板卡内存就2MB，算力0.5TOPS，延迟必须5ms内。模型不能有动态shape，INT8量化精度掉太多，关键层得用INT16，但INT16又慢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "INT16太慢，内存又不够放全INT16。要不我把模型剪枝一下？把不重要的通道剪掉，这样INT8也能顶住精度，内存和算力也能省下来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计日志？这还得占内存啊？那我把模型再压压，挤出点空间给日志。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "模型先剪枝20%冗余通道，验证F1跌幅卡1%内。卷积层用INT8，最后两层全连接用INT16，这样NPU加速和精度能折中。日志预留256KB，剩下的给模型。延迟的话，我优化一下中间态内存复用，尽量压在4ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

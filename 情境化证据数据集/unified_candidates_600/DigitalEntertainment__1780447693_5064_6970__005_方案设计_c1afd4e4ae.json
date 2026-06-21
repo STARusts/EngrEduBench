@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨端调质指令流与材质重映射方案设计背景下，与导师围绕指令流组织、Shader下发形式及LUT生成时序持续沟通（5轮），其中在跨端光照降级参数重映射部分与材质重映射工程师沟通（1轮），并最终形成基于Shader IR下发与预计算基线LUT加动态偏移的设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最直接的方式就是云端统一算好补偿值，把修改后的PBR参数和编译好的Shader字节码打包下发，端侧直接替换加载渲染。这样端侧计算量最小，延迟也低。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "改成下发Shader中间表示，比如Slang IR或者标准的SPIR-V源码，端侧接收后做JIT编译适配本地API。但PBR参数重映射这块，如果端侧因为算力限制降级了光照模型，直接赋值会失真。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果端侧从基于微面元的GGX specular降级到了简化的Blinn-Phong，这批参数直接下发会导致什么问题？重映射逻辑该怎么设计才能保证视感一致？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "调质指令包的结构就需要扩展：除了Shader IR，还要包含针对不同端侧算力档位的参数重映射LUT。云端生成LUT，端侧按档位查表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以基于端侧算力档位预计算几组典型光照降级路径的基线LUT缓存起来。云端度量出漂移后，指令流只下发“基线LUT索引 + 少量动态补偿偏移量”。端侧用基线LUT打底，叠加上偏移量做微调。这样既保证了跨端视感一致性，又把指令流带宽和云端计算开销压下来了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认基线：1. 指令载体采用Shader IR（如SPIR-V）加PBR参数组合，端侧JIT编译，严禁下发特定API字节码；2. PBR参数重映射采用“预计算光照降级基线LUT + 动态偏移量”机制，规避跨端光照模型差异导致的视感失真；3. 指令流时序采用异步预取，端侧按算力档位订阅对应LUT索引，严禁帧内同步重映射计算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

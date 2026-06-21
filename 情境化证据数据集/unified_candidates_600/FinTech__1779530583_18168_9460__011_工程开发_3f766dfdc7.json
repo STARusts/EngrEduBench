@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路追踪与压测性能优化背景下，用户与导师围绕压测思路、模型构建、图库隔离及压测方案确认持续沟通（6轮），其中在压测隔离与TraceId透传部分与联调与性能测试工程师沟通（1轮），在图写入TPS瓶颈与影子库支持部分与图谱核心开发主程沟通（1轮），并最终形成包含网关注入、标签隔离、脱敏、批处理、延时模拟与资源隔离的压测方案及改造点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上SkyWalking埋点，然后JMeter起并发压，看哪个节点RT高就优化哪个呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "外部机构可以Mock掉，RT和TPS一起看。不过Mock数据怎么造比较真实，我没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算JMeter直压，但怕污染真实资金库。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "影子表？图数据库也能搞影子表吗？我只知道MySQL可以。图库这边写入是主程负责的，我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测要搞影子表隔离，图写入这边TPS上限大概多少？影子表支持不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边写入改异步批处理，这改动不小啊。那我压测基线先按单分片800 TPS来定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "漏了Mock机构响应时间，不能全Mock成0延时。还有压测资源要单独起一套，不能和生产抢CPU。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

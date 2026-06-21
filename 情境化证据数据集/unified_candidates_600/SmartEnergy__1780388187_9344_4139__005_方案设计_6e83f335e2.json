@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微渗定位算法与数据流转方案设计背景下，与导师围绕定位算法选型、端云算力切分、实时性约束及断网降级策略持续沟通（8轮），其中在空间谱估计与算力切分及断网降级粗定位逻辑部分与算法定位设计师沟通（3轮），并最终形成宽带MUSIC算法选型、端云算力切分、数据流转约束及断网降级兜底策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着边缘端直接做互相关求时延差，然后打包发云端算坐标。网关有NPU，算时延应该很快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多径反射确实麻烦。那加个滤波？把多径滤掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想用互相关求时延，但说多径反射太重不能用。这玩意儿到底怎么定位？边缘和云端算力怎么分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘提时频图，云端跑MUSIC。那数据流就是边缘把时频图传上去呗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能用互相关，得用宽带MUSIC算法。边缘NPU做STFT提特征，算协方差矩阵初值，传给云端做谱峰搜索解算坐标。平时不传原始波形，报警才传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "NPU跑STFT肯定没问题，FFT有硬件加速。协方差矩阵初算也就是矩阵乘法，应该也行。云端算特征值分解，只要并发不大，实时性应该能保。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我还没细算。我估摸着矩阵维度不大，因为传感阵列就几个阵元。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "断网了确实麻烦。边缘算不了MUSIC，定位就废了。要不断网时退而求其次，边缘只做个区域初筛？根据哪个传感器能量最大，粗定在哪个管段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网降级时云端MUSIC跑不了，定位怎么保？我设想边缘根据各阵元能量大小做粗定位，判定微渗在哪个管段，这个逻辑可行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "断网降级用能量粗定位兜底。边缘提特征时顺带算各通道短时能量，断网就比大小定管段。恢复后云端再补算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定位算法选宽带MUSIC，不用互相关。边缘NPU跑STFT提特征和算协方差初值，云端做特征值分解和谱峰搜索。数据流转平时只传特征和协方差初值，报警才传波形。断网降级时，边缘用各通道短时能量比大小做管段粗定位，特征本地存，等网络恢复云端补算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估期异常复盘背景下与导师围绕无功指令异常的根因分析与修正策略持续沟通（6轮），其中在异常日志拆解部分与优化迭代专员沟通（1轮），在薄云透光特征区分部分与算法设计师沟通（1轮），并形成短期加辐照仪交叉校验、长期加红外特征重训模型的复盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在Grafana上用PromQL查了一下，确实有几个时段无功指令下发量特别大，但对应的云遮识别评分却是0。我想用Grafana自带的异常检测插件圈出这些时间段，看看能不能自动打个标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不好说啊，看曲线像是没识别出云，然后瞎给指令了。我得找专员看看日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我筛了三个时段的日志，你看下是不是漏判？云图评分都挺高的，但实际功率掉了一截，无功给超了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那怎么修？能不能在Grafana上加个规则，如果无功给多了就自动截断？或者我调一下算法的触发阈值？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在系统把薄云当厚云了，导致误调，这个怎么区分啊？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加红外是不是要重新训练模型？加辐照仪我倒是可以直接接数据源，快一点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先用辐照仪做个快速校验吧，如果辐照下降不大，就把云图的高遮挡评分压低，防止误调。同时让算法那边开始训练带红外的模型，后面版本再切过来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "误调根因是薄云特征缺失，短期加辐照仪交叉校验，长期加红外特征重训模型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改边缘侧的校验逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

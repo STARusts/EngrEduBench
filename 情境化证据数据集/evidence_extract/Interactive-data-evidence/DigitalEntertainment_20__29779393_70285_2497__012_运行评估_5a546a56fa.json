@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在叙境生成式剧情共创与版权结算系统运行评估中，用户与导师围绕灰度发布与回滚演练流程、观测指标基线与门禁阈值、以及结算事件不丢不重持续沟通（6轮），其中在灰度分流方式、日志/链路字段与回滚验证方法上与SRE运维负责人沟通（6轮），并明确按稳定版基线→5%灰度→回滚→按版本对比错误码/P95/最慢step及event_id一致性验收的执行顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "叙境生成式剧情共创与版权结算系统现在进运行评估了，我这段要做灰度发布和回滚演练。你说我先从哪一步开始？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我有一轮压测结果，但我看不太懂。错误码大概有几个，最慢 step 我还没定位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比例我没算。版本号我知道有，开关命中我没看过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维负责人 灰度发布和回滚演练怎么走？我现在要按 5% 灰度跑 200 rps。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该是网关分，我不确定是不是 cookie。我们有 user_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`release_version` 这些字段是每个接口都要打吗？我只想在结算那里看。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "trace 我不太会查。我就看日志行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我回滚演练要不要故意搞出错误？比如把服务停了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚验证的“事件一致性”我怎么验？我就看 DUPLICATE_EVENT 出现？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE 说灰度用 user_id 哈希分流到 v2 5%，回滚就是把 v2 权重改 0，然后别急着下线。验证要看两组错误码和最慢 step，还要看 event_id 只有一条入账，重复补传要走 DUPLICATE_EVENT。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先把灰度比例设 5%，然后 200 rps 跑一会。再把比例改 0 回滚。最后看错误码 top3 和最慢 step，结算那边看有没有重复入账。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "基线我就用上次那轮。阈值…错误码不变就算过？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我分不出“内部处理”和“外部依赖”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。我先按稳定版跑 10 分钟，再开 5% 灰度 10 分钟，中间做一次回滚到 0。然后我回来报“top3 错误码 + 最慢 step”，还要带上按版本分组。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我把 `user_id` 打出来是不是就算泄露？那我只打 hash？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

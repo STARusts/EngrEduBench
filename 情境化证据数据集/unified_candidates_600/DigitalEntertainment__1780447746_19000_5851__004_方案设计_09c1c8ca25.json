@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在事件总线方案设计背景下，用户与导师围绕技术选型、假设验证、知识补学及合规落地持续沟通（8轮），其中在架构选型与假设分析部分与分布式系统设计师沟通（1轮），在合规基线挂载与积压处理部分与分布式系统设计师沟通（1轮），并最终形成Kafka与Actor网格混合架构及合规注入方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按流程应该先选技术栈。我就选Kafka吧，吞吐量大，大家都用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Kafka和别的方案到底选哪个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来方案B更贴合项目名字里的“拓扑演进”。但运维复杂是不是很麻烦？Kafka简单点吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证的话，就跑一下看看呗？如果卡了就换B。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确实没搞过这种网格。我就知道Kafka。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去查Actor文档，写个路由Demo。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规基线怎么挂上去？还有积压怎么弄？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加TraceID行，这个简单。降级消费是不是又要多写好多代码？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主链路用Kafka接高并发，局部拓扑路由用Actor事件网格做？然后消息头都加上合规TraceID。积压就靠Actor的背压。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Kafka持久化削峰，Actor网格路由，适配层注入合规TraceID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

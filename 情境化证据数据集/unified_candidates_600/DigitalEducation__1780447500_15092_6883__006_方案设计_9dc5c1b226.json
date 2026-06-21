@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在招录数据入图管道设计且预算受限背景下，用户与导师围绕技术选型、管道关键节点及回滚机制持续沟通（6轮），其中在轻量级技术选型部分与后端开发工程师沟通（1轮），在脱敏映射边界部分与招录数据分析师沟通（1轮），并最终确定轻量级调度加五步批处理管道及入图重试策略方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "招录数据量也不小吧，我想着上Kafka接Flink，增量实时入图，查询延迟最低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "招录数据入图有没有省钱的法子？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就是先拉原始数据，然后跑清洗脚本，再换伪ID，最后写Nebula。失败回滚我还没想好，批处理好像可以断点重跑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "批处理管道里，招录数据清洗完直接入图行吗？脱敏伪ID怎么加？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以是五步：拉取、清洗、脱敏映射、组装、入图。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "批处理任务失败就重跑？或者入图前先做备份？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "轻量调度加五步批处理，脱敏单独一步，入图失败配重试策略。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在微生境演替推演模型架构设计背景下，用户与导师围绕图模型选型、流式架构改造及上行摘要特征定义持续沟通（6轮），其中在稀疏异步图选型部分与图神经网络设计师沟通（1轮），在事件驱动流式架构改造部分与流式计算工程师沟通（1轮），并最终确认HAN图模型、边缘局部聚合及包含脉冲衰减特征的上行摘要流架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看最近顶会论文都用时空图卷积STGCN，流式这边Kafka加Flink，搞个流批一体架构，理论上能覆盖菌根生长的时间序列特征。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间切片可以插值补齐吧？Flink并发度调低点应该能省资源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "STGCN在异步稀疏信令下是不是得插值？有没有不用等间距采样的图模型？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "植物和真菌特征维度不同，不能用STGCN。那就定HAN了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "复杂度这我确实没算过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "事件驱动的图数据，Flink怎么接？是不是得把微批改了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流式这边改成传摘要流，不用Kafka了，Flink做微批。图模型用HAN。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把均值、方差加上，再把脉冲间隔的时间差也塞进去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图模型用HAN，边缘局部聚合，上行摘要包含基线、脉冲间隔、衰减斜率和频域主峰，Flink做微批。确认。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

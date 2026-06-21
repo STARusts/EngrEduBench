@@ -1,0 +1,109 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在取证链路工程落地背景下，用户与导师围绕取证爬取与指纹比对服务的接口拆分、取证记录字段、判定口径与可复现/可审计要求持续沟通（11轮），其中在采集最小化与留存红线部分与合规与隐私官沟通（3轮），在阈值profile、两段式比对与需留存解释/复现字段部分与算法负责人沟通（2轮），并落实light模式、错误码枚举与对照测试验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "爬取就是把视频图拿下来吧。比对就比一下是不是一样的。差不多就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入口就一个 url 吧。字段我不知道，存个 url 和时间？判定就相似度大于 0.9？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 取证爬取要存啥，不存啥？能不能直接把原视频都存着？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就存 hash 就好了？视频不存，反正有 hash。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那爬取失败也要存吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一个 `/evidence`？传 url。返回结果。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "`POST /evidence/task` 传 url 和 caseId？  \n`GET /evidence/task/{id}` 看状态。  \n`GET /evidence/{id}` 拿结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就算一个 fingerprint，然后去库里查相似的前 10？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 比对这块阈值怎么定？我要返回啥字段才算能用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "extract_params 是啥，我要存一堆吗？听着很多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须有：url、platform、时间、raw_sha256、fingerprint、sim_score、candidate_id、decision、case_id。差不多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "top_candidates 我怕存太多。extract_params_json 我也不知道咋写。result_hash 是啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就 top5。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "result_hash 拼啥字段你给个固定的，不然我会乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果爬取失败，raw_sha256 没有，hash 就空串？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会把错误都当 NO_MATCH 的，省事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还是担心存原视频这块，会不会要我加存储，很大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "light 就是只截一张图？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我抽 0、5、10 秒三张？随便吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那比对的时候如果只三帧，会不会不准？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在要做的就是：写接口、存字段、跑通爬取+指纹+比对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用两条链接？一条是我们自己的素材发到外站的，应该 MATCH；另一条随便找个不相关的，应该 NO_MATCH。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记不住这么多校验项。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

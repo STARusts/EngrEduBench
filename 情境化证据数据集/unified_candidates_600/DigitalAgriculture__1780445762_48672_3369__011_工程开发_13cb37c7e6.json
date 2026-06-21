@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘端推理性能压测优化背景下，与导师围绕压测方案设计、异步推理机制引入及验收标准持续沟通（6轮），其中在压测设计与验收指标部分与联调测试工程师沟通（2轮），在模型推理瓶颈与异步改造部分与视觉模型训练师沟通（1轮），并最终形成改用异步推理流、并发递增压测及标定光照波动误差边界的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，多开几个进程并发发图片，看一秒处理多少张呗。延迟肯定是越低越好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线要求20FPS，这压测具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型这边推理快吗？有没有什么瓶颈？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直用的同步接口调。我刚才查了一下资料，OpenVINO里有AsyncInferRequest这个机制，我准备把这个异步调用方式迁移到咱们的推理服务里，应该能消除等待空隙。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测要模拟真实流，并发递增，P99卡50ms，NPU利用率得打满，还要验证异步流水线和INT8精度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "光照抖动导致毛刺，这个我之前没留意。好，压测报告标出延迟置信区间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改异步流，并发递增压测，P99小于50ms，精度损失小于2%，还有标出光照波动的误差边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

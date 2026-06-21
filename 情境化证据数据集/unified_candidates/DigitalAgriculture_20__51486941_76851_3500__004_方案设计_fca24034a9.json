@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农田用水碳效协同调度系统方案设计背景下，用户与导师围绕多源ET与需水模型的工程边界、降级策略、接口字段与验证动作持续沟通（12轮），其中在遥感ET来源选择、ET0+NDVI-Kc融合、置信度与需水计算简化部分与算法工程师沟通（4轮），在数据最小化、权限与审计留痕字段部分与合规与审计官沟通（1轮），并确定用产品/NDVI而非SEBAL并落下可追溯输出字段与降级码。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个“多源蒸散与需水模型”我想直接找个FAO56的模板抄进去行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写“ET0用Penman-Monteith，Kc查表，ETc=Kc*ET0”，再加个遥感修正。差不多吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用最近一张图插值一下？或者直接用站点算的ET0顶着。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看网上很多都写SEBAL，看着厉害。我就写SEBAL吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 遥感ET我就写SEBAL行吗？还有多源融合要怎么写才像方案？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "NDVI修正Kc是啥意思？我就写“NDVI越大Kc越大”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信度0-1我怕写不圆。是不是随便给个规则就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "需水模型是不是就ETc减降雨？我把有效降雨扣掉就得灌溉量？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去就把SEBAL删了，写成“用产品+ET0+NDVI-Kc”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写：输入有气象、遥感、土壤水分；输出就是ET和需水。接口字段我能不能直接写“全部传感数据入库”，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 这块我得写啥？我就怕写多了又不对。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我要在接口里加“版本号”字段？感觉很烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "degrade_code我就写“0正常1降级”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Kc表我直接放一个“通用作物Kc”。作物多了咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那试点作物就写玉米、小麦？反正常见。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证动作就是跟土壤水分对一下？再看下产量？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值不定也行？我怕被问具体数字。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就写：阈值由算法工程师根据试点一季数据定。行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就按这5条写。我就把“遥感反演算法”那段删掉，改成“用ET产品或NDVI”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕写错的点就是Kc那条公式，能不写公式吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

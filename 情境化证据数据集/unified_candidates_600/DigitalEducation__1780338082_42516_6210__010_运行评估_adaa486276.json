@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在弱网学区边缘节点部署验证巡检背景下，用户与导师围绕巡检指标设计、降级验证与验收口径持续沟通（5轮），其中在弱网数据采集与时钟对齐部分与边缘节点部署员沟通（1轮），在降级场景教学指标置信区间计算部分与教学链路监控师沟通（1轮），并最终确定巡检验收三个硬指标及手写Bootstrap目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算写个巡检脚本，把各节点的CPU、内存和队列长度拉出来，算下均值和标准差，超标的就标红。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "M/M/1模型在真实流量下肯定有偏移。那我再加个降级触发次数的统计。只要降级率不超过5%应该就算稳了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘盒子在弱网下心跳经常丢，我拉指标会不会拉不全？这种脏数据怎么洗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "统计样本量不够的时候，均值就没意义了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级场景下，伴学推理延迟的P99怎么算置信区间？样本量少于多少就不能算了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只看降级率太粗了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时钟偏移我定在500毫秒内吧，NTP同步在弱网下也就这精度。完成率这块，我准备写个Python脚本用Bootstrap采1000次。不过说实话，我只会套库算，真实环境数据缺失怎么补我不太懂。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块实操经验不足。我定个目标：两周内，用这项目的真实巡检数据，自己手写一遍缺失值处理和Bootstrap区间估计，不调现成包，跑通后跟监控师的口径对齐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "巡检验收口径：1.边缘节点时钟偏移<500ms；2.核心伴学链路P99延迟<3s；3.有效交互完成率Bootstrap 95%置信区间下界>85%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

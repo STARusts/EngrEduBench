@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在通感频谱弹性切片架构设计背景下，用户与导师围绕约束落实、控制与数据面分离、一致性验证及P4实现短板持续沟通（8轮），其中在控制与数据面分离及信令风暴规避部分与体制架构师沟通（1轮），最终确定控制面管宏观合规与策略、数据面管微观切片的架构基调，并制定P4补学计划与合规审计接口预留方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想用云原生架构，控制面用K8s调度器分配频谱切片，感知和通信业务按Namespace隔离，这样弹性最好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用K8s调度，控制面和数据面怎么切才能既快又不出信令风暴？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据面自治的话，切片一致性怎么保证？如果感知节点和通信节点切出来的频谱视图不一样，冲突率不就上去了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对照方案就是“集中式K8s调度”和“数据面Gossip自治”。验证指标就是并发冲突率下的信令开销和切片延迟。只要Gossip的开销没超上限，延迟又比K8s低，就选它。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P4交换机这块我只知道能自定义包头解析，具体怎么在数据面写先听后发的逻辑，还有射频拉远接口怎么对接，我没底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这两天把Intel Tofino网卡处理CPRI/eCPRI报文的白皮书过一遍，重点看Match-Action表怎么实现带外辐射拦截逻辑。周五前整明白，不耽误后面接口设计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构基调：控制面做慢速策略与合规护栏，数据面做毫秒级切片与自愈执行。数据面用轻量级协议做局部同步，不搞全局强一致。信令开销上限通过控制数据面分离来保底。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有合规审计。先听后发义务必须在控制面留接口，给@无线规约审计员 查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

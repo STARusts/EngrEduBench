@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘侧情绪采集联调背景下，与导师围绕采集方案选型、延迟与成本取舍、端侧推理框架选型及算子验证持续沟通（7轮），其中在双端维护可行性部分与多模态采集开发组长沟通（1轮），在推流接口设计部分与微服务接口设计师沟通（1轮），在特殊算子适配部分与情绪计算科学家沟通（1轮），最终确定原生采集加MNN端侧提取的A方案及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向走原生SDK，A方案。直接调OS的Camera和Mic API，在端侧跑轻量特征提取，延迟最低。跨平台框架套壳太重，容易卡帧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这确实是个坑。我打算双端各自写一套采集逻辑，共用一套C++的特征提取库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微服务接口设计师 如果走B方案，跨平台插件统一推流，接口层怎么设计？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "但推流方案延迟兜不住啊！原生采集加端侧提取，特征向量出端侧只要十几毫秒，推流到微服务再返回，光网络抖动就几十毫秒了，这会打断叙事沉浸感。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我还是想保延迟。双端维护成本我认了，可以用CI自动化测试覆盖。但端侧C++推理库的算子适配，我目前确实没底，NCNN和TFLite各有坑，这卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今天必须把端侧推理框架定下来。我准备用MNN，阿里开源的，双端支持好。我马上建个Repo，跑一下面部关键点的模型转换和双端单元测试，记录下耗时和内存占用，今晚把Benchmark结果拉出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "给的模型里，用到的不常见算子我会列个清单，比如Attention和自定义卷积，逐个在MNN里跑通，报错就直接改模型结构或者找替代算子。验证口径就是：双端推理延迟<30ms，内存峰值<50MB，算子覆盖率100%。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我拿到Onnx先过一遍MNN的op支持列表。还有个关键点，隐私合规要求端侧只出特征断开原图，B方案推流到微服务提取，直接违规了。所以只能走A方案，原生采集加MNN端侧提取。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调第一步：先用MNN把特征提取模型跑通，再对接双端原生采集API。我先去建Repo跑Benchmark了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

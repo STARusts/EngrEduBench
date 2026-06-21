@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在心内科反馈出血不良反应需归因的背景下，与导师围绕算法偏置修正与验证口径持续沟通（5轮），其中在病例归因定位与修正效果验证部分与临床实效与迭代分析师沟通（2轮），并最终形成算法补充衰减因子修正方向及回顾性队列离线推演验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看Grafana上接口延迟都正常，滴定指令也发出去了。是不是患者自己没按医嘱吃药？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "查下出血那3个病例，你那边有数据吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我在规则引擎里加个硬拦截呗？遇到年龄>80且BMI<19的，直接限制剂量上限，或者弹窗让医生改。我看网上很多人处理这种corner case都是加if-else。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改模型特征权重我不会啊，那是算法侧的事。验证的话，我再跑一遍仿真测试？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果算法侧改了特征权重，怎么验证改对了？仿真好像测不出这种动态的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用回顾性队列验证。筛历史同特征患者离线推演，看剂量吻合度和出血事件。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "行，不加if-else了。我让算法组去补特征，离线推演的事我找数据组要历史队列。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

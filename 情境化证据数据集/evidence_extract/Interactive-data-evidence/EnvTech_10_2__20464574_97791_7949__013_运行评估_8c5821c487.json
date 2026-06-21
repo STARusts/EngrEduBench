@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的审计取证与报表交付背景下，用户与导师围绕证据链从告警留痕延伸到报表脱敏交付、不可用结论审批与不可抵赖锚点持续沟通（7轮），其中在合规口径与hash/映射可用性部分与环境合规经理沟通（1轮），在取证包结构、delivery_id与run_id_set_hash追溯设计部分与数据治理官沟通（1轮），并形成三层取证与交付最小包及受控展开流程草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解取证材料不该重做一套，就复用告警证据字段模板做“事件证据索引”。思路是：报表里只放摘要指标和hash标识；审计要追到原始数据时，用告警key、run_id、event_ts范围去定位。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我不太确定审计方一般会不会接受“只给hash不出站点名”，以及报表交付要不要带规则hash、因子hash这类技术字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对外报表我先列个最小集：  \n1）主体标识：企业统一社会信用代码、报告期；站点我倾向用site_code_hash。  \n2）排放结果：小时/日汇总的CO2e、以及NOx/SO2/颗粒物之类如果要披露就分开；再给一个“数据有效覆盖率”。  \n3）方法说明：因子版本（可能用因子hash或版本号）、核算边界描述。  \n4）异常说明：P0期间标记不可用的时间段占比，或者“数据不可用清单”。  \n我拿不准的是：审计可能要看原始计数 raw_ingest_count/valid_emit_count 这些，放报表里会不会太工程化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理 取证与报表交付这块：对外报表能不能只给site_code_hash这类不可逆标识？审计常见必备材料有哪些字段/附件？工程侧的run_id、规则hash、因子hash这些你们会认可吗，还是需要转成更业务化的版本号和口径说明？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "“不可用清单”那块，我之前只想着从值守事件单拉时间段，没考虑审批留痕要一起给。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现有锚点我能想到：告警key、run_id、event_ts范围、规则/因子hash、raw_ingest_count、valid_emit_count、low_conf_ratio、延迟P95分解、最近一次成功run_id，还有操作者+时间这些留痕。  \n缺的可能是：报表数字对应哪个run_id（比如月报是多次run拼的），还有“报表导出”的操作者和导出版本。以及站点映射查询的留痕要能关联到具体审计请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 审计取证与报表交付：我们已有告警证据字段模板（含告警key、run_id、event_ts范围、规则/因子hash、计数、延迟P95、操作者留痕）。想把它扩成“审计取证包”。  \n我卡两点：1）报表级run_id怎么定义（一个月汇总可能跨多次run）；2）报表导出版本/口径怎么做可追溯且不暴露内部表名与站点明文？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这套“delivery_id + run_id_set_hash”我能接住。run_id不硬拼成一个，审计要抽样再展开列表，这符合最小暴露。  \n我担心一点：run_id列表展开会不会量太大，审计抽样时要等很久；还有 report_scope_hash 的生成方式如果站点集合变更，会导致同一期的hash不稳定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "展开成本我想两档：  \n- 默认不展开，只给run_id_set_hash + 统计：参与run数量、失败run数量、缺口小时数。  \n- 真要展开时做“按审计抽样”展开：比如审计指定某天某小时，就返回覆盖那段的少量run_id。  \nscope hash稳定性：给scope一个“范围版本号”，比如本期站点清单冻结成scope_version；report_scope_hash用冻结后的清单算。站点增减在下期生效，别在同一期滚动改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "流程我写成5步：  \n1）审计提出请求，给delivery_id或报表页码+指标名+时间范围；我们登记审计请求号。  \n2）报表系统返回该指标的元信息：report_period、method_version、factor_version、run_id_set_hash、data_coverage、unavailable_window_summary。  \n3）若审计要抽样复核：由合规经理审批“展开run_id/映射查询”权限，记录 approver_id、approve_ts、审计请求号。  \n4）在受控环境里，按审计指定的时间窗返回对应run_id、event_ts范围、valid_emit_count等，并给出规则hash/因子hash作为校验锚点。  \n5）如需定位到具体站点/排口：查询映射表（最小权限），返回站点明文，但同时写审计日志：查询人、查询时间、查询的hash、审计请求号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补一句：返回的valid_emit_count要对应“有效监测点数/分钟数”口径，并附上剔除规则版本号（rule_version）以及低置信度剔除阈值说明；coverage=valid_emit_count/expected_count，expected_count口径也要写清楚（比如每分钟一个点）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向两种：  \nA 不追溯重算：历史报表冻结，method_version变更从生效日开始；优点是稳定，缺点是前后不可比。  \nB 追溯重算：给“再发布”机制，delivery_id变新，旧版保留；优点是可比，缺点是工作量和解释成本高。  \n我不确定审计更喜欢哪种，但感觉B的证据链要求更严。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边缺口主要是：rule_version的命名规范我们还没统一，只留了规则hash；还有“补算原则”目前只在核算策略同学脑子里，我得去拉他们给一句可披露的摘要。  \n其余我能按你这三层去对齐值守事件单、告警模板和报表导出流程。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

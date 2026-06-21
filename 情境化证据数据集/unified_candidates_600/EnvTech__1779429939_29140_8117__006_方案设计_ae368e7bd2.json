@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在多源异构数据流规划背景下，与导师围绕VOCs、NOx和气象数据的时序对齐、特征拼装及降级策略持续沟通（5轮），其中在多源频差流时序对齐与迟到数据处理部分与气象数据架构师沟通（1轮），并最终形成基于事件时间窗口对齐、侧输出流修正及历史快照降级打标的数据流规划方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据接入我打算全扔Kafka，清洗走Flink。时序对齐就用水印呗，反正得按时间戳排。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就想着在Flink里做窗口，把快的和慢的都拉到同一个窗口里。晚到的数据如果超时了，就丢弃或者报警？但报警太多业务那边肯定要骂人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在VOCs秒级、NOx小时级、气象分钟级，全要进Flink。这种频差极大的多源流怎么拼？晚到的数据丢了又不行，咋整？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征矩阵啥的，是不是就是把同一时间的拼成一个大JSON扔给后面？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主流程就是Kafka接入，Flink里按事件时间开窗，以NOx更新频率为准，VOCs和气象存状态，到窗口触发拼成特征流送出去。迟到数据走侧输出流单独处理。降级的话，如果等太久，就先用上一周期的NOx清单顶一下，保证推理引擎不断流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

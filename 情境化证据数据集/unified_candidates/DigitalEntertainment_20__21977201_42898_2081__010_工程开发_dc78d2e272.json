@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在授权SDK与剪辑/生成工具插件联调、需在发布/导出时获取可审计授权凭证并携带水印/指纹信息的背景下，用户与导师围绕联调最小闭环、传参位置与验收口径持续沟通（6轮），其中在授权挑战/凭证/计量接口与错误码、device_id与日志合规及对照测试凭证部分与客户端SDK工程师沟通（4轮），并形成插件调用顺序与联调契约清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我卡在…就是它们互相不理。插件那边说我没给 token，但我给了啊。然后 SDK 又说授权不对，我也不知道哪个不对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就 request 里塞了个 token 字符串。应该在 header 吧，我看别人都这么写。我就随手塞了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道接口名…我就一个 `/license` 还是 `/auth`。反正就能拿到一个长串。然后就拿这长串去导出。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端SDK工程师 SDK这块到底要怎么调？插件要传啥？我现在就一串 token，瞎塞的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我现在就是把 license 当 token 用了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那…我就把 jwt 放 header 就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "device_id 我现在用随机 UUID…那岂不是每次都变。烦不烦啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我日志里全打了…因为我想看。那现在要删？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那错误码我也没管过，就打印“fail”。我回去改下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先 challenge，再 attest，拿到两个串。access 放 header，license 给 SDK 导出用。device_id 不随机了，落盘。差不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能导出成功…然后平台那边有记录？我就看接口返回 200。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3条我不知道怎么测。改 scope 我也不会签。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端SDK工程师 给两份能测的吗？一份能导出一份不能的。还有不能的时候 SDK 抛啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "调试面板我现在没有，我就弹窗写“失败”。那我加个错误码字符串显示就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我确实点两次就会卡…可能就是重复了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）challenge 接口要 app_id device_id nonce ts  \n2）attest 带签名，回 access_token 和 license_jwt  \n3）调 API 用 access_token 放 Authorization Bearer  \n4）导出走 SDK exportWithLicense(license_jwt)，SDK 自己打水印和 commit  \n5）日志别打整段 jwt，就打 jti 和 request_id"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

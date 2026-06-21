@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在水锤反演方程C++落地与延迟预算限制背景下，用户与导师围绕差分格式、边界条件、数据结构与插值方法持续沟通（4轮），其中在非恒定流边界处理部分与流体动力学建模师沟通（1轮），在算子加速内存对齐部分与算法实现工程师沟通（1轮），并确定重构SoA数据结构与采用线性插值的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按之前建模师出的差分公式，我逐行翻译成C++呗。矩阵运算套个Eigen库，应该就差不多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "显式吧，好写。边界条件就先写死成常量，跑通再说。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流体动力学建模师 特征线法在管段节点处怎么处理非恒定流边界？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法实现工程师 特征线网格计算做算子加速时内存对齐怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师说边界要联立相容性方程，按阀门开度插值，不能写死。算法工程师说数据结构必须改SoA，AoS缓存会miss，SIMD用不上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现在的Node类确实是AoS。改SoA得把结构体全拆开，工作量挺大，但为了算力只能改，我今天先把数据结构重构了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "插值我就用线性，抛物线容易发散，我不敢冒进，先稳住。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

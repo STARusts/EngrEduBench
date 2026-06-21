@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动剧开发阶段压测与卡顿定位背景下，用户与导师围绕压测口径、ID 串联与端网后端定位闭环持续沟通（9轮），其中在端侧卡顿/切流埋点与压测复现方案上与播放端负责人沟通（4轮），在后端决策 API 分段埋点与签名压测处理上与后端工程负责人沟通（3轮），并形成端侧最小指标集、后端分段 span 与执行清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先从“切分支”这条端到端链路切。卡顿可能来自三段：端侧解码/切流、网络拉 manifest/分片、后端分支决策和资产解析。压测我想分两类：服务端吞吐+端侧体验。服务端用固定脚本把“创建会话→拉分支树→上报选择→拿到下一段播放地址”打到稳定；端侧用自动化回放选择序列看卡顿、首帧和卡顿次数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "串联 ID 我想用三层：playSessionId（端侧会话）、decisionId（一次选择事件）、requestId（每次 API 请求）。端上报 choice_event 带 playSessionId+decisionId，后端在决策 API 响应里回 decisionId 并把它透传到 manifestUrl 的 query 里，这样 CDN 日志也能按 decisionId 查到。指标上：后端决策 API 的 p50/p95/p99、错误码分布；端侧卡顿用 stallCount/stallDuration、切流耗时（收到响应到新流首帧）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，不能把 decisionId 当 cache key 的一部分。我倾向于只在 HTTP header 透传，比如 `X-Decision-Id`，但 CDN 日志未必能拿到。另一个办法是 manifestUrl query 只加一个“抽样”的 trace 标记，比如 `trace=1` 且只在压测环境/灰度白名单打开；线上默认不加，避免碎片化缓存。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放端负责人 端侧这边我们要定位“互动选择触发的卡顿”。现在有 playSessionId/decisionId。问题是：1）卡顿/切流耗时你们现成指标有哪些（stall、首帧、切清晰度那套能复用吗）；2）decisionId 如何进端侧日志/埋点，最好不改内核；3）压测时如何自动化复现固定选择序列？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "自动化复现呢？我们现在用的是脚本驱动 UI 点选，偶尔时序不稳定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "decisionId 在端日志里能和后端 requestId 对齐吗？我们现在每个 HTTP 都有 requestId。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们还想区分“网络慢”还是“解码慢”。端上有下载耗时吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端侧最小集合我收敛成四个时间点和两个计数：  \n1）`branch_switch_start`（业务层触发换源前）  \n2）`manifest_response`（拿到下一段播放地址/manifest 的时间点，附 requestId）  \n3）`segment_ttfb_first`（换源后首段 ttfb）  \n4）`branch_switch_first_frame`（onFirstFrameRendered）  \n计数是：`stallCountDelta`、`stallDurationDelta`（从 start 到 first_frame 的窗口内）。用这些能把问题粗分成：后端慢（2 慢）、网络/CDN 慢（3 慢）、端解码渲染慢（4-3 大）、纯卡顿（stall 飙）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "并发模型我按“互动高峰”做阶梯：100→300→500→800 rps 的选择事件，持续 10 分钟一档；每个虚拟用户维持一个 playSessionId，按固定选择脚本每 5-8 秒触发一次 decision。数据集用 3 个剧集：分支树深度不同（浅/中/深），并让 20% 的选择走到高资产量分支（多音轨、多字幕），覆盖解析开销。阈值：决策 API p99 < 120ms（不含 CDN），错误率 < 0.1%；manifest 生成/签名 p99 < 80ms。端侧体验阈值先定：分支切换首帧 p95 < 800ms，切换窗口内新增卡顿次数 p95 ≤ 1。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用两步校准：先在无互动的普通换源（同一资源不同清晰度）测出端侧换源 p95 基线，比如 500-600ms；分支切换比它多的部分主要是 manifest 拉取和首段下载，预留 200ms。服务端 120ms 是为了把端侧瓶颈留给网络/解码，不让后端成为主因。校准动作：在实验室 Wi-Fi 和 4G 各跑一轮基线，算出 p95/p99，再把阈值按“基线+预算”落到配置里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "后端我会在决策 API 内打三段 span：`auth+session_bind`、`branch_resolve`（分支树计算+规则）、`asset_manifest_build`（资产聚合+签名+URL 生成）。每段记录耗时和关键维度：剧集 id、分支深度、命中缓存与否。trace 采样在压测环境全量开，线上只保留慢请求采样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程负责人 决策 API 我计划拆 3 段：auth/session_bind、branch_resolve、asset_manifest_build。压测环境想全量 trace，并记录 cacheHit、分支深度、资产量。你这边实现上有没有坑？签名/URL 生成这块能否单独计时并暴露指标？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果签名服务走外部依赖，压测会把它打挂，怎么处理？我们这阶段只是开发压测，不想把环境弄得太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "OK。另一个问题：我们要能把“端侧 first_frame 慢”回溯到后端 span。你们能把 requestId 一直贯穿到日志里吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳点：  \n- 端侧：用业务层 start 点 + onFirstFrameRendered 形成切分支耗时；窗口内记录 stall 增量；补首段 ttfb/download_time 区分网/端；在分支切换事件里同时记录 decisionId+requestId。  \n- 后端：决策 API 至少拆 `auth+bind / branch_resolve / meta_fetch / sign_url` 四段计时；压测环境 trace 全量、线上慢请求采样；维度用 cacheHit、assetCount、pathLen，避免高基数。  \n暂不做：把 decisionId 透传到 manifestUrl 的 query（避免缓存碎片化），线上全量采样也先不碰。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "清单：  \n1）我负责把压测脚本跑通：并发阶梯 100/300/500/800 rps，三套剧集数据集（浅/中/深分支），每档 10 分钟；收集决策 API p50/p95/p99、错误率。  \n2）后端工程负责人负责把决策 API 分段埋点补齐，并加上 cacheHit/assetCount/pathLen 维度；签名压测先用本地实现，单独再跑依赖压测。  \n3）播放端负责人负责提供 debug 选择指令接口（压测专用），并落地端侧四个时间点+stall 增量+首段 ttfb 的埋点；确保事件里带 decisionId+requestId。  \n验收：任意一次卡顿或首帧超阈值时，按 decisionId 查到端侧事件→拿到 requestId→回溯后端四段耗时，10 分钟内能判断瓶颈在后端哪段、还是网络/端解码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

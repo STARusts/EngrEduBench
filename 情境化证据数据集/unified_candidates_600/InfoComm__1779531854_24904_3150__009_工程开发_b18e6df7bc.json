@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知与重构模块编码联调背景下，用户与导师围绕算法硬件落地、定点化时序风险及验证口径持续沟通（6轮），其中在定点化精度与位宽补偿部分与干扰抑制算法专家沟通（1轮），在硬件侧数据流与时序对接部分与软硬协同开发工程师沟通（1轮），并最终明确量化指标与对照测试方法，制定先仿真时序再对齐位宽的联调策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就把算法专家给的Python代码拿过来，转成C或者Verilog跑呗，接口就按普通数组传参，应该没啥区别吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "精度损失就少截断几位呗，速率同步我加个延时等一下不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法转硬件，定点化怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "硬件那边数据怎么传？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法那边说缩放因子和12bit位宽，硬件这边说用DMA和FIFO，还要等信号拉高。所以就是我把位宽留够，然后用DMA搬数据，等信号来了再算呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑几个数据，看看结果跟Python是不是差不多就行了。差不多就没搞坏。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂AXI时序和定点化补偿。我今晚先看两份Xilinx的PG手册，搞懂AXI-Stream握手时序；再找之前项目里的定点化代码看一遍。明天我写个简单的测试激励，先在仿真里把时序跑通，再上板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态定价方案设计背景下，用户与导师围绕“给价建议”接口的请求/响应字段、置信度与异常标记对动作与审批的影响、策略参数注入、触发方式与防抖、审计与错误码持续沟通（7轮），其中在策略编排所需信号与审批提示上与策略产品经理沟通（3轮），在数据最小化、证据分层与留痕要求上与合规与风控经理沟通（1轮），并收敛出可评审的定价推荐接口草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想分两层：一个“给价建议”的接口，一个“落地执行”的接口。给价建议吃 RSL_P50/P10/P90、confidence_level、data_confidence_score、anomaly_flags，再加上商品、渠道、库存、当前标价这些上下文，吐出建议价、折扣区间、原因码、以及需要不需要人工审批。执行接口就拿审批通过的策略单去改价。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先分四组：\n1) 预测组：batch_id、RSL_P50/P10/P90、confidence_level、data_confidence_score、anomaly_flags；如果是批次聚合，就有 aggregation_method=weighted、aggregation_scope=批次/箱码。\n2) 交易组：sku_id、channel_id、store_id、current_price、cost_floor、min_margin、promo_lock(是否被活动锁价)。\n3) 供需组：on_hand_qty、days_of_supply、forecast_demand_7d。\n4) 约束组：price_step、max_discount_pct、effective_time_window。\n必填我觉得 batch_id、sku_id、channel_id、current_price、RSL_P10、confidence_level 必填；P50/P90可选但最好有。版本控制加 api_version。幂等用 request_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输出我先给：\n- suggested_price（单值）+ suggested_price_range（low/high）\n- discount_pct\n- price_action：NONE / MARKDOWN / HOLD / UP（虽然UP可能少）\n- risk_gate：AUTO / NEED_APPROVAL / BLOCK\n- reason_codes：比如 LOW_CONFIDENCE、DATA_GAP、CLOCK_SKEW、MAPPING_SUSPECT、PROMO_LOCK、COST_FLOOR_HIT、MAX_DISCOUNT_HIT\n- evidence：用来审计的关键输入快照，像使用的是 P10 还是 P50、data_confidence_score、异常比例\n- ttl_seconds：这条建议有效期，避免旧建议被用\n- trace_id：链路追踪"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向 NEED_APPROVAL，不直接 BLOCK。因为价格调整可能仍然需要做，但不能自动结算就意味着后续对账要人工。接口里 risk_gate=NEED_APPROVAL，reason_codes带 MAPPING_SUSPECT，同时建议价用更保守的 P10，并把 evidence 里写“settlement_auto=false”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先拟个简单表：\n- confidence_level=A 且 data_confidence_score≥0.8 且 anomaly_flags为空：用 P50\n- confidence_level=B 或 score在[0.6,0.8)：用 min(P50, P10的某个上移，比如P10+0.2*(P50-P10))，动作可能 NEED_APPROVAL（看折扣幅度）\n- confidence_level=C 或 score<0.6：直接用 P10，risk_gate 至少 NEED_APPROVAL\n- anomaly_flags含缺口/漂移：用 P10，且输出里给 anomaly_ratio；若异常比例>阈值比如5%则 BLOCK\n- anomaly_flags含映射疑似：定价可出建议但 risk_gate=NEED_APPROVAL，settlement_auto=false"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口里加 pricing_policy_id 或 policy_snapshot_id。给价服务只负责按 policy_snapshot 里的阈值执行。输出 evidence 里回传 policy_snapshot_id 和命中的阈值，比如 anomaly_block_threshold=0.05。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在输出里再加一个 upstream_actions_suggested：比如 REROUTE、REPACK、HOLD_SHIPMENT。并且加 action_priority：RISK_INTERVENTION_FIRST / PRICING_FIRST。这样策略编排器看到就能先走风控。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@策略产品经理 动态定价“给价建议”接口里，我想加 upstream_actions_suggested 和 action_priority 来表达先风控后定价。你们策略编排需要多细的动作枚举？还有风险门禁 AUTO/NEED_APPROVAL/BLOCK 这种粒度够不够？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "severity=1-5 是固定标度吗，还是你们按业务自定义？我担心我们这边给不了那么准。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审批层级怎么触发？只看折扣幅度吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我调整为三段输出：\nA) pricing_recommendation：suggested_price、price_range、discount_pct、price_action、ttl_seconds\nB) risk_signals：requires_intervention(bool)、intervention_types[]（温控/运输/数据质量）、severity(1-5)、conflict_groups[]（PRICING/SETTLEMENT/SHIPMENT）\nC) approval_hints：risk_gate(AUTO/NEED_APPROVAL/BLOCK)、suggested_level(store/region/hq)、required(bool)、deadline_minutes、reason_codes[]\n另外 evidence 里记录：用的 RSL 版本（P10/P50混合）、confidence_level、data_confidence_score、anomaly_flags、policy_snapshot_id、关键阈值命中情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "请求里加 trigger_context：trigger_type=EVENT/BATCH，trigger_source（温度告警/到港扫描/日终巡检），event_time。防抖我想到两层：\n- request_id 幂等，重复请求返回同一 trace_id 的结果\n- 价格抖动：输入加 last_decision（上次建议价、时间、原因码），服务里有 policy 配置的 cooldown_minutes；冷却期内如果变化不超过 price_step 就 HOLD，并在 reason_codes 加 COOLDOWN。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 定价建议接口的输出我想带 evidence 方便审计和复盘，但里面可能包含 cost_floor、min_margin、门店库存等敏感字段。你这边对“对外接口/多租户”有什么数据最小化要求？审计留痕要哪些字段？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "external_evidence 里我只放预测相关+置信度+异常比例+用了P10还是P50，不放成本。成本相关只放在 internal_evidence，通过权限才能查。reason_codes 里的映射疑似我改成 MASTER_DATA_INCONSISTENCY。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想分三类：\n- 200：返回 recommendation（可能 price_action=NONE）\n- 204：No Recommendation（比如 promo_lock 且策略规定不建议改价），但会有 minimal risk_signals？不确定\n- 4xx：输入缺字段、batch_id不存在、权限不足\n- 5xx：内部错误\n另外加一个字段 result_status：OK/NO_OP/BLOCKED/ERROR，这样即使200也能表达 BLOCKED。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，三点都对。还有一个小点：NO_OP 我想覆盖 promo_lock 和 cooldown 两种，reason_codes 里区分 PROMO_LOCK / COOLDOWN，方便前端解释。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

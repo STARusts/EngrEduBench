@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方引擎与规则融合开发背景下，用户与导师围绕分区处方“同质化”定位根因、制定修复与验收标准并明确接口/日志合规/节流方案持续沟通（10轮），其中在画像快照key粒度、lineage回归与质量标记接入上与数据架构师沟通（2轮），在硬软规则融合、缺失penalty与阈值归属上与算法负责人沟通（1轮），并形成ZONE粒度读取与缺失降级的最小验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现象是：同一地块的 4 个 management_zone，施肥量、播种密度、灌溉频次都被压到了同一档位，差异只有 1-2% 浮动。看日志里处方引擎输入的 features 里，zone_id 不同但关键特征像 soil_ec、awc、gdd_window、ndvi_trend 都很接近。我最怀疑两块：一是画像快照取错粒度，把 zone 特征聚合到 field；二是规则融合时权重/阈值走了默认分支，导致结果被“安全策略”收敛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据点我能先列三个方向：  \n1）awc：我们算子是土壤质地+容重估的田间持水量，按理 zone1 沙壤、zone3 黏壤差会明显，但现在差异不到 0.01。  \n2）ndvi_trend：zone 之间卫星序列应该有不同趋势，但输出 slope 几乎一致。  \n3）yield_p50：历史产量分位数本来是按 zone 做对齐的，现在各 zone 都接近 field 的中位。  \n调用 key 目前是 feature_set_version + window_end + field_id。zone_id 我没带进去，因为画像服务当时给我的接口只暴露 field 维度的 snapshot_feature_wide。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "画像服务宽表我理解是“可配置粒度”的，但我们当时优先打通了 field 粒度的快照写入，留了 zone 但没接。修法我倾向：  \n- 快照表继续按 feature_set_version + window_end 出，但主键扩展成 entity_type/entity_id（field 或 zone）；  \n- 处方引擎侧把请求从 field_id 切到 zone_id 列表；  \n- lineage_id 里把 entity_id 也编码进去，回归集同一 field 下做 zone 对照。  \n我不确定的是：画像服务那边是不是愿意改 key，怕影响现有消费者。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 现在处方引擎要做 management_zone 粒度处方，但画像服务我这边只拿到 field 粒度 snapshot_feature_wide（key=feature_set_version+window_end+field_id）。分区处方同质化。想请你拍板两点：1）快照宽表是做 entity_type/entity_id 兼容，还是 field/zone 分表更好；2）lineage_id/source_set_id 里是否需要把 entity 维度纳入，回归对照怎么做才不破坏可复现？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有个细节：我们现在只保近 180 天快照，ndvi_trend 需要 120 天窗口，够；但如果 zone 最近缺遥感，会走 missing_reason。规则融合那块会不会因为 missing 过多又把结果收敛？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我先落地成动作：  \n1）粒度：读取画像时显式传 entity_type=ZONE，处方引擎内部的数据结构从 field_features 改成 zone_features map，不再用 field_id 作为唯一键。  \n2）追溯/回归：lineage_id 只关联特征 run 元数据，不把 zone_id 拼进去；回归对照新增“zone 间方差断言”，并保持 source_set_id 不变时跨周大幅变化告警。  \n3）缺失/质量：规则评估输入里带 value_quality_flag/missing_reason。融合时不允许简单 if null then default；而是：缺失触发“替代特征”或“降级规则”，并记录在处方解释里。  \n融合逻辑我准备做两层：硬规则（禁忌、上下限）先裁剪，再做软规则打分；软规则对缺失用 penalty 而不是直接用默认值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "冲突策略我会定成：硬规则永远覆盖软规则，但硬规则阈值要可配置、可追溯。你举的例子里：EC 超阈值触发“上限/下限裁剪”或“比例折减”属于硬规则，先执行；耐盐性高只能在软规则里把折减幅度从 30% 调到 10% 这种“在硬规则允许区间内微调”。这样解释也更直观：先保证不踩风险线，再谈增产优化。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小验证我做三步，不需要大改：  \n1）同一 field，取两个 zone 的原始输入源（比如 soil 样点、遥感像元聚合），直接跑 awc、ndvi_trend 的算子，比较中间产物，确认算子对输入敏感；  \n2）在处方引擎里对同一次请求打印“读取到的 entity_id 列表、各 zone 的 awc/ndvi_trend/yield_p50、以及 value_quality_flag”，验证是否读成同一份 field 快照；  \n3）把规则融合里的默认分支命中次数按 zone 输出计数，如果缺失导致默认分支占比>50%，说明质量标记没进条件或缺失处理不当。  \n这三步能把责任界面切清：是特征计算、特征读取、还是规则融合的问题。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "日志里我只打 request_id、lineage_id、entity_type/entity_id（zone_id 这种内部编号）、feature_set_version、window_end、以及特征名和数值的摘要统计（min/max/mean），不打印原始序列、不落经纬度，也不把地块名称这种可能关联客户信息的字段打出来。需要定位遥感缺失时，只记录 missing_reason 的枚举值，不记录像元索引。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我希望是：  \n- 请求：entity_type=ZONE，entity_ids=[...]，feature_set_version，window_end；可选 include_quality=true。  \n- 响应：每个 entity 返回 json_blob（特征键值），同时返回 value_quality_flag/missing_reason（按特征粒度），以及 lineage_id/source_set_id。  \n错误码：404 表示快照不存在（超 180 天或未生成），422 表示 expected_range 校验失败被拒绝出数，403 表示 include_geom/敏感字段权限不足（我们默认不拿 geom）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 处方引擎现在出现分区处方同质化，定位到两个点：1）画像读取粒度没到 ZONE；2）规则融合默认分支可能吞差异。我要把融合做成硬规则（禁忌/上下限）+软规则（打分/微调），缺失用 penalty 不直接 default。你这边需要我对齐两件事：缺失 penalty 怎么设比较合理（按特征、按任务、还是按质量旗标分档）？硬规则阈值的配置归属是算法侧给、还是引擎侧内置？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "rule_pack_version 这点能避免我在引擎里埋常量。缺失分档我也能接住：安全类缺失直接保守，产量响应类用时间衰减 penalty。时间衰减函数我先用线性/指数两种试一下，看哪种对回归更稳定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今天收口到三项可判定：  \n1）画像读取改为 ZONE 粒度：同一请求返回的 4 个 zone，awc、ndvi_trend 至少各有一项出现>10% 的差异（排除质量差的 zone，用 value_quality_flag 过滤）。  \n2）规则融合缺失处理上线：日志里默认分支命中率从当前接近 100% 降到 <20%，其余走 penalty/降级规则，并在解释里标出“降级原因=missing_reason”。  \n3）追溯字段齐全：处方响应里包含 lineage_id、source_set_id、rule_pack_version；回归对照新增 zone 间方差断言，至少对 awc、yield_p50 生效。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先做两点轻量的：  \n- 批量接口限制 entity_ids 上限，比如 200；超了引擎分批拉取并做并发上限；  \n- 引擎侧对同一 request_id 内做一次性本地缓存（只活在请求生命周期），避免规则评估多次重复取同一 zone。  \n更长期的读优化我先不展开，等你明天看回归再决定是否需要加更重的缓存层。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

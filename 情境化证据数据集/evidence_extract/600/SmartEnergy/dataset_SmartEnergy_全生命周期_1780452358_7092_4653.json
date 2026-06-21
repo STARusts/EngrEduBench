@@ -1,0 +1,402 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在磁浮惯储阵列项目立项与需求梳理背景下，用户与导师围绕项目痛点、共振隐患触发边界、可检验假设及需求约束清单持续沟通（6轮），其中在电网侧真实诉求与惯量缺口部分与调频场站产品经理沟通（1轮），在共振扰动边界与红线部分与惯储并网合规师沟通（1轮），并最终明确项目核心需求与约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电网惯量缺口是啥？飞轮阵列为啥会共振？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频率晃多少危险？有啥红线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "定不出。不懂频率怎么算。得找人搞。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我负责把模块拼一起，跑现场测试数据。控制算法找懂行的人。"
+              }
+            ]
+          },
+          {
+            "microScene": "在惯储阵列并网与商业闭环背景下，用户与导师围绕合规红线、商业落脚点及阻尼与闭锁的策略编排边界持续沟通（4轮），其中在并网红线部分与惯储并网合规师沟通（1轮），在盈利模式部分与调频场站产品经理沟通（1轮），并最终确定阻尼算调频服务、失磁算安规闭锁不计费、收益锚定容量替代费的需求边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并网有啥红线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么赚钱？"
+              }
+            ]
+          },
+          {
+            "microScene": "在场站运营方诉求与边界锚定背景下，用户与导师围绕场站核心诉求、寿命与调频权衡的边界约束、降额阻尼验证策略及数据样本口径持续沟通（6轮），其中在场站痛点与寿命调频权衡部分与调频场站产品经理沟通（2轮），在寿命调频冲突合规底线部分与惯储并网合规师沟通（1轮），最终锚定降额阻尼保寿命诉求、阻尼失败停机边界及72小时含扰动样本验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调频场站产品经理 场站那边到底想要啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个阈值呗。震纹大了就停机，不就保住寿命了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@惯储并网合规师 寿命和调频冲突了咋办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证？我就跑个仿真呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道口径，我就用通用的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "频域样本我不太会看，以前没弄过这种高频的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我补补傅里叶变换吧，回头看看书。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这数据得找场站要，我负责不了要数据这事。我只管拿到数据后跑特征提取。所以诉求就是：1. 场站要保寿命，2. 边界是降额阻尼，3. 要72小时数据。对吧？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在微震孪生感知与边缘推演架构方案设计背景下，用户与导师围绕架构选型、算力规划与接口定义持续沟通（7轮），其中在架构选型部分与微震孪生架构师沟通推流与拉取优缺点及推演时延（1轮），在接口吞吐量定义部分与算力流控开发主管沟通算子拆分与算力规约（1轮），并最终确认边缘流式推流加异构算力架构选型及约束，接受补学任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "集中拉取和边缘推流哪个好，72小时数据推演时延怎么样，什么情况拉取就不行了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推流好，时延要小于5ms，拉取会漏信号。算力用FPGA和NPU。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不懂。FPGA算力分配我不会。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流注特征提取算子怎么拆，算力规约是啥，吞吐量多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "拆成三段，NPU和FPGA，吞吐10k。接口就按这个写？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在频域震纹解构与阻尼适配模型设计背景下与导师围绕微震信号解构方法、算力约束与接口定义持续沟通（5轮），其中在非平稳解构方法与阻尼接口特征部分与阻尼协同控制师沟通（1轮），在FPGA算力消耗与吞吐能力部分与算力流控开发主管沟通（1轮），并最终确定轻量小波包分解方案及阻尼闭环接口字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解构？就，FFT算一下频谱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大家不都这么算吗。时变的话，就，多算几次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微震解构用啥方法？阻尼接口要啥特征？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "FFT不行，有混叠。得用VMD或者小波包。阻尼接口要输入向量，输出系数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "VMD和小波包在FPGA上算力够不够10k fps？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "VMD太重了，FPGA跑不动。小波包可以，省资源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，小波包分解。输入是向量和熵，输出是系数。"
+              }
+            ]
+          },
+          {
+            "microScene": "在充放功率分配与动稳协同接口设计背景下，用户与导师围绕快慢环时序冲突与协同接口机制持续沟通（8轮），其中在快慢环隔离与防冲突机制部分与阻尼协同控制师沟通（1轮），并最终锁定双缓冲隔离、快环抢占与慢环断点续传三条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@阻尼协同控制师 快慢环接口怎么隔离，防冲突。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，先停下呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先双缓冲隔离，快环优先，慢环断点续传。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端工况容错与失磁跌落防线设计背景下，与导师围绕防线策略与验证约束持续沟通（5轮），其中在跌落拦截与防线测试部分与失磁容灾防线师沟通（1轮），在防误触发合规与特征解耦部分与惯储并网合规师沟通（1轮），最终锁定20ms确证触发、闪变不误动及预注册测试三条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "磁浮掉电了咋整？转子砸下来怎么弄？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看了一个并网防误动规范，说要防误触发，我寻思咱们这抱闸也得防误触发吧，别没掉电给抱死了。但我不知道咋弄这判据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段震纹解构算子拆解与规约制定背景下，用户与导师围绕算子拆解规约、算力超限降级策略及验证口径设计持续沟通（9轮），其中在算子拆解与算力分配部分与算力流控开发主管沟通（1轮），在特征提取算子对照验证部分与震动信号算法员沟通（1轮），并最终确定三层解耦规约与信噪比验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算力流控开发主管 算子怎么拆？算力怎么分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@震动信号算法员 特征提取算子怎么测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力主管定规约，算法员写提取引擎，我我负责把这三个算子串起来，保证5ms时延跑通就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算子串联卡5ms时延与定长流注规约对齐背景下，用户与导师围绕流注特征格式对齐、时延估算与降级帧长处理持续沟通（5轮），其中在特征帧排列与维度部分与震动信号算法员沟通（1轮），在总线带宽与算力解构时延部分与算力流控开发主管沟通（1轮），并最终明确降级时定长帧填零补齐与64字节死锁对齐要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对齐啥？他写引擎，我直接调他接口不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@震动信号算法员 流注特征帧怎么排，时标占几位，特征向量维度多少。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "总线速度我哪知道。反正就64字节，应该很快吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算力流控开发主管 64字节的流注帧，5ms内能跑完解构吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级砍半就变短呗，我写个判断长短的逻辑？"
+              }
+            ]
+          },
+          {
+            "microScene": "在孪生感知推演与惯储控制侧闭环联调背景下，用户与导师围绕接口数据转换、时延控制及验证测试持续沟通（7轮），其中在时延红线与接口对齐部分与动稳闭环联调员沟通（1轮），并最终确定5ms时延丢帧报错、ID映射校验及HIL测试等开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "孪生推演到阻尼下发，时延红线在哪？接口怎么对齐？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "5ms。超了会放大共振。还有飞轮ID得对上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑一下，看日志时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不会搞。就，先写个5ms判断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "5ms超时丢帧报错。ID映射加校验。跑HIL测试。"
+              }
+            ]
+          },
+          {
+            "microScene": "在震动特征提取算子向边缘平移背景下，用户与导师围绕算子拆分策略、轻量化降级及日志合规持续沟通（4轮），其中在算力平移规约与切分部分与算力流控开发主管沟通（1轮），在频域解构边缘轻量化与日志合规部分与震动信号算法员沟通（1轮），并最终明确特征提取引擎拆分边界与日志接口重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算力平移？就是把代码挪个位置跑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代码我不知道能不能拆，反正现在是一坨。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频域解构怎么边缘轻量化？还有日志合规。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我代码里好像直接把原始数组发出去了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改提取引擎的拆分，频域解构换成轻量FFT。改日志接口，把发原始数组换成发摘要和异常码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发极限注入与短板排查背景下，用户与导师围绕注入步进设定、短板排查判据及监控逻辑迁移持续沟通（7轮），其中在极限注入边界与判据设定部分与极限注入测试员沟通（2轮），并最终形成步进1%、相位裕度30度红线及调用监控API的测试约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，加功率呗。满功率跑一圈看炸不炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "判据？就，不震就是好？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极限注入怎么搞，边界在哪，判据是啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信区间啥意思？就跑多次取平均？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太会看相位裕度，以前都是看波形没发散就算过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "查那个逻辑太费劲了，我直接在代码里写死一个30度报警行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把监控那边的余度接口接过来，大于30度就绿灯。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "步进1，相位30，看区间。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在磁浮惯储阵列接入场站实况数据背景下，用户与导师围绕动稳基线核准方法及能力差距补救持续沟通（3轮），其中在基线核准统计口径部分与场站交付运维官沟通（1轮），并最终敲定核准口径与脚本交付计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看没超红线就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@场站交付运维官 接入质量和基线怎么核准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不懂算这个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去搜搜效应量是啥，看个教程。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明天写个算区间的脚本。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在震纹熵值与动稳余度实时监控背景下，与导师围绕共振前兆监控与报警阈值划定持续沟通（5轮），其中在指标联合判断逻辑部分与震纹态势监控员沟通（2轮），在现场误报率容忍度部分与场站交付运维官沟通（1轮），并最终确定报警触发条件与看板配置逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "震纹熵值和动稳余度怎么看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "联合变化？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误报率能多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能超5%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "熵值飙升加余度收窄，然后误报不超5%。"
+              }
+            ]
+          },
+          {
+            "microScene": "在阻尼失效报警复盘背景下，用户与导师围绕转子偏心漂移归因排查、根因验证及合规闭环持续沟通（7轮），其中在归因链路与合规留痕部分与偏心漂移诊断师沟通（1轮），在控制残差剥离验证与算力开销部分与阻尼协同控制师沟通（1轮），并最终形成提取磁隙特征、夜间低谷验证及上链存证的三步复盘方案。",
+            "evidence": []
+          },
+          {
+            "microScene": "用户在次同步振荡适配与演进规划背景下，与导师围绕复盘结论转化、演进路线制定、能力差距与学习任务及演进基线锁定持续沟通（7轮），其中在外推边界与演进路线排布部分与动稳演进规划师沟通（1轮），最终形成包含频段限幅、阻抗绑定与算力评估的三条演进基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "复盘结论怎么变成演进路线？外推边界是啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能直接套。要分两步，还得加阻抗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是高频的结论管不到低频的。次同步得重新弄。我其实不太懂轴系扭振这块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没怎么记。我看不懂推演过程。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那现在演进路线就按他说的两步走？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不知道。应该不会吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "限幅15Hz，绑阻抗复现，先评算力。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

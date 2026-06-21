@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流变标测模型开发与引擎集成背景下，用户与导师围绕动态图训练、模型轻量化与关键参数设定持续沟通（4轮），其中在输入管线与轻量化指标部分与标测模型训练工程师沟通（1轮），最终明确采样器步长、重叠率及轻量化硬约束并修订代码。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型这块我看之前的文档说是用时序图神经网络，我打算直接拿PyG搭个框架，把多模态数据拼进去跑起来。引擎集成的话，转成ONNX格式导出应该就完事了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边权重动态更新这块，我原想找找有没有现成的动态图处理库能直接调。边缘算力确实不太清楚具体会卡在哪，平时本地跑GPU也没感觉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流变标测模型的动态图训练，输入管线具体怎么写？还有边缘侧推理引擎对模型轻量化有什么硬指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入管线得自己写个TemporalGraphSampler，按时间片切快照，把阻抗变化率当边。轻量化就是要剪枝和做QAT，参数压到2M，延迟低于50ms。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "感觉这挺麻烦的，有没有那种一键剪枝的工具能直接套一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长和重叠率我还没细想。一般时序模型不都是重叠50%吗？我想着先跑起来看看效果，不行再调参。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去改代码把这些约束加进去跑一版。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

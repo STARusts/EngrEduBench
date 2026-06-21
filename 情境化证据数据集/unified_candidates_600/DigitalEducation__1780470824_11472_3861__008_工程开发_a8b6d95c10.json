@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发接入认知诊断与图谱检索背景下，用户与导师围绕微交互特征映射掌握概率及图谱差异化检索的模型适配与落地持续沟通（7轮），其中在微交互融入贝叶斯更新部分与认知诊断算法工程师沟通（1轮），在图谱根据缺陷类型差异化检索部分与知识图谱架构师沟通（1轮），并最终形成微交互调BKT参数、图谱扩展缺陷类型属性、MVP用配置中心映射表及历史数据回放验证的开发收束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用BKT算概率。涂改多就认为没掌握，算个概率出来，然后拿这概率去Neo4j查前置节点没掌握的，推内容。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算错的话停顿时间短？我先把特征加权求和算个分，权重写死0.5。区分概念和算错我确实没思路，加if-else规则行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "埋点给了停顿时长和涂改频次，怎么弄进BKT算掌握概率？直接加权行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "诊断出是概念不懂还是算错，图谱里怎么存？现在只有前置关系。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说不能加权，要用微交互调BKT的Guess和Slip，还要校准发射概率。图谱要在边上加`defect_type`，不同类型推不同内容。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "参数我先用经验值初始化，后面再拟合。图谱我用Cypher加属性。但我怕调参太慢，能不能先写个硬编码映射表顶一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏做了，上报时只传特征不传原文。查图谱也只传概率和缺陷类型ID，不传原始时长。我先把图谱加属性和算法接口调通，映射表放配置中心。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿历史做题数据跑一遍？对比下诊断结果和真实对错率？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

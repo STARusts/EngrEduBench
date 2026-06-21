@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估异构光场融合延迟监控背景下，用户与导师围绕线上告警配置、采样开销与监控覆盖面持续沟通（7轮），其中在线上毛刺与告警配置部分与运维监控工程师沟通（1轮），在P99统计开销与采样策略部分与性能调优专家沟通（2轮），并最终形成光流延迟、资产加载与NeRF解码的多指标监控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把压测定的11ms写到告警规则里，超过就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开销没算过。我以为直接套压测数就行。线上报警怎么配我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上异构光场融合延迟的毛刺很多吗？11ms硬告警是不是不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算P99的开销呢？全链路都算会不会拖慢融合？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "1%采样会不会漏掉真正的毛刺？关键交互全量打点，开销能顶住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "线上不能硬卡11ms，运维说要用滑动窗口，比如1分钟P99持续超15ms报警，或者1秒突增超30ms报警。采样方面，性能专家说平时1%尾部采样看趋势，导演取景操作时全量打点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "取景操作前端会发WebXR的pose事件，后端收到带pose标记的帧就算取景交互帧，对这些帧开全量打点。其他的走1%采样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "要。但这两个我不熟，也按1%采样配？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "异构光场融合延迟监控策略：\n1. 光流P99延迟：闲时1%尾部采样+滑动窗口告警（1分钟P99>15ms或1秒突增>30ms）；取景交互帧全量打点。\n2. 资产加载耗时：全量打点，超时阈值待定。\n3. NeRF解码耗时：同光流延迟策略，1%采样+取景全量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

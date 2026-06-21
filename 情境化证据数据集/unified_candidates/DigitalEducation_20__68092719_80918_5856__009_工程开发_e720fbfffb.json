@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在作业证据链智能督学系统进入采集SDK与埋点落地背景下，用户与导师围绕最小事件集、证据链ID设计、离线队列与重试去重、降级与合规边界持续沟通（9轮），其中在端侧队列/trace_id分层、props最小化、签名与失败码及降级开关实现细节上与移动端工程师沟通（6轮），并形成三档事件采集方案与最小字段清单及资源阈值约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点纠结：埋点到底要埋到多细，怎么保证“证据链”能串起来但又别采过头。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件类型我想就按页面浏览、作业上传、提交、批改反馈这些。字段嘛…我看很多SDK都默认带设备信息、地理位置啥的，直接开开关就行？离线重试用现成队列组件应该就可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ID我想用用户ID+作业ID，再加个时间戳？然后每个事件都带上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 采集SDK这块，端上埋点上报一般怎么搞最省事？我想直接接个现成的埋点库，然后把作业链路的事件都丢进去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "trace_id 是每次打开作业就生成？那学生开了又没交，下一次再开，trace_id就变了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 props 里是不是能随便塞？比如把作业文本内容也塞进去，省得后面查证据缺东西。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "文件hash也算敏感吗？我以为hash就安全。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那签名上报呢？我看到很多SDK用一个appKey就签了，直接照搬行不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那失败码要怎么设计？我怕端上只会“失败重试”一把梭。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级开关这个跟之前说的“保聚合”一致？端上就直接不发明细？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基础档：就 open_hw、submit_click、submit_success/failed、teacher_mark_done 这些关键点；增强档再加 edit_duration、attach_count、upload_latency；专项核查才开 file_hash 这种。定位、录屏、摄像头默认都不动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "每条都带：event_id、event_name、occur_ts、user_id、hw_id、trace_id。再带 client_version。props 里按事件放少量字段，比如 attach_count、net_type。大概这样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "install_id是本地生成然后存着？那卸载重装就变了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "policy_ver我之前没想到。我怕字段越来越多，埋点库就变重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值我不太会定…网上有人用10MB队列上限？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对照测试就是我用脚本点点点？还是要自动化。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我最后定一下：基础档必采事件我就压到6个以内，props每条不超过1KB？这样可以吗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实容易直接println全量。那我改成只打 event_name、event_id、code、policy_ver。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在心绪演进量化系统解析模块开发背景下，用户与导师围绕端云负载拆分、边缘功耗约束、验证口径及自采数据合规处理持续沟通（5轮），其中在端侧算子选型与工程化落地部分与算法工程师沟通（1轮），最终形成端云协同架构、性能约束、验证设计与数据合规的开发约束确认。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧只做简单的去基线漂移和R波粗定位，把数据加密传上来，云侧做HRV精细计算和EDA的SCR分离。这样能保证实时性，工具链上我打算直接用Python的NeuroKit2，接口很全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "功耗这块我确实没细算，凭直觉觉得现在手环算力都挺强的。验证的话，我准备跑几组公开数据集看看R波检出率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原计划端侧用NeuroKit2做预处理，但担心功耗兜不住。这块有什么现成的轻量级方案吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "C++手写滤波器我懂原理，但具体在嵌入式环境下的定点化实现和性能调优我没实操过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这两天把CMSIS-DSP库的滤波器API和定点化精度损失评估文档过一遍，先把端侧的带通滤波和R波检出用C++写出来跑通，云侧NeuroKit2保留。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "验证口径我采纳你的，F1大于0.95，延迟小于20ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自采数据进测试集前，必须过一遍前面定好的端侧脱敏逻辑，把时间戳和设备ID抹掉，只留信号流和沙箱签名。权限上，测试脚本只能通过声明式API拉取，不能直连数据库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 端云协同：端侧C++结合CMSIS-DSP实现带通滤波与R波检出，云侧Python用NeuroKit2实现HRV与SCR精细计算；2. 性能约束：端侧单导联延迟小于20ms，R波检出F1大于0.95；3. 验证设计：对照MIT-BIH与脱敏自采数据，观测F1与端侧耗时；4. 数据合规：测试数据需经端侧脱敏与沙箱签名，脚本仅限声明式API拉取。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

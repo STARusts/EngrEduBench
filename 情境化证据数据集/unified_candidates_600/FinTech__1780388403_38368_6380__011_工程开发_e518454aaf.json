@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在图推理延迟与内存超标背景下，与导师围绕性能瓶颈定位、锁竞争解决与验证方式持续沟通（6轮），其中在资源占用定位部分与性能调优极客沟通（1轮），在评级一致性与边界除错部分与算法工程师沟通（1轮），并形成子图提取改引用、锁降级、特征加兜底及Async Profiler验证的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "从理论上看，我们用的图神经网络消息传递，节点度数分布是幂律的，高维节点聚合时复杂度是O(N^2)，这肯定慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图推理延迟和内存的问题，怎么看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "大对象复制太多，GC受不了。同步锁堵住我也懂，但具体怎么改？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "锁竞争，换成无锁结构？比如CAS？但图更新如果冲突率高，CAS自旋也废CPU吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评级更新这里，是不是必须加同步锁强一致？能不能无锁？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前看论文只考虑了特征扰动，没想极端缺失。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨天刚看了一份关于Async Profiler的实操手册，里面讲用jfr去抓原生栈，比传统采样准。是不是可以用它来确认极客说的GC停顿点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一轮压测，同时开Async Profiler抓分配事件，看大图切片那块的内存分配率降没降。如果分配率平了，GC停顿自然就下来了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改子图提取逻辑，加兜底，锁的问题我按读写锁重构。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

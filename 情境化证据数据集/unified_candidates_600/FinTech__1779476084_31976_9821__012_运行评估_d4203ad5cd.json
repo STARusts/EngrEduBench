@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在线上抽取准确率掉点与推演延迟突增背景下，与导师围绕异常归因、监控口径设定与报警规则编写持续沟通（6轮），其中在Token截断监控与格式漂移处理部分与大模型算法架构师沟通（2轮），并最终确定Token超限打标、批次F1绝对差值报警、延迟分离与Schema合规率监控四条口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了Grafana大盘，整体F1-score在0.82上下，推演P99延迟大概1.2秒。理论上如果大模型输出分布稳定，这两个指标应该符合正态，不会有大抖动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我我我没细看。可能是有突发大流量打进来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@大模型算法架构师 线上如果出现因为Token截断导致的抽取准确率掉点，一般监控口径怎么定？直接算F1的滑动平均吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽取侧重点看批次F1掉点和输入Token超限打标，推演侧要把推理和查询拆开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果是批次F1掉点，是不是可以用 `rate` 函数算一下时间窗口内的变化率？变化率超过一定值就报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大模型输出JSON不合法后端直接报错了，这种5xx状态码好监控。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心是：1. 输入Token超限打标隔离；2. 批次F1绝对差值掉过5%报警；3. 推理与图查询延迟分离监控；4. 输出Schema合规率监控，不合规入脏池。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

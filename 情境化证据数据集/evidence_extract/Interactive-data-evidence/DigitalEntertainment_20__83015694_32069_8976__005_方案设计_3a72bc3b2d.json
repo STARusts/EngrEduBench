@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在分镜变体数据模型方案设计背景下，用户与导师围绕Shot/Variant/ConditionSet结构、命中规则可配置、回放可复现与审计日志、以及防抖cooldown等要点持续沟通（10轮），其中在SelectionLog隐私最小化与可存字段边界上与隐私与数据治理官沟通（4轮），并将合规要求回填到数据模型与作者配置示例中。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度就情绪、声纹、剧情分支。规则就 if。复现就存一下结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "shotId，图片url，台词？时长？我不知道还要啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "assetId就是图的id？那气泡也算图吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个json？里面写 emotion=happy 这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如：情绪=怒，然后声纹是A，就用变体2。不是A就用变体1。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "初始一个，然后能调。离线调到误触发小于1%。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "会选错图？读者骂。或者一直切来切去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存variantId。然后下次就按这个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与数据治理官 SelectionLog要存啥？音频能存吗？我怕搞错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "speaker_id还要轮换？那我就不能一直识别同一个人了吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就只存variantId不就行了，还搞这些桶干啥。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，音频别存。声纹向量也别存。SelectionLog存：shotId、选的variantId、conditionSetId、阈值版本、模型版本。然后情绪和置信度只能存成一档一档的，snr也分级。speaker_id要匿名，还得开开关。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Shot1：  \nVariant1：默认，assetId=base。  \nVariant2：emotion=happy，priority高。  \nVariant3：speaker=A 并且conf>=阈值，priority最高。  \nfallback就是Variant1。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记不住第3条一堆version，反正就是要存版本号对吧。还有桶化别存音频。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

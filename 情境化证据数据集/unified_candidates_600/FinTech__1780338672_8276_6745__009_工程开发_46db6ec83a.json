@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段智能合约编写背景下，用户与导师围绕合约模块拆分、过度抽象与ZK-Rollup的取舍、Merkle Proof折中方案及Gas优化与单测持续沟通（5轮），其中在合约拆分与基类评估及Merkle方案开发量部分与智能合约开发者沟通（2轮），在链上校验合规性部分与合规审计师沟通（1轮），并最终确认CreditFlow与PrivacyAnchor合约拆分方案及单测验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先搭一个通用的跨域验证引擎基类，把信用拆分流转和隐私风控的验证都抽象进去，以后加新业务直接继承就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你评估下合约模块怎么拆？如果加个通用验证基类，会不会影响开发进度？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只存哈希太弱了，链下数据一改，链上根本不知道。要不我们引入ZK-Rollup？把隐私证明压缩成零知识证明再上链，这样既能验证又省Gas。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果隐私风控的联合建模结果不在链上做完整校验，只存哈希，合规过得了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想到个折中，用Merkle Tree。链下算好风控结果，打包成Merkle Root上链，单笔交易带Merkle Proof验证。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对Solidity里写Merkle验证的Gas优化没底，之前没实战过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚得把OpenZeppelin的MerkleProof库源码和测试用例过一遍，搞懂它的Gas消耗模型，明天把验证逻辑迁移到我们的PrivacyAnchor合约里。单测方面，我会构造非法Proof和过期Root的用例来跑对照测试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约拆成两块：CreditFlow负责拆分流转，PrivacyAnchor负责风控Merkle验证。不搞通用基类和ZK了。单测验收标准就是流转精度不丢失，且非法风控Proof全被拦截。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

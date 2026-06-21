@@ -1,0 +1,612 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在需求与战略阶段立项背景下，用户与导师围绕固废识解精度提升的业务痛点拆解、可检验研究假设构建及边缘算力约束持续沟通（8轮），其中在识解精度与配调稳定性因果关联部分与循环经济架构师沟通（1轮），并最终形成核心痛点、研究假设、反驳标准及因果验证补齐目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做“固废多谱识解与再生微配调系统”。现在固废分拣线上的光谱特征提取太糙了，如果我们用高维多光谱在边缘端做材质识解，精度肯定能提一大截，下游再生微配调就好做了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固废分拣出来的料不纯，在微配调环节具体是个什么痛点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点是源头识解偏差导致微配调配方失稳。假设是：如果我们把源头识解的材质纯度提升，微配调的配方偏差就能降下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "变量就是识解纯度和配方偏差。但具体阈值我现在定不下来，反驳标准也没想过。这块我确实不太会定，我平时只看算法的F1 Score，没做过这种业务指标的因果验证设计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得补业务指标度量和因果验证的方法。这两周我找三篇固废配调的工程论文，把里面配方偏差的计算口径搞懂，自己推一个简化的因果映射公式，然后拿现有分拣线的脏数据跑一遍相关性，证明识解偏差和配方失稳确实存在强相关，如果P值大于0.05我就得重新找痛点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力不够识解慢了，配调指令发不出去，整个流转就堵了。这个我得加到约束里，不然精度再高也没用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心痛点是源头识解偏差导致微配调配方失稳与流转时效降低。研究假设：在边缘算力满足实时性约束的前提下，识解纯度提升X%可使配方偏差降低Y%。反驳标准：若配方偏差下降不到Y%或P值大于0.05，则假设不成立。关键约束是边缘算力限制。我这两周先去补配方偏差的因果验证设计，跑通相关性再往下推。"
+              }
+            ]
+          },
+          {
+            "microScene": "在识解配调价值画像构建背景下，用户与导师围绕价值链路闭环、商业价值假设与核心度量指标持续沟通（5轮），其中在价值流转与碳足迹变现部分与循环经济架构师沟通（1轮），并最终形成基于原级再生替代率、单吨碳减排折现与库存周转率收益的三大商业价值假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "价值不就是回收率提升嘛。识解纯度上去了，分拣出来的料纯，再生配方就好调，下游再生厂肯定愿意用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们把识解纯度提上去，下游再生厂到底怎么为这个买单？碳足迹降了怎么变现？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "所以不光是卖料，是卖配调配方能力和碳资产？原级再生这个点我之前没细想，感觉技术难度更大，但确实值钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是原级再生替代率，就是本来只能降级做拖把的塑料，现在能原级做食品级瓶子的比例。另一个是微碳配调带来的单吨碳减排量折现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "价值画像核心是三个假设：1. 识解纯度提升驱动原级再生替代率上升；2. 配方偏差降低驱动单吨碳减排折现增加；3. 流转时效提升驱动再生库存周转率上升。验证标准就是这三个商业指标有没有显著变化。"
+              }
+            ]
+          },
+          {
+            "microScene": "在固废流转合规可行性分析背景下，用户与导师围绕合规红线与商业时效冲突、折中方案探索及假设修正持续沟通（6轮），其中在合规红线与脱敏要求部分与环保合规审计师沟通（2轮），在流转时效与配调精度部分与循环经济架构师沟通（2轮），并最终形成边缘特征脱敏流转折中方案及假设3约束修正结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规？不就是走环评审批吗？咱们做的是AI识解，应该没多大关系吧，大不了后面补个资质。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这个多谱识解，合规上到底有什么限制？是不是随便拍随便传就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱敏和留痕，会不会把咱们的流转时效拖垮？之前假设3可是靠时效提升周转率的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "审计师说必须脱敏，架构师说脱敏就没法配调。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "多谱识解在边缘端不是要跑模型吗？如果把原图谱在端侧直接销毁，只回传材质特征向量和脱敏后的重量体积数据，是不是就满足隐私了？特征向量不含企业标识，但足够配调中心算配方。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们边缘端只回传材质特征向量，原图不回传不留存，合规能过吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征向量回传，配调中心能算准配方吗？时效会不会差太多？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论是：合规是前置红线，原图禁止回传。可行性折中方案是边缘特征提取加脱敏回传。对假设的影响是：流转时效提升的前提是扣除边缘脱敏计算的延时，假设3要加个约束条件。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微碳流转商业闭环与工程可持续性验证背景下，用户与导师围绕闭环模式、核算规则适配负担及分拣站接入意愿验证持续沟通（6轮），其中在多边价值交换部分与循环经济架构师沟通（2轮），并最终确定三边价值交换与碳足迹核销驱动的流转方向及核算规则适配约束，需重新设计验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "识别出来是什么料，然后配调嘛。下游再生厂付配调费，我们收服务费，这不就闭环了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就想到收配调费，这闭环还有别的流转方式吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以数据不只是给再生厂，还得给碳交所？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过。适配不同地方规则应该挺麻烦的，后端接口得写一堆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找两个分拣站问问？问问他们现在碳补贴能拿多少，接入我们系统后能多拿多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方向是分拣站、再生厂、碳交所三边闭环，碳足迹核销是核心。约束有前面定的边缘脱敏流转，还有各地核算规则差异的适配负担。我要去补看行业报告，重新设计验证动作。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在固废多谱识解系统感知架构设计背景下，用户与导师围绕架构选型假设、对照组设计与验证指标持续沟通（6轮），其中在光谱特征提取边缘约束部分与多谱视觉算法师沟通（1轮），在特征拼接算力开销部分与边缘智控工程师沟通（1轮），并最终形成双候选架构方案、验证指标及算力约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感觉可以直接上RGB+近红外+高光谱三通道融合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高光谱分辨率高，近红外看含水率，RGB看外观，这不就是常识吗？验证的话，跑几组废料看看识别率不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用RGB+近红外+高光谱，边缘侧做特征融合，这样行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以我现在的假设是不是改成“关键波段特征拼接能满足边缘时延”？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "波段选择我不太会定，之前没做过高光谱的降维。我得去查查相关的光谱特征选择算法文档，看看怎么根据固废材质特性挑波段。这周把高光谱波段选择的经典论文看两篇，把选取依据搞明白。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证动作就是拿这两种方案，跑同一批固废样本，看识解准确率和边缘推理时延。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算在边缘侧做RGB+近红外+高光谱关键波段的特征级拼接，这种算力开销大概多少？能控制在50ms时延内吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以方案A可行，但要注意算力分配。"
+              }
+            ]
+          },
+          {
+            "microScene": "在特征级拼接架构敲定背景下，用户与导师围绕特征喂入方式与边云数据流转持续沟通（7轮），其中在特征图回传需求部分与多谱视觉算法师沟通（1轮），在带宽与合规约束部分与数据拓扑设计师沟通（1轮），并权衡冲突设计双通道数据流折中方案，明确流转契约形成基线设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拼接完直接打平过全连接层呗。数据流就边缘算完把结果往云端推，简单直接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征拼接后怎么喂模型？还有数据流怎么设计？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "中间特征图传回云端，这流转能跑通吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师要传特征图做复训，拓扑师说带宽扛不住还涉密，只能传Embedding和Label。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得拓扑师说得有道理，带宽成本太高了，而且涉密确实麻烦。但全传Label的话，模型漂移了云端不就瞎了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实时走Embedding和Label，然后单独开个小通道传特征图？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按比例采样？比如千分之一？实时主通道只推Embedding和Label满足脱敏和带宽约束，异步副通道按低频采样把少量特征图回传云端做漂移检测。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "主通道推：物料ID、时间戳、预测Label、Embedding向量、置信度。副通道触发条件：置信度低于阈值0.6时强制采样，或者正常帧1000:1随机采样，回传对应帧的原始特征图和中间Attention权重。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微配调服务拓扑设计背景下，用户与导师围绕配调决策逻辑、核心节点与连线关系持续沟通（7轮），其中在配调业务闭环与微调逻辑部分与微配调产品经理沟通（1轮），最终确认包含漂移告警降级路由逻辑的微配调服务拓扑基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主通道数据进Kafka，配调服务订阅，算完直接gRPC推给产线控制器。副通道数据单独走一个小流量Topic，异步写库就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看Label分呗。PET就丢给PET产线，PE就丢给PE产线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配调这块业务上到底要怎么搞？光按Label分好像不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还得查配方库和看产能状态。那我Kafka消费端后面得加个查询接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心节点，入口是“识解网关”，接收主通道数据。然后是“配调决策中心”，它得连“再生配方库”和“产线产能看板”。算出配方后，发到“再生线路由器”，再推给产线。副通道那边，单独一个“复训回流节点”写库。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "复训回流节点，得把模型更新状态推给配调决策中心？不对，应该推给识解网关换模型版本。或者，决策中心根据漂移告警调低置信度阈值？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "配调决策中心如果收到漂移告警，就修改路由策略，把低置信度的物料强制指向通用线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心节点四个：识解网关、配调决策中心、再生线路由器、复训回流节点。识解网关收主通道数据推给决策中心；决策中心查配方库和产能看板，把指令给路由器；路由器推产线。副通道走复训回流节点。连线特殊点：复训回流节点发漂移告警给决策中心，决策中心根据告警触发降级路由。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在方案设计需构建跨节点数据隐私墙与容灾机制的背景下，与导师围绕全量加密缺陷、ABE原理应用及容灾接力与混沌验证持续沟通（9轮），其中在动态脱敏与合规红线部分与隐私安全守卫者沟通（1轮），在副通道容灾接力部分与数据拓扑设计师沟通（1轮），最终形成基于动态脱敏与ABE的隐私墙及WAL冷备容灾基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个鉴权呗，查配方库带个Token，数据库做全量加密，磁盘丢了也不怕。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟确实会炸。只加密敏感字段？但怎么控制谁能看啥，我也没现成的代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配调中心查配方库，怎么搞脱敏？全量加密太慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "动态脱敏，ABE。回流节点不给原图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没接触过。我只会RSA。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了下，ABE就是用属性当公钥，比如属性是“决策中心”，就能解密带有“决策中心”策略的密文。我们在识解网关把配方请求用ABE加密，只有决策中心能解，回流节点没这个属性，自然就看不到了。不用改后端逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "挂了就挂了呗，大不了不告警了，决策中心按默认路由走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "复训回流节点宕机了，副通道数据怎么保？不能全丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "写日志加冷备。验证就是拔网线看告警丢不丢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "变量就是主节点状态，正常和宕机。宕机用Chaos工具注入。RPO的话，看主节点宕机前发出的最后一条告警ID，和冷备接管后发出的第一条ID，中间不能有漏的。对比主备的告警总数得一致。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "隐私墙用动态脱敏和ABE加密，网关出数据脱敏，决策中心用ABE解配方。容灾用WAL日志加冷备，混沌注入验证RPO等于0。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在固废多谱识解系统谱仪边缘驱动联调背景下，用户与导师围绕驱动模型选型及硬件在环测试短板持续沟通（4轮），其中在驱动模型选型部分与边缘智控工程师沟通（1轮），在联调测试环境搭建与故障注入部分与联调测试专员沟通（1轮），并最终形成DMA加中断混合驱动选型及FPGA注错的联调验证基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接上DMA直通内存读取谱仪数据，这样吞吐量最大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "解耦这块我不太确定，如果谱仪推数据太快，边缘侧处理不过来怎么办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用DMA还是异步中断？我偏向DMA，但怕时序抖动搞崩边缘进程。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "中断和DMA混合模式下，联调时怎么验证时序对齐？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没做过带真实谱仪的联调测试。我得先看看有没有现成的硬件故障注入工具，或者学一下怎么用逻辑分析仪抓时序。我今晚先看边缘计算驱动接口的文档，把时序图摸透，明天试着写个简单的中断捕获脚本跑一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调测试环境怎么搭？特别是时序抖动这种硬件故障怎么注入？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终驱动选型就是：DMA搬帧，中断响应事件，中间加无锁环形缓冲区。联调验证用FPGA注错，看缓冲区健康状态。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多模识解模型极限吞吐压测方案设计背景下，与导师围绕真实时序模拟、精度退化观测及开发成本权衡持续沟通（5轮），其中在压测流量构造部分与性能优化攻坚手沟通（2轮），在精度退化观测部分与多谱视觉算法师沟通（1轮），最终确定多进程共享内存推流与在线金标比对的压测策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿一批历史固废光谱数据，写个多线程脚本一直往模型里灌，看QPS和延迟就行了吧？工具的话，JMeter或者Locust都可以。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "长尾材质和精度掉底这块我确实没想过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "显存打爆的话，我就加个限流。但怎么模拟真实物理时序我不太确定，之前都是用离线数据集跑的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么构造符合谱仪真实帧率的压测流量？我原来想用Locust直接发HTTP请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高压下模型精度的退化怎么观测？我只看了推理延迟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测流量不能用Locust，得用C++按分拣带速度生成泊松分布帧流，直接推内存。精度方面，要在压测流里插金标集，监控F1-score跌落和异常ID，不能只看QPS。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开发成本确实高，我C++写不了太复杂的。能不能退一步，用修改后的边缘驱动直接回放真实录像？录像本身就带时序。金标集比对能不能在压测结束后离线做，不占边缘算力？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测流量用多进程共享内存按泊松分布推帧，模拟峰值压力。在线穿插金标集比对F1-score，GPU利用率和显存也加上监控。离线回放只做基线对照。"
+              }
+            ]
+          },
+          {
+            "microScene": "在识解端结果推送下游微配调系统的接口契约实现背景下，用户与导师围绕接口协议选型、性能要求、合规审计与脱敏规则持续沟通（5轮），其中在流式推送性能与协议选型部分与微配调产品经理沟通（1轮），在跨域数据脱敏与合规审计部分与隐私安全守卫者沟通（1轮），并最终形成采用gRPC与ProtoBuf定义契约及哈希脱敏与审计埋点的落地思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个REST API呗，JSON传数据，我之前都这么写，快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐量加机器不就行了。合规审计是啥，加个log打一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配调接口用REST行不行？我写起来顺手，前端调也方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "gRPC啊，这玩意儿调试麻烦。跨域传输出啥要求？加个Token鉴权够不够？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段脱敏，还审计埋点。太繁琐了吧，我就传个数据而已。gRPC我还要现学Proto语法呢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Proto我以前没写过，估计得查查文档。脱敏是不是就把敏感字段置空？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "成，gRPC加哈希脱敏。我先去扒扒Proto例子。"
+              }
+            ]
+          },
+          {
+            "microScene": "在全链路灰度与排错背景下，用户与导师围绕灰度流量切分与背压降级阈值设定持续沟通（6轮），其中在边缘节点灰度染色与平滑切流部分与边缘智控工程师沟通（1轮），并形成基于设备ID打灰度标走Topic路由及wrk+Lua压测定阈值的排错方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切流量我直接在网关层按比例放行呗？先放1%跑跑看，没问题再放大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "谱仪那边能直接配IP白名单不？新服务只让几台机器连。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘节点灰度染色咋搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘那边用设备ID打灰度标，放MQTT的Topic里，云端新服务只订阅带标的Topic就行。排错还得看背压，识解慢了边缘得丢帧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢帧肯定影响精度啊，阈值我随便设个70%内存占用率？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前两天刚看了wrk，能发TCP包。但我没用它压过MQTT啊，这能通吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "wrk加Lua脚本压MQTT。我试试，压出极限QPS再算阈值。这样定阈值确实比拍脑袋准点，排错也有数据看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去写Lua脚本了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在固废系统边云部署与切流验证背景下，与导师围绕切流策略与数据合规边界的平衡持续沟通（7轮），其中在旧系统熔断风险与拦截器性能影响部分与运维交付工程师沟通（2轮），在未脱敏数据切流合规风险部分与环保合规审计师沟通（1轮），并形成先加脱敏拦截器再按比例切流的部署策略及合规补课目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接把流量全切到新系统，旧系统实在扛不住了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限？我配了只读啊。现在重点是旧系统P99延迟都快2秒了，分拣线机械臂都在等信号，不切流会出生产事故的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "旧系统现在到底什么情况？不切流真的会崩吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种情况下，能不能先切流保生产，脱敏的事后面再补？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一边是马上要熔断，一边是合规红线。我懂后端性能，但这合规我不熟啊。能不能先切10%的流量，把没脱敏的挡在外面？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没有，网关只认设备ID。我我我得加个逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那如果我在旧系统出口加个脱敏拦截器呢？但这会影响性能。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，那就先在旧系统出口加脱敏拦截器，然后再按10%比例往新系统切流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据是，加拦截器虽然损耗15%吞吐量，但根据刚才的区间分析，1020的QPS仍在安全水位内，不会触发熔断。同时保证了进新特征库的数据都是脱敏的，符合合规要求。不能用生产事故当借口绕过隐私保护。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "是，我对合规和数据脱敏机制太不熟了，之前只盯着接口延迟。这周我得把脱敏规范补上，具体目标是：这周五前读完《环保数据合规白皮书》里关于固废流转脱敏的章节，并写一个针对企业ID的哈希脱敏脚本跑通单测，下周一能用。"
+              }
+            ]
+          },
+          {
+            "microScene": "在旧系统切流后识解精度波动的运行评估背景下，用户与导师围绕精度波动原因排查、降级阈值与增量微调的取舍及执行动作持续沟通（7轮），其中在特征漂移原因排查部分与识解质量监察员沟通（1轮），在增量微调热更新方案部分与多谱视觉算法师沟通（1轮），并最终形成LoRA增量微调与边云热更新的闭环执行动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘上F1掉到85%了，感觉是特征漂移？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在室外转室内确实光线暗了。但具体是不是这原因，我不敢确定，我只会看接口返回的置信度分数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我该看哪些指标确认？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级阈值我熟，改个配置项就行，增量微调还得推模型，太慢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不想全量重训，怎么用特征库做增量微调热更新？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这个听起来可行，不用停服务。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 提取最近1小时PET漂移样本；2. 触发LoRA微调任务；3. 5分钟后验证增量包F1是否回升到90%以上；4. 执行边云热更新下发。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估配调吞吐下降与延迟飙升背景下，用户与导师围绕性能瓶颈定位与分级下发策略持续沟通（5轮），其中在瓶颈定位与攒批权衡部分与性能优化攻坚手沟通（2轮），在延迟容忍度确认部分与微配调产品经理沟通（1轮），并形成按材质价值分流的边缘端分级下发策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看监控了，微配调服务那块CPU占用挺高的，是不是得加节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底卡计算还是卡IO？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改成批量发送是不是就行了？把结果攒一攒再发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改成攒批能解决，但会增加边缘内存和延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固废配调下发都能攒批吗？延迟容忍度一样吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特种金属不能攒，必须秒级。普通废料可以攒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在边缘端加个路由逻辑？识解出来如果是特种金属，直接单条下发；普通的就丢内存里攒批。不过这样边缘端内存占用会变大，得加个上限，满了就强制发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘端按识解标签分流：高价值/危废走实时单条通道，P99<1s；普通固废走攒批通道，batch size 50或时间窗3s，优先保证吞吐；内存超限则触发强制下发。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估大盘识解准确率下降及特征漂移告警背景下，用户与导师围绕漂移根因分析、误判后果及短期止损方案持续沟通（6轮），其中在漂移根因排查部分与识解质量监察员沟通（1轮），并形成源端物料变异致特征漂移的根因结论及降级人工复核的短期止损与补样本重训的长期方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看日志了，是不是边缘端内存超限强制下发的时候，图片传坏了？或者是算力太吃紧，模型没跑完就出结果了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "主要是哪种料出事了？是输入数据分布变了，还是模型自己崩了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这不算是咱们系统bug吧？是前端来料不合规。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "PVC走危废通道了。那这种料是不是得拦下来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不先把它丢到普通攒批通道里？别走危废单条了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在再生效能迭代规划背景下，用户与导师围绕识解模型重训对流转的影响、碳足迹核算异步化及混合料重训外推边界验证持续沟通（5轮），其中在流转瓶颈与重训收益判断部分与运营复盘分析师沟通（1轮），并最终确认识解重训限定外推、碳核算异步化改造及补学规范与实验设计三条迭代主线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得模型重训完，识解率上去了，配调那边直接接就行了。前端准了，后面应该没问题吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在识解端准备重训，后端配调吞吐量数据咋样？重训完是不是就不卡了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证异步化，就看排队时延降没降吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "实验那边，我就只测纯净PET和混合深色料两组，看识解率差多少，证明不能外推就行了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在时空数据融合开发背景下，用户与导师围绕站点序列粒度、迟到回填/版本可复现、采样成本与测试验收持续沟通（8轮），其中在watermark与回填窗口及空间采样口径上与时空数据工程师沟通（2轮），在融合主表/修订表字段血缘与遥感许可合规落地上与数据架构师沟通（2轮），并确定48h回填+revision追溯的融合输出与单测拆分。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先把“融合的最小可用粒度”定死，不然会在插值和对齐上打转。两个候选：\n1）以站点为中心的时间序列（每 15min 或 1h 一个 bin），空间上就是 site 点或 buffer；\n2）以栅格为中心（比如 H3 或固定网格），再把站点映射进去。\n从预警和治理调度看，站点序列可能更贴近工单，但栅格更适合遥感面状覆盖。我倾向先做站点序列，遥感按站点 buffer 汇总，后面再扩到栅格。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间上我想用 normalized_ts 做 event-time，融合层按 time_bin（比如 15min）聚合。传感器在 bin 内做 avg/max/last，并把 qc_flags 的最差值带上。\n遥感迟到这块我有点纠结：遥感有 acquisition_time 和 availability_status/latency_hours，可能过了半天才来。我的直觉是“先产出 provisional 特征，遥感到达后回填并产生新版本”。\n空间尺度不一致：传感是点，遥感是覆盖度 raster 或面，先用站点 buffer（比如 500m 或 1km）裁剪/采样得到 bloom_coverage 的均值或分位数，同时记录 cloud_fraction 作为权重或缺失原因。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把融合输出做成“幂等可覆盖”的表：主键 (site_id, time_bin_start, feature_set_version)。\n触发方面：当遥感观测记录从 unavailable -> available，或 quality_level 变更时，按 waterbody_id + acquisition_time 找受影响的 time_bin，再重算那几个 bin。\n下游用 feature_set_version 或 fusion_run_id 订阅变化：新版本写入后，预测任务只拉取最新版本。这里我不确定“最新”的定义是不是会引起混乱，比如同一 bin 反复更新。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@时空数据工程师 站点序列做时空融合，如果遥感和部分水文数据会迟到，你们通常怎么定 watermark 和版本？另外站点 buffer 采样遥感覆盖度，有没有更靠谱的工程实现口径？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回填窗口 48 小时这个我能接受。revision 表存 diff 是为了复现，我之前只想用 feature_set_version 直接覆盖。那“超过窗口只进修订表不进主表”，会不会影响模型训练用到的历史数据完整性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 融合层我准备输出站点+time_bin 的特征表，同时做 revision 表。你帮我把最小字段集和血缘字段定一下？另外遥感记录里有 license_type、mask_uri/confidence_uri，这些在融合输出里怎么存才合规？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主表不落地 mask_uri 这点我之前没想到，我以为留个 URI 方便排障。那排障时只能靠 remote_obs_id 反查，对开发调试会慢一点，但能接受。source_refs 里用 hash 还是列表，你建议哪种？我担心列表会爆。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定一个第一版范围：\n- 粒度：time_bin = 15min，后面需要再降到 5min 再说；\n- 融合对象：以 site_id 为中心输出 fusion_feature_current，遥感按站点 1km buffer 采样 bloom_coverage_mean + p90；\n- 迟到策略：允许回填 48h；48h 内更新主表 current，并写一条 revision；超过 48h 只写 revision，不改主表；\n- 追溯：主表存 remote_obs_id / batch_id 列表先上，但加长度上限和 overflow 标记，后续再改 hash+明细表；\n- 合规：主表不存 URI，仅存 license_type 等元信息。需要看原始掩膜的排障走受控接口并审计。\n我还想加一个验收 KPI：同一站点一天 96 个 bin，融合缺失率（非云遮/非设备离线造成）< 2%，但这个阈值我没把握。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确定性测试我能做：\n1）同一组 ingestion_event 重放两遍，融合输出完全一致（幂等）；\n2）乱序/重复/未来时间在接入层挡掉后，融合层只处理合规 normalized_ts，输出不受 gateway_rx_ts 摆动；\n3）遥感从 unavailable 变 available 触发回填：同一个 (site_id, time_bin) 主表 updated_at 变化、revision 增加 1 条，且 diff 里只改遥感相关特征。\n对照性测试我想做个小规模黄金集：挑 2 个站点、1 天数据，把 15min bin 的传感聚合用离线脚本算一遍，和融合服务结果逐字段对比。遥感采样这块我不太会做黄金值，可能只能做“范围断言”，比如 bloom_coverage 在 [0,1]，云遮过高必缺失。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两条路：\n- 缓存：同一 remote_obs_id + 站点 buffer 的裁剪结果缓存一份，按 acquisition_time 只算一次，然后映射到对应 time_bin；\n- 退化：如果 remote_obs_id 当天只有一景，就只在它的 acquisition_time 所在的 bin 写入遥感特征，其他 bin 标成缺失，不做插值补齐，这样算量固定。\n我更偏向第二条当默认，缓存作为优化。插值补齐遥感覆盖度我先不做，怕引入假的细节。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本周我拆 4 块：\n1）time_bin 聚合器：按 site_id+time_bin 读取 ingestion_event，产出传感特征 + qc 汇总（必须单测，覆盖边界 bin、跨天、空窗口）；\n2）遥感映射器：remote_obs_id -> 站点集合 -> time_bin，先只写 acquisition_time 对应 bin（必须单测，覆盖 unavailable->available、cloud_fraction 阈值、quality_level= C 拒用）；\n3）fusion_feature_current / revision 写入逻辑：48h 回填窗口、revision diff（必须单测，覆盖窗口内外两种路径）；\n4）性能冒烟：用 100 站点 * 1 天数据跑一遍，统计耗时和写入量（先做基线，不做压测）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

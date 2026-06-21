@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在暗池系统切流上线与运行评估背景下，用户与导师围绕切流灰度策略、统计验证方法及审计日志要求持续沟通（6轮），其中在切流数据对齐与防穿透部分与交付保障工程师沟通（1轮），并最终确认按白名单标的切流、用T检验算P值回滚及打审计日志的切流约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我直接套K8s的Canary发布模板把流量切过去行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@交付保障工程师 暗池切流这块有没有模板？我这边想快点推上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Grafana连Prometheus看面板，两条线挨得挺近不就行了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂怎么用统计方法验证切流有效性。我这周末去把双样本T检验的原理弄明白，写个Python脚本用scipy.stats包算滑点P值，P值小于0.05就判定退化并自动触发回滚"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切流路由按低流动性标的白名单走，用T检验算实盘和沙箱的滑点P值，小于0.05就回滚，切流和回滚操作全打审计日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

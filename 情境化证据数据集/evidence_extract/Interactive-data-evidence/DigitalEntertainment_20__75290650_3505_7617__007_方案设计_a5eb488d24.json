@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在可验证数字藏品体验链路平台方案设计背景下，用户与导师围绕redeem/unlock/权益核验的反作弊风控策略、信号与事件接口落地持续沟通（8轮），其中在风险分级与最小信号集部分与风控负责人沟通（7轮）、在数据最小化与冻结告知申诉及黑名单共享边界部分与法务合规官沟通（4轮），并形成三类风险场景的信号与处置分级及risk_event记录取舍。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕的是脚本抢兑、同一个码到处用，还有那种黄牛刷号。再就是，用户把链接转发给别人看，算不算作弊我也不太确定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "领取就是批量注册抢。redeem 就是重放吧，拿同一个请求一直打。内容解锁是共享 token 或者录屏？二次流转就是假交易、洗钱那种，但我不太会分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控负责人 我们在 redeem/解锁这块，怎么做反作弊比较靠谱？我想知道要收哪些信号，怎么分级处置，尤其是重复核销和脚本刷这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重复核销这块，是不是直接上“幂等中间件”就能解决？我看很多网关都有现成的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备指纹我们要自己做吗？还是直接接第三方风控SDK？我有点依赖那种现成的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "家庭共享这个我就容易搞不清，会不会一刀切很容易被骂？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概想保三类：重复核销、脚本抢兑、共享解锁。信号就用账号、设备、IP、UA、次数窗口，还有 redeem_request_id 做幂等。处置分成提示失败、限流、冻结，再加个申诉。SDK先不强绑，写成可选增强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规官 反作弊要收 device_id、ip、ua、以及做冻结/降级/限流。哪些信息算敏感？用户告知和申诉要怎么写才不踩线？还有能不能做跨平台黑名单共享？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们就别搞“硬件指纹”那种了，用 app 内随机ID。冻结原因就返回个大类，比如“异常核销”“疑似脚本”，别把阈值写出来。黑名单共享写成不做，改成给发行方风险分就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三类：  \n1）重复核销：信号是 entitlement_id 的 redeem 次数、redeem_request_id 是否重复、request_digest 重复、同设备同IP短时重复。处置就是第二次直接失败，记风险事件；同设备老触发就限流/冻结。  \n2）脚本抢兑：信号是注册到redeem间隔很短、同IP/设备多账号、失败重试很密、UA都一样。处置先上验证码/二次校验，再限流，严重冻结。  \n3）共享解锁：信号是同 entitlement 多设备解锁、异地跳、并发观看。处置先降级到仅本设备、再强制下线，最后冻结+申诉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向单独一条 risk_event？这样不会把 redeem 搞得很大。redeem 里就放个 risk_level 摘要，详细的在 risk_event 里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂，我写成在线用计数阈值、幂等和绑定校验；离线再做账号簇、IP段聚类这种，出风险画像，给运营看。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

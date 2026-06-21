@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在缺血阈值动态推演流设计背景下，用户与导师围绕阈值设定、延迟预算分配、基线自适应及步长对齐持续沟通（6轮），其中在延迟预算切分部分与架构规划师沟通（1轮），在推演实现方案部分与算法工程师沟通（1轮），并最终形成推演流延迟与算法约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就弄个滑动窗口算均值，比正常值低个20%就触发预警呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分100ms？剩下的调控应该够了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@架构规划师 闭环红线200ms，特征提取50ms，推演流能给多少时间预算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 推演流最多80ms，还得是流式处理，这条件下缺血推演怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "架构说推演最多80ms，算法说80ms内用LSTM就行，还要加个基线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就是，就开局测一下呗。步长就按默认的来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推演预算80ms，用轻量LSTM切片，加动态基线，对齐融合流。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "80ms上限，轻量时序切片推理，术中动态基线自适应，输入步长对齐融合流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

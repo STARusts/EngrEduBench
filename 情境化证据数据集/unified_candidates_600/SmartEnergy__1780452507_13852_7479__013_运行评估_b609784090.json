@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度运行评估背景下，用户与导师围绕响应衰减监控指标选择、动态演进特征监控及报警阈值设定持续沟通（4轮），其中在高基数时序存储与衰减过程指标暴露部分与可观测性架构师沟通（1轮），并最终形成包含意愿衰退斜率与疲劳累积量Metrics暴露、Recording Rules降采样及报警阈值暂挂的监控指标清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看Grafana大盘上有现成的Flink算子吞吐和反压，还有业务侧的调峰达标率。直接加个报警规则，达标率跌了就发邮件，这样行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "衰退特征，是不是看反演出来的衰减系数？我用Prometheus查模型接口吐出的衰减因子，配个阈值，比如小于0.5就报警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在只会用PromQL查衰减因子，有没有现成的Exporter能直接用？另外一直存明细数据时序库会不会撑爆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "衰退斜率就是用户越调越不听话的速度，累积量就是疲劳程度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降采样我打算用Recording Rules把历史数据聚合成1分钟级，只保留3天明细。报警阈值，我先用上周基线数据算个均值，超两倍标准差就报警，先跑跑看。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

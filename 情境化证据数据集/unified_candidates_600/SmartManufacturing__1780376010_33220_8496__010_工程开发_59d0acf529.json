@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘控制优化与压测背景下，与导师围绕P99尾延迟超标下的性能与安全取舍、抖动源定位及eBPF追踪方案持续沟通（6轮），其中在旁路防撞与日志的性能收益部分与边缘性能优化师沟通（1轮），在旁路开关的合规与事故风险部分与产线安全评估师沟通（1轮），并最终放弃旁路方案，决定采用eBPF零侵入追踪定位抖动源并从内存布局优化。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "测试环境也不行吗？就为了跑个分看极限性能，临时关一下应该没事吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "关掉防撞校验和审计日志，P99时延能降多少？抖动源真的是这俩吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "优化师说旁路防撞和日志能降15ms。测试环境下，我们只跑压测不连真机，临时关掉也不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优化师给的数据很诱人，但安全师说的造假和事故风险确实担不起。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想岔了，以为测试环境能通融。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我，我就加线程？或者把防撞逻辑挪到别的地方？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没，我就看压测报告的总时间和P99。具体哪个函数耗时最长我不清楚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用eBPF的话，可以在不修改补偿程序代码的情况下，直接追踪防撞校验那块的耗时对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用eBPF追踪防撞逻辑的耗时分布，这样既不碰代码，又能精准定位抖动源。我这就去写追踪脚本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前我想直接关掉，太危险了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "绝不加旁路开关，用eBPF找真凶，从内存布局想办法。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

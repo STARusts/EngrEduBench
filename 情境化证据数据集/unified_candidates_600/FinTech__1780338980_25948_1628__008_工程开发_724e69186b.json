@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链上拆分流转合约开发背景下，用户与导师围绕信用拆分与防双花落地、拆分校验与穿透索引实现持续沟通（5轮），其中在协议状态机设计部分与联盟链协议工程师沟通（1轮），在拆分合规边界与权限审计部分与金融合规师沟通（1轮），并最终确认自绘状态机、哈希放Metadata、require防超发及对接Nebula实现穿透索引的开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用Solidity写个类似ERC20的拆分逻辑，找开源的票据合约模板改改，OpenZeppelin那些库挺全的，应该能直接套。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看网上好多人把票据状态写进Token元数据里。要不我找个Fabric的链码例子改？现成的Java链码比较多，改起来快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链上拆分流转协议咋设计？有没有现成的Fabric链码能直接套？我想省点事，不想从头写状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规上拆分要注意啥？我想让核心企业直接无限拆分，只要总金额不超过母票就行，这样代码逻辑最简单。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议工程师说没现成链码，得自己写状态机，母票锁定子票生成。合规师说不能无限拆，得跟贸易背景对应，每次拆要传哈希留痕。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "留痕的话，直接用Fabric自带的History Key行不行？不用自己写逻辑了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把贸易哈希放子票的Metadata里吧。超限校验，我算个总拆分额，写个require语句卡死不超过母票面额行不行？从头写一套验证太费劲了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态机我自己画，拆分哈希放Metadata，require加超发拦截。穿透索引我再想想怎么跟Nebula对接。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

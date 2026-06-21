@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在选配推荐引擎性能压测背景下，与导师围绕压测工具选择、真实工况数据模拟、Cpk分布实现及压测通过标准持续沟通（8轮），其中在压测模型与造数据部分与质量测试专员沟通（3轮），在引擎内部监控指标部分与抵消算法工程师沟通（1轮），并最终形成包含Python造数据、引擎埋点、对照试验及硬指标阈值的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用JMeter并发请求选配接口吧，看TPS和响应时间，网上压测基本都这套流程。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就随机生成一批零件数据呗？或者从库里导一点出来？JMeter有CSV数据文件设置功能，我直接配一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测模型怎么造？我准备用JMeter自带的随机变量生成器造数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这听起来得自己写脚本了，Jmeter好像搞不定这种复杂数据生成。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎内部要盯哪些指标？我只知道看接口耗时。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "内存池分配失败率？这怎么看？Jmeter肯定没这插件。是不是得用那种APM工具？我看网上有人用SkyWalking。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不能光靠Jmeter发请求了。得自己写Python脚本造符合Cpk的数据，然后在引擎里加埋点，看内存池和GC的情况。还要跑两组对比，一组N写死，一组动态N。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Python里肯定有现成的库吧？numpy之类的，调个正态分布的函数，把均值和方差传进去应该就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个，我不太确定。Cpk好像是跟公差上下限和标准差有关，具体公式我得查一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TPS的话，网上一般说这种系统得有上千吧？GC停顿不超过50毫秒？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这个去配压测脚本和阈值，造数据那块我也把Cpk公式加进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

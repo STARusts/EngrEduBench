@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在算热协同流控系统架构设计背景下，用户与导师围绕算力与热力的接口边界、时序匹配逻辑、架构假设验证及MVP架构边界持续沟通（7轮），其中在热网响应死区与安全变化率部分与热力流体规划师沟通（1轮），并最终确认算热协同缓变指令流MVP架构边界写入架构书。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思用Kafka把算力集群的负载指标推给热控侧，这样两边解耦还算干净吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Kafka不是快吗？算力侧一有潮汐变化就发个Event，热控侧订阅了直接跟着调阀门，我觉得挺顺的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "水击？不就是调个开度吗，会有这么大反应？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力侧如果秒级发负载变化指令，热控侧直接跟着调，会不会出事？你们热网能跟多快？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "热网跟不上秒级变化，得靠蓄热罐吸波，指令也不能是突变的那种。那Kafka只传原始指标就不行了，得在算力侧先把指标吃进去，算个缓变曲线再发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设B肯定好啊，刚才专家都说了会水击。验证的话，我就跑个仿真，看假设A是不是真会震荡？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "多能流耦合预测这块我确实没底，我只会写Kafka Consumer，不懂怎么把秒级指标平滑成缓变曲线。我得去补下课。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "今晚找两篇算热协同的论文，重点看他们怎么处理时序尺度差异的，把时间序列平滑或者模型预测控制（MPC）的思路摘出来，明天试着套到我们的指令流设计里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "算力侧出缓变指令，热侧蓄热罐吸波，Kafka传缓变指令。我先把这块边界写进架构书。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

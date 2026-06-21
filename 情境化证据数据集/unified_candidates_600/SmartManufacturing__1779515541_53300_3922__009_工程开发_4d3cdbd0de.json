@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图识别核心算法实现背景下，用户与导师围绕开源模型套用可行性、特征工程与推理时延持续沟通（7轮），其中在特征提取与算子定制部分与触觉算法设计师沟通（2轮），在算子融合与推理时延部分与边缘算力优化师沟通（1轮），并形成放弃开源模型与通用算子库、手写稀疏注意力融合算子及P99延迟低于2ms的取舍结论与开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块网上开源的时序模型挺多的，我打算直接拿一个InceptionTime之类的套进来，把传感数据喂进去，调调参应该就能出意图分类吧？这样开发最快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征提取可以加个PCA降维吧？或者找找有没有现成的AutoML工具能自动搜特征。推理耗时嘛，大不了再剪枝一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接套开源时序模型，比如InceptionTime，再加个PCA降维，能不能搞定意图识别？有没有更省事一点的特征提取办法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自己写算子就有点麻烦了，不能用现成的算子库拼一下吗？比如用PyTorch的Sparse模块？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我不手写算子，就用通用算子库拼凑稀疏注意力，在咱们端侧NPU上推理时延能达标吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "取舍结论：放弃开源时序模型和通用算子库，换取意图识别的推理确定性和低延迟。开发约束：第一，基于触觉阵列空间稀疏特性手写稀疏注意力算子；第二，必须做算子融合，把映射和分类头合成一个kernel；第三，禁止使用通用库的动态稀疏格式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证口径：单次意图推理P99延迟必须低于2ms，且不能有明显抖动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在链上存证合约测试与集成背景下，与导师围绕MRV合规与上链TPS冲突权衡、测试数据脱敏持续沟通（5轮），其中在合规签名要求部分与链上核验师沟通（2轮），在TPS压测表现部分与测试验证师沟通（2轮），并最终接受双签加异步预言机折中方案，准备修改合约与接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个Solidity合约，把算出来的柱浓度塞进去，跑个单测通过不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@链上核验师 你说要咋整？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这得花多少Gas啊，反演一秒钟出好几个数，链上堵死算了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试验证师 你怎么说？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得就单签明文存，快最重要。安全哪有那么多坏人攻击咱这破环境监测数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个权限校验不就行了。我昨天刚看了个Solidity重入攻击的帖子，加个防重入修饰器不就防住了。不用搞ZKP那么玄乎。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在合约里加个modifier onlyOperator，不是操作员地址就revert。测试数据我就连着生产库随便拉点真数据跑跑，造假数据太累。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那到底用几重签名？我是不想搞三重，太慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双签加异步预言机，TPS能回来到多少？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就双签，异步预言机，加防重入，Gas设上限。我这就去改合约代码和数据流接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

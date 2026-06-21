@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在流式对冲合约核心实现背景下与导师围绕对冲与ZKP验证结合、状态更新及无效交易处理持续沟通（9轮），其中在算法输出与状态更新部分与流计算架构师沟通（1轮）、与量化策略研发沟通（1轮），在无效交易存证部分与合规与审计专员沟通（1轮），最终形成无锁聚合、单笔兼容预留钩子及Reject存证的三条约束写入规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接在合约里调验证接口，然后更新余额呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能应该还行吧，原子性就加锁。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滑动窗口聚合，每秒上百次，不能加锁，要确定性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加锁了，批量触发ZKP。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就聚合证明吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢掉就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "无效交易链上存证怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能丢，要留哈希和原因码，要有无状态日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滑动窗口聚合，无锁；单笔兼容，预留钩子；Reject走日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

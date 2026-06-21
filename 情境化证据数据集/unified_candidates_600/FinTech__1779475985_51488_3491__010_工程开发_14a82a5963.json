@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在熔断判定引擎与指令组装开发背景下，用户与导师围绕HLS时序控制、误判率测试与监管审计留痕持续沟通（6轮），其中在时序与误判测试部分与极值侦测算法工程师沟通（1轮），在审计留痕底线部分与合规穿透专家沟通（1轮），并最终形成3级流水线、双轨对照测试、指令包带CRC32哈希与时间戳微缩审计及旁路DMA搬快照的核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算判定引擎用HLS写，比纯RTL快。特征进来后走状态机，过阈值就组装熔断指令，指令直接打包成AXI-Stream发下去。阈值我做成寄存器可配，方便调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序我加pipeline应该能压住。误判率后面再测。至于监管，触发后让软件层补日志行不行？硬件里加日志太费资源了，还容易添时延，把微秒级熔断拖成毫秒就废了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "HLS写状态机时序怎么控？误判率测试有什么好招？我不想在判定路径上加日志拖时序。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "旁路DMA搬走，主路径时延不增加，这招行。误判测试我回头用C++模型和随机激励脚本搞双轨对照。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "硬件主路径不能加日志，用旁路DMA搬特征快照够不够？还是必须主路径留痕？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时间戳和哈希塞进指令包，不占带宽，还能自证。这折中可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "3级流水线目标时延不超过100ns。双轨测试覆盖99.9%的随机激励。哈希用CRC16，算起来快，硬件资源也省，几十个LUT的事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "CRC16在短数据包下碰撞概率极低，但特征位宽如果比较大，确实有风险。为了保险，换成CRC32？资源多一点，但追溯确定性更强。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "判定引擎HLS 3级流水线，时延卡100ns；双轨对照覆盖99.9%；指令包塞CRC32哈希和时间戳；旁路DMA搬快照。我先去写HLS的C++原型和双轨测试脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

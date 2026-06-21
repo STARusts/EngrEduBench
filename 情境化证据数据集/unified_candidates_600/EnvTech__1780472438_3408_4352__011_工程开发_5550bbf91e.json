@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关调度逻辑开发与汛期压测方案设计背景下，用户与导师围绕调度语言选型、并发互锁、日志留痕与断网降级持续沟通（6轮），其中在边缘侧调度逻辑部分与嵌入式开发工程师沟通（1轮），在业务场景压测部分与测试工程师沟通（1轮），并最终确定C语言有限状态机、互斥锁、看门狗5秒超时放锁、RAM环形缓冲区双写日志及暴雨毛刺压测等约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个下发指令的接口呗，我看网上很多人用Python写个Flask调闸门，挺快的。压测的话，直接用JMeter压并发就行了吧，现成工具拉个线程组就跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧调度逻辑咋写啊？有没有那种轻量级的C框架可以直接调包的？最好别让我从零手撕状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那压测呢？JMeter不能用吗？我只会这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能跑Python，得用C写状态机，还得加互斥锁。压测也不是JMeter，得往里注水打毛刺，看死不死锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就printf存本地文件呗。断网了就一直重试发指令呗，还能咋降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "C状态机，互斥锁，看门狗超时放锁，日志双写。压测打暴雨毛刺。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就设个几秒吧，双写就写Flash里。我也不太清楚，就先这么定呗。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

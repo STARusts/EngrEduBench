@@ -1,0 +1,969 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“隐私计算学习履历互联平台”需求与战略梳理背景下，用户与导师围绕首要用户与痛点收敛、隐私目标边界与后续访谈计划持续沟通（11轮），其中在数据敏感性/授权留痕/最小必要部分与合规与隐私负责人沟通（2轮），在MVP切入口与可解释需求部分与产品经理沟通（2轮），并初步锁定辅导员学业预警场景与合规审计和低维护约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想搞个项目，叫隐私计算学习履历互联平台。反正就是把学生学习记录弄到一起，但别泄露。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "给学校吧。老师也用。学生可能也看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "辅导员吧。每次要统计啥，都要找很多系统。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是成绩在教务，平时作业在学习平台，竞赛又在别的地方。要评奖学金就得拼起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "争议多。还有很慢。经常说我这边没数据，你那边不认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学校不让直接把数据给第三方。还有家长会问。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "身份证？学号？还有成绩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 教育里哪些数据算敏感？授权要怎么搞才算合规？最小必要怎么判？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是就不要实名了？都用匿名就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行。我大概懂，就是别乱拿字段，还要能查谁看过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点就是：系统多，数据拼不起来。然后怕泄露，所以不敢给。还有谁看过得能查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是各部门导出表，字段还不一样。然后有人改了成绩，别的表没更新。最后对不上，吵。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 学校里最常见的需求是啥？这个平台先做啥比较像MVP？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“可解释原因”是要写模型吗？我不太会。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我这项目就做“学业预警”？是不是太小了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "首要用户就辅导员。场景是学业预警，找风险学生。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学校没人维护。换人就断了。还要各种培训，老师也不爱用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我接下来要干啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能约到辅导员，别的我不认识。信息中心估计约不到。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨系统学业预警需求阶段的跨平台数据评估背景下，用户与导师围绕字段可得性、主键对齐、口径一致与合规授权持续沟通（7轮），其中在字段盘点与质量抽样方法上与数据治理官沟通（2轮），在敏感分级、授权与审计留痕边界上与合规与隐私负责人沟通（2轮），并形成按教务/学工/学习平台拆分的访谈盘点问题清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "教务系统、学工系统吧。还有学习平台。但具体里面有什么，我真不知道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成绩。还有出勤？还有……学习时长？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 跨系统数据评估要怎么看？我现在就知道有教务学工学习平台。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着很多。我是不是要把每个字段都列出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主键吧，不然对不上人。还有口径，不然出勤和成绩算的不一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 哪些数据能用，哪些不能用？我们是要做跨系统学业预警的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那心理的我就不碰了，是不是就安全了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试下：  \n1 每个系统有成绩吗  \n2 有出勤吗  \n3 学号是不是一样  \n4 能不能导出来  \n5 更新是不是每天"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就：  \n1 成绩是总评还是平时分也有  \n2 出勤是次数还是到课率  \n3 学生ID是学号还是有别的统一ID  \n4 数据给的是接口还是报表导出  \n5 更新是实时/每天/每周"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "6 缺失多不多，比如出勤有多少没记  \n7 课程号是不是固定，重修会不会变"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "教务侧：成绩口径、课程号/教学班号、学期怎么标、更新频率。  \n学工侧：院系班级在籍状态、请假奖惩有没有、学生ID。  \n学习平台：时长怎么算、作业测验字段、日志缺失和更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那每组加：这块数据谁负责，谁能批给我们看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "辅导员我能约到，就先问他们能拿到哪些字段、谁批。教务那边我可能找不到人。"
+              }
+            ]
+          },
+          {
+            "microScene": "在学习履历互联平台需求与战略阶段，用户与导师围绕合规授权策略的授权要素、主体与审批链问题持续沟通（4轮），其中在数据分级、单独同意与审计留痕要求上与合规与隐私负责人沟通（6轮），并形成用于访谈辅导员的可执行提问与原则口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是点个同意吧。不然就不给看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学生？还有家长。老师算吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。我问谁来着。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 学习履历互联平台的授权要咋定？哪些要单独同意？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是做个总开关就行？学生同意一次就全通。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就怕问辅导员他们听不懂这些词。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那第三方应用是指啥，学习APP那种？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计留痕是不是很重，会不会很费事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我记不住这么多。能给我几条最关键的让我去问人吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就问他们平时要看啥，能不能只看汇总，导出不导出。还有学生会不会投诉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就加一句“你看成绩是自己点就能看还是要教务给权限”。"
+              }
+            ]
+          },
+          {
+            "microScene": "在学习履历互联平台需求阶段的价值闭环商业测算背景下，用户与导师围绕付费方假设、收益/成本/风险口径及走访提问法持续沟通（10轮），其中在测算口径与问数方式上与产品经理沟通（2轮），在成本项框架与治理合规成本上与数据治理官沟通（1轮），并形成保守测算话术与需回访核实的流程/审批链问题清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……采购系统吧。教务、网课、考试那种。具体多少我不知道，反正每年都买。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一般信息中心牵头？采购也不知道谁拍板，可能分管校长。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对外收费不现实吧。少买系统也不一定。教学效果也很虚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 你给个口径，我照着问就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就按这几条问？我怕问不出来数字。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就问辅导员：你们平时要凑学生学习记录，是不是要到处找系统导出？谁让你做的？要不要审批？大概多久一次。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我再加一句：你导出来发给谁？是发家长还是发别的学校？发之前谁点头？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "付费方…可能学校信息中心。买的就是互联平台和看板？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就：汇聚、授权留痕、报表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "服务器？人力？还有培训？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 成本项怎么列？我写不出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉这些都很虚，我也拿不到工时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "价值就是少折腾，不用来回导数据；还有更安全，有记录可查；老师看报表能知道哪些学生有问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "班主任看？看到风险就叫家长？或者找学生谈话。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不让随便看个人明细，要理由和审批。导出也要单独同意。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以我明天就去问辅导员和信息中心？问频次和谁批？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第3条我怕他们听不懂“撤回”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧。我就照这三条问，别的我也想不出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "付费方先按学校信息中心或分管校长这条线。收益先算人力省下的时间和少做重复采购/接口定制。边界就是强敏感不接，个人明细要理由审批，导出/跨机构/第三方要单独同意能撤回，还要留痕到人时间这些。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在隐私计算学习履历互联平台方案设计背景下，用户与导师围绕学习履历主干模型的事件层最小字段、跨系统对齐键、授权审计挂载与汇总层指标化设计持续沟通（6轮），其中在主键/外键与统一ID对齐部分与数据治理官沟通（3轮），在授权申请/令牌与审计留痕落模部分与合规与隐私负责人沟通（2轮），并形成事件层-授权审计-汇总层的模型要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是学生的上课、作业、考试那些记录吧。差不多全塞进去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我不太会。就……学生ID、时间、课程、分数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨机构就学校名？审计就是日志ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 学习履历事件这块，主键外键咋定？跨系统对齐用啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "verb枚举表是啥？就写“提交作业”这种？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "person_uid 这个统一人ID咋来？每个学校都有学号啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是 event_id 用UUID。然后人用 person_uid，机构 org_id。对象 learning_object_id。字段就那10个左右，其他放json里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权层我不清楚。是不是给老师看就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 学习履历模型里授权咋放？要留啥审计字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要在事件里加 grant_id？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件层：就固定那几个，event_id、person_uid、org_id、verb、对象id、时间、来源系统。别的先放context/result里。\n对齐：人用person_uid，不用身份证；机构org_id；对象learning_object_id。\n授权审计：事件不塞权限，查的时候带grant_id校验，然后审计表记谁在啥时候用啥用途访问/导出。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "汇总层就是统计？比如班级平均分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "口径版本是怕以后改了算出来不一样？就…留个版本号。"
+              }
+            ]
+          },
+          {
+            "microScene": "在学习履历平台方案设计的隐私权限架构设计背景下，用户与导师围绕按主体-客体-动作-约束梳理授权流、校验点与审计点并收敛成权限架构图与策略表示例持续沟通（8轮），其中在数据分级/最小必要/结果形态与k门槛部分与合规与隐私负责人沟通（2轮），在授权组件化落地到PDP/PEP、网关校验、数据层隔离与导出追溯部分与解决方案架构师沟通（1轮）。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我脑子里没图。就，给个权限表？能不能直接告诉我画啥。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "教师能看自己班吧。别的班不行。时间就学期内？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 分级怎么分？哪些能看哪些不能看，直接给我个骨架。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "k≥10 是不是就行了？我就写个10？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 这些分级和用途、k阈值，要我画成啥模块？校验点在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就画一条线：网关查 grant_id，然后PDP决定？然后就能查到汇总表？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能吧。第三方就看统计？不然太危险。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 个 grant 绑用途和时间。没 grant 就拒绝。第三方默认不给个人。还有 k 小就不给。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就照这五条画。策略表就写默认和例外两行可以吗？"
+              }
+            ]
+          },
+          {
+            "microScene": "在学习履历互联平台方案设计收尾背景下，用户与导师围绕互联接口事件流的分流、事件字段最小化、授权校验、审计留痕与失败回退持续沟通（7轮），其中在事件流分层与推/拉接口形态部分与解决方案架构师沟通（2轮），在最小必要字段、可撤销伪标识与审计要点部分与合规与隐私负责人沟通（3轮），并形成可用于画图的7步事件流与最小产出清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里没画面。是不是就发个API，然后别人收？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就学习事件上报吧。A系统把学生学习记录丢过来，平台存一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学生id、课程id、时间、分数？还有学校id。差不多了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行。@解决方案架构师 事件流怎么分？接口是推还是拉？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就写推送就行？拉取太麻烦了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "actor_ref就是把学号加密一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "好。@合规与隐私负责人 事件里哪些不能放？审计要留啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拒绝原因码也要写进事件里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计听着很重，能不能就记个日志？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去跟导师说。@导师 我问了两个人，大概就是三段：生产-接入-分发；事件字段8个；还有审计要记谁订阅谁放行拒绝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1 A系统有学习事件。2 发到平台。3 平台检查权限。4 存起来。5 B系统订阅。6 平台再检查权限。7 给B系统。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "业务事件就是作答、浏览、完成测验。治理事件就是授权、撤销、还有审计记录？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网络断了？还有权限不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "撤销了就删掉？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就记“撤销后不给别人了”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我怕漏审计那块。每次都忘。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在隐私计算学习履历互联平台进入xAPI采集适配开发背景下，用户与导师围绕解析-幂等-审计的最小可跑通实现与验收点持续沟通（8轮），其中在event_id生成与去重存储选择上与后端工程师沟通（4轮），在原因码枚举与对外响应隐藏细节上与合规与隐私负责人沟通（2轮），并明确先实现event_id函数、Redis SETNX幂等与最小审计接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "xAPI采集适配这块我真不知道从哪动手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我怕漏审计那块。每次都忘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一个HTTP接口收事件。别的我不清楚，反正他们说先这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "xAPI里有id吧，就用那个。没有就随便生成个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 statement.id到底要不要必须有？没的话咋整，我现在要写采集适配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的registration我也不懂，反正就是拼一堆字段hash？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "duplicate也要审计吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计字段我都要自己塞进去？我怕又漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 后端说没id就用一堆字段hash当event_id，还要duplicate也写审计。那我现在具体要做啥，我怕漏字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "effective_at又来了，我也不懂。是不是就是撤销以后都拒绝？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我怎么证明？我又不写报告。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 reason_code我要用哪些？还有权限拒绝对外到底回什么，别让我乱写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我记不住这么多码，能只用一个拒绝吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规说对外就403 PERMISSION_DENIED，审计里分 REVOKED_EFFECTIVE、POLICY_MISMATCH、DUPLICATE_EVENT 这些。还说测试数据别用真学生邮箱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先做幂等吧。别的我怕搞错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道用啥库。问别人吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 我做幂等去重，用DB唯一键还是Redis更快能搞定？我们现成有啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TTL 24h 是拍脑袋的吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写成配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先写生成event_id的，还有Redis的setnx去重。就这俩。审计中间件我先不碰。"
+              }
+            ]
+          },
+          {
+            "microScene": "在联邦统计分析调度器工程落地背景下，用户与导师围绕最小可跑调度骨架（Job/Task/Result建模、状态机、下发回收、幂等重试、审计与防滥用、授权校验）持续沟通（14轮），其中在参与方回包内容/失败码/审计字段与payload假设部分与隐私计算工程师沟通（3轮），并形成可用测试桩跑通的实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道。是不是就是发请求，然后等结果？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都卡。存哪，怎么切，我没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私计算工程师 参与方回什么？失败码怎么搞？还有审计要留啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回的就是桶计数这种？那我只要拼起来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那请求里要带啥？就analysis_type和时间？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是：有job、task、result三张东西。task按学校切。回传桶计数，聚合就是加。还有几个错误码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…created，running，done，fail？差不多？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PARTIAL也要做？能不能先不做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在到底写啥？写三张表？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "HTTP stub 是啥意思？就是先假接口？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那幂等我用Redis setnx那套可以吧？我刚写去重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "task_id不变吧，不然乱了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记下来了。还有啥要问的吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写代码里？限制一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那授权呢？我是不是不用管，反正对方会查？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权表字段我不知道。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我写错字段名。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发中实现能力图谱增量更新服务背景下，用户与导师围绕更新链路字段集、幂等/审计/错误码、接口与本地桩测验收点持续沟通（8轮），其中在最小表结构与幂等一致性校验部分与知识图谱工程师沟通（3轮），在证据字段最小化与白名单/审计合规部分与合规与隐私负责人沟通（2轮），并明确apply接口、证据唯一约束、乱序保护与审计hash落库实现方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道。能力图谱更新是要我写个接口吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是学习事件？有 user_id、event_id 就够了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等就是 event_id 不重复？查到就不写了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@知识图谱工程师 增量更新要怎么拆表？我只知道 event_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "唯一约束会不会直接报错把任务弄失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着挺多的。我要写四张表吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 就是建个 evidence 表，(event_id, ability_id) 唯一。先插 evidence，冲突就当处理过。然后再更新 learner_ability_state。还有个 last_event_at 不要被旧事件覆盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "校验字段不空。写 evidence。冲突就返回。没冲突就 update 状态 mastery+delta。写审计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 evidence_json 我能不能整段存？payload_hash放哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要做个白名单过滤？我怕我搞不对。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "@导师 我就做白名单。evidence_json 只收几个key，多的就报4001。payload_hash 写 evidence 表和审计表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是重复 event_id 调两次，第二次不更新。另一个是 evidence 里多了字段就拒绝。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "result_hash 是啥？也要算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕我忘了字段，能不能就都写到审计里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在要做的就是：建 evidence 表唯一键，写 apply 接口，白名单过滤，审计写入，乱序保护。"
+              }
+            ]
+          },
+          {
+            "microScene": "在能力图谱平台工程开发末期全链路压测缺陷闭环背景下，用户与导师围绕ingest链路的429/500/超时复现、定位、修复与回归验收持续沟通（8轮），其中在压测采样、最小复现、对照组与验收阈值部分与测试工程师沟通（4轮），在500常见根因、分段耗时指标与审计异步化改造及合规日志边界部分与后端工程师沟通（3轮），并最终确定先加分段耗时与做对照组再决定审计改造的修复顺序与清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道该看哪个。压测一堆红的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有个是 429。还有一堆 500。还有超时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好像是 ingest 多。update 也有点。query 没咋看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 429 和 500 一堆，怎么弄？我现在要看啥才能复现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "20条要手动翻？我不太会抓 request_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 429 就是扛不住？是不是把限流调大就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值是多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我就按你说的抓一段窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看关掉审计会不会不报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 ingest 压测500和超时，常见是啥？我该先改哪里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步队列是要上新中间件吗？我不想搞新东西。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "返回码怎么搞？我现在就怕乱改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记不住这些状态名。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先分清 429 是网关还是服务。再做对照，把审计改成不阻塞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看响应里写的 rate_limited_by。还有用 request_id 看日志里谁返回的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先做分段耗时吧，不然我也不知道是不是审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我加的日志把隐私写进去了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在隐私计算学习履历互联平台运行评估需做灰度发布回滚演练背景下，用户与导师围绕演练目标、最小可执行范围与演练脚本收敛持续沟通（6轮），其中在灰度路由/回滚步骤/监控阈值/异常注入与一致性检查部分与运维与SRE工程师沟通（6轮），在演练租户白名单与时间窗口及对外一句话口径部分与客户成功经理沟通（3轮），并形成可照执行的7步演练流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我被安排做灰度发布回滚演练，但我不知道从哪一步开始。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就知道有个灰度开关。别的我不清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE工程师 灰度回滚怎么搞？我该看啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计队列积压是啥？我分不出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚触发条件要我定吗？我真不会定阈值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线是哪来的？我没看到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那演练怎么制造异常？总不能等它自己坏。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就选第一个吧，限速。会不会把真实数据搞乱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我听到的是：1%灰度按租户哈希。触发条件看 5xx、p95、还有审计队列。回滚是把比例设0再把新版本缩0。异常用审计限速。检查就看计数别看内容。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "白名单租户ID我真不知道谁管。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE工程师 演练租户白名单谁给？怎么确认只影响它们？还有限速X给多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "客户成功经理我也不熟，我怕找不到人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户成功经理 给我灰度回滚演练用的租户ID白名单，还有能演练的时间段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们…我不知道。我们日志里是 hash。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我回你一句话就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我拿到的是：用3个演示租户，不用学校的。ID映射给SRE私下走。时间别在工作日10到12。结束后我要跟客户成功说影响范围/多久/要不要通知。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我到时候就照这7条念？我别的真想不出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "稽核就是……看告警是不是真的？我也不清楚要看啥。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "计数？就是那些数字跳了。可能就不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是…确认告警的数字没算错，不是系统乱报。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE工程师 告警稽核到底查啥？我现在脑子空的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "独立口径是啥意思？我就只能看一个看板。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那容忍范围要写多少？我不知道。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只会说“看95分位”，再往下我说不出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规也要写进稽核？我以为只有修故障才管。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我大概记住了：别用同一套数据算两遍，还有按租户分组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是…先看告警规则配没配错，然后看指标怎么来的。再用别的地方的数对一下。按租户分一下，别全混着。还要注意别查出隐私。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三组…入库、审计、统计？然后比差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先定时间段。再分别取三个计数。再算差值。差太大就…算异常？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就写“差值用正常日的95分位当阈值”。别让我算，我不会。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查…是不是有失败的请求？看 error_code？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是统计会慢一点，不能同一秒硬对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3条我怕说不清“独立口径”。我就记得别用同一个数源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就问 SRE 报基线的95分位阈值，然后照你这6条念。出告警就按这套对账。"
+              }
+            ]
+          },
+          {
+            "microScene": "在试点学校教学干预结束需评估成效的背景下，用户与导师围绕复盘骨架、完成口径、对照选择、指标最小集合与合规呈现持续沟通（7轮），其中在干预定义与执行口径上与教研负责人沟通（2轮），在对照组设计与评估指标选择上与学习分析算法工程师沟通（1轮），并形成可直接陈述的四句复盘模板要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道要看啥。就看分数涨没涨？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……老师根据看板把作业难度调了？然后给学生推题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是补救微课吧。就给低的看视频。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教研负责人 干预这次到底算啥？触发条件是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是单元测没过的，7天内发视频和题。每周一次。名单老师能改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "投放和完成要分开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看他点开了？有播放记录。还有题做没做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "播放时长？还有提交次数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@学习分析算法工程师 对照咋弄？看啥指标才算有用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照就是没完成的人，还有上个单元当历史。指标有完成率、练习正确率、下次小测得分、错题复现率、活跃天数。还要按班级老师分。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就完成率、下次小测分、还有错题复现率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同单元没完成的那批吧。历史对照听着麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就给班级的汇总？别给人名。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1就是单元测没过的，7天内发微课+练习，算完成要看完80%还得交题。2就是同校同单元没完成补救包的人当对照，还按班级老师分开看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没效果就先看是不是老师没执行完，还是学生没看完。再不行就换微课和题？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

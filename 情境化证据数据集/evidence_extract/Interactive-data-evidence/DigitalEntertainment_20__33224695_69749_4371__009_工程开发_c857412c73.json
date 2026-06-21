@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在变声SDK接入与端到端联调背景下，用户与导师围绕Web端流式链路“断续/没声/401”定位与修复方案持续沟通（12轮），其中在帧序号与采集帧规格问题上与实时音频工程师沟通（5轮），在鉴权401与日志合规问题上与安全工程师沟通（3轮），并明确采集改造、会话流程调整与量化验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能跑一半。按钮点“开始实时变声”，前端能拿到麦克风流，也能把参数发出去，但服务端回来的音频经常断断续续，有时候直接没声。日志里我看到过一次`ERR_FRAME_SEQ`，还有`401 token invalid`"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没声那次，SDK给了个`onAudio`一直不触发，但`onState`显示connected。断续的时候延迟会跳，从100多ms到800ms，然后又回去。401我复现过两次：刷新页面后第一次点开始就401，再点一次又好了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "浏览器getUserMedia出来我没改，应该是48k，单声道？帧长我按ScriptProcessor那套切的，差不多1024采样一包。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时音频工程师 `ERR_FRAME_SEQ`是啥？Web端送音频帧你们要求多少ms一帧、采样率必须多少？我这边断断续续还有没声。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我没带`seq`，我就把PCM chunk直接丢给SDK的send。SDK不是应该自己打包吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "断续的延迟跳到800ms也跟这个有关？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "401那种刷新后第一次点开始就挂呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我现在理解是：我用错接口了，还得自己管seq。还有AudioWorklet必须上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问到了：`ERR_FRAME_SEQ`是帧序号不连续/回退。我们现在用的偏底层接口，要传`seq`、`timestamp_ms`，断线重连要新`stream_id`且seq从0。Web端别用ScriptProcessor，换AudioWorklet；48k单声道；20ms一帧=960 samples。没声但connected可能是帧长不对被丢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 这边SDK联调，偶发401：刷新页面后第一次点“开始实时变声”容易401，再点一次又正常。token是我们前端拿到的临时token。想确认：token是不是一次性？有没有时间戳/时钟偏差窗口？应该按session还是按stream去换token？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们确实是点start才create，create失败就不管了。session_id我存在localStorage里复用，图省事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我懂了，就是我偷懒把session_id复用了，还乱了create/start顺序。JWT打印我现在确实打了全量……我回去删。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 安全那边说401主要是我流程不对：token是60秒JWT，绑tenant+session，要求先create session再start。刷新后我复用了localStorage里的旧session_id，直接start会401；第二次可能走了补偿create才好。还提醒别打完整JWT到日志，只留前6后4，审计记tenant/session/request_id就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算先做三件事：1）把采集从ScriptProcessor换AudioWorklet；2）改成固定20ms帧，按960 samples切；3）会话流程改成：点开始先请求create拿session_id+session_token，再开流。还有底层接口那块我补`seq`递增，断线重连就换`stream_id`、seq归零。验证的话我就跑一段30秒录屏看有没有断续。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟P95我不太会算，我只能拿到每帧的send时间和收到的play时间，算个差值均值。P95要写统计我得现写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，这个我能搞。stats我也看看SDK有没有直接给，我怕我算错。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。我之前还想调到5ms试试，先不碰了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

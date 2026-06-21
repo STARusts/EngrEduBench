@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农险灾损反演系统工程开发背景下，用户与导师围绕致灾指征清洗与特征提取的工程边界、验证口径、物理约束补全及跨域授权链路持续沟通（8轮），其中在异常值处理与特征提取策略部分与数据开发工程师沟通（2轮），并最终形成清洗与特征提取工程基座方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步规划是用流批一体架构，Flink做实时雷达和站网数据的脏数据拦截与插值，离线数仓构建长序特征基座。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "气象雷达的缺测和跃变，是直接丢弃还是做平滑补偿，这直接影响后续反演的输入分布。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对于雷达反射率和遥感云图这种时空强相关数据，缺测和异常跃变，工程上一般怎么处理既能保真又不丢信息？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取呢？我需要提取哪些时序特征给反演侧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据开发工程师建议清洗用插值补偿加质控打标，特征提取用Flink窗口算动态时序特征，同时地块坐标做GeoHash泛化。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备设计一个对照验证：拿历史已知灾情的数据，重放进清洗和特征提取管道，算提取出的特征分布与历史真实定损记录的皮尔逊相关系数。如果相关系数低于0.6，说明特征提取逻辑有偏，需要调参或者换特征。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对层状云和对流云的Z-R关系参数差异我拿不准，之前主要做通用数据工程，对气象物理模型底子薄。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这两天把《雷达气象学》里关于测雨原理的章节过一遍，重点看Z-R关系的拟合和雨型判别逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把雨型判别作为一个前置分类器加到特征提取管道里，根据雨型动态选Z-R参数，把物理一致性校验补进代码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨区域的话，我目前只想到在数据接入层做token鉴权，确保来源合法。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把跨域授权凭证校验加进清洗管道的TODO里，联调前找合规专员过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

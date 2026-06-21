@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在固废智能分选与溯源运营系统上线验收与基线对比背景下，用户与导师围绕验收证明、基线口径、可回放与合规留痕持续沟通（6轮），其中在验收清单与对账抽样阈值部分与测试经理沟通（2轮），在敏感信息最小化、审计留痕与保留周期权限部分与合规与风控经理沟通（2轮），并最终对齐6条基线对比项与上线当天分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "固废智能分选与溯源运营系统这边联调压测差不多了，现在要走上线验收和基线对比，我这块要怎么弄才算过？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是看下接口能不能调通，再看下页面能不能打开吧。还有压测不是跑了嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就是之前测试环境的结果？我就拿之前的P95那些数字对一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "六类用例都跑一遍？就投放到结算那条链路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "request_id、idempotency_key、upstream_event_id。都留痕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…在日志里能搜到吧，用ES搜一下。回放就是把消息再发一次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试经理 验收和基线对比要怎么写？基线项具体列啥，抽样对账怎么抽，过线标准是啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着挺多的，我照着抄就行？50TPS那块我记住了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试经理说基线有三块：功能链路、性能、数据质量。上线当天抽灰度窗口全量对账，再抽切全量后1小时分层抽样，每站点20笔。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺字段为0，重复入账为0，拼账失败为0。冲正率不设死线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就不打出来。把字段删掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 上线验收基线这块，日志和验收数据合规要怎么卡？哪些字段不能落，三ID怎么留，保留周期和权限怎么定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两年有点久。那日志90天就够了吧，审计表两年就按你说的来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规说压测和验收数据里不能有手机号、人脸、身份证、车牌、门牌地址。三ID要在事件表、账本表、结算流转表都能查，还要记录操作者、来源IP或证书指纹。日志90天，审计表两年。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…存表就存表。成本应该不大吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我拉个群，让测试盯用例，我盯接口，合规盯抽查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测试经理看六类用例都过、对账一致；SRE看监控P95、错率、积压没问题；我就看三ID都有、幂等没重复。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我就按这6条来对齐。负责人的话我就先按你说的分，明天验收前再确认一遍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

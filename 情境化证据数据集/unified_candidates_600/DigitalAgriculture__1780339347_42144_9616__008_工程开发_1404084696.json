@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在根系微生态靶向管控系统传感与注入联调启动背景下，用户与导师围绕时序同步方案及开发效率与注入精度的冲突持续沟通（7轮），其中在RTOS开发效率部分与嵌入式固件开发员沟通（1轮），在硬实时与抖动控制部分与传感与执行联调专家沟通（2轮），并分析取舍、提出对照验证方案，最终形成折中联调策略（注入走裸机中断，上报走RTOS任务，测抖动方差卡2ms）。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看 GitHub 上好多 IoT 项目都是直接上 FreeRTOS，用消息队列把传感数据丢给注入任务，现成的 API 调一下就行，不用自己折腾同步逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用 RTOS 的消息队列做同步，开发快，应该没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用脚手架开发快，联调也省事，这样搞可以吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "裸机中断？那不是得自己配寄存器？太容易出错了，有没有更方便一点的办法？比如在 RTOS 里把注入任务的优先级拉到最高？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我肯定想要精度，但手写中断时序我真不太熟，之前都是调包。能不能就按固件开发员说的，用 RTOS，然后在高优先级任务里做注入？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没怎么写过纯中断的时序控制，对 NVIC 优先级分组那些底层逻辑没把握。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这几天把 STM32 的外部中断和定时器那几章过一遍，在板子上写个最小 Demo。验证的话，就做对照测试，一组用 RTOS 队列触发注入，一组用外部中断直接触发，抓 GPIO 波形测两种方式下阀门响应的抖动方差。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "折中吧。核心的注入执行动作，我按联调专家说的，放在裸机中断里保证硬实时；传感数据打包上报还有之前定的心跳包，放在 RTOS 任务里跑。这样既能用脚手架省点事，又能保精度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

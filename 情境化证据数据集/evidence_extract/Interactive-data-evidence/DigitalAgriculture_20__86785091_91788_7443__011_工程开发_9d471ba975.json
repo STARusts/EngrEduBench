@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的压测回放与缺陷修复背景下，用户与导师围绕核验→计费→结算落库→对账全链路的压测形态、验收指标、日志可观测字段与回归闭环持续沟通（10轮），其中在回放数据三套包与输入等价/脏数据验收口径上与测试负责人沟通（4轮），在容量基线、幂等冲突与calc_trace_min落库取舍上与后端负责人沟通（3轮），并明确按任务回放器+门禁分层落地执行清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想先用现成的压测工具把接口怼满，看 QPS 和 P95 就行？链路我有点怕拉不齐数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放型就是拿历史轨迹跑核验再计费；并发型就是同一 task_id 重复提交看幂等；异常型可能是缺 GNSS 点或者时间乱序？日志键我就打 task_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把 tenant_id 和 input_hash 也加到日志 MDC。calc_trace 我怕太大，会爆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 回放压测这块你们一般怎么做？我现在只有一些轨迹 JSON，怕跑起来不稳定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能直接用 JMeter 之类把接口录一下重放？省事点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 input_hash 算法我就用请求体整体 hash？加上 task_id？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脏数据包里你说的乱序，我现在核验里会先 sort by ts，这样是不是都被吞了，看不出问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐就先 200 QPS？P95 < 500ms？错误率 < 1%？资源我没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 现在压测要定指标和重点链路。你觉得我们该压哪些点，瓶颈一般在哪里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "唯一索引冲突这块我怕一并发就死锁。我们现在是插入冲突再查回，应该还行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "calc_trace_min 写库会不会把表打爆？我能不能只打到日志里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解就是：压测不只压接口，要用回放器跑全链路；数据分三包：正常、幂等、脏数据；日志必须带 tenant_id、task_id、input_hash、price_plan_version，再加 idempotent_hit。指标先按单实例 80 rps、端到端 P95 1.2s 做起，5xx 控到 0.2% 以内。calc_trace_min 不能全丢日志，要按触发条件存精简字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把当时的请求体保存下来，再跑一遍？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差异路径我只能想一个，规则版本变了导致 adjustment。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我回放数据是不是就不好算面积了？点都偏了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值我不太会定。我能不能先照网上说的 GNSS 误差 1-2 米？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以写个小脚本批量跑，然后看误差分布。这个我能做。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据量就先 1000 条任务？每条轨迹可能几千点，会挺大。我想把轨迹压成 polyline 或者只存关键点，省空间。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "门禁我怕卡大家开发速度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按这五条做。idempotent_hit 我需要改下中间件打点。回放器我就照测试那边的三包去对齐，先把 A+B 跑通再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

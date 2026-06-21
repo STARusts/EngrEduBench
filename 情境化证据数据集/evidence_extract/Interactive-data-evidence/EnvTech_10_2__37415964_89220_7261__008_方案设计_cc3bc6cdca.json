@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计收口的高可用与安全评估背景下，用户与导师围绕故障点拆解、断网兜底与可验收指标持续沟通（8轮），其中在断网容错与缓存/对账部分与边缘计算工程师沟通（2轮），在设备身份、双向认证、最小权限、审计与数据最小化部分与安全工程师沟通（2轮），并明确将SLA、RPO/RTO与离线运行等指标写入方案并对齐负责人。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就相机坏了识别不了。还有网络断了传不上去。兜底就…先存本地，后面再传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 断网了怎么办？就存本地吗，存多少合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小事件就是投放分选那些结果，还有重量，还有操作记录。断网就本地队列落盘。满了先不存图片，改存…摘要。再满就只存trace_id和重量这种结算要用的。然后网络好了按trace_id补传，云端幂等。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "知道了，策略版本也记上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 这系统安全评估要看啥？要怎么搞才算安全？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双向认证是不是就两边都要密码？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就写证书。丢了就吊销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那…SLA 99.9？离线能跑48小时。RTO 就…半小时内恢复？RPO 就不丢，最多丢1分钟？安全就是关键接口都要鉴权，导出默认关，日志都记录，图片只留一部分抽检。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就负责把前面那几条写进方案里，然后找边缘计算把48小时和降级确认下，再找安全把证书、导出和留存比例确认下。别的你们定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

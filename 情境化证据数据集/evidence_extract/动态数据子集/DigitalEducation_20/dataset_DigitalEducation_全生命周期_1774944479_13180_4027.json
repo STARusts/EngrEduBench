@@ -1,0 +1,1107 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“课件可达性自检替代引擎”立项需求梳理背景下，用户与导师围绕无障碍资源痛点、缺陷样式、整改负担、采纳分级与MVP范围持续沟通（11轮），其中在缺陷分类与严重度澄清部分与无障碍体验设计师沟通（3轮），在数据最小化与留存边界部分与合规与隐私官沟通（2轮），并形成痛点清单与首轮聚焦范围口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我在助教那边见过，老师的PPT图多，很多图就是一张截图，学生用读屏根本读不到。还有视频没字幕，听障同学就很吃亏。老师一般就是“先这样吧”，要补也很慢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "被卡住的有三类吧。学生端就是看不懂、听不到；老师端是要改但没时间；教务可能要过检查。流程上就是发课件前没人查，等学生反馈或者临检才补，补的时候一堆东西要重做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PPT：图片没替代文本、颜色对比不够、标题层级乱、表格就是截图。文档：扫描版PDF不能选中、目录没层级。视频：没字幕、字幕不同步。音频：只有音频没文字稿。交互类我不太熟，可能键盘点不到、表单没标签？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不是发现问题，是改。比如一套PPT二三十页，补alt、补结构，得一个个弄。视频字幕更离谱，听写、校对、对齐都要时间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一键用更好，但我感觉老师会担心机器生成不靠谱。可能先给一个“能交差”的版本，再让他小改。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "视频字幕如果准确率够高，可能直接发。音频转文字也差不多。PPT的图片替代文本我不确定，很多图是流程图，机器写出来可能很怪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@无障碍体验设计师 常见的课件无障碍问题，能不能给个前5的清单？最好说下哪些算严重、会直接影响学习的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“结构缺失”我有点不明白。PPT不是每页都有标题吗？这也算结构？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那替代版本是不是可以直接变成一份结构化讲义，绕开PPT本身的结构问题？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我抓到五类：图片没替代、结构乱、颜色对比、视频字幕、交互键盘操作。对我们这个项目来说，PPT图和视频字幕最像刚需，老师也最愿意用自动化来省时间。交互那块我不太敢碰，范围容易炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "覆盖面：PPT和视频最多，几乎门门课都有。影响：字幕缺失对听障是直接不可用，图片没替代对盲生也一样。成本：人工做字幕和给图写说明最费时，所以自动生成的收益最大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 这项目要扫描课件、视频音频，合规上最容易踩坑的点是啥？哪些数据必须避免，结果要留多久比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师就是想把视频扔进来出字幕，那是不是默认他就授权了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "痛点可以写成：现在老师自己去做字幕/讲义会把原视频传到外部平台，数据更乱更不安全；学校如果有统一的自检和生成，就能把处理范围、留存、权限控住。还有生成错了要能追溯是谁导出的，不然风险甩锅。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得挺像，尤其外部工具那条，很多人真的会这么干。交互先不做我也赞成，不然我怕收不住。采纳三档也行，评审问起来我就按“老师省时间”解释。唯一我不确定的是“结构层级缺失”评审听不听得懂，可能得配个例子。"
+              }
+            ]
+          },
+          {
+            "microScene": "在“课件可达性自检替代引擎”需求与战略阶段背景下，用户与导师围绕目标学校画像字段、主选细分与筛选条件持续沟通（10轮），其中在画像最小要素与先选哪类学校跑通上与产品经理沟通（2轮），在画像合规必问字段与可接受处理场所偏好上与合规与隐私官沟通（2轮），并形成可用于访谈/试点的8条画像模板与排除项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我第一反应是那种有信息化平台的学校吧，至少能接进资源库。不然就算做出来也没人用。还有就是老师会做PPT的，别太原始。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "平台有但是人多，流程长？比如重点高中，啥都要审批。平台一般但痛点强的，可能是职业院校？他们资源多，视频也多，改起来更烦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 画像最小要素到底要写啥？还有我们先选哪一类学校更容易跑通？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那先选哪类更好跑？我怕一上来就卡采购。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "培训机构会不会更在意营销视频，不在意课件无障碍？我们做课件可达性，自检这块会不会被当成可有可无。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我试一下。  \n跑得快：培训机构/民办。资源入口可能在他们自己的网盘或者内容平台。内容形态是视频多、PPT也有。压力是平台审核和投诉。用的人是教研和剪辑？决策是老板或者教研负责人。现有替代方案可能是找兼职打字幕、或者用自动字幕再人工校。  \n痛点强：融合教育示范校。资源入口可能在资源库。内容是PPT、PDF多。压力来自教育局检查。用的人是教务和老师。决策是教务处+信息中心。现有方案可能是人工改，或者就不敢公开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "决定我们先做视频字幕还是PPT结构？还有他们有没有统一资源库，决定我们先做批量还是单个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 画像里合规这块最少要问哪些问题？想要能直接拿去跟学校沟通的那种问法。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第2条“外部还是校内”听起来就要讲部署了，我现在也定不了。画像里怎么写不超纲？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。还有“能不能用于训练”，我们肯定默认不拿去训练吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏跑得快的。原因很现实：我想先把“替代版本能被直接用”的闭环跑出来，不然一直停在报错。痛点强的学校流程长，我怕一直等审批。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "筛选条件……我想要他们有“交付/验收”场景，比如要给合作学校交资料，或者平台审核要过。还有他们课件不是只有视频，得有PPT/PDF一堆，不然结构自检价值不明显。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "主选画像：面向培训机构/民办学校的教研团队。  \n1）资源入口：课件集中在内部资源库或共享盘，能批量导入。  \n2）内容形态：PPT/PDF为主，视频也有但不是唯一。  \n3）触发压力：对外合作交付、平台内容审核、投诉风险。  \n4）使用人群：教研/教务里有人专门做资料整理，每周都要用。  \n5）决策链：教研负责人或校长能拍板，周期短。  \n6）现状：用外部工具拼凑，改格式很痛，重复劳动多。  \n7）合规边界：不能拿内容做训练；对外处理可接受但要可追溯。  \n8）成功信号：生成的替代讲义/字幕能直接进他们的交付包。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，那我就按这版去聊人。还有“结构层级缺失”的例子，下次我再补进访谈话术里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课件可达性自检与替代生成产品的需求与战略阶段，用户与导师围绕合规与伦理边界、默认最保守策略及外访必问条款持续沟通（6轮），其中在个人信息/版权授权/审计留痕与留存删除部分与合规与隐私官沟通（4轮），在无障碍硬性缺陷分层与生成内容风险提示/人类可控机制部分与无障碍体验设计师沟通（2轮），并汇总形成需求阶段边界条款清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最怕两块吧：一是把学生信息搞进去，二是课件版权。还有就是生成的替代版本万一不准，误导学生。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据上，课件里可能有学生姓名、学号、照片。视频里也可能有学生声音和脸。谁能看…应该就是老师和教务？不能做的，可能是拿这些东西去训练模型，或者把课件发到外网。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 这引擎默认要处理课件和音视频，合规上三件事：个人信息怎么界定和最小化、课件版权/授权怎么做、审计留痕要到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏这块我有点糊：比如字幕里老师点名“张三”，我们把“张三”变成“某同学”，那老师会不会觉得字幕很怪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "版权那块，你说不做公开发布，那老师导出PDF给学生算公开吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志是不是会很重？我们还在需求阶段，怕越加越多。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去跟导师对齐“默认最保守”和“可选开关”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从合规那边抓到几条：默认不拿资源去做模型训练；生成内容里遇到姓名学号要脱敏，导出算高风险要二次确认；替代版本只面向同组织内部教学，不做一键公开发布；日志至少要记检测/生成/导出/权限变更，能追到人和资源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "敏感个人信息…比如残障信息。我们产品这块本来是无障碍，可能会出现“这学生看不见”这种？我不确定。留存的话，默认短期删掉音视频中间文件，只留检测结果和日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "替代讲义可能把内容改错。字幕也可能错。然后老师一键采纳就发出去了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@无障碍体验设计师 我们做课件可达性自检和替代生成。想问：哪些问题算硬性必须修，哪些是建议；还有生成替代版本时，怎么做提示/确认，避免老师误把机器当权威？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "硬性必须这些我能理解。对比度和闪烁这类，我们也算吗？我怕后面需求变大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采纳前检查清单这点挺实用，老师不想读长说明。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，设计师那边建议把缺陷分硬性必须和强烈建议两档；替代版本要打“自动生成需确认”，并提供定位原文方便核对；默认原件和替代件并存，不要覆盖；高风险内容（数据/公式/定义）要更醒目提示人工复核。MVP先抓四类最大头，对比度动效放后面，并且别承诺一键达标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试一下：  \n1）默认不拿学校资源去训练模型；如果要用，得单独开权限和合同。  \n2）替代版本只用于组织内部教学分发，不做公开发布工具；导出到本地算高风险要确认+声明。  \n3）生成内容可能有错，必须让老师确认，不能自动覆盖原资源。  \n4）日志要能查到谁对哪个资源做了检测/生成/导出。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这版我能拿去问学校法务和教务了。导出高风险、并存不覆盖、默认不训练，这三条我记得住。其他我怕说漏，我就照你这几条逐个问。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课件可达性自检替代引擎的商业化与进校推广、且对外话术需守住“合规辅助与风险提示”边界背景下，用户与导师围绕定价模式、进校入口、试点指标口径与可续费叙事持续沟通（6轮），其中在校内决策链/竞品/价位与MVP试点设计部分与市场研究员沟通（3轮），在分档依据、可获取日志指标与4周试点阶段阈值部分与数据分析师沟通（2轮），并形成可对外复述的客户入口、年费分档+配额封顶、4周试点验证与承诺句要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉学校买东西就走招采。收费就按年，按学校规模分档？推广就先找教务处信息化的人，或者无障碍办。再就是老师自己用的话可能不太会付钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@市场研究员 学校这类无障碍/课件检测工具一般谁拍板？钱怎么谈？有没有常见价位区间？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那推广入口，是不是信息化部门最关键？还是教务？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "竞品呢？我只知道有些平台带字幕、带无障碍检查，但不确定算不算同类。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问到的结论大概是：校内会有教务、信息化、网安、采购好几条线；收费学校更吃年费，按量最好有上限；试点别搞全校，找一个学院4周跑漏斗指标。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "商业模式我能想到两种：\n1）按学校年费分档，轻量/标准/平台级。\n2）按资源量，比如扫描多少份课件/多少分钟音视频。\n我倾向第1种，因为学校预算好批。第2种怕学校觉得不可控。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分档依据…我不太确定用哪个最合理。学生数可能公开，资源量要学校自己报。\n试点指标：\n- 覆盖就是一周扫了多少课件/视频。\n- 采纳我觉得算“教师把替代件导出并用到课程里”，但“用到课程里”我可能拿不到数据，只能拿导出/分享。\n- 工时节省就问老师做一份要多久，对比用我们要多久。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 分档和试点指标，哪些数据口径能稳定拿到？学校一般愿意给什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那试点4周的成功阈值，有没有一个大概？比如采纳率多少算过线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据分析师建议：分档用“院系版/全校版”好理解，里面再放配额上限控制；试点用日志指标，先跑通成功率，再看预览率、导出率，别硬定一个神奇数字。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能补一点：入口双线，教务负责用，信息化/网安负责评估。定价年费+配额上限。试点就4周，用成功率、预览、导出这些。承诺句就是“辅助合规、提示风险”，不说包过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我们先盯学校和培训机构的教务+信息化两条线推进；卖法走年费，按院系版/全校版两档，里面带每月扫描量和音视频分钟的配额上限，超出再买包；先做一个学院4周试点，第一周确保生成链路稳定并留痕，后面看老师有没有预览、有没有导出/分享，外加记录节省时间；对外就说这是合规辅助和风险提示，替代件自动生成需要人工确认。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课件可达性自检替代引擎方案设计、需两天内出可用MVP背景下，用户与导师围绕资源可用性评分可计算口径、分流动作与审计留痕持续沟通（7轮），其中在评分拆分/阈值/扣分严重度与否决项定义上与数据分析师沟通（4轮），在最小化存储与审计日志字段合规口径上与合规与隐私官沟通（2轮），并收敛出分类型规则评分+否决项+结果字段结构的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我卡在“资源可用性评分体系”，想先把评分怎么落地讲清楚，不然后面扫描、生成、复核都没法排优先级。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把每个课件/视频算个0到100分。缺字幕扣分、图片没alt扣分、对比度不够扣分。然后给个红黄绿，红的必须复核。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源类型至少有PPT/PDF、Word、视频、音频。扣分我也不知道咋定，可能按问题严重程度。动作就是提示教师改，或者生成替代版让他点采纳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 资源可用性评分体系要做MVP，你帮我定下：分数怎么拆、红黄绿阈值怎么搞，别太学术，能解释给教务那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值怎么设？我怕别人问“凭什么60是黄”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可理解性这块怎么量？听着很玄。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据分析师给了个MVP：把资源可用性拆成可访问/可理解/可操作三块。总分100先用规则扣分，再加“一票否决项”直接红，比如视频没字幕也没文本讲义、解析失败、替代生成失败但缺陷严重。阈值先按分流：绿≥85、黄60-84、红<60或命中否决。可理解性先别硬做语义分，先做字幕/稿覆盖率，采纳率当后验指标单独看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规则分套我觉得要分：视频看字幕，文档看结构和alt。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "否决项我先想：解析失败算一个；视频没字幕没讲义算一个；扫描版PDF没OCR也没替代文本算一个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 评分体系要存结果和审计留痕。你给我两块建议：1）评分用的数据怎么最小化存，哪些能不存；2）审计日志字段要有哪些，才符合校内网安/隐私口径。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存全文不行我能理解。但不存OCR文本，那替代讲义从哪来？我有点混。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规这边的建议比较硬：不存原始内容全文，能哈希就哈希；处理期临时落地的音视频/图片要过期清。长期必须留：资源ID/版本、检测时间、规则版本、评分、缺陷类型统计、是否生成替代、是否复核、操作者标识、导出/分享事件。缺陷定位信息（页码/时间戳/坐标）可以短期留比如30天。审计日志按“谁-何时-对什么-做什么-结果”，还要记录评分前后变化、命中的一票否决、是否进复核队列。替代版本产物可以存，但别把OCR/转写中间态全文长期留。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先列四类：  \n- 视频：字幕有无、字幕覆盖率，没字幕且没讲义就否决；  \n- 音频：有无语音稿，没稿就扣大分；  \n- 文档（PPT/PDF/Word）：标题层级、阅读顺序、图片alt、表格表头；扫描版没OCR算致命；  \n- 交互内容我不太会，先不进MVP？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这版我能拿去讲。唯一我怕的是“封顶”怎么说清，封顶多少我不知道。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。我记住：分流优先，先能用。两天后评审我就按这套讲，交互内容先不碰。你别让我当场解释太深的统计学就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在可达性自检替代引擎的方案设计背景下，用户与导师围绕多模态缺陷检测后的统一替代生成链路（输入-中间表示-生成-校验-交付）、片段字段与证据链、两档替代层级及合规降级持续沟通（10轮），其中在多媒体解析与字幕对齐最小方案上与多媒体处理工程师沟通（3轮），在数据最小化、PII脱敏与审计留痕边界上与合规与隐私官沟通（2轮），并形成可评审的流程骨架与字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就两步：先把东西转成文字，再让模型改写。视频就出字幕，PPT就提取文字。剩下的我不太确定，比如图片替代文本到底要写多长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是PPT、PDF、MP4、MP3、还有互动题。中间表示……可能是抽帧、ASR文本、PPT的结构？生成就是字幕、讲义、alt文本。校验可能是看有没有敏感词？交付就是给教师下载或替换。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "统一粒度我想用“片段”。比如视频按时间片段，PPT按页，PDF按段落。每个片段都有原文、截图或音频区间，然后生成对应替代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "片段ID、来源文件ID、页码或时间戳、原始文本、图片链接、生成结果、生成时间、模型版本？还有个“置信度”之类。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 视频和PPT这块，中间表示怎么定比较稳？我怕抽帧、字幕对齐这块设计歪了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字幕对齐那个 alignment_score 怎么算？我怕被问住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PPT里图片的 bbox、block_id 这些，很多模板很乱，会不会解析不出来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概这样：  \n1）导入资源，按类型走解析：视频/音频出时间片段+ASR，PPT/PDF出页+block。  \n2）片段统一存：有来源定位（页码/时间戳）、原始内容、缺陷类型、解析等级。  \n3）按缺陷类型选生成策略：视频缺字幕就生成字幕；图片无alt就生成alt；文本结构乱就生成讲义；需要简化就出易读版。  \n4）生成后加校验分：字幕覆盖、alt不为空、结构层级、还有对齐粗分。  \n5）输出给教师：每个片段可预览、可采纳；低分的排队复核。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕做太多。能不能先每种只出一个？比如alt就一条，讲义就一份。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那策略字段里有 type=alt_text / subtitle / handout / easy_read，再加 level=L1/L2。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 这条替代生成链路里，哪些数据绝对别碰？追溯又要留字段，我有点拿不准边界。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“默认不存音视频”，如果教师要回看定位怎么弄？只靠时间戳？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着补：  \n- 解析后、生成前，对ASR/OCR文本做PII规则扫描，命中就替换占位符，并打一个 desensitized=true。  \n- 生成物都带 model_version、policy_version、segment_id、action=generate。  \n- 教师采纳时 action=adopt，能回滚 action=revert。  \n- 原件不长期存，segment只存定位和hash。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级就是：字幕用本地ASR先出草稿，不做润色；alt用模板+OCR关键词拼一下；讲义就把PPT文本按标题拼成大纲，不做改写。然后这些都标成 level=L1 且 need_review=true。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终我就按这几条说：  \n1）多模态统一成“片段”：时间片段（start/end、asr_text、对齐粗分）+版式片段（page+block、bbox、ocr_text、parse_grade）。  \n2）每个缺陷类型的替代生成分两档：L1最小合规全覆盖，L2可教可用做试点；策略字段里带 type+level。  \n3）生成前做PII脱敏，生成/采纳/回滚全留 action 审计字段；原件不长期保存，只留定位与去重hash。  \n4）云端不可用就走降级：本地ASR草稿字幕、模板alt、大纲式讲义，统一标 need_review 进复核队列。"
+              }
+            ]
+          },
+          {
+            "microScene": "在无障碍课件替代生成系统的方案设计背景下，用户与导师围绕权限审计架构MVP持续沟通角色/权限域/强鉴权接口/need_review分流与审计查阅边界（12轮），其中在审计日志字段、禁记项、留存期限与复核看片段授权部分与合规与隐私官沟通（3轮），并收敛为RBAC+资源归属校验、审计独立域与内部通道隔离的方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限这块我有点虚。直觉就是按角色开权限：老师、教务、管理员。审计就把操作都记下来。原文不长期存那条我记着，但日志里到底能写多少我拿不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按三类人凑一下：  \n1）教师：上传、触发检测、看缺陷定位、看替代建议、采纳/回滚自己课件的替代。  \n2）教务/无障碍负责人：看全校的缺陷统计、进复核队列、能代采纳？不确定。  \n3）系统管理员：用户管理、配额、看审计，但不该看内容。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 审计日志这块，最少要记哪些字段才算够？哪些字段不能记？我们又要可追溯又不想在日志里放课件内容。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "留存呢？我们上一步说原件不长期保存，只留定位和hash。日志要留多久才合理？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果教务要复核 need_review，那他肯定要看片段内容吧？这和“管理员不看内容”不冲突，但“教务到底算内容查看者”我没想清。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我抓三点：  \n1）日志只记行为证据：谁、对哪个resource_id、做了啥action_type，别塞内容。  \n2）日志里要带 policy_version、action_level（L1/L2）这种，方便追责。  \n3）复核者可以看片段，但范围要卡在 need_review 的片段，导出要收紧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "角色我先拆成五个：  \n- 教师（content_owner）  \n- 复核员（reviewer，教务/无障碍岗）  \n- 教务主管（manager，能看统计、分派复核）  \n- 审计员（auditor，只看审计和报表）  \n- 系统管理员（admin，配用户/配额/开关策略）"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我试试：  \n内容域：content.view_original（在线预览原件）、content.export_original、content.delete、content.view_fragment（按定位符看片段）。  \n替代域：alt.view_suggestion、alt.edit_suggestion、alt.adopt、alt.rollback、alt.export.  \n复核域：review.queue.view、review.queue.assign、review.decision.approve/reject（我不确定是不是拆这么细）。  \n审计域：audit.view、audit.export、audit.query（含按resource_id查）。  \n系统域：tenant.user.manage、policy.manage、quota.manage。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先挑：  \n1）content.view_fragment：因为能看到原内容片段，最敏感。  \n2）alt.adopt：一旦采纳就影响对外发布的无障碍版本。  \n3）alt.rollback：回滚也会影响版本一致性，怕被乱搞。  \n4）export：不管是导出原件还是导出替代，都容易泄露，得严一点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是给它一个“只读处理”的权限？它能拿到解析后的片段，但不允许把片段返回给人？我说得有点空。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解成：生成服务拿内容是系统内部的数据流，不算用户可见权限；用户想看片段必须走 content.view_fragment 的鉴权接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "reviewer 能看 need_review 列表和片段，能把状态从 need_review 改成 approved/rejected？教师能看到自己课件的 need_review 原因，但看不到别人的。manager 可以分派 reviewer。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，状态机改权限。状态从 need_review 到 approved 只能 reviewer。教师只能 comment 或重新生成。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小集合我记：generate、view_fragment、adopt、rollback、export、policy_change、review_decision、delete。每条都带 actor、resource_id、action_type、result、reason_code、policy_version、trace_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "auditor 角色能查 audit.view/audit.export，但查出来也只能是元数据，不带内容。admin 只能看系统健康和失败率这种聚合，不给按人按资源的明细？不确定会不会影响排障。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我再问一个：如果出了争议，比如教师说“系统乱改了课件”，审计怎么证明是谁点了采纳？只靠 actor_id？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "OK，我怕我写不出完整架构图，但能不能定成：权限走RBAC+资源归属校验，审计是独立域，日志不落内容，片段查看单独接口？"
+              }
+            ]
+          },
+          {
+            "microScene": "在课件合规检测系统的离线批处理与扩展方案设计背景下，用户与导师围绕批处理链路拆解、禁记项约束下的产物存储、分阶段队列编排、契约字段、失败分流、指标与降级持续沟通（9轮），其中在多媒体中间产物TTL/复用与幂等重跑部分与多媒体处理工程师沟通（2轮），在结果表/队列表/指纹表字段与追溯合规部分与数据治理工程师沟通（1轮），并形成可扩展离线批处理的最小决策要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是夜里跑一堆课件，按租户分开。然后出检测结果和替代建议。问题是量一大就排队，可能卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入是课件文件、视频音频、还有交互内容的导出包？步骤我能想到：先解析格式→抽取文本/图片/音轨→跑规则库检测→如果缺字幕就先做字幕→再生成替代文本/讲义→最后汇总成报告。产物…就是检测条目和建议，可能还有中间的字幕文件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那字幕这种算内容吧？那就不落库？直接生成完给替代引擎用，用完删掉。复核的时候…只看定位信息？我有点不确定，review不是要看片段吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 离线批处理里，像抽帧、转写字幕这种中间东西怎么存才合规又省钱？失败重跑怎么处理不重复烧资源？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那复用是靠 hash+模型版本。抽帧图就别存长时间，存短 TTL 的临时桶。指纹表能存久点。对吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从多媒体那边听到的重点：中间产物分三类，可再生低成本的元数据可以存TTL稍长；ASR/OCR/抽帧这种成本高的内容别长期存，只存 job_id、hash、分片 locator、模型版本这种引用，内容放短TTL临时桶；重跑靠每阶段的 artifact 指纹（hash+版本）做幂等跳过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向按文件切。一个文件从解析到生成建议一路走完。这样简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那…A？因为可以给视频那段单独扩容。B就是大任务，一慢全慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "契约…比如解析阶段输出：resource_id、tenant_id、resource_type、解析到的结构信息、还有 locator。检测阶段输入就用这些。输出是 issue 列表：rule_id、severity、locator、reason_code、hash。生成阶段再拿 issue 和解析信息，输出建议：建议类型（alt_text/字幕/讲义/易读版）、建议内容的引用…不放原文，只放存放位置？或者放一个建议模板id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是建议内容可以在业务库里存，给教师看；但审计日志里不出现。那契约里建议阶段输出可以是 recommendation_id + version + content_hash + storage_ref？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用不同 reason_code？比如 SYSTEM_TIMEOUT、DECODE_FAILED 这种就算系统失败。合规类是规则命中。系统失败就重试几次，还是不行就进失败队列，不要进 need_review？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理工程师 离线批处理要做分阶段队列和幂等指纹。结果表/队列表/指纹表字段怎么设计，才能追溯又不写入原文这些禁记项？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这个我能用。policy_version、rule_pack_version也放在job里，方便追溯。artifact_fingerprint里有 expires_at，符合短TTL。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐量，比如每小时处理多少分钟视频、多少份PPT。还有单位资源成本？比如每1000分钟视频转写用多少GPU小时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口就按 22:00-06:00 这样。口径：完成=所有 work_item 到 generate 阶段结束并写 recommendation 状态为 draft 或 need_review。失败进 dead_letter 不算完成。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先砍易读版和结构化讲义？保留检测和最基础的字幕/alt_text。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记下了。就是分层能力，先出“可采纳最小建议”，重的生成靠配额和优先级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1分阶段队列。2重的中间内容短TTL，表里只放引用和hash、模型版本。3指纹表做幂等。4 issue和recommendation分开，审计里不放内容。5系统失败去dead_letter，合规/质量才need_review。6指标按夜间窗口的完成率，加吞吐和每千分钟的资源成本，资源不够先停讲义/易读版这种重的。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课件可达性自检替代引擎MVP开发背景下，用户与导师围绕PPTX/PDF解析IR设计、检测规则框架、入库与need_review/dead_letter降级持续沟通（9轮），其中在解析字段集与失败回退部分与多媒体处理工程师沟通（4轮），在IR短TTL存储与审计合规部分与合规与隐私官沟通（2轮），并收敛可执行的实现拆分与字段/错误码口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PPT/PDF里到底怎么抽结构，怎么把检测做成统一的规则跑起来？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做个解析服务，输入就是文件路径或对象存储key，输出给检测服务一份json。json里放页、文本块、图片、表格之类。检测就遍历json跑规则。就是……不知道哪些字段必须有，哪些能先不管。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP我先做pptx和pdf。docx先放着。视频音频先别碰。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 PPTX/PDF解析要做成给检测用的json，你觉得最小字段集要啥？还有哪些坑会直接解析失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PDF里alt基本拿不到？那图片缺alt这条会不会一堆误报。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对比度用渲染图采样，是不是很慢？我们夜间窗口要吞吐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那PPTX抽文本，SmartArt那块我先不做深解析，拿不到就算元素缺失？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。结论我理解是：IR按page/element，PPTX能拿到alt和颜色就做硬规则；PDF alt不靠谱走need_review。对比度能算才算，算不了就跳或need_review。还要加parse_quality给检测降级用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "IR我想先丢对象存储，key里带task_id。DB里存个ir_ref和hash。TTL我可以配对象存储生命周期，过期自动删。hash就对json做sha256？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想写成一堆函数，遍历elements，发现就append issue。规则版本我先写死个v0.1在代码里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "need_review和dead_letter我容易搞混。比如PDF字体乱码导致文本抽出来是一堆方块，这算系统失败还是need_review？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我给parse阶段也产issue？还是只在检测阶段产？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块，我现在IR里有文本，会不会算存了敏感信息？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 IR里会含课件文本、抽出来的图片引用，我们打算短TTL放对象存储，DB只放ref和hash。审计不放内容。这样合规上还要加啥？比如权限、留存？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规冻结我之前没想过。那我先不做“申诉流程”，只是预留字段可以吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边说IR要服务端签名访问、按租户隔离；TTL默认24-72h，预留冻结字段但先不做流程；审计只写hash、页数、规则版本、need_review原因码，不写原文片段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能先做三块：  \n1）解析器：pptx/pdf转IR json，page/element两层，必带page_index、bbox、type、text或image_ref，带parse_quality；IR落对象存储，DB存ir_ref+ir_hash。  \n2）规则runner：加载几条规则（缺alt、疑似纯图片页、段落过长、标题缺失先做粗猜、对比度能算才算），输出Finding；异常进dead_letter。  \n3）入库：issue/recommendation分开存，issue里带page_index/bbox/need_review原因码，审计只存引用和版本。"
+              }
+            ]
+          },
+          {
+            "microScene": "在替代内容生成与检测issue联调背景下，用户与导师围绕issue到生成再回写的映射、幂等、失败/跳过状态及审计留痕持续沟通（10轮），其中在幂等键、请求/回写字段结构与预算降级上与NLP生成工程师沟通（4轮），并确定仅对NR_PDF_ALT_UNKNOWN生成ALT_TEXT、保留page_index+bbox定位与gen_history两版痕迹的MVP链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在是要把检测的issue喂给生成，然后把生成结果挂回去？我有点担心对不上区域。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用issue里page_index和bbox直接传给生成，生成结果也带同样的page_index和bbox回来。然后我们写回时按issue_id覆盖同一个字段。要是生成失败，就把issue标need_review？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "生成失败我可以写个状态，像gen_status=FAILED，然后错误码先放文本？幂等我想用issue_id做key，生成服务那边如果收到同一个issue_id就返回已生成的内容。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@NLP生成工程师 现在联调替代内容生成：我们从检测issue带page_index+bbox过来。你们生成侧怎么做幂等？同一个issue重复请求怎么避免重复生成？还有回写结果你们希望的字段结构是啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "input_hash是你们算还是我算？我这边拿得到原文片段，但图像指纹我拿不到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回写结构呢？我怕前端不好展示。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "gen_quality这个我理解是给人看的，不影响检测那边的need_review？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图片bytes走接口会不会很大？我们夜间资源紧张时就会跳过对比度规则，生成也要降级吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了NLP生成这边：幂等建议resource_id+issue_id+input_hash，input_hash他们根据evidence+prompt_version/rule_version算。请求字段要带resource_id/issue_id/issue_type/page_index/bbox，还有evidence（文本片段或图片URL/bytes）。回写他们给最小结构：gen_status、gen_type、gen_payload、gen_quality(OK/NEED_HUMAN_EDIT)、input_hash、gen_model、gen_error_code（四个枚举）。另外建议带gen_budget做轻量模式。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想issue里原来就有page_index和bbox，就不动。生成结果回写时只更新gen_*字段。前端定位用issue的定位字段，不靠生成结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向覆盖，省事。历史存多了我怕库膨胀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两版我能做。就是issue里加个gen_history数组，最多2条，存input_hash、gen_type、gen_quality、gen_payload摘要、created_at。payload全文还是放当前版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先做NR_PDF_ALT_UNKNOWN对应的图片/图表缺少替代文本，生成ALT_TEXT。还有NR_TEXT_EXTRACT_LOW这种我不确定要不要做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是应该在调用前就过滤？不调用生成，issue里gen_status留空？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@NLP生成工程师 我们这边编排层想加个状态SKIPPED，表示压根没调用生成（比如issue_type不支持或预算LOW）。你们那边枚举能加吗？不行的话我就只在issue侧写，不走你们返回。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我业务层自己写SKIPPED。错误码我也写GEN_UNSUPPORTED，但统计要剔除。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）只对NR_PDF_ALT_UNKNOWN触发生成ALT_TEXT；NR_TEXT_EXTRACT_LOW先不生成，其它一律SKIPPED。  \n2）请求带resource_id/issue_id/issue_type/page_index/bbox/evidence(URL或文本片段)，幂等靠他们算的input_hash；我们回写只更新gen_*，定位字段不动。  \n3）issue里保留最近两次生成痕迹：gen_history最多2条，存hash、时间、类型、质量和payload摘要；当前版本放完整gen_payload。"
+              }
+            ]
+          },
+          {
+            "microScene": "在教师工作台联调后进入验收测试背景下，用户与导师围绕“同课件连跑两遍”的验收口径制定与前端可判定规则持续沟通（7轮），其中在验收用例最小集合/幂等与失败码/性能阈值部分与测试工程师沟通（4轮），在采纳动作审计留痕最小字段与脱敏原则部分与合规与隐私官沟通（3轮），并形成次日抽查用的6条验收清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先冒烟一下：列表能看到issue，然后点进去能跳到页码和框。第二遍再跑，看issue数量不变，gen_history不多出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 验收测教师工作台，你这边最少要哪些用例？我怕漏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3点我有点不确定，我们后端现在每次成功都会写一条gen_history，虽然会裁到2条，第二次就会把第一条挤掉。这样验收会挂？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我得问下后端同学现在怎么写的。我这边能先在前端做判断：input_hash一样就不展示新版本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有失败码枚举，你建议怎么定？我们目前就一个GEN_CALL_FAILED。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 测试那边说幂等要做到“同input_hash不新增gen_history”，不然验收会判刷版本。我现在后端实现可能每次都会append再裁2条。你觉得要改后端，还是改验收口径绕过去？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我需要一个前端可判定的规则：怎么知道“没新增history”？看gen_history长度不变？还是看最新一条hash没变？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个坑：我们接口回写只更新gen_*，定位字段不动。但前端现在点“查看位置”是按issue里bbox画框。万一bbox缺了，就点不了。要不要要求后端保证bbox必填？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还有“采纳”这块，我现在只是在前端把issue标成已采纳，本地状态。你之前说要审计留痕，我不知道落哪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 采纳替代文本这步要留什么审计字段？我们不想把整段文本到处存。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里的adopted_summary我怕实现麻烦，是不是只存hash就能过？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 合规那边说采纳审计最少存：user_id/tenant_id/resource_id/issue_id + adopted_hash + gen_input_hash + timestamp，别把evidence片段写进去，URL要脱敏。摘要可以先不做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "批量这块我只知道前端列表是分页的，默认20条。性能口径要怎么写我没数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 批量课件验收，性能你这边一般卡什么阈值？我们不做压测，只做工作台验收级别。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "轮询间隔我们现在是1s，我当时觉得快点显示。看来会被判有风险。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我把前端轮询调慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这轮验收我理解的最终口径是：不刷版本、可定位、失败/跳过分清、采纳留痕、批量不拖垮。还有啥必杀点吗？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在课件可达性自检替代引擎进入运行评估、准备灰度发布背景下，用户与导师围绕灰度范围、监控阈值、回滚动作与验证标准持续沟通（9轮），其中在回滚阈值/窗口、在途任务处理与回滚后验证细则上与SRE运维工程师沟通（5轮），并最终整理出按tenant_id灰度与分级降级/回滚的可执行规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "课件可达性自检替代引擎现在要进运行评估了，我这边在准备灰度发布，但我不太确定回滚要怎么设才算“能用”，想先把回滚触发条件和动作定下来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度范围我想先给一小部分老师开，可能按租户？或者按老师账号。回滚我就把功能开关关掉？但关掉后正在跑的任务咋办我没谱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在有个总开关，另外生成那块有个开关。检测和生成是串一起的，审计是采纳时写的。按tenant_id切是能切的，就是配置得写规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布回滚这块，你给我个可执行的方案：触发阈值怎么定、回滚动作怎么做、在途任务要不要停。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值呢？我怕我写得太主观。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "在途任务怎么处理？我怕一回滚就一堆半成品。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚到哪一版？我们是同一套服务，只是开关控制。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚后怎么验证“好了”？光看告警消失够吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计这点我差点忽略。我理解是：即使功能回滚了，采纳入口如果还在，就必须保证写审计；如果采纳入口也关了，那就没采纳动作了，也就不会写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了SRE，他给了回滚触发器和在途任务策略。我想用按tenant_id白名单灰度，1%→5%→20%，触发就先功能回滚（关白名单+总开关），在途任务“继续跑完但不展示”，然后做监控+冒烟验证。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我先选这三个：  \n1）关键接口5xx>1%持续5分钟就回滚；  \n2）首屏P95>2s持续10分钟回滚；  \n3）任务队列长度一直涨10分钟且完成率<80%回滚。  \n外部依赖超时我先不写进触发器，怕一抖动就回滚太频繁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在只有总开关和生成开关。那“只检测不生成”能做，字幕算生成的一部分，关生成就全没了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "窗口是指观察多久再升级动作？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写：外部依赖超时>2%持续5分钟 → 先关生成；关了之后等10分钟，如果首屏P95还是>2s或者5xx还是>1%，就关总开关。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只想到把worker并发降下来，比如把并发从N降到1/2N？但具体数我不太会算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我先定全局K=5，每租户1个。我们灰度本来租户就少，应该够用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回滚后验证我写：  \n- 我这边用灰度租户挑一份小课件跑检测页，确认首屏<2s、详情<1.5s、翻页<1.5s；轮询>=3s，超过60s有提示；  \n- 监控上看5xx<1%、P95回到阈值内、队列不再增长；  \n- 采纳审计还在写：tenant_id/user_id/resource_id/issue_id + adopted_hash + gen_input_hash + timestamp，且不落evidence、URL脱敏。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课件可达性自检替代引擎运行评估背景下，用户与导师围绕可用性指标口径、看板结构与告警阈值方法持续沟通（8轮），其中在漏斗口径拆解、分组维度与新增指标（撤销率、二次定位率、重复提交率等）部分与数据分析师沟通（3轮），并形成MVP监控看板分块与致命项告警清单及分级规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可用性我理解就是“老师们用不用、用得顺不顺”。但要监哪些，我只想到采纳率、完成率这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我先按流程凑一下：\n1）发起自检的转化：进入自检页到点“开始”的比例。\n2）自检完成率：任务跑完的比例。\n3）替代生成成功率。\n4）预览打开成功率。\n5）采纳率：点“一键采纳”的比例。\n6）用时：从点开始到出结果的P95。\n大概这些？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 可用性监控要怎么定口径？我现在只有完成率、采纳率、耗时这些，很怕不够用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采纳后撤销率这个我没想到。二次定位率我有点不懂，高是好还是坏？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分组我怕字段不全，尤其学科。那我先按资源类型、租户、失败原因做。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算先上漏斗，按任务粒度。关键加两块：\n- 问题定位点击率、二次定位率\n- 预览到采纳转化、采纳覆盖度、采纳后撤销率\n分组先做资源类型+租户+失败原因。学科先不搞。还有重复提交率当“体验不顺”的信号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "告警我倾向只放“明显坏了”的：\n- 自检发起后任务失败率突然升高\n- 预览打开失败率升高\n- 采纳按钮点击报错这种\n至于采纳率下降，我不敢告警，可能就是内容不合适。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只能先用最近几天的均值+波动，先设个比如失败率>2%持续10分钟就告警？但我不知道合理不合理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "致命项我列一下，尽量不多：\n- 任务失败率（按原因分桶）突增\n- 排队等待P95超阈（会造成一直转圈）\n- 预览打开失败率\n- 采纳接口错误率/超时\n- 产出结果数为0的异常比例（有任务完成但无任何问题/替代输出，可能解析挂了或规则失效）\n分级：影响全租户是P1，单租户是P2？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "埋点里我只记task_id、租户、资源类型、阶段、耗时、错误码。应该不会带内容。但“撤销原因”如果做自由文本就可能有风险，我先不加。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这个我能让后端在采纳事件里带operator_role和auth_type，像SSO还是子账号。字段名我不太确定，但意思是这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看板我分四块：\n1）触达与发起：自检页UV、发起率、进入到点击开始耗时P95。\n2）执行体验：排队等待P95、处理时长P95、任务完成率/失败率（按解析/依赖超时/生成/权限配额分桶）。\n3）定位与预览：问题定位点击率、二次定位率、预览打开成功率、预览耗时P95。\n4）采纳：预览到采纳转化、采纳覆盖度、采纳后撤销率、采纳接口错误率。\n分组维度：资源类型、租户、失败原因；先不做学科。\n告警只挂：任务失败率、排队等待P95、预览失败率、采纳接口错误率、以及“完成但无结果产出占比”。再加链路断裂：有结果产出但预览事件为0。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的生成质量抽检复盘背景下，用户与导师围绕抽检评分口径、分层抽样策略与缺陷标签落地持续沟通（10轮），其中在评分判据制定上与无障碍体验设计师沟通（1轮）、在可教性与红线缺陷口径上与教育内容编辑沟通（1轮）、在标签与评分数据化追溯字段设计上与数据治理工程师沟通（2轮），并确定主评分0-6、<=100条抽样方案与首轮10个缺陷标签及P0/P1/P2严重度记录方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字幕、替代文本、结构化讲义。先看这三种吧。视频字幕最直观，老师也最爱吐槽。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分桶我先按资源类型。抽样就从昨天跑完的任务里拉一批，按租户也分一下，怕某校的课件风格很怪。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "打分我想用0-2分：0不合格，1勉强能用，2可直接采纳。总分6分，三项各2分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@无障碍体验设计师 抽检替代内容质量，你这边0-2分怎么定？要能让抽检的人照着打。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育内容编辑 你从“能不能教”角度给个抽检复盘口径？也是0-2分，总分6那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "两个口径有点像，但一个偏无障碍可用，一个偏教学内容。要合并吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想主口径用内容编辑那套“忠实度/表达/结构”，比较贴采纳；然后加一个补充：无障碍体验设计师的“字幕时序/图像替代是否可学习”，当成缺陷标签。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分层抽样：按资源类型（视频/课件/音频）和租户，再按失败原因。每层抽固定数量，比如每层20？但层多了就爆了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先砍维度：资源类型必须要；失败原因只挑Top3；租户先不全量，挑采纳率最低的2个租户+随机1个对照租户。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我把“完成但无结果产出”单列成一个桶，抽10条看看是0问题还是0替代。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能做个缺陷标签列表。比如：幻觉、术语错、结构缺失、图表没说趋势、字幕延迟。每条打上标签，统计Top问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理工程师 抽检复盘这块，缺陷标签和打分怎么落到数据里才方便追溯？要能按版本、资源类型、失败原因看趋势。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reviewer_id要存工号吗？会不会又被说隐私。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记一下。导师，我选：标签控制在15个以内+P0/P1/P2严重度。evidence我就不存原文，存片段ID。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先列10个，可能不准：  \n1 幻觉/编造（内容里出现课件没有的结论）  \n2 关键信息缺失（标题在但要点没了）  \n3 术语错误（专有名词、公式名）  \n4 图表解读不足（只描述不讲趋势/对比）  \n5 图像替代过泛（“一张图”这种）  \n6 字幕时序错位（延迟、跳句）  \n7 字幕可读性差（断句、错字多）  \n8 结构层级混乱（讲义层级乱、重复）  \n9 语言不适教（太口语/病句）  \n10 合规红线（出现学生姓名、手机号，或明显侵权拼接）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把字幕合并。红线拆成两条：隐私泄露、版权风险。这样还是10条。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我加“过度推断”，总数11了。要删一个？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，那首轮标签就是：编造、过度推断、关键信息缺失、术语错误、图表解读不足、图像替代过泛、字幕质量问题、结构层级混乱、隐私泄露、版权风险。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的教师采纳率分析背景下，用户与导师围绕采纳率口径、最小漏斗、对照分组及区分引擎质量与产品摩擦持续沟通（8轮），其中在指标事件与版本串联定义上与数据分析师沟通（3轮）、在采纳落地路径与摩擦点界定上与产品经理沟通（2轮），并形成明日评审可用的最小分析框架与边界说明。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采纳率我理解就是老师点了“一键采纳”占比？但我们现在也有“复制到讲义”这种，不知道算不算。拆因我没太思路，就按资源类型分一下，PPT、视频这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件大概有：提交检测、出结果、老师打开结果页、点采纳、下载替代稿、还有可能只是看了没动。还有“完成但无结果产出”之前我们抽了桶，这里也要算进去吗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先粗一点：任务创建 -> 任务完成 -> 有结果 -> 打开结果 -> 采纳。中间再加个“结果被编辑后采纳”我不确定现在有没有埋点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 采纳率这块我们现在到底按什么算？是点了采纳按钮就算，还是要看老师真把替代稿用进课件/讲义里？还有我们漏斗要用哪些事件，版本字段怎么拼？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在有 adopt_success 吗？我记得后端只记了“导出成功”，写回资源版本不一定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分组对照这块咋做？直接比不同租户、不同资源类型就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指标分两层：一个是进结果页后点采纳按钮的占比；另一个是导出成功再加24小时内资源被再打开，当成“实际用上了”的代理。分组就按资源类型、缺陷数/严重度、还有 engine_version+model_version。假设验证…我先猜两个：一是 NoOutput_rate 高导致落地采纳低；二是某些资源类型比如视频，结果出来但老师不看或者不下载。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用抽检分数？把忠实度/教学表达/结构覆盖低的那批，跟采纳率做相关？但我不太会做因果，只能看相关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 采纳这块，老师一般怎么把替代稿用进课件？我们现在“一键采纳/导出/复制”这些路径，哪个算真正用上？哪些地方最容易卡住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规自查模式我们有标记吗？我没印象有开关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我把拆法记一下：先分“只检查不改”的人群，不然采纳率会被稀释。视频的 adopt_effective 也会偏低，因为下载了不一定回传。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试试：  \n1）采纳分两层：结果页后的点击采纳（Adopt_click），以及导出成功+24h再打开作为代理落地（Adopt_proxy_success）。  \n2）漏斗按 task_create→task_finish→result_ready→result_view→adopt_click→adopt_proxy_success，额外看 NoOutput_rate。  \n3）人群先切：Compliance_check_only 单列，不和改造型混。  \n4）分组维度：资源类型、缺陷严重度/数量、engine_version+model_version；租户用低采纳2个+随机1个对照，再加高采纳反例。  \n5）把抽检总分(0-6)分桶，分别看在 result_view→adopt_click 和 adopt_click→adopt_proxy_success 哪段掉，粗分“质量问题”还是“流程/格式摩擦”。  \n6）所有事件/结果必须带版本字段和 input/output 指纹hash，保证能对比同输入在不同版本的趋势。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我在汇报里加：视频用代理落地会低估；P0拦截的任务从“可采纳漏斗”分母里剔掉，单列拦截率看。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段线上运行三周后需求池膨胀背景下，用户与导师围绕迭代需求池的分类、准入、证据化验收、打分与出池规则持续沟通（6轮），其中在分层与指标口径模板上与产品经理沟通（2轮）、在数据打点缺口与reason_code/策略版本上与数据治理工程师沟通（3轮）、在合规拦截改动准入字段与review要求上与合规与隐私官沟通（2轮），并形成8条可执行的需求池治理规则用于次日汇报。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就很多人提改进。大多是字幕、讲义，还有说检测太严、误报多。还有人想加一键批量采纳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没数很细。体感替代生成类最多，尤其是图的alt和讲义结构。误报也挺多。优先级我想先做大家喊得最凶的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 需求池现在太乱了，你这边一般怎么分层？准入条件要写啥，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那指标写啥算够？我怕大家乱填。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规拦截不算漏斗分母这条，也要写进模板里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 产品那边说分三层：P0合规/阻塞，P1采纳增长，P2长尾。准入四项：场景、范围、预期指标、验收方式（版本+指纹hash对比）。合规拦截类别别用采纳率当指标，用拦截率、误伤率、申诉时效。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理工程师 需求池要证据化打分。现在我们线上数据够不够？哪些字段缺得厉害？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code要多细？我怕开发嫌烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "视频代理偏差也能靠策略版本解释？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 数据治理说我们证据化有两坑：视频链路指纹hash没全打；还有缺reason_code和策略版本，导致拦截/降级/回退没法分桶看。最小reason_code建议那几个：BLOCKED_PRIVACY/COPYRIGHT、DEGRADED_LOW_QUALITY、FALLBACK_TEMPLATE、MODEL_TIMEOUT/ERROR、USER_ABORT，再加策略版本字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想就按P0/P1/P2，然后P1按采纳率提升预估排。P2就先放着。出池就做完就关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "价值：绑定主指标，能让采纳漏斗某一步变好，或者降低误伤/投诉。\n证据：必须能拿到线上数据分桶，或者有一批可复现样本，能用版本+指纹hash对比。\n实现成本：两周内能做完的算低，不然就高。\n运行成本/风险：会不会让处理时间变长、调用变贵，或者引入更多合规审计点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 合规拦截相关的需求，卡片里你最少要看哪些信息才会放行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师们觉得拦截太多，就只能干等？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 合规官要需求卡至少六项：数据类型、处理目的、数据流向、留存、拦截与申诉、审计（操作者/规则版本/指纹hash）。还强调版权拦截别用采纳率去“优化”，只能做降误伤和原因解释/替代路径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）所有需求先分P0合规/阻塞、P1采纳增长、P2长尾优化；没指标的进观察池。\n2）准入必须写：触发场景、影响范围、主指标最多2个、验收方式必须含版本字段+输入输出指纹hash对比。\n3）合规拦截类不进采纳漏斗分母，指标看拦截率/误伤率/申诉时效；视频类代理指标要在汇报写清代理偏差。\n4）评分四维：价值（绑指标）、证据强度（线上分桶或可复现实例集）、实现成本（两周内优先）、运行成本/风险（时延/费用/维护/审计负担）。\n5）涉及对比的需求，相关链路必须补齐指纹hash打点；涉及拦截/降级/回退必须定义reason_code最小集+策略版本。\n6）合规拦截逻辑改动必须走合规官review，需求卡补六项合规字段。\n7）出池三种：验证成功上线、验证失败关闭、证据不足回观察池；避免僵尸卡。\n8）每周只允许P1进迭代上限N条（我先拍个5条？不确定），其余滚动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那第8条改成“按近两周平均交付量设上限，超出要写取舍”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘节点算力内存极低背景下，用户与导师围绕高优意图流防拥塞的阻控算法选型持续沟通（4轮），其中在极限资源下算法选择与全局同步风险权衡部分与拥塞阻控策略师沟通（2轮），并最终确认基于IntentHash的SP+Tail Drop轻量级意图感知调度与丢弃策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这么抠的资源，只能上最简单的PQ吧？或者WFQ？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传统AQM和WFQ跑不动，怎么保高优意图流不拥塞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SP+Tail Drop确实省，但Tail Drop容易全局同步啊。DWRR内存能挤出来吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略师说用IntentHash分类，走SP调度加Tail Drop。省了DPI和权重计算。我担心全局同步，他说边缘流少影响不大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选SP+Tail Drop。算力保不住别的都白搭，低优丢包就丢吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阻控算法选型确认：基于IntentHash的SP+Tail Drop，无AQM，硬优先级抢占，丢弃阈值单限。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

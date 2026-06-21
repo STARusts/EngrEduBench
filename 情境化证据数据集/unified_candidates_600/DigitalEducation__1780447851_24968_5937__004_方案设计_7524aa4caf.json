@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在肌电姿态数据流规划背景下与导师围绕异构数据对齐、降采样、脱敏及断网缓冲策略持续沟通（4轮），其中在蓝牙分包与时钟同步部分与嵌入式开发者沟通（1轮），在边缘侧流对齐与降采样部分与系统架构师沟通（1轮），并形成端侧硬件同步分包聚合、边缘侧滑动窗口RMS降频、特征扰动脱敏及断网分级丢弃的规划方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "IMU一般100Hz，sEMG得到500Hz以上。我设想在穿戴设备端用NTP校时打标，通过蓝牙5.0传到边缘网关。网关收到后，按时间戳做流对齐，再送给判定容器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用蓝牙5.0把IMU和sEMG传到边缘网关，500Hz的sEMG带宽够不够？设备端怎么打标才能保证微秒级同步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关收到100Hz的IMU和500Hz的sEMG，判定容器算力有限，怎么对齐和降采样比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬件同步加滑动窗口这思路很清晰。RMS降频也能保住动作特征。我打算用硬件主时钟校准代替NTP，蓝牙分包聚合；边缘侧用20ms滑动窗口攒数据，sEMG做RMS降频到50Hz再送判定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏就是把设备MAC地址和学员ID解绑，用随机UUID代替。断网的话，FIFO满了就按时间戳丢弃最老的数据呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没考虑到肌电信号本身的身份识别风险。高斯扰动脱敏我加在端侧特征提取后。断网分级丢弃也合理，sEMG红线数据优先级最高，IMU可以降频甚至丢帧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

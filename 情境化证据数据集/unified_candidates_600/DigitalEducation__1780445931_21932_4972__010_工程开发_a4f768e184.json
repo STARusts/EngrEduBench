@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动性能优化与隐私脱敏背景下，用户与导师围绕差分隐私加噪的性能开销、合规红线与脱敏方案取舍持续沟通（5轮），其中在多模态数据合规底线与审计日志脱敏部分与隐私合规官沟通（2轮），在实时流加噪性能压测部分与后端开发工程师沟通（1轮），并最终形成端侧提取脱敏、加密传输、服务端K-匿名及日志仅留哈希ID与标签的代码修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "差分隐私嘛，加噪就行。理论上天涯若比邻，加了噪还能保住共振的统计特性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多模态数据脱敏，合规上必须怎么做？原片和原音能存不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "向量传输加差分隐私噪，性能扛得住吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "320ms？这么夸张。我之前看DP的论文，结论都说开销可接受。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚突击补了JMeter聚合报告的读法，知道P99是看尾部延迟，不能只看平均数。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "320ms确实远超我们200ms的互动基线。既然这样，我放弃全局DP加噪，按后端说的，端侧提取脱敏，服务端只做K-匿名？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志里不存原始向量，也不存明文用户ID，只存向量的哈希ID和干预策略的枚举值？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改调度引擎的日志打印逻辑和特征接收接口，把明文全替掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的资源受限全链路压测与缺陷修复背景下，用户与导师围绕压测场景拆分、指标阈值、节流最小改动与缺陷分级持续沟通（12轮），其中在最小全链路用例与验收指标设计上与测试工程师沟通（2轮）、在幂等/回调/DB写放大/队列超时瓶颈上与后端工程师沟通（1轮）、在压测数据与原图/日志保留及审计要求上与合规与隐私官沟通（1轮），并汇总形成三类压测子场景及可验收指标与最小修复清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先想的是把并发调高，看接口会不会 500。省钱的话就少搭机器。链路这块我有点不确定，离线那段怎么压，靠脚本模拟吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我拆成：  \n1）派工/同步：管理端创建任务，端上拉任务列表；看接口 RT。  \n2）核验/上传：端上发核验事件+media；看上传成功率。  \n3）结算/争议：核验过了进结算，生成工单；看数据对不对。  \n验收线我就定个，比如成功率 99%？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 现在要做全链路压测，但预算很小。你觉得最小要压哪些场景？验收看哪些指标比较值？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等命中率=100%是指重复 event_id 都不新增快照对吧？还有“快照版本单调递增”，我只知道我们有 snapshot_id，不确定有版本号。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 全链路压测预算很小，你觉得哪些瓶颈/幂等点最该盯？我们这边有 event_id、签名、nonce，快照里会加 verification_status 和 warnings。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "429 这块我们之前没加，我怕现在改接口会牵扯多。是不是先不做？压测只看现状会不会雪崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那错误码用 429 还是业务码？端上现在只识别 ACKED/REJECTED，别的会当失败一直重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边能做的是：端上如果 warnings 里有 THROTTLED，就把队列延后，比如 30 秒再试；服务端加 retry_after 秒数。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验收阈值我不太会定，P95 < 800ms 是不是太严？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "缺陷分级我按 P0/P1/P2：P0 是重复结算、数据回退；P1 是大量超时、队列清不掉；P2 是 warnings 不稳定、日志太多这种？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测数据我们就用假账号、假人名，图片用测试图。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原图查看权限这块要压吗？我怕牵扯权限系统。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 压测要跑到原图上传、查看、审计。我们准备用假账号和测试图。合规上有哪些硬要求？尤其是日志和原图保留。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以压测里原图查看就做少量用例，主要验证拒绝和审计字段。原图保留压测环境改 24 小时，这个我得让后端配一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按三组：  \nA 事件风暴：核验事件接口为入口，混重复 event_id、nonce 过期、缺 media、低置信定位，验收看 ACKED/REJECTED 比例对、warnings 稳定、P95<800ms，重复不多写快照不多结算。  \nB 弱网补发：断网后批量补发 200-500 条/设备，验收看队列 5 分钟清空、不回退 verification_status。  \nC 结算冲击：1 万条核验 30 分钟到达，验收看结算不重复、P95<1.5s、DB 不爆。  \n修复点：加 THROTTLED + retry_after，端上延迟重试；后端补幂等键（结算那块）；压测环境原图保留调到 24 小时，加 test_flag。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "表增长我不太会定阈值。就看审计表、反作弊明细表、核验事件表？数字我只能先看增速，比如每 1 万事件涨多少行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我明白了，我就用“重复不新增行、ACKED 只摘要、堆积>1000 触发节流”这些。X=1000 这个我怕拍脑袋。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，我就按你说的先跑一次拿峰值，再定阈值。重试风暴那块我也会看 warnings 里 THROTTLED 的占比，不能一直节流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

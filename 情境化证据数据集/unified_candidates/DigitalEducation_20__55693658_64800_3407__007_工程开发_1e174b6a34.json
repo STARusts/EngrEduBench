@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在可验证学情证据平台进入工程开发背景下，用户与导师围绕证据采集SDK重构的事件模型统一、隐私最小化、幂等去重、离线队列与验收用例持续沟通（7轮），其中在端上签名可信度、防重放与最小化采集策略上与安全工程师沟通（3轮），并形成新SDK的模块拆分与替换旧SDK的实施清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "导师你之前给的旧SDK示例我看了两眼，感觉埋点结构挺乱，我想先把“证据采集SDK开发”这块重构一下，免得后面全链路都烂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是把事件一刀切成统一Envelope：event_id、actor、context、payload、hash、sign。然后各端只负责payload，其他自动补齐。hash我甚至想做Merkle，把一个session的证据链都串起来，这样篡改基本没门。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据类型我先定三类：  \nA) interaction：课堂点击/举手/投票结果；  \nB) artifact：作业提交、草稿保存、修改轨迹；  \nC) assessment：测验得分、题目作答。  \n去重我想用event_id = uuidv7，离线缓存直接存event_id+payload，重传就不会变。签名我觉得可以端上用设备密钥签一下，服务端验签，保证“这条确实是这台设备发的”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 证据采集SDK我想做端上签名和证据链防篡改，但担心过头。端上签名可行吗？幂等/防重放在SDK怎么设计比较现实？还有我们要“最小化采集”，SDK默认该怎么做才不踩雷？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "端上签名只能算抬门槛，最终还是服务端验token+风控。那我把“不可篡改”改成“可发现异常”。幂等这块我喜欢你说的双键：event_id + idempotency_key。nonce缓存我担心服务端压力，但应该是短窗口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想问：链式哈希prev_digest如果丢包会断链，影响追溯吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从安全那边捞到的结论是：端上别幻想强签名，做token校验配合弱证明就行；幂等要event_id之外再加idempotency_key，服务端联合判重；防重放用nonce+timestamp短窗口；最小化采集走白名单分级，默认不上报原文，原文只给content_ref并受evidence.read和责任域约束；链式哈希先做prev_digest+payload_digest，断链允许并上报原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算拆四块：  \n1）Schema层：Envelope固定字段 + 三类payload的protobuf/json schema；SDK内置校验，非法字段直接丢弃并记metric。  \n2）Queue层：本地持久化队列（按session分段），支持离线、重试、退避；队列里存event_id、idempotency_key、payload_digest、最小payload。  \n3）Transport层：HTTP批量上报，带nonce/timestamp/token；失败按错误码分流（401刷新token，429退避，4xx丢弃并打点）。  \n4）Privacy层：字段白名单+红线规则（比如text_content禁止），支持远程配置热更新。  \n验收我想用：单测覆盖schema校验、幂等键计算一致性、重试退避；再跑一个弱网模拟，确保不会重复落库。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "存储我想上限1000条或10MB，先到先删；但这样会丢证据，我有点不爽。电量我可以把flush策略做成：Wi-Fi/充电优先，移动网络延迟批量；另外事件合并，比如interaction类按5秒窗口聚合一次，减少请求。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优先级分级我能接受：  \n- P0：assessment（测验作答、得分）不采样，队列满了也尽量挤掉别的；  \n- P1：artifact（草稿/提交）不采样，但只传摘要特征；  \n- P2：interaction允许采样+聚合，队列压力大就降频。  \n这样对“可验证”影响小一点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "清单我先定6条：  \n1）统一Envelope：event_id、tenant_id、user_id(可匿名化)、event_type、client_time、nonce、payload_digest、prev_digest(可空)、idempotency_key、schema_version。  \n2）payload只允许白名单字段，默认不含原文；需要内容的一律用content_ref。  \n3）幂等：event_id稳定存储 + idempotency_key可复算；服务端重复应返回已存在标记不当成失败。  \n4）离线队列有上限，按P0/P1/P2淘汰；interaction支持聚合与采样。  \n5）重试按错误码策略，429/5xx退避，4xx丢弃并计数；nonce+timestamp支持服务端防重放。  \n6）SDK日志与debug严禁打印敏感payload，必要时只打印digest和schema校验错误码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

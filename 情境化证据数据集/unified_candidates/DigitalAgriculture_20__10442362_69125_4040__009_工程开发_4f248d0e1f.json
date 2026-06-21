@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在种子批次活力预测与仓储干预协同系统的工程开发背景下，用户与导师围绕采集网关与协议适配的接入边界、统一事件模型、离线补传幂等与审计防篡改持续沟通（9轮），其中在协议覆盖优先级、profile字段最小集合及补传对账翻车点上与物联接入工程师沟通（6轮），并最终形成网关MVP协议范围、事件/字段骨架、hash chain与资源降级约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在卡在两件事：现场设备协议太杂，另外断网补传和审计留痕要一起满足。想先把网关侧的接入边界、数据模型和幂等规则敲定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先覆盖温湿度+CO2+电表/风机控制的状态量，协议先做Modbus RTU/TCP、MQTT，HTTP留给少数网关直连设备。数据上行统一成事件：device_telemetry、device_status、gateway_health。断网缓存只缓存遥测与状态，不缓存任何“干预执行”指令回执，指令必须中心可达才下发。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "点位映射我想用每类设备一份profile，定义：寄存器地址、数据类型、倍率、单位、量程、采样周期、异常值处理。解析后统一成timeseries点。trace_id我打算由网关每个上行批次生成，后续中心处理继续沿用；hash chain是把本地缓存的事件按顺序做prev_hash串起来，日终汇总签名再上报。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联接入工程师 现场这批仓储设备接入，协议覆盖优先级你建议怎么排？另外点位映射profile最少要哪些字段才不踩坑？断网补传和对账在现场最常见的翻车点是什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间戳乱这点我之前只想着用网关本地时间。那是不是要把“采集时间”和“上报时间”分开？还有profile_version/effective_time，会让中心做重解释吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "补传幂等你提seq_no，我想按“device_id + point_key + seq_no”做唯一键，中心落库去重。断电丢数据则上报gap事件。这样做现场压力会不会大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完物联侧了，我准备这样收敛：协议优先Modbus RTU/TCP、MQTT，HTTP暂缓；profile最小字段要加profile_version和effective_time；每条数据拆成ts_sample和ts_ingest，外加time_source；离线补传用每device的seq_no，中心用(device_id, point_key, seq_no)幂等；断电或缓存溢出触发gap/overflow事件，中心对账用“已收最大seq+缺口区间”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "trace_id我想分两层：网关上行包有gateway_trace_id，用来串采集、缓存、补传；中心收到后再生成platform_trace_id贯穿预测/工单/抽检/放行链路。网关事件里要带actor=system:gateway、action=telemetry.report/status.report、object=device/point，理由码用reason=scheduled_poll或reason=manual_poll（如果现场点了采集）。审计签名我不打算在网关做复杂签名，只做hash chain和日聚合摘要，上报给中心落AuditEvent。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "每条event算event_hash = sha256(canonical_json(event_payload) + prev_hash)。event_payload里包含：gateway_id、device_id、point_key、value、quality、ts_sample、seq_no、profile_version、gateway_trace_id。prev_hash是本地上一条已缓存事件hash。每天生成day_root_hash（最后一条hash）+ day_count + day_first_seq/day_last_seq，再对这段汇总做签名，签名用网关私钥。中心保存网关证书做验签，并把day_root_hash写入审计事件，后续抽查可以按seq范围回放验证链。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会把下行指令的执行结果单独建control_ack事件，只允许在线发送且中心收到回执才算生效；风机开关状态走device_status事件，字段里加state_source=sensor_readback（从继电器反馈或电表功率推断）/reported_by_device（设备自报）。中心策略引擎只认control_ack来闭环，不用device_status当作“已执行”的依据；但device_status可以触发“疑似未执行/人工复核”的告警。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算先用简单的容量预算：按每仓50台设备、每台10个点、采样60秒，粗算每分钟500条。每条压缩后按200B算，一天约144MB；离线保3天约432MB，再加索引和冗余，给1~2GB空间比较稳。降级策略：磁盘水位>80%时把poll_interval翻倍并只保留关键点位（温湿度/CO2），非关键点位暂停采集；>90%触发overflow事件并丢最旧数据，同时在中心把该仓批次的预测置信度下调并提高抽检建议。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "网关侧我会做数据最小化：遥测不带人员字段。调试登录如果需要账号，只在本地生成短期session_id，上报日志只带actor_type=technician和匿名id，不上报手机号；并且调试操作单独走audit_debug事件，默认关闭，只有在问题排查且有审批理由码才开启采集，避免常态化记录过多现场信息。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这7条我都认。补一个小点：device_status里要加state_source，避免被策略引擎当成control_ack；还有profile快照中心要存档，历史默认不重解释，除非走口径修订审批。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

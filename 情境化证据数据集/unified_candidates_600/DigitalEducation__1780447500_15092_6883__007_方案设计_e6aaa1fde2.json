@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态推演能力开放与接口规范制定背景下，用户与导师围绕推演接口异步设计、算力消耗与降级策略及误伤风险提示持续沟通（6轮），其中在推演耗时与算力限制部分与推演算法工程师沟通（1轮），在异步接口路径与降级风险字段设计部分与后端开发工程师沟通（1轮），并最终形成推演接口异步规范基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就定义几个API呗，比如算组合概率的，算专业匹配的，直接把参数传过去返回结果不就行了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步？用消息队列？我后端发个任务，算法那边消费？但算力控制我不太懂怎么在接口层做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@推演算法工程师 算组合概率和路径推演，跑一次大概要多久？算力吃得消吗？有没有啥限制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法那边说全量推演要3到5秒，轻量的200毫秒。算力有限，要分级，打满了得降级查缓存。所以接口肯定得异步，然后得把降级状态返回去？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误伤风险？加字段能防误伤吗？我不太懂这块怎么设计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 异步推演接口，提交任务返回taskId，然后轮询状态，这套路怎么设计比较好？还有降级状态和误伤风险提示怎么放返回体里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "后端说提交用POST返回taskId，轮询用GET。返回结果里加个meta，放置信度、是否降级、还有缓存过期时间。降级在算法那边触发，接口透传。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推演接口全走异步，POST提交推演任务，GET轮询结果。返回体必须带meta字段，包含confidence、is_degraded和cache_expire_at。网关层加并发限流保护算力。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

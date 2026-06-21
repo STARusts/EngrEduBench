@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在池化信贷阻截系统上线运行评估背景下，用户与导师围绕穿透延迟与阻断率的监控基建选型、指标口径拆分及统计严谨性持续沟通（6轮），其中在监控基建与熔断阈值部分与SRE运维工程师沟通（1轮），在误阻率线上评估与统计显著性部分与风控策略分析师沟通（1轮），并最终形成监控大盘四项确认结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备全链路埋点，用Flink做复杂事件处理，把从图谱推演到存管行冻结的每一毫秒都算清楚。阻断率不仅要看成功数除以总下发数，我还想引入强化学习，根据实时误阻率动态调整熔断器阈值，这样能做到自适应风控，比静态阈值优雅多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从运维稳定性看，穿透延迟和阻断率的监控体系怎么搭最稳妥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink先放放，Prometheus加Grafana够用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阻断率的分母怎么定？是所有推演请求，还是只算触发了阻断指令的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上怎么证明我的阻截系统没有过度误伤？统计上要怎么做才严谨？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我统计学学得比较浅，之前看论文都是直接看P值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "效应量具体用Cohen's d还是啥？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我设定个目标：两周内补学完假设检验的效应量计算与应用（每天1小时，用Python跑模拟），下次复盘时我直接给出阻截策略效应量的计算脚本，不再只看P值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控方案就收敛到：延迟看P99，阻断看漏阻率和误阻率的分组比较，基建用Prometheus，废弃Flink和强化学习。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漏阻率就是：推演判定要阻断，但存管行返回下发失败的数 除以 推演判定要阻断的总数。这就对上了前序的“超时即弃不本地补偿”约束，超时导致的失败都算漏阻，必须触发人工介入补断，不能自动重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认四条：1.基建用Prometheus加Grafana，废弃Flink CEP和强化学习；2.穿透延迟监控P99，来源于Resilience4j Metrics；3.阻断率拆双漏斗：漏阻率（超时失败数除以应阻断总数，触发人工补断）和误阻率（实验组与对照组违约率差异的95%置信区间与Cohen's d效应量）；4.熔断阈值固定，不搞动态调参。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

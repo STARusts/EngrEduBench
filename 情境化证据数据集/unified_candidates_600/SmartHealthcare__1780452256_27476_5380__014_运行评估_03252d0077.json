@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在Ramp机制导致边缘算力漂移背景下，与导师围绕漂移排查与软件层削峰整改持续沟通（7轮），其中在缓存堆积原因部分与运行监控SRE沟通（2轮），在削峰策略部分与边缘计算开发沟通（1轮），并形成动态滑动窗口与微批次整改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上，Ramp函数的积分面积和阶跃是一样的，算力消耗应该是守恒的，只是时间分布变了。应该不会有太大冲击吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算力漂移？是不是模型退化导致的计算量增加？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力漂移具体是什么现象？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是内存泄漏呗？写代码没释放内存。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "内存快满了，我们是不是得申请换大内存的网关？或者加个交换机把算力卸载到服务器？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在不加内存的情况下，怎么把堆积削掉？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "动态滑动窗口，超时丢弃？这会不会导致预判准确率下降？理论上缺失特征会引入偏差。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这我得看算法那边的指标。不过如果只是微小的时延，根据泰勒展开，误差应该是二阶小量。我觉得可以试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，修改特征对齐策略，把固定窗口改成动态滑动窗口，超时特征丢弃；第二步，调整NPU推理批次，改成微批次提高吞吐。不增加硬件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

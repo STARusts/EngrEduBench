@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在超声阵列调控流路设计与FPGA资源受限背景下，与导师围绕低成本相控合成流路、驻波干扰风险、预算可行性及闭环数据对齐持续沟通（6轮），其中在时分复用与驻波干扰评估部分与声学调控设计师沟通（3轮），在发射复用下闭环数据对齐部分与闭环链路规划师沟通（1轮），并最终形成4路时分复用驱动、固件死区补偿及时间戳对齐的流路妥协方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我原本想8路换能器直接拉8路DDS和功放，现在全并行肯定爆资源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种卡脖子的情况下，超声相控流路怎么搞最省？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "刷新率得跟强耦合走，要微秒级响应。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分组轮询会不会延迟太大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是4路硬件轮着带8个换能器，旁瓣可能会高一点是吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "轮询切换会不会在熔池搞出驻波干扰？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "电压毛刺我固件里加死区时间屏蔽掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "4路肯定比8路省一半多，FPGA逻辑和DAC数量都减半，预算绝对够。死区补偿我写过类似的，不难。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我发射端改成4路时分复用带8阵元，接收端还是8路独立采集，这样闭环数据对齐有没有问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把当前是哪组在工作的时间戳带上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案定这样：硬件层4路独立DDS与功放，时分复用驱动8路换能器，分2组轮询；固件层加死区时间防切换毛刺；数据链路层发射状态打时间戳对齐。资源占用大概降到全并行的45%，成本也压下来了，调控效能就是旁瓣略高但不影响主瓣消减应力。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

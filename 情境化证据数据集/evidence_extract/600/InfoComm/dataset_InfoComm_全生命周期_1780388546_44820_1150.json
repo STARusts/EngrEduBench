@@ -1,0 +1,468 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在需求与战略画刚需画像背景下，用户与导师围绕微抖压制引擎的伪刚需剥离、因果假设验证、老旧设备部署约束与底层机理持续沟通（6轮），其中在微抖对产线良率影响及量化指标部分与严实时控业务分析师沟通（1轮），并最终确认多轴插补严实时协同为真刚需、>5us为死线及老旧设备算力评估的刚需画像边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种开源的流图生成器可以直接改改套用的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听群里人说微秒级抖动会让机器动作变形，甚至撞机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微抖到底怎么影响产线的？有没有什么指标对照表能直接查的？我需要个现成数据证明这个痛点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我们只要写个流量限制器，超过5us的包直接丢掉不就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用抓包工具抓一下，看看有没有超过5us的包呗。如果有，良率肯定掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "老旧产线应该也能装吧，只要跑个轻量级Agent容器。维护我不太懂，网上说这种引擎都是云原生架构，挂个控制面就自动管了，不用人盯。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不太懂底层机理，就知道有个时间同步的协议包能调。我接下来两周去搜几篇讲时钟同步的博客，看看别人代码里怎么调包的，争取把API用法搞熟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。就做多轴插补的微抖压制，老旧设备那边我后面再想办法绕过去。"
+              }
+            ]
+          },
+          {
+            "microScene": "在确定性微网刚需画像敲定后的商业模式推演背景下，用户与导师围绕微网引擎计费方式、档位切分依据及老旧设备改造成本归属持续沟通（5轮），其中在TCO拆解与分级SaaS计费逻辑部分与确定性网络商业推演师沟通（2轮），并最终形成抛弃节点计费、采用分级SaaS、TCO纳入网关改造及初步切分两档的定价策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键生成的定价模板？我拿Excel套一下就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬件成本就让他们自己买呗。订阅费我就按接入节点数收，网上都这么搞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TCO和分级SaaS具体怎么搞？有没有现成的算法库我调一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分档收费听起来能多搞点钱。老旧设备加网关这块，成本挺高的吧？能不能让用户自己搞，我们就收软件钱？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "账没算清，太复杂了，我就知道网关钱得我们出。档位我就照着5us和1us切吧，网上没别的例子参考。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，5us是底线。那第一档就卡在5us以内，第二档1us以内？我实在不知道怎么切了，就先这么定吧，大不了后面再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "认，分级收钱，网关打包，5us和1us两档。"
+              }
+            ]
+          },
+          {
+            "microScene": "在标准合规与战略卡位研判背景下，用户与导师围绕1us档位TSN标准合规红线、专利风险与卡位策略持续沟通（5轮），其中在标准支撑与私有扩展机制部分与标准合规专员沟通（3轮），并最终形成“标准兼容+私有增强”的合规底线与战略卡位策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "标准不都是现成的吗？网上那么多开源的TSN协议栈，直接调包不就完了，哪来的坑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1us级别的调度，有没有那种开箱即用的标准库可以套？主要是怕踩到专利地雷。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "塞自己的东西？这算不算不合规？万一认证过不了咋办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说Qbv不够用，1us做不出来，得自己加东西，用预留字段塞进去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先只做5us？1us先放放？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的在Qbv里加私有扩展，这种搞法过认证吗？会不会被卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "外壳用标准，里面用软件绕过专利。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "认，标准外壳，私货内核，绕开专利。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在时延微抖智配引擎指标与路线制定背景下与导师围绕核心指标、验证口径及演进路线持续沟通（5轮），其中在微秒抖动与产线关系部分与严实时控业务分析师沟通（1轮），在MVP定义与商业闭环部分与确定性网络商业推演师沟通（1轮），最终确定10us/1us指标与L1单流先行路线，明确需补充真实流量模型设计验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这指标网上应该有通用的吧？我看别的项目好像直接列了几个时延阈值，我拿过来套一下行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务指标怎么定啊？网上通用的时延阈值能不能用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "10us和1us，记住了。验证动作我可以用打流工具跑一下看看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "包长就随便设个平均的？背景流就开一半？我不太懂产线的真实流量模型，工具里好像有默认配置。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "演进路线怎么搞？有没有现成的分步模板？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我缺产线业务逻辑这块的东西。我只会调工具，真实流量模型我不懂。我得去补一下协同控制和伺服周期的资料，记在清单里，不然验证动作没法设计。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在时延微抖与确定性流图智配引擎方案设计背景下，与导师围绕L1单流无冲突门控架构与现成调度器套壳可行性持续沟通（4轮），其中在门控表架构约束部分与全局时隙编排架构师沟通（1轮），最终放弃套壳与对照假设，明确需补齐Qbv算法基础，并形成无冲突底座、特征注入接口与禁用黑盒兜底三点架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接拿个现成的TSN调度器套一下，应该能很快出个图吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设现成调度器能跑通，我们拿它跟手工编排对照一下，看哪个快，这算研究吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种能自动吐时隙表的组件？我不想从零写编排逻辑，太麻烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以我找个支持插件的工具，把特征塞进去就行了？对照假设就改成插件工具对比纯黑盒工具。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂门控生成算法，ST和EST怎么排我总搞混。我这两天去把TSN协议里802.1Qbv的调度案例看一遍，能不能先照着案例画个流图草图？"
+              }
+            ]
+          },
+          {
+            "microScene": "在信令与数据交互设计背景下，用户与导师围绕硬实时信令下发与状态回传方案持续沟通（6轮），其中在轻量级信令框架选择部分与全局时隙编排架构师沟通（1轮），在YANG模型标准适用性部分与标准合规专员沟通（1轮），并最终确定信令下发与回传采用定长二进制、回传走带外通道、YANG仅用于离线校验的交互方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用NETCONF下发YANG模型呗，网上一堆开源工具，导进去就能生成代码，回传也方便。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那有没有什么轻量级的现成框架？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想找个轻量级的信令框架，不用自己从头写解析的那种，有没有推荐？NETCONF太重了不能用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Qcc标准里是不是规定了怎么配？有没有现成工具能直接把Qcc的YANG转成二进制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "他俩都说YANG不能直接下，太重。架构师说用二进制或者TLV。那我用Protobuf吧，序列化快，也有工具直接生成代码，比XML好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "芯片不支持？那就跑在控制核上呗。防风暴，限流就行了啊，工具库里都有令牌桶组件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定长二进制没工具生成啊。那就只能手写了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令下发和回传都用定长二进制，不用YANG和XML。回传走带外通道，不让它影响数据面。YANG模型留着只做离线校验。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微抖容灾与高可用性评估背景下，与导师围绕微秒级容灾方案选型与验证方法持续沟通（5轮），其中在FRER开启的时隙冲突部分与全局时隙编排架构师沟通（1轮），在极限压测下微抖边界测试部分与微秒抖动压测极客沟通（1轮），并最终形成FRER结合保护时隙的容灾方案及基线对照压测验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Keepalived行不行？或者K8s自带的那种Pod重启，网上很多人说高可用就靠这套。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了个FRER。好像就是包发两遍，接收端去重。感觉挺省事的，直接把FRER功能打开不就容灾了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER直接开起来做容灾，会不会有问题？我主要想图个省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以要加时隙。有没有那种工具能自动算时隙偏移？手算太麻烦了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，打流呗。变一下包大小，再变一下发几个包，看看抖动大不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER容灾微抖怎么测？我要看边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，要打对照，负载从10到90，打一千万包看尾时延。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不用Keepalived了，用FRER加保护时隙，按他说的测。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在网元微控模块开发背景下，用户与导师围绕硬实时门控实现、SDK逻辑拼接及参数校准持续沟通（7轮），其中在底层框架与原子性下发部分与南向网元流控开发者沟通（1轮），并最终形成基于原厂SDK拼门控的开发约束与补学验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接拿现成的TSN流控插件改改，这样快一点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有更方便一点的框架，能直接把时隙编排转成流表下发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网元微控这边有没有好用的框架？我想把时隙编排直接转成流表下发，最好不用自己写底层。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照测试就是把FRER开和关跑一遍呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "门控逻辑我不太会拼，之前没写过寄存器操作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "参数校准我就先按默认值跑，看尾时延越不越界，越界了再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "补学计划就是：第一，两天内看完Paceker SDK手册；第二，写一个Demo验证下发时延；第三，把原子性下发逻辑补上。验证动作就是抓下发前后的时戳算差值。"
+              }
+            ]
+          },
+          {
+            "microScene": "在流图下发与端侧联调验证背景下，用户与导师围绕端侧硬实时门控下发通道与协议选择持续沟通（4轮），其中在产线端侧适配坑部分与端侧协议适配联调员沟通（1轮），并最终确认联调约束闭环：走本地Socket加私有TLV翻译、日志脱敏及验证端侧门控响应时延。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接用Scapy打流包？端侧我看有个开源的O-RAN适配器，我直接装上是不是就能通？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能调包？这差异也太大了吧，我看别人都是用SNMP一把梭配设备啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网上都说用SNMP配设备就行了，有没有更方便点的方法，不用一个个写适配吧？这得搞多久啊。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脱敏？这还得弄？所以没现成轮子，只能硬写寄存器翻译？那岂不是要写一堆？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能用SNMP，那就，gRPC或者直接Unix Socket连本地进程写寄存器吧，这总行了吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微秒级抖动压测与调优背景下，用户与导师围绕压测工具选择、误差边界分析与压测方案制定持续沟通（6轮），其中在微秒级打流与时戳采集方法部分与微秒抖动压测极客沟通（1轮），并最终确认放弃软件工具、采用XDP旁路加硬件时戳方案及20微秒抖动基线的压测约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我装个iperf3，调大包长，跑个十分钟抓个抖动分布图，应该就能看出来了吧？网上很多压测脚本也是这么干的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有更方便一点办法，不用改底层驱动的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级压测怎么搞？软件打流误差大，有没有现成工具或者框架直接测微秒抖动？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差就是，软中断太慢？极客提了PHC频偏和中断延迟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种底层代码有没有封装好库可以直接调？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以试试把极客说收包逻辑换成XDP？这样不用改内核模块，可能方便点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用XDP旁路抓包，解析硬件时间戳算时延。发包用专业测试仪。这样误差就卡在PHC频偏上，对吧？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在产线灰度部署与基线验证背景下，用户与导师围绕工业控制流灰度切流策略、基线验证方法及网元资源监控持续沟通（7轮），其中在切流策略与回滚触发条件部分与灰度演进运维指挥沟通（1轮），并最终确认按流图优先级分步切流、新旧流分组对比P99偏移及监控网元CPU增量的灰度部署核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接用容器平台的灰度发布功能，按Pod比例切流，应该挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线验证就是看监控大盘呗，大盘没飘红就说明没问题。大盘工具我熟，拉几个Prometheus指标出来就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切流这块能不能直接用K8s的灰度插件？我只要配个百分比就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能按比例切，得按流图类型切。回滚看P99抖动。那我回去配一下告警规则，用Grafana配个阈值告警应该能挡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多跑一会呗，跑个一天一夜，数据量大了不就稳了嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分组对比我会，就是把新旧流的数据拉出来比对。但我Python写得不溜，算分位数有点费劲，有没有现成算分位数的包直接调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周每天花1小时看numpy和pandas的API文档，学会用代码算P99和P99.9。然后把算出来的值贴到报告里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "交换机资源应该有监控吧？我找运维要个面板看看就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在现网微抖越界红警溯源背景下，用户与导师围绕微秒级抖动根因分析思路与验证方法持续沟通（4轮），其中在时戳对齐与交叉比对部分与抖动越界溯源专家沟通（5轮），并最终明确去获取硬件时戳和gPTP日志并尝试按时间窗口切片做交叉比对。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看监控面板上有异常流ID，我直接导出日志，用之前写好的LogParser脚本跑一下，看看是不是链路断了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种一键分析时延毛刺的命令？我跑一下出结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时戳肯定有啊，就普通的那种时间戳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对齐是啥意思，是要我自己写脚本算差值吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿到时戳，算差值，看哪个节点差值大，就是哪个节点堵了呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能直接看交换机CPU利用率？利用率高就是堵了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以用工具发个ping包测一下延迟？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "切片段是按时间切还是按节点切？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种时序异常检测的包啊？直接import一下就能找突变的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我去拿日志。切片比对我自己试试，找不到包再说。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在效能复盘与配调策略迭代背景下与导师围绕流图配调策略长尾效应量化、复现条件及动态带宽借调短板补全持续沟通（6轮），其中在策略边界与长尾复现条件部分与确定性配调迭代师沟通（1轮），并最终明确长尾复现条件与迭代方向，形成压测观察与日志记录的补全计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Prometheus看面板呗。面板绿的就不用调了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把时延导出来算个方差？我看网上有个Python包能画直方图，直接跑一下不就有了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流图配调策略的边界在哪？长尾怎么复现？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以我们要加个动态带宽借调？听起来有点麻烦，有没有现成的动态带宽分配模块能直接插进去的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近在看TSN协议栈的源码，里面好像有带宽管理的逻辑，我打算把那段代码抄过来试试，算不算补短板？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写日志。压测我也能跑，就用压测工具打160%流量嘛。观察状态变化，我再看看吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "超150%长尾，160%复现，要加带宽借调，我要跑压测写日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

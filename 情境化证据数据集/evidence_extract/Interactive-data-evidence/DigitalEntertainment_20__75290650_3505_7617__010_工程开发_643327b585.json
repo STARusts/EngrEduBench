@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在内容解锁与合成联调“解锁成功但内容空/404”排障背景下，用户与导师围绕竞态根因、接口异步化状态机、幂等与日志合规持续沟通（8轮），其中在前端交互与轮询策略上与前端体验工程师沟通（2轮），在复现与验收口径上与测试负责人沟通（2轮），并最终对齐POST/GET解锁接口返回体与READY前HEAD校验等最短交付方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在是 redeem_submit 成功返回 200，然后前端去调 content/unlock。问题是有时候 unlock 返回 200，但实际拿到的合成内容是空的；有时候直接 500。我先把锅甩到合成服务了，但我不确定是不是我这边事件没发出去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "返回里有个 `asset_url`，但点开有时候 404，有时候是 200 但文件大小是 0。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边就是：校验权益->写一条 unlock 记录->调用合成服务生成->拿到返回的 path->拼 CDN URL 回给前端。合成服务返回挺快的，我就直接回了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "它有个 `/compose` 返回 `job_id`，也能 `/compose/status?job_id=` 查。我之前觉得多一次轮询很烦，就直接用它返回的 path 了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端体验工程师 现在 unlock 返回了 URL 但 URL 偶尔 404 或 0 字节，你们这边能接受的交互是啥？一定要一次调用就拿到最终内容吗，还是可以先拿 job_id 再轮询？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "轮询频率你们有要求吗？我怕刷太猛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 前端说可以改成先返回 `PENDING+job_id`，前端轮询 status 到 `READY` 才拿 URL。超时就提示稍后在藏品页看。失败 message 要用户能懂但别吐内部堆栈。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等我能不能继续用之前 redeem_submit 的 idem_key？把 unlock 也强幂等成同键返回同结果？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点担心数据库里要加很多字段，我能不能图省事直接 Redis 存 job_id 状态？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "产物哈希也要存吗？我以为有 URL 就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于 READY 就信它，HEAD 感觉又多一次请求。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边要写个后台 worker？我本来想用框架里现成的定时任务，直接每秒扫一遍表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "指数退避我不太会算，有没有现成的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "日志我一般直接把 response 打出来排查方便……那我只打 job_id 可以吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在还有个疑问：unlock 接口到底返回什么 HTTP？一直 200 但 status=PENDING？还是 202？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是还要加一个 `content/unlock/status` 接口？或者复用一个？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕改动有点多，今天能交付吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我可以。我就是担心 worker 那块我写错，能不能让测试负责人给我个最小回归点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 我这边要修“解锁成功但内容空/404”，你们能给最小复现和验收点吗？我改成异步状态机后，你们怎么测才算过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "调用次数怎么查，你们要我打点吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 QA 的验收点是：POST 不直接给 URL；READY 前必须 HEAD 校验>0；PENDING 60s 或 10 次转 FAILED=COMPOSE_TIMEOUT；重复触发不能多次 compose；日志里 query 打码。我先按这个实现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "POST `/content/unlock` 返回：`unlock_id`、`unlock_status`（先是 PENDING）、`poll_after_ms`，不带 asset_url。GET `/content/unlock/{unlock_id}`：PENDING 也就这些；READY 才加 `asset_url` 和 `asset_sha256`；FAILED 给 `error_code` 和偏用户的 message。job_id 我先藏后端表里，不给前端。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

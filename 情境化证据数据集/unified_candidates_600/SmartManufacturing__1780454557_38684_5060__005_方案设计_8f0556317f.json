@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在生坯ICT切片密度感知边缘方案设计背景下，用户与导师围绕边端部署框架选择、资源与精度取舍及方案拆分持续沟通（4轮），其中在边端资源与依赖评估部分与边端研发工程师沟通（3轮），在算法精度与拆步计算部分与算法设计师沟通（3轮），并最终形成C++极简算子结合整型累加与差分查表提取梯度、摘要上云的边端感知方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能直接套个轻量级的推理框架？比如NCNN或者MNN，把Python那边的模型转一下扔上去。或者哪怕用OpenCV的DNN模块跑前向，这样开发最快，网上现成的例子也多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端跑密度感知，能不能直接塞个NCNN或者OpenCV进去？我看好多人边端部署都是这么搞的，转个模型就能跑，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能裁剪一下OpenCV？只编我们要的几个模块，体积能小点吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两边都挺有道理。一个要轻量没依赖，一个要精度怕误报。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一期肯定要实时报警兜底。误报停机损失太大了，工艺那边肯定闹。开发维护成本只能往后排。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "梯度计算能不能拆开？简单的整型运算在边端做，复杂的浮点查表或者摘要传上去云端算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端感知方案就定这个：C++极简算子，整型累加加差分查表提取梯度，摘要上云。不引入重型依赖库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

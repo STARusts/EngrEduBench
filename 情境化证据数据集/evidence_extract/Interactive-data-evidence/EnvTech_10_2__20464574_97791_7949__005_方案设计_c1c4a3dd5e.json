@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在排放异常闭环策略与端边云接口分层设计背景下，用户与导师围绕最小闭环链路、状态机、字段最小化、责任划分与API清单持续沟通（8轮），其中在对象拆分与验证方法结构化部分与行业解决方案架构师沟通（3轮），在免责声明/对外口径与数据分级边界部分与环境合规经理沟通（2轮），并汇总形成6条接口与闭环约束及两条优先时序图范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解的最小闭环是：先出一个可解释的“排放异常事件”，带时间窗、置信度、证据指针；然后把事件映射成“可能原因/影响因子”的候选集合；再生成一条或多条“工艺调参建议”，最后要有执行回执和效果验证。接口上我想把事件和建议都做成版本化对象，不直接传原始视频和全量工艺参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态机我先按粗粒度：DETECTED→TRIAGED→RECOMMENDED→APPLIED→VERIFIED→CLOSED。  \n字段我能想到的：event_id、site_id、stack_id、time_start/end、metric_name+metric_def_version、value_peak/avg、confidence、decision_code、evidence_uri（指针）、quality_flags。  \n到建议那边：rec_id、event_id、action_type、target_system（比如DCS/EMS）、param_delta（不要给绝对值，给变化幅度）、expected_effect、validity_window、safety_guardrails、need_human_ack。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：param_delta这种也算敏感生产信息吗？以及回执怎么做最不“背锅”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业解决方案架构师 闭环策略这块，你建议的端边云接口分层怎么做？尤其是事件、建议、执行回执、验证这几类对象，各自该在哪一层落地，哪些字段要强制最小化？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Outcome里的EffectVerification要怎么做对照？我担心现场工况变化很大，执行了建议但指标没下降，就会显得建议无效。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Recommendation的“自动型”你说要权限白名单，那具体在接口里怎么表达？是靠调用方身份，还是对象里带policy_id？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理 闭环里会生成减排建议并可能触发自动执行。合规边界怎么划？接口里需要哪些免责声明/责任字段，才能避免对外变成“超标认定”或“监管结论”？另外rec里带param_delta会不会踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "disclosure_level听起来挺实用。那EffectVerification导出给第三方时，能不能直接给kpi_delta？还是也要分级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见合一下，看看有没有矛盾：  \n- 对象分Event/Hypothesis/Recommendation/Outcome四类；  \n- Recommendation分人审和自动，自动要policy_id+白名单+安全规则版本；  \n- 建议内容用策略和范围，不给绝对设定值；  \n- 对外靠disclosure_level控制，默认internal_only；  \n- delta和kpi_delta都做内外分级；  \n- 全程带disclaimer_version和not_a_compliance_determination。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不确定的是Hypothesis里features_used只列字段名，会不会导致复核困难？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我建议把Hypothesis字段补成：features_used（列名）+snapshot_ref+compute_ref+assumption。数值只在snapshot里，且snapshot字段集合固定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个落地问题：AppliedReceipt如果DCS不方便改造，只能回传“已执行/未执行”，没有operator_id，这种要怎么降级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那闭环的KPI验收我想放两类：  \n1）闭环完成率：从DETECTED到CLOSED的比例，按policy分层；  \n2）验证可信率：EffectVerification里decision_code=VERIFIED可信的比例。  \n第三类“减排效果”我怕口径争议大，先做内部看板，不作为硬验收。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我列最小API：  \n- POST /events：边缘上报事件元数据（含metric_def_version、decision_code、evidence_uri指针）  \n- GET /events/{id}：中心查询事件与状态  \n- POST /hypotheses：中心生成/更新候选原因（含snapshot_ref、compute_ref）  \n- POST /recommendations：生成建议，带policy_id、guardrails、disclaimer_version、disclosure_level  \n- POST /receipts：现场回传AppliedReceipt（支持T1/T2/T3）  \n- POST /verifications：中心写EffectVerification（method、baseline_ref、kpi_delta分级、uncertainty、decision_code）  \n- POST /state-transitions：状态流转，要求提供actor_role与reason_code，防止黑箱改状态"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这6条能拆。时序图我先画两条：  \n- “DETECTED到RECOMMENDED”的链路，重点把Event→Hypothesis→Recommendation的字段边界画清，特别是snapshot_ref/compute_ref怎么串起来；  \n- “APPLIED到VERIFIED”的链路，把Receipt三档降级和Verification三种方法放进去，避免验收时扯皮。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

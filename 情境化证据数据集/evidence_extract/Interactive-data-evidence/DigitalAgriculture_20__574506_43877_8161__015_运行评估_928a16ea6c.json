@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在盐胁迫指标监控的运行评估“异常诊断与工单”背景下，用户与导师围绕有效点阈值、回补不触发电话、RTT字段去留及三类告警/工单触发口径持续对齐并形成可执行条件（5轮），其中在告警引擎字段可用性、时间漂移容忍、有效点计算与RTT缺失影响部分与SRE运维工程师沟通（3轮），在告警规则变更审计、电话告警权限与工单留痕/数据最小化部分与合规与数据治理官沟通（1轮）。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "业务告警别看 ingest_ts，看 event_ts，然后回补别打电话。有效点数我就按你们之前说的来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有效点就是…点数够吧，30分钟里有数据就算。阈值我记得是够多就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那…30分钟嘛，采样是分钟级的话，至少20个点？差不多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，就80%。N的话…10个？这样就不会太少。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就用 ingest_ts-event_ts 超过…比如5分钟，就算回补？然后不打电话。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就30分钟？跟红线窗口对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "实时电话就是红线EC25超重度30分钟且有效点够；即时工单就是…预警2小时斜率？追溯工单就是回补的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 现在告警这边能同时拿到 event_ts 和 ingest_ts 吗？还有你们现在是不是用 ingest_ts 做业务告警？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把规则改成按event_ts就行了吧，然后回补别电话。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "允许偏移…就，几分钟？有效点就是有值的点吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我先按15分钟容忍？然后超了就链路工单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，那RTT就先不放。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们说event_ts能拿到，但有漂移。有效点要用qc_status=OK那种。还有RTT很多缺，就先别用。然后规则按event_ts来做，ingest_ts只看链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采，15分钟。超过15分钟就不算业务红线，改成链路工单，意思就是数据时间不可信。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）红线电话：用event_ts算，EC25超重度持续30分钟，窗口内有效点到达率80%以上且至少10点；有效点=qc_status是OK的去重点。触发就打电话+建即时工单。\n2）预警：2小时斜率触发就只建工单不电话。\n3）回补：如果event_ts比当前时间早30分钟以上，算回补，只进追溯工单，不电话。\n4）时间漂移：|event_ts-ingest_ts|超过15分钟就标时间异常，不参与1）2）的判定，只建链路工单。\n5）ingest_ts只用于链路延迟看板，不用于业务告警。\n6）弱网分组先只用5分钟心跳成功率<95%算弱网，RTT先删。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "回补的话…可能会漏，但既然是旧数据，就算了？权限审计我不太清楚，可能SRE那边有记录。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 告警规则从 ingest_ts 改成 event_ts，这种变更要留哪些审计字段？还有工单关闭、电话告警开关权限要怎么管？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回补追溯工单：event_ts早于now-30min的事件不触发电话，但会生成追溯工单；工单里要带一个字段提示“按实时口径是否本应红线/预警”，方便复盘。\n合规3条：1）规则变更要记变更人/时间/前后摘要/影响范围/审批号；2）电话告警开关只给值班负责人和SRE角色，记录原因和时长；3）工单关闭要填根因分类和处置动作，原始事件只能追加不能改，工单不写个人手机号姓名。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RTT先从弱网分组标准里去掉，只保留5分钟心跳成功率<95%算弱网。等以后现网补齐RTT再评估要不要加回去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

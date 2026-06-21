@@ -1,0 +1,425 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在量化因子系统共线性反演立项背景下与导师围绕因子拥挤痛点、正交剥离与简单剔除的优劣及数学基础持续沟通（6轮），其中在因子拥挤实盘风险部分与量化策略研究员沟通（1轮），并最终确认痛点为同向回撤与虚假阿尔法，明确验证方向为正交剥离优于简单剔除。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是把因子弄正交，不拥挤就能赚钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "因子挤一块会出啥事？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那把一样的删了不就好了，留一个剩下的全删。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "凭感觉删了最干净啊，留着还占地方。假设就假设正交跌得少点呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会算矩阵。我去翻翻线代书，把正交公式看懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看特征值那一章，能把矩阵乘法算出来就算懂了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点是一起跌和假信号，正交比删除好。"
+              }
+            ]
+          },
+          {
+            "microScene": "在独立阿尔法商业价值评估与反演系统立项论证背景下，用户与导师围绕增量收益、算力成本、因子衰减及黑箱合规风险持续沟通（4轮），其中在因子半衰期与换手率优势及算力成本覆盖部分与量化策略研究员沟通（1轮），在正交变换可解释性与合规边界部分与合规风控专员沟通（1轮），并形成独立阿尔法价值成立的定调及可解释性与成本覆盖的约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "独立出来的因子能活多久？算力费能不能赚回来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "正交弄出来的因子如果名字叫不出来，合规那边让不让过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就凭它活得久，手续费省，而且没被监管查水表。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在量化合规与风控边界划定背景下，与导师围绕监管审查红线、合规理解纠偏与边界验证持续沟通（5轮），其中在审查要求与数据红线部分与合规风控专员沟通（2轮），最终确认链路可回溯、逻辑可解释、双熔断与因子源预审四条边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监管查我们这种系统一般看啥？要留啥东西才能过关？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实搞不懂监管看啥，我得去翻翻以前被罚的案例，看他们死在哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就找几个以前出事被罚的策略，扔进我们系统跑一遍，看能不能被熔断拦住？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查监管白皮书，把审计链路和预审加进我的学习清单里，我看不懂就去死磕法务。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路能回溯，逻辑能看懂，超限就熔断，数据要预审。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在量化因子接入架构设计背景下，用户与导师围绕异构数据低延迟接入、时序对齐、选型依据、极端行情反压验证及降级策略持续沟通（7轮），其中在异构流式接入选型部分与数据工程师沟通（1轮），并最终确定Kafka+Flink基础架构与P99超20ms丢弃低频因子的降级约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频低频混一起怎么弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C++听起来太快了，写起来太累。Kafka大家都在用，就Kafka吧，窗口一拉不就对齐了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我哪知道5倍是多少毫秒。我连P99是啥都算不明白。这块我真搞不定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看Flink的文档？看窗口对齐的API。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我跑个Demo试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Kafka和Flink，P99要是超过20毫秒就把慢的扔了保快的。齐了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在共线性反演算法选型背景下，与导师围绕PCA与ICA的算力开销、业务红线及降级约束持续沟通（5轮），其中在算力与维护成本评估部分与算法工程师沟通（1轮），并最终确定选ICA为主、降级切PCA的算法选型定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "PCA和ICA哪个算起来不费劲？长期跑哪个省钱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "PCA快省钱但会留伪东西，ICA贵还难维护但剥得真。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就ICA呗，回撤红线不能碰。贵就贵点，维护难就多招人。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定ICA，算不过来或出错了就切PCA，维护的事后面再说。"
+              }
+            ]
+          },
+          {
+            "microScene": "在ICA正交剥离算力流控设计背景下，用户与导师围绕流控策略与算力约束持续沟通（6轮），其中在防雪崩与队列设计部分与架构设计师沟通（1轮），在算力调度与降级保底部分与性能调优专家沟通（1轮），并最终确定背压防OOM、优先级队列保核心与秒级熔断降级PCA三条流控约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@架构设计师 流控怎么搞？排队不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优专家 背压是啥意思？算力不够加机器不行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是下游满了就顶回去，机器不够用就切PCA？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就，先背压，然后分高优低优，GPU不够就熔断切PCA。成本，成本就是别买太多机器闲着？"
+              }
+            ]
+          },
+          {
+            "microScene": "在信号衰减监控容灾预案设计背景下，用户与导师围绕因子衰减时的系统自保与仓位处置持续沟通（7轮），其中在仓位处置红线与降仓动作区分部分与合规风控专员沟通（2轮），并最终形成单因子正交归零与全池VWAP平滑降仓的预案骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没信号了就报警，然后停手不交易了呗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那不停还能咋办，没信号硬上肯定亏啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规风控专员 信号不行了能不能直接一刀切清仓？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了点，好像说相关系数跌破0.5就不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就IC_IR跌破了，按每分钟卖10%的速度减仓，然后记日志。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "单因子和全池还不一样？统一处理不行吗？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在量化因子共线性反演核心代码编写背景下，用户与导师围绕反演数值稳定性、合规可解释性、验证口径及实现路径持续沟通（6轮），其中在反演数值底线与SVD截断实现部分与算法工程师沟通（2轮），在合规红线与稀疏可解释性要求部分与合规风控专员沟通（2轮），并最终形成SVD截断求伪逆加权重裁剪加双重验证的实现路径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "共线性不就是相关性嘛，我把相关系数算出来，然后求个逆矩阵不就反演出来了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "矩阵求逆不行的话，共线性反演到底咋写啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演这块合规有啥要求？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用SVD拆开，然后挑几个大的留下，小的不要，这样矩阵就稀疏了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就，跑一下看报不报错呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "SVD这块我其实不太会写，numpy的svd函数参数我老弄混，每次都报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚回去把numpy的linalg.svd文档看一遍，写个3x3小矩阵跑通，明天再把逻辑搬到项目里。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SVD截断后不是就有零了吗，那不就是稀疏？可解释的话，我就加个注释说这因子是由前几个主成分合成的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "VIF和重构误差我算完输出到日志里看一眼。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在大规模因子横截面SVD分解的工程开发背景下与导师围绕算力并行与内存调优方案持续沟通（7轮），其中在内存分配防坑与预分配零拷贝确认部分与性能调优专家沟通（3轮），并最终形成预分配连续内存、Joblib多进程及严禁循环拼接的代码规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，多开几个线程呗？内存不够就加机器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不知道。反正跑不出结果就重启一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大矩阵算得慢内存爆了咋办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以不能写for循环建矩阵？那咋写？直接全部一股脑塞进去？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "零拷贝是啥？不复制数组？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复用？就是算完一个把变量名改改接着算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我如果提前建好一个大数组，然后往里填数，是不是就不爆内存了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Joblib我听过，好像就加个装饰器。行，我就加这个，然后提前建大数组。"
+              }
+            ]
+          },
+          {
+            "microScene": "在回测联调背景下，用户与导师围绕回测收益异常、时序对齐、停牌处理及结果置信度持续沟通（8轮），其中在时序对齐、停牌幸存者偏差及置信区间评估部分与测试开发工程师沟通（3轮），并形成基于index对齐、停牌前向填充与信号剔除的重构方案及样本内参考结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试开发工程师 这破回测代码收益全负了，通常死在哪？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前老在shift上栽跟头，昨天刚看了个用index直接对齐的写法，不用自己算挪几格。这次就用index对齐来重构，不会再错位了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "停牌就填前一天的？或者直接扔了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 对齐用index不用shift；2. 停牌收益前向填，信号标无效算IC踢掉；3. 回测结果现在只能当样本内参考，实盘会打折。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在量化因子新系统实盘切流背景下，用户与导师围绕切流策略与统计监控指标持续沟通（5轮），其中在灰度切流方式部分与MLOps专家沟通（1轮），在切流核心监控指标部分与业务监控分析师沟通（1轮），并最终形成5%切流、跑满3个交易日看p值与效应量的扩容规则及统计补课计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接全切过去替换老系统吧，早点上线早点看效果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看系统报错呗，没报错就是没问题，有报错就切回来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是分10%流量过去就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那监控看啥？看赚多少钱吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MLOps说分桶，监控说看IC和什么效应量。我觉得就分5%流量，看半小时没报警就全切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "效应量不就是效果大不大吗。样本量，我就猜个100条数据够了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂这些统计的东西，配对t检验和效应量我都没用过。我接下来两周每天花1小时补A/B测试和假设检验的统计课，把样本量计算公式搞明白，下次切流我自己算周期。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "5%切流，跑3天，看p值和效应量。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在切流观察期监控大盘核心指标缺失背景下，与导师围绕补充残差共线性视图及解决资源瓶颈的降级方案持续沟通（3轮），其中在视图数据源接入与降频采样部分与业务监控分析师沟通（3轮），并最终形成Top50条件数分钟级采样与VIF取均值的降级监控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是加两个新数据源嘛，我配一下数据管道拉过来不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网卡不够就想办法降频，只看头部的行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一分钟算一次，只算前50个因子，VIF画个平均值，热力图不画了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端行情信号畸变监控背景下，与导师围绕畸变量化指标、触发阈值及熔断降级处理持续沟通（7轮），其中在信号畸变原因与回测阈值部分与测试开发工程师沟通（2轮），并最终确定条件数跃升5倍与残差方差突变5倍的畸变触发口径及冻结新因子接入的降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试开发工程师 大跌的时候信号是怎么烂的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就翻倍报警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试开发工程师 回测里条件数能飙多少倍？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "10倍跃升，残差5倍。平时50，极端能到500，残差也大好几倍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发了就停系统？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "冻结新因子，老因子继续跑。我去跟分析师说加个5倍报警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "条件数跃升5倍，残差方差突变5倍，触发就冻结新因子接入。"
+              }
+            ]
+          },
+          {
+            "microScene": "在阿尔法衰减复盘迭代规画背景下，用户与导师围绕衰减根因、反演参数调整、外推边界及合规留痕持续沟通（5轮），其中在复盘指标与算力降级部分与迭代规划师沟通（1轮），在参数变更留痕部分与合规风控专员沟通（1轮），并最终形成包含IC重叠率判断、外推边界、算力降级与合规留痕的四条迭代规画核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就写个总结呗，把跑出来效果不好的因子挑出来换掉，写进文档。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减数据怎么搞下一步？亏得多的直接换掉行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能只看亏钱，看IC重叠，还有外推啥边界，算力太贵要降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "翻了几页，没细看。日志没写。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "外推边界我加上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "迭代改参数要留什么痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要留审批记录和矩阵快照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看IC重叠率定是换因子还是调反演；单边趋势不能直接用；算力贵要降级；改参数要留快照审批。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

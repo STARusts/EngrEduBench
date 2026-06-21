@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在自适应学境渲染集成联调背景下，用户与导师围绕UI闪烁Bug、根因定位及修改方案持续沟通（5轮），其中在流场动效渲染机制部分与前端交互工程师沟通（1轮），在推流频率与数据结构部分与算法工程师沟通（1轮），并最终确定算法侧增量降频与前端WebGL插值的修改方案及验收KPI。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前端在接收到干预指令进行UI流场重塑时，界面疯狂闪烁，根本做不到无感过渡，体验极差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用React接WebSocket推送，收到指令直接setState触发重渲染。我怀疑是推送频率太高，DOM重排开销扛不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流场动效怎么渲染才能平滑？直接setState肯定不行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边干预指令推送频率是多少？是不是推得太快了？数据结构是全量还是增量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前端React DOM扛不住20Hz全量推送，算法侧也没做增量diff，两边都有问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法侧必须加增量计算，只推变化的参数，推送频率降到5Hz，中间帧由前端插值补齐。前端侧把流场渲染从React抽出来，用WebGL重写，加上过渡插值状态机。验收KPI：流场动效帧率稳60fps，无视觉闪烁，端到端干预延时压到200ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

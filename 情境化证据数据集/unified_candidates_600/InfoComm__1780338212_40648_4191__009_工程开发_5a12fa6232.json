@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在低空通感算一体智联系统基带软硬协同开发背景下，用户与导师围绕旧版代码时延问题、软硬切分重构方向、时序约束开发卡点及验证指标持续沟通（7轮），其中在BRAM读写冲突与软硬切分部分与嵌入式基带开发沟通（1轮），并确定感知抽取卸载PL状态机等重构方向，明确时延、BRAM占用率与DMA带宽验证指标阈值，计划补齐工具链跑回环测试。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "通信和感知的波形处理全塞在一个软件线程里，理论上ISAC的感知符号可以利用通信的CP间隔做脉冲压缩，但这代码把时域数据全搬到DDR再处理，时延根本达不到毫秒级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力开销我算过MIMO信道估计的FLOPs，但这个HDL代码里BRAM的读写冲突我没法直接算出来，这块我不太确定怎么切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想把脉冲压缩和FFT拆开硬加速，但BRAM资源好像不够，这种软硬切分怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那通信和感知的并发冲突怎么解决？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我搭个仿真环境跑对照测试，对比旧版全软和重构后的软硬协同版。不过我对PL端状态机的时序约束和Vivado的时序报告分析不太熟，这块经常看不懂Setup/Hold violation怎么修。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天把Xilinx PG关于AXI-Stream和时序约束的文档过一遍，然后在板子上跑个精简版的脉冲压缩回环，把时序报告里的slack和WNS指标跟理论算出来的时钟周期对齐。用这个基础模型先验证通感算的基带时延能压到1ms以内。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "基带处理时延不能超过500us，留给协议栈和路由500us；BRAM占用率上限80%，留20%给防撞紧急流控；DMA带宽得吃到2GB/s以上，不然感知数据吞吐跟不上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

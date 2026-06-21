@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在巨灾敞口推演系统灾模算子编排架构设计背景下，用户与导师围绕编排引擎选型、容错机制与精算收敛控制持续沟通（7轮），其中在物理状态依赖与断点续算部分与灾模领域专家沟通（1轮），在精算收敛条件与计算负债部分与精算架构师沟通（2轮），并最终形成自研精算状态机驱动算子流转结合Volcano批调度的架构决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得这没啥难度，把气象和地质算子按顺序串起来跑不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用DAG跑呗，有向无环图，一个算完下一个接着算。崩了就重试，加个最大重试次数，多简单的事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "随便选个开源的，Argo Workflows吧，K8s原生多方便。崩了就重跑，降级太麻烦，大不了全重新算一遍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灾模算子崩了是不是重跑就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Argo应该也能搞吧，大不了我把中间结果存Redis里，崩了从Redis读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组就用Airflow呗。延迟飙升就加节点。跑得慢就加机器"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看两篇Argo和Volcano对比的博客，弄清楚它俩排队机制有啥不一样。看完我试试把Volcano的队列替换Argo的调度器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "退出码为0就是成功，收敛条件我在脚本里加个判断不就行了，不收敛就一直跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那把超时设长点呗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "自研状态机？这工作量也太大了吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

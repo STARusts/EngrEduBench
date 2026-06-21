@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的联调压测与故障注入背景下，用户与导师围绕指数查询/定价两条API的压测指标口径、数据集与通过阈值、以及故障注入条目化清单持续沟通（6轮），其中在压测范围与基线阶梯加压方法上与后端工程师沟通（4轮），在依赖/资源/质量故障注入与判定标准及日志审计要求上与SRE可靠性工程师沟通（4轮），并口头形成最小版压测计划与故障注入清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是……多打请求？然后看会不会崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就负责模型那块吧。验就是看返回0/1对不对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 压测要怎么搞？我现在不知道从哪开始。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线就是先不搞故障？一直加RPS？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我只会打curl。是不是就用curl循环？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "缺测地块是啥意思？就是没数据？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE可靠性工程师 故障注入要注什么？我不知道要怎么弄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能就把服务kill掉算故障注入？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级是直接返回默认值？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "日志还要管这个？压测不就是打爆就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "范围就两个接口，一个查指数，一个定价。基线就是先不加故障，分档加RPS，测p99啥的。故障注入就是把缓存弄挂、把特征服务弄慢、还有CPU打满这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "field_id就随便挑一批？阈值就……别超时？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "热门50个，冷门50个，缺测10个？p99小于2秒，5xx小于1%？429不算失败。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺测30个。429超5%算不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我补……把数据库关了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据库连接耗尽：pricing会报错，但要返回你们说的那种错误码，不要一直等。日志里要有trace_id，还有db pool满了这种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就不打SQL。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测计划：压两个接口；用热门50、冷门50、缺测30的field_id；阶梯加压50/100/200/400 RPS，每档10分钟；看p95/p99、5xx、429。通过是p99<2秒，5xx<1%，429<5%。\n故障注入：缓存延迟500ms看p99和fallback字段；特征服务超时20%要回PRICING_DEP_TIMEOUT；CPU打满要快速失败别5xx多；DB连接池满要回PRICING_DB_POOL_EXHAUSTED，不打SQL不打token。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

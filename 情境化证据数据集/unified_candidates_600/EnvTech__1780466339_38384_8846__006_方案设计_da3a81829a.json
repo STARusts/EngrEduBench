@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在水下物联感知与控制接口规范设计背景下，用户与导师围绕感知数据上报与抑制指令下发的格式及可靠性持续沟通（6轮），其中在上行数据压缩与时标对齐部分与异构数据架构师沟通（1轮），并最终确立上行二进制压缩时标对齐与下行可靠广播回执的接口规范原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感觉直接上MQTT协议传JSON格式就行了。声学数据和光学数据都打包成JSON发上去，控制指令也用JSON往下发，调库很方便，网上例程多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果JSON不行，那有没有既能压缩数据，又不用我自己写底层解析器的方案？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "水下声光异构数据上报的接口，如果不用JSON，一般怎么设计比较合理？还有控制指令下发，用什么格式好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Protobuf是有现成库，勉强能接受。自定义位域压缩是不是得自己写移位操作？太容易出错了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回执确认这个懂，但广播多播加上重传，接口逻辑一下就复杂了。没有现成的水下可靠传输协议栈可以调用吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "看来光靠调库兜不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行数据接口得用Protobuf或者自定义位域压缩，带上统一时标做时空对齐。下行控制接口不能简单发指令，得设计广播重传和业务级回执。虽然复杂点，但确实JSON扛不住水下带宽。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Protobuf序列化库可以直接引，时标对齐我得在数据打包前手动塞。下行回执逻辑得自己写状态机，有点麻烦，但也没别的捷径了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

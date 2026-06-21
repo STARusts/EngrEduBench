@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在水动力拓扑反向推演并行计算核心实现背景下，用户与导师围绕并行方式、子图切分依据、配额设置及日志权限持续沟通（7轮），其中在并行痛点与加锁弊端部分与性能优化工程师沟通（1轮），在子图切分依据与权限控制部分与图计算架构师沟通（1轮），并最终形成按汇流点子图切分、边界异步更新、权限最小化、日志全量及资源动态配额的核心实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多线程呗，或者直接丢Spark集群里跑，反正图数据都进内存了，并行扫一遍不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加锁啊。大不了锁粗点，慢就慢点，先跑通再说。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能优化工程师 图并行加锁是不是就行了？别整太复杂的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "随便切切，按城市切不就完了。配额给个8核16G总够了吧。日志就打ERROR。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@图计算架构师 这图怎么切块啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看GraphX调度，把配额改成动态的。日志打全，权限收窄。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

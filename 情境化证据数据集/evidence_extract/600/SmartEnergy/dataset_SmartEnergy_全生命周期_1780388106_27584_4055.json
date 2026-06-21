@@ -1,0 +1,590 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在光伏云遮降发微态重构立项背景下，用户与导师围绕损失量化口径、场景区分及痛点假设确立持续沟通（7轮），其中在损失漏项与计算口径部分与能源市场分析师沟通（1轮），并最终形成聚焦碎云瞬变考核与偏差损失的痛点假设及数据补充目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在场站一遇云遮，功率就断崖式掉，逆变器还老脱网。我打算用那种时序预测工具包，把云图推演和逆变器调节绑一块，看能不能把这损失降下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看后台日志，云一来功率直接掉一半，这损失肯定大啊。有没有那种一键算损失率的现成组件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种云遮降发造成的损失，怎么算才不漏项？我只看了有功电量损失。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来还有无功考核和市场偏差结算。我之前真没想这么细。是不是得分场景统计？碎云和慢云得分开算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设？就是假设用了我们系统，损失能降下来呗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这我得跑数据吧？有没有那种能自动识别碎云和慢云的现成标注工具？没工具我这假设验证不了啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "移动速度阈值怎么定？我不懂气象图象识别，电力市场的偏差结算规则我也没细看过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去翻电网并网细则，把无功考核那块公式抠出来。气象那边，我看能不能找找有没有开源的云团分类数据集，先跑个大概的阈值出来。两周后我拿一份基于历史数据的碎云降发损失占比初稿。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心是碎云瞬变带来的考核和市场损失，不是单纯少发了电。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微源抑损商业模式探索背景下，与导师围绕系统变现模式与收费方式持续沟通（4轮），其中在微源抑损变现路子部分与能源市场分析师沟通（1轮），在服务包拆分与收费模式部分与商业架构师沟通（1轮），并形成双轨效果付费及合规准入为核心约束的商业模式方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卖SaaS呗，按场站收年费，或者按调用次数收。我看有些光伏运维平台就是这么干的，直接套就行了。或者跟着虚拟电厂那种聚合模式走？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这系统主要是减少碎云带来的考核罚款和现货偏差结算损失，这种\"少亏\"的能力，现在电力市场有没有什么方便点的变现路子？最好是现成的规则能套上的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "各地规则不一样就麻烦了，有没有那种通用的补偿接口，我们接上去就能全国跑的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "避损就是保并网合格率，增益就是拿无功补偿。收费上有没有现成的SaaS模板可以改改直接用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能搞死板年费，得搞效果付费。避损包按省下的罚款抽成，增益包按补偿分成。这样业主容易接受。咱们就定这两个包吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束有三条：第一，价值主张不能讲泛泛的提效，必须是碎云瞬态抑损；第二，变现走双轨，避损包按省下的罚款抽成，增益包按辅助服务补偿分成，全是效果付费；第三，落地前提是必须把各省并网细则与辅助服务准入条件搞透，不然连进场资格都没有，更别提分成了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在绿电并网合规与准入评估背景下，用户与导师围绕合规红线与辅助服务准入持续沟通（6轮），其中在微态重构合规红线与辅助服务认定部分与电力合规审计师沟通（2轮），在抑损平滑辅助服务分类与进场门槛部分与能源市场分析师沟通（1轮），并最终形成合规红线与辅助服务准入两条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "坑肯定多，不过现在不是都有那种合规规则库嘛，我看网上有人卖各省并网标准API，直接调包跑一遍我们的策略，不合规的拦截掉不就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "红线就是电压电流不能超限呗，频率也得稳住。具体的，可能就是并网点那块不能越限。其实我真觉得弄个自动化校验工具最省事，人看规则容易漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有现成的合规检查清单或者工具能直接用？另外山东和甘肃那边的红线具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那辅助服务进场呢？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感觉好麻烦，还是得手写适配逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对电网低穿这块基础太弱了，以前只搞过应用层。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "看完把无功支撑要求直接写进我们系统需求的硬约束里，这块绝对不能靠工具动态判，得写死。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在辅助服务里算啥？进场门槛高不高？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束就两条：第一，合规红线，低穿期间必须保动态无功支撑，抑损动作不能干扰调度切机；第二，辅助服务准入，响应速度必须进百毫秒级，否则只能做自用避损，拿不到市场分成。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在光阵云遮微态重构系统方案设计背景下，用户与导师围绕云边架构选型、算力拆分、对照实验与边缘部署短板持续沟通（8轮），其中在链路延迟部分与系统架构师沟通（1轮），在云边算力拆分部分与算法设计师沟通（1轮），并形成轻量通信与算力拆分原则、实验反驳标准及部署补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用KubeEdge这种通用框架做云图下发和边缘推演，百毫秒响应能保住吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云图预测和微态重构算法，在云边怎么拆分比较合理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说通用框架延迟太大不能用，得走局域UDP直控；算法师说云端跑重模型推轨迹，边缘跑轻量模型算微调。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全放边缘的话，边缘网关跑不动重模型吧？算力不够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就跑两组试试？一组用我们的拆分方案，一组全放边缘，比一下延迟和重构误差？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "C++和边缘部署这块我不太熟，只会用Python跑模型推理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天先把ONNX Runtime在ARM上的C++部署文档过一遍，照着官方示例把一个简单的LSTM模型转过去跑通，看看延迟能降多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，严禁使用KubeEdge这类重框架，边缘侧不走消息中间件；第二，算力拆分原则：云端跑重模型推演轨迹，边缘跑轻量模型重构微态；第三，验证指标：云边拆分方案的端到端延迟不得比全边缘方案多10ms，重构误差率得降5%以上；第四，我本周要补学ONNX在ARM上的C++部署加速。"
+              }
+            ]
+          },
+          {
+            "microScene": "在逆变器群控与无功补偿流设计背景下，用户与导师围绕指令下发延迟与数据流编排持续沟通（7轮），其中在群控指令流低延迟方案部分与系统架构师沟通（1轮），在无功补偿合规风险部分与电力合规审计师沟通（1轮），并最终形成并发下发私有协议、合规闭锁前置及降级发有功的流设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接走Modbus广播指令，网上好多光伏群控的开源库，直接套一下就能下发，挺方便的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用现成库转Modbus，但说延迟不够。有没有那种低延迟的现成方案？或者怎么改能快一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "无功补偿这边，我调大点补偿量是不是就行了？有什么坑吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Modbus太慢，得用私有协议并发发。无功不能乱调，得加闭锁防越限。那我就找个支持多协议并发的网关机，把闭锁逻辑写进去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "微态重构算完，先查表看闭锁条件，过了再按私有协议打包，并发给各逆变器？闭锁不通过就丢弃或者降级发有功？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，严禁串行广播，得并发走私有协议或104；第二，无功指令下发前必须过合规闭锁，防越限跳闸；第三，闭锁不通过降级发有功。网关选型我后面再看现成的。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计第三轮微态重构算法选型与仿真背景下，用户与导师围绕气象云图推演模型选型与仿真验证设计持续沟通（7轮），其中在时空联合建模选型部分与算法设计师沟通（2轮），并最终形成ConvLSTM选型及边缘算力约束、基于本站历史数据回放与极端云团切片的仿真验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种时间序列的，我看网上好多现成代码，直接套个LSTM的包跑一下行不行？调调参数应该能出结果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "空间？我本来想把各方阵辐照拼成一维向量输进去。自己写空间提取太容易搞砸了，最好找个封装好的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接套LSTM包，但说空间特征不行。这块有没有封装好的模型能同时处理云图移动和时间序列的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规整，都是标准方阵。听起来ConvLSTM好像好弄一点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法设计师说用ConvLSTM，开源也好找，边缘侧跑着也不至于太卡。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "仿真这块，有没有那种气象仿真平台可以直接灌数据的？我找个开源数据集跑一遍看Loss降没降下来就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "地形风确实没法套现成。那只能拿咱们场站去年历史气象云图和实际功率跌落的数据做回放对照了？把云图喂给模型，看预测的遮影时间跟实际跌落时间差多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，选型定ConvLSTM，严禁网络过深导致边缘推演延迟超标；第二，仿真不用通用数据集，用本站历史云图与功率跌落数据做回放对照；第三，必须构造云团分裂、对冲等极端切片，测漏判率边界。"
+              }
+            ]
+          },
+          {
+            "microScene": "在逆变器群控通信低延时与安全认证方案设计背景下，用户与导师围绕通信协议选型、轻量级认证机制及验证实验设计持续沟通（6轮），其中在毫秒级延迟底线部分与通信协议专家沟通（1轮），在边缘侧轻量级防篡改与防重放部分与安全工程师沟通（1轮），并最终形成UDP组播与IEC104双路热备通信、对称密钥加滑动窗口MAC防重放认证及含噪声注入的验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "通信我想直接上MQTT，好多云平台都自带，调包很快。安全的话，直接在传输层套TLS证书，也是配置一下就行，不用自己写加密逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "逆变器控制下发延迟要压到毫秒级，MQTT是不是不行？有没有那种不用自己从底层写，但又能保证低延迟的协议栈？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用TLS，边缘网关到逆变器之间怎么防篡改？有没有轻量点的方案？我怕搞非对称加密算力不够。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "密钥分发我确实没想透。验证的话，就跑一下压测看看？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "上周看了个白皮书，里面提到一种“滑动窗口MAC”机制，不用全局同步时间戳，只要维护一个短窗口内的序列号就行，能容忍丢包。我想把这个滑动窗口机制套进来，比单纯校验时间戳容错性更好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，通信放弃MQTT，改用UDP组播与IEC104遥控帧双发；第二，认证采用对称密钥加滑动窗口MAC防重放，密钥首次握手协商；第三，验证实验注入背景噪声，统计误判率，样本量一万条以上。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光阵云遮微态重构系统工程开发背景下，用户与导师围绕气象数据接入方式、云图解析方法、Kafka配置及解析验证指标持续沟通（6轮），其中在推演模型输入要求部分与算法设计师沟通（1轮），在推流接口与流式解析框架部分与后端开发主管沟通（1轮），并最终形成Kafka推流接入、xarray流解析及RMSE与SSIM验证指标方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先搞气象接口适配和云图解析这块。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看网上很多气象数据拉取都是用Python的requests库定时轮询，或者用现成的SDS SDK。我想直接用MinIO的SDK去气象中心拉HDF5文件，省得自己处理协议。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "解析的话，我打算直接调OpenCV的轮廓提取，把云团抠出来，这库多方便啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们推演模型对输入到底有什么要求？HDF5文件是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "气象中心那边除了HDF5全量文件，有没有推流接口？我不想自己写解析器，有没有现成的流式气象数据接入框架？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前只拉过静态文件，Kafka消费端配置和流式解析我有点卡壳，不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找两篇Kafka Python客户端的教程看一下，顺便把xarray处理GRIB2的Demo跑通。今天下午我把消费组拉起和反序列化这块代码写完，跑不通我再问后端主管。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算写个脚本把解析出来的矩阵画成图，肉眼跟气象局的图对比一下。误差的话，灰度值差个10以内应该都行吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，气象接口改用Kafka消费雷达拼图推流；第二，解析用xarray处理流数据；第三，验证指标用RMSE<5和SSIM>0.95，跑100个时次。下午我先搞通Kafka这块。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在逆变器逆调指令下发与联调测试背景下，与导师围绕指令下发协议、群控并发机制与重试退避策略持续沟通（5轮），其中在Modbus群控并发库选择部分与通信协议专家沟通（1轮），在异步指令联调测试与抓包验证部分与嵌入式联调工程师沟通（1轮），并最终形成异步TCP下发、网关抓包验证与指数退避熔断的指令下发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上很多人搞设备控制都是用MQTT，或者找个现成的Modbus库调一调，应该能直接发下去吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Modbus的话，我就用libmodbus库，写个for循环挨个发指令，反正代码也不长。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几百台逆变器用Modbus下发，有没有那种支持并发或者广播的现成库？我不想从头写底层协议。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步并发啊，libuv我听过，但写起来挺麻烦的，还得处理回调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调的时候，这种异步指令下发怎么测？有没有好用的模拟器工具能直接验证？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超时熔断我就设个重试次数，比如重试3次，应该就够了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大面积超时的话，我直接把重试的线程杀掉行不行？这块我真不太敢定，怕杀错把正常指令也干掉了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指数退避我查了下，就是每次重试等待时间加倍那种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃libmodbus的同步轮询，用libuv包一层异步TCP并发下发；第二，联调不上模拟器，直接在网关上tcpdump抓包，重点看字节序对不对；第三，重试策略用指数退避，比如初始200ms，最多退避3次，如果大面积超时直接熔断不再重试，避免把网关资源打满。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘网关算法落地背景下，用户与导师围绕ONNX Runtime C++技术栈选型、封装细节及验收基线持续沟通（6轮），其中在模型导出固定Shape及补零掩码机制部分与算法设计师沟通（2轮），在C++并发封装与预分配内存池预热部分与后端开发主管沟通（2轮），并形成功率微调算法工程化封装五条验收基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上好多人直接上Triton Inference Server，或者最不济用FastAPI包个微服务，HTTP调一下，多省事啊，何必重复造轮子。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Triton确实太重了。那，转成ONNX格式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我C++写得半生不熟，调ONNX Runtime的API怕搞出内存泄漏或者死锁。有没有那种封装好的一键部署库啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱那云团轨迹预测模型能直接导ONNX吗？我之前查资料说动态Shape导出特别容易出Bug，运行时也慢，能不能强制固定Shape啊？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "补零和掩码啊听起来好麻烦。精度会掉很多吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "C++里跑ONNX Runtime，如果瞬间来了一堆推理请求，怎么搞并发？我不想每次请求都new一段内存出来，太容易崩了，有没有成熟的封装模式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预热是说启动时先跑一遍假数据对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法那边说可以固定Shape，就是切块要补零，还得传个掩码进去；后端主管说用ONNX Runtime C++包一层，搞个内存池存输入输出Tensor，启动时预热。听起来逻辑挺顺的，我就按这个套路写封装层？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "掩码放外面吧，让调用方算好了传进来，封装层只管跑模型，这样职责单一？内存大小的话，我给推理分个1G？感觉应该够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存池大小就是 MaxBatch * (输入字节数 + 掩码字节数 + 输出字节数) 再加点余量对吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那硬限怎么卡？ONNX Runtime有这个接口吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "功率微调算法工程化封装验收基线：第一，技术栈选ONNX Runtime C++，模型导出为固定Shape；第二，封装层对外只接收原始图块指针和尺寸，内部自行处理补零和掩码生成；第三，采用预分配内存池管理输入输出Tensor，禁止运行时动态new；第四，服务启动时必须用假数据完成Session初始化和预热；第五，外部实现请求排队与超限丢弃机制，防止推理内存越界。"
+              }
+            ]
+          },
+          {
+            "microScene": "在遮影瞬变边界极限压测方案设计背景下，用户与导师围绕压测场景构造、跌落斜率边界确定、压测数据合规及降级验证持续沟通（8轮），其中在时空相关性压测场景构造部分与测试与性能专家沟通（1轮），在网关指令风暴死锁与背压阈值部分与通信协议专家沟通（1轮），并最终形成包含混沌工程注入、云墙模型驱动、背压阈值测定及全合成数据的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Locust写个脚本，多起几个并发用户，把请求量打上去呗。看网关CPU和内存会不会爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时空相关性？这，我不太懂怎么模拟云的移动啊。是不是有那种现成的气象压测工具？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种遮影瞬变怎么构造压测场景？我手里只有Locust。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近刚好在看Chaos Mesh，能不能直接用这个？我在网关的容器里注入网络包延迟和乱序，是不是也能模拟出那种极端情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用Chaos Mesh注入固定比例的丢包和延迟，配合刚才说的云墙模型发请求。但这个云墙的跌落斜率设多少合适？有没有个大概的范围？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果几百台逆变器同时报功率跌落，边缘网关往下发微调指令，协议栈那边会不会卡死？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "背压阈值是个关键点。那我压测的时候，就要不断调大云墙的移动速度，看指令生成速率什么时候把背压打满。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算从生产库里拉一份真实场站的拓扑数据，把功率值脱敏一下就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规红线不能碰。那我把压测方案理一下：第一，用Chaos Mesh注入网络抖动；第二，开发一个云墙平移模型驱动逆变器报文；第三，逐步提高云墙风速，测出网关背压阈值；第四，压测数据全部用合成数据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在光阵云遮微态重构系统场站灰度发布与实况核验背景下，用户与导师围绕灰度流量切分逻辑、实况核验统计严谨性、统计技能补充及网关回滚配置持续沟通（5轮），其中在灰度物理分簇与网关配置部分与运维部署专家沟通（2轮），在消除气象混淆的统计验证方法部分与数据观测分析师沟通（1轮），并形成按汇流箱切分边界、网关打标回滚及基于ANCOVA的统计验证闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用Argo Rollouts搞个金丝雀发布，按逆变器序列号随机切5%的流量出来，看下实况数据对不对就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "场站这边的逆变器分组怎么切才不影响基线对比？我手里只有一份资产台账Excel。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在实况核验这块，我打算对比灰度组和基准组的并网功率曲线，肉眼看看曲线平滑度有没有提升，差不多就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度对比如果只看功率平滑度，怎么排除天气变好的干扰？有没有现成的A/B测试库能直接算这个？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只会用Python算个均值和方差，这些统计概念我不懂啊。我就想找个工具包一键跑出结果。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来一周，每天花1小时学SciPy里的stats模块，重点看ANCOVA和效应量计算，然后把云遮指数和功率方差的计算脚本写出来，跑通灰度组的显著性验证，必须算出p值和效应量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我用K8s的rollback命令就行。那我现在的部署方案就是：按汇流箱划灰度边界，网关打灰度标签，然后数据那边我先用历史数据把统计脚本调通，再上实况验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在灰度切分后实况数据回流的运行评估背景下，用户与导师围绕抑损增益率计算口径、并网合规红线、看板分层及刷新策略持续沟通（8轮），其中在增益率口径与数据延迟部分与数据观测分析师沟通（2轮），在并网合规红线指标部分与电力合规审计师沟通（1轮），并形成业务增益、运行稳态、合规红线三层看板结构与差异化刷新策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备直接拉个Grafana，把时序数据库连上，拽几个折线图出来。这种现成的看板搭起来快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增益率就，就按挽回的电量除以总装机容量吧？并网看板我看别人开源模板里都是盯有功功率和无功功率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据观测分析师 抑损增益率这指标，具体计算口径是啥？我之前估的除以总装机对吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@电力合规审计师 看板上除了功率还要加啥？有没有必须加的死指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "增益率得用实际恢复量除以理论降发量，分母要用云图推演算。看板上必须加电压、频率和功率因数，审计师说超了就是事故，场站担责。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个红色闪烁的标签？然后触发个邮件或者钉钉告警？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分三层？最上面是业务增益，看恢复率；中间是运行稳态，看功率和辐照；最下面是合规红线，盯电压频率。红线一旦报警，看板上直接显示智调指令已熔断，不给往下发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "云图推演在云端跑，下发到边缘有延迟。我能不能直接在边缘侧用实况辐照算个近似值当分母？这样快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好吧，那就等云端数据。那我看板刷新频率就设30秒一次，免得数据对不上。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "合规指标1秒拉一次，增益率和功率那些1分钟。我这就去改Grafana的数据源配置和刷新策略。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估期异常复盘背景下与导师围绕无功指令异常的根因分析与修正策略持续沟通（6轮），其中在异常日志拆解部分与优化迭代专员沟通（1轮），在薄云透光特征区分部分与算法设计师沟通（1轮），并形成短期加辐照仪交叉校验、长期加红外特征重训模型的复盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在Grafana上用PromQL查了一下，确实有几个时段无功指令下发量特别大，但对应的云遮识别评分却是0。我想用Grafana自带的异常检测插件圈出这些时间段，看看能不能自动打个标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不好说啊，看曲线像是没识别出云，然后瞎给指令了。我得找专员看看日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我筛了三个时段的日志，你看下是不是漏判？云图评分都挺高的，但实际功率掉了一截，无功给超了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那怎么修？能不能在Grafana上加个规则，如果无功给多了就自动截断？或者我调一下算法的触发阈值？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在系统把薄云当厚云了，导致误调，这个怎么区分啊？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加红外是不是要重新训练模型？加辐照仪我倒是可以直接接数据源，快一点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先用辐照仪做个快速校验吧，如果辐照下降不大，就把云图的高遮挡评分压低，防止误调。同时让算法那边开始训练带红外的模型，后面版本再切过来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "误调根因是薄云特征缺失，短期加辐照仪交叉校验，长期加红外特征重训模型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改边缘侧的校验逻辑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在A站向山地B站扩场适配背景下，用户与导师围绕跨地形模型漂移风险、外推边界与验证方法持续沟通（5轮），其中在漂移检测与外推边界设定部分与优化迭代专员沟通（1轮），并最终形成遮影率超15%禁用外推、RMSE超20%触发重训及叠加实况辐照校验的扩场硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "A站模型直接部署过去应该也能用吧？如果真漂移了，我就用AutoML工具包跑个微调，我看网上很多人跨场站迁移都是这么搞的，挺方便的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用B站的历史辐照和云图数据微调呗。漂移临界点，我看工具包里有KS检验的接口，跑一下就知道了。不过山地地形影响具体有多大，我也拿不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种跨地形的外推边界怎么定？光靠工具包的KS检验感觉不太稳。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前光想着调接口了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没完全把握。山地涡流这种物理机理我不懂，AutoML里也没这参数。我只会按默认配置跑微调。这块我得补一下，我去找数据组同事要他们之前做山地涡流分析的脚本看看，顺便把这次漂移检测的配置和结果记到我的学习日志里。既然误调复盘时我们加了辐照仪交叉校验，这次B站验证集我也加上实况辐照做交叉比对，防止模型预测飘了我们还不知道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

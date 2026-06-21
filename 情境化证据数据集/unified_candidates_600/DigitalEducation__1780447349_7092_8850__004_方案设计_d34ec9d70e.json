@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨域异构算力编排系统方案设计背景下，与导师围绕异构算力感知与抽象架构、跨域多集群聚合方案选型及压测验证假设持续沟通（8轮），其中在跨域算力感知与多集群聚合实现部分与云原生架构师沟通（1轮），并形成以多集群联邦方案为主、延迟超标则缓存降级的架构决策与压测验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前用过K8s的Device Plugin管GPU，是不是顺着这套往下写就行？给每种算力写个Plugin，然后汇总起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域异构算力感知和抽象架构怎么搞？多集群怎么聚合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A省事，我肯定倾向A。但专家说A有延迟。我这两天得补一下Clusternet的架构文档，看看它的同步机制到底多慢，还有跨域网络抖动下怎么处理。我争取这周末跑个单机多集群的Demo出来看效果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设跨域网络延迟在50ms以内，A方案的API同步应该能撑住，超过100ms可能调度就滞后太严重了。我准备搭两个跨可用区的K8s集群，用方案A组联邦，压测一下资源变更的同步耗时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "B方案自己写探针，还得适配各种异构设备，我觉得我搞不定，工作量太大。还是先以A为主，如果压测发现延迟超标，我们在中心管控区加一层Redis缓存热点算力状态，降级处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 算力感知用多集群联邦聚合异构资源CRD；2. 验证假设是延迟<100ms；3. 不满足就加缓存降级；4. 我这周补学Clusternet机制并跑压测Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

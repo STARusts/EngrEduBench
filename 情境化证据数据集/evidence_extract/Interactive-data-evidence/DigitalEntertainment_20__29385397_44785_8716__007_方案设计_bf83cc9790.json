@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场方案设计收尾的安全审核与灰度设计背景下，用户与导师围绕“可追责取证”与“最小化留存/体验”边界持续沟通（6轮），其中在留存范围、隔离区与权限保留期上与合规与内容安全官沟通（3轮），在灰度门禁、开关鉴权与回滚权限上与安全工程师沟通（3轮），并形成结构化事件+hash链路留存与分层灰度门禁及验证指标写入方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向全量留吧，不留出事不好查。反正我们有RollbackEvent和快照，不就能回放了吗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我真没想细。就感觉审计得能看懂发生了啥，不然RollbackEvent只剩id也没用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 我们互动剧场这边要做审计和取证，弹幕、语音、用户选择、生成剧情这些，到底哪些能存、哪些最好别存？保留多久合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解就是：事件都存，但文本/音频别存，最多存hash和命中规则。只有出事才去隔离区看原文，对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "隔离区那块我们后端可以做成单独存储和单独权限组？还是跟主审计库一个库分表就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度时我们要不要放宽一些留存，方便排障？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是：审计事件照常存结构化字段，像operation_id、target_state_id这些，再加策略版本、内容hash。弹幕/语音原文不常驻。真要看原文走隔离区，得工单审批和访问留痕，到期清掉。灰度也不能偷懒，只能采样匿名化开关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RollbackEvent里我能加：policy_version、moderation_decision_id（如果有审核结论）、content_hash。快照里别放原文，放node_id、scene_id、asset_id这种。弹幕这种就只存risk_rule_id和hash指纹。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用户id用脱敏id，像uid_hash？但反查这块我不太会设计，可能要你们定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先小流量开，命中高风险就直接拦，低风险先放行再抽检？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 灰度方案里我们要做审核门禁和开关控制。哪些能力必须先上？比如鉴权、开关、白名单、审批留痕这些，怎么设计比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "四级开关我大概懂。发布门禁那块，“高风险命中即阻断”，是基于规则还是模型？误伤会很多吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "回滚权限这点我之前没想到。我以为回滚是救火功能，谁都能点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "留存这块我不坚持全量了。选“结构化事件+hash链路”为主，原文进隔离区短期留。灰度策略选“规则命中高风险先审后发”，其他走自动审核再放量，开关四级控制，回滚要权限和理由码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "证明…我只能想个演练：随机挑几起RollbackEvent，看能不能靠快照和hash把当时的剧情和策略复现出来。阈值我不知道怎么定，可能先按历史审核通过率？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我能先写成区间，比如误拦率先小于1%-3%这样？延迟增加不超过100ms？我不确定行业是不是这么定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能接住审计事件字段这块，尤其是RollbackEvent加policy_version、content_hash、reason_code这种，还有“回滚也要审计”。隔离区审批流程我只能写接口和字段，审批链得合规和你们定口径。灰度指标我会先按你说的写区间，具体阈值我不敢拍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

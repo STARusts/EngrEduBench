@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知数据接入清洗背景下，用户与导师围绕多源异构接入、流式清洗、合规裁剪及实现约束持续沟通（5轮），其中在协议适配与合规裁剪部分与数据流设计师沟通（1轮），在流清洗与异常剔除部分与数据研发工程师沟通（1轮），并最终形成接入清洗5条实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写几个Consumer拉数据呗，格式不同就写几个解析脚本，用Pandas洗掉空值就能入库了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时空对齐我按时间戳merge一下？伪数据我就设个上下限过滤。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规是啥意思，环境数据还有隐私？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多源数据接入协议怎么适配不硬编码？流式清洗怎么搞？还有合规裁剪具体要干啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能写死解析，得用适配器。清洗上Flink，还得打标剔除维护数据。合规就是把多余字段砍了，还得留日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "适配器就写个接口类，各种协议实现它呗。乱序数据，Flink不是有Watermark吗，设个延迟就行。算力这块，在Source端裁剪肯定最省啊，免得下游还要处理。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去搭Flink任务和适配器脚手架。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

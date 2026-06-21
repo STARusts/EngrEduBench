@@ -1,0 +1,113 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在溯源跨端扫码查询链路方案设计背景下，用户与导师围绕一码多端承接形态、码值解析接口、失败态与合规隔离收口定案持续沟通（8轮），其中在承接H5/小程序冲突与埋点联调卡点上与前端负责人沟通（3轮），在code解析建模与resolve/view接口口径、状态码与版本快照上与数据架构师沟通（4轮），并形成一码入口/承接兜底/接口分层/租户隔离与缓存TTL的定案表述。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是二维码里放个链接，扫了就打开一个页面，页面去我们这查批次，然后展示溯源和营养标签。大概这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "码里放URL吧，带个batchId。不同端就都跳这个URL。登录我觉得不用，消费者就看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "消费者用微信扫、相机扫。渠道方可能在电商APP里扫。工厂自己用我们APP扫来核验。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 现在扫码链路到底要怎么做？我听到两种说法，我有点对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但你之前不是说微信里打开H5有些限制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那另一套“小程序承接”是你们谁提的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我主要想知道，能不能做到一套码同时支持？不想印两种码。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那你说的“埋点统一”怎么做？小程序和H5不是两套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们现在卡在哪，才说联调做不下去？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向微信走小程序，其他走H5。因为他说风控概率我也控制不了。兜底就是微信里如果小程序打不开就H5？我不确定能不能判断。坑我担心就是跳转太多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 码值解析这块，应该怎么建模？前端要一个`code->展示数据/跳转`的接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "快照是每次更正都生成一份？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我记得导师之前强调UNVERIFIED不能对外发布。这里就直接拦？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那接口字段最小集是啥？前端说要“最小展示数据”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "batch_code_masked是啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那code怎么生成？会不会很长？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我说下我理解的版本：  \n1）二维码里只放`code`，指向我们域名 `/q/{code}` 这种；不放batchId。  \n2）首跳到服务端做一次resolve，然后根据UA决定跳小程序还是H5。  \n3）`/scan/resolve` 返回status、public_version_id、trace_id，还有最小产品名和遮罩批次号。  \n4）如果是UNVERIFIED或REVOKED，就不给`public_version_id`，前端出“不可查询/已作废”。  \n5）正常就再调`/public/view` 拿溯源摘要+营养标签+检测报告引用（白名单字段）。  \n6）埋点用trace_id串起来，小程序和H5事件名统一。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "多租户隔离是resolve里校验tenant？但消费者也没登录，怎么知道tenant是谁。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能。resolve结果可以缓存一小段时间，比如几分钟？我不确定多久合适，怕更正后还看到旧的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那微信小程序打不开的兜底呢，我没想清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就变成：`/q/{code}` 在微信里先给个中间页，按钮进小程序，另一个按钮进H5？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心前端会说中间页影响转化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我去跟前端对齐这些指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定案我记成这几条：  \n- 一码制：码里仅`code`，入口统一 `/q/{code}`，服务端解析，不允许前端拼batchId查。  \n- 承接策略：微信UA走“中间页→小程序”为主，提供“网页查询(H5)”按钮兜底；非微信直接H5；App内先按H5兜底。  \n- 接口分层：`/scan/resolve(code)` 返回`status/trace_id/public_version_id(可选)/entry_policy/最小展示字段`；`/public/view(public_version_id)` 返回对外视图（溯源摘要+营养标签+检测报告引用白名单）。  \n- 合规拦截：UNVERIFIED/REVOKED等状态只允许受限页，不下发明细、PDF直链或可反推内部主键的信息。  \n- 隔离与性能：code解析绑定tenant，服务端只按解析结果取数；resolve短TTL缓存(30-60s)，view按version可长缓存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

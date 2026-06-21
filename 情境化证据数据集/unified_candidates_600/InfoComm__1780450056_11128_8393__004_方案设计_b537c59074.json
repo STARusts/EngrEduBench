@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在载波畸变感知与反演总体架构设计背景下，用户与导师围绕模块拆分与核心假设选择持续沟通（6轮），其中在对照假设设定部分与畸变反演总体设计师沟通（1轮），在基带算力切分与接口带宽部分与基带算力协同调度师沟通（1轮），并最终锚定采用多径假设B作为架构基线及特征压缩协议。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步打算把感知和反演拆成两个独立模块，中间做个数据通道传特征就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知侧就提取多普勒频移和信道衰落特征，反演侧拿这些去算速度和位置，假设就是信道变化能反映目标运动呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知侧提特征和反演侧算态势，这中间的假设怎么定？单径的行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设A快但多径不准，假设B准但怕慢。我觉得假设A简单点，先试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "依据就是假设B可能太慢了，我怕时延超。不过确实多径下A不行。那还是得看B能不能把时延压下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我有点拿不准，多径角谱估计的加速方法我不熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去查几篇关于压缩感知和子空间追踪做角谱估计的文献，看看能不能把复杂度降下来，把时延控制在5ms内的可行性。看完我拿计算量评估来定架构。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用多径角谱+频移扩展这套架构，基带算力切分怎么做？接口会不会卡住？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知侧做压缩，只传有效径，反演侧做求逆。这样带宽就够了吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

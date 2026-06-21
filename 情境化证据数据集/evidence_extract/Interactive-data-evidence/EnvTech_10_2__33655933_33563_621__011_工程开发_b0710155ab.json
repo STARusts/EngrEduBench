@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在策略引擎进入压测与故障演练验收口径固化背景下，用户与导师围绕负载定义、门禁阈值、降级触发可控性、日志合规与能耗抖动保护持续沟通（11轮），其中在压测负载模型/指标SLO/故障注入与可观测收敛方法上与SRE运维工程师沟通（8轮），并收束形成分层SLO+正确性门禁+注入点+日志白名单与动作allow/denylist的测试计划要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆三段压：采集写入、风险计算、策略下发。然后故障演练按“数据缺失/乱序、设备接口超时、策略引擎自身抖动”。KPI我想定成：风险计算延迟、策略输出延迟、以及不该下发时的控制请求数为0。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "负载我先用房间数×传感器数估一下，比如1000房间，每房间10个点位，1Hz上报，算10k msg/s。压测轮廓用阶梯上升到2倍峰值再回落。故障注入点：消息队列积压、风险服务返回超时、策略下发HTTP 5xx。量化“不乱下发”就用：unknown必须0下发；degraded只能最小可逆动作占比100%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 压测这块你给我一套可落地的：负载模型、关键指标、门禁阈值怎么定？另外故障注入你建议从哪几处下手，能复现又能收敛定位的那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "门禁阈值你一般怎么给？我怕拍脑袋。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障注入点你会怎么选？我现在只想到超时和5xx。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心一点：压测里怎么稳定造出 unknown/degraded？是靠造数据质量问题，还是加个测试开关？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规层面，trace_id和reason_codes会不会带出房间号设备号？我们之前断言要求不带标识。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把门禁拆成性能+正确性+资源三组，然后把注入点对应到能验收的统计指标上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳四块：  \n1）分层SLO：入口摄取延迟、风险API、策略输出三段；门禁按p95/p99+错误率。  \n2）正确性门禁细化：unknown窗口 control_request_count=0 且原因回显 action_eligible=false；degraded动作必须命中allowlist，denylist为0。  \n3）故障注入四类：数据乱序/丢包、风险服务延迟/不可用、下发429/503、存储慢。  \n4）可观测：trace_id贯穿+reason_codes按分钟聚合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我暂时不做的：1小时稳态2倍峰值我可能先缩到20分钟，因为我们本地环境资源不够，先把趋势看出来；另外“安全审计日志映射”我理解是合规模块的事，压测里先保证默认日志不带标识。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存泄漏替代验证我能想到两个：一是看GC/堆占用的斜率，20分钟内如果持续上升就报警；二是做一次“峰值->空载->再峰值”的循环，看回落是否到基线附近。日志白名单我这边可以把字段定成：trace_id、tenant_id(脱敏)、space_id(脱敏)、risk_status、risk_score、primary_pollutant、reason_codes、action_eligible、action_list，不写device_sn和room_name。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能耗这块我理解是“不要因为抖动导致频繁调档”。我可以加一个门禁：单位时间内同一空间的策略变更次数上限，比如每10分钟最多2次；超过就强制进入保守模式（保持当前档位或回到低档）。另外策略输出里记录estimated_energy_delta的区间，压测时统计不应出现异常尖峰。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "allowlist我先列：  \n- OA_FAN_UP_SMALL（新风小幅上调）  \n- PURIFIER_LOW_ON（净化器低档开启/保持）  \n- RECIRC_ON（内循环保持开启，如果本来就开）  \ndenylist：  \n- OA_FAN_OFF（关闭新风）  \n- OA_FAN_DOWN_LARGE（新风大幅下调）  \n- PURIFIER_OFF（关闭净化器）"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不确定RECIRC_ON算不算我们现有动作码，得和控制策略工程师对一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补两点：一是“白盒测试模式”我们要加进演练手段里，保证unknown/degraded能稳定触发做回归，但必须受权限保护且不进生产构建；二是allowlist里RECIRC_ON我先标待确认，避免验收时口径对不上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

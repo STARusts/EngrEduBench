@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在软硬件联调背景下，用户与导师围绕弱网下阀控指令确定性架构与安全保护持续沟通（5轮），其中在边缘指令架构部分与边缘高可用架构师沟通（1轮），在卡死故障模拟部分与联调测试工程师沟通（1轮），并最终确认弃用EMQ直连，采用网关本地状态机闭环、5秒看门狗超时全关及电平钳位测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接上EMQ X的边缘版做MQTT下发，它自带规则引擎，反演结果一出来直接转JSON发下去，应该挺快的。我看网上好多物联网项目都是这么连设备的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，EMQ有离线消息缓存吧？等网好了再发。卡在中间的话，我可以加个心跳检测，超时就重发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网下怎么保证不卡死？用EMQ边缘版能行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写状态机好麻烦啊，有没有那种边缘侧的轻量级状态机框架？比如用Actor模型那种？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "安全态应该是全关吧，断水总比淹了强。超时，我不太清楚阀门走完全程要多久。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要写个看门狗超时保护，联调时怎么模拟阀门卡在半开状态？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我大概懂了，不能用EMQ直连，得在网关里写C或者Go的本地控制逻辑，接GPIO，自己管状态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。网关本地闭环，看门狗5秒超时全关，电平钳位测故障。我这就去翻边缘网关的GPIO文档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实时配音变声服务台MVP链路开发背景下，用户与导师围绕端到端语音流闭环的延迟预算、可追踪与合规日志持续沟通（7轮），其中在分帧/jitter buffer/丢包与gRPC传输节点向实时音频工程师咨询并确认实现基线（4轮），在最小压测与验收口径节点向测试负责人咨询脚本与指标采集（2轮），并最终对齐20ms frame、降级策略、审计字段与最小验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在“语音流进来—变声/配音—再推回去”这段，想先把MVP跑通，哪些点必须优先做对？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在实现思路是：网关收到WebRTC音频帧，扔到处理服务里做重采样+VAD，然后把片段送到“变声/合成”模块，再拼回流推给下游。问题是分片大小我拿不准，怕延迟爆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端到端我想先压到500ms以内？分片20ms或40ms我都见过。缓存上限我没概念，我怕抖动就越攒越多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时音频工程师 我现在做声纹译动实时配音变声服务台的流处理链路，想先跑通MVP。音频帧分片、抖动缓存、丢包这块一般怎么定？我不想一上来搞得太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边的“变声/合成”模块是流式的，不是整段才出结果。那我是不是可以不做VAD切片，直接frame进去frame出来？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢帧这块我有点虚。丢了会不会听起来很炸？我怕被产品喷。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想问个实现细节：我用gRPC流在服务间传frame可以吗？还是必须走WebRTC？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我平时调音频会把几秒PCM dump到文件看波形……这次我不dump了，只打耗时和队列长度。trace里就放stream_id、seq范围、处理耗时。音频本体不落盘。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把日志封装一层，只暴露白名单key，其他都不让传。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "入口网关校验Stream Token签名和过期时间，校验过就给内部链路一个短期的stream_session_id。内部服务就不再验token了，只认session_id。过期就断流？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码我先做三个：TOKEN_EXPIRED、TOKEN_INVALID、SERVER_OVERLOAD。关闭原因就写在控制信令里，不写音频。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做：WebRTC进来->解码成16k mono PCM->gRPC推到voice-worker->worker调用算法模块->编码opus->WebRTC回推。降级先做直通：算法超时就直接把原音回推。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "worker内部有个ring buffer，超过5帧就认为处理跟不上，进入degrade_mode=PASS_THROUGH，等buffer回到2帧再退出。阈值先写配置。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 我在做实时配音变声的流处理链路，想做个最小验证：模拟算法处理耗时，看看buffer和降级能不能把延迟压住。你这边一般怎么测？我不太会写音频压测。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能用假处理器这个思路，省得等算法那边。P95我之前没算过，我就先输出直方图行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试这块建议做个可复现脚本：固定音频按20ms喂，worker里用可配置sleep的假处理器模拟算法耗时，采端到端延迟、drop、降级时长。验收先用阈值：P95<500ms之类，至少能对比趋势。我想先这样过MVP。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把frame结构和worker那套ring buffer写出来。token_hash我用sha256截断就行吧？长度我随便取16字节？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我这两天先把链路跑通，算法那块先接假处理器，等他们接口稳定再换。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

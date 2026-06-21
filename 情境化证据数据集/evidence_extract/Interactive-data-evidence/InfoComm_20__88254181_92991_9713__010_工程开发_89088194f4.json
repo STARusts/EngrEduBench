@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在6G专网意图翻译后进入实时资源控制器实现背景下，用户与导师围绕闭环下发、非阻塞反馈与降级策略持续沟通（6轮），其中在仿真反馈接口与参数格式校验部分与数字孪生建模师沟通（2轮），在高并发异步状态机与解耦实现部分与后端开发工程师沟通（2轮），并确定用gRPC流+Protobuf对接仿真、Redis Stream管理状态及未达标降级重试的控制器流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心逻辑不就是把翻译好的数据传给基站吗？我想着直接写个发送函数，把那些带宽、时延参数丢过去就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还要准？那是不是得一直盯着基站看它行不行？我可能得写个死循环去查状态。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数字孪生建模师 那个，导师让我问问，我这边控制器逻辑要接你们的仿真模型，你们那个接口是怎么给数据的？频率对得上吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "5ms这么快啊。Protobuf那个我还没怎么用过，我就用普通的JSON传不行吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧。那我把参数改改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算等他们仿真完了给我回个话，我再点下一步。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 仿真那边说要用gRPC流，还要厘米级精度，我怕把控制器写死锁了。你觉得这逻辑该怎么搭？是用多线程还是弄个消息队列隔开？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "消息中间件？是说那个Kafka吗？我也不会配置那个。非要用这个吗？能不能简单点，我直接写个全局变量存状态行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Redis我会一点，那就用这个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听明白了。就是控制器接到意图后，先别急着发给基站，得先弄成那个Protobuf格式传给仿真。然后我用Redis弄个队列，不让程序死等。等仿真说行，我再发。坐标什么的我也得对一下，别弄偏了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这……我没想过。要不就直接报错，让用户重新发意图？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在逻辑里加个判断，如果不达标，就按您说的减点带宽重试一次。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按这几条去写。先把那个gRPC和Redis连上，剩下的重试逻辑我写个if判断就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

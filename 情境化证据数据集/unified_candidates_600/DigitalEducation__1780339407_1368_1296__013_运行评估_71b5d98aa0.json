@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估盯盘体系搭建背景下，用户与导师围绕监控大盘构建、核心指标口径及异常归因下钻维度持续沟通（6轮），其中在核心指标业务口径定义部分与业务指标监控师沟通（2轮），并最终形成盯盘口径确认与自定义指标构建方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Prometheus抓数据，Grafana出图吧。网上有通用的API监控大盘模板，我直接导一个改改就能用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "达成率就是匹配成功数除以总请求数呗。延迟就看接口响应时间，这些模板里都有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有现成的PromQL算子能直接算这俩？我不想从头写逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分母要过滤，延迟还分机器和人。这样Grafana图不好画吧，人工确认的时间怎么抓？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这样得加不少自定义指标了，通用模板估计用不上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分母不能直接用请求数，得是有效需求池。延迟得分两段，引擎计算和人工确认。还要按租户看P99。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个下钻链接？或者按资源类型再拆个标签，用PromQL聚合一下。Grafana支持变量筛选，选租户就能看细分图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "盯盘口径：达成率分母用有效需求池，延迟拆引擎和人工确认两段，大盘按租户看P99，支持租户和资源类型下钻。我自己写PromQL和变量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

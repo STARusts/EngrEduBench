@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在隐私计算学习履历互联平台进入xAPI采集适配开发背景下，用户与导师围绕解析-幂等-审计的最小可跑通实现与验收点持续沟通（8轮），其中在event_id生成与去重存储选择上与后端工程师沟通（4轮），在原因码枚举与对外响应隐藏细节上与合规与隐私负责人沟通（2轮），并明确先实现event_id函数、Redis SETNX幂等与最小审计接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "xAPI采集适配这块我真不知道从哪动手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我怕漏审计那块。每次都忘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一个HTTP接口收事件。别的我不清楚，反正他们说先这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "xAPI里有id吧，就用那个。没有就随便生成个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 statement.id到底要不要必须有？没的话咋整，我现在要写采集适配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的registration我也不懂，反正就是拼一堆字段hash？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "duplicate也要审计吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计字段我都要自己塞进去？我怕又漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 后端说没id就用一堆字段hash当event_id，还要duplicate也写审计。那我现在具体要做啥，我怕漏字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "effective_at又来了，我也不懂。是不是就是撤销以后都拒绝？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我怎么证明？我又不写报告。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 reason_code我要用哪些？还有权限拒绝对外到底回什么，别让我乱写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我记不住这么多码，能只用一个拒绝吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规说对外就403 PERMISSION_DENIED，审计里分 REVOKED_EFFECTIVE、POLICY_MISMATCH、DUPLICATE_EVENT 这些。还说测试数据别用真学生邮箱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先做幂等吧。别的我怕搞错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道用啥库。问别人吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 我做幂等去重，用DB唯一键还是Redis更快能搞定？我们现成有啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TTL 24h 是拍脑袋的吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写成配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先写生成event_id的，还有Redis的setnx去重。就这俩。审计中间件我先不碰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在实体资产碎化铸造上链交付部署验证背景下，用户与导师围绕部署验证标准、系统性延迟排查与重新部署方案持续沟通（6轮），其中在部署状态与延迟数据排查部分与链上运维监控官沟通（3轮），并最终确定重新部署修复合约、转多签权限及灰度验证方案，明确交付清单与后续学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看Hardhat部署脚本都写好了，直接跑一下看合约地址出来没就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了网上的模板，基本都是跑个 verify 命令在Etherscan验证一下源码。权限那些，我看工具库里有默认的Ownable，应该直接就生效了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@链上运维监控官 部署完的合约，监控面板上有没有现成的检查项能一键确认交付的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是Hardhat的gas估算又抽风了？延迟15秒这种，有没有自动重试的中间件能兜底？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差分析我只会用Python库算，但我不确定该用啥置信度。两组数据看着差挺多，直觉上B组有问题。但我不知道怎么证明。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用SciPy跑了一下，A组95% CI是[7.78, 8.62]，B组是[14.21, 15.39]。完全不重叠。B组确实有系统性问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把部署钱包的权限转给多签吧，然后重新初始化。B组延迟的问题，我只会改代码重新部署，有没有不改代码能修的网关配置方案？我实在不想再走一遍部署流程了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我发现我对链上部署后的数据验证完全没概念，只会看成功失败，不会做统计分析。我接下来一周得定个目标补一下：每天花1小时用Jupyter分析链上监控数据，自己写脚本算置信区间和效应量，不能再只看面板了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

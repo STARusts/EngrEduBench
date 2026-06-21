@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在时隙编排闭环背景下与导师围绕光电协同流表机制与接口切分持续沟通（6轮），其中在流表机制设计部分与光电协同规划师沟通（1轮），在接口切分与状态暴露部分与通信协议开发专家沟通（1轮），并最终形成光表静态电表动态、控制面数据面接口切分及内部参数解耦的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流表就按电层的来呗，扩展一下OpenFlow，光层也套这套匹配转发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "光电流表怎么搞？我本来想直接复用OpenFlow。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "光表静态，电表动态，中间靠控制字上送连起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "光层把包送给电层，电层处理完再送回去？具体要交互啥我不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "光电接口怎么切？光层要暴露啥状态？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "光层只上报通断和占用，电层下发建拆。数据面靠控制字上送匹配。接口隔离内部参数，免得升级牵连。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流表机制：光路状态表静态，电层转发表动态，控制字剥离上送触发更新。接口切分：控制面光层上报通断和占用，电层下发建拆；数据面靠控制字上送匹配。接口不暴露光层内部参数，解耦。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

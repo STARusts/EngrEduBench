@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度流量监控补齐背景下，用户与导师围绕语义保真度与意图命中率算法、运维抽样与溯源全量诉求冲突及折中方案持续沟通（5轮），其中在实时大盘分布计算与抽样部分与语义监控运维工程师沟通（1轮），在溯源数据全量落盘需求部分与异常溯源与复盘师沟通（1轮），并形成双轨监控与积压降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保真度我打算算个余弦相似度，接收端重构的特征向量和发送端原向量比一下。意图命中就看标签对不对，匹配上就算命中。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实时大盘算保真度，余弦相似度不行的话，Prometheus里要怎么算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "运维这边说要抽样算分布，你们溯源需要什么数据？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "运维要抽样省算力，溯源要全量落盘。存储和算力都要炸。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现在5%流量，全量落盘应该还扛得住。那就这样：全量特征和标签先推到Kafka落盘，给溯源用；实时大盘的分布计算，从Kafka里再按比例抽样丢给Prometheus。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "消费者那边设个积压水位线。超了就降级抽样率，从全量降到1%落盘。大盘实时性优先保。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在极端工况压测背景下与导师围绕工况注入方式、验收指标及异常日志存储持续沟通（5轮），其中在工况注入部分与联调测试工程师沟通（1轮），在验收指标部分与可靠性评估工程师沟通（1轮），在脏数据规范部分与数据合规审计员沟通（1轮），并形成含网络抖动注入、声振毛刺构造、P99时延与阻断率验收及日志限流落盘的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联调测试工程师 这种工控极端工况，有没有一键注入的工具？我搜搜有没有现成脚本。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Chaos Mesh是K8s里的吧，能用在OT网络？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@可靠性评估工程师 压测结果怎么看？系统没崩就算过？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只会看平均响应时间。tc netem我也没写过。看来我得现学一下Chaos Mesh的配置，把它改改用到OT网络侧。今天得把tc命令和Chaos Mesh的NetworkChaos对象过一遍，不然没法造抖动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "它支持delay和loss动作，我就在边缘节点容器里部署它，模拟交换机抖动。造毛刺的话，我写个Python脚本改测试桩，往正常声振数据里叠加热噪声。压测出来的数据，我就不只看平均时延了，按专家说的，提P99和阻断率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据合规审计员 这种压测产生的脏数据，有没有规范要求？能不能直接丢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测方案就是：第一，用Chaos Mesh和tc造网络抖动；第二，用Python脚本造声振毛刺；第三，验收看P99时延和阻断率；第四，压测日志限流落盘。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

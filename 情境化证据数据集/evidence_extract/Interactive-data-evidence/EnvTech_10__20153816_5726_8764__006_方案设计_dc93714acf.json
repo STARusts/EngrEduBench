@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在自愈调度V0接口设计背景下，用户与导师围绕风险事件/工单/调度三段链路的字段级接口点、去重抑制窗口与动作枚举持续沟通（7轮），其中在范围对象与幂等/版本/状态机设计上与解决方案架构师沟通（3轮），在自动执行分级与审批留痕最小化设计上与合规经理沟通（1轮），并形成Scope建模、动作类型集合与留痕幂等的接口骨架及后续访谈X和N/T取值问法。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按三段链路拆：  \n1）风险服务→自愈编排：发“风险事件”，包含评分、等级、影响范围候选、解释和建议动作。  \n2）自愈编排→工单：把风险事件落成“处置工单/巡检工单”，填上我们上个微场景定的关单四字段模板和SLA。  \n3）自愈编排→调度/执行系统：推“建议动作”，由调度系统做二次确认或自动执行（按分级）。  \n我担心的是第3段里“分区范围”到底用DMA、阀门集合还是管段集合，得定一个V0可对接的表达。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "风险事件我先给一版V0字段草案（偏业务语义，不绑具体实现）：  \n- event_id：全局唯一  \n- event_time / detect_time：发生/检测时间  \n- source：触发来源（模型/规则/人工回放）  \n- risk_level：L1-L3  \n- risk_score：0-100  \n- evidence：关键指标快照（如余氯、浊度、压力等的当前值+偏离幅度）  \n- explanation：可解释文本/要点（命中的规则或特征贡献摘要）  \n- duration_hint：持续时间建议口径（比如“已持续X分钟/预计需要观察T分钟”）  \n- dedup_key：我设想用【站点/分区 + 指标类型 + 触发模式】拼  \n- affected_scope_candidates：影响范围候选（先放分区ID列表+置信度）  \n- recommended_actions：动作建议列表，每条含 action_type、scope、priority、expected_effect、safety_note  \n其中 X（告警量目标）和 N/T（持续/观察窗）我倾向放到阈值配置侧，但事件里要带“本次适用的抑制窗/升级窗”，不然联动侧很难解释为什么没继续告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 分区范围这块，V0接口里你建议用什么对象表达？DMA/压力分区/阀门集合/管段集合怎么取舍，才能让调度系统直接用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那可靠性这块呢？比如我重复推送同一个建议，调度系统会不会重复关阀；还有版本升级时字段变了怎么办？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问一句：L3这种高风险，能不能支持“先演练再执行”？不然调度那边会很抗拒。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规经理 自愈调度接口如果带 operator_ack、审批编号、状态流转，这些留痕字段怎么设计才符合你们之前说的“阈值双人审批、状态变更审计、个人信息最小化到班组维度”？另外哪些动作可以自动执行，哪些必须人工确认？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见拼一下，回到接口设计：  \n- Scope 统一用 DMA/压力分区为主，辅以 boundary_valve_id_list；管段ID先做可选不强依赖。  \n- recommendation 和 command 分离；建议带 ttl、dry_run；执行必须带 approval_ticket_id（如果需要）和 operator_ack（班组/岗位）。  \n- 幂等用 idempotency_key=event_id+action_id；全链路 correlation_id 贯穿到工单与调度回执。  \nX 和 N/T 这块，我先不拍数值，但接口里会留“suppress_window”和“escalate_window”的字段，用于解释告警合并和升级逻辑；具体初值区间在访谈里定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "动作类型我收敛到V0五类，调度系统也好做枚举：  \nA1 隔离（ISOLATE）：关闭边界阀门集合；参数 boundary_valve_id_list、close_mode（建议值）、dry_run  \nA2 冲洗（FLUSH）：指定冲洗点/消火栓/排水口；参数 flush_point_id_list、target_duration  \nA3 加氯调整（CHLORINATE_ADJUST）：指定加氯点；参数 chlorination_site_id、delta_setpoint、max_duration、dry_run  \nA4 采样/复核（SAMPLE_VERIFY）：参数 sampling_points、deadline  \nA5 仪表自愈（SENSOR_SELF_HEAL）：参数 device_id_list、self_check_type（重启/校准/切换冗余），失败则自动转巡检工单"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "工单字段我按“工单系统最小可用”来：  \n- work_order_type：处置/巡检/仪表故障  \n- title / description：由 risk_level + 证据摘要自动生成  \n- priority：由 risk_level 映射  \n- location：分区ID、关联站点ID（不填个人信息）  \n- related_event_id、correlation_id  \n- suggested_actions（引用 recommendation_id 列表）  \n- SLA：要求响应时限（由等级映射）  \n- closure_required_fields：结论/原因/动作/结果耗时（关单校验用）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "V0我建议四类接口点（不绑定具体协议名，先按语义）：  \n1）RiskEvent Ingest（风险→自愈编排）  \n- 入参最小：event_id、detect_time、risk_level、risk_score、dedup_key、scope_candidates（DMA列表+置信度）、evidence_summary、explanation_ref、recommended_actions（可为空）  \n- 回执：accepted(bool)、reason_code、correlation_id  \n- 关键错误码：INVALID_FIELD / DUPLICATE_EVENT / AUTH_FAILED  \n2）WorkOrder Create（自愈编排→工单）  \n- 入参最小：work_order_type、priority、title、description、location_scope（DMA/站点）、related_event_id、correlation_id、SLA、closure_schema_version  \n- 回执：work_order_id、status  \n- 错误码：MISSING_REQUIRED / REJECTED_BY_RULE（比如不允许自动建单）  \n3）Dispatch Recommendation（自愈编排→调度）  \n- 入参最小：recommendation_id、event_id、action_type、scope（scope_type+scope_id_list+可选boundary_valve_id_list）、ttl(valid_until)、dry_run、approval_required、safety_note  \n- 回执：received、reason_code  \n4）Dispatch Command Status（调度→自愈编排回传 或 编排侧查询）  \n- 字段最小：command_id、recommendation_id、state、state_time、why_code、operator_role（到班组/岗位）、approval_ticket_id(可选)  \n- 错误码：UNKNOWN_ID / STATE_CONFLICT  \n频控上我先按两点：  \n- 对同一 dedup_key 在 suppress_window 内只出一条建议（窗口具体值等访谈给X和N/T区间后再定）  \n- 支持批量：同一时间片聚合多个低风险建议，避免调度侧被刷屏；L3不批量，单条强提醒。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我按你说的三条定：  \n1）范围建模：Scope 以 DMA/压力分区为主，必要时补 boundary_valve_id_list；pipe_segment_id_list 先保留可选。  \n2）动作枚举：A1隔离/A2冲洗/A3加氯调整/A4采样复核/A5仪表自愈，recommendation 与 command 分离，带 ttl、dry_run、state机。  \n3）留痕与幂等：idempotency_key=event_id+action_id；correlation_id 全链路；执行侧回传状态变更审计（到班组/岗位），L3支持双人审批编号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "访谈里我准备两问把X和N/T逼出来：  \n- “值班台一天能接受多少条需要处理的告警不崩？”让他们给区间，比如 20-50/天 这种，否则就让他们按班次算上限。  \n- “同类风险从首次出现到你希望系统升级到更强动作，最长能忍多久？”分别问 N（去重持续阈）和 T（观察窗/升级窗），让他们给分钟级区间，并让他们用最近一次事件回忆校准。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

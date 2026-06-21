@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度放量后配给响应延迟P99飙高的复盘背景下，用户与导师围绕延迟根因分析与解决方案持续沟通（7轮），其中在链路耗时拆解部分与系统架构师沟通（1轮），在分拣物理上限确认部分与线边仓专家沟通（1轮），并最终形成基于漏桶限流的指令节拍对齐方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5秒确实太长了。我猜是后端配给引擎计算配额的时候卡了，或者查MES工单数据慢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你能帮我拆一下这个链路的耗时分布吗？我怀疑是后端计算慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不是后端的问题。那就是队列积压和PLC响应慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是网络抖动啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是你们分拣动作跟不上？导致指令排队了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "明白了，是并发太高超过了分拣上限。那我们是不是得加个限流？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加个消息队列削峰填谷？不对，前面已经有队列了，还是积压。应该是把下发指令的节奏控制一下，按线边仓的分拣周期匀速下发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "复盘结论：延迟P99飙高根因是短时并发配给指令超出线边仓分拣物理上限，导致指令排队。解决思路是在指令下发通道加漏桶算法，按分拣周期匀速下发，做削峰对齐。同时监控看板要加上“指令并发超限率”指标，超过分拣上限就报警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

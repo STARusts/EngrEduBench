@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在竞域微操时序指纹甄判与战局推演系统方案设计背景下，与导师围绕流式架构选型、状态管理约束与反压验证持续沟通（5轮），其中在信令接入与特征提取解耦部分与流式架构设计师沟通（1轮），并最终放弃Flink SQL，确认接入网关与特征提取解耦架构及压测验证方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时序指纹提取这块，我打算直接用Kafka加Flink那一套，网上都这么搞流式数据的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink快啊，吞吐大。数据最小化我就少写几个字段进Sink呗。误判红线那是算法的事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩还要解耦？不都是Flink里的算子吗？我不太懂怎么拆，@流式架构设计师 导师让我问下信令接入和提取怎么拆开？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A是Flink SQL一把梭，B要自己写DataStream。A多省事啊，直接抄个SQL作业就能跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态TTL我确实不太懂，SQL好像也能设置？审计我就再写个Sink存数据库呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去搜下Flink State和反压的文档，这两天看完。验证的话，我就压测一把看看呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我造一批信令，分别灌进A和B，看哪个先反压。我看完文档后，会在DataStream方案里加上状态清理逻辑，应该就不会爆了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

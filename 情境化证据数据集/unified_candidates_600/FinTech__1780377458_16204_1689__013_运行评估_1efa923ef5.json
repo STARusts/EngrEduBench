@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在零知证绿ESG系统灰度发布运行评估背景下，与导师围绕灰度验证标准、统计口径与能力短板提升持续沟通（10轮），其中在基建指标监控部分与运维部署工程师沟通（1轮），在假阳率置信区间计算与观测窗口部分与风控监控分析师沟通（2轮），并最终形成灰度验证标准、内部统计服务开发目标及全量发布结论边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用Istio搞灰度发布，按Header路由切10%流量过去，应该挺快搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看Grafana面板有没有红色报警呗，如果报错率没超0.1%，我就接着切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维部署工程师 灰度部署证绿引擎的时候，除了看HTTP状态码，还要盯哪些基建指标？@风控监控分析师 漂绿判定假阳率这块，灰度期间怎么算才不误伤？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算置信区间？这有点超出我平时的操作范围了。有没有那种一键对比的工具，直接告诉我有没有偏差？我平时只用Prometheus的avg函数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维说要盯P99延迟，风控说要算假阳率的置信区间。标准就是：灰度组P99延迟不超过2秒，假阳率置信区间跟基线组重叠。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切5%吧，稳妥点。观测窗口跑1天？统计口径我就只会看均值，P99和置信区间我真不知道怎么在PromQL里写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "导出来算？这还得写个服务接收数据，有没有现成的A/B测试平台能接？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我只会用现成监控面板，一碰到要自己写统计逻辑就抓瞎。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我得学学怎么算比例差异的置信区间。目标就是：这周内，用Python实现一个接收Prometheus webhook的接口，算出两个分组假阳率的95%置信区间，并把结果打回监控面板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用两组已知假阳率的模拟数据跑一遍，如果算出来的区间符合统计学教材上的结果，就算对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论边界就是：3天观测期后，如果灰度组证明生成P99小于2秒，且漂绿阻抑假阳率差异的95%置信区间包含0，说明新引擎没劣化，可以全量。如果区间不包含0，说明判定有偏，得回滚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

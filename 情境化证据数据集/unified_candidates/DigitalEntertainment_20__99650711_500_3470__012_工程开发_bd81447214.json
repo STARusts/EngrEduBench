@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在可信剪辑协作台工程开发的压测优化与端到端联调背景下，用户与导师围绕压测数据选型、端到端最小闭环与门禁措施持续沟通（9轮），其中在审计日志与素材可用范围及UI联调替代方案上与合规与风控负责人沟通（2轮），在压测模型量级、关键接口与峰值模拟上与后端负责人沟通（1轮），并最终确定合成/测试数据+结构化审计+压测重点链路与环境门禁的落地口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选B吧，省事。链路就……导入素材、切镜头、协作、导出？指标就QPS、延迟。不能碰的就是用户信息。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入库一个视频；自动切几个镜头；做一次AI剪辑；点一下合规检查；然后导出成片。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 压测联调要用审计日志和素材数据，哪些字段能用？哪些不能？要留多久？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是别用原文，用结构化就行。reason也别带。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规那UI要展示原因，不带文本咋联调？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就全用测试库的数据，素材用合成视频。日志只打结构化事件，加hash串起来。UI原因用code模板。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 压测模型要怎么配？目标量级多少？关键接口有哪些？仲裁拦导出的峰值怎么模拟？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口我记下了。P95这些我有点容易忘，我就照你说的数填到脚本里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不允许吧，合规说了不带生产的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个校验？比如压测环境禁止访问生产库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。一个是只认测试桶，一个是审计字段白名单，丢自由文本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）压测和联调全用合成/测试数据，不碰生产素材和未决冲突内容；2）审计只留结构化事件，用reason_code模板，ID用加盐hash串联；3）压测重点打 /evidence、/shots写入、版本提交、仲裁拦导出，压测环境入库只读测试桶，审计层做字段白名单门禁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

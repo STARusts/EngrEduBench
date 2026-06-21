@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在全息光场视点流化协议设计背景下，与导师围绕协议选型、延迟优化与算存协同调度持续沟通（5轮），其中在传统协议死穴与视点握手重构部分与流化协议设计工程师沟通（1轮），在协议栈旁路与分层编码紧耦合部分与光场编码系统架构师沟通（1轮），并最终形成信令数据解耦、视点预测驱动握手与内核旁路直推显存的协议设计红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了几篇Volume DASH的论文，感觉可以在MPEG-DASH基础上扩展，把全息切片当成分片描述符去拉取。或者用WebRTC加SEI扩展来传视点坐标？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟这块，DASH确实有首屏问题。WebRTC如果只传视点增量，应该能压到几十毫秒吧？视点预测，是不是用卡尔曼滤波算下一帧的FOV中心？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传统WebRTC或者DASH跑全息流化，延迟和调度到底卡在哪？视点感知驱动的握手协议要怎么设计才能满足微秒级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令面和数据面解耦，信令传视点预测轨迹，数据面走UDP专线。握手变成了视点订阅确认。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "QUIC吧，教科书上都写QUIC解决了队头阻塞，而且用户态协议栈好做加速优化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "QUIC做全息流化是不是开销太大？视点切片要直推显存的话，协议栈旁路和分层编码怎么配合？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "内核旁路加视点索引直推显存。不用QUIC，用DPDK绕过内核。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "协议红线：信令数据解耦，视点预测驱动，内核旁路视点索引直推显存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在农地碳汇核算与信评系统生产环境部署背景下，用户与导师围绕部署验证方式与误差边界判定标准持续沟通（6轮），其中在灰度发布与指标验证部分与运维部署工程师沟通（1轮），并最终确认按区域灰度5%流量、核算误差P99小于5%的验证口径及超限回滚策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就正常部署呗，用K8s起服务，看有没有Error日志。没报错应该就没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生产环境部署，怎么搞灰度？还有怎么验证核算误差没超标？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前都是看平均值，分位数这块不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看P95误差率是不是小于5%？如果是就算过了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量都卡5%以内太严格了吧。要不看P99？或者P95小于3%？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对统计检验这块一知半解，只会看大盘平均数。我这周得把Prometheus的histogram_quantile函数弄明白，自己写个PromQL算P99误差，加到看板里，算是定个具体目标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认三点：第一，按区域灰度5%流量；第二，验证指标是核算误差P99小于5%；第三，达标才放量，超了就回滚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改部署脚本和监控面板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

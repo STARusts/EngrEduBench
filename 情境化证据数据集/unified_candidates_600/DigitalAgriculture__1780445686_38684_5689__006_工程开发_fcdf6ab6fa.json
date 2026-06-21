@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涝渍径流推演服务工程开发背景下，用户与导师围绕技术栈选型（Python与C++）及性能验证方式持续沟通（8轮），其中在模型计算量评估部分与农水动力学分析师沟通（1轮），在边缘网关部署可行性部分与全栈开发工程师沟通（1轮），并最终确定核心算子用C++、Python做封装的技术栈及对照测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Python写微服务呗。NumPy和SciPy生态多好啊，SCS-CN产流模型直接调库就行，开发快，我自己也熟。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没细测过，但Python现在加速手段也多啊，大不了我上Cython包一层，或者用Numba做JIT编译，应该差不了太多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SCS-CN模型在这个系统里，每秒算力消耗到底啥量级？我Python加JIT能抗住不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那网关那边呢？内存够不够跑Python环境？我尽量省着用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C++写模型太费劲了吧，我Rust也不熟。Cython真的不行吗？我以前用Cython把循环加速过，效果还行啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证，就，写个Demo跑一下看卡不卡呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "C++算子我确实写不利索，特别是涉及矩阵运算的部分，要搞对照测试我得先能把C++版本跑通才行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天把Eigen库的文档过一遍，专门看动态矩阵和ARM优化那块。之前搞过一点C++，但没在嵌入式上弄过计算密集型。我把C++算子的开发环境先搭起来，写个最简单的入渗计算单测，跑通编译。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我这两天重点就是搞C++算子原型和对照测试，Python版我也顺手写个极简版当对照组。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

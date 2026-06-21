@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多介质迁移流架构设计背景下，用户与导师围绕多介质数据时空对齐、流批选型及对照假设持续沟通（6轮），其中在异构时空流对齐与流批选型部分与系统架构师沟通（1轮），并最终确定Flink流批一体加网格映射服务架构及补学任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用消息队列把三种介质的数据全拉过来，写进ClickHouse，然后在上层跑推演算子算耦合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳对齐我可以做窗口Join，空间粒度我不太懂怎么处理，不同介质网格都不一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多介质数据时空网格不一样，推演架构怎么搞对齐？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink我熟，能搞。但时空网格映射服务这个组件我没写过，不知道里面具体映射逻辑怎么定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实缺这块空间对齐的理论。我去查一下OGC标准里的时空网格规范，还有GeoServer做网格索引的案例。这两天先看明白，跑通一个2D网格映射的demo。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设用Spark纯批，那阻控调度延迟肯定超限，因为要等数据攒批，应急响应不了。如果用Flink流式，延迟低但推演算子如果很重，可能会背压堵死。验证点就是看推演算子并发时Flink的背压指标是不是在安全线内，超了就说明流式推演扛不住。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

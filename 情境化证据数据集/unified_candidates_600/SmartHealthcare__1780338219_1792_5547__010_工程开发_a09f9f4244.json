@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在产房网关端侧推理压测与时延优化背景下，用户与导师围绕算力切分、模型量化、日志合规脱敏及误差验证持续沟通（10轮），其中在TRT适用性与算力切分部分与边缘算力调度师沟通（2轮），并最终形成采用NPU原生混合精度量化与算力切分、异步哈希脱敏日志及5bpm误差边界验证的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延高肯定是算子耗时。我查了论文，用TensorRT把FP32转成FP16推理，理论加速比至少2倍，直接套过来就能降时延。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算上TRT做FP16加速，导师说显存可能不够，你觉得产房网关能跑起来吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "NPU算力占满会阻塞？那我加个多线程队列缓冲一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "高频伪迹帧置信度是1，那就得进大模型。但是进大模型就慢。我我我不知道怎么在保证精度的前提下加速了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "INT8量化误差在信号突变点会溢出，导致胎心基线漂移误判。我之前只看了FP16的。我现在去补一下NPU原生的量化工具链用法，看看能不能用混合精度，把伪迹敏感层保留FP16，其他走INT8。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就按时间戳打印推理耗时和帧号呗，方便我看瓶颈。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，还有隐私数据。我忘了。那我脱敏后再存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把ID哈希一下？这样应该能反查吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 放弃TRT，用NPU原生INT8混合精度量化，伪迹敏感层保留FP16；2. 置信度0的帧走规则树，置信度1的高频伪迹帧进大模型，算力切分；3. 日志异步脱敏存储，ID字段哈希。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿测试集里的难产场景跑一遍，对比INT8和FP32的基线漂移差值，如果差值在临床允许的5bpm内就过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

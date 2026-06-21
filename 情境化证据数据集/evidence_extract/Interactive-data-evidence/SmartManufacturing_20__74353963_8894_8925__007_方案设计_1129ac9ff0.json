@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在光子芯片制程平台方案设计背景下，用户与导师围绕控制指令下发的控制策略与通信协议分层、验证与安全要求持续沟通（6轮），其中在混合频率场景的协议选型与分层设计部分与首席架构师沟通（3轮），并最终确定EtherCAT+OPC UA双层架构及延迟抖动5微秒验证指标与RBAC审计要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得就用普通的工业以太网连上就行，反正现在带宽都挺大的，只要线拉得好，数据跑起来应该都没问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前天翻了翻《工业互联网协议手册》，里面说TSN时间敏感网络挺火的，能保证数据准时到。我就想干脆全用TSN，把热控和力控全跑在上面，这样肯定不会丢包了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@首席架构师 专家，我们这个光子芯片制程平台，热控频率太高了，全用TSN行得通吗？还是说有别的更划算的法子？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白了，就是快的用那个EtherCAT，慢的用OPC UA。这样确实省事不少，硬件也不用全换。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想可以设两个变量，一个是背景流量大小，一个是指令发送间隔。在跑热补偿指令的时候，人为往链路里加一些大尺寸的图像监控数据，看看热控指令的延迟会不会波动。样本量选一百组，看看置信区间。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把这个记在验收要求里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按你说的，加个密码就行了吧？或者在协议里设个只读权限，不让乱改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是谁改了参数都要记下来，还要分权限。这个我懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "底层EtherCAT，上层OPC UA，验证测高负载下的延迟，抖动上限5微秒，加上操作审计。我就按这几条收尾。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

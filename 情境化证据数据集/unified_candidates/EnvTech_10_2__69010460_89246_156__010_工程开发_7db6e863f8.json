@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发构建“音频→切片→特征→可检索/可复现”数据管道背景下，用户与导师围绕特征库定义、字段血缘、质量校验与最小合规落地持续沟通（10轮），其中在字段清单/分层表设计与成本保留策略上与数据工程师沟通（4轮），在音频敏感性、访问权限与审计留痕上与合规与审计专员沟通（2轮），并明确三层表、结构化日志与采样率白名单等最小实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征库…不就是个表吗？把分数、物种名存进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从设备传上来开始，到识别出来结束？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道特征要存啥。embeddings 是啥我也不太会。能不能直接存音频文件路径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 特征库要存啥字段？我就想先能跑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "vector 就是数组？我存json行不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "切片表一定要有吗？我觉得多一张表很烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我懂了，就是多存点id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 音频和特征存多了会不会爆？咋办。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就直接删原始音频，留特征两年，最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计专员 音频要留多久？是不是随便存？谁都能看吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我以为都是鸟叫，不会有人声。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先做三张表。音频不删。权限…先不管？我只管跑通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不返回uri。日志我就 print 一下行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "action 写啥？download？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采样率我不懂，我就都转成一样的不行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不我就只支持一种采样率，别的全失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三层：原始音频表、切片表、特征表。特征表带model_version和policy_version。uri不随便给人。日志里加action和audio_id。采样率不在白名单就报错。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端配型性能调优背景下，用户与导师围绕P99延迟瓶颈定位、SIMD加速适用边界、验证动作及合规底线持续沟通（8轮），其中在性能热点定位与优化路径部分与性能调优工程师沟通（2轮），并最终形成零拷贝序列化、SIMD加速特征比对及异步脱敏日志的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "书上说优化算法最有效，我们把配型算法的时间复杂度再降一阶？或者加缓存？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卡在比对？不对，卡在网络？我猜是数据库查询慢，或者锁竞争？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优工程师 端到端配型延迟的热点在哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原来大头在序列化。那怎么优化？直接换二进制协议？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SIMD是单指令多数据流，书本上见过，但这玩意儿在咱们这微服务里怎么用？Java能调这东西吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑个benchmark对比一下？边界的话，SIMD要求内存连续对齐，咱们特征数组如果是不定长的，可能对齐不了，会有性能损耗或者直接退化。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "SIMD这块我确实不太懂怎么在业务代码里写，我得去查查怎么用JNI或者Panama项目调向量API。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个JMH测试用例，单独测特征比对模块，用JIT看汇编，确认确实生成向量指令了再合进去。这样改动范围可控，不会污染主链路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在P99是200ms，序列化优化掉35ms，SIMD再压个30ms，GC调一下，应该能进150ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

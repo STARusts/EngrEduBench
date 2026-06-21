@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在位移反演算法实现背景下，用户与导师围绕非刚性形变反演逻辑及端侧算力约束持续沟通（5轮），其中在反演模型输入输出与求解器选型部分与流注反演算法专家沟通（2轮），在稀疏矩阵存储与右端项组装约束部分与流注反演算法专家沟通（1轮），并最终形成反演算法的四条工程硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，把外面的点减去原来的位置，然后里面也跟着减呗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "输入输出是啥，核心逻辑是啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "解方程组？那岂不是要算矩阵求逆？这怎么写代码啊，C语言里又没有矩阵求逆。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要弄个什么刚度矩阵，然后解方程。可以用Eigen库，不用自己写求逆。矩阵不用每帧重弄，只更新右边。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "密集矩阵太慢呗？右边映射我随便搞个插值不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "存储格式用啥？右端项怎么弄才不漂？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用CSR存，只存非零。右端项用双线性权重，要离线先算好，运行时查表，不能在线插值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

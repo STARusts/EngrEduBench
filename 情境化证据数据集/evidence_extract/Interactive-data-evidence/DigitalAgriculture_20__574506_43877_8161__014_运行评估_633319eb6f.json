@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段的盐胁迫指标监控背景下，用户与导师围绕监控指标清单、采样/上报/聚合频率、异常判定及强弱网分组口径持续沟通（10轮），其中在盐胁迫KPI与分期阈值设定部分与农业系统分析师沟通（3轮），在弱网回补数据的event_ts窗口告警与缺测/回补标记处理部分与数据工程师沟通（2轮），并形成业务告警与链路告警分离及弱网误报规避的口头清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盯根域EC吧，还有离子，差不多就这些。阈值超了就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就温补EC，用dS/m；Na+、Cl-用mg/L；再加个pH、含水率。频率就，1分钟一次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业系统分析师 盐胁迫这块监控到底要盯哪些指标？阈值怎么定？我这边只记得EC和离子。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那异常就是超阈值就行？我按3/4/5 dS/m那套配上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，那我就按“持续超阈值+斜率”来做。离子单位我就先用mg/L？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那我先把核心5项记下来：EC25、Na、Cl、VWC、进液EC。pH和温度当辅助。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心5项：EC25 5分钟采集，1分钟上报聚合avg/max/p95；Na+、Cl- 30分钟采集，10分钟上报；VWC 5分钟采集，1分钟上报；再一个孔隙水EC有就上。辅助：pH、根区温度、进液EC。报警分级就红线是持续30分钟超重度，预警看2小时斜率。强弱网就按丢包率分组看这些报警数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就按入库时间吧，反正都进来了就算持续了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 告警里“持续30分钟超标”这种，弱网离线回补怎么处理？用event_ts还是入库时间？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我把回补也算进去就行了？BACKFILL也触发红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，我回去跟导师说用event_ts窗口、点数不足不触发，回补不打电话。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就两套都做？一个用event_ts一个用ingest_ts，各看各的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "业务告警按event_ts；技术告警按ingest_ts监控延迟和丢包。看板就显示发现延迟=ingest-event。强弱网按丢包率>5%算弱网。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就沿用测试那边的？我记得他们提过RTT。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用丢包率吧，网关有心跳成功率；再加RTT我怕拿不到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我复述下：  \n1）盐胁迫业务告警用event_ts做窗口，不看入库时间。  \n2）核心指标盯EC25、孔隙水EC（有就上）、Na+、Cl-、VWC；辅助是pH、根区温度、进液EC。  \n3）频率分三层：EC/VWC 5min采集、1min上报聚合；离子30min采集、10min上报聚合。  \n4）告警分级：红线是EC25持续超重度30min（有效点够才算），预警看2h斜率；回补数据不触发实时电话，只做历史追溯。  \n5）链路技术侧用ingest_ts看延迟，展示发现延迟=ingest-event。  \n6）强弱网分组用5分钟窗口心跳成功率<95%算弱网；如果RTT字段有，就加P95>800ms也算弱网。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

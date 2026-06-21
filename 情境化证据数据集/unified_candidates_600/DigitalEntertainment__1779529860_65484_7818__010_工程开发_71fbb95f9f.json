@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发链路压测与性能调优背景下，用户与导师围绕压测方案、核心指标、RL异步化调优及Flink反压机制持续沟通（7轮），其中在压测模型构建部分与质量与效能工程师沟通（1轮），在流式计算调优部分与实时计算架构师沟通（1轮），并最终形成压测MVP方案与调优核心策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测我就用JMeter多线程狂发请求，把CPU和内存打满，撑不住就加节点扩容。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心指标不就是QPS和平均延迟嘛，保证接口不超时就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心智流链路的压测模型怎么造，重点该盯啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流式链路调优该从哪下手？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测要模拟突发波形，盯P99和抖动率；调优就是把RL改成异步，特征流就不卡了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "积压就清空呗？不对，清空会丢状态。反压这块我确实没搞透，Flink那些底层机制看着挺绕的，我之前没细看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RL推理那块用AsyncWait算子，特征流进去不阻塞，如果RL积压，反压会传到上游，限流收特征。这样吞吐能提一倍，虽然P99延迟会稍微涨一点，但不会OOM。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "之前体验测评官说难度切换超过200ms会有割裂感。所以异步带来的P99涨幅，只要还在200ms以内，抖动率不超5%，就算可接受边界。超出这个边界，异步化反而起反作用，就得换更轻量的推理模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

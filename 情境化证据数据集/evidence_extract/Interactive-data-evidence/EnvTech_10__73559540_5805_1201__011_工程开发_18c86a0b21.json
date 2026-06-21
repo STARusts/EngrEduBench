@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在接口按job模式联调后进入联调压测与修复背景下，用户与导师围绕回归用例补齐、压测模型与指标口径、以及超时PARTIAL/cancel/幂等TTL缺陷闭环持续沟通（4轮），其中在用例矩阵与混合压测流量/轮询间隔及脱敏日志要求上与测试工程师沟通（4轮），在GET轮询热点、Idempotency-Key TTL实现与PARTIAL状态稳定性/cancel写入屏蔽方案上与后端工程师沟通（2轮），并确定以A方案将超时表现为RUNNING、降级才为PARTIAL并形成用例与压测产出清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都能跑，就是压测还没弄太明白。回归用例我感觉随便写写也行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "嗯…一条正常 OK，一条超时 PARTIAL。还有 cancel 就返回 CANCELED 吧。幂等就是重复 POST 也 OK。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，我问问。@测试工程师 回归用例要怎么写到 6 条？压测要测啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了，就是把状态都跑一遍。压测就测 p95。那我用 jmeter 直接怼 POST 就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脱敏是把名字删掉就行吧。轮询间隔我就设成 10ms，这样更快出结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我按 1 秒轮询。脱敏我先不管吧，反正是测试环境。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我记一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把 OK、PARTIAL、CANCELED 做掉。压测就 1000 并发吧，越大越好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 现在 GET 轮询会不会有锁？PARTIAL 超时你们怎么判的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "明白，就是把查询合并一下，然后 TTL 扫更快。PARTIAL 就让它别再变 OK。cancel 我们先不做中断也行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就改成 PARTIAL 就算结束，后面不写了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就选 A 吧，RUNNING 感觉更正常。PARTIAL 我也没太懂啥时候用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就写成 reason_code=DEGRADED。那超时就 reason_code=TIMEOUT 的 RUNNING？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就是一直 RUNNING，客户端等到 OK。降级就是 PARTIAL，然后带 DEGRADED。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

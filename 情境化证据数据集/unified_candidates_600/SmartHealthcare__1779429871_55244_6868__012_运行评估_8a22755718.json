@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在ICU真机部署准入背景下，用户与导师围绕临床合规边界、脱敏效能验证方法及现场弱网运维容错持续沟通（6轮），其中在数据合规与脱敏证据部分与医疗合规官沟通（1轮），在现场网络隔离与部署容错部分与现场部署实施沟通（1轮），并形成配对T检验脱敏验证方案与网关容错限流补充计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接把边缘网关搬过去连上监护仪跑通就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我回放泵跑通了，AUC有0.75，召回率也达标，这不就是数据吗？现场只要网不断，流式算子就能解耦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "准入的话合规边界在哪？是不是把患者ID抹掉就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏不就是去个ID和姓名吗，还能影响AUC？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "再跑一遍回放泵，比对下脱敏前后的AUC差值？差得不多就算没影响？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ICU现场部署有什么坑？我网关程序写好了，直接贴设备上行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "断线重传我流式算子没写，只写了实时解耦。算力占用我也没测过长期极限。这块我确实没考虑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周内把院内网隔离规范看明白，然后给网关加上断线缓存逻辑，写个单测验证重传不丢数。算力占用我也在流式算子里加个限流参数，防止打满带宽。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先跑脱敏配对T检验，再补网关容错和限流，最后拿两份报告去申请临床准入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

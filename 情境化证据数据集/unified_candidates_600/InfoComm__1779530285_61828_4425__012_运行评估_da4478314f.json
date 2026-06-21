@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在语义编译算子线上灰度部署背景下与导师围绕灰度观察指标、置信区间与灰度策略制定持续沟通（7轮），其中在线上灰度A/B对照统计口径与显著性检验部分与语义监控运维工程师沟通（2轮），并最终确定灰度策略与回滚条件，计划补齐监控统计脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算先切10%的流量过去试试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就看看大盘的意图命中率掉没掉过95%呗。掉过了就回滚。看个一天差不多吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不太懂线上灰度怎么算置信区间这种东西。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图命中率和编译延迟这俩指标，怎么看是不是新算子搞崩的而不是流量自己波动？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以我得在监控看板上配这两个检验？我看板现在只有大盘QPS和错误率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维说要看48小时，得做A/B对照。用t检验看差异，p值小于0.05才算新算子有问题。我得给看板加这些统计指标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为大盘本来就会波动。如果新算子只是稍微拉低了命中率，比如从96%降到95.5%，大盘根本看不出来，但其实是显著劣化了。t检验能算出来这个差异是不是碰巧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先切5%流量进灰度组，对照组95%。观察48小时。如果灰度组意图命中率的95%置信区间下界跌破95%，或者编译延迟p值<0.05且劣化超过20ms，就回滚。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时只写业务代码，Prometheus和统计检验这块一直是短板。我这两天得把这块补上，今晚先去翻Prometheus的统计函数文档，写个Python脚本验证一下Welch t检验的计算逻辑，明天再套到看板里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

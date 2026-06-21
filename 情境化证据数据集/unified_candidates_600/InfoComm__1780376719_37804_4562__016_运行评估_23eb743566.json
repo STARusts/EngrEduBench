@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在波束载噪比突降排障背景下，用户与导师围绕雨衰与闪烁区分、边缘侧数据流改造、复合场景混叠处理及在线粗分类与离线复盘策略持续沟通（10轮），其中在区分雨衰和闪烁异常部分与信道衰耗溯源师沟通（1轮），在复合场景特征混叠拆解部分与极端信道分析师沟通（1轮），并最终形成在线溯源特征集、低置信度波束保持策略、离线ICA复盘接口及边缘侧200Hz采样方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按ITU-R P.618模型算雨衰，或者查电离层闪烁指数S4是不是超0.6了？一般就这两种吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没有S4指数，只看C/N0的话，雨衰和闪烁都是幅度衰落，特征重叠了怎么分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现网只有C/N0和底噪数据，怎么区分雨衰和电离层闪烁导致的异常？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "雨衰全频段一起跌，闪烁会有频率选择性。底噪抬升是干扰。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "底层采样数据量太大了，全传上来带宽扛不住。能不能在边缘侧算完再传结果？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果雨衰和闪烁同时发生，频域平坦度特征是不是就失效了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ICA盲源分离在线上跑太慢了吧？算力也不够。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "在线就别跑ICA了。只算频域平坦度、底噪抬升，再加一个深衰落持续时间，做粗分类。短时深衰大概率是闪烁，长时浅衰是雨衰。ICA放离线复盘用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加个保底策略。粗分类置信度低的时候，直接触发波束保持，不切换。离线ICA算完再修正规则。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "在线溯源三个特征：频域平坦度、底噪抬升量、深衰落持续时间。粗分类结果带置信度，低置信度触发波束保持。离线用ICA做盲分离复盘，修正在线规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "闪衰特征频率一般几十赫兹，采样率至少200Hz吧？再高边缘侧内存可能不够。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，边缘侧新增200Hz底层采样；第二，在线计算频域平坦度、底噪抬升和深衰落持续时间；第三，粗分类低置信度触发波束保持；第四，离线ICA盲分离接口留给复盘。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

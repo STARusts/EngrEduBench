@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在核心计算模块技术栈选型背景下，与导师围绕时空推演与运筹优化的可行性、合规性及数据流转持续沟通（5轮），其中在时空推演选型部分与时空数据建模师沟通（1轮），在运筹优化选型部分与运筹优化算法师沟通（2轮），并最终确定轻量化与可解释的选型方案及接口对接方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时空推演我倾向用ST-GCN，时空图卷积网络，理论上能同时捕捉空间拓扑和时间依赖，学术上很主流。运筹部分，混合整数规划是标准解法，我准备上Gurobi求解器，它算得快，精度高。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "训练成本确实没算过，我看论文里跑个推理也就几十毫秒级。Gurobi授权，这个我确实没考虑，我以为有学术版就可以直接用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ST-GCN做区域生源推演，在纯批处理模式下，是不是性能不够？我看很多顶会论文都用这个做时空预测。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不用深度学习，总感觉特征工程会漏掉隐含模式。不过如果图结构不稳定，确实难训。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Gurobi不能上，开源的CPLEX也有点重。我们师资调配是多目标优化，还要输出Pareto方案集，用什么框架合适？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "启发式算法求解质量怎么保证？会不会陷入局部最优？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不用精确求解器，理论严谨性确实差了点，但合规和可解释性是硬指标。我听懂了，MVP阶段不能上重器。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "特征工程我得重新设计，不能直接套网络结构了。启发式求Pareto解集，业务端选方案确实更直观。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时空推演输出的是各学区未来三年的生源缺口矩阵，运筹优化输入刚好需要这个矩阵做供需约束。只要推演引擎把结果落表，运筹模块直接读就行，接口能对上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时空推演：PostGIS+LightGBM，理由是适配低频长周期批处理，特征工程可控，避开了不稳定的图构建；运筹优化：OR-Tools+NSGA-II，理由是规避商用授权合规风险，启发式解集可解释性强，符合业务弹性。接口通过关系表对接缺口矩阵。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

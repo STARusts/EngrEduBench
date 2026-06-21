@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在疗法沙箱容器编排联调背景下，用户与导师围绕不可信应用隔离与联调基线持续沟通（7轮），其中在沙箱运行时与资源网络隔离部分与容器化工程师沟通（2轮），并最终形成包含运行时切换、网络隔离、资源限额、指令通道及脱敏边界的5项联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就K8s部署呗，写个Deployment把疗法镜像拉起来，开个接口接收指令。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "疗法应用不可信要隔离，K8s里怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "gVisor这玩意儿我没玩过，开发期联调搞这个会不会太慢？而且Sidecar又要改代码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发期可以用普通容器，但网络要配Policy隔离，资源用LimitRange卡，指令走Sidecar的gRPC。gVisor留后面上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个Proto文件给他们呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能还原啊，脱敏就是单向的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 开发期用runc，上线切gVisor；2. 网络隔离靠NetworkPolicy；3. 资源限额用LimitRange；4. 指令下发走Sidecar gRPC；5. Proto里不传明文ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

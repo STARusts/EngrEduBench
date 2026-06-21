@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高动态路由集成测试背景下，用户与导师围绕测试工具链、动态拓扑注入、gRPC接口桩设计及重选阈值调整策略持续沟通（8轮），其中在测试链路搭建与netem参数确认部分与路由集成测试工程师沟通（2轮），并最终确定测试工具链、接口核心字段及熔断调整方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要验证收敛性吧。设定不同的初始信噪比，看置信度平滑能不能收敛。拓扑就用Walker-Delta星座，轨道参数按论文里的典型值配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "动态拓扑，写个脚本定时改节点坐标？工具的话，我之前只用过MATLAB，集成测试是不是得切到STK？或者Mininet？不太清楚怎么跟我们的软切换模块连起来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动态路由集成测试怎么搭，特别是动态拓扑怎么注入到我们系统里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试那边说不用STK，用信道模拟器加netem。重点是测路由表震荡和拥塞窗口退避。我需要提供gRPC接口桩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "映射逻辑输出的是切换指令结构体，我把它序列化塞进gRPC的payload里就行。但路由表震荡我不太懂怎么防，理论上Dijkstra重算肯定震，得加惩罚因子吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "netem注入的时延和抖动大概在什么范围？我怕频繁触发熔断重选。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在的指数平滑因子是0.2，按理论算，遇到500毫秒的尖峰，置信度肯定瞬间跌穿阈值触发重选。我得把平滑因子调大，或者重选阈值放宽点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心字段得有目标频段，还有切换指令类型。其他还需要啥？时间戳要加吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，就这三个。我这就去写proto。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

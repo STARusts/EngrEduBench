@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在信令处理能效基线核验背景下，用户与导师围绕基线核算口径、指标切分粒度及PromQL关联计算持续沟通（5轮），其中在能效核算口径与资源归因部分与运营能效分析师沟通（1轮），并最终确定按AMF和SMF微服务接口粒度核验稳态单核吞吐基线及PromQL计算方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接在Grafana大盘上拉一下CPU利用率和消息吞吐量，跟设计文档里的基线值比一比，差得不多就算达标了吧？有没有那种一键对比的插件？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能写个Python脚本把所有信令的P99时延平均一下，再跟基线比？或者网上有没有现成的Dashboard JSON能直接导入搞定的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令处理能效基线具体怎么算？有没有现成的公式或者工具能一键把基线对比报告导出来？我不想一个个去扒数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "做资源归因听起来好麻烦啊，能不能就用Node级别的CPU指标除以Node上的信令总数凑合一下？这样PromQL好写多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先弄AMF和SMF吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么在Prometheus里把特定接口的CPU时间和信令数乘除起来啊？我只会拉单独的指标，这种关联计算没做过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

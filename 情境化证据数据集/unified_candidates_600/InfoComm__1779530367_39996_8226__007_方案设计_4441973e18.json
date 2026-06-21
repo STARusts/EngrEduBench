@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在确定性流控与高可用评估背景下，用户与导师围绕流控防拥塞与故障自愈方案的可行性、验证及资源约束持续沟通（5轮），其中在集中式流控方案的边缘网关约束部分与算网安全与高可用师沟通（1轮），并最终形成层次化流控与轻量化高可用的设计取舍方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全局集中式流控最稳。用CQF结合微秒级TE路径切换，所有门控定时器由中控统一下发。故障检测用微秒级BFD加SRv6 FRR，一断就切。这样确定性最高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "集中式CQF加微秒BFD，在边缘网关上到底能不能跑？开销有多大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "光靠CQF确实防不住入口突发。如果把PSFP入口过滤加上，结合本地CQF调度，再用带内OAM自愈。这套组合拳技术最完美，入口防过载，中间保时延，故障秒切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用混沌工程验证。变量控制是注入不同规模的微突发流量，对照组分为有PSFP拦截和无拦截两组。观测P99时延和丢包率。用Chaosblade做网络混沌实验，随机切断SRv6路径触发FRR切换，记录收敛时间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PSFP流表确实占存储，FPGA资源不够。那砍掉PSFP，入口降级为基于5QI的优先级队列加令牌桶整形。本地CQF保留，带内OAM加SRv6 FRR保底。P99时延可能劣化几十微秒，但工程能落地，维护成本也可控。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

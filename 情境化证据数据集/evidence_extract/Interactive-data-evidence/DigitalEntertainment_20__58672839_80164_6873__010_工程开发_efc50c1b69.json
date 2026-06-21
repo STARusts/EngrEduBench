@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在票务-入场-互动链路工程开发收尾的风控反作弊落地背景下，用户与导师围绕投票端接入规则与验证验收持续沟通（7轮），其中在技术路线取舍与合规留痕上与安全负责人沟通（4轮）、在统一规则引擎接法与错误码/降级策略上与后端负责人沟通（3轮），并确定投票接口接riskCheck、轻指纹+降级兜底与可复现测试口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信号…就是IP吧。还有手机号。差不多？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…刷票。还有进场的时候，拿截图混进去。互动投票也能刷。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "模型吧，听着高级。规则写起来很累。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全负责人 A规则引擎和B指纹+行为评分，在我们这个买票入场互动的场景，哪个更靠谱？我现在要做啥才算做完？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就全用规则不就好了？指纹这块我怕搞不起来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "二次验证是啥？短信吗？那很烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是就写个“同设备一分钟只能投一次”这种？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 安全那边说先规则主，指纹做轻的，别上模型评分。还说要分级处理和留痕。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就…把UA和openId拼一下？存库？然后投票的时候查一下，超了就不让点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我负责互动投票接口。那我就在投票接口里算fingerprintId，然后加个Redis计数。超过就返回…嗯…429？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想A，快。引擎我不会配，配错就更糟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 投票反作弊我想在接口里Redis计数限频，或者接统一规则引擎。你觉得哪种更合适？错误码怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "引擎我还是怕。riskCheck失败怎么办？超时就卡住投票？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那前端挑战我不懂，验证码谁发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 后端说接B，引擎只给riskCheck接口，我这边按ALLOW/CHALLENGE/BLOCK走。超时就本地兜底频控，不是直接挂死。错误码用RISK_2001/2002/2003/2101。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A更快，但B看起来省事点，我就调一个接口。那…选B。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1个是投票接口接riskCheck。1个是限频能拦住。还有…日志打出来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能试。fingerprintId要hash，我就直接sha一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不打UA了。我怕排查不了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "投票先调riskCheck，回ALLOW就正常写投票事件；回BLOCK就RISK_2003；回CHALLENGE就RISK_2101带challengeId。还有频控的RISK_2001/2002。riskCheck超时就走本地兜底频控，然后日志里risk.degrade=true，加ruleId这些字段，不放UA原文。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

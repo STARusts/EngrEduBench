@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极低带宽场景寻址路由设计背景下，用户与导师围绕寻址方式选择、部署约束及降级路由机制持续沟通（8轮），其中在向量寻址与传统查库开销及语义聚合部分与知识图谱路由设计师沟通（2轮），最终确定GNN拓扑聚合加HNSW向量索引为主、Neo4j规则路由降级及算力与命中率触发条件的设计方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接查库。图谱存Neo4j，写几条Cypher规则，匹配上就转发。GNN那套太重了，线上玩不转。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没细算。反正图遍历快，加个索引就行。GNN还得训练，出错了谁负责调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我觉得Neo4j查库就够了，搞GNN向量寻址是不是多此一举？训练成本多高啊。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预训练推理啊。那不就是个向量数据库嘛，Milvus那种？直接加个Milvus不就完了，干嘛非要GNN。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Neo4j确实慢点。那就GNN加向量库吧。但网关上跑推理，机器扛得住吗？以后维护这套模型多麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "机器不够加配置呗，维护找算法组啊，我反正不会调模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主GNN备规则。过载就切规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控网关CPU和内存？超了就切。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "GNN加向量，降级用规则，看算力和命中率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

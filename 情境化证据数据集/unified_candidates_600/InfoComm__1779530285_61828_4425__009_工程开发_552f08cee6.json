@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在寻址路由引擎联调且算力内存受限背景下，用户与导师围绕低算力寻址替代方案及参数设定持续沟通（5轮），其中在省内存寻址方案部分与知识图谱路由设计师沟通（2轮），并最终确定采用PQ量化压缩特征、ef_search压至20保延迟的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那寻址模块全量加载肯定直接OOM啊。要不我把特征维度再砍一刀？从128砍到64，内存不就省了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高维向量索引跑不动，有没有省内存的法子？不能砍维度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "精度掉得多吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "设计师说搞个PQ量化，把向量切小块压缩，用8位存，内存能省四分之三。召回率会掉，但可以把ef_search调大补回来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是聚类压缩吧，用中心点代替原向量。掉5%应该还行？反正现在只是联调，能跑通看个大概就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先切16块，ef设默认的50？不行再改呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻址引擎换PQ量化模式，特征向量分块压缩；ef_search先压到20保延迟；跑联调看召回率掉多少。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端工况边界除错背景下，用户与导师围绕5G断连时的防碰撞兜底、物理安全降级及状态切换并发冲突持续沟通（6轮），其中在位姿数据异常判定部分与防碰撞算法设计师沟通（1轮），在车端降级指令执行部分与嵌入式边缘开发沟通（1轮），并形成基于物理极限判异常、本地雷达加怠速降级、单机CAS防冲突及交叉GDB排查的除错方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5G断连的话，我第一反应是用Spring Cloud的重试机制，多试几次连上了不就行了？或者加个超时时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "位姿数据断流或者乱跳的时候，算法怎么判不可信？有没有现成的容错包能直接套一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级是不是直接用Hystrix那套断路器？熔断了走fallback？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "车端收到安全降级指令，该怎么执行？有没有轻量级的状态机框架能管这个？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "其实我前两天刚学了用GDB附加进程看coredump的方法，本来以为只用在服务端排查，现在想想车端如果状态切换卡死了，也能用交叉编译的gdb去抓异常上下文，比光看日志查问题快多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "因为降级指令可能和正常调度指令并发到达。我想用Redisson的分布式锁把车机状态锁一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "不用分布式锁，单机CAS加volatile。那我这就去改车端状态机的代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

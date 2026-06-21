@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在算力容灾与幂等保障设计背景下，用户与导师围绕容灾机制、幂等重试与容灾验证持续沟通（7轮），其中在容灾快照与检查点部分与算力调度架构师沟通（1轮），在幂等重试与聚合一致性部分与质量与精算校验员沟通（1轮），并最终形成增量检查点与随机数状态序列化容灾、子任务版本号与哈希校验幂等、故障注入验证及5秒RTO的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "挂了就拉起来重跑呗。幂等不是有task_id吗，拿它判重不就结了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就存个快照呗，挂了从快照恢复。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力挂了怎么搞容灾，快照行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "幂等重试有啥坑？加个版本号不就幂等了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "存状态加个锁防并发不就完了。前两天刚看了个lease租约机制的文档，直接套过来锁住结果写入，肯定没并发问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "挂掉试试呗。写个脚本把进程杀了，看它能不能活过来。结果对不对跑两遍比一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就写个故障注入的case，挂GPU和网络分区各测一次。RTO定个30秒总够了吧。lease不套就不套，用你们说的检查点加版本号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "5秒就5秒。增量检查点，版本号哈希，故障注入测5秒。就这些吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

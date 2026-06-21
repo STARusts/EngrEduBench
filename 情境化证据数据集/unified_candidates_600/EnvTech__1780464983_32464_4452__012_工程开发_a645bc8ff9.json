@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在演控下发全链路集成测试背景下，用户与导师围绕测试覆盖策略、并发时序、合规脱敏与熔断阈值持续沟通（4轮），其中在链路校验与脱敏红线部分与测试工程师沟通（1轮），在指令时序与状态锁部分与后端开发主管沟通（1轮），并最终确定基于心跳基线的动态熔断与四项测试验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备造几条典型Mock数据，从演控接口直接发下去，看末端物联设备的日志有没有收到指令。只要状态码200，设备日志有回执，链路就算跑通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 演控下发链路集成测试，除了看通不通，还要卡哪些校验点？@后端开发主管 指令下发时序和并发冲突，服务端这边怎么防的？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "幂等性和状态锁这确实容易漏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近刚学了Chaos Mesh，正好在集成测试里注入网络延迟和Pod重启，模拟设备断连重试，这样能把链路容错性也验了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏的话，我加个脱敏函数抹掉产值字段就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "熔断阈值，大不了设个超时时间，比如3秒没回执就熔断。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "脱敏规则我确实没查标准，凭感觉写的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "超时阈值我去拉历史心跳延迟分布算基线。脱敏规则我找合规分析师对齐，不能瞎写。测试用例我马上补这四块。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

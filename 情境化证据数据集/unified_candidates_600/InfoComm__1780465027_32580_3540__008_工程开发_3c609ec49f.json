@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在重构协议栈适配层代码背景下，用户与导师围绕GCL下发硬件卸载的位宽、时序与原子性重构持续沟通（6轮），其中在位宽截断与时序回滚红线部分与底层驱动开发工程师沟通（1轮），在流式数据配合硬件原子写入部分与协议栈联调专家沟通（1轮），并最终形成三条重构硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把软件GCL数组往硬件寄存器接口里塞，完全没管位宽截断。而且下发顺序也是乱的，肯定跑不通。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时序这块我不太确定，我就想着把下发逻辑拆开，一个个写寄存器，中间加延时？不对，加延时会破坏时间对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前那版协议栈适配代码，直接把GCL数组强转指针丢给硬件接口，这写法有什么致命问题？我该怎么改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "位宽要拆分，写入时序得卡在Gate_State变更前。回滚这事确实没考虑到。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把所有Entry打包，在一个Cycle里一口气写完？但协议栈那边数据是流式过来的，不一定能凑齐一包啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "协议栈这边给硬件卸载接口喂数据时，如果是流式的，怎么保证硬件那头不触发状态回滚？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来得用双缓冲。软件侧先攒够一整块AdminConfig，再一次性Commit切换。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. GCL条目写入前必须做32bit到8bit的位宽拆分，不能强转指针；2. 协议栈侧必须维护AdminConfig缓冲区，流式数据先进缓冲区；3. 缓冲区满后，通过原子Commit指令切换到OperState，禁止边收边写硬件寄存器。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在预算受限需收尾扫码平台安全审计与权限体系的方案设计背景下，用户与导师围绕B端后台/对外扫码页/对接API的最小权限模型、审计字段、更正链事件清单、scope取舍与最小验证动作持续沟通（8轮），其中在RBAC+ABAC混合、对外视图授权与审计日志低成本实现细节上与安全工程师沟通（4轮），并形成三入口鉴权与可追责审计的最小方案表述。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先想的是两块：多租户别串数据，还有扫码那边别把内部信息漏出去。审计就是谁看了谁改了得能查到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "B端后台就按角色分，比如品牌方管理员、工厂操作员、质检员。对外扫码页就不登录，只按public_version_id展示。对接API就用key或者token，绑定tenant。审计字段我知道要有操作者、时间、做了什么、对象是谁。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 现在预算很少，想做多租户的权限+审计，B端后台、对外扫码页、对接API都要管。最省事还能过审的做法是啥？要记哪些日志字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对外视图的“不可枚举”就是public_version_id用随机串？那扫码码本身不是也可能被猜？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ABAC那块我有点虚。是不是就是每次都判断org_id和status？会不会很难写全？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计里before_hash/after_hash要怎么搞？存diff会不会很占空间？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听到的重点是：权限用RBAC打底，然后关键资源加一些属性判断，先硬规则四条。对外view只认public_version_id，而且得随机防枚举，状态不对只出受限页。审计分管理审计和数据审计，两类字段最少要tenant、谁、什么时候、干了啥、对象、结果、trace_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "更正我理解是：重新生成标签版本、撤回旧public版本、再发布新版本。事件我先列：登录、发布、撤回、生成标签、重生成、改配方、改检验、白名单改动、导出、改权限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把“登录”算到管理审计里常规事件，不进Top10清单。Top10改成：  \n1 密钥创建/轮换/吊销  \n2 权限/角色变更  \n3 批次创建  \n4 批次关键字段修改（数量/日期/产地等）  \n5 配方修改  \n6 检验报告录入/签发/撤销  \n7 营养规则版本变更  \n8 标签生成/再生成（产生新version）  \n9 public版本发布  \n10 public版本撤回/作废（含REVOKED）"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就按资源级：批次/配方/检验/标签版本/公开版本 这几类资源。角色就四五个。租户内按org_id隔离，品牌管理员能跨org。字段级先不做，导出也先只给管理员。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "B端后台：用户登录后拿到角色和org_id，每个接口先校验tenant，再按角色+org_id判断能不能读写对应资源，关键动作记管理审计。  \n对外扫码页：不登录，只能通过resolve拿到public_version_id，再用view取公开视图；如果状态UNVERIFIED/REVOKED就只返回受限页字段，拒绝明细和报告直链。  \n对接API：用tenant级API key换token或直接签名校验，所有请求必须带tenant绑定；写接口按key的scope限制（比如只能写检验、只能写批次），每次写入记数据审计并带trace_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就：batch.read、batch.write、lab.read、lab.write、public.publish、admin.manage。配方和营养规则先算在batch.write里，后面再拆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "把batch.write只管批次和配方录入，营养规则单独一个scope：rule.manage。那就变成7个了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白：batch.read（含检验只读）、batch.write、lab.write、public.publish、admin.manage、rule.manage。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我们可以做三组验证：  \n1 越权：用工厂A账号访问工厂B批次，应该403并且审计记fail+reason_code。  \n2 对外拦截：把批次状态改成REVOKED，再扫同一码，只能看到受限页，不出现报告链接。  \n3 审计串联：一次“改配方->再生成标签->发布新public版本”，审计里能用trace_id串起来，能看到旧public撤回、新public发布。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小RBAC配合少量属性隔离，三入口分别鉴权；对外只走public_version_id并按状态门禁；关键更正与发布动作全量审计，能串trace_id追到人和版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

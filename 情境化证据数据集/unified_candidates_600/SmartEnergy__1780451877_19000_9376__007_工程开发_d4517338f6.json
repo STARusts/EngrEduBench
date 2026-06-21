@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算功功耗映射模块工程开发背景下，用户与导师围绕微秒级采集与精准任务追踪的实现方案及验证标准持续沟通（6轮），其中在底层采集与任务拦截落地方式部分与算功功耗映射研发者沟通（1轮），并最终形成NVML加eBPF拦截方案及延迟<10us、成功率>99.9%的验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接套个DCGM的包，把功耗拉出来就行了吧"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "微秒级有啥用？毫秒不就够了？任务追踪我直接从环境变量读POD名，简单省事，别搞复杂了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算功功耗映射研发者 微秒级这破玩意怎么采？任务追踪又咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拦截CUDA？还要注入ID？写个Hook得多麻烦，能不能就采个整机功耗凑合用？我真不想折腾底层。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我哪会写CUDA Hook啊，这根本没法搞，超出我能力了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去搜搜eBPF能不能挂CUDA，NVML的API我翻一下文档。先写个单卡Demo跑跑看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就测采集延迟呗，还有注入成功率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集延迟压到10微秒以内，注入成功率怎么也得99%以上吧，这够严了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "NVML加eBPF拦截，延迟10us，成功率99.9%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

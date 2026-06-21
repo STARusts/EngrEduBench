@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在土壤微生物处方与闭环施治系统方案设计背景下，用户与导师围绕“采样到处方”数据流的对象主键、状态机/异常分流与合规最小化持续对齐并收敛为V1六条确定项（6轮），其中在主键血缘与处方输入快照/view规则部分与数据架构师沟通（3轮），在数据分级最小化、授权映射与审计留痕部分与合规与数据治理官沟通（3轮）。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我卡在两点：样本怎么一路追到地块和作业批次；还有检测结果回来后，怎么保证处方用的是同一批正确数据。@导师 你帮我把关键链路和主键先钉住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想的对象大概是：用户/客户、地块、采样任务、样本、检测报告、处方。主键我本能想用一个全局样本ID，别的都挂它下面。但我担心一个地块会采多个点，混在一起就乱了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向拆开。ServiceOrder像“买的服务”，SamplingTask是“怎么去采”。一个服务单可能复采，或者补采。拆开能解释得通，也方便做次数上限和响应时效这种边界。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Plot我想强制绑地理边界：至少一个多边形或中心点+面积。可比性判定就用边界重叠度阈值，比如70%重叠才算同一地块，低于就新建Plot版本。我不确定阈值多少合适。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想Result里加一个is_final标记，默认最近一次为final。处方只吃final。问题是“最近一次”不一定最好，可能是补做小panel，反而缺字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我现在在做采样到处方的数据流设计。想确认三件事：1）Plot、ServiceOrder、Sample这些对象的主键怎么设计才不乱；2）样本追溯到地块、采样点、批次的最小字段；3）检测结果多批次回传时，处方应该消费哪个Result集合。你按最小可行给我一版口径就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的prescription_input_view我能理解成“处方输入快照”吗？我担心处方生成后，后面又回传了新结果，会把老处方复现不了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "chain_of_custody你说简化字段，我有点拿不准。我们真要记录到人吗？采样员、快递、实验室交接，感觉会变成负担。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从数据架构师那拿到一版最小口径：plot_id+plot_version_id，service_order_id贯穿交付，sampling_task_id对应一次外业，sample_id扫码唯一，assay_run_id对应检测批次，result_set_id对应一次回传。处方不直接吃Result表，而是吃一个按service_order聚合的prescription_input_view：过滤QC不通过，满足处方版本声明的required_panel，再按panel_version/时间排序选一份。处方生成时把用到的result_set_id列表和规则/特征版本写进metadata做快照，保证可复现。你看还有哪里容易漏？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先试一版：\n- ServiceOrder：CREATED→SCHEDULED→IN_SAMPLING→SENT_TO_LAB→RESULT_RECEIVED→PRESCRIPTION_READY→DELIVERED。\n- Sample：REGISTERED→COLLECTED→IN_TRANSIT→LAB_RECEIVED→ASSAY_RUNNING→RESULT_READY。\n异常：丢样/污染/QC_FAIL/字段缺失，进EXCEPTION状态，触发补采或重测。我不确定超时点放哪。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级我能想到两档：\nA档：缺深度、GPS点这种关键字段就不出处方，只出“需补采”提示；\nB档：缺少管理记录（比如前茬施肥）还能出处方，但风险分档更保守。这样会和前面“可解释风险分档”对上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 采样到处方的数据流里，我们要采Plot边界、采样点GPS、采样员、作物和管理记录、检测结果等。我需要你给一套“数据分级+最小化”口径：哪些属于必采字段，哪些应默认不采或脱敏；授权深度怎么映射到处方交付深度；以及审计留痕最少要留哪些事件。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "GPS对外展示模糊化我能接受，但处方算法如果要做空间变异（比如地块内分区），没有高精度点会不会影响？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把分区处方当V2能力，V1先地块级处方。那GPS我倾向：内部存高精度但默认不展示、不导出；对外导出只给模糊网格。这样算不算过度采集？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 合规这边给的口径是：分L1地块经营、L2个人、L3检测生物数据；V1尽量不默认存高精度GPS点，除非明确用于复采定位或分区处方且有更高授权；采样员用staff_id即可；电话只用于履约且隔离存。审计最少留：plot_version变更、sample关键字段修改、L2/L3明细访问导出、处方生成时用到的result_set_id和规则版本。你看我们V1处方只做地块级的话，字段必填矩阵我先怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成6条：\n1）主键链：service_order_id贯穿交付；plot_id+plot_version_id管理可比性；sample_id物理样本唯一；assay_run_id与result_set_id做检测回传血缘；prescription记录输入快照（result_set_id列表+规则/特征版本）。\n2）对象拆分：ServiceOrder≠SamplingTask，支持补采/复采；Sample与AssayRun多对多通过映射表。\n3）处方输入口径：处方消费prescription_input_view，规则为“required_panel满足+QC_PASS”，多份候选按panel_version优先、时间次之。\n4）状态机与超时计时点：采样响应从SCHEDULED起；实验室周转从LAB_RECEIVED起；处方响应从RESULT_RECEIVED起；异常分丢样/污染/QC_FAIL/字段缺失并走补采或重测。\n5）降级策略：关键字段缺失（plot_version、采样时间、样本材质/深度等）不出处方；非关键缺失可出处方但风险分档更保守。\n6）合规最小化：V1不默认采集/保存高精度GPS点；L2个人信息隔离存储与受控导出；保留最小审计事件用于追责与复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在光混驱极低时延交换网现网部署验证背景下，用户与导师围绕割接验证指标、回滚红线与灰度流量显著性检验持续沟通（7轮），其中在回滚红线制定部分与网络交付工程师沟通（1轮），在P99置信区间窗口与分布假设部分与运行监控分析师沟通（1轮），并形成基于误码率与区间重叠度的灰度判定与回滚方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我跑个ping看看？不对，ping太粗了。我就盯P99时延，如果没超5us就说明没问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "基线数据我还没拉。我只管时延压进5us，丢包和误码这块我没太关注。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现网部署光电链路，回滚红线一般怎么卡？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把切过去的10%当成实验组，没切的当对照组。对比两组的P99。如果实验组比对照组大，就有问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前只看平均数和P99最大值，没搞过置信区间。我得补一下统计假设检验，明天花2小时把Bootstrap重采样原理看懂，然后把监控看板的阈值逻辑改掉，用区间重叠度来判断异常，不再只卡死数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算P99时延置信区间，窗口多大？假设啥分布？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以验证方案就是：先灰度切10%流量，1秒窗口采P99，Bootstrap算区间，如果新旧链路区间重叠就继续切，不重叠就回滚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

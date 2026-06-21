@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端气象系统容错排错背景下，用户与导师围绕物理层容错逻辑实现持续沟通（7轮），其中在物理失效与异构源降级部分与边缘感知固件极客沟通（1轮），在断连防丢与防重放劫持部分与水下物联安全官沟通（1轮），并最终形成异构源降级补偿、环形缓冲断点续传带签名及ADTK加方差校验漂移预警的实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种熔断降级，我寻思直接套个Hystrix或者Sentinel是不是就行了？网上现成的配置改改，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "物理层抽风框架确实管不到。这就得自己写判断逻辑了？有没有那种专门处理传感器失效的库？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种物理失效怎么搞？有没有现成的容错库？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网了数据丢包咋整？边缘端怎么防丢？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "带签名防重放，这就有点麻烦了，加密算法跑在节点上功耗会不会炸？能不能先不签？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "功耗大我就用轻量级的哈希。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这个验证阈值我原来想写死，但我昨天刚好看了个轻量时序异常检测库叫ADTK，能不能直接套过来做漂移预警？这样阈值就不用硬编码了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没完全摸清，它文档里说对跳变敏感，但对缓慢漂移可能漏报。我寻思声学多径是跳变，光学浑浊是缓慢漂移，结合起来用应该能兜住？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补个方差校验我能写。那我就用ADTK加方差校验做预警，替代硬编码阈值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，异构源降级补偿，光糊信声，声糊信光，双废休眠；第二，环形缓冲断点续传，必须带轻量哈希签名防重放劫持；第三，用ADTK库加滑动方差校验做数据漂移预警，不硬编码阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

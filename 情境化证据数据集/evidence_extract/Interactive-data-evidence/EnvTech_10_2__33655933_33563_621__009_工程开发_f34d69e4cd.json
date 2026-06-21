@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在风险计算服务工程实现背景下，用户与导师围绕模块拆分、公式与合成规则、status语义、可回放与测试及幂等要求持续沟通（9轮），其中在暴露风险定义与质量标签入公式部分与环境与暴露建模工程师沟通（4轮），在window_key/字段最小集与reason_codes枚举规范部分与后端开发工程师沟通（2轮），并形成本轮实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解风险计算服务先别碰策略下发，先把“风险分+状态”稳定产出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模块上我想拆成：输入归一层（把传感器质量标签、校准 confidence、缺失补齐都收敛）、特征聚合层（分钟/5分钟窗）、风险计算核心（按污染物+人群权重）、输出层（risk_score/risk_status/置信度/原因码）。输入我先按三类：污染物浓度（CO2/PM2.5/TVOC等）、环境与设备（风量/新风阀位/净化器档位）、人群（占用或人数估计，可能先给默认）。输出要跟上一步一致：risk_status=normal/degraded/unknown，再附risk_score。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "公式上我现在有两个备选：1）偏规则：每个污染物算一个子风险，比如用阈值分段或超标比例，再用权重加权成总分。质量标签如果 fail 就把对应子风险标成 unknown 或降低权重。2）偏统计：用一个简单的回归或打分模型吃特征窗输出风险分，再把 confidence 乘进去。对照口径我想先用规则版当 baseline，回放三组数据流，看稳定性和单调性（污染物升高风险不应下降），再把统计版挂在后面做对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 风险计算服务这块，我准备先做规则 baseline。想确认三件事：1）风险分怎么定义更贴近“暴露风险”而不是单纯超标；2）多污染物怎么合成（加权/取max/概率合成）；3）质量标签 pass/conditional/fail 以及校准 confidence 在公式里怎么用，才不会误报或漏报？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量标签这块你说怎么进？我担心 conditional 降权会让风险看起来变低，但其实只是数据不确定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权重建议有现成一版吗？学校/办公/医院差别挺大，我不想把配置写死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值映射怎么定？比如把均值映射到 0-100，分段点用国家标准还是我们自己的？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把“风险分不被confidence压低、而是用status表达不确定”这个原则落实到接口里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的理解是：risk_score 用规则版先算，质量只影响 conf_total 和 risk_status，不直接把 risk_score 乘下去；多污染物先用加权求和，同时加一个“关键污染物一票抬升”的保护阈值；占用缺失直接让 status=degraded 并给原因码。接口字段我想加上 reason_codes 便于可解释和测试对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1）我倾向加权+保护，办公/学校更平滑，医院可以把保护阈值设得更激进，接近 max 的效果，但不完全一票否决。2）conf_total 我更想用“关键传感器取min，非关键做均值”，不然一个边缘传感器坏了把整体拉爆。关键集合先定 CO2、PM2.5，TVOC 看场景。3）status 阈值我先定两条线：conf_total<0.5 直接 degraded，关键 fail 或连续缺失>窗口长度则 unknown；风险分阈值比如 R>=70 且 conf_total>=0.7 才允许 normal->高风险（但这里高风险不是 status，是 score）。测法：回放数据里人为注入缺失/漂移，验证 status 的翻转符合预期，且“联动门槛”不会被 unknown 绕过去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我刚说岔了。status 只管可信度。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "风险等级我加一个 risk_level=low/med/high，跟 score 映射，便于前端和联动读取；unknown/degraded 时 risk_level 仍可算，但要带上“仅供参考”的 reason_codes。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拆三层测：- 单元测试：给定一段窗口数据（含质量标签、缺失），断言子分、总分、conf_total、reason_codes；重点覆盖边界：全缺失、单传感器fail、窗口跨越、极值钳位。- 组件测试：输入是上一步的标准化事件流（带trace_id、ack口径），跑聚合+计算，检查输出事件幂等（相同window_key重复输入输出一致）。- 回放集成：三组真实回放流，加两组“故障注入流”（缺失/漂移/乱序），看status比例、unknown触发是否符合预期；同时测计算耗时，目标每个空间每分钟计算 <200ms（我不确定这个数是否合理，先当门槛，超了再profile）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 风险计算服务我负责实现计算逻辑和测试，但担心接口字段和幂等口径不统一。想对齐三件事：1）window_key/幂等键怎么设计（空间+时间窗+版本？）；2）输出事件字段最小集合（score/level/status/conf/reason_codes/trace_id等）；3）reason_codes 枚举放哪里、怎么做版本兼容？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "algo_version 进幂等键这个点我之前没想到，这样回放对比也更干净。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "primary_pollutant 我觉得对前端解释挺有用，但会不会跟多污染物加权冲突？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 后端这边给的口径我打算采纳：window_key=tenant+site+space+window_start+window_size+algo_version，避免算法升级覆盖。最小输出字段我认可一套：trace_id、空间与窗信息、risk_score、risk_level、risk_status、conf_total、primary_pollutant、reason_codes。reason_codes 做分层枚举，公共模块共享，策略端只消费子集，遇到未知码忽略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这轮落地目标定三块：1）实现规则 baseline：窗口聚合 -> 子分映射 -> 加权求和 + 关键污染物保护；输出 primary_pollutant。2）质量不压分：risk_score 独立算，conf_total 按关键min+非关键均值；risk_status 仅表达可信度（normal/degraded/unknown），并输出 reason_codes（缺失/fail/low_conf/乱序等）。3）测试：单元覆盖边界+组件幂等（window_key含algo_version）+回放三组真实流和两组故障注入，检查 status 翻转与输出稳定；同时记录 calc_latency_ms 做开发期门槛。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实时流处理与畜禽画像构建的工程开发背景下，用户与导师围绕事件流/画像分层、窗口配置、迟到回写与字段清单持续沟通（8轮），其中在watermark与幂等键及画像分桶/回放版本设计上与数据工程师沟通（4轮），在最小可测用例与断言点（含并发upsert规则）上与测试与质量工程师沟通（2轮），并形成事件与画像表结构及验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解两层：事件流是给预警和工单触发用的，画像是给看板和后续训练用的。落地上我想先做最小闭环：先支持 2-3 个事件类型，比如采食下降、饮水异常、活动骤降；画像就先按“个体/栏位/栋舍”三种粒度存当天的聚合指标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先按网关输出的 record 来：`device_id, ts, animal_id(可能为空), pen_id, feature_vector, feature_seq(可选), cache_level, recalc_flag, rule_ver, dedup_ver`。\nkey 我倾向 `animal_id` 有就用，没有就退化 `pen_id+device_id`。窗口：采食/饮水这种我用滑窗 5min 更新一次，活动用 1min；补算的 N=3 连续窗口到了就按 `recalc_flag=1` 打上，事件输出里带上这个标。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先把画像的窗口固定成可配置：`agg_window_food`, `agg_window_water`, `agg_window_activity`，默认先用 5min/5min/1min 只是开发调通用，最终默认值等评审拍板。\n去重抑制我这里不写死，只在事件输出里带 `dedup_key` 的组成字段，抑制在后端风控服务里做。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想到两条路：\nA）画像只存“当前滚动窗口状态”，迟到数据来了就覆盖更新，代价是历史不可追；\nB）画像存“按窗口分桶”的快照，比如每 5min 一个 bucket，有 `window_start/window_end`，迟到数据只会影响对应 bucket，再由下游汇总。\n我更偏 B，能解释补算引起的回写，而且便于排查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 画像构建这块我卡在三点：1）乱序/迟到（尤其 L2 补算）怎么定 watermark 和允许迟到；2）事件流和画像 bucket 的幂等键怎么设计，和 `rule_ver/dedup_ver/recalc_flag/cache_level` 怎么进键；3）画像表支持回放/重算时，版本字段和写入策略怎么搞比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那晚到超过 20min 的侧输出流，我们是不是要做个告警，不然画像就永远错？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bucket 的 `late_flag` 你建议按“是否发生过迟到更新”还是按“本次写入是否迟到”？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好。我回去把幂等键和版本拆开。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个细节：entity_id 我们可能没有 animal_id，只能 pen 粒度，bucket 会更粗，会不会影响下游风险事件精度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备采纳这些：\n1）watermark/允许迟到：按事件时间 `ts` 做 watermark，允许迟到先设成 `N*agg_window + 5min`，比如 5min 窗口、N=3 就 20min；超过就进侧输出，不回写画像主表。\n2）幂等键：事件幂等键用 `entity_id + window_start + event_type + model_ver + rule_ver + agg_ver + dedup_ver`；`recalc_flag/cache_level` 只当解释字段，不进键，避免补算重复事件。\n3）画像两层存：`profile_bucket` 做窗口分桶 upsert，带 `agg_ver/updated_at/source_max_ts/is_late_update/has_late_history`；`profile_latest` 做查询加速，从 bucket 汇总或增量维护。\n4）输出必须带 `entity_type`，避免把栏位级结果当个体级用。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我打算先用“规则+分数”的折中：\n- 从聚合指标算一个 `risk_score`（0-100），先简单线性组合，权重走配置；\n- 再用状态机减少抖动：`NORMAL -> WATCH -> ALERT`，需要连续 K 个窗口满足条件才升级；恢复也要连续 R 个窗口回落才降级。\n阈值、K、R 都放配置中心，事件输出带 `threshold_id` 和 `rule_ver`，方便追踪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 实时流处理与画像构建我想做最小可测闭环。你帮我给一套最小用例集合：要覆盖 1）正常顺序数据；2）乱序/迟到但在允许范围内会回写；3）超过允许迟到走侧输出；4）L2 断网补算 N=3 连续窗口且 `recalc_flag=1`。每类用例你建议断言哪些关键字段（事件、bucket、latest），还有哪些边界容易漏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "并发 upsert 这点我之前没准备测。我们流处理里可能并行度一高就踩。你说“最后写入按 ts 最大”是建议用 `source_max_ts` 做比较？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我把验收点按 T1-T4 加上并发覆盖规则。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先报一版口头清单：\n事件输出（risk_event）：\n- 主键/幂等：`event_key = entity_type + entity_id + window_start + event_type + model_ver + rule_ver + agg_ver + dedup_ver`\n- 字段：`event_type, event_level, risk_score, window_start, window_end, entity_type, entity_id, farm_id, device_id(optional), model_ver, rule_ver, agg_ver, dedup_ver, threshold_id, state_prev, state_new, is_suppressed(由后端去重层填), recalc_flag, cache_level, source_max_ts`\n画像分桶（profile_bucket）：\n- 键：`entity_type + entity_id + window_start + agg_ver`\n- 指标：采食/饮水/活动的聚合值（先按配置），以及 `source_max_ts, updated_at, is_late_update, has_late_history`\n画像最新（profile_latest）：\n- 键：`entity_type + entity_id + agg_ver`\n- 指标：近1h/当日聚合 + `has_late_history` 透传一个 `profile_confidence`（先简单：有 late 就降一档）\n规则：\n- watermark 按 `ts`，允许迟到 `allowed_lateness = N*agg_window + 5min`；超过走侧输出，不改主表；\n- bucket upsert 以 `source_max_ts` 单调递增为覆盖条件；\n- `recalc_flag/cache_level` 不参与幂等，只做解释；\n- entity_id 缺失降级到 pen 粒度时，必须显式 `entity_type=pen`。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "收到，我把 `farm_id` 设成必填；置信度先拆成两个标志位。`data_gap_present` 我用“窗口缺失超过1个”判定，阈值也配成参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

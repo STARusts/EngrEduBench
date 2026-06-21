@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在药代推演数据流路径设计背景下，用户与导师围绕流计算状态管理、PBPK接口与数据流主干持续沟通（5轮），其中在状态结构与事件时间对齐部分与系统架构师沟通（1轮），在PBPK增量校验输入输出接口部分与药代建模师沟通（1轮），并最终确认包含事件时间对齐与乱序容忍的数据流主干。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得数据流应该是HIS发处方过来，规则引擎先过滤一遍，没问题的直接过，有疑似的把状态存到RocksDB，然后异步发给PBPK模型算，算完结果再写回去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态应该就是存当前用了什么药吧。PBPK输入我不太确定，可能需要患者体重？时序冲突这块，我还没想明白怎么比对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "混合架构下，流计算的状态管理具体要存哪些东西？PBPK计算的数据流怎么串？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "PBPK增量校验的输入输出具体是什么？我需要知道接口字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "状态要存酶占据率历史和脏器代偿指标。PBPK输入是生理参数和时序用药史，输出是浓度曲线和冲突概率。数据流就是HIS发事件，规则初筛，存状态，有疑似的把状态和生理参数打包给PBPK，算出曲线和概率再更新状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一步是时间对齐，用水位线处理乱序。然后再进规则引擎。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

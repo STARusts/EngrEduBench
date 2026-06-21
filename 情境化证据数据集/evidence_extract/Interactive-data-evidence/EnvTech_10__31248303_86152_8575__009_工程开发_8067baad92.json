@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在告警看板验收背景下，用户与导师围绕接口契约、top3概率展示求和、拒答与SHAP解释边界、血缘可追溯与权限审计持续沟通（6轮），其中在页面交互与性能落地上与前端工程师沟通（2轮），在可自动化验收断言与回归阈值上与测试工程师沟通（1轮），并产出P0/P1可执行验收门槛清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想按“接口契约 + 展示规则 + 处置闭环 + 证据可追溯”四层验收。  \n1）接口契约：告警详情接口必须回溯源输出 top3（含概率）、reject_flag、reject_reason、以及样本表那四个版本/水印/摘要字段做 drilldown；审计域只做证据展示不进解释。  \n2）展示规则：top3 三项概率展示到 2 位小数，但后台保留原始值；三项概率和必须等于 1（容差 1e-6），不靠前端拼。拒答时仍显示 top3+概率，但不出现“建议处置结论”。  \n3）处置闭环：告警确认、分派、备注、关闭要写审计日志，且与告警ID关联；关闭前必须选择处置类型（如已核实超标/误报/设备故障）。  \n4）证据可追溯：告警详情里能看到 cutoff_watermark、raw_hash_set_digest，并能跳到原始批次的对账摘要（raw_count、hash digest）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端返回两套值：raw_prob（高精度）和 display_prob（两位小数但保证和为 1）。display_prob 的生成在后端做“最大余数法”：先四舍五入到 2 位，然后计算差值 diff=1-sum；把 diff 按 0.01 的粒度补到余数最大的那一项（或从余数最小的扣）。前端只展示 display_prob，并用 raw_prob 做悬浮提示。验收时先对接口做断言：sum(raw_prob)=1±1e-6，sum(display_prob)=1 精确到 0.00；如果接口都满足而页面不满足，就定位到前端渲染或格式化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拒答我会固定三点：  \n- 溯源卡片标题仍叫“疑似来源 Top3”，下面三条来源+display_prob；  \n- 在卡片上方加一行状态“模型拒答：置信度不足/数据不足”，展示 reject_reason；  \n- 处置区不自动生成“建议立即排查某某排口”的句子，避免误导；只能让用户手工选择处置类型并写备注。  \nSHAP 解释我拆两块：  \nA）“模型依据（特征贡献）”：展示 topN 的 SHAP 绝对值条形图，并标注正负方向；里面不出现审计域字段。  \nB）“数据质量提示”：单独一个区块，只列 data_quality 相关指标（缺测率、时间漂移、补传比例等），只做风险提示，不把它混到“来源证据”列表里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端工程师 现在告警看板验收卡在三块：top3 概率展示（和=1）、拒答态不出结论文案、SHAP 可视化同时把 data_quality 单独展示。你这边准备怎么落到页面交互和性能上？我想把验收点对齐到具体组件行为。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“隐藏校验”我认同，但验收更希望在接口层就能把锅分清。还有概率展示：如果 display_prob 是百分比，后端是 0-1，前端换算会引入误差，你打算怎么约定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 告警看板要做验收，我希望用例能覆盖：top3 概率口径与求和、拒答态展示边界、SHAP 展示与 data_quality 分离、以及血缘字段（agg_version 等）在 drilldown 的可追溯性。你给一组偏“可自动化”的断言点，方便我们回归。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这份清单我会采纳大部分，两个点我想改：  \n- display_prob 我更倾向于不单独暴露，避免双口径；只要 prob 足够精度，后端再额外给一个 prob_2dp_adjusted 用于展示即可。测试断言就对 prob_2dp_adjusted 做 sum=1。  \n- 金样回归里“类别不变”可能在小版本特征变动时不现实，我会把它降级：top1 必须一致，top3 集合允许 1 个替换，但 MRR 不低于基线-0.02，同时 ECE 不恶化超过 0.01。  \n我回到你这边确认下：这些验收阈值会不会过度约束研发节奏？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源开销我不打算让前端去背：后端只存“解释快照”的 topN 贡献（比如 15 个），不存全特征；并且只在告警生成时计算一次，后续读取不重复算。验收里加两条性能阈值：详情页首次打开，溯源+解释接口 P95 < 800ms（测试环境），并且 SHAP 响应 payload < 50KB。  \n合规这块我把默认权限设成最小：只有“查看告警”权限的人能看列表；“查看证据链”权限单独开关；“处置”权限再单独开关。审计日志至少要落：查看详情、展开证据链、提交处置、导出记录。验收时用两个账号跑用例：只读账号不能看到 raw_hash_set_digest 的完整值，只显示前后各 6 位做脱敏；有权限账号才显示全量并记录审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边给出最终验收门槛，按优先级：  \nP0（必须过）：  \n1）top3 必含概率，prob 为 0-1，三项求和=1（1e-6 容差）；排序降序。  \n2）reject=true：仍展示 top3+概率与 reject_reason；不渲染自动处置结论文案，只允许手工处置。  \n3）SHAP 展示：只在详情页按需拉取；特征贡献区不包含审计域；data_quality 单独区块展示。  \n4）血缘可追溯：告警详情展示 agg_version、feature_extractor_version、cutoff_watermark、raw_hash_set_digest；drilldown 对账 raw_count 与 digest 能对应。  \nP1（建议过）：  \n5）性能：详情页溯源+解释接口 P95 < 800ms，SHAP payload < 50KB；列表页不拉 SHAP。  \n6）权限审计：最小权限默认；查看/处置/导出动作都有审计留痕；只读账号对 digest 脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

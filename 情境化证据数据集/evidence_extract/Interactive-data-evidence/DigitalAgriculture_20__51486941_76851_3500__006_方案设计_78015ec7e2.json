@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业处方与泵站协同方案进入“安全高可用与接口规范”设计背景下，用户与导师围绕控制/业务接口分层、幂等防重放、断网可运行与审计留痕持续沟通（6轮），其中在合规底线与证据链字段部分与合规与审计官沟通（3轮），在控制面接口骨架与回执状态机/离线队列部分与解决方案架构师沟通（2轮），并将接口字段、幂等规则与审计事件清单收敛为方案最小集。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就照我以前项目抄一套 REST 就行吧。下发一个 start/stop，回执一个 ok。告警就发短信。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重复就……服务端多发几次也没事吧，泵站收到就执行一次。断网就等网好了再说。审计就写日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 我们这套系统接口要怎么写才算合规？给个模板字段就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "地块也算隐私？我们就一个经纬度点，不就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "权限我就弄管理员一个角色，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计事件就全量存起来？反正存储便宜。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 就是要分权限，还有导出不能带坐标。接口要加签名时间戳。审计要存链路ID。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 控制接口这块你给个能用的规范，别太复杂，我照着写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "状态这么多我记不住。能不能就 RECEIVED 和 DONE 两个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分开就分开吧。但我能不能就写一句“采用统一鉴权，接口幂等”结束？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等就是同一个请求发两次结果一样。就用 commandId 不重复。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "commandId 云端生成。过期就边缘不理它。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就把这几条抄进去。reasonCode 我就用你给的那几个。坐标脱敏就写“导出不含经纬度”。可以了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

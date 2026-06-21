@@ -1,0 +1,109 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在AIGC镜头可信剪辑协作台方案设计背景下，用户与导师围绕可信素材证据、元数据分层与数据模型关系持续沟通（9轮），其中在版权证据与AIGC生成留痕字段部分与版权策略经理沟通（4轮），在敏感字段分级、权限与审计日志设计部分与安全工程师沟通（2轮），并汇总形成对象分层、Evidence/RightsEvent表、分级审计点与降级策略要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要开始做 AIGC镜头可信剪辑协作台 的方案设计了，这一段先把“可信素材与元数据架构”怎么搭理清楚。先从哪下手？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…文件名、上传人、时间、分辨率这些？还有是不是AIGC生成。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资产级就是素材本身，镜头级是切出来的一段，操作级就是谁剪了几刀？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我写：source_url、owner、license、hash、timecode_in/out、editor、edit_time、aigc_flag。差不多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据附件是放图片吗？合同PDF？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@版权策略经理 这套“可信素材与元数据架构”里，版权证据到底要留哪些？越具体越好，我好塞进字段里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那AIGC的要啥？就写“ai生成”不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存摘要是指hash吗？那是不是就存一个hash字段就够了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我大概懂了，就是把提示词藏起来，只给少数人看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。大概就是：合同、订单、授权范围、拍摄单这些要能挂上；AIGC要存工具版本、生成记录ID、参考资产ID；提示词别全公开，做权限；授权变更要留事件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "镜头表里放三个asset_id？或者就放一个“来源”字段写JSON。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按你说的三张表做。证据附件也来一张表？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "visibility_level 是公开/私密？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那权限我就写RBAC？角色：剪辑、审片、制片、法务。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 元数据这块哪些算敏感？权限和审计日志一般怎么做才不会翻车？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计字段是啥意思？日志也算字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我感觉有点多。我们MVP也要做这么细吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必存就合同和订单？提示词先不存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "资产：hash、来源、授权信息；镜头：timecode、shot_hash、关联asset；操作：谁改的、版本；AIGC：工具名版本、生成记录ID、参考asset_id、提示词hash；还有证据附件表，权限分三档，下载和看受限字段要审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级…就是老素材不存了？或者只留最近一周？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，这两条我记一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最后我还要给接口吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得可以。就是“EditAction”我不确定要不要单独做表，能不能直接写在版本里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

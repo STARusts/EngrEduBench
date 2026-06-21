@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上调度延迟毛刺溯源与策略修正背景下，用户与导师围绕根因分析与时序对齐及状态机降级策略持续沟通（5轮），其中在根因确认与修正方案部分与策略敏捷调优师沟通（3轮），并最终形成状态机乐观锁、时序校验前置与超时降级的修正方案及改动范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "肯定是撮合引擎并发没扛住，昨晚可能有大批充电桩同时响应。我去看下线程池配置是不是满了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "昨晚P99延迟毛刺，是不是撮合引擎高并发扛不住导致的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "锁等待？那就是代码里有死循环或者锁粒度太粗呗。容量上报抖动我不懂，是网络丢包吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把边缘侧上报频率调高一点，跟云侧对上？然后引擎这边加个超时熔断。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "云侧去适应边侧？怎么适应？我这边只能改引擎的超时时间，云侧调度逻辑太绕了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "乐观锁，时序校验，超时调低。我按这三条去改撮合引擎和调度下发逻辑的配置。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "下发逻辑判断，加个时间戳比对分支。回滚处理我加个异常捕获。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在排涝机组高动态拓扑背景下，用户与导师围绕宽带自组网协议选型、边缘网关硬件加速、RTK数据接入及接口配置持续沟通（4轮），其中在高动态拓扑MAC与路由选型及算力切分部分与无线组网协议工程师沟通（1轮），并最终确定LAR路由与混合MAC方案、网关协处理器卸载配置及推演算子核间通信接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看了几个开源库，想着直接拿现成的改改，比如用BATMAN-adv或者直接UDP组播。网关就用树莓派4B加个LoRa模块，成本低也够用吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "排涝机跑起来拓扑变得特别快，MAC层和路由协议怎么选才不丢包？网关算力怎么分才不会卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说路由用LAR，配合机组RTK坐标，MAC用混合模式。算力切分就是把帧解析和重传卸载到协处理器，主核跑路由更新。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以不能全靠软件写协议栈，得用带协处理器的硬件？我只会写软件协议栈，硬件加速咋搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RTK板卡有串口输出，我写个串口读线程喂给路由模块应该行，延迟大概几十毫秒吧。网关我选带NPU的那种ARM板子，应该有协处理器。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "LAR路由接口主要有：位置更新回调、邻居表维护、路由请求转发。协处理器配置就是开启硬件CRC、帧头解析卸载。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

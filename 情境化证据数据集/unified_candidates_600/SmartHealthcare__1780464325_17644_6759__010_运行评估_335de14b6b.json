@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在院感气溶胶网络上线评估背景下与导师围绕孪生映射校验、灰度方案及统计验证短板持续沟通（9轮），其中在映射误差计算部分与流体数字孪生设计师沟通（1轮），在灰度双流比对部分与现网交付护航员沟通（1轮），并最终确定灰度比对方案、降级回滚机制及能力补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "刚才看服务都起起来了，接口也通，可以切全量了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据都在kafka里转，延迟我压测过了，P99不到200ms，还不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "孪生映射误差怎么看？我后端只能拿到两个数，算差值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我数据里带了病区ID，应该能分组。RMSE我听过，就是求差平方再开根号吧。置信区间这个怎么搞？我不太会算这个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度怎么搞？我现在只敢先切两个病区试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接口能吐数据，但这些统计你们算吧，我后端不干这个。回滚指令我写了，没问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不同地方误差要求不一样。ICU肯定要求严。但我真不知道怎么定这个阈值，RMSE小于多少算好？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对CFD这块真不行，算错了更麻烦。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我回去找两本流体仿真数据处理的书看看，把RMSE和置信区间这块搞明白，至少能看懂护航员出的图。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现在灰度先上，我按护航员说的提供数据接口，误差统计先让他们前端算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "孪生计算服务挂了，直接降级走原始传感数据报警，不依赖仿真结果。这块我代码里写死了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

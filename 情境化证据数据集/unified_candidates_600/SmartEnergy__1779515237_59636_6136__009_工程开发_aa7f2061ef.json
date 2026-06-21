@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在尾流演化模型算法封装背景下，用户与导师围绕计算图解耦、状态管理、ONNX导出及接口定义持续沟通（8轮），其中在模型导出与状态传递要求、网格分辨率确认部分与尾流算法工程师沟通（2轮），并最终形成包含维度信息的封装接口定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "封装不就是写个类嘛，把之前算尾流的代码塞进去，给个入口给个出口，能跑就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "计算图解耦是啥意思？把代码拆成几个文件算不算解耦？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@尾流算法工程师 模型导出和状态传递的要求，要怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听起来就是要把代码弄快点，不能卡。内存分配我不懂，反正就是不让我在代码里新建变量呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就在外面建好变量，传进去用？导出ONNX我以前没弄过，是不是有个命令直接转一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网格应该就是风场那么大吧，风场多大我哪知道，反正就那么大。我猜是固定的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是输入要带状态，里面不能新建大数组，最后转成ONNX。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入就是风速和上一步的结果，输出是新的亏损。字段名我就叫wind_speed和old_loss，新的叫new_loss。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好吧，我加上维度。wind_speed_tensor和deficit_state，输出是updated_deficit。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

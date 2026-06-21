@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在漂绿微鉴与绿债信配引擎技术方案设计背景下，用户与导师围绕多源异构数据流架构选型及硬约束持续沟通（7轮），其中在Flink状态后端选型与迟到数据处理部分与数据流设计师沟通（2轮），最终放弃纯Kappa架构，确定准实时流加侧输出迟到的混合架构，并增加评分重算幂等性与外部源断流降级硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步打算全上Kappa架构，纯流处理，理论延迟最低。理论上Kappa架构通过事件时间和水位线可以处理乱序。我做个假设：如果用Kappa，漂绿特征捕捉延迟可以压在500ms内。对照组就是Lambda架构，批处理层做T+1对账，延迟肯定高。如果乱序数据导致特征计算结果大面积回撤，那就推翻Kappa可行的判断。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "状态回滚这块我确实没想清楚。Kafka和Flink联合，Exactly-once语义理论上能保证状态一致，但具体到多流Join的状态后端怎么配，迟到数据的状态保留多久，我不敢乱定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多源ESG数据流如果全走Kappa架构，Flink的RocksDB状态后端在多流Interval Join时，如果出现长达几天的迟到数据，状态TTL和回撤机制怎么设计才不会爆内存？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以Kappa假设不成立？那我得换Lambda？批处理层做T+1对账，流处理层只算实时增量？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不坚持了。乱序回撤代价确实太大，纯Kappa在这个场景会被长尾数据拖垮。但是，Flink侧输出流触发重算的具体逻辑，还有Checkpoint间隔对吞吐的影响，我现在的工程知识不够做细粒度权衡。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我去补一下Flink的容错机制和状态后端调优文档。这两天把Exactly-once的Checkpoint Barrier机制和RocksDB的增量Checkpoint原理看明白，然后把侧输出流触发重算的状态恢复逻辑画出来。这块不搞懂，后面开发没法写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "幂等性可以通过信配引擎的版本号控制，断流降级需要设置超时和兜底评分。待验证点是侧输出流重算的延迟是否满足风控时效。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边端与云平台接口联调背景下，用户与导师围绕推理结果上传的弱网重传、时钟校准与Payload字段设计持续沟通（4轮），其中在弱网重传与时钟校准部分与管道联调专员沟通（1轮），并最终形成MQTT协议、本地缓存重传、云端校时及包含特定字段的Payload接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个POST接口呗，把异常类型和分数打包成JSON扔上去，云平台写个Controller接住落库就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就多试几次呗。时钟飘了就不管了，差个几秒也没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端往云端推数据，POST重试不行的话该用啥？时钟飘了咋整？这接口具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MQTT加本地缓存。时间用云端下发的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄个数组，里面放type和score，有几个放几个元素呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "认不出，现在v1模型只能检测区域。那就把摄像头ID和框的坐标传上去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

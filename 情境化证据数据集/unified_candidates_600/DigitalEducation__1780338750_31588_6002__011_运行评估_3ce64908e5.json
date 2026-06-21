@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估背景下，用户与导师围绕挫败感干预有效性度量、特征落盘带宽取舍及报警逻辑持续沟通（5轮），其中在干预有效性量化标准部分与教育测量师沟通（2轮），在监控落地方案与报警规则部分与SRE运维工程师沟通（2轮），并形成基于Kafka与Flink聚合的特征落盘及斜率报警方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我埋了日志啊。支架弹出来的时候前端打了个点，后端降阶题目也打点。我看这两个点有没有报错不就行了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "后端日志里只有接口耗时和状态码，学生的状态我怎么查？去查数据库看下一题做没做对？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "挫败感干预有效到底看啥指标？我这边能拿到的就是做题耗时和正确率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "眼动离散度这个特征端侧模型输出了，但我没存下来，直接扔给推断模型了。放弃率倒是可以算，就是得关联题目表。那我监控就加个放弃率对比？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在端侧算完特征没落盘，直接推给云侧了。要监控的话，我得把这部分特征再写一份到时序数据库？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "带宽确实紧张。要不每10秒采一个点存？阈值的话，如果干预后60秒眼动离散度还是往上涨，就报警？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在要存端侧的眼动和笔触特征来监控干预有效性，但带宽不够。我想每10秒采一个点存InfluxDB，然后干预后60秒如果特征值还在涨就发报警。这样行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "全量推Kafka再聚合？那前端SDK那边不用改，后端加个Flink任务就行。斜率大于0且超20%，这个能写进PromQL里吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改Flink逻辑和Prometheus规则。我先把Flink作业提MR，然后把PromQL写进报警模板里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

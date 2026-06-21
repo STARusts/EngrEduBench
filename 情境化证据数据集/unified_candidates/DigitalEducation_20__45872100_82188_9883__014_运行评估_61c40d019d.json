@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段为线上监控告警到根因分析建立MVP闭环背景下，用户与导师围绕告警分流、分层排查、审计合并联动与合规信息披露持续沟通（9轮），其中在最短定位路径、判别信号与告警字段补全上与平台与DevOps工程师沟通（5轮），并最终形成15分钟内可跑通的告警处理步骤与根因输出模板。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在就怕告警一堆，最后只知道 P95 高了。根因我不太会拆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先看 P95 和错误率吧。错误率翻倍就当故障。P95 高就查慢查询？审计合并我不知道算不算故障。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我习惯先看网关的 5xx/504，然后看哪个接口最多，再去看服务日志里 timeout。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@平台与DevOps工程师 线上告警触发后，一般你们怎么从告警到根因？我需要最短流程，最好按我们这项目的口径：P95、错误率、还有审计合并那些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“哪一层异常”我怕我看不出来。有什么很具体的判别点吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计合并这块的告警怎么看？我只记得要看 merge 次数和 view_count。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我定位的时候需要追踪链路吗？还是只看日志够了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那你这边觉得最少要补哪些告警字段，方便我明天能写根因结论？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 DevOps 给的最短路径大概是：先看告警归类（SLO 的 P95/错误率），再判是哪一层（网关/服务/依赖/资源），最后固化证据（时间窗、对比基线、trace+日志）。审计合并那块建议做“合并延迟+backlog”和 `merge_count/view_count` 的趋势，突增就怀疑重复写或合并失效。PARAM_INVALID 这类要从故障错误里隔离，不然会把错误率看花。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）收到告警先确认是哪种：P95 高持续 10 分钟超过基线 20%，或者故障错误率翻倍。  \n2）去网关看 route 维度的 5xx/504，找最集中的接口和 scope。  \n3）再看服务的 timeout/failed/DEPENDENCY 的错误有没有涨，如果涨就去依赖看 DB/缓存 P95。  \n4）如果错误主要是 PARAM_INVALID 就不用当故障，记成调用方问题。  \n5）最后看 trace top 慢请求，看看耗时段落。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能是某个接口慢了，但没报错。依赖变慢，或者服务 CPU 高？我只能想到这些。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "排除项我容易漏。比如审计那块，我只会看 TPS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是看诊断计算的调用数有没有突然多？如果没有，说明不是诊断任务打爆。然后看诊断写 TPS，不要跟着快照读涨。审计看 merge 次数和 view_count，总体 view_count 上来但 merge 不应该等比例上来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果合并没跟上，backlog 变大，写入会排队，然后占用 DB 连接？再把其他请求也拖慢。大概这个意思。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那只能贴接口、tenant、校区这种。用户 ID 也别贴？日志里可能有题目文本，我得做脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

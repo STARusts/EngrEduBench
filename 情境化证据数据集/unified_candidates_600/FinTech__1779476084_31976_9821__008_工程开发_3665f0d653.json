@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段大模型实体抽取与对齐实现背景下，用户与导师围绕抽取防幻觉与格式漂移控制、对齐消歧与延迟优化的工程化方案持续沟通（5轮），其中在防幻觉Prompt设计部分与提示词工程师沟通（1轮），在实体对齐工程链路部分与大模型算法架构师沟通（1轮），用户最终明确抽取侧CoT+Schema+重试及对齐侧FSA字典树+大模型消歧兜底的开发任务，并制定补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看相关文献里，主流是用基于Span的指针网络结合大模型做联合抽取，对齐阶段直接接个开源实体链接工具应该就覆盖大部分场景了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "格式漂移我打算开启大模型的JSON Mode，再写个正则表达式做兜底校验。对齐的话，我之前看过一篇论文用对比学习做实体表征，然后算余弦相似度，原理上讲得通，实现起来应该也不难。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@提示词工程师 研报实体抽取的Prompt怎么防幻觉？我本来想用JSON Mode加正则兜底，导师说不够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@大模型算法架构师 实体对齐用对比学习算余弦相似度行不行？导师说冷启动和延迟有问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "提示词那边得加CoT和Schema约束，解析失败还要重试。对齐这块不能用对比学习，得先建FSA字典树过滤，没命中的再丢给大模型判别。验证就是跑测试集看F1和召回率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件就抓JSON解析的报错吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "字典树热更新，我我我还没想好，这块确实没写过。CoT的Prompt我也没写过这么复杂的，平时只会写简单的指令。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实卡在这了。大模型输出解析和FSA状态机这块我不熟，只会调API。我今晚得去补LangChain的OutputParser机制，还有FSA的增量构建源码，写个测试跑通。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把实验记录和补学目标记下来：1. 跑通OutputParser修复异常重试；2. 实现字典树增量更新接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

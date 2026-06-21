@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在情绪涟漪洪泛下的边缘端信令设计背景下，与导师围绕流控协议选型、背压处理与降频实验设计持续沟通（6轮），其中在信令洪泛与去Broker化部分与全链路联调专家沟通（1轮），在信令字段压缩与防丢包部分与边界拓扑设计师沟通（1轮），并最终确认64字节极简UDP信令与自适应降频反压方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉着直接套MQTT就行吧？网上好多人做物联网信令都用这个，自带QoS和流控，不用我们自己造轮子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "它有QoS 0/1/2啊，大不了用0，丢了就丢了。背压这块我还真没细看。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种自带背压处理的开源库啊？直接集成一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "MQTT是不是扛不住突发流量啊？有没有更好用的现成框架？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UDP直发？那丢包怎么办？信令字段怎么设计才能防丢包？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近在看QUIC协议的流控机制，它底层是UDP，自带拥塞控制，感觉比纯UDP靠谱，能不能直接上QUIC？省得自己写降频逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "依据就是它也是基于UDP的，而且自带流控，不用我手写。不过握手开销确实没考虑过。那我还是用纯UDP吧，自己写降频。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "为了验证纯UDP比MQTT好，我准备做个实验，发一堆模拟涟漪流量，看延迟和丢包率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就用无流控的UDP。变量设两组：无流控UDP vs 自适应降频UDP。并发度从1000拉到10000，观测边缘端内存占用和中心端接收吞吐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘端用64字节极简UDP信令，不传原始特征，加上自适应降频和本地反压。中心端下发用组播。放弃QUIC，太重了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估需统一“运维成本+停机+事件影响”复盘口径背景下，用户与导师围绕成本分摊维度、停机分类与字段化、停机映射雨洪事件影响及合规边界持续沟通（11轮），其中在停机定义与告警归因字段部分与SRE运维工程师沟通（3轮），在成本拆分归因与停机影响代理指标部分与运营分析师沟通（3轮），并形成最小可复现的停机/成本/事件影响字段与报表口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "成本我能想到电费、人工清掏、耗材换网，还有传感器坏了换件。停机就是设备停了。口径我不太确定，是按天算还是按事件算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度可能按站点、按设备类型、按月份。停机分类就…计划内维护、非计划故障、外部原因比如停电。字段就开始结束时间，原因。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "停机应该影响拦截量，拦截量下降就风险上升。挂起来就用停机时段里的降雨事件数？我不太会算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有效事件…降雨超过阈值，或者水位流量超过阈值触发。相交就是事件发生时间段和停机时间段有重叠。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 停机在你们那边到底怎么定义？是设备离线就算，还是拦截功能不可用才算？需要哪些字段才能复盘？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果数据缺失但设备其实还能拦截，这个算啥？我怕把“离线”当“停机”会高估。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“服务停机”的触发靠什么？全靠工单回填会不会很慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我再问成本。@运营分析师 运维成本拆分你们通常怎么做？需要哪些维度和字段，才能跟停机联系起来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那没有工单的，比如日常巡检走一圈，这怎么摊？按站点平均？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "停机损失怎么计入？比如没拦住的微塑料算罚款吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了，就是成本先别强行变成收益损失，用暴露代理。对吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "停机分两层：观测停机是数据断，服务停机是功能不可用。字段要 downtime_start/end，function_id，impact_scope，trigger_level，rule_version，还要告警ID或工单ID做证据。成本字段有 cost_item、amount、period、site_id、asset_id、work_order_id、allocation_rule。坑是把离线当停机，会高估服务不可用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把每条 downtime 取时间窗，和有效雨洪事件表做交集。交集里计数 missed_event_count。然后按事件的流量或水位估算 missed_volume_est。站点敏感度加权出 risk_exposure_score。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用前面拦截成效分箱里站点分级？比如A类敏感排口权重大一点。权重表要能审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工单里别写个人电话身份证？还有现场照片可能拍到人脸，得做权限和留存期限。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我看差不多。第3条里“有效事件”要引用现有触发规则版本，不然会吵阈值。还有成本里“不可归因成本”单列，不强行摊到站点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在Neural ODE模型接入流式预警流联调背景下，用户与导师围绕模型状态更新、反压处理、异步算子配置及脱敏规则持续沟通（5轮），其中在有状态模型接入方案部分与流式计算开发工程师沟通（1轮），在联调测试基线与数据脱敏部分与测试与质控工程师沟通（1轮），并最终确认异步算子加RocksDB状态后端的接入方案及端到端延迟小于200ms的脱敏合成数据测试基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我寻思直接写个Flink的UDF把模型包进去？反正就是个算子，来一条数据算一条。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态更新这块我确实没细想。反压的话，加个缓存队列能不能缓解？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Neural ODE模型要接进Flink，有状态更新和反压这块怎么搞？直接写UDF会不会卡死？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流式预警这块，联调测试重点看啥？数据怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流式那边说要用KeyedState存隐状态，用RocksDB，算子得改成异步的。测试那边说延迟得压到200ms，还得造尖峰数据测，数据必须脱敏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "线程池大小我估个10？脱敏规则我不太懂，测试那边提了一嘴但我没细问，应该就是去掉姓名吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就按这个来。线程池大小我再根据算力算算，脱敏规则我找测试对齐下特征哈希的事。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

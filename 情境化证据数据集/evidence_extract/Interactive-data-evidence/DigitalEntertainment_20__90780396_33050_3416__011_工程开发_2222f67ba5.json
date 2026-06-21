@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在观众端渲染SDK与播放器集成重构背景下，用户与导师围绕旧实现问题定位、渲染时钟适配层、事件调度/幂等/版本一致与可测接口埋点持续沟通（10轮），其中在播放器时钟与状态回调抽象上与客户端负责人沟通（2轮），在特效资源量级与合并限频降级及去重缓存策略上与渲染引擎工程师沟通（2轮），并形成最小接口清单、事件类型与状态机及5类埋点方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我翻了下，SDK里直接拿播放器的时间戳当事件时间，用它去排队。然后事件到达就立刻渲染，不管是不是过期，也没看到按 roomId 做隔离。还有就是回放时它会拉最新的规则配置，和我们记录的 ruleVersion 对不上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "弱网下重连，会把积压的互动一股脑推过来，端上就闪一堆特效。然后如果播放器卡住或seek，时间戳跳了，SDK还按旧逻辑继续画，感觉会乱。还有多人同场，A机和B机的效果可能不同步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是从网关来的互动事件，和回放读出来的事件。调度是按房间排队，然后按时间播放。输出是调用渲染引擎的 overlay 接口加特效。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 播放器这边能给SDK什么回调和时间信息？pause/seek这种怎么接比较稳？我们现在要做低延迟互动叠加，还要回放一致。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果没有每帧回调，只能timer，会不会抖？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放一致性那块，ruleVersion/assetVersion我们端上要管吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概三点：做 IPlayerAdapter 拿播放位置和状态；调度按播放位置推进，不用系统时间；seek/pause要影响队列。还有端上要做去重缓存，用 eventId 或 seq，避免重连重复。版本上事件里带 ruleVersion/assetVersion，端上按这个找素材，缺了就降级，不拉最新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想有这些：  \n- `IPlayerAdapter`：getPlaybackPositionMs、getSpeed、registerListener  \n- `IRenderEngine`：applyOverlay(command)、clearOverlays()  \n- `InteractionRenderer`：onEvent(event)、onTick()、onPlayerStateChanged(state)"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在 onEvent 收到时先看 expireAt，过期就丢，然后打点 dropped_expired。队列满了丢最旧，打 dropped_overflow。回放事件也走同一套 onEvent。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缓存按最近的播放位置窗口，比如最近30秒的 eventId 存一个 set，超过就删。大小上……我不太确定，先按1万？再看内存。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@渲染引擎工程师 互动特效叠加这块，一条事件通常会带来多少资源/实例？端上最容易炸的是哪类？我们要做去重缓存、合并和降级，想要个量级建议。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bloom filter我没用过，我们一定要上吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "渲染这边说最怕积压事件爆发，尤其粒子和全屏特效。建议调度做同类合并、粒子限频；资源必须按 assetVersion 命中缓存，没命中先占位别阻塞；去重缓存先用 LRU map 就行，双阈值：最近N秒+最大K条，K大概5000起，超了淘汰并打 dropped_dedup_cache_evict。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态就跟播放器走：Idle/Playing/Paused/Seeking/Stalled。Playing时 tick 推进，根据播放位置把队列里 displayAt<=pos 的事件吐给渲染引擎。Paused就不吐。SeekStart清队列并 clearOverlays。SeekComplete从 event-log 拉一段？这块我不确定端上要不要自己拉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入事件类型：  \n- InteractionEvent：普通互动，带 eventId、roomId、displayAtMs、expireAtMs、payload、ruleVersion、assetVersion  \n- SnapshotEvent：seek/reconnect 后下发，带 roomId、snapshotAtMs、overlays[]（每个带 assetVersion、params）  \n- ControlEvent：比如 clear、setQuality？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1) dropped_expired：onEvent时 expireAtMs < playerPosMs  \n2) dropped_duplicate：eventId 在 dedupCache 里  \n3) dropped_overflow：queue 超过 maxDepth 丢最旧  \n4) asset_missing_fallback：按 assetVersion 找不到素材走占位  \n5) merged_coalesce：同类合并把前一个覆盖掉时"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直用播放位置。现在听你说，seek会跳，确实会误丢。那用 wall clock？但互动显示又是跟播放走的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我得把事件结构改一下：displayAtMs 是播放轴，expireAtEpochMs 是系统时间。SDK 收到事件用当前 epoch 判断过期丢弃，不受 seek 影响。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我之前确实喜欢直接toString全打。我改成白名单字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小方案：  \n- 新增 IPlayerAdapter 统一取播放位置、状态回调；InteractionRenderer 订阅它。  \n- 输入只处理 InteractionEvent 和 SnapshotEvent。InteractionEvent 带 eventId/roomId/displayAtMs/ruleVersion/assetVersion/expireAtEpochMs。SnapshotEvent 在 seek/reconnect 后用来重建 overlays。  \n- onEvent：先用 epoch 判断 expireAtEpochMs，过期打 dropped_expired；再做 eventId 去重（LRU，K=5000，窗口按最近N秒），命中打 dropped_duplicate；再入队，队列超限丢最旧打 dropped_overflow；入队前做同类合并，触发 merged_coalesce。  \n- tick：Playing 状态下按 playerPosMs 吐出 displayAtMs<=pos 的事件，调用渲染引擎 applyOverlay；pause 不吐；seekStart 清队列并 clearOverlays，等 SnapshotEvent 来重建。  \n- 素材加载按 assetVersion 命中缓存，找不到走占位并打 asset_missing_fallback。  \n- 日志只打白名单字段，不落 payload 原文。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

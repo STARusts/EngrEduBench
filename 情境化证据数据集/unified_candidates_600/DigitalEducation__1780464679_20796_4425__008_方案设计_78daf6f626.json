@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在偏差容错与隐私安全防护背景下，用户与导师围绕心智数据隐私防护与流中断容错机制持续沟通（5轮），其中在差分隐私与脱敏策略部分与伦理守门人沟通（1轮），在心智追踪流中断降级部分与认知建模师沟通（1轮），并最终形成特征维度分级脱敏、图谱先验推断容错与安全熔断及混沌实验验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "隐私防护从信息论角度看，加噪是标准解法，我考虑对心智向量引入差分隐私机制。容错的话，如果对齐演算服务超时或报错，加个重试队列就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "精度损失确实没细算。重试也确实粗暴了点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "差分隐私的噪声尺度怎么定，才不至于让对齐演算失效？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分级脱敏，这比一刀切加噪合理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果心智追踪流突然中断，演算中枢没数据了，该怎么降级？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近在看联邦学习的端侧隐私保护范式，想着能不能直接迁移过来，让心智建模在客户端完成，服务端只拿梯度更新图谱，这样隐私问题从根源上就没了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我忽略了这个部署约束，联邦学习这条路走不通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还是得服务端算，配合分级脱敏。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证方面，我准备设计一组混沌实验，模拟流中断和心智数据污染，检验熔断机制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组跑正常流，实验组注入不同梯度的丢包率和心智向量偏移量。主要观测对齐演算的R方衰减速率，以及推断置信度跌破阈值后，安全熔断的触发时延和成功率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

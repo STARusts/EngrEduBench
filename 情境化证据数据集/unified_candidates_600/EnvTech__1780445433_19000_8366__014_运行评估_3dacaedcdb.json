@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在阻控指令下发异常告警处理背景下，与导师围绕故障排查、误报剔除与告警分级规则制定持续沟通（7轮），其中在故障现场还原与链路拼接部分与异常溯源分析师沟通（2轮），在策略容忍边界确认部分与阻控策略规划师沟通（1轮），并最终形成区分策略容忍与真故障的告警分级规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我翻了下日志，好像是调度引擎返回了503，不知道是不是服务挂了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻控指令报503，日志里一堆超时，怎么把故障现场拼出来？我现在只能看到一堆报错堆栈。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果是执行器阻塞呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "策略下发那边，有没有哪种情况是允许指令一直等着的？我怕误报。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来是这样，那这种就不该报503。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "如果是强制等待锁导致的，就不算故障。我得在告警规则里加个判断，看是不是高风险区的指令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个超时阈值？比如等超过5分钟还没ACK，就升级成真故障告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "一级是提示，就是那种强制等待锁还没超时的；二级是故障，就是3分钟没释放，或者traceID串起来发现ACK丢失的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "把执行器心跳丢失也加到二级故障里。总结下：一级提示是策略容忍等待（<3分钟）；二级故障是等待超时（>3分钟）或ACK丢失或心跳丢失。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

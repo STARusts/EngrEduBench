@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在截流井设备接入与网关协议设计背景下，用户与导师围绕异构设备协议选型、网关缓存溢出策略及数据过滤与降级采样触发机制持续沟通（8轮），其中在协议选型约束及缓存溢出与数据过滤机制部分与物联协议工程师沟通（2轮），并最终形成南向多协议北向MQTT架构及网关边缘处理策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接用大厂的物联网平台SDK呗，我看网上好多人都是把设备注册到阿里云或者腾讯云上，用他们现成的MQTT包，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "清单我扫了一眼，好像有些是串口的。那加个网关就行了？买个现成的DTU透传上去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现场设备挺杂的，既有老闸阀也有新传感器，直接全转成MQTT透传上去行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关得支持多协议接入，Modbus和LoRa都得接，然后统一转成MQTT往云上发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "带宽不够的话，网关自带的那种本地缓存队列能不能顶用？断网了就先存着，网来了再发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关断网缓存溢出怎么搞？还有老设备数据太多的问题，怎么过滤？我不想在网关上写太多代码，有没有现成的配置规则？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是网关配个规则，没变化就不发。点表映射还得写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暴雨期，就，就把死区调大？或者采样频率降低？降级采样不就是少采点嘛。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是队列快满的时候，触发降级，然后死区变大，少发点数据保命。点表映射是必须做的硬逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在特征提取通过后的连通演进图卷积开发背景下，用户与导师围绕时空图卷积的时间依赖处理、模型选型、采样策略及验证指标持续沟通（5轮），其中在时空耦合机制与OOM问题部分与图神经网络极客沟通（2轮），并最终确定使用EvolveGCN-H、时间窗口切块检查边完整性及连通度MAE验证的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图卷积就直接用PyG搭个时空GAT呗，把T维度放在batch里，节点特征用刚才的D维向量，边权用阻力矩阵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把T展开成RNN？或者直接把t-1的隐状态拼到节点特征里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时空图卷积怎么处理时间依赖？我准备把时间步放batch里或者加个RNN，行不行？还有大规模图训练显存爆了咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "EvolveGCN？让GCN参数自己变？听起来行。采样就用Cluster。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "极客说用EvolveGCN，参数自己演进。OOM用Cluster采样，切时空连通子图。我准备就写个EvolveGCN，然后采样子图跑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就选EvolveGCN-O吧，参数演进好像更直接。采样我就按时间窗口切一块。验证就看loss降不降呗，还能咋验证？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "EvolveGCN-H，时间窗口切块检查边，验证加MAE。这就去搭模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

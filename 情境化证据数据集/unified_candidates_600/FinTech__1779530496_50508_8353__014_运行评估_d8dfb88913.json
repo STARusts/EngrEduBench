@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估全量切流背景下与导师围绕分润结算延迟与异常监控持续沟通（5轮），其中在耗时拆解与告警分级部分与运维监控分析师沟通（1轮），在合约执行失败与状态机卡死监控部分与智能合约设计师沟通（1轮），并最终形成包含全链路耗时、合约失败事件及告警分级规则的监控看板埋点方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算设个阈值，比如分润超过5秒没结完就告警，发个邮件给运营那边。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，光看总时间不够细。我我我去问下运维的人，看他们平时怎么拆的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分润结算延迟这块，监控怎么拆？光看总时间分不清哪层出问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "TraceID串联，拆成计算、上链、确认三段，盯P99。我回去加上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，Revert的话交易失败了，耗时可能看不出。这得看合约层吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合约执行失败或者卡死，监控怎么抓？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抛事件，还有卡在中间态超时转人工。我把这两块加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心指标就是：分润计算耗时、上链确认耗时、还有合约失败事件数。告警的话，P1是链上确认超时和合约Revert，P2是计算耗时高。卡在中间态超时的也告警转人工。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

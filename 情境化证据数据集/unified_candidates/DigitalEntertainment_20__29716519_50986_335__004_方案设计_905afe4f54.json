@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多端互动剧集分支编排平台方案设计背景下，用户与导师围绕分支状态机建模、端服权威一致性、审核发布校验与审计留痕、灰度回滚及离线约束持续沟通（10轮），其中在总体抽象与关键接口部分与解决方案架构师沟通（4轮），并沉淀总体架构要点与错误语义及成本验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "现在开始做多端互动剧集分支编排平台的方案设计，我想先把“分支状态机总体架构”定下来：状态怎么定义、怎么跑在多端、服务端怎么做校验和留痕。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先抛个结构：把“剧集交互”抽象成分层状态机。上层是剧情节点（Narrative Node），下层是播放资产切换（Media Segment）。观众每次选择触发一次事件，状态机从节点A转到节点B，同时下发要切换的多模态资产集合。端上维护运行态，服务端维护权威态并做审核/灰度控制。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权威态我倾向于两层：  \n1）发布层权威：某个节点/转移在特定端/渠道/地域/版本是否可用，这是绝对的；端只能在“已发布可用集合”里选。  \n2）会话层权威：用户在一次观看会话里走到哪个节点，服务端记录为准，用于回放/复看续播和审计。离线时端可以先走，但只能走“已发布可用集合”，并把选择事件补传；服务端回放时按服务端记录复现。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "对，端在会话开始先拉“交互清单”：状态机版本号+签名+可用性约束（端/渠道/地域/版本）。每次选择事件上报要带版本号、节点ID、转移ID、以及服务端下发的校验token。服务端只接受匹配token的转移，否则拒绝并让端回退到当前可播放分支。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设想状态机以“版本化DAG”存储，发布时生成不可变快照。运行时会话绑定某个版本快照；灰度就是“同一剧集多版本并存”，按分流规则给会话绑定版本；回滚就是把新会话分流指向旧版本，存量会话按策略继续旧版本或强制迁移到回退点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 给我一版分支状态机总体架构的推荐抽象：状态/事件/转移怎么建模？端/服各负责什么？版本化、灰度、回滚怎么在模型里表达，才能保证未审触达=0？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Guard 和 AuditRef 都挂在 Edge 上，这样“未审触达=0”就是 Edge 校验必过。那资产切换呢？比如同一节点里有视频、贴纸、字幕、多语言音轨。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RuntimePolicy 单独版本化会不会导致“同一个快照被不同策略解释”，审计时难复现？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边再确认一个一致性点：端离线时没法拿 serverNonce。是不是就不能互动？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "理解了。我回去跟导师把取舍敲一下：默认不迁移存量会话；离线互动能力受限但安全。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完解决方案架构师了。我倾向采用“三对象+策略外置”的总体架构：GraphVersion（不可变快照）、SessionState（会话态）、RuntimePolicy（灰度/回滚/降级策略）。Edge 上挂 Guard 与 AuditRef，AssetRef 只给逻辑ID，播控再解析成可播地址，保证未审触达=0。回滚只影响新会话绑定旧 graphVersionId，存量会话不迁移，除非在 SafeCheckpoint 做受限迁移。离线互动仅走 offlineAllowed 白名单边，不拿 nonce 不允许全量互动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1）我选摘要+按需拉取：端启动拉“图摘要（节点/边/guard 的最小集合 + hash+签名）”，具体节点内容和资产列表按播放进度预取。全量图可能很大，尤其长剧分支多，会拖首帧和内存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "2）会话权威“服务端最终裁决、端本地先行但受限”。在线时端先点、立刻切UI，同时并行发选择请求；服务端校验失败就让端回退/降级。这样体验好，但要定义清晰的失败语义。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我给一版：  \n- EDGE_NOT_FOUND：端触发的 edgeId 不在当前 graphVersion。  \n- GUARD_DENY：guard 未命中（端/渠道/地域/版本/时间窗/人群）。  \n- AUDIT_BLOCK：审核状态不允许触达。  \n- NONCE_INVALID：缺 nonce 或 nonce 过期/不匹配 currentNode。  \n- ASSET_UNAVAILABLE：edge 通过但资产解析不到可播地址（分发/下架）。  \n端侧处理：前三类必须停在当前节点并提示刷新；NONCE_INVALID 走重试；ASSET_UNAVAILABLE 走降级 edge（若配置）或回退。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我设计一个小验证：取三档剧集复杂度（100/500/2000 edges），模拟互动峰值下端每次选择的请求数。比较两种方案：  \nA 全量下发：会话开始一次大请求，之后选择只上报。  \nB 摘要+按需：会话开始小请求，选择时可能触发额外拉取。  \n关注两类成本：服务端校验次数（每次选择必有）+节点内容拉取次数（只在进入新节点时）。用“每千次确认”拆分成：confirm_cost + prefetch_cost。只要 prefetch 命中率高（提前预取下一跳），B 不会显著高于 A。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "策略外置会增加一个 policyVersion 的治理成本，但好处是快照不频繁变，审核链路更清晰；策略变更更频繁，适合独立回滚。维护上需要明确“策略只能影响分流与降级，不能绕开审核”，否则会把复杂度变成风险。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "每次选择事件记录三段ID：graphVersionId、policyVersionId、edgeId，再加用户会话ID和 serverNonce。审计回溯时能复现“当时允许什么、命中什么、实际走了什么”。同时发布校验要覆盖端/渠道/地域/版本，作为 guard 的静态输入，避免人工口径漂移。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我补两点：  \n- 下发策略：端先拿图摘要，再按播放进度预取节点内容，避免大图拖端资源；同时把“每千次确认成本”拆成确认校验+预取拉取两部分来测。  \n- 离线模式只允许 offlineAllowed 白名单边，且只能指向预缓存、已审已发资产，恢复网络后补传选择并标记离线来源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

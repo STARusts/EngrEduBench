@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在幽灵节点-异构资管流动性自愈系统进入编码实现背景下，用户与导师围绕gRPC over SM-TLS的流式接入适配层实现、并发与验证测试持续沟通（4轮），其中在接入层代码结构与性能优化部分与底层协议开发工程师沟通（3轮），并汇总ByteBuf池化、Pipeline前置SM4解密、SM3摘要校验、流控与自动重连等实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幽灵节点-异构资管流动性自愈系统的方案定了，我准备开始写代码了。数据接入这块我打算直接找个通用的转换插件挂上去，能动就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想找个现成的Demo改改。并发什么的，我看网上说用那种异步库就行，代码粘过来应该能跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@底层协议开发工程师 有没有那种直接能用的gRPC接入模板？最好是带国密加密的，我直接套用一下，不想从零开始写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "内存池听着好麻烦，我直接new一个对象不行吗？现在服务器内存也便宜，不差这一点吧。"
+              },
+              {
+                "behaviorLabel": "终身学习",
+                "behaviorEvidence": "行吧。那我得去查下Netty怎么搞零拷贝，还有那个Pipeline怎么排队。感觉这块我确实没弄过，得找个视频教程突击下，明天看能不能把这几个词弄明白。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我多开几个线程发包，看最后存进库里的数对不对。要是对不上我就再改改参数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。第一，不能直接new对象，要用那个叫ByteBuf的池子。第二，解密要放在流水线前面。第三，用SM3做个摘要校验。反正先把代码框架搭出来，具体的我边写边看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，我先把你们说的这些名词加到代码注释里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收尾的要点我记下了：流式接入采用ByteBuf池化管理、Pipeline前置SM4解密逻辑、全链路SM3摘要验证，还有就是加上自动重连的异常捕获。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

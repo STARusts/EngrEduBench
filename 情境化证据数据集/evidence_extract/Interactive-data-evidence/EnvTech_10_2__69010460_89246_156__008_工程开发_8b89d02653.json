@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在生物多样性声景监测平台工程开发的边缘模型部署升级报错排障背景下，用户与导师围绕下发-校验-解压-加载-回滚链路的根因定位与最小修复要点持续沟通（8轮），其中在升级包结构/sha256校验、updater日志与回滚健康检查条件部分与边缘计算工程师沟通（6轮），并形成按日志闭环排查及强制校验、磁盘预检、原子切换与可靠回滚的落地清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一堆红字。我只看到“load model failed”。好像是升级完重启就挂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本我忘了看。应该就换了个模型文件吧。网不太稳，有时候断一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "哈希是啥我不清楚。日志我也没认真翻。回滚好像没发生，反正就一直不工作。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 现在这个边缘升级，为什么会“load model failed”？我就换了模型，设备重启就不跑了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "磁盘满会变成 load fail？不是应该说磁盘满吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是把磁盘清一清就行了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚条件是啥？我感觉它没回滚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "健康检查是 ping 一下接口那种？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 边缘那边说两种常见原因：一个是校验没做，包坏了也解压；另一个是磁盘满/权限，解压不全。还有回滚要看健康检查，他们现在是 60 秒 3 次失败才回滚，但我这边可能健康检查写得不对，所以没回去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推理服务有。updater 我不知道在哪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 updater 日志到底在哪个文件？我只会看服务那边的 log。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我如果看到 sha256 mismatch，是不是把校验关掉就好了？不然老失败。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不可变日志段就是不能删的那种日志？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那磁盘呢？设备空间不够就直接不升级？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕清理把证据删了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以我现在要改三件事？我有点乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你直接说我该照着做啥，越短越好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记个大概：别关校验；先看 updater 日志；磁盘不够就别硬上；回滚要真能触发。行吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

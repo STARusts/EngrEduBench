@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关多任务并行调度引擎开发背景下，用户与导师围绕XXL-JOB与Celery等调度方案的跨语言支持、实时异步与资源约束持续沟通（6轮），其中在队列吞吐与序列化安全部分与系统架构师沟通（2轮），在边缘部署资源压力与并发模型选择部分与后端开发工程师沟通（1轮），并最终明确弃用XXL-JOB并拟定Celery相关选型要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我本来的想法是直接用Java常用的XXL-JOB，因为它的界面操作很直观，而且我看网上现成的配置教程特别多。只要把任务脚本往里一挂，照着教程搬过来，应该很快就能把整个流程跑通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 调度这一块，如果一定要兼顾模型运行的性能，是不是只能舍弃那种带图形化管理界面的框架了？我比较担心如果全靠代码去手写任务编排，后期任务一多，我就很难看清到底哪一步出错了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Celery我听别人提过，但配置起来好像比那些开箱即用的框架复杂不少，特别是涉及序列化和中间件结果存储的时候。如果不选XXL-JOB，咱们有没有那种配置更方便一点，但性能也能跑赢的中间件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 咱们现在的网关环境，如果部署Celery集群，对内存和并发连接数的压力大吗？我就怕这框架跑起来太重，反倒把预测模型需要的内存空间给抢走了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听你们这么说，XXL-JOB在跨语言支持和实时异步处理上确实是个短板。那我目前的想法是，为了保证模型调用的最高效率，还是优先考虑Celery方案？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "具体的逻辑如下：第一，用Redis做Result Backend，追求反馈速度；第二，针对预测任务设一个高优先级队列，充放电指令设为最高优先级紧急队列；第三，重试策略先定为3次，失败了就往日志里记一条。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对了，为了图省事，我打算先用默认的序列化方式，这个在生产环境应该没风险吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我这就去查查Celery的JSON配置文档。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚才说的指数退避逻辑，我得找找有没有现成的代码段可以参考，感觉自己从头写逻辑容易出Bug。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我先记下了：弃用XXL-JOB，采用Celery集群架构，通过多优先级队列保证实时性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

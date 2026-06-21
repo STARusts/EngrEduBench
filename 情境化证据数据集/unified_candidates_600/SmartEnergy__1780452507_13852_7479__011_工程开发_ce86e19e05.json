@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端削峰性能调优背景下，用户与导师围绕压测模型构建、可观测性指标定制及监控打点资源折中持续沟通（5轮），其中在压测链路与观测指标梳理部分与压测调优工程师沟通（1轮），在监控打点性能损耗与高基数存储边界部分与核心算法工程师沟通（1轮），并形成压测模型、核心观测指标及采样打点约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想着可以直接用JMeter压接口，如果延迟高了，我就去改Spring Boot的server.tomcat.max-threads参数，或者加个JVM堆内存。有没有更方便一点的一键调优工具？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这链路中间有Flink和Redis，压测模型该怎么建？需要看哪些指标？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在要自己针对这条链路定义指标和写PromQL，我有点没底，这得怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我定义几个Histogram指标，分别记录特征提取耗时、Redis读取耗时和规则匹配耗时，然后在Grafana里按百分位画图。这样压测的时候就能直接看出是哪一段拖慢了P99延迟。不过，这指标数据量会不会太大？Prometheus存Histogram会不会把内存撑爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备在Flink反演算子里加Histogram埋点来记录耗时，但担心高基数指标把Prometheus内存撑爆，或者打点本身拖慢了计算。你们算法侧对监控打点的性能损耗底线是多少？高基数存储的边界在哪？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "所以我得改下我的方案，在Flink算子里加个采样率控制，只抽1%的请求记录耗时Histogram。这样既能定位P99延迟瓶颈，又不会影响反演计算性能。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

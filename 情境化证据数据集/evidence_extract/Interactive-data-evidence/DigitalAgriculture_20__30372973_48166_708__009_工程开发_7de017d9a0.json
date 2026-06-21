@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农产品溯源/营养标签规则引擎与模板实现的调试与合规约束背景下，用户与导师围绕日志最小可解释信息、回放复现方式、受控调试与留存策略持续沟通（12轮），其中在规则回放字段与trace摘要/size cap设计上与规则引擎工程师沟通（4轮），在日志留存红线与审计证据包导出机制上与隐私与数据官沟通（3轮），并形成默认安全日志+debug_mode分流审计通道的落地改动与验收项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是把每次生成的输入都存一下，方便复现。就像把配方、检测值、批次信息一起落库，再打日志里，出问题直接看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）最小信息……规则ID、模板ID、批次ID、时间戳，可能还有算出来的营养结果。2）复现我不太会，可能存一个hash？3）证据链就是把用到的检测报告编号、配方版本号挂上去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则引擎工程师 规则回放这块，如果要能定位“为什么标签这么算”，最少需要留哪些东西？我现在想只留 rule_id/template_id/version、输入hash，但怕复不了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "evaluation_trace 是指每条规则命中了没命中？那如果计算是配方比例加权，trace 会很长吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "模板渲染失败时，想知道是字段缺失还是规则没产出，这个也能靠 trace？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "受控调试层要怎么开？我怕实现复杂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与数据官 日志和留存这块，规则引擎/模板渲染为了排查想存输入和trace，哪些是明确不能进日志的？我们是农产品溯源+营养标签。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那批次ID算敏感吗？我们现在对账都用 batch_id 打日志。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果客户要审计，说你这标签怎么来的，我们只能给 evidence_id？他看不到报告原文会不会不认可？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两档：默认日志只留版本号、规则命中摘要、还有输入的 fingerprint，不留值；需要排查时才开 debug_mode，然后 trace 里也只是 evidence_id 和字段名。配方明细、检测报告原文、联系人这种不进日志。审计要看原文走单独导出，不靠日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用 JSON 序列化然后 hash？按字段名排序？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能做 canonical 的工具函数，先覆盖我们现在标签生成用到的输入字段。精度我不太确定用几位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我就先做“没配置不改动”，避免把两条不同输入弄成同一个fingerprint。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我没想过输出也会带个人信息。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 output_snapshot 就只留营养成分数值和合规结论码？把展示文案不打？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那模板渲染失败怎么办？只靠错误码够吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我这边要做的改动我列一下：  \n1）日志结构改成 trace 摘要：rule_set_version/template_version、rule_hits、missing_fields、error_code、input_fingerprint；  \n2）加 debug_mode（权限+过期时间+工单号）输出 evidence_id 列表；  \n3）输出 snapshot 限制成结构化营养表和 claim_codes，不含文案。  \n这样对吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存 7 天我可以做成配置？默认 7？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕有人为了省事把 debug_mode 默认开着。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验收怎么测？我能想到的是：模板缺字段时报 TEMPLATE_VAR_UNBOUND，日志里只有字段名；开 debug 后能看到 evidence_id，但普通日志看不到。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，这俩我都加到回归里。还有 rounding 配置我先空着，等合规那边给口径我再补。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

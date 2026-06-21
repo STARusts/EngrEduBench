@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发联调背景下，用户与导师围绕多机偏航指令时延抖动与同步问题持续沟通（5轮），其中在压测时延数据排查部分与群控联调测试工程师沟通（1轮），在组播时延机制与同拍执行方案部分与边缘协同控制设计师沟通（2轮），并最终形成帧头改绝对执行时刻及压测用例加时延容忍阈值校验的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是网络不好？让他们重启下交换机试试？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "偏航动作错位，测试数据是怎么报的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "为什么组播会差400毫秒？不能一起收到吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "收到就执行不行，那就改成单播，我挨个发，发完再下一个？对，会更慢。那就加个时间戳，收到以后先等会儿，时间到了再动？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "本地时钟不一样，加时间戳没用，那怎么保证同拍执行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代码里指令帧头改成绝对时间，收到指令先存起来。测试那边就看他们动作是不是一起的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "帧头加绝对时刻，压测卡50毫秒误差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

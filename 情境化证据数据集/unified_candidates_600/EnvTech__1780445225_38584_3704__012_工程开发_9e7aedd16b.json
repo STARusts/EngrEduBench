@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在矢量廊道可视化渲染联调背景下，与导师围绕算子输出数据格式、空间索引抽稀及增量更新机制持续沟通（8轮），其中在数据格式、LOD抽稀及增量更新监听部分与前端交互主程沟通（4轮），并最终确定算子输出转b3dm瓦片分块及WebSocket按需拉取的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边算子输出不就是一坨廊道数据嘛，转成GeoJSON给前端不就完了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "百万级确实有点多。但数据格式不就是通用最好吗？解析慢也是前端的事啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边算子算完的廊道矢量，准备给你GeoJSON，你能直接在Cesium上渲染吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "LOD抽稀？我这边算子只负责算连通度和阻力，还要我负责抽稀？这太麻烦了吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前端说要3D Tiles和后端LOD抽稀，还要八叉树索引。我这算子代码里哪有这些啊。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "八叉树我不会写。抽稀的话，我就把网格放大，把小面合并成大面行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我后端不想搞八叉树，直接给你原始顶点的Binary流，你自己做LOD和索引行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Cesium的管道工具转。那我可以把算子输出的顶点先攒着，凑够一个瓦片就用工具转成b3dm。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "增量数据？我每帧都重新打包整个瓦片？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，算子输出格式从GeoJSON改成顶点数组；第二，后处理加上3D Tiles Pipeline打包成b3dm瓦片；第三，推演结果要附带变化节点的ID列表；第四，前端通过WebSocket按需拉取瓦片。就这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

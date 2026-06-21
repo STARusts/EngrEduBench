@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在固废识别链路工程开发中，用户与导师围绕训练样本字段设计、数据切分评估、上线阈值与边缘推理事件对齐及合规留存持续沟通（9轮），其中在切分/指标/阈值与边缘资源约束上与AI算法工程师沟通（3轮），在图片与RFID最小化、脱敏分层、保留周期与审计留痕上与合规与风控经理沟通（2轮），并明确样本/推理结果事件字段与rfid_token接口口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用触发那张图训练吧，trigger_id 也带上。RFID就……有就有，没有就算了。称重就当标签的一部分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最少就图片+类别？再加个时间戳。trigger_id 也加上就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "image_path、label、ts、trigger_id、device_id、site_id、weight、rfid_id、camera_id、maybe…版本号？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "随机就行吧，70/30。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI算法工程师 训练集咋切？评估看啥？阈值怎么定？边缘部署有啥限制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值就是扫一遍找最好的那个。上线就用一个固定阈值行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等就是同一张图别算两次，我懂。那我就把 model_version 写到结果里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切分就按站点留一部分出来，再按时间切。验收就看mAP、F1，还有混淆。上线阈值就先用验证集扫出来，然后站点可以改，低分就unknown。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就记下模型版本号、数据集路径、还有训练时间。差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 训练用的图片和RFID这些要怎么存？谁能看？多久删？审计要啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把RFID直接删掉，用不到就不存了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推理就消费统一事件，拿到图片就跑，出个类别和分数，写回去。失败就重试几次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trigger_id、pred_class、score、model_version、ts、unknown_reason。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "把推理结果事件接到统一事件里，unknown也能跑通；再把样本字段按你说的补上，rfid用token。阈值覆写我先留个配置位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

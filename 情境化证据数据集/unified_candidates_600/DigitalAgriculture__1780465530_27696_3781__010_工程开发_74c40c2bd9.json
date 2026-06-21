@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在作物长势边云协同推演引擎开发落地背景下，用户与导师围绕边缘算力瓶颈、云端并发调度及边云推演一致性验证持续沟通（4轮），其中在边缘模型量化与算力约束部分与边缘端开发工程师沟通（1轮），在云端异步解耦与状态同步部分与云端推演服务工程师沟通（1轮），在推演偏差容忍度与决策红线部分与农学知识审校专员沟通（1轮），并最终形成边云推演模块分工与一致性降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步想按模型复杂度切。大模型像WOFOST这种机理模型放云端，轻量模型比如NDVI趋势LSTM放边缘。但边缘端ARM网关算力有限，跑多大参数量心里没底。而且我对TensorRT在ARM架构上的量化加速不熟，之前只搞过X86。这块要是搞不定，边缘推理延迟肯定爆。我得先花半天补一下ARM NN SDK的文档，做个小规模基准测试，把量化精度损失和耗时关系摸清楚，再回来定模型参数上限。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关用的ARM Cortex-A72，内存2G。WOFOST肯定塞不进去，我打算放轻量LSTM做NDVI短临推演，用ONNX Runtime跑，量化到INT8可行吗？会不会特征脱敏后精度掉得没法用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端WOFOST单次耗时可能要秒级，怎么拆解任务能不把服务拖死？我想用异步任务队列，但怕边云状态不同步。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧用ONNX Runtime跑FP16的LSTM，参数限制500K；云端Kafka接特征流，网格拆解并行推演，结果走Redis回传。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我有点担心，FP16的LSTM在边缘推出来的NDVI趋势，跟云端WOFOST推出来的结果如果偏差大怎么办？这算不算一致性红线？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想到对比两者输出曲线算RMSE，但阈值怎么定真没概念，可能得看农学容忍度。这块我确实没深究过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边云推演结果如果出现偏差，比如边缘预测NDVI下降0.05，云端预测下降0.02，农事决策能容忍这种分歧吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘端：ONNX Runtime + FP16，参数<500K，只做趋势预警。云端：Kafka异步 + 网格并行推演，作为决策基准。验证指标：边云推演MAPE<5%，否则边缘降级为只发告警。我马上把这两个模块的Sprint任务拆出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

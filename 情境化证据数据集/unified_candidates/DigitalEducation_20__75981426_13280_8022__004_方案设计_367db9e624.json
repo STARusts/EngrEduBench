@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在隐私计算学习履历互联平台方案设计背景下，用户与导师围绕学习履历主干模型的事件层最小字段、跨系统对齐键、授权审计挂载与汇总层指标化设计持续沟通（6轮），其中在主键/外键与统一ID对齐部分与数据治理官沟通（3轮），在授权申请/令牌与审计留痕落模部分与合规与隐私负责人沟通（2轮），并形成事件层-授权审计-汇总层的模型要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是学生的上课、作业、考试那些记录吧。差不多全塞进去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我不太会。就……学生ID、时间、课程、分数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跨机构就学校名？审计就是日志ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 学习履历事件这块，主键外键咋定？跨系统对齐用啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "verb枚举表是啥？就写“提交作业”这种？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "person_uid 这个统一人ID咋来？每个学校都有学号啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是 event_id 用UUID。然后人用 person_uid，机构 org_id。对象 learning_object_id。字段就那10个左右，其他放json里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权层我不清楚。是不是给老师看就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 学习履历模型里授权咋放？要留啥审计字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要在事件里加 grant_id？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件层：就固定那几个，event_id、person_uid、org_id、verb、对象id、时间、来源系统。别的先放context/result里。\n对齐：人用person_uid，不用身份证；机构org_id；对象learning_object_id。\n授权审计：事件不塞权限，查的时候带grant_id校验，然后审计表记谁在啥时候用啥用途访问/导出。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "汇总层就是统计？比如班级平均分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "口径版本是怕以后改了算出来不一样？就…留个版本号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育方案设计收尾的接口契约与权限模型设计背景下，用户与导师围绕证据/反馈/审计/导出等最小接口集、鉴权与责任域裁剪、引用链与禁用证据表达持续沟通（10轮），其中在引用链可见性与未成年人数据边界上与合规官沟通（1轮），在RBAC+scope落地与token claim最小集上与安全工程师沟通（1轮），并最终收敛接口返回分级与审计字段由服务端写入的约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做得很干净：所有东西都统一成 Evidence，对外就一个 Evidence API，写入、查询、引用都走一套。权限就用细粒度到字段级的 ABAC，再叠加租户隔离。这样以后扩展证据类型不用改一堆接口。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先按调用面分：\n1）证据写入：POST /evidences  \n2）证据列表：GET /evidences?student_id&course_id&type&time_range  \n3）证据详情：GET /evidences/{id}  \n4）生成草稿：POST /feedback/drafts（带量表、证据集合ID）  \n5）草稿发布：POST /feedback/publish（带draft_id和教师确认）  \n6）审计查询：GET /audits?request_id&operator&time_range  \n7）权限查询：GET /permission/check（给前端做按钮置灰）"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "证据详情里要返回它被谁引用过？比如被哪个draft_id引用。禁用证据我想放在 drafts 里：draft生成时写一个 selected_evidence_ids、disabled_evidence_ids。发布时再固化一次。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规官 引用链这块，证据被哪些反馈引用过、被谁禁用过，这类“关系信息”能给哪些角色看？我们想做审计追溯，但又怕越权。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解：引用链对教师侧要按“教学责任域”裁剪；学生侧只看发布后的最终引用；全量只给审计角色，而且查链路也要写审计。禁用列表更敏感，最好不下发给学生端。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 我们要做证据和反馈的接口权限，最小落地怎么设计比较稳？token 里放哪些 claim 合适，避免每次都查权限表？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向把 token 里塞全量 class_ids，前端就能自己判断按钮和列表过滤，速度更爽。权限快照ID听起来要多一次查询，感觉慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "token 最小我选：sub、role、tenant_id、campus_id、teacher_id、perm_snapshot_id、perm_snapshot_ver、exp。  \npermission/check 入参：action、resource_type、resource_id（可选）、context（class_id/course_id）。  \n返回：allow true/false + reason_code + policy_version。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "draft 生成请求里带 policy_version 和 snapshot_digest？不过这不是客户端能保证真实的，应该服务端从鉴权层拿。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "证据写入我给三层：\n- 必填：tenant_id（从token）、student_id、source_type（课堂/作业/测评）、occurred_at、evidence_type、content_ref（指向原始内容存储的引用）  \n- 选填：rubric_id、activity_id、device_id_hash、tags、confidence（采集端自评）  \n- 禁止：身份证号、电话号码、精确地理位置、设备原始ID（只留hash）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "- DELETE /evidences/{id}：不是物理删，写 tombstone=true，原因码 required。  \n- POST /evidences/{id}/expire：设置 expire_at，给批量任务用。  \n导出我想做 GET /evidences/export?query=... 返回下载链接。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，这个我认。同步导出确实容易被刷。那性能上班级批量异步也一致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补两点：  \n- evidence.detail 返回字段要分级：默认只给摘要和必要元数据，原文 content_ref 需要 evidence.read 且责任域校验通过才给。  \n- draft/publish 响应里最好回传 used_evidence_ids 和引用链摘要，配合我之前提的“教师手改结论提示引用链是否仍支持”，前端才有依据做提示。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

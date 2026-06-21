@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在招股书数据抽取槽位填充防幻视背景下，用户与导师围绕校验方案选择、接口改造与验证策略持续沟通（7轮），其中在校验效果评估与验证实验设计部分与质量与防幻视工程师沟通（2轮），在图谱比对接口改造量部分与知识图谱架构师沟通（1轮），并最终形成核心指标走图谱硬比对、非核心走自校验的分级策略及对照实验验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加校验呗。用正则查一下数字格式对不对，或者让大模型自己再检查一遍，它看到自己填错了应该能改。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A比较快，B听起来要改很多接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我去问问防幻视工程师和图谱架构师，看B到底有多重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抽取出来的数据经常张冠李戴，如果用大模型自己再校验一遍，能防住吗？还是必须上图谱比对？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱硬比对要改接口吗？我们现在的抽取链路是直接出JSON。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱比对能压到2%，但接口要大改，还得带抽取路径。自校验虽然剩15%幻视率，但不用改接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "核心财务指标，像营收、净利这种，填错就是事故，必须走图谱硬比对，接口改了也值得。一些非核心的文本描述，比如公司简介，用大模型自校验凑合一下就行。分级处理，只改核心指标的接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太懂图谱那边怎么查的，抽取路径我知道要传，但图谱查询的语法我不熟，怕传过去格式不对。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "查完我在抽取接口的返回体里加个 `graph_query_param` 字段，把实体ID和关系类型按图谱要求的格式传过去，这样图谱那边直接就能查，不用再解析。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑一百条数据，看看报错率降没降。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "500条数据做三组对照，重点盯核心指标是不是0，非核心指标是不是在2%以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧渲染调优与排障背景下，用户与导师围绕AIGC潮玩掉帧原因定位、排障手段及合规拦截要求持续沟通（6轮），其中在掉帧根因与合批策略部分与前端渲染联调工程师沟通（2轮），在资产确权与拦截校验部分与跨链合规分析师沟通（2轮），并最终形成抓帧定位、静态合批、贴图降级及异步合规拦截的排障方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我试了把模型塞进Three.js，帧率直接掉到十几。我想着是不是直接套个Draco压缩库？或者把贴图分辨率砍一半？这种现成的压缩工具应该能兜底吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端渲染联调工程师 我这端侧渲染AIGC潮玩掉帧，到底是啥原因啊？Draco能解决不？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "上千Draw Call那肯定卡死。有没有那种一键合批的插件？把Mesh合并一下，材质也自动合了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚看了个WebGL调优的文章，说可以用Spector.js抓帧看指令，我准备试下这个，能直接看到哪步渲染耗时最长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果是碎Mesh，我就写个脚本把同材质的合并，材质贴图打包成图集。不过刚才说4K贴图OOM，这个我直接压成2K应该就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@跨链合规分析师 我这端侧直接加载AIGC图，有没有啥合规风险？要不要加个校验？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在加载模型前先调个接口查状态，没上链的就不给真图。不过这会不会影响渲染速度？本来就很卡了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这就去装Spector.js抓帧，然后改合批逻辑，再加个校验拦截。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

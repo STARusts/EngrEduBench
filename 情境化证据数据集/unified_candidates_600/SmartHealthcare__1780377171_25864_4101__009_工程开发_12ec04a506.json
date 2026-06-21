@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧特征与联邦推演联调背景下，用户与导师围绕跨域异构数据聚合策略与折中方案持续沟通（3轮），其中在FedAvg收敛性与FedProx可行性部分与算法工程师沟通（2轮），在端侧算力约束与LayerNorm开销部分与边缘端开发工程师沟通（3轮），并形成端侧加LayerNorm、服务端切FedProx及召回率容忍阈值的联调约束确认。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧特征维度和上报频率已经锁死，现在联调核心就是服务端聚合策略要能兜住各边缘节点的异构数据分布。我打算先跑一轮基线FedAvg看收敛情况，如果不行再调聚合权重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 基线FedAvg在咱们目前的特征分布下，收敛性具体卡在哪里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘端开发工程师 端侧现在能在特征输出后加一层分布对齐的逻辑吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "两边都有硬约束。@边缘端开发工程师 端侧现在的算力余量到底还有多少？哪怕只做方差缩放呢？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端侧加复杂对齐肯定不行，那是强算力依赖。架构上可以这么折中：端侧只在1D-CNN输出后加一层轻量级LayerNorm，只做方差缩放和平移，参数量极小；服务端把FedAvg换成FedProx，加个近端项约束偏态节点的更新幅度。这样端侧算力增加极少，服务端也能容忍一定Non-IID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这个风险我承接。我们可以在仿真环境里注入带极端菌群失调的样本，对比加LayerNorm前后的召回率下降幅度，只要在2%容忍度内就可以接受。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘端开发工程师 LayerNorm的计算开销你能挤出来吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本轮联调约束确认如下：1. 端侧在1D-CNN输出后增加轻量级LayerNorm，仅做推理期方差缩放，不改动触发阈值与采样逻辑；2. 服务端聚合算法由FedAvg切换为FedProx，近端项约束参数需根据收敛曲线调优；3. 验证指标为极端菌群样本召回率下降幅度，容忍阈值2%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

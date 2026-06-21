@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在循环水质数字孪生与合规管控平台运行评估背景下，用户与导师围绕灰度上线台阶、回滚触发阈值及合规守门/审计验收口径持续沟通（8轮），其中在发布对象与回滚演练可验证流程上与SRE运维工程师沟通（6轮），在证据接口字段白名单与审计必检项上与合规与审计官沟通（3轮），并形成可执行的放量与回滚触发清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "循环水质数字孪生与合规管控平台现在到运行评估了，我要搞灰度上线和回滚演练。你给我个直接能照着做的步骤。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度不就是发10%流量吗？我直接把比例改成10，然后不行就回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象就随便吧，挑一批设备。台阶就10%到50%到100%。指标就看报错数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是别把原始包发出去？我感觉我们又不是做抓包，应该不会有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度上线和回滚演练你给我一套现成流程，最好能复制。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "主动回滚为啥要做？我感觉出事再回滚就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "一致性偏差<1%是啥意思？听着很玄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚按钮怎么按？就是把镜像tag切回去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记下来了，1%到5%到20%到50%到100%，回滚就看P95和报错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "raw_packet怎么判？是不是有人手看日志？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是1%、5%、20%、50%、100%。20%的时候要主动回滚一下。回滚就看P95小于3秒，还有工单成功率啥的。合规那边说raw_packet命中就立刻回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "archive_uri？还有id之类的吧。多点字段也方便排查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 灰度上线这块，evidence到底能回啥字段，哪些绝对不行？给我一张清单式的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在接口里还有个data_preview字段，里面就几行，应该没事吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那排查靠啥？出了事我怎么知道内容？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了，就是接口里别出现正文，只给链接和hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写成：  \n- 台阶1、5、20、50、100。  \n- 触发回滚：P95>3秒；工单成功率掉；链路关联率掉；出现raw_packet；audit没出来。  \n差不多这样？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "白名单字段我记不全，我就写archive_uri和id行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个问题：DATA_QUALITY_GAP我老分不清，是不是等于数据延迟？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了，我就按这几个硬指标走，别的先不动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

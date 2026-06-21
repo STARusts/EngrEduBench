@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阻隔指令下发链路与联调设计背景下，用户与导师围绕指令下发架构选型（Seata与Flink取舍）、轻量级下发方案及重试降级逻辑持续沟通（6轮），其中在边缘网关抖动环境下重事务链路影响部分与测试联调工程师沟通（1轮），并最终形成MQ异步下发、网关阈值拦截及重试降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备引入分布式事务框架Seata配合RocketMQ做指令可靠下发。阻隔指令如果丢了或者重复执行都很严重，必须保证Exactly-Once语义。再加个Flink做下发流式的实时校验，拦截脏数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "延迟可以通过增加MQ分区和调整Seata超时时间来优化。主要是不允许任何指令异常，Exactly-Once是院感阻隔的刚需，宁可慢一点也不能错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用Seata+MQ做阻隔指令下发，保证Exactly-Once。如果在边缘网关网络抖动时做联调，这套方案扛得住吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "测联说Seata会超时回滚导致指令取消。确实，设备指令是幂等的。那我把Seata撤了，但MQ还是得保留，用异步确认重试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink做实时校验我觉得还是得留着，防止算子出野值直接打坏设备。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定MQ异步下发加上网关侧阈值防野值拦截，再配合设备ACK超时重试。联调重点测网关断连和ACK超时的重试逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试3次放弃，放弃后把该阻隔区域标记为降级状态并转入手动干预，在孪生界面上高亮报警。不再占用寻优算子资源反复推演该区域，避免算力死循环耗尽资源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

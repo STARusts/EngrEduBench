@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在伴学模型微调与接口设计背景下，用户与导师围绕微调方案（全量vs QLoRA、Adapter拆分vs Prompt）与接口架构（WebSocket vs SSE）持续沟通（4轮），其中在微调指标与算力权衡部分与算法工程师沟通（1轮），在双协议架构复杂度部分与后端开发工程师沟通（1轮），并最终确认QLoRA通用基座加Prompt及HTTP SSE流式接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然都上7B了，全量微调肯定效果最好。LoRA那种只调旁路矩阵的，我觉得在意图识别这种细粒度任务上肯定掉点。我想用DeepSpeed Zero-3做全量微调，把多轮对话和意图标注数据全量灌进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LoRA在咱们这种多轮语境解析任务上，相比全量微调，指标差距到底有多大？如果F1掉超过5个点我就没法接受。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1.5个点勉强能忍。那我就用QLoRA，但我打算针对不同学科设计独立的Adapter，推理时动态加载组合，这样能保住学科特性，效果逼近全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口必须全双工。我设计WebSocket维持长连接做状态同步，同时内嵌gRPC流式返回脚手架生成结果，这样前端渲染能做到字符级打字机效果，延迟最低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种WS加gRPC的双协议架构，网关层和后端服务编排复杂度能搞定吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SSE的话，客户端断连重传机制得自己写，不如WS省事。不过确实不用维护双向心跳。好，SSE加HTTP2。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "微调：QLoRA rank64，通用基座不分域，学科特性走Prompt；接口：HTTP SSE流式，上下文通过请求头携带traceID关联，放弃长连接。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

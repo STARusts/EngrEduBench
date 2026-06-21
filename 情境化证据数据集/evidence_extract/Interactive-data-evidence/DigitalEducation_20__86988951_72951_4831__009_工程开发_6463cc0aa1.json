@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统进入工程开发背景下，用户与导师围绕设备模型落库与孪生引擎最小闭环持续沟通（8轮），其中在主数据/时序/事件拆分与可预约reason_code设计上与数据架构师沟通（3轮），在事件幂等、事务更新快照、Outbox通知与乱序测试上与后端工程师沟通（5轮），并最终明确MVP表结构、事件处理链路与最小演示验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要进工程开发这块，先把“设备模型与孪生引擎”做出来。现在我卡在一件事：设备孪生的模型到底要先写到什么程度，才能开始联调预约？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就三类：设备基础信息、实时状态、还有一些告警。然后我就想直接找个数字孪生的平台SDK，接进去就能画图那种，但我不确定我们是不是要自己写很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "台账就设备ID、名称、型号、位置、归属实训室。实时状态我想要在线/离线、运行/空闲、功率。可预约性…是不是直接算个available=true/false？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 设备孪生这块我现在要写库表和模型类，主数据、时序、事件要怎么拆比较稳？我怕我搞成一坨JSON后面改不动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“可预约性”的原因，是放在device表里一个字段，还是也当事件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code这些码我是不是要提前定死？我怕后面又加很多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我懂点了。还有一个问题：telemetry这张表会不会很大，开发环境就一台设备也还行，上线后会爆？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我先按这个拆。@导师 我问回来了：主数据/时序/事件三层，加一个state_current快照表。可预约性不直接存布尔，返回可预约+reason_code。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我本来想用个状态机库，直接配置转移图，可能会省事。但我不确定哪些状态需要进状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 孪生引擎我现在要写事件处理：device_event进来更新device_state_current，还要发变更通知。幂等、事务、测试我有点虚，你给个能写代码的落地建议。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "乱序事件这块我有点懵。是不是只要比较event_ts，小的就不更新？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕字段太多写起来慢。能不能先用全局last_ts，等跑起来再改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "优先级就是：ADMIN_LOCK来了就一直锁，直到ADMIN_UNLOCK，其他事件都不动lock_flag？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从后端那拿到的做法是：device_event表用(device_id, trace_id)唯一键做幂等；事务里插event再更新state_current；通知异步用Outbox；快照最好分字段ts避免乱序覆盖；锁定优先级最高。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "顺序我写成这样行不行：\n1）lock_flag=true -> LOCKED\n2）maintenance_active=true -> MAINTENANCE\n3）fault_active=true -> FAULT_ACTIVE\n4）online=false -> OFFLINE\n5）能力不匹配 -> CAPABILITY_MISMATCH\n6）不然就 OK 可预约"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我更想偷懒点，直接靠上报。可如果设备不报，就一直在线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "查询时算，就是每次取状态再比一下now-last_ts？那压测会不会慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那返回体我就用一个DTO，里面有 online、fault_active、maintenance_active、lock_flag、derived_offline、reason_code 这些。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我容易忘。我之前想把操作者姓名一起带上，前端显示方便。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个小事，咱们后续怎么验证这套设计在方案评审能过？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

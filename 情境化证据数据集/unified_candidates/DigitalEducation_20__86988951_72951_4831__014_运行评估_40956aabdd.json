@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在实训设备数字孪生预约管控系统进入运行评估、进行灰度上线与回滚演练背景下，用户与导师围绕灰度单位选择、观测与审计留痕、回滚触发与回滚后验证持续沟通（10轮），其中在灰度维度/回滚演练设计与监控分组及reason脱敏负例部分与运维与SRE沟通（5轮），并形成按学校定向灰度、按version分组监控、相对基线回滚条件与最小用例回归的执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点想直接用现成发布工具一键灰度，但怕漏检查项，你帮我盯一下关键点行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "负例就是 page_size 超过上限要截断或 400、sort 不在白名单 400，对吧？还有强制释放、管理员取消要 reason，不带也 400。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉按流量比例最省事，网关里配 5% 之类的。我看很多人都这么搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "灰度单位…按学校？或者按实训室？指标我就看 5xx、接口耗时、还有预约成功率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 灰度上线和回滚演练你们一般怎么设计？我怕只会点发布按钮。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚怎么练？我就把版本切回去行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们日志现在有 request_id 和 actor_id，我是不是加个 version 字段就够了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏我有点慌，我怕误拦了正常理由。有没有更省事的做法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度期间监控要怎么配？我平时只看总 5xx。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开关放网关路由或者配置中心那种。权限我想只给管理员角色，普通老师肯定不行。证据就是看监控按 version 分组，v2 的错误码没异常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计记录要有 actor_id、action、target_id、reason、request_id、ip、timestamp。灰度开关的 action 就是 “toggle_canary” 之类，target_id 放租户id。reason 也要求必须填，不填 400。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）v2 的 5xx 比基线高很多就回滚；2）预约创建的 P95 超过阈值；3）审计写入失败率上升。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，这种我能照着配。持续时间我怕太长拖死课堂，能不能 2 分钟？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那灰度比例就先 1 个学校，别按百分比。监控我就按 version=v2 和 tenant_id 过滤看。回滚就把路由切回 v1。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑：list 接口 page_size 超限 -> 看是不是 400 或截断；sort 不在白名单 -> 400；强制释放不带 reason -> 400；管理员取消不带 reason -> 400。再跑一条正常预约创建、取消、强制释放各一次，看审计有没有字段齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "检查点：审计里必须能看到 actor_id、action（比如 force_release/admin_cancel/toggle_canary）、target_id（预约单或租户）、reason、request_id、ip、timestamp。reason 不允许超长，我按 200。还有不要把 token、密钥、原始 payload 写进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按“学校维度灰度 + version 分组监控 + 3分钟判定回滚 + 负例回归”来做，开关操作也走审计并强制 reason。要是我在配置上卡住，我再来问你。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

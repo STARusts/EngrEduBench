@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在叙事地图“事件流与回放引擎”开发背景下，用户与导师围绕事件模型可重放/对账/裁剪、幂等与隐私最小化持续沟通（8轮），其中在事件存储与回放接口及checkpoint实现上与后端负责人沟通（2轮），在可记录字段与合规边界上与隐私与安全工程师沟通（2轮），并复述确认验收点与MVP折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不就把用户点了啥、进了啥节点都记下来，然后按顺序放回去就行。能跑就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就 event_id、user_id、node_id、时间戳。还有地图id。差不多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 事件流和回放要怎么搞，字段和接口给个快的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接口两条就行是吧。那 `payload` 我就全塞进去省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与安全工程师 回放要记啥不违规？我想省点事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就想回放看起来像真的走过。坐标不存会不会很假？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先不存坐标，先把选择和进出节点回放出来。用户id我就先用哈希顶上，TTL 30天写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "seq 就客户端自己加啊。重复就插两条也没事吧，回放也能看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就服务端收到就给个自增号。重复就按 event_id 去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，照抄就行。system_hint 我就按昨天格式塞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选A，最省事。慢就慢点，反正现在人不多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 checkpoint 要做吗？能不能别搞太多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就每50条插一条 CHECKPOINT。visited 就别 bloom 了，我怕写错，先存最近20个节点id得了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是两接口：写事件和读事件。写的时候带发布版本和快照id，uuid做幂等，服务端给seq。读就按seq读，先找 checkpoint，再往后播，缺了就回个 STATE_REPLAY_GAP。字段就按你说那堆，坐标不存，用户用 pseudo，TTL 30天可配。就这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多端审片协同功能开发背景下，用户与导师围绕多端标注/审批不冲突、版本绑定与trace_event串联持续沟通（8轮），其中在协作数据模型与并发/离线幂等策略部分与后端负责人沟通（3轮），在权限鉴权、审计日志最小化与导出限制部分与安全工程师沟通（3轮），并汇总形成表结构/事件类型/字段约束与最小验证测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着用时间码对齐吧。每个人的标注带 start/end，然后存库。审批就一个状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "标注里加个 version_id？我之前溯源预留了 approval_id，那就也塞进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 协作审片这块，版本和标注怎么存才不乱？我现在只想到 version_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只增不改是指评论改了也不覆盖？那会很多条吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线呢？手机没网的时候。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么跟 trace_event 连上？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按他那个三张表做。标注不更新，改就新建事件。审批加版本号防同时点。离线先不做复杂合并，就用 client_id 去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从 asset 的版本号？我库里给 asset 加个 revision 自增？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就做成：点“开始审片”时拉最新 revision，生成 session。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 审片协作里评论和审批，权限和审计要怎么做才不踩雷？我怕做少了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志不写正文，那排查问题怎么看内容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审批的 decision 也算敏感吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）加 review_session 表：session_id、asset_id、playback_revision、status。  \n2）加 annotation 表：带 time_range、type、body，外加 client_id/local_seq 做去重。  \n3）加 approval 表：approval_version 乐观锁。  \n4）trace_event 加三类：ANNOTATION_ADDED/RETRACTED、APPROVAL_DECIDED，可能还有 EXPORT_TRIGGERED。  \n5）日志不存正文，导出默认关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "detail_json 就放 id、session_id、start_ms/end_ms、decision、node 这种。正文不放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿两台设备同时点同一审批，看有没有一个失败。还有发两次同样 local_seq 看会不会重复。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

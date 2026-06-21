@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在套利环路熔断引擎设计背景下与导师围绕技术选型、降级策略与留痕机制持续沟通（6轮），其中在CEP因果推断可行性部分与风控引擎设计师沟通（1轮），在熔断指令穿透与降级合规部分与监管合规架构师沟通（1轮），并最终形成自研DAG推断与WAL留痕的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思用Flink CEP，配一套规则进去，或者上Drools，现成的规则引擎，调调包就能用吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控引擎设计师 Flink CEP做时序因果熔断行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Flink搞不定，得自己写推断节点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口就传个账户ID和熔断级别呗。降级的话，大不了全掐了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@监管合规架构师 熔断指令穿透这块，监管那边有啥要求没？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能一刀切啊，还得留痕。那降级就只掐源头账户？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据洪流延迟高的话，推断节点先降级？比如先不推断环了，只抓单链？留痕可以异步写Kafka。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推断节点用轻量DAG，不用Flink CEP。规则分发自研，和推断解耦。降级不搞一刀切，延迟飙升时退化为单链推断，保源头截断。留痕必须同步落盘，不能丢。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

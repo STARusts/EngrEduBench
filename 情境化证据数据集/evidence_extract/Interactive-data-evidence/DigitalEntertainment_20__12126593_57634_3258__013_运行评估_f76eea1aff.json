@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的剧透拦截效果复盘背景下，用户与导师围绕shield_show异常、30s退出与申诉上升的拆解验证及复盘模板V1持续沟通（10轮），其中在对照分组口径与阈值基线设定上与数据产品经理沟通（5轮），在申诉抽样审查字段与合规边界上与合规与风控负责人沟通（4轮），并形成同桶同内容对照+进度分桶+分层抽样判读的可执行复盘流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "复盘我想做得更“闭环”一点。比如把每次shield_show都落一份可回放的决策链路，再把用户当时看到了哪些字幕、弹幕、评论全串起来，这样能从内容侧直接定位误伤原因。然后做一个统一的“剧透风险评分”序列分析，甚至用向量库把相似误伤聚类出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可计算的话，我先想三层：\n1）命中层：shield_show后用户是否继续看≥N秒，作为“可接受拦截”；\n2）泄露层：shield_show出现前后，用户是否在评论区/弹幕区出现“剧透词命中”，但这个得接内容语义；\n3）体验层：shield_show后30s退出、申诉点击、以及二次触发率。\n我担心只看退出会把“用户本来就要走”也算误伤。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据产品经理 复盘拦截效果这块，咱们能用现有埋点做哪些分组对照？我想把“退出上升”拆成误伤还是用户自然流失，现有事件能不能支持得住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们没有shield_dismiss？我以为前端会打。要不要现在补一个？不然复盘太粗了。我甚至想加“用户关闭遮罩原因”选项，顺便收集反馈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。我先不碰原因选项。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“同一播放位置可比窗口”这里，5分钟时间窗感觉也不准，短剧节奏快，可能30秒内剧情就翻了。能不能用“shield_show触发时的播放进度区间”做对照，比如按progress_bucket（0-10%、10-30%…）？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我拿离线复盘用current_time_ms去分桶，不进告警label。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那阈值怎么定？比如“可接受拦截”我设shield_show后继续看≥15秒？感觉拍脑袋。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解下来，复盘模板先固定这些块：\nA. 范围：告警时间窗 + 受影响strategy_version/policy_id + 影响桶user_bucket。\nB. 主观测：shield_show触发率偏离、shield_show后30s退出率、申诉点击率。\nC. 对照：同内容同桶下，触发shield_show vs 未触发的退出差异；再按播放进度current_time_ms分桶看差异集中在哪个进度段。\nD. 判读：如果差异主要集中在某个policy_id且decision=block，那优先怀疑误伤；如果集中在某些内容/集数，偏模型/词表误判。\n但“词表误判”我没证据，只能靠内容抽样看样本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 复盘里我们想抽样看误伤申诉相关的会话，来判断拦截是否合理。最小字段集之外，哪些可以看？哪些碰了就不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我之前说的“回放决策链路把字幕弹幕串起来”基本就踩线了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那误伤原因怎么定位？只看policy_id太粗，我怕我们只能说“误伤上升”，说不清哪一类。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于加reason_code，感觉一加就能把复盘从“看数字”变成“能解释”。而且还能做聚类分析，把误伤聚成几类，做自动诊断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽样判读我能接受。但我想把抽样也做得“系统”一点：比如每个policy_id抽20条，按申诉点击/未点击各一半，再覆盖不同content_id。这样能减少主观偏差。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "表头我先列8个：\n1）trace_id（只用于回溯）\n2）strategy_version / policy_id / decision\n3）content_id / episode_id\n4）触发时间戳 + 播放进度桶（用current_time_ms离线分桶）\n5）shield_show后30s是否退出（Y/N）\n6）是否appeal_click（Y/N）\n7）申诉处理结果（通过/拒绝/处理中）\n8）人工判读：A剧透明确/B疑似剧透/C非剧透；再加“遮罩时机：合适/偏早/偏晚”。\n我不确定“申诉处理结果”我们能否当天拿到。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这版我能执行。reason_code我先忍住不提成硬需求，只在复盘结论里当“可能的改进方向”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回头会先用离线的current_time_ms做进度分桶，把“shield_show后30s退出差异”按policy_id和内容TOP N切出来，看集中在哪些组合上。然后按你说的T+0先做一轮，T+3补申诉通过率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

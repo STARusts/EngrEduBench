@@ -1,0 +1,516 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在跨域阅卷痛点调研背景下，用户与导师围绕漂移源拆分、阈值验证与研究假设持续沟通（5轮），其中在量尺体系与阈值定义部分与教育测评架构师沟通（1轮），在AI阅卷公平性与脱敏平衡部分与合规与伦理审查员沟通（1轮），并最终明确漂移源拆分、动态锚定研究假设及脱敏特征平衡约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域阅卷的量尺体系和漂移容忍阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周去读三篇关于IRT等值和Kappa系数计算的论文，然后用去年的省考数据跑一个小样本，看看0.85阈值下的误判率，这样行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AI阅卷对偏远地区考生的公平性怎么保证？"
+              }
+            ]
+          },
+          {
+            "microScene": "在评痕漂移合规论证背景下，用户与导师围绕评痕感知与基准锚定的合规红线及约束标准持续沟通（6轮），其中在合规红线与群体公平性拆分部分与合规与伦理审查员沟通（1轮），并确定k-匿名化、分群信度阈值与禁止回滚的合规底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "思路肯定有，就是要把数据保护好，然后让结果公平，合规也就是这些吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评痕感知和锚定寻优的合规红线是什么？还有群体公平性怎么拆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "博弈就是两边都要，标准就是不能压分。我觉得具体怎么做后面再想，现在需求阶段只要把方向定下来就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "因为回滚了数据就乱了？不对，因为分数已经公布了？"
+              }
+            ]
+          },
+          {
+            "microScene": "在量尺锚定系统商业闭环论证背景下，用户与导师围绕收费模式持续沟通（5轮），其中在增值服务打包部分与商业闭环推演师沟通（1轮），在分档服务合规性部分与合规与伦理审查员沟通（1轮），并最终形成“基准无差别服务，附加值造血”的商业原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按调用量收钱呗，用一次收一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基础功能白给，高级功能收钱，现在软件都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "基础感知免费，精准锚定收费，这玩意怎么变现最赚？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按修正频次收钱，考院为了信度肯定买单，这合规吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "商业说能赚钱，合规说踩红线。这咋办？要么全收费，要么全免费？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就只能收点别的钱？比如收服务费？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "锚定功能不能拿来分档收钱，得统一给。钱从SaaS部署和算力调度这些地方赚。"
+              }
+            ]
+          },
+          {
+            "microScene": "在大考公平战略锚定背景下，用户与导师围绕公平的测量学定义、合规底线及验证数据样本代表性持续沟通（7轮），其中在测量学公平定义部分与教育测评架构师沟通（1轮），在合规红线部分与合规与伦理审查员沟通（1轮），并最终形成包含DIF检验、白盒留痕和样本代表性解决的公平战略锚定需求点。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测量学上公平到底怎么定义啊？合规这边有什么红线？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿历史阅卷数据跑一下不就行了吗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没想过样本问题。我之后去查一下DIF检验怎么构造对照组样本，把这块补上，再更新到验证方案里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，必须过DIF检验，保证等能力等概率；第二，锚定算法本身要白盒留痕，不能引入新偏见；第三，验证数据得解决样本代表性问题，不能拿历史数据硬跑。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在评痕流式采集架构设计背景下与导师围绕流式管道构建、推拉模式取舍、背压降级策略及架构约束持续沟通（10轮），其中在采集拓扑抗峰值与实时性部分与数据流设计专家沟通（1轮），并最终形成推主拉辅降级、P99延迟50ms及带版本号审计等5条架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用消息队列接一下，先存起来，后面再处理。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，要实时。那就直接推给反演模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评痕数据流拓扑怎么设计才能抗峰值又实时？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就推模式吧，延迟低。背压的话，加机器就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个，我不太会设计验证动作。Flink状态后移这块我也不熟，得补补课。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看Flink的State Backend文档，把状态容错机制弄明白，看怎么配合漂移感知的反演窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是数据流速，看推模式在峰值流速下延迟会不会飙升。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟不超过100毫秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，Kafka接评卷行为；第二，Flink做实时特征提取；第三，推模式为主拉模式降级；第四，P99延迟50ms。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第五，特征输出带算法版本号。"
+              }
+            ]
+          },
+          {
+            "microScene": "在评卷漂移感知模型选型背景下，用户与导师围绕模型选型、残差补偿、特征接口对齐与融合输出方式持续沟通（7轮），其中在漂移反演选型与推理约束部分与漂移感知算法师沟通（1轮），并最终形成主反演用SSM变体、残差用轻量Transformer、加权融合及特征拆分适配的四条底线结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得直接上LSTM就行吧，时序预测嘛，处理漂移肯定也没问题，大家都用这个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对哦，延迟可能不够。那，那就换个轻量级的？CNN加LSTM？或者把网络层数砍一砍？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "漂移感知选型怎么做？在线推理有延迟要求。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，专家说用卡尔曼滤波，不用深度学习，因为要解释。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "残差就随便弄个简单的MLP吧。特征刚才不是提了嘛，带版本号推过来直接接上就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我我再想想。残差用个轻量Transformer？然后特征进来先拆分，一份给SSM做状态初始化，一份给Transformer。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主模型就SSM，残差用轻量Transformer，融合就是加起来。风险可能就是Transformer还是有点慢？"
+              }
+            ]
+          },
+          {
+            "microScene": "在基准锚定算力拓扑设计背景下，用户与导师围绕感知与锚定层的算力排布及容灾降级策略持续沟通（5轮），其中在算力拓扑切分与容灾机制部分与高可用架构师沟通（1轮），并最终确立感知无状态弹性、锚定有状态专享强一致写入及冻结基准转静态降级的三条底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力拓扑，就上云呗，开个弹性伸缩组，感知和锚定分开部署，不够就加机器，挂了就重启。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@高可用架构师 导师让我来问，感知和锚定的算力拓扑怎么切分，还有容灾降级怎么弄？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接着算吧，不是有快照同步吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级，那就停机维护，换一台备机顶上？"
+              }
+            ]
+          },
+          {
+            "microScene": "在阅卷数据脱敏评估背景下，用户与导师围绕漂移感知数据需求与合规脱敏矛盾、双轨脱敏架构对接、TEE应用边界及精度验证实验设计持续沟通（7轮），其中在合规边界与特征保留部分与合规与伦理审查员沟通（1轮），在静动态脱敏技术选型部分与数据安全官沟通（1轮），并最终形成脱敏评估四条定稿底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把评卷员ID和考生ID都哈希掉，答卷内容里的敏感词用正则替换掉，这样应该就安全了吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "轨迹断了确实没法感知。那就只脱敏答卷内容，不脱敏ID？但这又违规了啊，个保法不是说不留存能识别身份的信息吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评卷行为数据要追踪轨迹，又不能泄露隐私，合规边界卡在哪？技术上怎么实现？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说用假名化保留特征，还得保留群体特征查偏见。安全官说感知链路用静态脱敏，审计用动态脱敏，还提了TEE。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "TEE我前两天刚看了篇论文，说是可以在硬件加密区算东西，数据不落盘明文。我想是不是能把漂移感知模型放TEE里跑，这样输入数据就不用脱敏那么狠了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算拿历史数据跑一下。一组是原数据，一组是脱敏后的。对比一下感知出来的漂移曲线重合度。重合度高就说明脱敏没影响。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "样本量按功效分析算，控制群体变量，双盲对比漂移曲线。脱敏策略就按静态为主、动态为辅，TEE做密钥管理。特征保留偏移量和耗时。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在评卷数据管道联调背景下，用户与导师围绕双轨脱敏流式管道落实、Schema兼容性排障及联调底线持续沟通（6轮），其中在双轨数据乱序关联与Schema对齐部分与流式计算开发工程师沟通（1轮），并形成Schema演进补齐策略及三条联调底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Flink接Kafka把数据拉过来，留痕的话就在数据里加个审计字段一块儿往下发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分两个流，然后再Join起来。偏移量直接当字段带着走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink接Kafka处理双轨脱敏数据，Schema对齐怎么做？乱序情况下两条轨怎么关联？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "失败了就报错重启呗。我之前确实没处理过这种流式Schema兼容性问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把Confluent的Schema演进和兼容性规则看一遍，写个包含向前向后兼容的Producer和Consumer demo跑通，然后在咱们管道接入层加一个Schema校验拦截器，版本不兼容直接拒绝消费并告警。"
+              }
+            ]
+          },
+          {
+            "microScene": "在漂移感知算法实现背景下，用户与导师围绕感知与寻优接口冲突、延迟红线及异步补偿机制持续沟通（6轮），其中在特征维度传递与侧输出标签部分与漂移感知算法师沟通（2轮），在多维特征接收与异步修正接口部分与基准寻优算法工程师沟通（2轮），并最终形成双轨数据流与异步重锚定补偿的接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@漂移感知算法师 咱们能不能少传点特征？寻优那边说解析太慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "确实，没特征就没法反演。@基准寻优算法工程师 那寻优这边能不能接收多维特征？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "两边都有硬指标啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不敢破。那只能让感知侧妥协了？可是感知侧说没特征就没法反演根因。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "让感知侧把高维特征走侧输出流，主流只推标量给寻优？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "漏判了就，就补偿？发个告警然后人工介入？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@基准寻优算法工程师 如果异步反演发现群体偏差，需要重锚定，你们寻优侧能接收异步修正指令吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@漂移感知算法师 侧输出流能加上TraceID和GroupTag吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知侧主流输出标量，保证寻优10ms闭环；侧输出走高维特征加TraceID和GroupTag做异步反演；寻优侧开AsyncCorrection接口接收异步修正；如果反演发现群体偏差，触发重锚定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得找测评架构师定？"
+              }
+            ]
+          },
+          {
+            "microScene": "在基准寻优接口重构以接入流式特征的背景下，用户与导师围绕老接口解耦、无状态化及新接口入参出参契约定义持续沟通（7轮），其中在接口解耦与无状态化部分与基准寻优算法工程师沟通（1轮），并最终形成包含特征向量、批次标识、上下文配置、锚定偏移量、置信区间及降级标志的新接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "流式推数据，可能，可能得加个队列？我不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老代码把查库写回全塞一起了，现在要接流式特征，怎么拆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入参就传特征向量和配置，出参返回偏移量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，忘了批次。入参加个批次号，出参加个置信度。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入参包含特征向量、批次标识、上下文配置；出参包含锚定偏移量、置信区间、降级标志。计算逻辑无状态，写库分离。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极端偏压性能测试与压测脚本改造背景下，与导师围绕极端偏压特征形态、造数逻辑与断言门控位置持续沟通（5轮），其中在极端偏压定义与造数配置部分与高并发压测工程师沟通（1轮），并最终确定用历史数据拟合帕累托分布参数及在写库算子前加门控断言作为测试准入条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征向量里的值会变得特别大吧？造数的话，我就随机插几个满分或者零分进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端偏压的造数配置具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加帕累托分布造长尾，还有方差归零那种。断言这边，降级标志true时拦截写库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "shape参数我先设个1.0试试？断言加在寻优接口返回之后吧，直接校验返回体。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用历史最差数据拟合参数，写库算子前加门控断言。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发阅评一致精度校验背景下，用户与导师围绕校验指标选择、置信区间前提与相依数据处理持续沟通（6轮），其中在交叉验证口径与ICC指标部分与精度校验分析师沟通（1轮），并最终形成双盲交叉验证加ICC(2,1)加块自助法估95%CI的校验口径及算子封装开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算一下Kappa系数？对比锚定前后的均值差异，看看是不是收敛了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "均值确实不够。那就再算个标准差？高分低分我就分两组算一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "双盲重评交叉验证口径和ICC指标，还有置信区间怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是用重抽样算区间。前提是数据量够吧？结论边界就是看区间包不包含原值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天看了块自助法，好像是处理这种有块结构的相依数据的。大考阅卷同一个老师改同一题，确实是个块结构。可以用块自助法来估区间，这样能考虑评卷员内部的相依性，区间应该更准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我负责寻优算法的接口封装，那我把块自助法的抽样逻辑封装成独立算子，供分析师调用。分析师那边负责跑双盲数据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在跨域阅评系统仿真大考部署验证背景下，与导师围绕评痕序列保序、效应量Cohen's d把控与算子封装持续沟通（5轮），其中在验证门禁与监控指标设定部分与部署验证专员沟通（1轮），并明确双重排序保序方案、效应量算子封装目标及门禁卡点标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "效应量这块，我看看ICC和置信区间宽度够不够就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "仿真大考的验证门禁和监控指标具体咋定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "顺序我按评卷员ID和时间戳双重排序。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "d值我确实不太会算，这块我得补补课。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周末前找两篇效应量的论文看明白，把Cohen's d的计算逻辑封装成算子加到寻优接口里，用历史数据跑通单元测试。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在量尺漂移实时监控背景下与导师围绕监控核心指标、阈值设定及报警干预逻辑持续沟通（4轮），其中在指标口径与阈值设定部分与信度监控分析师沟通（1轮），在报警人工介入合规部分与合规与伦理审查员沟通（1轮），并最终形成盯信度三指标、动态基线阈值及干预必留痕的监控口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盯漂移量呗，还有评卷速度，别卡住了就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@信度监控分析师 我来问问监控指标和阈值怎么弄。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，盯相关系数、双盲差异和累积漂移。阈值是动态的，报警要留痕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跌破0.6，是不是系统出bug了？我先重启一下感知服务看看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与伦理审查员 漂移报警后人工介入怎么搞才合规？"
+              }
+            ]
+          },
+          {
+            "microScene": "在评阅异议归因分析背景下，用户与导师围绕异议根因拆解方式与阈值卡边证据链组装持续沟通（6轮），其中在异议拆解流及卡边场景证据链优先级部分与异议归因调度员沟通（2轮），并最终形成三叉拆解与卡边题目特征前置的核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得直接调监控日志看看漂没漂就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异议申诉进来了，除了看漂移，到底怎么拆解根因？什么时候该人工介入？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡在边缘的话，就，就把刚才那三步的数据都列出来给人工看？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这我拿不准，是不是题目特征更重要？毕竟考生理由充分多半是觉得题有问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的拆解流，如果偏移量卡在阈值边缘，给人工的证据链里，漂移证据和题目标签谁排前面？"
+              }
+            ]
+          },
+          {
+            "microScene": "在锚定模型迭代演进背景下，用户与导师围绕异议反馈反哺模型、防退化验证逻辑、双盲测试难度控制及演进流程约束持续沟通（7轮），其中在防退化验证与外推边界设定部分与精度校验分析师沟通（1轮），在量尺基线调整合规红线部分与教育测评架构师沟通（1轮），并最终形成锚定模型迭代演进的四条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把异议数据清洗一下，直接喂给锚定模型重新训练，这样它下次就不会犯同样的错了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下大盘指标呗，准确率没降就说明没崩吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上锚定模型要迭代演进，怎么做防退化验证？外推边界怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "量尺基线调整的合规红线在哪？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分两组，一组旧模型跑，一组新模型跑，然后比分数。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没搞透。我回去翻一下之前项目沉淀的双盲实验规范，看看怎么控制难度变量，然后把现在的复现脚本加上难度分层采样逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从题库的难度特征标签拉取，然后喂给复现脚本做分层抽样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先跑历史标定数据的复现脚本，确认新模型在历史场景没退化，然后再上带难度分层的双盲测试看无偏性？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四条硬约束：一，迭代必须跑切片双盲验证，控制难度变量；二，必须声明外推边界，没覆盖的场景不能硬推；三，任何基线偏移必须过无偏性检验并审计留痕；四，历史已出分基线绝对锁定不可篡改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在孪生引擎与网关联调开发背景下，用户与导师围绕reqId去重方案的性能与安全权衡及验证方案持续沟通（2轮），其中在去重实现与内存风险部分与边缘网关开发者沟通（3轮），在弱网重传安全隐患部分与全栈联调专员沟通（2轮），并最终形成Redis对照测试与容量评估验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前定的reqId去重和MQTT 5.0规范，落地没问题吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "5秒TTL在弱网场景下肯定有漏洞，重传延迟可能超过5秒，这不符合规范要求。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上用Redis做集中式缓存是最稳妥的，但具体占多少内存，我还没算过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设计个对照测试吧。自变量是缓存实现方式，对照组A是HashMap加短TTL，对照组B是Redis加LRU淘汰策略。因变量是内存增长曲线和去重命中率。我得确保在模拟弱网重传下，Redis组的去重命中率能到100%，同时内存增长是可控的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块确实有短板，只会背规范，没算过底层开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚补一下Redis的Memory Doct，自己写个脚本填充10万条模拟key，看实际占用，明天把估算公式和淘汰策略配置给出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "今晚我补完Redis容量评估和淘汰策略实验，明天给出具体的验证数据和配置参数，再推进联调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

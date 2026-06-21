@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在群智情绪波反演数据流方案设计背景下，用户与导师围绕实时性与精度矛盾、折中方案设计、乱序数据短板及补学、节点定稿持续沟通（8轮），其中在流式架构延迟与降级部分与实时流式数据架构师沟通（1轮），在预聚合特征保留部分与群智情绪流分析师沟通（1轮），并形成端侧特征预聚合加Flink小窗口事件时间反演的主架构及对照验证与补学任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是用Kafka接数据，Flink做实时聚合算情绪值，这块我熟。但Flink窗口怎么设才能不丢情绪特征，我心里没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink做情绪波聚合，反演延迟要求多少毫秒以内能不卡剧情？吞吐扛不住能不能降级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧预聚合会不会把情绪波的特征给抹平了？比如短时间高频交互代表的情绪峰值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构师要降速保延迟，分析师要极值保精度。我原想的Flink大窗口聚合肯定不行，会把极值吃掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设端侧传[均值, 极值, 方差]这种特征向量，而不是原始流，Flink侧用小滑动窗口反演。对照就是纯原始流大窗口。如果小窗口反演能抓到90%的突变点，延迟还低，就选折中。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "乱序数据水位线这块我确实没搞透，之前写普通后端日志流不用管这个。情绪数据乱序的话反演就全乱了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去看Flink Event Time和Watermark的官方文档，重点看AllowedLateness机制怎么触发侧输出。明天把乱序容忍的参数设计补到折中方案里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "端侧采集节点预计算特征向量[均值, 极值, 方差, 突变频次]，Kafka压缩传输，Flink用5秒滑动窗口（步长1秒）基于事件时间反演，乱序数据靠Watermark兜底，超时侧输出走合规的免费救赎出口。延迟优先保，极值不能丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "之前分析师说过情绪波半衰期约3秒，5秒覆盖一个半衰期能抓到波峰。如果压测发现延迟超200ms，就缩窗口到3秒，牺牲一点平滑度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在绿电平台高并发集中结算导致链上TPS不足的性能优化背景下，用户与导师围绕批量上链缓冲层、热点账户读写冲突与一致性风险持续沟通（5轮），其中在链底层批量处理与聚合签名策略上与区块链架构师沟通（2轮），在业务侧Redis缓存预热与锁竞争问题上与后端开发工程师沟通（2轮），并明确按批量步长与缓存/MQ异步方向整理伪代码实现。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就是让它跑快点，多加几台服务器分担一下压力行吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就先存到内存里，等攒够了再一块儿往链上写？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链架构师 架构师，导师说现在的配额交易太慢了，链上那一块能怎么优化一下？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哦，就是不能超过200个。那我就按这个数设死就行吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 刚才架构师说批量传，你这边在业务逻辑里能做点什么配合一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Redis那个我最近确实在看，但也刚看到基础数据类型。具体的分布式锁怎么写我还没顾上学，感觉挺复杂的。要不我这周先花个两个晚上把那几个命令练熟，先把简单的缓存读写给弄出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问完了。架构师说一批不能超过200笔，不然节点就掉队了。后端那边建议加个Redis缓存，省得老是去链上查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个，后端刚才说用什么锁，我也没太听明白。反正他说我先写个简单的查询缓存，剩下的他再带带我。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想的是，先按架构师说的，把单笔发送改成每50笔攒一包发一次。然后查询配额的时候，我先去Redis里看一眼，没有再去链上拉。这样应该能快不少吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，我这就去按这三条改一下逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

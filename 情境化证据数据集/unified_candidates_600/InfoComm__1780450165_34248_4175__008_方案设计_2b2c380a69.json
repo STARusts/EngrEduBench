@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在抗毁拓扑与关键接口设计背景下，与导师围绕水下抗毁拓扑K值选取与验证、接口LQE字段设计及状态机状态定义持续沟通（9轮），其中在抗毁拓扑结构部分与网络拓扑架构师沟通（1轮），并最终形成K-连通拓扑与接口状态机设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口这块我熟，就在MAC层上面加个声光状态机，声断切光，光断切声，拓扑的话，多连几条边不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想多连边，他说开销大，到底咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按2-连通设计，接口加个LQE字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2-连通应该够吧，浅海掉2个节点概率挺小了。LQE我给8个bit，1秒刷一次。最近我看了一篇水下FANET拓扑自愈的论文，它里面用局部重构代替全局重算，我觉得可以搬过来，省算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我跑个仿真，随机删节点看连通率。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我就按区域删，一次删一个簇。如果2-连通扛不住区域失效，我就把K提到3。局部重构那块我也加上去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就16bit，跟反演那边对齐。所以拓扑就2-连通起步，仿真不行就3-连通，接口状态机加上LQE上报和局部重构触发信号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "声通光断、光通声断、声光双通、声光双断、重构中。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，漏了。加上声降级态和光降级态。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

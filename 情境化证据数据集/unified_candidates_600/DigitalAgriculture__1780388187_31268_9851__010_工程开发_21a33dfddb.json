@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在车舱温湿压多源联调背景下，用户与导师围绕数据对齐与指令防冲撞方案持续沟通（4轮），其中在时钟漂移与数据对齐部分与嵌入式网关工程师沟通（1轮），在指令并发防冲撞部分与物联网测试工程师沟通（1轮），并最终选择固件插值与边缘状态机方案且规划自测。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接按时间戳对齐就行，用Pandas的merge_asof拉到同一个时间点。指令下发的话，加个Redis分布式锁，拿到锁才能发指令。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "边缘端跑Pandas确实有点重。时钟漂移这块我没细看"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关那边采样率不一样，时钟漂移大概有多少？我们能不能直接用时间戳对齐？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那固件里做插值，我用C写个线性插值应该能跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我不加锁，直接发指令，测试那边能过吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我Pandas对齐方案得废弃，Redis锁也改成边缘状态机。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选方案A。车舱网络不稳定，全靠云端处理一旦断网指令就乱了，而且Pandas吃内存。固件里写插值和状态机虽然麻烦点，但本地决策延迟低，断网也能保底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写个Python脚本模拟并发发指令，断网情况也加进去测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

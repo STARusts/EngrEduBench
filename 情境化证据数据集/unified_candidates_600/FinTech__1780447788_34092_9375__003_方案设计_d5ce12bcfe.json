@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在异构资产联邦映射架构设计背景下与导师围绕架构选型、一致性约束与运维成本持续沟通（6轮），其中在联邦图谱同步与映射层设计部分与隐私计算专家沟通（1轮），在图存储与异构资产映射部分与图谱数据架构师沟通（1轮），并最终形成基于星型MPC静态对齐的映射层及基于FIBO统一本体的单一图库架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得这块得上点硬核的，跨链联邦图计算引擎，把各家银行的数据全拉平。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我的想法是用K8s动态网格调度联邦学习任务，每家银行部署一个图计算Agent，通过P2P Gossip协议同步图谱状态，然后中心端用GNN做推理。这样架构够弹性，能适应各种异构数据源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用P2P Gossip做联邦图谱状态同步，结合动态MPC计算映射，这方案在金融风控里可行吗？还有映射层怎么设计才能兼顾各家异构资产字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那图存储端呢？如果不用Gossip，我打算底层用Neo4j存实体关系，TigerGraph做实时计算，再套个Elasticsearch做字段映射索引，这种多库混合架构能不能扛住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我们可以做个对照验证：假设A方案用我说的多库混合加动态联邦，假设B方案用单图库加静态本体映射。变量是图构建耗时和映射一致性，用之前定的历史违约样本跑一轮回测，看A方案的数据漂移率是不是显著高于B。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "FIBO本体标准我之前只看过目录，对信贷资产的属性对齐细节拿不准，我得这周把FIBO的核心本体定义补一下，看怎么迁移到咱们的图谱Schema里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "运维成本没细算，我觉得多库虽然复杂，但各取所长，大不了多招两个DBA。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家意见很明确，P2P和动态联邦在金融场景不可行，状态不可控且开销大；多库混合有一致性灾难和运维成本爆炸风险。我保留统一本体映射的思路，砍掉多库混合和Gossip同步。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "映射层采用星型MPC调度，先做静态属性对齐再隐私求交；图存储用单一属性图库，基于FIBO标准构建信贷资产本体，各家异构数据ETL映射到该本体。砍掉K8s动态网格、P2P Gossip和多库混合。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,632 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在算义共生意图路由演进系统需求与战略背景下，用户与导师围绕算网语义错配的痛点量化与商业验证逻辑持续沟通（6轮），其中在痛点商业量化部分与算网商业分析师沟通（1轮），并最终形成核心痛点确认、待验证假设及数据验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在异构算网里传统路由只看链路状态，完全不管业务语义和目的节点算力，导致算力供需严重错配。我想把语义和算力深度耦合起来做路由寻路，再内生一个动态拥塞阻控机制保障高价值业务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "像OSPF和BGP只看带宽Cost，它把流量导到一条链路质量好的路径，但终点节点CPU早就满载了，请求全堆在队列里超时。反过来，算力闲的节点又没流量过去，资源全浪费了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我只懂路由选路错了导致时延大，但这在商业上到底怎么算损失？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分析师说痛点是SLA违约扣钱，还有算力利用率低造成的沉没成本。他提了个假设，说算力闲置率和SLA降级率是正相关，斜率大于1。这啥意思？我大概懂就是错配不仅浪费钱，还加倍赔钱？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我不懂这种商业验证模型。平时我只看丢包率和时延抖动。这种算力闲置和SLA降级率的关联分析，我完全没做过，不知道怎么下手。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我接下来两周得补这块。我去找几份运营商的算网SLA违约财报看看，再学一下相关性分析的基础方法，至少得能把分析师给的这两个指标画到散点图里看趋势。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找东数西算国家枢纽节点的公开运营月报，用Python的Pandas清洗数据，Seaborn做个初步散点拟合。两周后我拿个脚本跑出趋势图来，如果拟合直线的斜率真的大于1，就说明分析师的假设成立，这痛点就立住了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在意图路由商业闭环设计背景下，用户与导师围绕付费意愿、切入点选择、公平性约束及成本验证持续沟通（8轮），其中在商业闭环机制部分与算网商业分析师沟通（1轮），并最终确认供给侧溢价切入、带公平性约束的商业切入点及损益平衡验证方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，卖给大云厂商呗。他们机房闲置多，我们帮他们调度，省了钱他们肯定愿意买。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们路由带语义嘛，更准，省下的算力费不就是收益？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算网商业分析师 意图路由这系统谁买单？我导师说光靠省成本不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "三方掏钱。这，这挺复杂。那就找租户收钱？他们要确定性嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力节点出让优先权？因为他们闲置痛，最愿意出让？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "公平性，就，阻控不能搞大客户霸权，小租户得活。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切入点是算力节点侧的溢价，因为他们痛点最真。约束是阻控不能搞大客户霸权。行，就先这么搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，算一下？算力节点闲置率降下来的钱，减去阻控模块的开销，大于0就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在通算融合商业闭环背景下，与导师围绕意图数据与算力状态跨域交互的合规红线及战略切入方式持续沟通（4轮），其中在合规红线摸底部分与通信合规审计师沟通（1轮），并最终形成合规战略约束底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规？路由信令不都是网络层的东西吗，加个加密传输不就行了，应该没多大事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图路由里算力状态和业务意图数据跨域交互，合规红线到底卡在哪里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "溢价靠的是全局算力编排，如果不让聚合异构域的拓扑，那全局编排不就只能在单域或者授权域内玩了？这商业盘子不就缩水了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先在授权互信域里做算义共生编排？跨域的先只传意图信令，不强行拉通拓扑？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "合规战略约束：1. 采集语义最小化；2. 阻控信令去标识化；3. 切入先限授权域，跨域只传意图不拉拓扑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在高价值通算业务确定性流转护城河规划背景下，用户与导师围绕硬管道与意图调度冲突、混合阻控策略构想、验证口径细化及意图机制补学持续沟通（7轮），其中在软隔离与加权调度保弹性部分与意图架构师沟通（1轮），在硬阻控保确定性防雪崩部分与拥塞阻控策略师沟通（1轮），并最终形成意图分级加硬软混合阻控策略、双流仿真验证口径及意图RFC补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "给VIP业务直接把物理通道锁死，别的业务进不来，这不就确定了吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不做硬管道，光靠意图路由，拥塞的时候怎么保高优业务的确定性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "但这玩意儿真拥塞起来，排队延迟还是没法避免吧？怎么护城河？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "意图架构师要软隔离保资源利用率，阻控策略师要硬阻控保确定性。我觉得阻控策略师说得对，雪崩的时候软调度肯定崩。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "结合的话，是不是按意图等级分？最高优的给硬阻控保护，一般的给软调度。但我没做过这种混合策略，不确定阈值怎么定才不会互相干扰。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就放两种流量，一种高优一种普通。高优的卡死阈值，普通的随便抢。看看链路快满的时候，高优的延迟是不是稳的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链路利用率压到90%吧。稳就是抖动不超过5ms。变量就是高优流量的占比，从10%拉到30%看看。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对意图怎么转成具体的网络控制信令不太熟。之前只写过静态路由配置，意图这块基本靠猜。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得去把RFC8967意图架构那几个核心概念看一遍，特别是意图怎么转成YANG模型下发给设备。我把这几个RFC加到我今天的阅读清单里，看完试着写个映射关系的伪代码，不然后面没法跟阻控策略师对齐接口。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在算义孪生总体架构设计背景下，用户与导师围绕控制面轻重权衡、验证依据及折中底稿持续沟通（7轮），其中在重控制面架构切分部分与意图架构师沟通（1轮），在轻控制面转发延迟保证部分与数据流拓扑架构师沟通（1轮），用户提出对照假设与压测补学计划，并最终形成慢快环分离折中架构底稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我肯定偏向数据面啊，控制面搞太复杂，下发个意图解析半天，包都转发出去了。但前面又说了要意图分级，这好像又得在控制面做文章。我就怕控制面太重把数据面拖垮。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构切分上，如果把意图解析和YANG模型下发全放控制面，会不会太重？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重控制面的话，数据面转发延迟怎么保证？前序阶段要求高优延迟抖动小于5ms的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以建个对照假设。假设A：信令解析耗时占比超过单跳转发耗时的20%，重控制面架构就会导致高优抖动超标；假设B：占比低于5%，则影响可忽略。验证变量就是信令解析耗时。我可以拿前序的YANG映射伪代码跑个解析耗时基准测试，再对比数据面单跳基准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实拿不准。我之前只看过RFC8967的皮毛，具体怎么用gNMI高效下发YANG数据集，我还没实操过。如果解析效率低，我的假设A就天然成立，测出来肯定超标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我得去把gNMI telemetry的规范看一遍，特别是dial-in/out模式在重载下的性能表现。我把这个加到这周的补学清单，周末前写个gNMI下发的性能压测脚本，拿到真实解析耗时数据，再回来修正架构切分。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先折中。采用“慢快环分离”架构。控制面作为慢环，负责意图解析和长周期算力拓扑更新；数据面作为快环，缓存高优意图的流转规则，直接做微秒级阻控和寻路。接口上，慢环通过gNMI向快环注入流表，快环命中则直接转发，未命中再上送慢环。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在意图驱控信令流规划背景下与导师围绕信令封装格式、上送防抖限速及特征摘要定义持续沟通（5轮），其中在信令必选字段部分与意图架构师沟通（1轮），在上送限速与开销控制部分与数据流拓扑架构师沟通（1轮），并最终形成意图信令字段基线及gRPC+TLV封装与令牌桶限速上送规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，快环查表没命中嘛，直接把请求扔给慢环去解析呗。信令格式的话，用JSON凑合一下？扩展性好，加字段方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能会积压。那我加个队列缓冲一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图信令里面都要塞什么字段啊？是不是有个业务ID和优先级就够了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "快环未命中上送慢环，怎么防抖和限速？导师怕打爆慢环。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要加Goal和Constraint，还有优先级。上送要做令牌桶限速。格式的话，用定长TLV，解析快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就五元组吧，别的我也想不出来了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TLV吧。快环那边处理太慢的话整条链路都卡住了，维护麻烦点就麻烦点，性能要紧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘节点算力内存极低背景下，用户与导师围绕高优意图流防拥塞的阻控算法选型持续沟通（4轮），其中在极限资源下算法选择与全局同步风险权衡部分与拥塞阻控策略师沟通（2轮），并最终确认基于IntentHash的SP+Tail Drop轻量级意图感知调度与丢弃策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这么抠的资源，只能上最简单的PQ吧？或者WFQ？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传统AQM和WFQ跑不动，怎么保高优意图流不拥塞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SP+Tail Drop确实省，但Tail Drop容易全局同步啊。DWRR内存能挤出来吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略师说用IntentHash分类，走SP调度加Tail Drop。省了DPI和权重计算。我担心全局同步，他说边缘流少影响不大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选SP+Tail Drop。算力保不住别的都白搭，低优丢包就丢吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阻控算法选型确认：基于IntentHash的SP+Tail Drop，无AQM，硬优先级抢占，丢弃阈值单限。"
+              }
+            ]
+          },
+          {
+            "microScene": "在内生安全防御体系构建背景下，用户与导师围绕防御架构折中、带外审计方案与安全劣化量化持续沟通（4轮），其中在DHR开销与安全劣化量化部分与内生安全密码员沟通（3轮），在动态异构审计合规与带外加签约束部分与通信合规审计师沟通（3轮），并最终形成带内DHR加带外明文审计分离架构及实验验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "安全太吃资源了。路由本来就抢算力，再上拟态防御那种动态异构冗余，延迟肯定爆。我前两天翻了篇轻量级内生安全的论文，里面提了TEE隔离加策略可证伪，能不能只对意图信令做TEE加固，数据面不管。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果只对意图信令用可信执行环境隔离，不搞全量拟态动态异构冗余，抗毁性够不够？CPU开销能压到多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "30%算力没了，前面SP+Tail Drop省出来的全赔进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种动态轮换的日志怎么记？全混淆了还能审计吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "密码员要混淆，审计师要明文留痕。我昨天看那篇论文，里面提了个带外审计架构，把混淆区和明文审计区物理隔离。意图信令执行体动态轮换，但决策日志通过带外通道直接写死进安全芯片。这样行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "带外通道走独立总线，不占主路由算力。消耗的话，我准备做个对比实验测一下。控制变量是混淆频率，自变量是路由延迟和审计可解析率。抽10万条意图信令，分五组跑，看看把混淆周期从50ms拉长到200ms，审计成功率能回升多少，延迟降多少。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个我确实不知道怎么算。安全劣化度指标怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定这个基调：意图信令带内DHR动态轮换，决策日志带外明文写入安全芯片。算力开销控制在15%左右，审计合规也能过。长周期演进的话，以后算力上来了再全量拟态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论：防御架构采用带内DHR加带外明文审计分离；意图信令执行体动态轮换，日志带外写入安全芯片并加签；资源消耗约束在15%以内；长周期演进预留全量拟态接口。实验验证用攻击面暴露时间量化安全劣化。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在算义共生意图路由系统架构已定背景下，用户与导师围绕语义特征提取引擎的轻量化选型、资源红线约束、蒸馏开发缺口及验证口径设计持续沟通（6轮），其中在轻量化方案选型部分与语义特征算法工程师沟通（1轮），在资源消耗卡点指标部分与性能压测调优师沟通（1轮），并最终确认TinyBERT选型、资源红线指标及对照测试验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接加载预训练的BERT模型做特征抽取，它的语义理解效果最稳，接口封装也简单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "轻量化我确实没怎么做过，只知道有剪枝和量化。资源这块我卡住了，不知道怎么往下写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "BERT在路由节点上跑不动，我们项目算力卡得很死，特征提取这块怎么做轻量化？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取引擎的资源消耗，具体要盯哪些指标才不会超15%的红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法工程师建议用TinyBERT走知识蒸馏，压测师给的红线是推理延迟10ms、显存50MB。但我没写过蒸馏代码，这块实现我搞不定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我缺模型蒸馏的训练流程搭建和损失函数定制能力。我今晚去扒HuggingFace的Trainer源码，照着TinyBERT的官方Demo跑通蒸馏流程，明天下班前我拿一个能在本地跑通的蒸馏脚本交差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得做个对照测试。拿原版BERT和蒸馏后的TinyBERT，用同一批业务流数据跑特征提取。比对两个模型的语义重要性量化得分，如果TinyBERT的打分跟原版BERT的皮尔逊相关系数大于0.9，我就认为语义没丢。同时用压测师的指标卡资源。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算力路由协同调度联调背景下，用户与导师围绕联调超时与路由寻路异常排查、接口契约比对及修复方案持续沟通（5轮），其中在调度模块解析权重报错部分与算力编排调度工程师沟通（1轮），在信令包字段比对部分与通算联调测试员沟通（1轮），并最终形成在引擎输出加适配层映射字段的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "调度那边疯狂报超时，路由寻路结果也全乱套，根本没按语义优先级走。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我光看日志了，引擎这边打分是出来了，但后面一长串timeout，我也看不懂是卡在哪了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度模块接收语义权重那块是不是有Bug？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TinyBERT推理出来的得分我明明塞进返回结构里了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我看下引擎到调度的信令包，字段是不是对不上？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "是我写TinyBERT输出层的时候图省事，直接用了HuggingFace模型默认的输出key。我改一下映射。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "在引擎输出那里加个适配层，把`weight`映射成`importance`。这样模型底层的输出逻辑不用动。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在拥塞阻控微服务封装测试背景下与导师围绕解耦边界、降级策略与审计日志持续沟通（7轮），其中在阈值计算与执行拦截分离部分与拥塞阻控策略师沟通（1轮），在服务软降级与日志落盘部分与算力编排调度工程师沟通（1轮），并形成异步阈值下发、Nacos软降级与主核侧日志的封装及测试策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这代码太丑了，800写死了，还没任何抽象。我打算把这块逻辑整个挪到一个新服务里，对外暴露个 `/check_and_drop` 接口，主核每次调这个接口就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同步确实会卡。但状态？阻控不就是看当前队列深度吗，哪有什么状态要隔离。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原来写死在主核里的阻控逻辑，现在要拆成微服务，怎么拆才不会把主核拖死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能同步调，阈值算好推给主核，主核自己比对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "封装成两个，一个是阈值推演服务，一个是留在主核里的本地拦截执行器。测试重点就看阈值下发准不准。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "服务挂了全放行肯定不行，全阻断又太狠。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "日志我确实没想，原来都在主核打，拆出去了可能就丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻控阈值推演服务挂了，主核怎么降级？服务注册发现怎么弄？还有日志在哪打？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用旧阈值兜底，Nacos监听下线。日志在主核打。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "封装方案：阈值推演独立成微服务，算好后通过Redis把阈值推给主核；主核本地拦截比对，不搞同步RPC。降级策略：Nacos监听推演服务下线，主核用旧阈值兜底。日志在主核拦截时打，推演服务只打计算日志。测试重点：一是验证Redis阈值下发和本地一致性；二是模拟推演服务宕机，看主核能不能软降级不卡死。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在信令雪崩抗压调优背景下与导师围绕应对思路、Disruptor无锁与批量聚合方案、批处理阈值设定及eBPF适用边界持续沟通（8轮），其中在压测数据与锁争用分析、批处理阈值边界计算部分与性能压测调优师沟通（2轮），并最终形成极端信令雪崩调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以加个消息队列缓冲一下？把Redis的推送先放到Kafka里，消费者慢慢拉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "提速的话，推演服务那边算阈值是多线程的，是不是加机器或者加线程池？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上次压测信令突发的时候，主核的CPU占用和锁情况怎么样？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "锁争用这么严重。那把ConcurrentHashMap换成无锁的结构？或者把信令攒一批再处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "无锁队列可以用Disruptor。它内部是环形缓冲区，单生产者多消费者很契合。批处理的话，在Disruptor的消费者里，一次拉取一批信令再统一推演。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我不太会算。只能先写个死值，比如一次攒50条，跑一下看效果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来还得建模型算。那我就把批量大小设成动态的，根据当前信令积压量调整，积压多就放大批量，积压少就缩小批量保证低延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了eBPF的XDP，可以直接在网卡内核层过滤和重定向包，不用走协议栈。我想把意图信令的接收挂到XDP上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我光想着绕过内核，没在意XDP没法拆解意图字段。那我把eBPF先放放，重点把用户态的Disruptor加批量处理写好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "极端信令雪崩调优方案：主核信令接收改用Disruptor无锁环形缓冲区；消费者采用批量聚合模式，静态批量大小定为150；替换原有的ConcurrentHashMap更新逻辑，消除锁争用。预期吞吐量从2万提升至8万TPS，延迟控制在5ms内。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在算义孪生镜像部署验证背景下，用户与导师围绕现网数据合规处理与统计验证方案持续沟通（8轮），其中在数据流转限制部分与通信合规审计师沟通（1轮），并最终形成基于脱敏数据的A/B对照验证方案及脱敏模块开发计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "把现网流量导进来比对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全量同步过去就行。用Kafka的MirrorMaker把信令Topic镜像过来，消费端重放。这样数据最真实。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要把现网算义信令全量同步到孪生镜像环境做验证，数据流转有什么限制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合成数据验证结果还能作准吗？脱敏后特征向量都变了，意图识别和阻控算法不就认不出来了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就抽一小部分脱敏的跑一下，看看指标没大问题就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分两组，一组旧路由一组新路由，看延迟降没降。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，A/B对照，95%置信区间，效应量用Cohen's d。那数据源只能用脱敏后的了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太会弄脱敏脚本。我这两周先把特征哈希脱敏的方案学明白，写一个脱敏处理模块，下周跑通镜像环境的数据接入。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "看《电信数据安全治理指南》里的脱敏标准，写一个Kafka消费端的Interceptor做字段哈希，确保进孪生环境的数据合规。两周内搞定，能跑通脱敏数据接入。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算义共生路由系统运行评估背景下，用户与导师围绕大盘核心指标选择、异常归因排查及指标联动逻辑持续沟通（8轮），其中在意图路由黄金三指标部分与态势运营监盘员沟通（1轮），在错配率飙升归因排查部分与异常溯源分析员沟通（1轮），最终形成大盘核心指标体系与联动排查逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要看QPS和接口延迟吧？以前上线都盯这俩，再加个CPU利用率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图路由大盘的黄金三指标，具体看什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存储采样率我会注意的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查算力节点是不是挂了？或者看调度器的日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力错配率飙升，一般怎么查？跟数据脱敏有没有关系？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模型漂移、哈希碰撞导致特征丢失，或者心跳延迟。明白了，脱敏那边出问题也会传导到错配率上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "意图锚定吻合度？因为特征丢了，意图就匹配不上了，吻合度肯定掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力不够了，阻控会频繁触发，如果高价值业务跑不掉，逃逸比就会下降。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心指标：意图锚定吻合度、算力供需错配率、阻控降级逃逸比。联动逻辑：脱敏哈希碰撞等数据异常导致特征丢失，意图锚定吻合度下降，同时引发算力供需错配率上升；错配率飙升若未及时缓解，阻控触发频次上升，若高价值业务未能成功逃逸，逃逸比下降。A/B组大盘需对比此联动差异。"
+              }
+            ]
+          },
+          {
+            "microScene": "在阻控降级逃逸比异常归因背景下，用户与导师围绕根因分析与整改方案持续沟通（5轮），其中在根因定位与兜底逃逸风险确认部分与异常溯源分析员沟通（2轮），并最终形成基于源IP信誉加权的粗粒度兜底逃逸补偿策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看阻控触发频次挺高的，是不是阻控算法那块阈值设太低了？还是算力节点又出幺蛾子了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边有根因没？是我阻控阈值配的有问题吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "特征丢了啊。那改脱敏算法呗，换个碰撞率低的，特征不就回来了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没看。但这不改源头咋弄？特征补不回，逃逸通道又进不去，这就卡死了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "无特征兜底？就是不看语义，只看五元组做粗粒度逃逸？这我熟，路由转发表本来就是按五元组匹配的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们在阻控侧加一层五元组粗粒度兜底逃逸，让那些特征丢失的包先跑掉，会不会把低价值流量也放跑了导致拥塞扩散？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因结论就是：脱敏碰撞导致特征丢失，高价值业务降级被误杀。整改方案不能动脱敏算法，得在阻控侧加基于源IP信誉的粗粒度兜底逃逸逻辑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算网流转效能闭环核验背景下，用户与导师围绕效能核验方法、副作用验证及约束阈值设定持续沟通（5轮），其中在核验指标与基线口径部分与效能评估迭代师沟通（1轮），并最终形成包含意图达成率、算力侵占比与CPU开销增量的闭环核验约束条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看逃逸成功率和误杀率吧。之前高价值业务被误杀，加了信誉兜底后，误杀率肯定降，逃逸成功率上去。这两个指标达标，就算闭环了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "副作用应该不大吧，就是个查表和打标的逻辑。验证的话，再跑一轮压测看看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "除了看误杀率降没降，还要看哪些指标？长期运行的副作用怎么核验？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设兜底触发率在5%以内，CPU开销增量不能超过2%。算力侵占比，我觉得10%是个红线，超了正常流转肯定受影响。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "既有业务恢复证据，又有资源消耗约束，闭环条件齐了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估意图漂移自适应演进规划背景下，与导师围绕演进触发条件、防震荡机制、统计验证短板及失效边界持续沟通（8轮），其中在漂移分类与触发条件及失效兜底部分与效能评估迭代师沟通（2轮），并形成包含触发条件、防震荡双重判定、AB测试验证闭环及失效人工接管规则的演进规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "意图漂移就是业务需求变了对吧。我觉得可以加个监控，意图达成率连续跌就告警，然后人工去改路由策略。或者定期把新数据喂给语义特征模型重训。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图漂移具体分几种？触发演进的条件怎么设？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但重寻路要是来回震荡怎么办？网络一会儿好一会儿坏，策略跟着频繁切换，路由表得抖死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个冷却时间？两次演进间隔不能少于5分钟。或者设个滞后窗口，漂移距离得持续一段时间才算数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑个仿真脚本看看曲线呗。别的我不太懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差计算和AB分流这块我确实不太熟。我记个日志，回头找测试组借个AB分流框架看看怎么配。现在先假定防震荡用滞后窗口加方差阈值双重判定，行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那演进规划先定这几条：触发条件用漂移距离超15%或算力波动超20%，防震荡用滞后窗口加方差阈值双重判定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漂移距离特别大？比如超50%？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

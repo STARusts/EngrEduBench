@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在深地盐穴释能极端工况压测与排障背景下，用户与导师围绕OT侧数据风暴造压、死锁毛刺抓取工具及误差拆解持续沟通（6轮），其中在极端工况压测、死锁成因及误差拆解边界部分与测试排障工程师沟通（3轮），并形成包含乱序造压、埋点、eBPF抓耗时及区间限定的排障方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测我打算用JMeter起500个并发线程，直接打寻优调度接口，看QPS能到多少。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "同时重连？我还没想过这种场景。回调队列可能会积压吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盐穴储气这种OT系统，极端工况压测怎么搞？我只会用JMeter打接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能在异步写回调里加个时间差计算。但状态机异常锁是什么情况？乱序数据怎么会触发了锁？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我加埋点的时候，得把时间戳差值和锁持有时间一起记下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接开pstack太卡了吧。我之前只用过简单的strace。抓这种微秒级毛刺，我不太会弄。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这就去补一下bcc的写法，看看怎么用funclatency抓open62541的回调耗时。把eBPF抓到的耗时数据，和我加的埋点时间戳对齐，就能定位是网络乱序还是锁冲突了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果毛刺只在并发打满时出现，而且eBPF抓到的锁持有时间长，那就是锁冲突。如果是偶发的，埋点显示时间戳差值很大，可能就是网络抖动导致乱序。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我得在压测报告里标明，这结论只在队列未满的并发区间有效。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多端互动剧集分支编排平台的编辑器落地背景下，用户与导师围绕编辑器选型决策标准、commitId 版本语义贯通、验收切片与性能基准持续沟通（8轮），其中在图引擎性能上限/扩展点/测试分层部分与前端工程负责人沟通（4轮），并最终确定“图引擎作renderer+自研Graph领域模型/校验/操作”的路线与本周可验收任务拆分。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在技术路线：编辑器的数据模型和渲染层到底用“自研 JSON Schema + 自己的校验/回放”还是“直接上现成流程图引擎（节点图那种）”。我想今天把栈选掉，然后拆任务开干。@导师 你先帮我把决策标准定一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“领域模型先行”：核心用一个我们定义的 BranchGraph（节点/边/条件/资产引用），序列化成稳定 JSON，再做渲染层。图引擎我担心被它的数据结构绑死，后面加“条件表达式”和“端上决策回放”会难。  \n但现实压力是交付速度，现成图引擎能快出效果。我想把“领域模型”和“渲染”解耦：底层是我们的 JSON，视图层可以接一个图引擎当 renderer。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端工程负责人 现在编辑器选型纠结：A 自研数据模型+渲染；B 用现成节点图引擎做主骨架。你别给我泛泛建议，我要你站队：性能上限大概在哪、扩展条件分支/并行/回跳这种交互难不难、以及单测/E2E 怎么做才不被 UI 绑架？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“虚拟化/分层渲染”是必须提前做吗？我担心一上来就复杂，进度炸。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "条件表达式这块我计划先做简单的“变量-操作符-值”，未来再扩成脚本。引擎对这种边的条件展示会不会很难做？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多人协作冲突这块我现在想先做“锁剧集/锁章节”粗粒度，后面再细化到节点级。引擎会干扰这个吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳三点：  \n1）数据与视图分层：Graph 纯数据模型 + 校验器 + 操作函数，ViewModel 只是坐标/端口/样式；  \n2）测试分层：领域层单测为主，适配层快照，UI 只做少量 E2E；  \n3）性能策略先留接口：viewport 概念、节点渲染无状态、避免绑死在引擎 store。  \n暂不做的：一开始不搞自动布局和节点级协作合并，先手动布局+章节锁。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选方案2。原因是交付速度更稳：画布交互（拖拽、缩放、连线、对齐、框选）是工作量黑洞，用引擎兜住；同时我把风险压在可控的领域层上，避免未来被锁死。  \n风险点是引擎的性能上限和扩展点，我准备通过“适配层隔离 + 可替换 renderer 接口”来对冲，最坏情况换引擎或回退自研画布，领域层不动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我给一个最小闭环切片：  \n- Graph 模型：Node/Edge/Condition/AssetRef/commitId 字段齐；  \n- 8 个核心操作：addNode/removeNode/addEdge/removeEdge/updateCondition/bindAsset/moveNode/undoRedo；  \n- 校验器第一版：孤儿节点、不可达节点、循环检测、资产缺失；  \n- 画布：能拖拽节点、连线、选中后侧边栏编辑条件与资产；  \n- 导出：生成稳定 JSON（字段顺序不强求，但 schema 固定），并能基于 commitId 做版本快照。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "日志我之前确实只想着 debug 方便，容易把条件表达式和资产 URL 全打进去。那我收敛成：只打 nodeId/edgeId、操作类型、commitId、校验错误码；资产只打 assetId，不打原始 URL。需要排查再走权限更高的审计查询。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我做一个小基准：用脚本生成 100/300/600/1000 节点的 Graph，渲染到画布上，统计三项：首次渲染时间、拖拽单节点的帧率、框选 100 节点的响应时间。阈值先定得保守点：600 节点拖拽要维持 45fps 以上，首次渲染 2s 内。达不到就先上 viewport 虚拟化的最小实现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

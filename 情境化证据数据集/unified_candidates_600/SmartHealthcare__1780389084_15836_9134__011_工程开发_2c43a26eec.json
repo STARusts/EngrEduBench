@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在适老化交互无障碍适配背景下与导师围绕MCI老人交互降级策略、WCAG规范工程落地及验收标准持续沟通（5轮），其中在无障碍适配优先级与感官代偿部分与交互适老化设计师沟通（2轮），并最终放弃动态重构引擎，形成基于Theme Token约束与被动眼动放大的适老化方案及模拟测试验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想构建一套基于眼动追踪的动态UI重构引擎。既然我们已经接入了眼动标志物，如果老人视线在某组件停留超过2秒没操作，系统就用WebGL弹出一个3D虚拟手进行操作引导。这样彻底消灭学习成本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "具体到医疗App，特别是针对MCI老人的交互降级策略，我不太确定怎么把规范映射到代码约束里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "针对我们这种带眼动和语音采集的认知筛查App，MCI老人的无障碍适配优先级是什么？WCAG AA级在移动端的具体参数怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那眼动数据在交互层还能用吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我回去把WebGL和动态重构全删了。把WCAG的对比度和触控热区规则加到UI Lint流水线里，眼动只做被动放大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前只把无障碍当事后补丁，现在把它前移到组件库的Theme Token里。对比度4.5:1直接锁死在色板定义上，触控热区用Figma的Auto Layout约束最小尺寸。这样开发时根本没法用错。眼动被动放大我用CSS Transform: scale实现，不触发布局重排，性能开销极小。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收看两个核心指标：筛查任务完成时间分布，以及误触返回率。我要让测试师构造一个老年模拟测试集，帕金森手抖和黄斑变性视力受限都要模拟，跑这两个指标的95%置信区间。如果误触率上限超过5%，说明热区还是不够。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

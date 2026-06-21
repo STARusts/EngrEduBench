@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在链上并发与隐私防护评估背景下，用户与导师围绕并发控制、隐私防护、性能验证及数据最小化持续沟通（7轮），其中在并发控制部分与分布式账本设计师沟通（1轮），在密文验证部分与隐私计算工程师沟通（1轮），并最终形成OCC加随机退避、同态加密、数据最小化及压测验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发加锁呗，synchronized 一把梭，谁抢到谁改。隐私更简单，把金额一加密，别人看不见不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加锁死锁咋整？不用锁咋防并发改同一笔凭证？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "金额加密了合约咋算？总不能解密再算吧，那还有啥隐私。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "扛不住就加机器呗。验证就随便跑两笔试试，没报错就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前确实老死锁。前天刚看了个讲OCC退避重试的分享，我寻思把重试丢内存队列里，加个随机退避时间再试，是不是就不容易雪崩了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测工具发请求，1倍、1.5倍、2倍并发量各跑一轮。明文和密文各跑一组。看延迟是不是在两秒内。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合同原件、企业税号这些敏感的绝不上。就上凭证ID、密文金额、版本号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

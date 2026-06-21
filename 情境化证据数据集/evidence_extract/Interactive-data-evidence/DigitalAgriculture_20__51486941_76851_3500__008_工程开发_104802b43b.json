@@ -1,0 +1,113 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在蒸散反演与数据管道开发调试背景下，用户与导师围绕ETa.tif“全0”排查、管道可回放与产物可审计字段设计持续沟通（9轮），其中在掩膜/NoData、缩放单位与CRS裁剪根因定位上与算法工程师沟通（5轮），并明确按CRS→mask→scale顺序加日志与sidecar JSON验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ET那块我直接跑了个开源脚本，结果产出的tif全是0。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就卫星影像，Sentinel那种。输出是ETa.tif。我在QGIS看是黑的，统计也接近0。日期大概上周，地块随便选了一个多边形。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我找谁问？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在ETa.tif出来全是0，这一般是哪里炸了？我用Sentinel影像跑的脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没看NoData。我就看统计面板显示min=0 max=0.01这种。应该是ETa吧，脚本名字就ETa。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "QA我没动，脚本里有个mask函数我就没管。反正能跑完。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "关mask会不会很不合规？反正有云也算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想问下ETa正常应该多少，我怕我看错了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CRS这点我可能真没管，多边形是WGS84，影像好像UTM。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我先记一下：看mask、scale、CRS、NoData。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "产物文件名里加date就行吧，比如 ETa_202603xx.tif。版本我就不写了，麻烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "auditTraceId还能拿来做这个？我以为只给设备回执用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把auditTraceId写到元数据里？tif也能写吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段你直接给我一份，我照抄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "p10 p90我不会算，我只会mean。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就搜“percentile json output”抄一段。可以吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "null我老忘，之前就填0省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "日志就print一下CRS，然后print有效像元数，再print min max。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我还要不要把影像下载到本地缓存？我现在每次都重新拉，挺慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "20GB我怕不够，Sentinel一景就很大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我回去就按你这顺序查。要是我只修一个点，先修CRS行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "QGIS里不黑了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行吧。我就按这三条跑一遍。要是p90到12怎么办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去把CRS对齐和validPixelCount加上，再把json那10个字段照着写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

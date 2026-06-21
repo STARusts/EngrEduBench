@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "交通物流",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在网关协议栈对接与海运卫星链路带宽受限背景下，用户与导师围绕协议选择（JSON与Protobuf）、运行稳定性及验收标准持续沟通（6轮），其中在公海带宽限制与硬性规范部分与IoT通信专家沟通（2轮），最终确认采用MQTT-SN加Protobuf方案及128字节单包与5MB流量红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上MQTT发JSON包。这种方案最主流，写起来快，调起来也直观，出错了看一眼日志就知道哪错了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流量能值几个钱？现在的工业网关硬件性能强得很，多几个KB又不影响解析，没必要搞得那么复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没必要吧。Protobuf还得弄一套.proto文件，改个字段都要重新编译，麻烦死了。丢包了就让网关多重发几次，逻辑写死在底层不就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开发快也是效率。行，既然专家说会堵，那我把JSON里的字段名缩写，比如energy直接写成e，也能省不少空间。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "128字节？这也太窄了。行吧，既然你们非要改，那我先按这几条弄个样板包看看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "5MB也太紧巴了。我试试看，反正在代码里先把二进制转换的逻辑占个坑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

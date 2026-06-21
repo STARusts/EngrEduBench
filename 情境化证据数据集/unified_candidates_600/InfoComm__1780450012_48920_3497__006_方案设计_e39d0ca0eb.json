@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在星地协同调度接口设计背景下与导师围绕接口轻量化、降级接管、差分对齐及扩展性持续沟通（7轮），其中在接口与降级接管部分与星载软件架构师沟通（1轮），在差分对齐与信令保障部分与空口架构设计师沟通（1轮），并形成Protobuf差分更新、100帧锚点对齐、短帧信道降级接管及波束簇分片扩展方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JSON格式吧，解析快。星上把反演的干扰矩阵打包发地面，地面算完图样再发上去。降级的话，地面发现星上发来默认图样，就直接全量反演一把，再把新图样注上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "矩阵大，那，压一下？用gzip压。时延的话，几十秒确实会断。那降级接管怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@星载软件架构师 星地协同接口轻量化和降级接管状态同步。我原想说JSON传全量，他说带宽不够时延大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Protobuf行，我换序列化库。差分更新就是只发变化的边？心跳保活也加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包重传？预计算图样下发应该很快吧，就几个波束的配置。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@空口架构设计师 星地传差分矩阵，丢包了怎么对齐基准？降级接管时地面下发备选图样，空口信令怎么保障时延？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "100帧跟一次全量，懂了。专用短帧信道下发图样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "波束翻倍差分包也会变大吧，专用信道也挤。余量，预留个20%带宽？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，Protobuf加差分，100帧锚点，降级专用短帧50ms内，波束簇分片。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

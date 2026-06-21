@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发图谱存储选型背景下，用户与导师围绕Neo4j、Apache Age及Postgres CTE方案的排障风险与交付死线持续沟通（4轮），其中在关系库多跳检索可行性部分与图谱架构师沟通（1轮），在原生图联调排障风险部分与图谱开发工程师沟通（1轮），并最终形成基于Postgres递归CTE的对照验证决策方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接上 Neo4j，用原生图存储和 Cypher 做子图匹配，这才能保证因果织网多跳遍历的极致性能。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存大点无所谓，为了系统的图运算扩展性，这点资源开销是值得的。并发限制可以先在单测里 Mock 掉，后面再考虑集群版。只要底层模型纯正，开发进度肯定能赶出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原生图库联调排障到底多坑？复杂因果图用关系库能顶住多跳检索吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我承认原生图排障确实是个隐患。但我还是觉得用纯关系库太挫了，配不上这系统的推凶态机编排复杂度。我想折中一下，用 Postgres 加上 Apache Age 插件，既有关系库的稳定性，又能用 Cypher。不过我之前没深入用过 Age 的 Cypher 引擎，我得花点时间补学一下它的内核实现，看看它的执行计划生成逻辑，确认它对复杂子图匹配的支持度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我设计一个对照验证来决策。我用 Postgres 递归 CTE 实现基础线索图谱的存储与检索，写个单测压测 3 层和 5 层的子图检索延迟。如果 3 层检索的 P99 延迟能压在 200ms 以内，我就彻底放弃 Neo4j 和 Age，全量上 CTE 方案。变量就是图遍历深度，评价指标是 P99 延迟和慢查排查耗时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "存储选型验证就锁定：Postgres + 递归 CTE，验证目标 3 跳子图检索 P99 < 200ms。我现在就去建表写 CTE 逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

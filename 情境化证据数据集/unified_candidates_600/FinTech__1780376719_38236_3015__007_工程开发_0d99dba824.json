@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在金融暗池穿透系统核心代码开发背景下，用户与导师围绕流式图计算技术选型、向量化计算学习验证及测试数据合规持续沟通（8轮），其中在图状态存储STW问题部分与流式拓扑设计师沟通（1轮），在同构算子性能与合成数据构造部分与图算子开发工程师沟通（2轮），并最终形成采用Arrow JNI与堆外内存重构算子、使用注入星型子图的合成数据测试的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上Flink，图状态存RocksDB，同构匹配写Java查，这活儿很快能搞定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同构算子就是拿当前图去跟规则图比，Java写个DFS遍历不就完了，顶多慢个几毫秒，加几台机器并发跑不就弥补了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink存图状态到底行不行？同构匹配用Java写有多慢？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink大厂都在用，肯定没问题啊，搞堆外和C++不是没事找事吗。C++我都不熟，写出来全是Bug，到时候更慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去翻翻Apache Arrow的文档，它好像有JNI接口。我试着写个Demo调用它的列式结构存邻接表，跑个同构匹配试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "目标就是这周五前把Arrow的Java/JNI调用跑通。验证的话，我写个微基准测试，造一千个节点的图快照，分别用纯Java DFS和Arrow JNI跑同构匹配，对比P99延迟。如果JNI的P99在10毫秒以内就算成功。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "随便抓点线上的日志灌进去就行了，方便。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我自己写个脚本生成随机图，只要边和节点的分布像暗池交易就行了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "造数据时强制塞几个星型结构的子图进去。核心编码我不直接写纯Java了，先去学Arrow JNI，图状态用堆外存，测试数据我自己造带星型子图的合成图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

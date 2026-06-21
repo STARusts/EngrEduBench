@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在嗅探节点分级上报与复核工单衔接的方案设计背景下，用户与导师围绕气味指纹v1.0数据标准的最小字段、分层命名、体量与可回放性约束持续沟通（9轮），其中在Header/记录类型与质量枚举设计上与数据工程师沟通（5轮），在地块/站点标识最小化、token化与审计边界上与合规与数据治理官沟通（2轮），并最终复述确定FeatureRecord/SnippetRecord骨架及禁止上报字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里第一反应是搞一套很通用的标准：原始波形、频谱、特征向量、再加上元数据，最好还能兼容以后换传感器。甚至用一套“自描述schema”，像Avro那种，后面演进比较丝滑。但我也怕标准过重，节点端就烦了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "常态包我先按时序点来：  \n- device_id、node_id、farm_id/plot_id  \n- ts_start/ts_end 或 ts + window_len  \n- env: temp、rh、maybe wind（露地）  \n- correction: 温湿补偿参数版本、基线版本号  \n- features: 各通道统计特征向量（均值、斜率、响应幅度之类），还有Top-K通道变化  \n- score: 风险分、阈值、异常类型  \n- health: 泵电流、气路盒寿命百分比、传感器自检码  \n- quality_flag: 去噪是否成功、漂移、饱和、缺失"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线我想用 baseline_id（hash），对应平台上一个基线对象：包含基线建立时间、有效期、参考环境范围。节点只上报 baseline_id + distance_to_baseline 这类派生值。补偿后值我可以加字段名区分：env_meas vs env_used。特征里也分 raw_feature vs corrected_feature？会不会太啰嗦。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 现在要定气味指纹数据标准，常态特征包+事件短窗原始包。你给个你认为的分层结构/命名方式，还有质量标记枚举怎么做比较抗后期演进？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Header里 node_id 和 device_sn 都要我之前没想全，确实要，不然换件追不回来。quality_code 控制在15个以内挺实用。fingerprint_vector 还带 vector_rev 也算给未来留口子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 气味指纹上报要定数据标准。常态特征包里我们想带 site_id/plot_id 方便路由工单。合规角度哪些字段算敏感、怎么做最小化采集和审计留痕比较稳？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规这边等于把 site_id/plot_id 换成 token，还要权限分层和审计。我担心工程上麻烦，就要多一层映射服务。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先压住我那套“万物自描述”。折中我想这样：  \n- v1.0 固定两类record（feature/snippet）+统一header，schema_version 控住演进。  \n- 必填：schema_version、record_type、node_id、device_sn、ts_utc、window_ms、data_level、quality_code；再加 site_token（不是真site_id）。  \n- feature必填：input_context（至少temp/rh_used+compensation_model_id）、fingerprint_vector+vector_rev、risk_score+risk_bucket、model_id+rev、baseline_id+distance_to_baseline。  \n- 可选：plot_token、observation_env的扩展项（co2/pressure）、topk_channels、channel_features的细项、quality_detail。  \n- 禁止：地块名称、农户姓名/手机号、精确经纬度（除非维护导出且审批），以及任何原始长时段连续波形（只允许snippet短窗）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "体量上我想给 fingerprint_vector 一个上限，比如<=128维，float16或量化后再传，但标准里只写 datatype=fp16/qint8 这种，不写具体压缩算法。可回放性我就把上一轮说的“复核券字段”钉死：topk_channels、distance_to_baseline、env_used、quality_code、health摘要、以及触发时的snippet指针（trigger_id+snippet_id）。常态没有snippet就只能看质量码和健康状态来判断“值不值得复核”。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实想过把施药记录也塞进来做建模特征，但那属于业务侧输入，不该从嗅探节点上报。行，这块我收手。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）两类消息：FeatureRecord（常态/告警都用）、SnippetRecord（仅告警触发短窗原始）。  \n2）统一Header：record_type、schema_version、node_id、device_sn、ts_utc、window_ms、data_level、trigger_id(可空)、site_token(必填)、plot_token(可选)、quality_code。  \n3）FeatureRecord body分层：observation_env（测得，可选扩展）、input_context（用于补偿与建模，必含temp/rh_used+compensation_model_id/rev）、features（fingerprint_vector+vector_rev，topk_channels可选，channel_features可选）、inference（risk_score/bucket、model_id/rev、baseline_id、distance_to_baseline）。  \n4）SnippetRecord body：raw（sample_rate、channels数据、encoding名），并带同窗口input_context/observation_env，quality_code继承。  \n5）质量标记：quality_code用有限枚举（OK/ENV_OUT_OF_RANGE/PUMP_ABNORMAL等），必要时quality_detail补充键值。  \n6）可解释线索字段对齐复核工单：topk_channels、distance_to_baseline、env_used、health摘要、quality_code为强关联字段。  \n7）最小化采集：常态不上报原始长波形，只上报特征+摘要；原始只在告警snippet短窗或维护导出。  \n8）合规：不允许上报真实地块名/农户信息/精确经纬度；用token化标识，解映射走权限与审计。  \n9）体量约束：fingerprint_vector维度上限（建议<=128）和datatype标注；算法实现细节不写入标准。  \n10）留存建议：snippet原始短窗默认短期留存（30-90天），长期只保留派生特征与告警字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

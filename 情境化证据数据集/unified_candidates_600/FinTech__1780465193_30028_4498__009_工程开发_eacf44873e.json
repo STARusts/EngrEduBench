@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发联调背景下，与导师围绕对冲比例动态编排逻辑、联调接口定义及合规校验红线持续沟通（7轮），其中在波动率触发与输入参数部分与期汇量化策略师沟通（1轮），在接口协议与合规校验位部分与对冲编排开发主导沟通（1轮），并最终形成包含波动率、画像ID、敞口的接口定义及边界处理策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接乘个系数，流算那边给个汇率变动，我这边拿变动乘个比例，超过阈值就锁"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口就传个汇率和变动值，我这边算个比例返回"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "比例到底怎么算？接口要传啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "波动率序列、画像ID、敞口，gRPC推送，加个合规校验位"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超限就截断，最大100%锁汇。校验位我随便传个true"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "调个mock接口查权限。输入是波动率、画像ID、敞口，输出是对冲比例，中间查合规"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "gRPC接口，入参波动率、画像ID、敞口，出参比例。必须调合规接口拿校验位，比例上限100%"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "突增就降级，负数取绝对值，代码里加个if判断"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在灌溉网关控制逻辑架构设计背景下，用户与导师围绕架构选型、断网高可用及本地审计日志持续沟通（4轮），其中在资源受限设备架构落地部分与边缘计算设计师沟通（3轮），最终放弃微服务，形成双进程+UDS+SQLite WAL的故障隔离与日志保底方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备在网关上搭一套KubeEdge边缘计算框架，把模型包成Docker镜像。这样控制逻辑可以拆成几个微服务：感知接入、模型推理、电磁阀控制。微服务之间用gRPC通信，方便以后扩展其他的决策算法或者做灰度发布。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RK3308算力其实还行吧，我可以限制Docker容器的CPU份额。gRPC虽然重一点，但是序列化效率高，跨语言也方便。如果实在吃力，我就把KubeEdge换成纯Docker Compose，去掉边缘编排开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算在RK3308网关上跑Docker微服务来做灌溉决策，内部走gRPC。这方案在256M内存的板子上可行吗？如果不行，有什么更优雅的架构替代？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "单进程多线程？那模型迭代升级多麻烦啊，替换so库还得停机重启整个网关。如果不用容器，怎么保证版本一致性？断网的时候，云端没法拉取新镜像，这算不算架构缺陷？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "本地审计日志确实是个问题。如果微服务挂了，日志可能丢在内存缓冲区里没flush。如果按专家说的单进程，我可以开一个独立线程专门做AOF写盘，就算主线程崩了，日志还在。但模型推理还是得隔离出来吧？万一模型跑飞了OOM，不能把控制线程也搞死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SQLite WAL模式在频繁写的情况下，锁竞争会不会严重？控制指令每秒都有，全写SQLite主库可能卡IO。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就不用微服务了。核心逻辑拆成两个进程：`irr_control`（主控状态机+传感快照+电磁阀驱动）和`model_infer`（TCN推理）。通信用UDS，日志用SQLite WAL，断网时SQLite做本地队列。这比KubeEdge确实轻多了，但我还是觉得裸跑二进制不够云原生。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态机我会用有限状态机库实现，保证状态转移原子性。断网降级的安全策略我会硬编码一组保守水肥配比，不会瞎灌。日志那边我确保WAL文件写满一定大小再checkpoint，避免写放大。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

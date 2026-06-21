@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在感控动态阻断指令下发背景下，与导师围绕指令协议适配、架构解耦与安全验证策略持续沟通（5轮），其中在BA系统协议与回执机制部分与联控接口设计师沟通（1轮），并最终形成基于Kafka解耦的指令适配服务架构与Mock回执验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算在Flink算出风险等级后，直接调医院BA系统的HTTP接口，把压差调控指令发过去。这样链路最短，延迟低。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我忽略协议适配了，只顾着算力延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联控接口设计师 医院那边的BA系统到底用什么协议？指令发过去怎么拿执行回执？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能耦合。我改一下：Flink只负责把风险判定结果发到Kafka的一个特定Topic，比如`risk-control-cmd`。后面单独起个指令适配服务，它消费这个Topic，做BACnet协议转换和下发，同时监听回执。如果超时没回执，适配服务往另一个告警Topic写消息，Flink侧做熔断降级，切回安全基线开度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这步验证肯定不能硬动设备。我准备搭个Mock服务，模拟BA系统的BACnet网关和风阀回执。指令适配服务发过去，Mock直接返回执行成功或模拟超时。先跑通全链路时序，等联调测试阶段再上影子模式旁路观察。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

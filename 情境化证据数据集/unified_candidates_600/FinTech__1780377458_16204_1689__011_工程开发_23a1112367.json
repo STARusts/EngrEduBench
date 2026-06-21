@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在量化算法性能调优背景下，与导师围绕性能瓶颈定位与调优方案持续沟通（4轮），其中在性能热点定位与调优路径部分与性能优化攻坚手沟通（2轮），排除了套用通用加速库、并发库及pandas的捷径，明确需针对内存IO瓶颈手写批量校验重构逻辑并制定包含资源监控的测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是我直接把模型转成ONNX塞进去就能快？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "瓶颈我猜是循环太多？反正只要能套上加速库，应该多少能快点吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边有个现成的py-spy工具，直接挂上去跑一圈行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多重循环校验这个，能不能用numba加个jit装饰器加速？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "批量处理是不是有现成的并发库可以套？比如用multiprocessing.Pool直接并发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有类似pandas那种groupby的现成操作能直接合并？我自己写重组逻辑怕写错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对比测试我跑两遍看时间就行了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

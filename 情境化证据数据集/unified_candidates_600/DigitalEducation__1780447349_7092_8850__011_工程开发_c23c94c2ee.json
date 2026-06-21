@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在多租户高并发极限调优背景下与导师围绕OOM、死锁根因及性能稳定性取舍持续沟通（8轮），其中在QoS分级与压测验证部分与测试调优工程师沟通（2轮），在QoS拖慢启动与死锁解耦部分与容器化开发工程师沟通（1轮），并最终形成基于eBPF采样、QoS分级、熔断降级与对照压测的调优折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚用Jmeter模拟了200并发拉起沙箱，直接OOM了。调度器那边也出了几个死锁。我试着给Pod加了Limit，OOM少了，但沙箱拉起耗时从50ms涨到200ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全加的一样的大小。死锁我看堆栈是调度器在等Webhook返回，Webhook在等算力池分配，算力池又满了卡住了。这循环等太要命了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "200并发OOM，加Limit又拖慢启动，还有死锁，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "熔断好理解，但加QoS控制真会拖慢启动吗？日志不打全量，OOM的时候怎么查是哪块毛刺？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚学了用eBPF做容器内存采样，可以不用打全量日志，只在内存接近Limit阈值时抓当时的内存分布。这样日志量小，合规风险也小，OOM也能定位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "是不是可以只对高优沙箱加Overcommit控制，低优的不管？这样大部分沙箱启动还是走快路径，只有高优的多走一步校验。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "现在的数据太粗，只有成功失败，看不出毛刺在哪。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我重新写个压测脚本，加上eBPF采样，按QoS分级跑对照组。死锁那边我直接在Webhook里加个Timeout和Fallback逻辑，不等了直接降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优方案这几点：1. 日志合规与诊断：用eBPF按需内存采样替代全量日志，防租户数据泄露；2. QoS分级控制：高优沙箱加Overcommit控制，低优走快路径，不影响整体启动P99；3. 算力抢占死锁：Webhook加超时熔断降级，不参与循环等待；4. Overcommit比例：跑1.5/2/3三组对照压测，根据OOM率和耗时P99定基线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

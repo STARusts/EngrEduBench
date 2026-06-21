@@ -1,0 +1,491 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在异构空基算网切片自愈项目需求梳理背景下与导师围绕异构链路瞬断痛点量化、自愈约束及合规风险持续沟通（5轮），其中在业务SLA定量化部分与业务场景映射专家沟通（1轮），在频谱干扰、数据合规及算力开销部分与算网融合规划师沟通（1轮），并最终明确切换间隙、自愈时效、频谱合规与在轨算力等核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "主要是现在低轨卫星和5G融合，链路动不动就瞬断，资源也有潮汐效应，我想搞个中枢做动态重编排，保证业务不断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近得补一下低轨卫星切换参数这块的知识，这周找3篇IEEE论文看看切换间隙阈值怎么定，搞懂了再来对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构链路瞬断的痛点怎么量化？关键业务对断开多久有要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频谱和合规上有什么坑？还有长期维护成本怎么样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，车联网业务切换间隙不能超50ms，不然丢包。第二，自愈得快。第三，频谱别干扰，数据跨境要合规，在轨算力得够用。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在将技术约束翻译为业务SLA诉求背景下，与导师围绕业务SLA无损流转的指标拆解与降级合规边界持续沟通（7轮），其中在SLA指标量化部分与业务场景映射专家沟通（1轮），在资源抢占合规红线部分与空基通信合规分析师沟通（1轮），并最终形成SLA四维指标体系及降级合规边界策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这项目要保证业务SLA无损，这指标具体都有啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压制时延吧？不对，是压制抖动。自愈期间丢包率要小于1%？还是0.1%来着，反正得特别低。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把不重要的业务停了，把资源全给车联网这种重要的业务用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果资源不够了，能不能直接把低优先级的业务停掉，给高优业务让路？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不能直接停，得降级，还得告诉人家。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，指标有四个维度，时延、抖动、丢包和可用性；第二，确定性路由主要是为了压抖动；第三，资源不够不能硬停低优业务，得按阶梯降级，还要有告知机制。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域算网资源潮汐分析背景下与导师围绕空基异构潮汐特征量化、双波谷叠加期战略约束与资源底线持续沟通（5轮），其中在潮汐特征量化与双波谷资源底线部分与算网融合规划师沟通（2轮），在跨域流转合规限制部分与空基通信合规分析师沟通（1轮），并最终形成星地潮汐相位差、双波谷保底切片及数据不出境红线的战略需求结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "潮汐就是资源一会多一会少。我们要分析什么时候多什么时候少，然后把业务分配过去。核心点应该就是找出高峰和低谷，对吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构空基潮汐到底怎么表现？我们要提取哪些量化维度？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "同时波谷的话，确实没资源了。那，那就只能等一波涨潮？或者强行降级？我不太确定这时候自愈中枢该怎么约束。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们怎么定哪些切片必须保？跨境数据流转这时候受什么限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "双波谷的时候，底线就是只保控制面和特急切片，商业的必须挂起。就算为了保业务，数据也不能违规出境。所以跨域编排得看属地政策。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在确定性路由商业可行性评估背景下，与导师围绕路由商业卖点、客户容忍底线与验证方法持续沟通（8轮），其中在客户确定性需求与容忍底线部分与业务场景映射专家沟通（1轮），在弹性确定性与传统专线成本对比部分与算网融合规划师沟通（1轮），并最终修正卖点认知为弹性降级与低成本恢复，设计对照组验证方案补入战略需求文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卖点？就是快吧，确定性路由不就是为了时延低、抖动小嘛，客户肯定愿意买。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片都可能挂起了，这确定性路由还怎么卖？客户能买账吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户买的不是绝对不中断，是可预期降级。就是断之前能提前说一声，然后告诉啥时候恢复。金融和航运客户能接受。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种断前预警、断后恢复的弹性确定性，跟传统高轨卫星专线比，成本能省多少？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "一开始我以为卖点就是死扛SLA，绝对不卡。现在发现空基网做不到，卖点变成了弹性降级，还能省带宽钱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对弱连接下的确定性定义没概念。我回去把学习清单更新一下，加一条“TSN在弱连接下的扩展协议”，把专家刚说的可预期降级案例补进去，改改我原来那种死扛SLA的老观念。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我找几家用高轨专线的，算算他们一年的带宽费，再算我们弹性确定性方案的费用，看他们愿不愿意为了省这60%的钱接受短暂挂起。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "卖点：可预期降级与低成本恢复；验证：对比高轨专线成本看切换意愿。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异构空基算网切片自愈架构方案设计背景下，用户与导师围绕架构可预期降级体现与验证方法持续沟通（5轮），其中在空基自愈触发与降级阈值设定部分与切片自愈策略设计师沟通（1轮），并最终确定感知决策执行解耦架构方向与混沌注入对比验证方法。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备直接复用容器编排那套自愈逻辑，切片出问题就销毁重建，状态存etcd。这样处理最简单，也算能预期吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@切片自愈策略设计师 特别是降级阈值怎么定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是解耦比硬切好。变量就设恢复时间吧。如果时延高，就，就调小阈值？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会设计这种验证。我去补一下混沌工程这块，找《云原生韧性系统设计》里讲故障注入对照实验的章节，周末看完，争取下周一把自愈架构的验证框架画出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在端到端确定性路由协议扩展背景下，用户与导师围绕压制跨域时延抖动与控制信令开销、中间节点处理逻辑及TLV更新机制持续沟通（7轮），其中在协议扩展方式与开销控制部分与确定性网络架构师沟通（1轮），在轻量化SRv6处理逻辑与TLV更新阈值部分与跨域路由协议工程师沟通（1轮），并最终确认轻量化SRv6压缩SID、新增时间感知与预测TLV、TLV更新设阈值触发、边缘解封装与中间改写匹配逻辑等关键扩展点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算在原有协议上加点东西，比如改改OSPF或者SRv6，把时延信息塞进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域时延抖动压制在协议扩展上怎么搞？开销是不是很大？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "更新嘛，就是感知到了就更新呗。中间节点应该不用变太多吧，透传就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "轻量化SRv6中间节点怎么处理？预测TLV更新频率太高的开销怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 轻量化SRv6压缩SID；2. 加时间感知和预测TLV；3. TLV跟自愈联动，超阈值才更新。就这些。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补上边缘解封装和中间改写。确认。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨域资源感知与重编排流设计背景下，用户与导师围绕平衡重编排精度与数据最小化合规持续沟通（5轮），其中在感知数据颗粒度要求部分与跨域路由协议工程师沟通（1轮），在跨境感知信令合规红线部分与空基通信合规分析师沟通（1轮），并最终确认跨域传聚合摘要与域内用细数据的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得得保证重编排能用，但也得合规。要不我们做个脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们对跨域感知数据的颗粒度要求是什么？必须要流特征吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域传这些节点级负载和流特征，合规上能过吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "协议工程师说没细数据收敛慢，自愈做不到毫秒级。合规分析师说细数据跨境传违规，只能传聚合的摘要和带宽。我觉得合规红线不能碰，就按合规的来吧，粗点就粗点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是可以在域内先聚合，然后传摘要的时候加点东西？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就域内把细粒度数据聚合成摘要，再对摘要做差分隐私加噪，跨域只传加噪后的摘要？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想清楚。误差容忍度得算一下。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构链路无缝切换容灾设计背景下，用户与导师围绕星地链路瞬断下的无缝切换方案持续沟通（6轮），其中在双发选收的切片代价部分与切片自愈策略设计师沟通（1轮），在双占挤占的合规边界部分与空基通信合规分析师沟通（1轮），并最终确定采用预测预建加锚点快切容灾方案及约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接双发选收呗，星上星下同时发，收端挑最好的，绝对无缝。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "关键业务优先嘛，占就占点，保SLA要紧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "双发选收在切片里代价真有那么大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种挤占合规不管？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来这样，双发不行，太霸道了。得换。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就预建？提前把备用路径算好，断了直接切过去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用链路质量趋势？斜率陡了就预建。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确认，不双发，用预测预建，靠本地摘要算趋势。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "预测预建加锚点快切。预建不占带宽，预测用本地数据，锚点在地面。"
+              }
+            ]
+          },
+          {
+            "microScene": "在北向接口与SLA保障数据模型设计背景下，用户与导师围绕接口抽象、数据最小化、意图驱动接口引入及验证方案持续沟通（7轮），其中在接口协议选型与数据结构部分与跨域路由协议工程师沟通（1轮），在跨境数据脱敏与审计留痕部分与空基通信合规分析师沟通（1轮），并最终确定协议与数据约束、引入意图接口并形成自愈频率控制验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是弄个API，把时延抖动这些SLA参数传上去呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，不能全传。开销也得控制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口用啥？数据模型怎么建才不占太多带宽？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域数据脱敏怎么做？审计怎么留痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Protobuf，只传切片ID和SLA，不传IP。审计只记违约。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不用管底层怎么切，直接说我要低时延，系统自己配。我加上这个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测一下接口。就发一堆请求，看看接口崩不崩。对照组就是不加压的呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议用Protobuf，数据只传切片级SLA和租户ID，不传IP。审计只记违约和自愈。意图接口加上。验证就是控制自愈频率，看上报时延，跟静态路由对比。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构空基算网切片自愈与确定性路由算法开发背景下，用户与导师围绕跨域寻路收敛逻辑、验证方案设计与动态规划短板持续沟通（4轮），其中在跨域寻路收敛与算力分配联合优化部分与核心算法实现工程师沟通（1轮），并最终确定联合图模型算法框架、对比验证口径及补课计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就分开写呗，先跑路由算路径，断了再触发自愈重新算。这样逻辑清晰，也好写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域寻路收敛和算力分配联合优化这块，具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就跑一次看时延低不低呗，对照组就是不加压的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "动态规划那块我有点卡，状态定义不太确定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "图论和动态规划我确实不熟。我这几天把《网络流与图论应用》里关于动态权值最短路的章节重看一遍，重点推一下状态转移方程，然后写个最小可行脚本跑通单域场景，把推导过程记在项目wiki里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构网元联调与信令风暴压测背景下，用户与导师围绕星地信令适配与风暴防护的具体实现持续沟通（6轮），其中在星地信令转换痛点部分与网元异构适配开发员沟通（1轮），在信令风暴压测触发模型部分与信令与性能压测专家沟通（1轮），并最终形成信令代理层异步降级与C语言发包压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备先把卫星和5G的接口调通，然后用压测工具打一波信令看看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个转换模块把两边信令转一下。风暴的话，多加几个缓冲队列应该能顶住吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "卫星和5G信令转换这块，具体难搞在哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，状态映射和事务合并。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令风暴压测怎么设计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，模拟潮汐加瞬断，看排队时延和收敛率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个信令代理层做映射，压测就模拟过境切换加断链，看P99时延和收敛成功率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代理层就挂在中枢入口吧。回退，回退就重试？脚本用Python写，断链时间随机。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在重编排时延飙升的调优Debug背景下，与导师围绕死锁根因定位与并发安全改造持续沟通（3轮），其中在锁竞争分析部分与信令与性能压测专家沟通（1轮），在双缓冲拆锁与eBPF探针定位部分与核心算法实现工程师沟通（1轮），并形成双缓冲拆锁、eBPF仅作调试及P99时延压回50ms的调优策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是机器性能扛不住了，加点CPU和内存可能就好了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这重编排耗时飙升怎么回事？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把锁去了就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抢锁死锁怎么改？重编排状态机那块。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就加上bpftrace探针，用双缓冲改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用perf buffer往用户态推，开销应该不大吧？双缓冲肯定能解决时延。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估与现网部署验证背景下，用户与导师围绕验证脚本归因缺陷、实验设计细节与统计能力短板持续沟通（8轮），其中在流量切分与灰度引流规则部分与现网交付验证工程师沟通（1轮），在自愈时延统计显著性与T检验部分与SLA监控与度量分析师沟通（1轮），并最终确定验证脚本修正点与统计能力提升SMART目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "异构空基算网切片自愈与确定性路由中枢调优完了，P99压回50ms了"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这脚本步骤挺全的啊，先切流再改路由，最后看大盘指标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘指标整体降了应该就是生效了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现网验证怎么切分流量做对照？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自愈时延的统计显著性怎么算？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太会算这些统计的东西。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，两周内学完课程，把T-test代码加到脚本里跑通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，要加基线对照组，选同轨同频不同时隙的波位；第二，引流按Slice-ID匹配，5%步长递增；第三，样本量要采7天潮汐周期；第四，用T检验算显著性，P<0.05才算数。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估盯盘背景下，用户与导师围绕异构链路瞬断自愈时延口径、SLA违约判定、核心看板项及告警阈值配置持续沟通（7轮），其中在时延口径与违约判定逻辑部分与SLA监控与度量分析师沟通（1轮），并最终明确三段时延拆分、软硬违约分类、三项必须看板及动态基线告警逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "空基链路瞬断自愈的时延口径怎么定？还有跨域SLA违约具体怎么判？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是感知、决策、下发。看板就挂自愈总时延和SLA违约率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就按之前方案设计文档里的静态值来？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估动态阈值配置完成背景下，与导师围绕潮汐余量量化评估、异常流转模式识别及下期迭代重点持续沟通（5轮），其中在评估口径与流转模式部分与网络智能迭代规划师沟通（1轮），并最终明确余量评估口径、当前核心痛点为重编排震荡及下期迭代重点为优化自愈判罚与缓冲池。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看大盘上资源剩多少，流转有没有报错呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "潮汐余量评估口径是什么？异常流转有哪些典型模式？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该是跨域拥塞溢出吧，目标域余量不够嘛。迭代就扩容目标域。"
+              }
+            ]
+          },
+          {
+            "microScene": "在基于反馈的切片与路由迭代背景下，用户与导师围绕SLA违约数据转化迭代约束、切片调整适用边界、资源挤占误伤风险及审计合规持续沟通（9轮），其中在违约分布拉取部分与SLA监控与度量分析师沟通（1轮），在切片颗粒度收缩比设定部分与网络智能迭代规划师沟通（1轮），并最终形成包含收缩比、复现条件、误伤红线与审计要求的五条下期迭代约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "A类切片违约率高，跨域重寻路震荡大。这种情况下，下期切片颗粒度收缩比定多少合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该是在低轨赤道区域测的吧，极地可能不适用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误伤应该不会吧，A类优先级高。审计日志我加上去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我缺定量分析能力，特别是网络指标的方差计算和资源挤占的量化评估。我写日志，把之前学过的基础统计方差分析方法迁移过来，算一下A类收缩0.6时C类的余量被挤占的概率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 下期迭代A类切片收缩比0.6，C类1.0；2. 复现条件限低轨赤道区域，极地需重测；3. 误伤红线：C类余量挤占不得超5%；4. 必须留存切片调整审计日志；5. 星上退避逻辑算力开销需低于5%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

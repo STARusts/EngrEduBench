@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在剧本式学习编排引擎方案设计背景下，用户与导师围绕事件驱动架构落地课堂状态机（最小事件集合、状态机边界、顺序幂等与接口契约、合规边界）持续沟通（8轮），其中在runId与排课/合班主数据绑定部分与教务流程代表沟通（3轮），在事件字段分级与留存脱敏策略部分与数据治理官沟通（2轮），并形成课堂运行事件分层与可靠性约束的方案骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我开始做剧本式学习编排引擎的技术方案设计，这一段我想先把“事件驱动架构”怎么落到课堂状态机上弄清楚：事件怎么定、谁发谁收、怎么保证顺序和幂等。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先抛个草案：事件就按“课堂一次运行”当成一个会话，里面有环节切换、资源投放、学生提交、分组变更、超时。状态机我倾向放在编排引擎服务端，端上只做展示+缓存。顺序就按环节序列来，幂等用 eventId 去重。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "唯一键我没想死。直觉是用“runId”，开课时由教师端发起生成。教务那边给我们 lessonId/sectionId 之类的我们就绑定上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教务流程代表 课次这块你们系统里到底怎么标？我得知道 runId 绑什么才靠谱。补课调课、合班这些会不会让一个“班级+节次”不唯一？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 runId 直接用 scheduleItemId 就行？省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合班时，学生名单是从 teachingClassId 拉，还是行政班？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。那我回到事件上：我们可以把 runId 当聚合根，关联 scheduleItemId。端上离线提交的事件也带 runId。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我先记下：事件要带 source、occurredAt、receivedAt。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了：教务那边稳定的是 teachingClassId + scheduleItemId；runId 要我们自己生成，但要能关联这些，防止同一节次多次开课。合班以 teachingClassId 为准，参与者字段要最小化。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我试着收敛到 6 类：\n1) RunCreated（runId、teachingClassId、scheduleItemId、operator=teacher）\n2) StepActivated（stepId、stepType、expectedDuration）\n3) TaskPublished（taskId、targetGroup）\n4) SubmissionReceived（taskId、countIncrement，别带学生）\n5) StepCompleted（actualDuration、completionReason）\n6) RunEnded（endReason）\n分组变更我没放，怕太细。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就加一个 GroupingUpdated：groupingId、version、groupCount、ruleType（随机/手动/按名单）。任务发布带 groupingVersion。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：教师端点“开始环节/发布任务”是命令；服务端校验通过后发出事实事件，比如 StepActivated、TaskPublished。学生端提交也是命令，服务端落库后发 SubmissionReceived。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“至少一次投递 + 消费者幂等”。幂等键：\n- 教师命令：commandId（端生成）+ runId\n- 学生提交：submissionClientId（端生成）+ taskId\n顺序：同一 runId 下按 stepSeq 或 serverAssignedSeq 排。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段我先列一个最小版：\n- eventId、eventType、runId、seq、occurredAt、receivedAt、source（teacher/student/system）、actorRole、payload、schemaVersion、traceId\npayload 里每个事件有各自字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "学生侧我就不带 actorId，最多带 role=student；教师侧带 operatorId。这个会不会被质疑“为什么教师能记录、学生不记录”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 事件驱动这块我们会有 runId、teacher 操作、学生提交计数、分组版本之类。你帮我定一下：哪些字段算敏感、怎么分级、留存多久、审计要留哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那事件里 traceId、ip 这类算 P1？我本来想都放，方便排障。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。那我回去跟导师把字段拆成“业务事件”和“审计日志”两条。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据治理给的口径是：学生个人标识不采；教师账号、IP、设备这类算 P1，留存 180 天且访问要审批；runId/环节/计数/耗时/错误码算 P2，可留到 365 天。并且建议业务事件流别带 IP/deviceId，把这些放网关/审计日志里，用 traceId 关联。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定版是：\n- 状态机在服务端，端上只发命令、收状态，离线时缓存命令并补发；\n- 事件分两层：业务事实事件（P2为主）走事件总线；审计/访问日志（含P1）走独立日志域，通过 traceId 关联；\n- 可靠性约束三条：1）同一 runId 服务端分配单调 seq，消费按 seq 驱动状态；2）至少一次投递，所有消费者按 (eventId 或 commandId) 做幂等；3）离线/弱网场景允许重放命令，但服务端用状态机校验拒绝非法跃迁并返回明确错误码（比如 INVALID_STATE）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

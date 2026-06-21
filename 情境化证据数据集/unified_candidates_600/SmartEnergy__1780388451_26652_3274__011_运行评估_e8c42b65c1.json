@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户围绕储荷微态协控与碳迹溯配引擎上线部署验证，与导师持续讨论切流策略与数据验证口径（5轮），并在切流编排与长连接状态保持议题上与运维交付工程师沟通（1轮）、在溯配积分误差的统计验证口径议题上与能效审计师沟通（1轮），最终形成金丝雀发布方案与A/B分桶假设检验验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "火焰图那块锁争用降下来了，我想赶紧发版。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切流就蓝绿部署吧，老实例留着，新实例起起来，网关切过去。验证口径就盯大盘的QPS和错误率，没暴涨就全量切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "蓝绿部署切流这块，储荷协控引擎上线有没有什么特别要注意的？我怕切流瞬间断连。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "金丝雀按Region切，这我能在K8s里配标签搞定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上线后验证溯配积分误差，我打算对比前后两个版本的平均误差，降了就算成功，行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "分桶对比，置信区间？这我只会写Python拉两组数据算平均数，假设检验得现找库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去翻一下SciPy的文档，照着t检验的例子写个验证脚本，明天把它套到数据校验流里。这样能行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署用金丝雀，按Region切5%起，心跳超时1%回滚。验证这块，A/B分桶跑，用t检验算P值和置信区间，P值小于0.05才算真降了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

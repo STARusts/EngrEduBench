@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在V0初筛验收通过后推进V1特征工程与训练验证背景下，用户与导师围绕样本单位/标签代理真值、质量门控继承、特征维度约束与验证指标口径持续沟通（10轮），其中在特征集与基线模型/分组验证部分与算法工程师沟通（3轮），在诱捕器计数与虫情等级映射及事件时间戳口径部分与农业植保顾问沟通（2轮），并确定半日标签+5分钟特征窗、GroupKFold与Recall@FPR5%等可执行清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就用边缘那5分钟滑窗的score当label不就行了？直接训练个二分类，赶紧出模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有虫子就报警了啊，报警就是正样本。没报警就是负样本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "样本就一条消息吧，一条msg就是一条。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "差不多吧。那就T=6小时，窗口5分钟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在要做V1，特征怎么搞？给个快的方案，别太复杂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分位数、相关系数这些都要？我感觉直接把VOC均值喂进去就行了，越快越好。还有GroupKFold我没用过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就最小集合。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值计数我随便定个5行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加权我会，直接class_weight。对照表我去催一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 他说用树模型快，特征做VOC均值+斜率+标准差，再加温湿均值，别的先不管。验证要按棚分组，不要乱切。标签用未来6小时诱捕器计数超过阈值当正。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "指标就AUC吧，AUC高就行。0.9够了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Recall@FPR5%我没算过。PR-AUC我知道。提前量怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差不多。阈值扫描就for循环一遍分数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "40维够了。我就做每通道3个统计量，再加温湿两三个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把门控不过的样本删了不就行了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "计数我加个counter就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业植保顾问 诱捕器计数多少算有虫情？事件时间戳按啥算，快说个能用的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "半日标签也太粗了吧，我还想分钟级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，半日就半日。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 他说用半日累计计数，>=10再加虫情等级>=2算正；<3且等级<=1算负，中间都丢。事件时间戳用半日结束时间。还说先别混作物虫种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就先把半日label映射上，然后训个LightGBM把指标算出来。要是Recall上不去我再加特征。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

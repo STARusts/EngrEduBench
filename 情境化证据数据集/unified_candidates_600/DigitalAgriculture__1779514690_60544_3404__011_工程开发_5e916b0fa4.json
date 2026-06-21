@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在软硬协同联调背景下，用户与导师围绕增氧机对冲指令下发逻辑的防抖防重发与过期处理持续沟通（6轮），其中在幂等与防抖定义部分与控制接口定义专家沟通（1轮），在网络延迟与乱序测试部分与联调测试工程师沟通（1轮），并最终形成包含指令ID、幂等比对、冷却窗口拦截及过期丢弃回传NACK的下发模块修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接写个判断呗，预测溶氧低于3就发开机指令，高于5就发关机指令。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个sleep？开起来后等两分钟再判断关？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "溶氧对冲下发指令，怎么防抖防重发？我原来想加sleep的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加个ID，再搞个冷却期。幂等就是状态一样就丢掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "堵了5秒肯定不能执行了啊。但我怎么知道它堵没堵？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要测指令过期丢弃，怎么模拟网络延迟和乱序包？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用tc命令加延迟，然后看时间戳差值，超时打日志丢掉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指令结构加ID和时间戳，网关做幂等和冷却判断，超时的丢掉回NACK。我这就去改下发模块。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

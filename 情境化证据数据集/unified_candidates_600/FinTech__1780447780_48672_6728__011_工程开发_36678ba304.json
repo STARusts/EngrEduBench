@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在阻截动作联调测试背景下，用户与导师围绕防污染、幂等校验、异常注入、数据合规及验收标准持续沟通（7轮），其中在边界违约场景构造与防污染机制部分与联调测试攻坚手沟通（2轮），并最终形成影子账本防污染、状态机幂等、异常注入测补偿方案及三项联调验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试不重复扣款，加个唯一请求ID就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻截动作联调怎么构造边界违约场景？还有怎么保证不污染真实账务？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态机拦截幂等这个我得改下引擎代码。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "半写异常具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要就是搞个影子账本防污染，然后引擎那边加个状态机做幂等，再注入点异常测补偿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就直接从库里导了一部分数据出来，没想那么多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收标准就是：第一，影子账本写入成功且核心库无变更；第二，并发重试阻截动作，状态机拦截无重复执行；第三，半写异常后补偿机制触发成功。这三点过了就算联调通过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

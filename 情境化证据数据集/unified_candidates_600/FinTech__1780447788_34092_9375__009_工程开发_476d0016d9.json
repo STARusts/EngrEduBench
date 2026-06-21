@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在传染推演算法封装与压测验证背景下与导师围绕架构取舍、算法选型及压测约束落实持续沟通（5轮），其中在图算法优化部分与图算法工程师沟通（1轮），在压测工具与数据构造部分与联调测试工程师沟通（1轮），并最终形成单机算法封装、微基准与接口压测、全字段脱敏及审计保真等约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得光JGraphT封装不够，为了压测时体现高并发优势，我准备引入Redis做图计算的中间状态缓存，再用Kafka把推演任务异步化。压测直接上JMeter分布式脚本，模拟10万并发违约事件冲击。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加Kafka了。但Redis缓存中间状态我觉得还是有必要的，不然每次推演都重新加载图数据太慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用JGraphT做内存计算封装，推演违约传染时，多跳查询和中心性计算怎么搞能快点？我不想用简单BFS，想用Pregel模型做自定义顶点计算，扩展性更好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备搞压测，用Gatling写脚本注入异常，搞全链路追踪。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法这边，不用Pregel，直接用JGraphT遍历和最短路径，加衰减系数防计算爆炸，封装解耦。压测这边，分两步：JMH测微基准，JMeter测接口。数据按沙箱造，要脱敏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "衰减系数我设个0.8默认值，后续再调。脱敏就把姓名和身份证替换成随机字符串。审计流水号压测时生成个假UUID塞进去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "衰减系数需要做对照实验校准，不能拍脑袋。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "脱敏范围扩大到金额和机构关系。审计流水号按线上规则生成。我按这四条去推封装和压测脚本：1.算法用JGraphT原生遍历加衰减系数；2.压测JMH加JMeter；3.全字段脱敏；4.审计流水号保真。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

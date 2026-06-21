@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在动态光流追踪算子开发背景下，用户与导师围绕算子实现路径、核心约束及验收指标持续沟通（7轮），其中在NeRF架构下光流算子核心约束部分与算法工程师沟通（1轮），并最终形成基于深度约束与辐射场联动的三步实现计划及两项客观验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步先把光流算子的接口写好，第二步接入RAFT预训练模型跑通，第三步再针对咱们的NeRF数据做微调。大概按这三步走。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心矛盾就是动起来会糊。RAFT不是效果挺好的吗，直接套应该能对付一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们NeRF架构下的动态光流算子有什么核心约束？直接用2D的RAFT行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，先写一个深度约束模块，把Depth Buffer的数据导进来做粗光流；第二步，把粗光流塞进NeRF里做辐射场精调；第三步，写个脚本测一下遮挡边界和闪烁。我负责把这三步排进迭代日历，跟前端和渲染那边的接口对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标我还没细想。是不是看画面糊不糊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标准指标有EPE，就是端点误差。结合深度约束的话，是不是再加一个遮挡边界的误差率？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "算子开发第一步写深度引导的粗光流提取模块，验收看深度约束下的EPE和时序体密度方差。我这就去更新开发看板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

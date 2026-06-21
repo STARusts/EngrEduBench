@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在导学路径推送异常归因背景下，用户与导师围绕异常原因定位与降级预案修复持续沟通（9轮），其中在特征数据拉取与配置可行性验证部分与运行监控分析师沟通（2轮），在用户实际反馈核对部分与体验迭代规划师沟通（1轮），并最终形成跳帧期间微表情通道未熔断的归因结论及跳帧联动降级修复方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先查查推荐模块的日志？看看是不是推荐算法出bug了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "靠情感微变捕捉。所以是情感识别错了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征输入有啥问题没？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用户那边怎么说的？路径乱跳他们啥反应？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是跳帧导致特征方差大，图谱引擎乱重构。用户投诉说被误判迷茫强制降维了。所以要把跳帧修好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上一轮说置信度低于0.6就降级，只取行为特征。可能跳帧时置信度没降下来，还是用了微表情？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论就是跳帧时微表情置信度假高，没触发降级，导致图谱输入乱跳。我们要改降级条件，加上跳帧状态判断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CPU负载超80%跳帧的时候，直接把微表情置信度强制置零？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因是跳帧期间微表情通道未熔断，修复是跳帧时走弱光降级逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跳帧期间暂停微表情通道，只留行为特征，现有监控配置能支持这种联动吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控那边说能配，挂个联动动作就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

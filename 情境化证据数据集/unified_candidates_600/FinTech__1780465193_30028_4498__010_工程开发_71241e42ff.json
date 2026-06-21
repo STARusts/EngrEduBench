@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在汇损异常注入边界测试背景下，用户与导师围绕极端行情下的整型溢出修复、非法入参拦截与降级熔断策略持续沟通（6轮），其中在注入用例对齐与溢出及熔断风险反馈部分与交易链路测试员沟通（4轮），并最终形成前置拦截防溢出、非法值转降级及熔断记录失效标记的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个try-catch呗，抓异常返回0，不循环了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以加个拦截器，入参进计算前，把Infinity和NaN直接挡掉，转成降级标识。这样后面就不会算出乱数了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "熔断吧，省事。误差大概就是0吧，都不交易了还有啥误差。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "比例溢出我换成Math.absExact，抛异常就转降级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

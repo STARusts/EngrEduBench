@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在拟态调度系统灰度部署背景下，用户与导师围绕切流逻辑、监控指标、统计显著性验证及误伤率红线持续沟通（6轮），其中在监控配置与A/B Test部分与运维监控工程师沟通（1轮），在动态切流与攻击注入部分与拟态重构调度工程师沟通（1轮），并最终形成包含动态切流、效应量计算与误伤率回滚的灰度方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看Istio的VirtualService配权重切流特方便，直接套这个把调度模块切到线上可以吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控这块怎么配？有没有那种可以直接Import的Grafana JSON？我想看重构是不是正常。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度这边灰度切流怎么搞？有没有SDK我直接调一下就能按标签分流？我不想手写分流逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按反演置信度动态切流，看重构时延和误报率，还要做A/B Test算显著性。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看Python里scipy.stats.ttest_ind直接算p值特别快，p值小于0.05就说明有效呗？网上很多人这么搞。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "效应量我确实没概念，平时都是调包出p值就完事了。误伤率上限我也没想过，以为监控不报警就行。这统计原理我底子太差了，光靠调包搞不定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "自己写个Python脚本算出来，替换掉现在只算p值的逻辑。误伤率红线我定在0.1%，超过就自动回滚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度方案就是：按反演置信度动态切流，注入模拟攻击验证；监控看重构时延P99、误报率和隐遁失效比；A/B组对比不仅算p值，必须算效应量Cohen's d；误伤率超0.1%回滚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

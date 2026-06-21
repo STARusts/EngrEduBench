@@ -1,0 +1,522 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在体域网共形织入引擎需求与战略背景下，用户与导师围绕高动态微域通信痛点挖掘、重连时延阈值验证及短板弥补持续沟通（7轮），其中在场景与根因对齐部分与痛点分析师沟通（1轮），并最终形成共形形变致拓扑裂解与多模态异步致窄带冲撞两个核心痛点假设及状态机验证学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高动态微域就是人在动嘛，信令断续就是因为信号不好，容易丢包。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动态微域下的通信受限和信令断续，具体是怎么回事？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "皮肤拉扯导致节点位置变了，拓扑就裂了；然后各种数据采样快慢不一样，挤在一起就堵了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现有重连太慢了吧，影响肯定大，生命体征监测不能断太久。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设重连时延必须在100毫秒内？不然心电数据就接不上了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对皮肤形变怎么影响射频特性这块完全没概念，协议栈重连机制也不熟。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我下周去查柔性射频的论文，搞懂形变和频偏的关系，再看两篇体域网MAC层快速重连的协议文档，两周内把重连状态机流程画出来，用这个来验证100毫秒到底够不够。"
+              }
+            ]
+          },
+          {
+            "microScene": "在共形体域网立项背景下，用户与导师围绕合规与可行性边界持续沟通（6轮），其中在合规对商业模式卡点部分与商业架构师沟通（1轮），在隐私红线划定部分与安全隐私官沟通（1轮），并最终形成表皮共形与端侧脱敏的战略约束边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "射频辐射肯定有标准，SAR值得卡死。信令流转，得加密吧，不能明文传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业架构师 共形体域网织入这事儿，合规对商业模式的卡点具体在哪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全隐私官 隐私这块红线怎么划？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "植入式审查太慢，商业走不通；信令出域前必须脱敏，这是底线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "皮下算植入，审查周期长，成本高，我们这种项目回本太慢。做表皮共形也能验证形变裂解和多模态冲撞这两个痛点，没必要非得搞皮下找不痛快。脱敏是出域必须做的，不然违法。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在生化信令流转商业模式规划背景下与导师围绕脱敏信令变现逻辑与首发模式选择持续沟通（6轮），其中在变现路径与最小验证设计部分与商业架构师沟通（1轮），在首位金主与付费意愿判断部分与痛点分析师沟通（1轮），并最终确立B2B2C健康险赋能首发模式及最小验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们可以搞数据服务费，按调用量收钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏了确实不好卖原文件。但总归是有用的吧，就收点基础订阅费？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这项目端侧脱敏了，原始数据不出域，这种信令流转怎么搞商业模式？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得B2C个人订阅比较好吧？直接面向消费者，来钱快，也不用跟险企扯皮。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱敏信令流这东西，谁最愿意掏钱？个人用户好像不太靠谱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对健康险这块没概念，之前判断错了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我们引擎对外的流转接口先按险企的标准留好扩展位，免得后面对接不上。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在体域网共形织入方案设计背景下，用户与导师围绕拓扑架构选型与算力约束持续沟通（8轮），其中在共形织入物理约束下的拓扑选型部分与拓扑规划师沟通（1轮），在网状拓扑下微节点算力与脱敏特征提取部分与信令路由专家沟通（1轮），并最终放弃星型与动态分簇，确定冗余网状拓扑与算力解耦方案，计划补齐形变建模。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就画个星型拓扑呗，所有传感器连手机，手机当中心节点"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@拓扑规划师 星型拓扑在共形织入下是不是不行？该用啥拓扑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选A，曲率感知听着牛，动态分簇肯定比静态好。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没验证。曲率感知这块怎么算我都没搞懂，我得去补课。这两天我去翻两篇IEEE 802.15.6的体域网形变建模文档，自己推一下曲率到拓扑映射的公式，不然重选开销我估不出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@信令路由专家 网状拓扑下端侧算脱敏特征行不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "微节点只传切片，汇聚节点算特征和转发。那就选B网状拓扑，算力放汇聚节点。"
+              }
+            ]
+          },
+          {
+            "microScene": "在体域网信令流转路由与寻优机制设计背景下，用户与导师围绕路由核心诉求与设计约束持续沟通（6轮），其中在路由度量与寻优设计部分与信令路由专家沟通（1轮），在物理层指标上报与合规部分与近场通信工程师沟通（1轮），并最终形成前瞻路由、脱敏枚举、缓存丢弃与占空比适配四条设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得就用最短路径跳呗，或者泛洪广播，保证能到汇聚节点就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心诉求就是能传到，还不费电。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这流转引擎的路由度量怎么搞？怎么把紧迫度和链路稳定性结合做寻优？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要跨层，看时延敏感度和存活时间。还要有丢弃策略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "物理层能给网络层啥指标做预测？还不能加开销。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "物理层给信号和误码率的滤波值，但要脱敏成枚举。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策点就是，第一，路由度量看优先级和链路预测；第二，物理层指标要滤波再给路由层；第三，缓存满了就丢低优先级的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，前瞻路由、脱敏枚举、缓存丢弃、占空比适配。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在近场抗扰传输与接口规约设计背景下与导师围绕体表抗扰机制与微帧规约持续沟通（4轮），其中在极近场抗扰与微帧格式部分与近场通信工程师沟通（1轮），在跨域接口安全与隐私部分与安全隐私官沟通（1轮），最终确认分集主跳频辅、2字节帧头CBOR、掩码对齐与轻量双认证的规约。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "好办，传输受干扰就加大发射功率，把信号怼强就行了。接口规约就统一用JSON，通用又好解析。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "体表遮挡干扰大，加功率行不行？不行的话咋抗扰？接口规约定JSON可以吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域接口规约怎么定？安全上要注意啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通信专家说不能加功率，得用分集加跳频，接口用CBOR。安全专家说接口要字段掩码，还要双向认证。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得跳频为主吧，跳频听着高级，频率换来换去肯定抗扰好。帧头就按标准CBOR格式来呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，分集主跳频辅，自定义2字节帧头CBOR，跨域掩码对齐，轻量双认证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在体域网容灾与隐私安全评估设计背景下，用户与导师围绕容灾接管机制、冲刷策略、隐私加密选型、差分隐私加噪与精度平衡及容灾验证指标持续沟通（7轮），其中在极低功耗下容灾接管与隐私流转路径部分与安全隐私官沟通（1轮），并最终在导师纠正下形成包含拓扑接力暂存、动态假名加CP-ABE、差分隐私加噪及容灾验证指标的底线方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得最简单的就是加个备用节点防掉线，数据传输全用AES加密，肯定安全。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，功耗不够。那就先在本地存着？加密换轻量级的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "体域网节点掉线容灾怎么做？极低功耗下隐私加密选什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冲刷就覆盖旧的呗。策略对齐，我不太确定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差分隐私！对对，我看了，就是加噪嘛。我觉得可以加到信令流转里，保护隐私。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "精度就稍微加点噪，应该影响不大吧。验证就测节点掉线率？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "差分隐私加噪阈值设0.5，容灾测恢复时延和数据缺损率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看论文里大概就这数。上限，1秒吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "都记下了。拓扑接力暂存，异常优先，动态假名，加噪阈值要联合实验，时延小于500毫秒。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在体域网引擎开发期敲定协议栈与编解码背景下，与导师围绕选型避坑、异常信令优先机制、时延验证与约束持续沟通（11轮），其中在微节点协议栈与微帧编解码落地部分与嵌入式开发师沟通（1轮），最终确定802.15.6与CBOR方案、对照测试步骤及先画帧结构再写代码的开发动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就想直接拿现成的BLE协议栈改改，编解码用ProtoBuf，省事而且大家都熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在要做协议栈和编解码，极近场低功耗，还要支持异常信令优先，怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "映射，就，直接加在前面？中断抢占我不太懂怎么写，时延我也没算过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺802.15.6帧结构细节，还有CBOR怎么跟硬件中断配合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚看802.15.6协议文档里的帧头定义，再把CBOR编解码库的源码过一遍，找找中断回调接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可以先写个测试用例跑一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照测试？就是，裸机跑一遍，加上协议栈跑一遍，看差多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写在解码回调函数里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先画帧结构，定义掩码，然后再写代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发流转调度与联调测试背景下，用户与导师围绕调度引擎自适应寻优机制与联调数据脱敏合规持续沟通（6轮），其中在寻优流控与底层链路联动部分与调度引擎开发师沟通（1轮），在联调数据脱敏与端侧模拟部分与测试联调员沟通（1轮），并最终形成滑动窗口平滑LQI、降级阈值区间、位图环缓冲及CRC加盐脱敏的基线方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备直接弄个发送队列，把信令塞进去发就行。联调的话，我随便造点数据测测通不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "寻优就是挑个好路发呗。数据合规我加个密码？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优流控怎么跟底层链路状态联动？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调数据脱敏和端侧模拟怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻优靠听底层LQI和能量，低了就降级只发核心。脱敏用合成数据加偏移，日志不打明文。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值就定50吧。偏移我就加个随机数。队列隔离我弄两个链表，一个核心一个非核心。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那阈值改成150？脱敏用SHA256哈希。抢占结构我不加锁，直接轮询。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在近场抗扰性能优化与除错背景下，与导师围绕干扰应对、FEC取舍及自适应除错策略持续沟通（7轮），其中在极近场抗扰手段部分与近场通信工程师沟通（1轮），在微节点算力与除错工具部分与嵌入式开发师沟通（1轮），并最终形成基于LQI与底噪双控的FEC自适应机制及跳频逃逸除错策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢包的话，最直接就是多发几次，或者把发射功率拉满？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "近场干扰怎么搞，重传和拉功率都不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就跳频加FEC一起上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FEC是不是更省信道占用？那就只加FEC？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微节点能跑FEC吗？我想加个纠错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前补过一篇讲射频底噪寄存器直出的文章，当时配置没看懂，但思路是不是能借过来？直接读物理层底噪寄存器，比看MAC层日志快得多，还能区分是宽带冲击还是窄带干扰。这样不用盲目加FEC，除错也能精准点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用上一步定的平滑LQI。LQI低于150，强制开汉明码；在150到180预警区间，只在底噪寄存器报窄带干扰的时隙开；高于180就不开，省算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "宽带冲击就先不纠错了，直接触发跳频逃逸？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 编解码用轻量汉明码；2. FEC开关由平滑LQI和底噪寄存器双控，低LQI必开，高LQI关，预警区间看干扰类型；3. 除错先读底噪寄存器抓特征，区分窄带和宽带；4. 遇宽带冲击触发跳频逃逸。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在体域网流转引擎部署上线与入网验证背景下，用户与导师围绕验证量化指标、统计检验有效性及底噪除错策略持续沟通（7轮），其中在入网验证指标阈值部分与部署运维官沟通（1轮），在上线初期有效性验证与数据分析部分与态势监控员沟通（1轮），并反思实验设计盲区制定补学计划，最终确立入网验收红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备把节点贴上去，看能不能连上网，连上就算验证通过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "节点贴附后，入网验证具体看哪些指标？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上线初期我们要怎么分析数据才能证明流转引擎是有效的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维说CCI低于0.6不让入网，时延超50ms退避；监控说要搞同体对照T检验看断续率，95%置信区间，还要看底噪分布。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控员直接给的，我觉得挺有道理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P值不显著就，就再多跑几组人加样本量呗。底噪寄存器就是除错的抓手嘛，有底噪就读特征除错。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂统计检验和实验设计，这块我搞砸了。我接下来一周每天花1小时补学《实验设计与方差分析》，把对照原则和混杂因素控制搞懂，明天先拿入网数据试跑一次ANOVA看看效应量。"
+              }
+            ]
+          },
+          {
+            "microScene": "在节点入网后信令流转稳定性评估背景下，用户与导师围绕流转态势监控指标、端侧溯源字段及断续归因处置逻辑持续沟通（4轮），其中在流转断续溯源与看板指标部分与态势监控员沟通（1轮），并最终形成流转监控指标体系及基于归因的处置红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "盯流转成功率吧，断了就去溯源。入网都过了，流转应该大差不差。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查哪个寄存器我还真没想好，得找人确认下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流转断续的时候端侧溯源抓哪几个字段？态势看板盯啥指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "盯流转完成率、时延抖动和重路由频次。溯源抓上一跳ID、时标离散度和信道占用状态位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时标离散度大就校准呗，被抢占就重路由。处理思路不都一样嘛。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估复盘信令断续潮背景下，用户与导师围绕跨频逃逸合规告警与重传明文违规问题及红线修订持续沟通（7轮），其中在合规底线确认部分与安全隐私官沟通（1轮），在合规约束下路由调整与防死循环部分与信令路由专家沟通（1轮），并最终形成逃逸前置探规、重传轻量加密、失败降级与暂存上送的红线修订结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可是按红线执行的话，信道占用置1就得逃逸啊，不逃就断了。合规告警是频谱那边太严了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "当时信道都挤了，重传肯定是怎么快怎么来吧，没顾上加密。那这确实有点问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨频逃逸占了医疗频段，重传也没加密，这合规底线怎么卡？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就加个条件，逃逸前看看是不是医疗频段，是的话就不逃了。重传也加个加密。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在逃逸不能占医疗频段，重传必须加密，但加密耗时会导致死循环，这路由怎么调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "探规失败就强制休眠节点，暂存溢出就覆盖最旧数据？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在近场能耗与流转延迟度量背景下与导师围绕降级保底信道的开销度量、基线设定与告警阈值持续沟通（6轮），其中在降级单播功耗模型部分与近场通信工程师沟通（1轮），在延迟抖动度量口径部分与态势监控员沟通（1轮），并最终形成降级态度量基线与阈值策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "平均数不太行。那就看最大值？延迟最大不能超过多少来着？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级单播的时候，功耗模型是啥样的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "延迟抖动怎么看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级信道功耗高千倍，延迟看P99和方差，方差很大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "5%的降级率，续航跌破24小时。这肯定不行，贴皮节点换电池太麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就是正常共形流转的状态。降级时候的功耗和延迟，不能超过基线太多，不然电池受不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "允许功耗上浮，上浮个10倍？P99延迟，长尾到50毫秒？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "记下了，基线正常态，降级功耗10倍，P99延迟50ms，方差5倍。超限就得修。"
+              }
+            ]
+          },
+          {
+            "microScene": "在基线超限寻优迭代规划背景下，用户与导师围绕迭代策略、反馈信号、实验设计及参数调节优先级持续沟通（8轮），其中在迭代路线与失效边界部分与迭代规划师沟通（2轮），并形成三档迭代策略、方差变化率反馈、单链路适用边界及优先上线主逻辑的约束总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "功耗和延迟超了，就触发调整。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "基线超限后，寻优策略的迭代路线怎么规划？现在只有功耗和延迟的阈值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这种实验设计我之前确实搞砸过，没控制好变量。我记个学习日志，找测试联调员要一下故障注入脚本，把隔离注入那套迁移到现在的评估流程里，至少能看清单链路和多节点的数据差异。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "步长我想定0.1毫瓦，太小了调不过来，太大了容易震荡。还有衰减因子，0.99还是0.999？这个得好好测测，选错了方差压不住。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主逻辑没跑起来扣这些细节没用。那就先上线这三档策略，步长先用默认0.1，大盘跑起来再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，寻优分三档：微扰、路由、重构；第二，反馈信号用滑动窗口的方差变化率；第三，当前策略只管单链路，多节点并发不能外推；第四，复现基线必须用注入式故障模拟器做隔离。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

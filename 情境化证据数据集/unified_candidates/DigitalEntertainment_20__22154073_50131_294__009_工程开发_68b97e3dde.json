@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在控台链路联调与仿真回放开发背景下，用户与导师围绕统一播放时钟、录制回放设计、抖动注入与三条路径验收持续沟通（6轮），其中在回放时钟喂给Scheduler与可重复抖动/丢包注入方案上与实时系统工程师沟通（3轮），并产出最小闭环方案与6条联调用例规格。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉最危险的是时间基准不一致：仿真回放用的timecode、Scheduler用的单调时钟、协议层还有自己的lead_ms。再加上seek会让旧事件残留，虽然有transport_epoch，但我担心回放录制里会把epoch也录进去，导致回放时复现不了“当时为什么丢弃”。\n另一个点是degraded_mode帧化25ms，如果回放文件本身粒度更细，就会出现“回放比实时更精确”，联调看起来就假好看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时系统工程师 回放/仿真这块我准备做成“可控时钟源 + 事件录制 + seek回放”。Scheduler现在靠单调时钟tick。你建议回放模式下怎么喂时钟最稳：是改Scheduler支持外部clock，还是在外面做time dilation把事件timecode映射到单调时钟？另外，想稳定复现晚到/丢弃/压缩，你会怎么注入抖动、时延突刺、丢包，指标口径怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在纠结：录制到底录“输入事件(timecode)”还是录“输出事件(send_at/协议payload)”？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕自己又过度设计了：同时搞两套回放会膨胀。那我先按你说的功能回放走，输出录制只做接口占位。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抖动模型这块，我能不能先不用Gilbert-Elliott，先做“突刺+均匀抖动+p丢包”，把seed固定，然后用三组参数覆盖三条路径？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我选最小闭环是：  \n1）时钟口径：回放模式引入playhead，把回放timecode从单调时钟delta映射出来；Scheduler仍用单调时钟tick，不改核心。seek时++transport_epoch，并重置playhead base。  \n2）录制字段：只录输入事件：`event_id、timecode、priority、protocol、payload_ref`，外加录制时的`track_id`和一个`seed`用于仿真参数复现；不录send_at。  \n3）抖动注入点：在Dispatcher最终执行send之前包一层SimTransport，负责delay/jitter/spike/drop，且随机seed固定，参数通过测试注入。  \n4）验收：跑三组场景，检查日志摘要字段里`request_id、event_id、execute_at、late_ms、action`，action期望分别出现`EXECUTE_LATE`（或类似）、`DROP_LATE`、`COMPRESS_FRAME`三类，且seek后旧epoch事件不会再执行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "payload我可以直接录payload bytes，或者录一个小型字典表：同一段里重复payload用hash去重，回放文件自包含。就是我担心IO成本，然后又想搞压缩格式。  \naction枚举我这边实现的是`EXECUTE/DROP/COMPRESS`，late是通过`late_ms>0`体现，不单独一条action。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我给回放模式加个“严格模式”：一旦`MISSING_PAYLOAD`直接失败，这样测试环境能逼出buffer上限问题；现场联调则默认非严格，至少时序策略还能测。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我之前确实想把“所有上下文”都打进回放方便复盘。那我收敛一下：回放记录里不放用户名和设备序列号，只保留`request_id`随机生成，必要的审计另走审计通道，不跟仿真文件混。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）回放时钟：给定seed和rate=1x，回放同一录制文件，`execute_at`单调域偏差不超过±5ms（不含注入延迟）。  \n2）seek隔离：回放进行中seek到更早timecode，旧epoch未执行的事件不得在新epoch执行，日志里同event_id若出现两次，必须epoch不同且第一次后续不再有执行。  \n3）晚到路径：配置`late_tolerance=20ms`，注入突刺使late_ms落在(1..20]ms范围，期望action=EXECUTE且late_ms>0。  \n4）丢弃路径：同上但突刺使late_ms≥30ms，期望action=DROP且无协议发送计数增长。  \n5）压缩路径：启用degraded_mode=25ms，rate=2x制造积压，期望出现action=COMPRESS，且最终协议发送节拍接近25ms。  \n6）日志约束：实时线程只写摘要字段到环形buffer，后台线程落盘；测试中不得出现实时线程构造JSON的调用点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

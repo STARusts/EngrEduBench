@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在星栈云原生电竞观赛编排系统的方案设计背景下，用户与导师围绕多视角直播总架构分层、接口边界与验收口径持续沟通（9轮），其中在切换时延定义、观测点与常见坑的验收设计上与媒体链路工程师沟通（3轮），并形成六层架构、四组接口关键字段补全、验收指标与成本降级策略的口头收束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "总图就是很多路直播，然后观众点一下就切，最好不卡。再加点数据层，比分啥的盖上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点…摄像头到推流，再到平台，再到用户播放器？中间可能有导播。切换就是播放器换地址。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集就是进来，处理就是转一下码，分发就是发到CDN，播放就是播。数据叠加就是把比分放上去。编排控制就是……配置页面？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口…一个是拿直播流的，一个是拿数据的，一个是互动的，一个是管理的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先试试。A里字段：userId、matchId、device。行为：进房间、切视角。B字段：cameraId、url、清晰度。行为：拉列表、拿url。C字段：score、time、player。行为：订阅、取消。D字段：activityId、startTime、endTime。行为：开始活动、结束活动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@媒体链路工程师 多视角切换时延要怎么定义？验收要看啥点？坑有哪些？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是看首帧时间，然后要打点。坑就是关键帧和鉴权慢，还有参数不一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收就是P50、P95，然后失败率。还有要有四个观测点打点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "A加sessionId、traceId。B加viewId、viewType。C加ts时间戳、seq序号。D加gray灰度、audience人群。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "平台这边判定，编排系统给列表，前端只展示，不自己算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采集层把各个机位和解说的流进来。处理层把每路变成可播的多档清晰度。分发层把各个视角发出去，保证用户能就近拿到。播放层在端上拿到视角列表，点了就切到对应的播放地址。数据叠加层走一条实时数据通道，把比分和时间戳对齐到视频上。编排控制层给出“哪些视角+用哪套叠加模板+哪个时间点出互动”，还要能让切换失败回到主视角。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "默认就只开主视角？需要的人再点开别的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，三条：热门预热、冷门按需、压力就只主视角低码率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

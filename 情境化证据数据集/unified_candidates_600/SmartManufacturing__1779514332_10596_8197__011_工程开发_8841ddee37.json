@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发指令异常注入攻防演练背景下，用户与导师围绕语义级异常变种指令构造、测试边界与验收指标持续沟通（5轮），其中在变异策略与测试边界部分与安全测试与攻防专家沟通（2轮），并最终形成基于Boofuzz的三类变种测试方案及99.5%拦截率验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么构造那种格式合法但意图恶意的工控指令？还有测试边界怎么看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "0xFFFF越界，功能码06值超限，时序乱，权限跃迁。我就测这三类是吧？5000个样本用Fuzzing跑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚查了下Boofuzz的文档，它那个数据结构描述原语可以用来定义Modbus字段，我刚好能把这个移植到咱们的解析引擎单元测试里，以前我都是手写case，现在直接用它的变异生成器喂数据，效率高不少。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得只要解析引擎抛异常或者返回拦截，就算成功。没拦住的就是漏报。具体多少过关，我拿不准，5%行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演练就测越界、时序乱、权限跃迁三类变种。用Boofuzz生成变异报文喂给解析引擎，跑5000个样本。拦截率底线99.5%，不能崩溃。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改单元测试脚本，把Boofuzz接进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在栅格更新渲染优化背景下，用户与导师围绕渲染方案选择与性能验证持续沟通（4轮），其中在Draw Call瓶颈与GPU渲染方案部分与视觉感知开发者沟通（2轮），并最终形成基于Compute Shader的最小原型对比测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想在CPU端加多线程，把栅格切分给不同线程算，然后用八叉树把视野外的裁掉再渲染。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "锁开销大不了用读写锁。渲染就正常画呗，反正裁完剩下的也不多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用CPU多线程加八叉树裁剪来优化栅格渲染，你觉得这路子行得通吗？还是非得用GPU？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Compute Shader我以前没写过，开发周期可能拉得挺长。有没有那种稍微简单点，不用动图形管线也能提速的办法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "十万级确实会到。专家说必须上Compute Shader，不然Draw Call太多顶不住。但我没写过这东西，怕写出来全是Bug调不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个最小原型，造十万个体素，一半状态随机变，分别跑CPU多线程和Compute Shader，对比耗时。只要GPU端耗时能降到5毫秒以内，我就全转Shader。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估配调吞吐下降与延迟飙升背景下，用户与导师围绕性能瓶颈定位与分级下发策略持续沟通（5轮），其中在瓶颈定位与攒批权衡部分与性能优化攻坚手沟通（2轮），在延迟容忍度确认部分与微配调产品经理沟通（1轮），并形成按材质价值分流的边缘端分级下发策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看监控了，微配调服务那块CPU占用挺高的，是不是得加节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底卡计算还是卡IO？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改成批量发送是不是就行了？把结果攒一攒再发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改成攒批能解决，但会增加边缘内存和延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固废配调下发都能攒批吗？延迟容忍度一样吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特种金属不能攒，必须秒级。普通废料可以攒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在边缘端加个路由逻辑？识解出来如果是特种金属，直接单条下发；普通的就丢内存里攒批。不过这样边缘端内存占用会变大，得加个上限，满了就强制发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘端按识解标签分流：高价值/危废走实时单条通道，P99<1s；普通固废走攒批通道，batch size 50或时间窗3s，优先保证吞吐；内存超限则触发强制下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

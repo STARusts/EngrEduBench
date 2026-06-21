@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课堂提示链路压测与低延迟优化背景下，用户与导师围绕端到端延迟拆链路、指标口径、压测场景、打点字段、优化优先级与合规门禁持续沟通（10轮），其中在课堂事件流建模/弱网回放与trace分段设计上与测试工程师沟通（2轮），在SLI/SLO设定与trace采样及normal/gap区分上与观测与SRE沟通（2轮），并收敛压测方案、观测打点与验收改动清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端到端延迟我理解是事件进来，到前端卡片出来。压测…是不是就一直发事件？我不太确定要怎么模拟课堂，怕测出来不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜后端汇聚那里？因为要写审计链，还要算策略。还有前端有2秒缺口缓冲，本身就会加延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标…P95延迟？还有吞吐。然后丢包率？端侧CPU占用也算吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块，课堂事件流要怎么模拟才像真的？还有trace_id怎么串延迟分段看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "弱网那里“断网30秒补发”会把pending队列打爆吧？我们之前说pending只存最小字段，不存敏感内容。那补发时怎么保证还能追踪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听起来要加很多时间戳点，我担心前端现在只有event_id、audit_chain_id这些展示字段，时间戳要改动不少。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主要采纳事件类型比例+45分钟结构，还有断网补发。分段延迟我也想要，但我不确定端侧能不能加 `t0_capture`，我这块不熟端侧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@观测与SRE 端到端延迟这块，SLI/SLO一般怎么定？trace_id全量打点会不会把日志撑爆，怎么采样比较合理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SLO我怕定800ms会不会太理想。前端有2秒缺口缓冲，岂不是天然就会到2秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测场景：45分钟模型，事件类型按语音要点多、翻页中、答题突发、设备心跳低。加弱网：50-300ms抖动，1-5%丢包，断网30秒补发。\n打点：t1_ingest/t2_dispatch/t3_recv/t4_render，trace_id串起来。\n优化改动…我想到的是：后端队列别堆，前端flush策略可能要调？我不太会写验收口径。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选B和C。A我不太敢碰。\nB验收：在压测回放里，frontend_latency的P95下降？还有卡片渲染不要掉帧。\nC验收：仪表盘能分normal/gap，两条都有P95，采样能看到完整trace。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调试入口只有有权限的人能开；trace和日志里不放原始音视频，也不把学生标识当指标标签。pending队列仍只存 event_id/class_session_id/dispatch_seq/trace_id/created_at 这些最小字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第3条SLO数字我不确定是不是要再调，但我先按这个验收用。能立刻做的是前端那边渲染批处理和把normal/gap分开上报，其他的我得找后端和端侧配合。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧多端播放与决策接口方案设计背景下，用户与导师围绕摘要字段边界、预取语义、会话与幂等、错误码与合规裁剪持续对齐并收敛最小接口集合（9轮），其中在端上预取目标与choiceWindow契约上与播放端负责人沟通（2轮），在最小披露与审计信息返回策略上与合规与内容审核沟通（1轮），并最终确认Bootstrap/GetNodeSummary/CommitChoice的接口边界与最小验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会按“播放态接口”和“决策态接口”拆。播放态负责端上拿到可播放的“当前节点内容 + 可选分支”；决策态负责端上提交选择、换取下一段要播的节点。还有个基础能力是“摘要获取”，给端上做预取和 UI 展示用，但摘要不带分片索引，只给到节点级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版字段草图，你看方向对不对。  \n1）GetEpisodeBootstrap：入参 episodeId、clientType、appVersion、channel(stable/canary)、region、ageGateFlag、userAnonId(可空)。出参：entryNodeId、policy（比如可否互动、是否强制登录）、rootSummary（节点级摘要）。  \n2）GetNodeSummary：入参 nodeId、deviceCapabilities(比如是否支持 HDR/杜比)、netHint（强弱网提示）。出参：nodeMeta（时长、标题）、variants（清晰度/语言可用性）、choices（分支选项列表，含 choiceId、文案、倒计时/是否可跳过）。  \n3）CommitChoice：入参 sessionId、nodeId、choiceId、clientTs、playheadMs。出参 nextNodeId、nextSummary（用于预取）、decisionToken（幂等/防重）。  \n\n一致性我倾向“服务端出裁剪后的 choices”，端上不再本地做规则判断，只做展示和提交。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，得分层。摘要我定义成“轻量可缓存”，用于：1）提前展示下一步选项和封面；2）让端上决定要不要提前拉取下一节点的 manifest/首段。  \n预取语义我倾向两级：  \n- level=0：不预取，只拿摘要  \n- level=1：允许预取下一节点的 manifest + 首个媒体片段（但我们不做分片索引，所以只给“首段”概念，具体由播放端按 HLS/DASH 自己实现）  \n真正预取什么，端上自决；服务端只给“建议”和“边界”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "建议依据主要是“节点切换是否硬切”、“节点资产体积”和“互动窗口时长”。比如互动窗口很短、切换必须秒开，那服务端建议 level=1。端上如果不听，体验差但不影响正确性；正确性靠 CommitChoice 决定 nextNodeId，端上预取只是性能优化。为了可控性，我觉得要加两个约束：  \n- 服务端能下发 maxPrefetchBytes 或 maxPrefetchNodes=1，防止端上贪预取  \n- 端上回传实际预取行为（prefetchLevelApplied、prefetchBytes、prefetchHit），后面评估"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "会话我倾向在 Bootstrap 时发一个 playbackSessionId，绑定 episodeId + userAnonId（没登录也能有匿名）。CommitChoice 带这个 id。  \ndecisionToken 用来做幂等：同一 nodeId + choiceId + token 多次提交返回同一 nextNodeId，避免端上重试导致分叉。过期时间可以短一点，比如 10 分钟，跨端续播就重新 Bootstrap 生成新的 session，但服务端能用 userAnonId 做“上次节点”提示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放端负责人 端上看接口时，摘要层我们打算只给“节点级信息 + choices”，不携带分片索引。预取语义服务端只下发 level(0/1) + maxPrefetchBytes/Nodes，端上自己决定拉 manifest/首段。你们能落地吗？需要更明确的字段吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "choiceWindow 这个我同意放进 summary。prefetchTarget 枚举我担心太细会变成又在指导端实现，但你说得对，至少要避免双方语义不一致。我们能不能折中：  \n- server 下发 prefetchHint：{level, targetHint}，targetHint 只分 “manifestOnly” 和 “playableUnit”，不说具体分片。端上把 playableUnit 映射到 init+firstSeg。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小集合我建议 3 个接口 + 统一错误码：  \nA. Bootstrap：返回 playbackSessionId、entryNodeId、channel、compliance剪裁结果（比如 removedChoiceIds 或 reason=age/region）。  \nB. GetNodeSummary：返回 nodeMeta、choiceWindow（startMs/endMs/timeoutChoiceId）、choices（已裁剪）、prefetchHint（level+targetHint+maxBytes+maxNodes）、nextNodeMediaKey（可空，只有在可预测下一节点时给，比如 timeout 的默认路径）。  \nC. CommitChoice：入参 sessionId/nodeId/choiceId/clientTs/playheadMs；出参 nextNodeId、nextNodeMediaKey、nextSummaryDigest（用于缓存校验）、decisionToken。  \n错误码分三类：可重试（network/timeout）、需重拉摘要（choiceExpired/summaryStale）、需重启会话（sessionInvalid）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容审核 接口里如果因为地域/年龄剪裁了分支选项，我们是只返回裁剪后的 choices，还是需要返回被裁剪的标识/原因？担心暴露被屏蔽内容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把 removedChoiceIds 去掉，只保留 policyFlag + userFacingHintCode（比如 CHOICE_UNAVAILABLE_GENERIC）。审计关联我们在服务端日志里打 auditId，端上不需要拿到。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我定边界：  \n- Summary 只含：nodeId、nodeMeta（时长/标题/封面key）、choiceWindow、choices（文案+choiceId+展示样式）、prefetchHint、summaryDigest（版本校验）。不含任何媒体 URL、分片信息。  \n- MediaResolve（可以是现有播放器的取流接口，不在我们这次新造轮子）：输入 nodeId + variantKey + authContext，输出 manifestUrl/license 等。我们在 CommitChoice 返回 nextNodeMediaKey，方便端上直接走取流。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我提两个验证：  \n1）对照实验：同一集选几个高频切换点，prefetchHint=0/1 两组比较“分支切换首帧时间、卡顿率、互动放弃率”。不引入端/地区矩阵，只在 stable/canary 做。  \n2）回传闭环：端上回传 prefetchApplied/prefetchHit，算“建议命中率”和“浪费下载占比”，如果浪费太高就调 maxPrefetchBytes 或把 level=1 只用于硬切节点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这 5 条我都认。唯一补一句：CommitChoice 出参带 nextNodeMediaKey，端上能直接走取流，减少一次往返。其他按你这版走。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

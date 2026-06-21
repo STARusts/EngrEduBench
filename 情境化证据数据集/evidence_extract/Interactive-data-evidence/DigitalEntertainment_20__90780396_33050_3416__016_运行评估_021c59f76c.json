@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在玩法改动后二次灰度的运行评估背景下，用户与导师围绕玩法迭代数据闭环的指标分组、假设验收、分桶对照与判定动作持续沟通（8轮），其中在指标口径与可用字段/合规关联上与数据工程师沟通（4轮），在最小体验反馈闭环设计上与用户研究员沟通（2轮），并形成可执行的闭环清单与通过/不通过分支处理逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先盯 timeout 率、互动成功率，还有端到端延迟的 P95？分组就按 room_id 和版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是 epoch mismatch 拦了以后 timeout 会下降。late 不拦就不会影响参与率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 现在二次灰度要做玩法迭代闭环。timeout 口径你们怎么定义的？参与率和玩法配置版本字段现在能打出来吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那现在闭环是不是就做不完整了？没有 rule_rev 就没法按玩法配置分。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "参与率分母是曝光到入口的人，这个曝光事件现在稳定吗？我怕漏。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认下，你说的体验层 timeout 是客户端自己判 6s，那跟链路层 5s 不一样，会不会对不上？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据工程师说 timeout 有链路层5s和体验层6s两套。玩法配置版本 rule_rev 埋点还没全量，有 feature_flag_rev 可以替代，再用编排日志离线按 room_id+时间窗+flag_rev 聚合关联，别拼单用户轨迹。参与率分母最好双口径：曝光入口 vs 进房停留>10s。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主假设1：硬拦 epoch mismatch 后，链路层 timeout 率会降。阈值…降 30%？\n主假设2：late 不硬拦，参与率不下降。阈值…参与率变化小于 1%？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对照组就用上一轮灰度的版本？还是同一时间不同 bucket？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就 90/10 分桶？跑 24 小时。排除项是特殊活动房间？主要看链路层 timeout、互动提交成功率、参与率两个口径、还有降级触发率。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我漏了。加上 epoch mismatch 命中率、late_ratio 的 P50/P95。还有按网络档位分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户研究员 二次灰度想做最小的体验反馈闭环，不做大访谈。你建议怎么收集，关注点放哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "问卷只对完成互动的人弹，那“没完成的人”不就看不到了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 用户研究员给了最小闭环：两题问卷只对完成互动的人弹；行为指标看重复点击率、触发互动后30s退房率；再看投诉关键词聚合。说阈值先做对照差异，不先定死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）二次灰度同时间分桶（90/10），周期 24 小时，按 room_id 聚合看。\n2）核心指标：链路层 timeout（5s无 ack）、互动提交成功率、参与率（入口曝光口径+停留>10s口径）。\n3）缺口指标补齐验收：epoch mismatch 命中率、late_ratio P50/P95，且按网络档位/端类型/是否降级分组。\n4）体验补充：重复点击率、触发互动后30s退房率；完成互动人群弹2题问卷。\n5）玩法配置维度：先用 feature_flag_rev 分组，rule_rev 只做编排日志到 room_id+时间窗+flag_rev 的聚合关联。\n6）合规护栏：不拼单用户轨迹，只出聚合；明细按之前说的 72 小时和审批导出。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通过：timeout 下去，参与率两个口径不掉，重复点击/退房不升，那就扩大灰度比例。\n不通过A：timeout 没下去或 epoch mismatch 命中率没变，那就回查拦截是否生效、是不是还有别的 timeout 原因。\n不通过B：timeout 下了但参与率掉或重复点击上，那就说明 late 不拦可能带来体验问题，要考虑调整 late 的提示或软限制？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

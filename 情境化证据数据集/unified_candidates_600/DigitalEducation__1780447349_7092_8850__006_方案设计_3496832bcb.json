@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在实验数据多级缓存与流转背景下，与导师围绕数据物理分级、跨域流转机制及合规边界持续沟通（7轮），其中在热温冷数据分布与流转协议部分与云原生架构师沟通（1轮），在跨域流转数据红线与脱敏要求部分与数据合规审核员沟通（1轮），并最终形成包含物理分级、脱敏流转及涉密数据本地归档的数据流转决策点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Redis做缓存？或者挂个NFS？之前我们项目都是直接传到OSS。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧，就沙箱本地存一份？然后异步推到中心？中间层我不太懂怎么加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实验数据多级缓存怎么设计，热温冷怎么分，跨域怎么传？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件我还没细看。合规，加个HTTPS加密传不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域传实验数据，加密传合规吗？有什么红线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来不能全传。得先脱敏，涉密的只能留本地。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策点：1. 物理分级：热（沙箱本地）、温（区域池）、冷（中心存储）；2. 跨域流转只推脱敏后的温/冷数据，用异步加断点续传；3. 涉密和个人隐私数据红线，禁止出域，仅本地冷归档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

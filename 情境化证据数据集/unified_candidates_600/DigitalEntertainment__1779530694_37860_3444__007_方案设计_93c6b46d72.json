@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在隐态情感数据安全与隔离方案设计背景下，用户与导师围绕数据隔离、跨端同步、对抗验证及差分隐私持续沟通（5轮），其中在合规红线部分与合规与隐私官沟通（1轮），在对抗实验设计部分与AI安全攻防工程师沟通（1轮），并最终形成包含逻辑隔离、密态信封、硬剪枝、红蓝对抗验证及差分加噪防推断的收尾约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "敏感字段入库前AES加密，查的时候再解。然后隐态情感库和普通行为库分两个库存。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "隐态情感数据隔离，只做物理分库和AES加密够吗？跨端同步怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规官说不能只分库，得用租户密钥封装，跨端走密态信封，还有解除羁绊时要真剪枝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧落地，我猜是端上不解密，直接推密文给渲染？验证的话，就跑几条坏数据试试看能不能改状态机。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "隔离机制怎么测？导师说要变量控制和对照组。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "注入词做自变量，状态机偏移做因变量。对照组裸跑，实验组开隔离。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "以前我只知道加解密，现在觉得加噪也是一种隔离。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是可以在隐态情感特征提取时加拉普拉斯噪声？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "epsilon我还没算过，先设个0.1试试？保真度那边可以看状态机的震荡方差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "逻辑隔离、密态信封、硬剪枝、红蓝对抗验证带对照组、差分加噪防推断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

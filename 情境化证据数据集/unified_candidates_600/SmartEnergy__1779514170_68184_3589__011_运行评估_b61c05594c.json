@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在并网交付验证背景下与导师围绕并网合规红线、统计验证方法与死区热冲击防范持续沟通（5轮），其中在合规验收与灰度验证部分与并网交付验证师沟通（2轮），在死区防冲击与前馈控制部分与并网交付验证师沟通（1轮），并最终形成MPC前馈衰减防冲击策略与灰度统计验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我打算直接把余热侧接口切到市政管网跑真实流量，看数据通不通就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不是有缓冲罐吗？而且我压测时MPC 10分钟就能拉回温度，这还不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "市政并网到底卡在哪？温差波动允许多少？我们系统MPC响应挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测时我就看了MPC轨迹，没注意出口方差。那这方差怎么算？我就看曲线好像有点抖。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我平时就写调度逻辑，统计这块真不懂。那这方差得用啥算？我自己写个Python脚本算滑动窗口行吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块完全是黑盒。我得定个目标：这周末把KS检验原理和极值理论的Python实现搞懂，下周用真实灰度数据跑一遍，出个合规报告。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "死区这3秒怎么防？换热器出口阀门直接快关能行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力任务队列我本来就有监控，我可以在MPC决策前加个钩子，把预计降载的算力份额转成阀门开度斜率。这就能把死区冲击吃掉了！"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这就去改MPC的钩子逻辑，加前馈衰减。统计那块我周末补课，灰度数据出来我先用笨办法算极值，再对齐合规要求。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

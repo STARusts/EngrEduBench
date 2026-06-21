@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在频谱续传跨域接口规范设计背景下与导师围绕时延预算、序列化协议、通道隔离、安全校验与异常降级持续沟通（8轮），其中在时延红线与编解码、通道隔离、校验折中及降级信令节点与波束流控设计师沟通（5轮），并形成定长二进制、双通道隔离、纳秒时戳96位HMAC及降级码的规范要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了下现在主流微服务都用gRPC，是不是直接拿gRPC套一下就行？现成工具多，生成代码也快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "gRPC底层不是ProtoBuf吗，据说挺快的。应该，差不多吧？如果不行，我加点缓存队列行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域接口时延红线是多少？gRPC的ProtoBuf能过吗？不能过的话有没有现成的高性能框架推荐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那岂不是要自己写编解码器？好麻烦。TLV格式我以前用过一种开源库，能不能直接搬过来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "复用吧？省端口听起来挺好的，而且我可以用个现成的多路复用器，像Selector那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这加解密不更慢了吗？有没有那种硬件加速的现成模块可以直接调？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这折中太难打了。时戳精度微秒级？HMAC截断，我看过网上的做法，截断到64位？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那接口规范是不是就按：定长二进制、逻辑隔离双通道、纳秒时戳加96位截断HMAC来写？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "降级信令？这个我确实没想过。断联了就发个特殊码？比如全0？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Fallback Code定0xA5A5，超时触发降级走旁路。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

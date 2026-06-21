@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估期流失踪损侦测与告警背景下，与导师围绕侦测架构取舍、合规与稳定性冲突及告警分级策略持续沟通（5轮），其中在轻量化侦测与防风暴部分与运行监控SRE沟通（1轮），在危废流失零容忍与留痕部分与环规合规审计师沟通（1轮），并最终形成基于现有AlertManager的分级告警与回灌验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "物料流失踪损是个时空图演进过程，异常往往不是单指标超限，而是图结构上的关联突变。我打算引入Flink CEP做复杂事件处理，配合Drools规则引擎，当演进图上的边权重或者节点聚集度发生异常模式时实时拦截。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我正想用Flink CEP做流失踪损的复杂事件侦测，你觉得这个方向对路吗？还是说有更轻量的做法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SRE建议用动态基线容忍毛刺，但流失踪损如果涉及危废组分，这种容忍会不会导致微量流失被平滑掉？合规上有什么硬要求？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SRE要动态基线防风暴保可用，合规要静态阈值零容忍还要快照留痕，这俩完全反着来。我有个折中方案：搞个双轨规则引擎。一条轨走Flink接合规的硬规则，保证低延迟和快照触发；另一条轨走Prometheus接SRE的软规则做动态基线。中间用Kafka解耦，互不干扰。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用AlertManager的路由分组来做。把告警分两级：涉危组分流失用静态绝对阈值，触发P0告警，同时通过Webhook异步触发快照写入；非涉危的物料演进偏差用动态基线，触发P1告警，走常规收敛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "动态基线我打算用Prometheus内置的`deriv`函数算短时变化率，配合3-sigma模型。验证方式是：我把历史离线跑批时出现过的几次真实流失异常数据回灌到测试环境的Prometheus里，看动态基线能不能在3个采样窗口内识别出偏离。如果不行，我再手工调缩放因子。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去写AlertManager的路由配置和快照触发的Webhook接口，动态基线的回灌验证脚本也一并准备。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

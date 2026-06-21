@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在作业证据链方案设计背景下，用户与导师围绕可信时间戳口径、端签/服务端签取舍与验收约束持续沟通（8轮），其中在密钥轮转、抗重放与离线补传解释策略上与安全工程师沟通（3轮），并形成时间字段口径+分级双层签名+TSA按需启用的策略要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是“这条证据到底什么时候发生的”，另一个是“是不是这个人/这个设备发的”。我脑子里就想到用现成的时间戳服务+签名套件，感觉很多系统都这么做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间上可能是：学生说“我按时交了”，老师说“系统里显示晚了”；还有离线缓存一堆，补传的时候时间会乱。身份上就是代交、代写，或者家长手机替孩子点了提交。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏服务端接收时间？因为端上时间能改。端上时间就当参考。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可以留两个字段：client_time和server_time，然后用server_time做排序？但督学看板上又要体现“实际完成时间”，不然学生会说冤。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户端采集时间、服务端接收时间、还有……证据入链时间？就是写进证据链存储那一下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端签吧，感觉更“原始证据”。服务端再签一遍也行？我不确定是不是会太重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 我们作业证据链这块要做可信时间戳和签名。端上会离线补传。你给个能落地的签名策略：端签要不要做、服务端要不要再签；密钥怎么管和轮转；还有重放、补传时间怎么解释比较站得住？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端签只签关键事件这点我能接受，不然我怕SDK太复杂。设备级密钥是每个安装实例一对？那换手机就变了，督学会不会觉得不连贯。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可信时间戳你说“附加可信时间戳”，这是不是要接第三方TSA？不接行不行？我看很多产品就用服务器时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 安全那边建议是：双层签名但分级。关键事件才端签（提交、附件hash、批改结论、申诉/撤回），普通行为不端签。端签用设备级密钥，不搞用户私钥长期放手机；用户身份靠登录态+服务端把account和device绑起来。服务端对规范化事件再签一次，并把服务端接收时间当平台确认时间。离线补传就保留client_time做声明时间，但默认排序/认定用server_time；看板可以两条一起显示。第三方TSA不默认上，只有进入申诉且争议大才按需盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把 action_instance_id、client_seq、device_id 放进去，再加事件内容hash？这样别人拿旧包重放，服务端能用action_instance_id去重；而且签名覆盖这些字段，改了就验不过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主字段就 server_received_at。client_time只是展示用或做辅助统计，但要标注“端声明”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）任何EvidenceEvent落库后，event_hash固定，后续改字段会导致服务端签名校验失败；2）server_received_at来自统一授时，记录时间漂移告警，有漂移就标记该时间段证据为风险；3）端签关键事件能在审计里验证来源设备公钥链路有效（没过期或在验证期）。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基本没问题。我就担心端签把 client_collected_at 放进去会不会导致离线补传时“时间不准”也被签死，然后反而解释不清。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我后面写评审材料时，就按你这五条写，别再加一堆花活。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

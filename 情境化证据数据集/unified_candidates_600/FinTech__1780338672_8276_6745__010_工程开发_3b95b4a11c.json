@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在跨机构风控联合建模的隐私求交实现背景下，与导师围绕PSI算法选型、底层实现稳定性及包装层设计持续沟通（5轮），其中在千万级ID求交性能与方案选型部分与隐私计算专家沟通（1轮），并最终敲定基于Emp-tool的KKRT方案及简化版Orchestrator，输出交集哈希供Merkle Tree构建。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "普通的基于哈希的PSI不够安全。我准备引入全同态加密（FHE）来做PSI，这样不仅能求交，还能在求交的同时做后续的特征加密计算，一步到位。而且为了通用，我想抽象一个基于FHE的隐私计算中间层，以后加新算法不用改上层。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "理论上FHE是慢一点，但我可以加GPU加速，而且只对求交后的部分做FHE运算。我觉得为了架构的扩展性，这点性能牺牲是值得的，以后我们要做更复杂的隐匿计算就不用改底层了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在千万级数据的PSI，主流方案性能到底怎么样？FHE真的不可用吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FHE确实太重了，做纯求交用KKRT更合理。不过KKRT的实现挺复杂的，我准备自己基于底层的OT协议手写一套，这样可以把哈希函数和OT实例的管理做得更精细，方便后续调优。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开源库封装太黑盒了，万一有内存泄漏或者通信瓶颈不好排查。自己写的话出问题我能直接改源码。不过既然你强调稳定性，那我就用Emp-tool里的KKRT实现。但我得包装一层，搞一个PSI-Orchestrator，把多方连接管理、断点续传、结果验证全塞进去，不然太单薄了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心实现就是调用它的两方PSI接口，输入是本地ID列表和对方传来的OBVF数据。输出就是交集ID的哈希集合。这个哈希集合会作为Merkle Tree的叶子节点，生成Root后推给PrivacyAnchor合约做验证。断点续传和多方扩展先不写，Orchestrator只保留连接管理和基础异常重试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

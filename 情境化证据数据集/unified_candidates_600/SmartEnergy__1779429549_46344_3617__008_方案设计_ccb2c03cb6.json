@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在MPC策略定调后的极端工况容灾设计背景下，与导师围绕边缘侧保底逻辑选型与故障注入验证方案持续沟通（8轮），其中在断感知断网下的降级模式与硬线联控机制部分与高可用保障架构师沟通（5轮），并最终形成边缘侧FSM降级保底与硬线安全阀兜底的容灾架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全挂了？那就停机呗，或者让现场值班员手动关阀门。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容灾我不太熟，就是做主备切换吗？双网关？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "深井温压传感如果全断，网关也挂了，MPC没输入，系统怎么弄？做双机热备能行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘侧自己搞一套控制逻辑？那不是跟MPC冲突了？我写边缘侧逻辑最怕状态不同步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘侧写复杂控制逻辑太容易出bug了。能不能断网时直接把阀门锁死在当前位置？这最安全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近在看一种轻量级的嵌入式规则引擎，类似Rete算法那种，我想着能不能把合规硬约束的回灌率下限写进去，当MPC断连时触发这套规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规则引擎跑起来吃内存。那就用最简单的状态机？就三个状态：正常MPC模式，降级本地模式，全手动模式。降级模式里直接查常量。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么验证这玩意儿真管用？总不能真去现场拔网线吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以写个脚本，在测试环境里随机杀掉传感进程，或者断开网关和云端的连接。看边缘侧是不是能在规定时间内，比如2秒，切到降级模式，并且回灌率输出是不是合规下限值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是断网时长和断网位置。位置分传感断、网关断、云端断。时长就模拟短时闪断和长时宕机。看边缘侧状态机切过去能不能切回来，不震荡就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我得跟硬件厂商确认阀门单作用类型，气开还是气关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "容灾方案：1. 主控MPC，心跳监测；2. 超时切边缘FSM降级，输出合规下限回灌率；3. 边缘也死则靠硬线阀门失电跳最大回灌；4. 验证用故障注入，变量是断网位置和时长，看状态切换和恢复不震荡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

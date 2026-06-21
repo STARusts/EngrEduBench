@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在爬坡寻优与调峰接口设计背景下，用户与导师围绕电网指令与熔断硬边界冲突、柔性降级速率及极限验证持续沟通（7轮），其中在拒动合规依据部分与安全合规官沟通（1轮），在带硬约束寻优与接口状态码部分与寻优调度引擎师沟通（1轮），并最终形成MPC硬约束寻优、三状态接口、拒动审计及极限注入验证的方案定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定听电网的啊，不然要被罚。寻优用粒子群或者MPC，接口照着IEC61850套一下就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就把超限的指令砍掉？算法里加个if判断。接口就返回个错误码呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规官 如果电网指令超了熔断线，我直接拒动，安监那边能认吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@寻优调度引擎师 那算法上咋整？既不能超限，又不能直接拒动挨罚。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，我看了个“柔性降级响应”的概念。是不是把爬坡速率降一半就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "懂了，不是拍脑袋降一半，是把MPC算出来的当前最大允许速率作为降额爬坡的值返回给电网。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自变量是指令斜率和余压，因变量是求解延迟。必须测出求解不超时的边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 算法选MPC，热力包络做硬约束；2. 接口三状态：全量、降额（按MPC算出的最大速率）、熔断拒动；3. 拒动必须带审计日志；4. 验证做极限指令注入，测求解延迟边界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

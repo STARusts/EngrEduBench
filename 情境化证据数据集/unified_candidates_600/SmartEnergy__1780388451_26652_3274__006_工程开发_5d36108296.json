@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在储荷微态协控与碳迹溯配引擎工程开发背景下，用户与导师围绕边端协议解析方案、延迟预算、时标对齐及性能压测方法持续沟通（6轮），其中在解析时间预算与时标对齐部分与数据链路专家沟通（1轮），在防粘包与零拷贝技术部分与边缘端开发工程师沟通（1轮），并最终确定接入解析模块的五项开发要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先写个解析网关，把下面各种RTU和智能电表的协议统一转成内部标准JSON，再推给后面的协控和碳迹模块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "报文头我用工厂模式拆，校验位按各协议规范写死。序列化的话，我改用Protobuf代替JSON，省带宽。延迟预算我还没细算，几十毫秒总够了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端协议解析的时间预算大概能分多少？还有设备时钟不同步，时间戳怎么对齐？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算就按网关打标来写，零拷贝我之前用过Netty的DirectBuffer，应该能搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在本机发点压测包，看看日志里打印的耗时呗，如果都在50以内就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会模拟边端网络抖动。我去找几个边缘压测的开源工具看看，比如用ghz或者wrk改改？我今晚先跑通一个，把命令记下来，明天用到CI脚本里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 报文解析用零拷贝和防粘包处理；2. 时间戳统一在网关接入层打标，忽略设备时钟；3. 序列化改用Protobuf；4. 性能验证用边端专用压测工具，延迟卡口50毫秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

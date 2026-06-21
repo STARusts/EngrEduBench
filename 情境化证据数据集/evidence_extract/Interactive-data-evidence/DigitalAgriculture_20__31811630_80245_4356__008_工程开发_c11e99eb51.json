@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在基因适配作物处方平台工程开发背景下，用户与导师围绕地块画像服务的最小特征集、时间窗增量计算、质量追溯回滚、分区支持与合规成本持续对齐并收敛口径（10轮），其中在数据模型主键分区键、版本血缘与读性能优化上与数据架构师沟通并确定窄表+快照方案（4轮），最终形成画像服务落地的五条硬口径与三周交付拆解。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周要把【地块画像与特征工程】这块真正写起来：先落地一版“地块画像服务”的特征计算和存储口径，保证后面处方生成能稳定吃到同一套特征。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在的想法是分三层：静态（边界、面积、土壤类型）、准静态（历史作物轮作、地力等级、排灌条件）、动态（近7/30天微气候、遥感指数、传感器聚合）。实现上先做离线批处理为主，动态特征先按天汇总，别一上来搞分钟级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拆成几个可落地的特征族，先不追求全：  \n- Geometry：area_ha、perimeter、shape_index、slope_mean（如果有DEM）。  \n- Soil：soil_texture_class、soil_om、ph、ec、bulk_density（缺的就空）。  \n- Water：irrigation_type、distance_to_water、drainage_level（先用人工录入枚举）。  \n- WeatherAgg：gdd_30d、rain_30d、tmin_7d、vpd_7d_mean。  \n- RemoteSensing：ndvi_p95_30d、ndwi_p95_30d、bare_soil_frac。  \n- History：crop_rotation_3y、yield_p50_3y（有历史才算）。  \n然后在画像里派生三个“业务评分”先做可解释规则：potential_score、drought_risk_score、workability_score。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "同意，那我把评分拿掉，画像只输出原子特征与窗口定义。时间窗我准备统一用 feature_window 字段，比如 “P30D ending@YYYY-MM-DD”，动态特征都挂这个窗口，静态就 window=null。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分区先不做自动划分，我想先支持“地块-分区”两级实体：zone 可以是人工画的，也可以后续接算法分区。画像计算时支持按 zone_id 聚合遥感/传感器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 地块画像这块我在落地：需要“地块/分区画像”特征表的建模建议。你给我一个最小可用的表结构、主键/分区键、特征版本与血缘字段怎么设计？还要考虑动态特征按时间窗增量刷新。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这个“窄表”会导致一次查画像要 join/聚合很多行，我担心接口响应慢。我们处方生成会批量拉很多地块。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "动态特征的增量刷新，source_set_id 怎么定？比如遥感 NDVI 是按景、按tile来的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。我还想加一个字段 `value_confidence`，对插值或缺测填补有区分。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去跟导师对齐：画像服务写窄表，读侧做 snapshot。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把数据架构师的建议吸收了一版：核心是“实体维表 + 特征窄表 + 元数据 + 来源集合”。我倾向于按这个落地，另外为了处方批量读取快，在画像服务侧维护一张 `snapshot_feature_wide`（按 feature_set_version + window_end），里面放常用特征的 json_blob，写入由窄表聚合生成。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）feature_set_version 我准备按“接口契约版本”来：比如 v1 只包含 20 个核心特征，v2 再扩展。版本号写死在服务配置里，对应一组 feature_name 列表。  \n2）触发条件：按 window_end 每天跑一次动态特征；静态/准静态在 dim 表 update_time 或 geom_hash 变化时触发重算；另外 source_set_id 有新批次也触发对应窗口重算。  \n3）验算：我想做两层：  \n- 单元测试：每个特征算子有固定输入样例和期望输出（尤其是单位换算、缺失处理）。  \n- 数据质量：运行时做 expected_range、null_policy 校验，超界打 value_quality_flag=INVALID 并写 missing_reason；同时记录 lineage_id 方便追查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加一个回归集：选 50 个地块、3 个时间窗（近7/30/90天），把当前产出的特征快照和上一版本（或上周）对比，设阈值：  \n- 数值型：相对变化 > 30% 且 source_set 未变则报警；  \n- 枚举型：除非人工录入批次变更，否则不应变化；  \n- 几何派生：geom_hash 不变则 area_ha 不变。  \n这样能抓到“代码改了口径但没升级 feature_version”的事故。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "snapshot_feature_wide 我只存 window_end 在近 180 天的；更老的只保窄表里“必要粒度”的聚合特征（比如月级），细粒度的遥感日值不保留。对外导出的画像默认只给聚合值，不给明细时间序列，减少泄露面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。geom 只在 dim_plot 表，画像返回默认不给 geom 字段，除非带 `include_geom=true` 且权限通过；日志里我只打 plot_id、feature_set_version、lineage_id，不打坐标。审计留痕走现有权限服务的 request_id 串起来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我分三步交付：  \n- 第1周：dim_plot/dim_zone + fact_feature_value 的写入通路跑通，先做 8 个最关键特征（area_ha、soil_texture_class、ph、gdd_30d、rain_30d、ndvi_p95_30d、crop_rotation_3y、yield_p50_3y）。  \n- 第2周：补齐元数据表 meta_feature_def、quality 校验、lineage/source_set；上线 snapshot_feature_wide 的聚合任务。  \n- 第3周：扩展特征到 v1 的 20 个，并把回归集阈值和报警接到测试流水线里。  \n我会把“新增特征”都走 meta_feature_def 注册，否则不让写入。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我复述下最终口径，没问题我就按这个写：  \n1）画像数据模型：dim_plot/dim_zone + fact_feature_value(窄表) + meta_feature_def + meta_source_set；特征主键含 entity、feature_name、window、feature_version。  \n2）动态特征统一用 window_start/window_end 表达；静态特征 window 为空；geom_hash 变更触发相关重算。  \n3）读性能：画像服务维护 snapshot_feature_wide，按 feature_set_version + window_end 产出 json_blob；仅保近180天快照，历史做更粗粒度聚合。  \n4）质量与追溯：expected_range/null_policy 校验、value_quality_flag、missing_reason；lineage_id + source_set_id 保证可复现；回归集做跨版本/跨周对照，source_set 不变而数值大幅变化就告警。  \n5）合规默认：不回传 geom；include_geom 需权限；日志不落坐标，只串 request_id/lineage_id。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

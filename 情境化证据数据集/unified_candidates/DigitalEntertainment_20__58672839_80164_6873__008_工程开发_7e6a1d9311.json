@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动选择与后端状态机实现背景下，用户与导师围绕接口字段、状态定义/转移、幂等并发与断网重连方案持续沟通（13轮），其中在去重键/并发更新/返回码落地上与后端负责人沟通（3轮），在重复提交与并发双击及节点关闭瞬间用例设计上与测试负责人沟通（1轮），并形成POST/GET接口与表结构及最小测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我怕…它一会儿说选过了，一会儿又能选。然后观众就骂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…userId，选项id，场次id？还有票码？我不确定要不要都带。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防重复？就是点两次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没开始、在选、选完了、结束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…观众点了就触发吧。剧情事件我没搞过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 去重键咋搞？并发更新咋写？返回码给哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这`clientSeq`要是乱了咋办？他改一下不就绕过去了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我返回`DUPLICATE`还是`OK`？前端要不要区分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问了。他说用唯一索引去重，状态用一张表，更新要卡住只能从CHOOSING到CHOSEN一次。返回码有NODE_NOT_OPEN、NODE_CLOSED、ALREADY_CHOSEN之类。`DUPLICATE`可以不让前端管。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "表…`user_node_state`有sessionId、nodeId、state。然后…version。`choice_submission`有dedupe_key、choiceId、时间？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先查是不是CHOOSING，不是就报错。是就写入，然后改成CHOSEN。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这步挺多…我怕我写乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查状态？给个get。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就别打印session原串，打短点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 用例怎么测重复、并发、关闭瞬间？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发那条我不会写脚本…两线程我就头大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我用两个终端curl吧，简单点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先把POST那个按你说的流程写了，再搞GET查状态。测试…我尽量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

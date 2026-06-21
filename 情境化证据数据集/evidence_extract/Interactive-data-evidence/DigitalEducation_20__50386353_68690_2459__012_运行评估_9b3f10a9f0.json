@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在端侧课堂多模态助教编排系统进入运行评估、需做灰度发布与回滚演练背景下，用户与导师围绕灰度策略、回滚触发与演练验证点及合规门禁持续沟通（7轮），其中在分流键与回滚路径设计上与DevOps工程师沟通（5轮），在灰度期SLI对照与高基数治理上与观测与SRE沟通（4轮），并形成演练版脚本要点与三方对齐分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前在SLO第3条数字上有点不确定，但先按验收口径走；我能先把前端渲染批处理那部分灰度开关接上，normal/gap分开上报也能做，回滚流程我不太敢自己拍板。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想的是按学校或班级切一点流量，比如先1%终端，再5%，再20%。但端侧设备分散，我不知道按“设备ID”切会不会踩隐私。还有“gap”我理解成卡顿间隔，但是不是还要按课堂时段分组，我没想明白。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 端侧课堂多模态助教编排系统要做灰度发布和回滚演练。端侧设备比较多，我如果按设备ID/班级切流量会不会不合规？一般怎么分流比较稳，回滚演练要验证哪些点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "桶号我能理解，就是hash分组。installation_id要是生成在端侧，那算个人信息吗？还有你说“不要存到label里”，那要怎么追到单节课的问题，之前不是还要可复现抽样trace？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我大概明白了：指标别用高基数字段当维度，trace可以有检索字段。那回滚触发阈值你给的倍数我也不确定该不该用，我们SLO第3条我本来就拿不准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "installation_id不进label、灰度用桶、回滚优先配回滚。配置回滚我可以配短TTL。制品回滚得靠MDM。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度切法：端侧按稳定桶放量，桶号是hash(installation_id)%100这种；服务端只看桶号。然后端侧版本灰度和策略配置灰度分开。回滚：先把策略配置切回last_good_config，制品回滚走MDM。触发条件我还没法定，可能用“比基线高两倍”这种。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "normal是正常渲染耗时，gap是两次渲染之间的空档？我想在灰度里看gap是不是变大，gap变大说明掉帧？但这个和端到端延迟关系我说不清。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@观测与SRE 灰度发布要做对照桶比较。我们有frontend_latency、render耗时，还准备把normal/gap分开上报。灰度期一般盯哪些SLI比较靠谱？对照怎么做，怎么避免高基数把指标存储打爆？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bucket_id也能当label？我以为也算高基数。还有“策略触发率暴涨”我不懂怎么定阈值，触发率本来就跟课型有关吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会按差分做，不用绝对值。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "步骤我理解是：先关着灰度开关，上线前确认签名和审批号；然后放1%桶看指标，再到5%、20%。但放量节奏我也不知道要不要卡一节课。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演练要点：  \n- 灰度分流：端侧用installation_id落桶，服务端按bucket_id看灰度；不使用student_id/class_id做分流或指标label。  \n- 双灰度：端侧版本灰度和策略配置灰度分离。  \n- 观测：灰度桶对照控制桶，盯崩溃率、frontend_latency P95、render耗时P95、gap P95、策略触发率差分。  \n- 触发：灰度桶相对控制桶，崩溃率上升>50%持续10分钟或frontend_latency P95上升>20%持续5分钟，先自动回滚配置；若仍不回落再停放量+考虑制品回滚。  \n- 合规门禁：调试入口控权；日志/trace不落原始音视频；指标label不含任何可识别个人的ID；trace用session_nonce做检索字段但不做指标维度，采样可复现。  \n- 回滚验证：看到config_version回到last_good_config、指标回落、端侧心跳确认；制品回滚则验证版本号回退和回退后稳定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能做的就是把前端那套批处理开关接到灰度里，然后normal/gap按你说的口径上报成分布。last_good_config我会让后端给个版本号规则，不然我自己瞎写不靠谱。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

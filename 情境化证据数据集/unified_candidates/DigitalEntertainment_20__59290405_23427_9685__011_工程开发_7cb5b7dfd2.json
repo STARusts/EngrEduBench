@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发收口的联调压测与时延优化背景下，用户与导师围绕触觉-音频链路的P95时延与漏触可回归、埋点口径/压测门禁/降级与合规持续沟通（9轮），其中在时间戳与队列/漏触分类埋点部分与触觉交互工程师沟通（3轮），在压测场景分层与指标阈值及日志采样策略部分与测试负责人沟通（2轮），并形成本周可落地的最小闭环清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜主要是三块：segment加载解包、事件调度线程切换、以及触觉驱动提交。还有音频那边如果时钟不同步，会导致我为了对齐做等待，变相增加submit latency。想做得更极致的话，我倾向上GPU timeline和全链路trace，把每个事件的关键路径都标出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在只有两点：调度器出队时间、驱动submit返回时间。口径我先按“submit返回-出队”算。missed我还没接统计，打算在播放结束时对比“应触发事件数”和“实际submit次数”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@触觉交互工程师 触觉这条链路里你们能暴露哪些时间戳？我现在只有调度出队和submit返回，感觉不够。还有队列深度/丢包原因能拿到吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`device_play_estimate_ts`不稳定的话，我是不是就不该依赖？我更想加一个硬件回读，但成本会炸。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "队列窗口你建议多少？我想搞自适应buffer，按BPM动态调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我再问测试怎么压。@测试负责人 我们现在要做联调压测与时延优化，触觉-音频这条你建议怎么设计压测场景？门禁指标怎么卡更合理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采样我有点不想做，我更想全量记录，才好分析每个事件的尾部。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解要做的最小闭环是：  \n1）埋点加`target_ts`，并把口径换成`driver_submit_ts - target_ts`的分布；同时加`queue_len/overflow`和`missed_reason`分类，missed不只看总数。  \n2）压测先三层：基线10分钟、频繁segment切换、CPU压力；每层都出P50/P95/P99和missed分布。  \n3）日志两路：门禁跑分用采样；定位模式可全量但不进指标比较。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我还是想把P95压到10ms以内，但如果要降级合并事件，我会纠结，合并会影响“触感叙事”的细节。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "触发条件我先用硬阈值：`queue_len`超过某值或`driver_block_ms`连续大于比如5ms就进入降级；降级策略先做最简单的“相邻10ms内事件合并取max强度”，同时记录`degrade_level`和`degrade_reason`。我担心不同设备的队列长度含义不同。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级判据改成：若`submit_lag_ms = driver_submit_ts - target_ts`连续K次>15ms，或者`overflow_count`增长，就提升`degrade_level`。字段我都加成可选：`submit_lag_ms`、`degrade_level`、`missed_reason`。旧版本读不到就忽略，不影响major。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想把device id全打进去方便分桶。现在看只能做匿名：用会话内随机id代替，或者hash再加盐？但盐管理我不太想碰，麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "权限开关我可以先做成开发者菜单+编译宏，只在内测包出现；审计我可能要找你们现成的日志开关系统接一下，不然我自己写肯定歪。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "落地清单我先按四块：  \n- 埋点字段：每事件必须有`target_ts, enqueue_ts, dequeue_ts, driver_submit_ts, driver_submit_ret_ts`；可选`device_play_estimate_ts`；统计字段`haptic_queue_len, overflow_count, driver_block_ms, submit_lag_ms, missed_reason, degrade_level`。  \n- 指标口径：主指标用`submit_lag_ms`的P50/P95/P99；missed按`missed_reason`分桶；segment相关看`load_fail`。  \n- 压测用例：基线10分钟；segment 5秒一切；CPU压力场景；每个场景固定同关卡包，跨设备对比“不劣化”，同设备要求P95不差、missed可回归。  \n- 降级：默认不触发；当`submit_lag_ms`连续K次>15ms或overflow增长，合并10ms窗口内事件取max强度，并记录`degrade_reason`（我先用`late/overflow`两类）。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "硬规则两句：门禁压测只允许采样（比如每秒最多N条事件），并且单次run日志上限比如50MB；定位全量必须显式开关、只针对指定`run_id/level_hash`生效，超上限自动截断并在汇总里标记“数据不完整”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构学情接入适配联调背景下，用户与导师围绕老适配层重构策略、降级方案与换算逻辑验证持续沟通（5轮），其中在适配重构与降级策略部分与数据流架构师沟通（2轮），并最终形成策略模式重构、脱敏拦截、暂存异步对账及Golden数据Diff验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着能不能直接套个流计算框架，把不同平台的接口配置抽出来，这样不用大改老代码的逻辑吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "鉴权差异这块我确实没细看。如果要动老代码，是不是得问问搞数据流的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "里面全是硬编码，我想直接套个流计算框架把配置抽出来，这种老代码一般怎么改比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级的话，是不是直接给个Fallback空返回就行了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "把老代码的硬编码拆成策略模式，不同平台用不同策略类。日志那边加脱敏拦截器，把明文ID哈希掉。降级就加暂存和异步对账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件就是接口超时或者返回异常码吧。验证换算逻辑这个我确实没想好，老代码里根本没留测试用例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略模式重构适配层，加脱敏拦截器，降级用暂存加异步对账，换算逻辑用老代码的输出做Golden数据Diff验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

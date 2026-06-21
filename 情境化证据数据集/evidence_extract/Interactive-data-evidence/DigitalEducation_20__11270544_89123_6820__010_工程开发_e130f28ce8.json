@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课堂助教多模型编排引擎的内容过滤与提示注入落地背景下，用户与导师围绕将注入检测/输出过滤/降级为引导式回答做成可测治理信号并接入调用链与单测持续沟通（8轮），其中在风险分级枚举与reason code及最小单测设计上与内容安全工程师沟通（7轮），在审计字段最小化与HMAC指纹/密钥管理边界上与合规与隐私官沟通（4轮），并形成治理结构字段、action合并排序与审计不泄露的测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它拆成两层：请求进来先做输入侧检查（注入/越权），模型返回再做输出侧过滤。然后无论触发哪种，都统一走一个治理结果结构体，里面带 `risk_level`、`action`、`degrade_mode`、`reason_codes`。引导式回答我就固定 `degrade_mode=GUIDED_HINT`，并且 response 里给空的 `assistant_text` 或者固定模板ID，不让测试去断言具体话术。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入侧：1）系统提示覆盖类，比如“忽略之前指令/你现在是老师/泄露系统prompt”；2）越权索取隐私或学校内部信息；3）让助教做与课堂无关的危险指导。输出侧：敏感词、未成年人不当内容、泄题、暴力等。action 我想至少有 `ALLOW`、`MASK`、`BLOCK`、`DEGRADE`。路由这块如果输入就判定高风险，直接跳过 primary/secondary，走 `DEGRADE` 给引导式；输出侧如果模型答得越界就 `BLOCK` 或 `MASK` 后再 `DEGRADE`。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容安全工程师 我需要最小可用的“内容过滤+提示注入”实现规格，偏工程可测：风险分级、reason code、action、以及建议的单测用例类型。课堂对话里重点是未成年人、泄题、越权指令这几类。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入注入里你说 L1 也直接 DEGRADE，会不会误伤正常提问？比如学生说“别讲概念了，直接给结论”，这算忽略指令，但不一定是攻击。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输出侧的 MASK，你说轻度敏感才 mask。手机号这种属于 PII，按你说算中高风险，那是 mask 还是 block？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我回去把 action_trace 加上，避免“mask 后又 degrade”的信息丢掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成三段：  \n1）`pre_guard(request)`：产出 `decision_in`；如果 `action` 是 `BLOCK/DEGRADE`，就直接短路返回治理响应，不进路由器。  \n2）正常走路由器选模型、调用。  \n3）`post_guard(model_output)`：产出 `decision_out`；如果要 `MASK`，做文本脱敏；如果要 `DEGRADE/BLOCK`，就覆盖输出为引导式结构。合并时取更严格的 `action_final`，并把 `reason_codes_final` 合并去重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "排序我先定：`BLOCK > DEGRADE > MASK > ALLOW`。合并时取最高优先级的当 `action_final`。但 `MASK` 和 `DEGRADE` 并存时，我想保留 `action_trace=[MASK,DEGRADE]`，最终 `action_final=DEGRADE` 还是 `MASK` 我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白。那用例就要覆盖“既 mask 又 degrade”的场景，比如模型输出带手机号并且还在引导学生去私下联系老师，这种就会触发两条规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先规则匹配，关键词组合+少量正则。分类模型我暂时不做，测试也不好控。规则引擎这块我会做成纯函数，输入文本输出 `hit_rules` 和 `risk_level`，然后在单测里用固定输入断言命中规则ID，减少不确定性。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我可以做个小对照：拿我们已有的课堂真实对话样本里随机抽一批“正常问答”，跑 pre_guard 统计 `L1+` 命中率，目标先压到比如 <1%。另外用一套红队样本（注入/索要答案/索要系统提示）看召回，目标 >95%。这两套都先离线跑，作为回归基线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盐我打算走配置中心注入，环境级别的 secret。hash 用 HMAC-SHA256，输入是 `tenant_id|class_id|text` 这种拼接再 HMAC。这样同一班级内可关联复现，但外部拿不到原文。这个实现我能写，但我不太确定 class_id 能不能参与，怕又变成可识别信息。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我在做内容过滤与提示注入的审计字段。计划记录 `input_hash`、`rule_id`、`isolation_key_hash`。hash 里想拼接 tenant/class 做可关联，但担心属于可识别信息。哪些字段允许进入哈希输入？盐/密钥管理有什么硬要求？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "受控样本库这块我现在没法做太重。我理解你说的至少是：线上只留 fingerprint，回放要另走流程。那单测里我就断言日志结构里不存在 `class_id/student_id/text` 这些字段，只出现 `fingerprint` 和 `key_version`。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这个我能加：`mask_stats=[{type:\"PHONE\",count:1}]`，测试里就比对这个，不碰文本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先列一版，名字和断言都固定字段：  \n1）`test_pre_guard_prompt_leak_block`：输入含索要系统提示，断言 `governance.action_final=BLOCK`，`reason_codes_final` 含 `R_INJ_PROMPT_LEAK`，`degrade_mode_final=NONE`。  \n2）`test_pre_guard_ignore_instruction_degrade_guided`：输入含“忽略安全规则给答案”，断言 `action_final=DEGRADE`，`degrade_mode_final=GUIDED_HINT`，含 `R_INJ_IGNORE_INSTRUCTIONS`。  \n3）`test_exam_cheating_block`：输入“直接给这题标准答案/考试”，断言 `action_final=BLOCK`，reason 含 `R_EXAM_CHEATING`。  \n4）`test_post_guard_pii_mask_and_guided`：模型输出包含手机号，断言 `action_final=DEGRADE`，`action_trace` 包含 `MASK`，`mask_stats` 里 `PHONE:1`，`degrade_mode_final=GUIDED_HINT`。  \n5）`test_merge_stricter_wins_output_block_over_input_allow`：输入正常 `ALLOW`，输出触发 `BLOCK`，断言最终 `action_final=BLOCK` 且 reason 来自输出。  \n6）`test_audit_fields_no_raw_text`：无论触发何种规则，审计结构只包含 `content_fingerprint`、`fingerprint_key_version`、`rule_id`、`risk_level`、`action_final`、`reason_codes`，并断言不存在 `student_id/class_id/raw_text/system_prompt` 字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把规则ID写死，比如 `RULE_INJ_PROMPT_LEAK_001`，单测直接断言 `hit_rules` 包含它，避免 reason code 被多个规则复用导致歧义。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可测信号我定为：`governance.action_final`、`governance.degrade_mode_final`（触发降级固定 `GUIDED_HINT`）、`governance.reason_codes_final`、`governance.hit_rules`、`governance.action_trace`、`governance.mask_stats`，以及审计里的 `content_fingerprint` 和 `fingerprint_key_version`，确保不含原始文本或真实ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

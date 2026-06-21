@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在情绪轨迹编舞交互系统方案设计背景下，用户与导师围绕多模态采集-脱敏-聚合-使用链路及避免产出个人情绪画像持续沟通（11轮），其中在采集授权边界、聚合门槛与保留审计要求上与合规与隐私官沟通（2轮），并最终对端侧最小化、入口仅收房间桶与降级策略达成一致。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是摄像头的人脸表情、麦克风声音，还有弹幕和礼物这些行为数据。差不多就这些吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "摄像头肯定最危险，会拍到人。麦克风也可能。弹幕也可能有ID。礼物也有用户ID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得都放服务端统一处理，方便一点，然后做脱敏就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就端上先算出情绪分数，再发到服务端。服务端只拿分数做群体趋势。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "传情绪分数，比如开心、激动这种，按5秒一条？再带时间戳和房间号。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就不带用户ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们情绪轨迹编舞交互系统要采表情/声音/弹幕这些，多模态怎么做脱敏和授权？群体数据最低怎么聚合才算不做个人画像？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是要N个人以上才算一桶，不够就不用情绪，改用互动量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "房间5秒一个桶，里面是情绪分数的平均值之类的，还有互动量。然后7天。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "端侧不发个人的，每个人自己算完就丢掉？只在端上做平均再发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "放在服务端入口那层？先接收再聚合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入口只收房间级桶数据，不收用户级情绪向量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "弹幕就不传文本，只传数量和速度，可能再加个情绪倾向？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，就按强度信号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可能会慢一点，但更安全。创作那边可能觉得不够细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是看最近5秒的数据，但每秒算一次新的结果，不用等5秒结束。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该不大吧，就房间桶。比存视频小太多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1万*1秒*200字节=200万字节每秒，差不多2MB/s？一天大概…两百多GB？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

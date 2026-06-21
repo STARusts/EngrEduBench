@@ -1,0 +1,579 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在重症免疫风暴微侦与多靶点阻尼协控系统痛点画像梳理背景下，用户与导师围绕临床痛点深挖、系统能力需求转化、病理知识补充及假设验证方法持续沟通（5轮），其中在临床判别困境部分与重症临床专家沟通（1轮），并最终锁定痛点画像核心与学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "脓毒症引发细胞因子风暴致死率太高了，ICU里现在都是等体征恶化才干预，完全来不及。我想搞个微态侦测来提前阻断。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "目前临床上判断细胞因子风暴启动，主要看什么指标？医生觉得最棘手、最滞后的点到底在哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说生化检验慢，体征滞后，淋巴细胞亚群变化才是关键。所以我们要抓亚群变化的时序数据。痛点就是检测慢和单点用药反跳，对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工程上我能保证数据流是实时的，用流式处理去算特征。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "病理机制上，我其实不太懂级联反应到底怎么触发，专家说的淋巴细胞亚群，我也不清楚具体是CD4+还是CD8+变化最敏感。这块我确实缺知识。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算这周找两篇脓毒症免疫监测的综述看看，重点搞懂淋巴细胞亚群动态和级联反应的关联。补到位的证明是，我能在需求文档里把微态特征的业务定义写准，不再是拍脑袋列指标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能得看历史数据里，单点干预后的反弹发生率，和模拟多靶点干预后的趋势对比？具体怎么设对照组，我还得再查查文献，现在没思路。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多源数据融通背景下，用户与导师围绕数据合规边界、授权链路与责任主体持续沟通（6轮），其中在ICU实时数据授权与目的限制部分与医疗合规审计师沟通（1轮），在跨科室数据调用底线部分与医疗合规审计师沟通（1轮），并最终形成代签授权审查、跨域调用留痕、授权分离及辅助决策定位等合规约束条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏呗，把姓名身份证抹掉，我们只拿特征值做计算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，确实没想那么深。我以为只要不关联到具体人就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ICU这种实时多源数据拿来做免疫风暴预警，合规上具体卡在哪些点？脱敏不够吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代签授权这个确实容易漏。目的限制，我可以说这是同一次诊疗的延续？责任主体，肯定是医生啊，系统只是建议。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我觉得至少得明确：1. 代签授权流程怎么走；2. 训练数据和实时推演数据要分开授权；3. 系统建议的定位得在合规里写死是辅助。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨科室把检验影像数据拉过来，合规底线是什么？必须每个科室都授权吗？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在数据不出院的商业化背景下，与导师围绕靶向阻尼干预系统的付费方、预算出处与ROI闭环持续沟通（5轮），其中在科室付费意愿、预算出处及ROI闭环计算部分与商业模式架构师沟通（2轮），并最终形成按效付费商业闭环与量化归因干预效果的核心商业假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是ICU科室出钱吧？能提前阻断风暴，主任肯定愿意买。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过，医院采购流程太绕了，我不太懂他们怎么批预算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种ICU免疫风暴预警系统，科室愿意单独掏钱买吗？预算一般从哪出？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据不能出院，科研经费又不够长期私有化运维，ROI怎么闭环？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业闭环是按效付费，核心指标是缩短ICU停留天数，系统必须能量化归因干预效果。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在ICU临床准入与战略路线制定背景下与导师围绕准入门槛、回顾性验证归因方法及战略路线排布持续沟通（7轮），其中在临床准入原则与验证路径部分与重症临床专家沟通（1轮），在合规底线与干预归属部分与医疗合规审计师沟通（1轮），并最终形成先回顾后前瞻的三步走战略路线及合规与归因约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "门槛应该就是模型准吧，我们把细胞因子预警的AUC提上去，医生肯定愿意用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "临床准入这块，除了模型准，医院还看重啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规底线有哪些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿以前治过的病人数据跑一遍，看系统如果早期干预，能不能缩短危险期。样本就用科室近三年的脓毒症病人。不过，怎么证明缩短天数是系统的功劳？这个归因好像挺难的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实缺，我今晚把PSM的原理和临床验证常用方案补一下，记到学习清单里。搞懂了才能跟临床专家对齐验证方案设计，不然样本口径和对照组都没法定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，用三年脱敏历史数据做回顾性验证，用PSM做归因，证明能缩短危险期；第二步，拿着回顾性数据去申请伦理批件；第三步，做小样本前瞻验证，医生保留一键否决权。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在重症免疫风暴微侦系统多源时序融通架构设计背景下，用户与导师围绕时序对齐方案、对照验证设计与补学计划持续沟通（4轮），其中在异构时序对齐痛点部分与数据架构师沟通（1轮），并最终形成流批一体、特征空间对齐、冷热分层及对照验证等架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上Kafka接Flink，落盘用ClickHouse，这套后端组合吞吐量绝对够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐就按时间戳强对齐呗，Flink watermark设大点等慢数据。审计好办，加个旁路同步写进Postgres不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心电波形和血气这种快慢差极大的数据，融通对齐到底怎么搞？我原来想的Flink强对齐是不是不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "特征空间对齐，就是提R波再做窗口？这听起来延迟可控，也不怕时钟偏移了。冷热分层我懂，热数据放Redis或者时序库，冷数据放OSS。那我回去改方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设A是原始时间戳强对齐，假设B是特征事件流对齐。对照组就是模拟5%的时钟漂移，看R波提取后的事件流对齐准确率是不是比原始流高，乱序率是不是更低。不过特征提取算法我不熟，特别是那种做波形匹配的DTW算法，我得补补课。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这周末前看懂两篇DTW在医疗时序上的应用论文，把对齐窗口的伪代码写出来，能跑通一个模拟波形对齐的demo就算完事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 架构选流批一体，不用纯流强对齐；2. 波形降频提特征，离散指标插值，在特征空间对齐；3. 审计数据冷热分层，热查冷存；4. 必须做对照验证：5%时钟漂移下，特征对齐乱序率要显著低于原始对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "在免疫微态特征图谱设计背景下，用户与导师围绕图谱schema定义、动态特征需求与临床基线校准持续沟通（7轮），其中在特征工程与动态特征需求部分与算法推演工程师沟通（2轮），在基线校准与预警阈值设定部分与重症临床专家沟通（2轮），并最终形成图谱设计四条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把那些细胞因子的值抽出来，拼成个向量，丢给模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "schema我可以用JSON定义，字段就按检验科那些指标来。阈值的话，我不太清楚，网上搜搜或者用默认的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征工程这块，除了抽静态值，还要啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "滑动窗口好弄，流批架构里加个算子就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "交叉关联是啥，两个指标相除？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要加差分算子，算激增速率。还要算什么相关性。基线不能写死。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阈值咋定？不同人基线不一样，算法那边说不能写死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加协变量？就是多传几个字段进去呗。年龄，基础病。这算特征还是算阈值参数？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 图谱不能只存静态值，要有差分特征算激增速率；2. 要有交叉关联特征，算相关性；3. 基线校准必须加年龄和原发病协变量，不能写死；4. 阈值得跟着协变量动态调，防漏诊偏见。"
+              }
+            ]
+          },
+          {
+            "microScene": "在免疫风暴阻尼协控流图设计背景下，用户与导师围绕流图触发机制及合规与时效平衡持续沟通（5轮），其中在全闭环逻辑流可行性部分与协控流图设计师沟通（1轮），在自动执行合规边界与分级协控部分与医疗合规审计师沟通（2轮），并最终形成按靶点风险等级分流的两级干预与分流阀逻辑硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定全自动啊，ICU抢救争分夺秒，系统直接推注阻尼药物不是最快吗？写流图也简单，触发阈值直接连执行器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算流图全闭环，风暴指标越限直接下发自适应阻尼指令，不用人工干预，这在逻辑流上能跑通吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "传感器延迟我加个心跳校验不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "自动执行阻尼干预，合规上是不是只要模型准确率够高就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可如果等医生点确认，风暴可能已经不可逆了，这矛盾怎么解？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规这边说全自动给药算非法行医，流图那边也说耦合系数算错会崩盘。但纯人工确认又怕延误。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不把干预分两级？一级是微调阻尼，像补液和微量血管活性药，这种半自动，系统自动执行但事后补审；二级是冲击量免疫抑制剂，这种必须弹窗拦截，主治医师指纹确认才放行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把一级干预的靶点只限定在IL-6受体拮抗这种相对温和的，大剂量糖皮质激素绝对放二级。流图里加个分流阀，按靶点风险等级走不同分支。"
+              }
+            ]
+          },
+          {
+            "microScene": "在ICU系统高可用与隐私安全设计背景下，用户与导师围绕容灾架构、隐私保护与合规要求持续沟通（6轮），其中在高可用与越权访问部分与系统安全工程师沟通（1轮），在合规底线与数据采集原则部分与医疗合规审计师沟通（1轮），并最终形成同城双活、特征层差分隐私加噪、动态脱敏与全链路审计方案及验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高可用我熟啊，数据库主从同步，Redis缓存挂上，基本能抗住。隐私的话，密码加密存库，接口加个鉴权，应该没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这切换确实会丢数据。越权访问我没细想。@系统安全工程师 这种情况一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@医疗合规审计师 合规那边卡得严不严？能不能稍微通融下，先跑起来？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前做电商容灾只搞过主从，医疗这块确实没碰过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这两天在看差分隐私的论文，里面提到给数据加噪能防溯源。我想着咱们这个免疫微态特征提取，是不是也能在特征层加噪？这样就算数据泄露，也反推不出原始生理指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "epsilon设梯度，测AUC衰减，卡住2%的线。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就按双活和全链路留痕去写设计文档了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在重症免疫风暴系统预处理模块开发背景下，与导师围绕数据规整与特征保留冲突解决、双通道方案设计持续沟通（6轮），其中在流式对齐与资源开销部分与数据架构师沟通（2轮），在特征保留与异常极值影响部分与算法推演工程师沟通（2轮），并最终形成双通道接口定义与AUC验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@数据架构师 这边要求流式对齐，缺测值必须插值补全，不然下游Flink窗口聚合会报错。@算法推演工程师 又说原始时序绝对不能插值，免疫风暴的断崖式下跌一补全特征就糊了。我到底听谁的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以一边要数据规整，一边要保留突变特征。这俩是互斥的吧？我写不了预处理逻辑啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对细胞因子突变斜率的敏感度真没概念，不知道插值到底影响多大。我得先去补补这块的病理特征知识，不然没法取舍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查了脓毒症相关的文献和之前的数据探查报告。确实，IL-6这些指标在Sepsis发作前有极其陡峭的爬升，线性插值会让梯度变缓。但流式算子报错也是实打实的工程问题，不能不管。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算在预处理模块输出双通道。主通道保留原始值，缺测位用特殊标记比如-999填充，不让窗口报错；副通道做线性插值平滑。算法那边用主通道抓突变，数据这边用副通道做聚合统计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "归一化可以前置排除-999。资源翻倍确实是个问题，但总比特征全毁强。而且，我准备做个对照测试验证一下。就像之前算隐私epsilon那样，我把插值平滑的数据送进模型，跟原始带标记的数据对比AUC，看衰减多少。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那预处理微模块的接口就定成：输出原始时序加NaN掩码，以及一个插值生成器接口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口和验证口径都锁定了，我这就去写预处理的代码骨架。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风暴预警模型训练联调背景下，用户与导师围绕极度不平衡样本的损失函数、验收指标、超参设置及约束监控持续沟通（6轮），其中在不平衡样本训练策略及Focal Loss调参逻辑部分与算法推演工程师沟通（2轮），在临床漏报容忍底线部分与重症临床专家沟通（1轮），并最终形成包含Focal Loss、Recall硬约束及动态调参的联调验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个数据加载器把`getRawWithMask()`拉出来，转成Tensor喂给模型，跑几个epoch看看loss曲线降没降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标就看Accuracy吧，或者F1？临床要求我不太清楚，反正模型拟合了就行。损失函数就用交叉熵，分类问题不都上这个么。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "正负样本差几百倍，交叉熵是不是不行？验收指标看啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风暴预警漏报能接受多少？指标要求是啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说用Focal Loss，临床说Recall得0.95以上。我就把损失函数换成Focal Loss，跑的时候盯着Recall看，不到0.95就继续调参。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "gamma我随便设个2？alpha就0.5吧。0.95的约束我就在测试脚本里加个assert，过了就发版。卡在0.90的话，我就再跑几轮或者调下学习率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Focal Loss的gamma和alpha初始值怎么定？训练中途Recall卡住怎么处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法给了初始值，gamma=2，alpha=0.25。还建议加个回调，Recall不涨就自动加gamma。我这就去改训练脚本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径就是：数据走`getRawWithMask()`通道，损失函数用Focal Loss（gamma=2, alpha=0.25），训练回调里加Recall 0.95的监控，达不到就Early Stopping。还有gamma动态调整的逻辑也加进去。这就去写代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在阻尼协控接口核心实现背景下，用户与导师围绕并发防重、断点续跑、配伍校验与熔断降级、审计留痕持续沟通（8轮），其中在防双重用药与并发处理部分与后端开发主管沟通（1轮），在流图断点续跑与状态校验部分与协控流图设计师沟通（1轮），并最终形成包含事件入队、流图推送、配伍校验、熔断降级与审计留痕的接口核心闭环流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预警回调过来，拿参数去调流图引擎，走完返回结果。并发的话，加个Redis锁防重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失败了就重试，加个幂等校验。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预警触发后要调流图引擎，中间如果挂了怎么防双重用药？我本来想加个Redis锁。流图那边执行一半断了，状态能接上吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MQ加状态机。那我就写个事件监听器，收到预警发消息，消费者拿traceId去推流图。nodeId对不上就报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我管接口转发，药有没有冲突得问大夫吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "挂了肯定不能放行，出医疗事故。那就熔断，直接返回失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，接预警事件入MQ；第二步，消费者拉流图，带traceId和nodeId推；第三步，推之前调配伍校验；第四步，校验挂了直接熔断，不推。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加个切面打日志。核心流程就是：接事件 -> 异步入队 -> 拉流图(带状态校验) -> 配伍校验 -> 下发或熔断 -> 审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在ICU高并发性能调优与联调测试背景下与导师围绕防IO阻塞、缓存一致性风险及压测指标持续沟通（6轮），其中在入队与缓存调优部分与后端开发主管沟通（2轮），在压测数据构造与延迟指标部分与质量保障工程师沟通（1轮），并最终形成分级线程池隔离、缓存前置加DB兜底、P99小于200ms的验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个线程池调调参数呗。压测我就用JMeter跑一把，看QPS能不能上千。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟容忍度我确实没谱，临床那边肯定越快越好。压测数据确实是个坑，随机报文过不了配伍校验，直接报错打不进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在入队用的单线程池，拉流图每次查库，这性能肯定拉胯。怎么调优？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地缓存？多节点部署状态不一致咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测数据怎么造？我只会用JMeter发随机数，过不了校验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我前两天刚看了JMeter的CSV数据源配置插件，正好能派上用场，不用再傻乎乎手写脚本造数据了，测出来的结果也靠谱点。P99小于200ms记下了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入队要分级隔离线程池，流图拉取加Caffeine本地缓存，短TTL带失效。压测得用脱敏波形CSV驱动，P99得小于200ms，还要看GC停顿。这次压测直接用JMeter的CSV插件，造数据效率高多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这确实是个坑。但现阶段节点少，先用本地缓存顶一下。要不我先把TTL压短点，比如100毫秒，风险小点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加Redis锁太重了，还得引入新组件。直接查库兜底吧，缓存命中就走快路，没命中或者失效就走DB慢路，这样既快又不会用错状态。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在临床试运行基线验证背景下，用户与导师围绕预警有效性验证、误报影响及熔断阈值统计依据持续沟通（6轮），其中在监控指标与分组比较部分与运维监控分析师沟通（1轮），在基线数据收集与对照组设置部分与临床试运行协调员沟通（1轮），并最终形成包含A/B组对比、误报熔断降级、置信区间阈值及审计留痕的验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我都配好了缓存前置加DB兜底，P99延迟也压到200ms以内了，应该能直接上吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看监控大盘呗，CPU和内存不炸，延迟不超标就行。真有问题我再查库兜底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上监控除了看P99延迟和资源水位，还要盯啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分组比较？太麻烦了，线上跑着看大盘不就行了。准确率这种东西，得等医护点反馈才知道吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么证明我们预警比以前准？医护会不会嫌烦？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "误报留痕好办，后端加个日志表就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加个熔断机制吧：误报率超过5%就降级，系统只记录不弹窗报警，免得挨骂。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我知道我这块算不准。我确实不懂怎么算置信区间和效应量，以前都是看平均值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周内把假设检验和二项分布置信区间补完，把误报率熔断阈值用公式推出来，不再拍脑袋。然后把这个阈值逻辑加到降级代码里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行大盘监控与预警评估背景下，用户与导师围绕预警延迟优化与漏报风险的权衡持续沟通（6轮），其中在异步削峰对时序对齐与漏报率影响部分与运维监控分析师沟通（1轮），在漏报率翻倍的临床后果部分与重症临床专家沟通（1轮），并最终放弃异步削峰，确定采用内存流式对齐、放宽延迟红线及漏报超限停机的降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟有点顶不住。P99快到3秒了。我想在接入层加个Kafka异步削峰，把延迟压下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没细算。我就想着P99超标肯定得削峰啊，不然熔断阈值一碰就降级了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我如果在接入层加Kafka异步削峰，多源时序对齐会出问题吗？漏报率会飙多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "漏报率翻倍的话，ICU那边后果是什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "削峰这路走不通。那P99延迟只能放宽？还是说有别的不伤时序的降延迟办法？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加异步队列了。我改用流式对齐，在内存里做滑动窗口，直接算不落盘。开发量大了点，但能保住时序。延迟红线得调，P99不能卡3秒了，得放宽到5秒。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级触发条件得改成：如果流式对齐超过5秒还没出结果，才触发降级只记录。漏报率如果超1%直接熔断停机，不走降级了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估阶段ICU高危医嘱采纳率低的背景下，与导师围绕医嘱拦截方式、拒绝理由枚举及阻尼衰减系数联动持续沟通（4轮），其中在临床采纳原因与拒绝理由枚举部分与重症临床专家沟通（2轮），在合规责任与拒否留痕方式部分与医疗合规审计师沟通（1轮），并形成不强制拦截但必选拒绝理由留痕且拒绝码映射阻尼衰减系数的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在阻尼流图里加个强制校验节点，不点确认不许过，直接锁死医嘱流程。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "临床那边为啥不采纳啊？是系统算错了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规上如果医生执意不采纳，我们系统有责任吗？会不会被告？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我加个必填的拒绝原因枚举字段，顺便写操作日志。但这会不会拖慢抢救？医生要是急了乱选一个理由敷衍了事怎么办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "常见的拒绝理由有哪几种？给我几个选项我直接写到下拉框里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就在流图里加个分支，拒绝必须选这四个之一，选完才能往下走。这算折中吧？不锁死，但必须给理由。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把这几个拒绝码跟协控流图里的衰减系数做个映射表，选了替代方案的，阻尼衰减加倍；选了终末期或放弃抢救的，直接关掉该患者预警流。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在预警模型漂移复盘与迭代规划背景下，与导师围绕漂移复盘着手方式、复现步骤理解、基线偏差修复与规划内容持续沟通（5轮），其中在漂移指标计算与复现条件部分与算法推演工程师沟通（2轮），并最终形成包含锁定适用范围、复现偏移、刷新率约束与基线重标的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们上线后那个预警模型漂移咋样？我看着误报不多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线不准？那现在这模型结论还能用吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是拉上线3到7天的数据，用v1.2脚本重跑特征提取，对比偏移量。还有，这个模型现在只能在ICU脓毒症用，不能推到普通病房。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前光改阻尼衰减系数，没管数据刷新率，现在看模型漂移也是这回事，数据偏了衰减就没意义了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我待会把这个刷新率约束加到迭代规划里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "迭代规划得把清洗基线数据加上，还要把特征分布监控加上。基线偏差只能先让标注师重标一部分，再重新对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

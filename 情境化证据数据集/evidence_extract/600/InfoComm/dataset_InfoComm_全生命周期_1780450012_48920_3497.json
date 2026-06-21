@@ -1,0 +1,664 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在星载跳波束图样推演系统立项论证背景下，用户与导师围绕潮汐分布量化、可检验假设提出及需求边界确定持续沟通（5轮），其中在潮汐分布量化口径与商业驱动力部分与星网战略规划师沟通（1轮），并最终确立潮汐调研需求基线与含反驳标准的可检验假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在低轨宽带星座同频复用太狠了，干扰底噪抬得厉害。我想根据地面用户的潮汐分布，在星上直接算跳波束图样，把干扰避开。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对怎么把潮汐分布量化出来，还有怎么跟商业战略对齐，心里没底。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看之前一些仿真结果，早晚高峰时候，有些波束底下用户扎堆，有些空闲，同频波束一撞就掉线。我觉得这就是痛点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "你要说怎么建个模型去量化它，或者怎么证明它严重到必须上星，我就有点抓瞎了。我平时都是拿现成数据跑脚本，这种从零定指标的事我不太在行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算精读3篇关于低轨容量潮汐的顶会论文，把里面的量化指标摘出来，至少凑出2个能用于我们项目的测度，比如波束负载方差啥的。读完后我整理个指标清单给您看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "宽带星座容量潮汐分布具体怎么量化调研？还有从商业上看，怎么证明星上推演图样比地面算好再传上去更划算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "关键点是经度带轮转导致的漂移，指标看负载方差和溢出比。商业上卖点就是省回传带宽和实时性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想着早晚高峰，格局小了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "需求边界就是针对经度带轮转的漂移做图样推演，不搞全网重算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证假设的话，如果波束负载方差超过某个阈值，导致溢出比大于5%，星载推演的收益就大于星地回传的开销？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在同频干扰痛点与合规分析背景下，与导师围绕跳波束瞬态干扰风险、合规约束前置及基线补充持续沟通（5轮），其中在瞬态干扰与保护率合规红线部分与频谱合规审计员沟通（1轮），并最终确认同频干扰痛点与I/N及EIRP硬约束，形成合规包络内的需求基线补充。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "仿真跑一下干扰值？超了就调功率呗，或者把波束挪开点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跳波束图样推演会不会违规？主要是瞬态干扰和保护率的事，我们要怎么避坑？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我把跳变速度放慢点，是不是就不会展宽违规了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把I/N和EIRP限制加进去？寻优的时候，不合规的图样直接扔掉。不过这算力会不会更大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点一是同频冲突导致吞吐量掉底，二是瞬态跳变引发干扰保护率I/N和EIRP密度超标。硬约束就是：寻优推演出的任何波束图样，必须满足ITU的I/N门限和EIRP密度限制，不合规直接一票否决，解空间不能超出合规包络。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跳波束商业蓝图构建背景下，用户与导师围绕变现逻辑与成本闭环持续沟通（4轮），其中在潮汐错配变现及星载算力成本约束部分与星网战略规划师沟通（2轮），并最终形成基于潮汐错配与差异化SLA变现的商业逻辑及成本约束基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "频谱效率上去了嘛，同样带宽能多塞用户，资费不变用户多了，不就赚钱了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这跳波束到底怎么变现？还有潮汐错配是啥意思？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是把闲的切给忙的用，然后收大客户的溢价费。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算力开销不是方案设计时候再权衡吗？现在需求阶段也要算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星上跑寻优算法的算力和功耗，会不会把赚的溢价亏进去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以不光是卖SLA收钱，还得保证星上算力成本和长期维护成本不能比赚的还多，不然就是白忙活。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业逻辑是：利用潮汐错配驱动资源动态切分，通过差异化SLA变现。硬约束是：SLA溢价必须覆盖星载算力折旧与功耗增量，且全生命周期在轨维护成本受控。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在星载算力约束与可行研判背景下，与导师围绕星载算力限制、启发式算法可行性及验证动作设计持续沟通（6轮），其中在星上功耗限制与验证指标设计部分与星载软件架构师沟通（2轮），在寻优算法算力消耗与降维方案部分与图样寻优算法师沟通（1轮），并最终形成星载算力可行性基线与硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星上跑寻优，算力到底卡在哪？是MIPS不够还是功耗扛不住？寻优算法大概要吃多少算力？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就是要用启发式。那我就选个遗传算法或者模拟退火，星上跑个近似解，应该就能过功耗墙了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个超时中断？超时了就发上一次的图样？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我确实不太懂星上算力具体怎么评估，之前没弄过这种功耗受限的算法评估。我得去补补星载功耗模型和启发式算法收敛性的资料，记一下，免得后面设计瞎定参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿几个轨道的潮汐流量数据，在地面仿真环境里跑一下这个启发式算法，看平均收敛时间和功耗。如果大部分情况能在比如50ms内收敛，功耗在2瓦以内，就算可行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我验证动作就定：选3条过境北上广的轨道数据，注入峰值，测启发式最大收敛步数和峰值电流。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "星上不能跑精确解，必须用启发式近似算法。硬约束是：算法必须在确定步数内收敛，且峰值功耗不能超标。验证就是拿极端轨道数据压测。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在星载跳波束寻优系统全局架构与信令流设计背景下，用户与导师围绕星间图样同步信令开销、容错机制及状态机调度持续沟通（6轮），其中在星间链路带宽受限下的图样同步与容错机制部分与空口架构设计师沟通（2轮），并最终形成增量同步与位图压缩的事件驱动架构方案及状态机补充计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "星上算好图样后，直接全量广播给邻星和地面，大家拿到就执行。这样逻辑最清晰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没细算。就觉得全量发不容易出错。如果带宽不够，是不是可以降低广播频率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星间传图样，除了全量广播，还有啥低成本的办法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "传增量确实省流量。但本地拼装如果丢包了，图样不就全乱了？全量广播容错好点吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我做个对比假设验证一下。假设用全量广播，每帧图样大概2KB，10ms一帧，光图样同步就要1.6Mbps，星间链路肯定塞满。增量压缩可能就几十字节，带宽占用不到百分之一。对照组很明显，全量方案在压测下链路利用率直接崩溃。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "状态机这块我其实有点虚。之前主要写业务逻辑，空口协议状态跳转那些规范我没系统看过，容易漏状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天把3GPP NTN协议里关于状态同步那部分啃一下，重点看序列号管理和快照恢复机制。然后把状态跳转图画出来，对照着写星上调度的伪代码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "全局架构就定成：星上启发式寻优产出增量图样，位图压缩后事件驱动推送到邻星，本地拼装执行。状态机等我补完3GPP NTN规范再细化。"
+              }
+            ]
+          },
+          {
+            "microScene": "在星上波束跳变图样计算与干扰矩阵反演方案设计背景下，用户与导师围绕反演机制、算力约束、降级设计与验证口径持续沟通（6轮），其中在轻量寻优算法部分与图样寻优算法师沟通（1轮），在星载算力预算与降级机制部分与星载软件架构师沟通（1轮），并最终形成基于部分观测的分布式近似图着色、迭代上限20轮加超时降级、以及底抬恶化量2dB阈值的方案边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着，星上拿到邻星的位图，再结合本地测的干扰值，直接拼个矩阵出来？然后跑个贪心算法分配波束？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测不全的话就只能猜了。贪心死锁我倒是没跑出来过，之前仿真就随便写了写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星上反演干扰矩阵只能拿到部分观测数据，全量反演算不动，这种情况下图样寻优怎么搞？有没有轻量一点的算法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种分布式图着色算法在星上跑，算力消耗大概啥水平？长期能撑住不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师说用分布式近似图着色，不用全量矩阵。架构师说算力只给15%，迭代得卡在20轮以内，超了就降级给默认图样，怕吃满算力卡死。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "精度差一点就差一点吧，总比卡死强。验证的话，我可以在地面仿真里切一段最差的潮汐场景跑一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就在地面先跑这个极限冲突场景的切片，看恶化量。星上就先按Distr-RandColor加降级机制落。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在星地协同调度接口设计背景下与导师围绕接口轻量化、降级接管、差分对齐及扩展性持续沟通（7轮），其中在接口与降级接管部分与星载软件架构师沟通（1轮），在差分对齐与信令保障部分与空口架构设计师沟通（1轮），并形成Protobuf差分更新、100帧锚点对齐、短帧信道降级接管及波束簇分片扩展方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JSON格式吧，解析快。星上把反演的干扰矩阵打包发地面，地面算完图样再发上去。降级的话，地面发现星上发来默认图样，就直接全量反演一把，再把新图样注上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "矩阵大，那，压一下？用gzip压。时延的话，几十秒确实会断。那降级接管怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@星载软件架构师 星地协同接口轻量化和降级接管状态同步。我原想说JSON传全量，他说带宽不够时延大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Protobuf行，我换序列化库。差分更新就是只发变化的边？心跳保活也加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包重传？预计算图样下发应该很快吧，就几个波束的配置。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@空口架构设计师 星地传差分矩阵，丢包了怎么对齐基准？降级接管时地面下发备选图样，空口信令怎么保障时延？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "100帧跟一次全量，懂了。专用短帧信道下发图样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "波束翻倍差分包也会变大吧，专用信道也挤。余量，预留个20%带宽？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，Protobuf加差分，100帧锚点，降级专用短帧50ms内，波束簇分片。"
+              }
+            ]
+          },
+          {
+            "microScene": "在单星算力安全与高可用设计背景下，用户与导师围绕寻优推演容错机制、对照实验变量控制及RAFT机制迁移持续沟通（6轮），其中在轻量级容错与接续推演部分与星载软件架构师沟通（2轮），并最终形成增量检查点加差分重放、控制验证变量、参考RAFT压缩去选举及在轨自适应调频四条高可用约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "双机热备呗，星上不都这么搞吗？主节点挂了，备机直接接管。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，矩阵一更新数据量就炸。不同步中间状态，备机起来接着算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优推演挂了怎么快速接续？热备开销太大搞不了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "增量快照，重放差分。那恢复要多久？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "快照加差分重放，测一下找拐点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，改检查点频率呗，看恢复多快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还得固定算力负载，模拟内存碎片。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近在看边缘侧RAFT的裁剪实现，它做日志同步的机制，是不是能拿来当差分重放的容错验证？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，它选举超时太长。那就只借它日志压缩那块，不管选举。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按在轨时间自适应调频率。好，就这四条。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在星载跳波束系统干扰图谱反演编码选型背景下，用户与导师围绕开源库与手写定制方案取舍及验证口径持续沟通（6轮），其中在开源库星载可行性与验证口径制定部分与核心算法工程师沟通（2轮），在手写定制算子必要性部分与图样寻优算法师沟通（1轮），并最终形成放弃开源库、手写定制稀疏算子及数字孪生A/B测试验证指标的选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "干扰图谱反演这块我准备直接套个开源图计算库，手写太慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "库快啊，我拿现成的igraph改改接口就行，内存大不了我加个监控防溢出。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱反演用开源库跑，星上能行不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那手写呢？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "手写求逆我肯定写崩，条件数一大全发散，这底层算子我搞不定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我得去看看共轭梯度法怎么加预处理因子。我先找算法师要个最简demo跑通，这两天死磕一下不完全Cholesky分解的代码，然后自己裁剪个星载版出来。只能这么干了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就比谁跑得快，看耗时，谁快用谁。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "干扰图谱反演算法编码选型：不用开源图库，手写带预处理的定制稀疏算子。验证环境用数字孪生，对照指标卡耗时、内存峰值、碎片率和反演误差。我现在去要demo。"
+              }
+            ]
+          },
+          {
+            "microScene": "在星载波束跳变时序逻辑开发背景下，用户与导师围绕时序选型、并发安全、中断处理与微服务拆分持续沟通（6轮），其中在时序驱动与并发安全部分与核心算法工程师沟通（1轮），在微服务拆分与中断底半部处理部分与星载软件架构师沟通（1轮），并最终确定事件驱动FSM加优先级队列选型及三模块拆分与底半部中断约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我寻思着直接上个时间轮，把推演出来的图样塞进去，到点查表触发波束切换，多省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发这块我没细想，反正单核跑应该没事吧。表项更新就加锁呗。内存的话，表可能占点空间，不过应该不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这玩意在星上跑到底咋弄合适？中断来了怎么防？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FSM我熟，写起来也快。优先级队列麻烦点，不过比加锁靠谱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序控制这块如果用FSM加优先级队列，在咱们微服务架构里怎么拆比较干净？中断底半部怎么处理才不会卡住主流程？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "顶半部只做信号量释放，不干活。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时序逻辑不用时间轮了，改用事件驱动FSM加优先级队列。模块拆三块：图样解析、时序生成、动作执行。中断处理走底半部机制，顶半部只放信号量。临界区用无锁环形队列，不用互斥锁。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在星载轻量调度微服务联调背景下，与导师围绕遗留代码死锁排查、IPC方案替换及日志落盘策略持续沟通（5轮），其中在微服务IPC对接与日志防磨损部分与星载软件架构师沟通（1轮），并最终形成共享内存承载无锁队列、futex通知及日志异步落盘的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图样解析服务和时序生成服务之间居然用的System V消息队列，星上哪有这开销。而且跟我写的无锁环形队列对不上，数据全丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图样解析往里写跳变指令，时序生成这边读不出来。GDB跟了一下，卡在msgsnd那里，直接死锁了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前留下的微服务通信用的SysV MSG，联调死锁了。我现在时序生成模块用的是无锁环形队列，这俩怎么接？还有星上审计日志写flash太频繁怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "futex我以前没用过，怕在星上调不通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异常必须刷盘，正常状态跳变可以攒一波再写。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端负荷波束冲突压测背景下，用户与导师围绕极限冲突用例构造、系统稳定性判断指标及超限熔断机制持续沟通（7轮），其中在极限冲突用例构造与监控打点部分与极限压测工程师沟通（1轮），在算法退化与死锁判断指标部分与核心算法工程师沟通（1轮），并形成包含eBPF监控、反演迭代与死锁指标判断及熔断回退的压测脚本修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "极端冲突的数据我不太好造，平时模拟器里波束都是匀速扫的，打不出那种抢资源的冲突。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么造极限波束冲突的用例？我本地模拟器波束都是匀速的，打不出冲突。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "K4完全图，抢时隙。加eBPF探针抓延迟。我这就去改压测脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看CPU和内存呗。只要不OOM，CPU没打满到100%，应该就没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法在K4完全图冲突下怎么判断没崩？导师说看CPU不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超限了就报错退出呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加熔断。反演超MAX_ITER或者deadlock_flag为1，直接触发熔断器，跳过寻优走默认图样。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在工程开发压测背景下，与导师围绕时敏信令传输抖动的根因分析、修复方案及验收标准持续沟通（6轮），其中在信令抖动修复方案与测量工具选择部分与时延调优专家沟通（2轮），并最终形成基于绑核、SCHED_FIFO策略与bpftrace测量的修复与验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测时看日志有几百微秒的抖动，我以为是CPU负载高正常波动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思在发送队列加个缓冲，平滑一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@时延调优专家 这种信令抖动怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我能在代码里用pthread设置。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对实时调度这块一窍不通，之前只写过普通业务逻辑。我现在就去查pthread_setschedparam和timerfd的文档，把信令线程改成FIFO，顺便把定时器换了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用perf抓吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我用bpftrace写个脚本挂钩子，把调度延迟打出来。如果确认是调度切走导致的，我就把绑核和FIFO加上去重新跑压测。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改线程属性和定时器，测完直接拿bpftrace日志对齐。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在星载跳波束在轨验证背景下，用户与导师围绕同频干扰规避效果量化与统计依据持续沟通（4轮），其中在指令注飞流程部分与在轨验证工程师沟通（1轮），在遥测数据假设检验方法部分与遥测监控分析师沟通（1轮），并最终形成分批注飞与基于T检验脚本比对的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把推演好的跳变序列注上去，看遥测里波束开关状态字对不对就行。规避效果就看有没有掉线呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "波束跳变指令注飞具体怎么搞？要注意啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跳变前后的干扰数据怎么比？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "T检验，P值，效应量... 我平时就看均值方差，这些怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指令要分3批注，间隔5个轨道周期。效果验证得做T检验算P值和效应量，不能只看均值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会算T检验。我这就去学，目标定这周内用Python写个脚本，输入两组C/I遥测，自动出P值和效应量，跑通为止。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先去写Python脚本，注飞的事等基线跑完再说。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估同频干扰与吞吐监控背景下与导师围绕C/I底噪异常、吞吐未降原因、寻优算法失效及临时止损方案持续沟通（8轮），其中在数据拉取与统计口径确认部分与遥测监控分析师沟通（5轮），并形成重启反演微服务与边缘波束降权的临时止损策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板我搭好了，Grafana拉的数据，C/I和吞吐曲线都有。不过肉眼看不出啥，波动挺大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我拉一下最近6小时的C/I底噪和吞吐汇总？我这边看板曲线有点乱，想看聚合数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "2.5dB挺多了啊，怎么吞吐没掉？是不是我取数接口写错了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果是算法调走了，那跳波束频次肯定变高。我查一下跳频指令计数器。跳波束的时序指令下发频率最近6小时有突增吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没介入？那底噪抬升为什么没影响吞吐？难道是干扰只抬了底噪没影响信噪比？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吞吐统计口径是啥？全星汇总还是按波束？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来是边缘波束扛了伤害。那这2.5dB底噪主要就在边缘波束？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "手动跳走太慢了，而且我根本不知道往哪跳。得让寻优算法动起来啊。为什么没介入？寻优算法的触发阈值是多少？现在C/I到了没？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算法挂了？！内存溢出？星上内存那么紧张，反演模块吃多少内存？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重启微服务只能管一会，内存还是会被吃满。得限制矩阵大小。但我不会改算法逻辑。能不能先加个监控报警，内存超80%就重启反演模块，先把服务保住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我把刚才边缘波束C/I跌到8dB前后的遥测包导一份给我，我要跑T检验。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "3次/小时，这就很麻烦了。如果反演模块内存泄漏快，根本撑不住。这得找核心算法工程师改内存分配，我只会写脚本验证，改不了C++代码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘波束降权的话，我需要在监控看板加个告警规则，C/I低于10dB直接标红，然后手动注飞降权指令。先这么顶着吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在潮汐错配引发越区切换掉线飙升背景下，与导师围绕解决切换失败及放弃重试补丁方案持续沟通（5轮），其中在信令断点拆解部分与故障溯源分析师沟通（1轮），并最终决定抓包计算空窗期差值与调整推演预测步长配置。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我拉了失败日志，全是 0x1A 拒绝码。是不是信令超时？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我写个补丁脚本，切换失败就自动重发信令，重试三次应该能过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡在目标波束没资源呗。用户移过去了，新波束没分配资源，肯定切不过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切换失败码0x1A，断点具体在哪个环节？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以是老图样释放太快，新图样太慢，中间断档了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我重发信令，等新图样激活了不就切过去了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时序对齐得改算法吧？核心寻优代码我动不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抓包算差值行，我用tcpdump抓星地信令流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预测步长配置项在哪？"
+              }
+            ]
+          },
+          {
+            "microScene": "在星历老化寻优偏差迭代背景下，用户与导师围绕偏差修正思路、补偿验证方案及降级兜底策略持续沟通（7轮），其中在老化模型与偏差关联部分与演进迭代规划师沟通（2轮），在偏差发散速率与边界推算部分与遥测监控分析师沟通（1轮），并最终形成包含J2解析递推补偿、补偿周期上限及超红线降级策略的迭代结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "星历老化？是轨道飘了还是时钟偏移？直接地面重注星历不就行了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果本地算错了，是不是得在寻优算法里加个补偿项？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在本地星历累积误差导致干扰矩阵算错，该怎么迭代修正？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "J2摄动补偿模型复杂吗？能不能简单点，比如按天给个固定补偿值？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "解析递推，我之前学轨道力学基础时记过一点，当时只记了开普勒六根数，没推到J2摄动。我翻下之前的笔记看能不能套进来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "得把递推公式补进去。我试试把规划师给的公式转成C代码，加到星载调度微服务的预处理模块里，正好把STK验证脚本也迁移过来测这个递推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以看遥测里的干扰底抬指标。如果底抬降了就说明有效。老化快的话，我多跑几次递推？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我需要看星历老化导致的偏差发散速率。最近几天寻优偏差和干扰底抬的关联数据有吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "50公里是红线。按每天15公里算，大概3天多就危险了。那我递推补偿的周期必须小于3天，而且得留余量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在测试环境用STK注入一个加速老化的星历，看递推补偿能不能把偏差压在50公里内。如果压不住，就触发降级，把跳波束切回静态分配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论：1. 星历老化导致J2摄动偏差，寻优错配率上升；2. 在星载预处理中增加J2解析递推补偿；3. 衡量我之前STK导数据的经验，把递推公式补进学习日志；4. 偏差红线50公里，补偿周期最多2天；5. 超红线触发降级切静态图样。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

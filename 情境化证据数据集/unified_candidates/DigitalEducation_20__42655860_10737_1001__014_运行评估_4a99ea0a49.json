@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段误拦截申诉闭环设计背景下，用户与导师围绕按decision_id可追溯、可审计留痕的状态机、指标口径与回流改进持续沟通（7轮），其中在判定依据与最小证据集及临时放行护栏部分与法务合规负责人沟通（5轮），在漏斗/时效/回流质量指标及看板字段口径部分与数据分析师沟通（4轮），并形成6状态闭环必填项、自动预判分流与权限留存约束的落地口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "闭环是不是就做个申诉入口，然后人工审核，通过就放行？我怕流程细起来会很重，有没有省事点的通用模板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我猜就是：用户点申诉→填理由→系统把 decision_id 带上→法务看一下→改成放行或维持拦截。回流的话……就给规则打个标签？我不太确定要哪些字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态至少要有：已提交、处理中、已结论。再细一点就加个待补材料？不然经常来回问。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 误拦截申诉这块，审核时到底要看啥才算够？能不能给个最小证据集，不然每次都要翻原文我怕扛不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果用户说“课堂合理使用”，我们能不能直接给过？很多老师会这么说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，最小集里我听懂的就是“别看全文，看快照+hash+原因码”。但我不太会把“临时放行”做成不出事的样子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 申诉闭环要怎么量？我怕大家各算各的。你给我一套指标口径和需要埋哪些字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段埋点要到多细？我担心每个环节都加字段会很累。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概能复述给你：看板就按漏斗、时效、回流三块。对照组那块我有点虚，7天变化是不是太武断？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须做的我选三件：1）申诉表单带 decision_id；2）状态流转和时间戳齐，能算 SLA；3）结论要有 root_cause_code，不然回流不了。对照组我想先不做，先用“动作后同原因码的再申诉率下降没下降”替代，后面再补严谨对照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自动预判就按证据缺失那类吧：比如 evidence_snapshot_present=否 或 source_connector_present=否，就直接打成“疑似系统问题”，优先给后端队列？规则过严和合理使用就还是人工。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我只能说个粗的：证明文件只让法务看，其他人看不到原件。数据分析那边只拿校验结果。留存时间……按公司合规要求？我不确定具体天数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限就两行：教研/运营只能看到申诉状态、结论码、缺失项，不见原件；法务能看原件和签章页，且每次查看都记审计日志。原件默认留 180 天，之后只保摘要哈希和审计号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态我给 6 个：已提交→待补材料→已受理→审核中→已结论→已回流。必填项我可能漏，你帮我看：已提交要 decision_id、申诉理由码；待补材料要缺失项清单；已受理要 assignee_role；审核中要证据最小集检查结果；已结论要 root_cause_code、是否放行、放行类型；已回流要 action_type、override_ttl。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

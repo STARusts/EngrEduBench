@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在荷源交互接口规约设计背景下与导师围绕接口时序、降级语义、合规签名与频振压测验收持续沟通（7轮），其中在控制类接口边界与压测验收指标部分与接口规约师沟通（2轮），并最终形成包含TTL机制、数据最小化、应用层快检签名及三档压测标准的接口规约闭环。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把微源状态和疏导指令用JSON包起来，通信走MQTT，轻量好实现。字段就加个指令类型和目标值，应该够了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原想用MQTT传JSON，控制指令嘛，发下去就行。边界上还有什么硬性要求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但签名太麻烦了吧？验证签名不要时间吗？这会不会把时延拉爆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚看了GOOSE的快速重传和ASN.1编解码。它是应用层直接打包，跳过TCP/IP那套栈。我能不能把签名放到应用层最外层，验证失败直接丢，不进业务解析逻辑？这样时延应该能控住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测的话，我写个脚本模拟微源狂发指令，看看接口会不会堵死就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频振压测的变量和指标怎么设？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "荷源交互接口规约核心：1.通道MQTT，控制指令带时戳和TTL，过期直接丢弃；2.降级时接口语义切为“冻结远端，只认本地下垂”；3.上行数据最小化只传频偏和容量，关键指令必须应用层签名；4.验收按三档压测模型，500节点并发，P99时延<20ms。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补上应用层快检机制，签名时延<2ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

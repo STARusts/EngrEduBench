@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微抖容灾与高可用性评估背景下，与导师围绕微秒级容灾方案选型与验证方法持续沟通（5轮），其中在FRER开启的时隙冲突部分与全局时隙编排架构师沟通（1轮），在极限压测下微抖边界测试部分与微秒抖动压测极客沟通（1轮），并最终形成FRER结合保护时隙的容灾方案及基线对照压测验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Keepalived行不行？或者K8s自带的那种Pod重启，网上很多人说高可用就靠这套。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了个FRER。好像就是包发两遍，接收端去重。感觉挺省事的，直接把FRER功能打开不就容灾了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER直接开起来做容灾，会不会有问题？我主要想图个省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以要加时隙。有没有那种工具能自动算时隙偏移？手算太麻烦了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，打流呗。变一下包大小，再变一下发几个包，看看抖动大不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER容灾微抖怎么测？我要看边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，要打对照，负载从10到90，打一千万包看尾时延。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不用Keepalived了，用FRER加保护时隙，按他说的测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云数据断点续传测试背景下，用户与导师围绕断网数据存储策略、弱网测试场景设计及合规要求持续沟通（5轮），其中在高频写入与防断电存储部分与数据流开发工程师沟通（1轮），在真实弱网续传测试场景部分与物联网测试工程师沟通（1轮），并最终形成循环追加写与分片序号方案及含合规标记的弱网测试脚本。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关端我打算起个SQLite，断网数据全存本地，网一来自动查出来发上去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本地跑数据量小没试出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不用SQLite高频写怎么存？断电防写坏咋搞？Flash寿命怎么保？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "发现追加写配合mmap映射比库快得多，还能少几次内存拷贝。我试着把这套搬到网关续传这块应该能解卡顿。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我只会用tc加延迟丢包。真实弱网续传成功率怎么测？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "长断Flash满了就覆盖最旧的呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就改网关C代码，加追加写和分片序号，脚本补上这三种断网用例，看云端日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

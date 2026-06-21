@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农药试点的农资可信流转智控系统方案设计背景下，用户与导师围绕批次数字身份的编号与流转、证据包≥5次、离线补录与重复扫码处理及箱码/瓶码取舍持续沟通（10轮），其中在批次主数据与事件模型部分与数据架构师沟通（2轮），在二维码防复制、事件防篡改与离线补录机制部分与安全工程师沟通（2轮），并形成以箱码为主的carrier_id→batch_id结构与证据包白名单/最小字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在要开始做农资可信流转智控系统的方案设计了，这一块批次数字身份架构我有点没底，先从“批次怎么编号、怎么一路跟着走”开始捋？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要就是防假货和窜货吧，然后出事了能追到是谁卖的。批次号就贴在瓶子上，扫码就知道是不是正品。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "二维码吧，便宜，大家也习惯扫。RFID感觉成本高，先不搞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 批次数字身份这块，批次ID怎么定才不乱？还有事件怎么串起来，重复扫码会不会把链搞乱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就是批次一条主表，事件一条条追加，然后用hash串起来。箱码、瓶码先选一个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，我记下了：carrier_id连batch_id。那证据包“≥5次”就是从事件里凑？比如入库出库这些都算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是批次有个随机ID，不用顺序的。然后贴的二维码其实是carrier_id，它指向batch_id。每扫一次就记一条事件，事件里带hash串起来。重复扫用一个key去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验真就是查一下是不是真的，不一定要写库。业务事件才是入库出库这种，需要留证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 二维码很容易被拍照复刻吧？我们这批次数字身份怎么做才不容易被仿？还有事件hash链是不是就够了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是码里加签名，事件也要带签名。离线补录要限制类型，还要打标。位置别太细。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "hash链只能保证写进去之后不乱改，但写进去的人也得可信，所以事件写入要鉴权和签名。二维码也做签名，复制了也能被风控识别，不是说彻底扫不出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就箱码为主吧，流转都按箱走，少贴点码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "瓶码太多了，贴码成本高，还要每瓶扫一遍，渠道不一定配合。箱码扫的次数少，先能跑通证据链。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "batch_id随机生成，carrier_id就是箱码的那个ID，指向batch_id。码里放carrier_id和签名。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "至少要有出厂一次、入库一次、出库一次、零售一次、施用一次？如果施用不做强制，那用抽检或回放演练补？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "每条要有时间、地点、是谁操作的、批次、还有凭证号。再加一个签名校验结果？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按这套说。箱码为主，瓶先不管。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）试点用箱码做载体码，码里是carrier_id加签名。2）batch_id随机不可猜，carrier_id指向batch_id，事件一条条追加，有幂等键去重。3）证据包按白名单凑到≥5次，其中至少2次真实流转，3次回放演练，事件字段按你给的最小集，离线补录要打标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

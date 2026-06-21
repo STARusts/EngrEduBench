@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在动态阈值生产部署与沙箱验证背景下与导师围绕验证设计、波动干扰剥离及止损与回滚补全持续沟通（4轮），其中在流量隔离部分与DevOps工程师沟通（1轮），在统计检验排除干扰部分与数据运营分析师沟通（1轮），并最终形成含流量镜像、配对t检验及Ansible回滚的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想法是切一部分真实流量进沙箱，跑同一套马尔可夫剧情转移矩阵，对比P99延迟和拒绝率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "怎么保证对比结果不是出块时间随机波动带来的，我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱环境能不能做流量隔离？我想做A/B测试验证动态阈值，但又怕污染线上资产确权数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "既然出块时间共享，那数据对比就有干扰项。这种情况下，我怎么在沙箱数据里证明动态阈值公式的收益是策略带来的，而不是出块恰好变快了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "沙箱用流量镜像，分析上用配对样本t检验看效应量。只要Cohen's d够大，且P99置信区间收敛，就能确认动态阈值生效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "止损线可以设在核心资产拒绝率超过1%。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "自动回滚到静态阈值的配置，具体怎么弄我不太会，我平时都是手动改配置重启的，这种秒级回滚的工具链我还没摸透。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来的目标是：2周内，用Ansible写好动态阈值配置的自动回滚Playbook，并在预发环境跑通一次基于Prometheus指标触发的自动回滚演练。这样沙箱验证时就能接上止损动作。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

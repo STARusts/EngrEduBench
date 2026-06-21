@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流式实时配音变声服务开发收尾的压测优化与故障注入验证背景下，用户与导师围绕压测模型、观测指标、自动化注入与验收口径持续沟通（8轮），其中在压测矩阵维度、三类故障注入与合规边界部分与测试负责人沟通（5轮），并落实一套可复现的压测+故障注入MVP交付清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测我想用脚本开很多路流，先看E2E延迟和401、`ERR_FRAME_SEQ`。故障注入我不太确定怎么做得像真实问题，怕全是造假的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能按“短剧创作者”开10并发，持续5分钟？指标抓平均E2E、P95、错误码。故障注入…断网、乱序、token过期？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测和故障注入这块，你给我一套能跑的矩阵行不行？我们是流式接口，有`seq/timestamp_ms`，重连换`stream_id`，还有5分钟验收要E2E<250ms、P95<400ms、401=0、`ERR_FRAME_SEQ`=0。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "矩阵里具体维度你怎么列？我怕一列多就跑不完。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能直接用同一个`session_id`开多路吗？这样省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障注入你建议怎么搞？我现在就会断开连接这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的A里“P95不超过400ms”，这个是在有丢包时也硬卡这个线吗？我怕跑出来就不达标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有一个，我担心压测会刷爆计费时长，影响账单统计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我带着这些回去。矩阵6格，故障三类，弱网退化单独口径。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算用k6或者locust写脚本，多进程起流。可复现就固定帧率20fps、固定帧大小两档，跑三次取平均。瓶颈我可能先看服务端CPU和单路延迟分布，再看错误码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "爬坡就10到50再到200，每档跑5分钟，中间休息1分钟。日志关联用`request_id`，客户端也打印`request_id/stream_id/seq`。故障注入我可以在客户端发送端做：随机丢帧、重复seq、改timestamp。断连就主动close再重连。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小验收：正常链路5分钟，401=0、`ERR_FRAME_SEQ`=0、平均E2E<250ms、P95<400ms。鲁棒性：1%丢包P95<500ms，重连后`stream_id`换、`seq`从0，服务端不崩。协议异常要返回对应错误码，日志不打全量JWT。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多租户两组tenant同时跑，A租户拉到200并发，B租户保持10并发，B的P95不能被A拖到很夸张，比如超过450ms就算隔离失败？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，压测文本用固定短句模板，音频用我们内部无版权的提示音。那我就按这套跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

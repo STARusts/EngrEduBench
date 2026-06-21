@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘微表情与声纹识别联调背景下，用户与导师围绕双模态时序对齐、融合方案、丢帧处理及推理Profiling持续沟通（9轮），其中在边缘端对齐与融合方案部分与算法工程师沟通（2轮），在双模态异步输入测试部分与测试工程师沟通（2轮），并最终确定固定滑窗对齐与决策级融合方案、测试注入抖动方案及RKNN-Toolkit2补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上特征级融合效果最好，能保留更多细节。我打算用多模态Transformer，时间窗对齐用DTW动态时间规整。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还没测，但DTW在处理时间序列失真上是最优的，论文里都这么写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘端微表情和声纹时间对齐怎么做？特征级融合是不是也跑不动？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "固定滑窗能处理时间抖动吗？决策级融合会不会损失太多交互信息？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就固定滑窗对齐，决策级加权。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "视频一般30fps，音频一帧可能更短。丢帧的话，如果超过阈值就报错？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视频流和音频流采样率不一样，怎么造测试数据验证滑窗对齐逻辑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "注入时间戳抖动，这个能复现线上情况吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法建议固定滑窗加时间戳对齐，决策级加权融合。测试说要注入时间戳抖动和丢帧，还要对比单双模态F1。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我平时就看看打印的log时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太熟，RKNN那套我只会跑demo，profiling没弄过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这两天把RKNN-Toolkit2的文档看一遍，重点看模型可视化和耗时分析接口。写个简单的单层卷积跑通profiling流程，再把这套用到现在的微表情模型上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃DTW，用固定滑窗加时间戳对齐双模态；第二，采用决策级加权融合，不搞特征级；第三，测试构造30fps和100fps仿真流，注入时间戳抖动验证鲁棒性；第四，我得先学会RKNN的Profiling工具查延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在情绪轨迹编舞交互灰度运行评估背景下，用户与导师围绕互动可解释漏斗、分群留存口径、分母选择及采样与合规约束持续沟通（10轮），其中在事件模型与看板结构部分与数据分析师沟通（2轮），在隐私字段最小化、保留周期与审计权限部分与合规与隐私官沟通（2轮），并确认最小指标看板与两条漏斗、三类留存的交付范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "互动好就是参与多、点得多，然后留存也高。就先看PV、参与人数、互动次数这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…曝光、点击、同意权限、发弹幕、停留到结束？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那事件就叫exposure、click、submit、effect、resubmit、retention。字段就房间号、用户ID、时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看次日留存、7日留存，然后按新老用户切一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "新老用户、平台iOS安卓、白名单房间和非白名单、看过生效和没看过、互动过和没互动过、网络好坏、时段、主播不同。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 事件模型怎么建？我这边要做互动漏斗和分群留存，你给我个能直接用的口径和看板结构。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看懂了，就是要把“生效反馈”作为核心分群，然后留存要分回到互动房间、同主播和任意直播三种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我回去跟导师对一下分母这块。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问完了。数据分析师给的主线是漏斗expose→open→submit→effect_deliver_ok→5分钟内二次提交。留存拆三种：回到同类型互动房间、同主播同栏目、任意直播。分群以effect_deliver_ok优先。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用…看过入口的人当分母？然后看次日回到任意直播？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就用submit过的人当分母，然后看deliver_ok比例，再看二次提交。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能是主播差异？房间内容不同导致数据不一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去找数据工程师？还是产品？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "问题：1）实验桶按房间还是按用户；2）白名单房间是不是永远实验组；3）看板里优先看哪些指标，别一堆看不过来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 运行评估做互动和留存分析，事件里哪些字段不能直接用？保留周期、权限、审计留痕要怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是别把用户ID明文放进去，情绪也别做长期个人画像，尽量聚合，保留期短点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，合规说用户标识要hash隔离，情绪输入算敏感推断，评估期尽量做房间/桶级聚合，个人级只能白名单排障还要工单和审计。原始事件保留7到14天，超过就裁字段或只留聚合，看板不让单用户钻。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采样就…把数放大？乘个系数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，事件都带sample_rate，然后关键事件统一采样，不统一的就不算转化，只看趋势。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记的就是：看板先放入口漏斗和生效漏斗，两条。留存分三种，不只看总D1。分群优先看deliver_ok，再看实验桶、新老、网络、平台。采样每个事件带sample_rate，关键链路用同采样口径，不一致就别硬算转化。合规这块用户标识hash，情绪别做个人长期画像，原始事件最多留两周，看板只给聚合，单用户要工单和审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

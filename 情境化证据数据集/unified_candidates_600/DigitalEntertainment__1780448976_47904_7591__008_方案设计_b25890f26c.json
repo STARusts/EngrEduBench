@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在热门曲目高并发预览的高可用方案设计背景下，用户与导师围绕防雪崩、背压熔断降级、重试幂等及压测方案持续沟通（5轮），其中在防雪崩与背压控制部分与分布式系统设计师沟通（1轮），在压测与性能调优部分与性能调优专家沟通（1轮），并形成预览链路熔断降级加背压、融合链路重试加幂等及压测先单机再算扩容的设计方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多开几台机器呗，挂了再重启。应该花不了多少钱吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "要是人太多挤爆了，加个备用机行不行？怎么防雪崩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几万人同时推切片，CPU是不是得爆？怎么调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "背压就是让前面发慢点，熔断就是断网保护。我刚刚查了下熔断，跟保险丝一样，烧了就断。我觉得预览接口可以加个保险丝，断了就给用户提示“人太多稍后再试”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RPC失败就再试一次呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分梯度加人，看啥时候卡住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "预览熔断降级加背压，融合重试加幂等。压测先单机再算扩容。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

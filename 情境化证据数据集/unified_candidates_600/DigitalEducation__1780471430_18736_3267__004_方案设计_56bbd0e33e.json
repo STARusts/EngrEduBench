@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在虚实融合实验编排与物联中控系统总体架构设计背景下，用户与导师围绕虚实映射绑定方式、弱网可靠性、状态持久化短板及急停安全合规底线持续沟通（5轮），其中在弱网下指令下发可靠性及架构选型部分与孪生系统架构师沟通（2轮），并最终确定边缘侧状态机加心跳确认、云端事件溯源只做分析、物理急停硬线优先的架构硬约束及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "虚实映射这块怎么把孪生模型和物理设备绑一起，我有点想法。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "书上都说双向驱动，我觉得可以用CQRS，命令和查询分离。写侧用事件溯源，把每次操作都记下来，读侧就是孪生状态，这样肯定一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这CQRS加事件溯源的架构，在咱们这种物联中控场景下抗弱网行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设用纯事件驱动，在丢包率5%以上时同步延迟会超3秒，这假设能验证不？对照组就用状态机加心跳确认那种。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "看来纯事件不行，得用状态机那套。但边缘侧状态机怎么持久化我还没搞过，这块我短板挺明显的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去查查嵌入式数据库，比如RocksDB或者SQLite在网关上的用法，这周末把这块的demo跑通，至少得把断电恢复的状态重载逻辑搞明白，不然架构图画出来也落不了地。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以在系统里加个断连检测，超时就锁设备。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没画，光顾着数据流好看了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那架构就定边缘侧状态机加心跳确认，云端事件溯源只做分析，物理急停硬线优先。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

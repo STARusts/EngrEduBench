@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虫情预警告警服务联调与压测背景下，用户与导师围绕预警事件到工单流转的幂等键、状态机对齐、压测验收阈值与日志合规持续沟通（9轮），其中在告警去重键/返回码/重试与查询接口部分与后端工程师沟通（2轮），在压测用例设计与指标口径部分与测试工程师沟通（1轮），并明确联调三组用例与验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接把模型输出往告警接口一丢，告警那边建工单就完了。压测我用脚本打一波QPS，看挂不挂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件ID就用时间戳吧，同一分钟算同一个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 现在告警打到你们那边，重复告警怎么避免重复建工单？直接说你们怎么做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就照你这个dedup_key拼一下。异步就异步吧，反正我只要看到有工单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态就两种：成功和失败？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块你给个最省事的方案，我就想快点跑完。要测啥指标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等那组我懂，就是同一个key狂打。乱序补报我懒得搞，感觉没必要。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 查事件状态和工单号有接口没？我需要测创建是不是成功。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限我先用我自己的token测下不就行了，省事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了。我就不打印payload了，返回码记一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95小于1秒？错误率小于1%？幂等就不重复建单。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5万行这也要管？我感觉有点多余。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按你们说的拼dedup_key发告警；2）压测脚本打并发；3）用接口查event状态和工单号。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

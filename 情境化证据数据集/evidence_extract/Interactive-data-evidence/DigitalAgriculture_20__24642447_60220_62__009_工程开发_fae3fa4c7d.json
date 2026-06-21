@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在策略服务与调度最小闭环实现背景下，用户与导师围绕云端任务下发、边缘按资源串行、回执校验、幂等与重试落地持续沟通（11轮），其中在任务/指令模型与状态机及幂等键节点与后端工程师沟通（2轮），在核心测试用例覆盖节点与测试工程师沟通（1轮），在日志字段最小化与隐私边界节点与合规与隐私官沟通（1轮），并确定先实现云端状态单调更新+重试调度与边缘resourceKey锁+SQLite出队逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把调度做得更“完美”点，比如用统一的DAG，把能耗、水肥、环控都当成节点，支持回放和策略版本比较。然后边缘执行也能并行，提吞吐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "串行是为了避免同一时间给同一执行器下多条互斥指令，比如灌溉阀开关、风机启停。幂等我打算用taskId，再加deviceId、commandSeq。重试我想指数退避，再加最大重试次数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 策略任务调度这块你给我个能直接照着写的模型：任务/指令怎么拆？状态机怎么走？幂等键怎么定，重试/取消怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "resourceKey串行我懂了。commandId用taskId+resourceKey+hash算出来，等于指令级幂等。那我担心一个点：策略里有“灌溉10分钟”，它不是desiredState一个瞬间，hash怎么搞？会不会重复执行多次？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘侧我想做一个“执行队列表”，主键commandId，字段有resourceKey、status、attempt、nextRetryAt、eventSeq、payload。\n入队：云端下发Command写入SQLite，按resourceKey+nextRetryAt排序取READY。\n执行：每个resourceKey一个worker串行拉取。这样不同资源并行。\n去重：插入时commandId唯一约束，冲突就忽略，然后回个已存在的ack。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就线程池+按resourceKey做锁。取任务时先选一条READY且nextRetryAt<=now的command，尝试拿resourceKey的内存锁，拿到才发；拿不到就跳过再选别的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可能先用两段式：\n第一段从SQLite取一批READY（比如limit 50）按nextRetryAt排序；\n第二段在内存里遍历，能拿到锁的就执行，拿不到的留着下轮。\n饥饿我想加个“lastPickedTs”，优先挑很久没被选中的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那云端侧的Task/Command状态机，我写服务时要保证“重复回执不乱跳”。是不是每次更新都要带expectedStatus做CAS？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 给我一组策略调度的核心测试用例，优先挑容易漏的：幂等、乱序、重试、断网补传。要能落到单测/集成测的那种。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第3条乱序回执，我之前没太在意，我以为边缘会按顺序发。现在看还是得防。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "云端更新我打算写成：update where status in (allowedPrevSet)；不匹配就返回0行影响，直接忽略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们调度/回执日志要留哪些字段才够排障，又不踩合规？比如gatewayId、棚号、设备号、payload是不是都能打？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "payload我本来想全打，方便复现。那就改成hash+白名单参数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计查询我不太熟，先在接口层加个简单的role检查，查询日志写一条audit记录到表里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先写云端的Command状态单调更新和重试调度（nextRetryAt那套），再写边缘的resourceKey锁+SQLite出队逻辑。DAG那套我先放一边，等闭环跑起来再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

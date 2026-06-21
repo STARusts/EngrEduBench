@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在最小闭环进入测试压测与修复背景下，用户与导师围绕压测验收口径、网关侧幂等降磨损与日志合规持续沟通（9轮），其中在吞吐/延迟/可靠性用例与口径部分与测试与质量负责人沟通（2轮），在补发/重下发时policy_id稳定性与seq回退判定部分与后端工程师沟通（1轮），并形成网关计数器、拒绝执行降级与压测交付项清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想就是把上报频率调高点，看会不会崩，然后看日志有没有报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收点就是上报到云端、云端下发、网关解析、驱动dispatch这几个。数字的话……比如延迟在几秒内？吞吐就每分钟多少条。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "sqlite里有policy_id就不执行了。压起来如果重复下发，应该会被挡住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量负责人 压测这块要怎么做，主要看哪些指标？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "P95就先按10秒，丢包<0.1%，重复dispatch不超过一次。弱网就模拟掉线再回来。差不多这样？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重点就是三组压测：吞吐、延迟、可靠性。还有资源和日志。修复动作就是看P95，超了就优化，看重复dispatch有就继续查去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关侧就：收到策略次数、解析成功次数、dispatch次数、去重次数、sqlite大小？再加CPU内存。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就把压力拉高，看日志里有没有database is locked。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先执行再补记？这样不中断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂，写失败就不执行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 policy_id在补发或者重下发时会保持不变吗？还有会不会重算导致新id？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是policy_id一般不变，变的情况是版本或窗口。seq回退就当replay。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）网关加计数器：收到策略、去重、dispatch、失败分类、replay接收。2）sqlite写失败就直接拒绝执行策略，上报错误码。3）加policy_seq记录，seq回退不执行，打is_replay标记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只在策略事件写，不在每次上报写。压测时就看sqlite写入次数是不是跟策略次数差不多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给你看：一组压测结果，包含P95有没有超15秒、丢包率、同policy_id的dispatch次数，还有去重/失败分类计数。然后把三类问题优先修，尤其重复dispatch和sqlite锁，还有弱网队列堆积。日志里也不出现farm_name明文。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

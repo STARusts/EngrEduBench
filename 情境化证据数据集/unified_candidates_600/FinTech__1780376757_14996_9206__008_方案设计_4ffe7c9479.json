@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计极端压力熔断高可用评估背景下，用户与导师围绕重配引擎防雪崩方案取舍与异构架构演进负担持续沟通（4轮），其中在极端网络隔离下动态方案可行性部分与混沌测试工程师沟通（1轮），并最终形成采用静态分级熔断、FPGA硬中断驱动及混沌验证的评估约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算引入图神经网络动态预测流动性黑洞，提前触发熔断。拦截层直接用eBPF做无感拦截，零开销。重配状态机用Dapr的Actor模型，保证每个资金流重配都能独立死锁恢复。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我在重配引擎里加了GNN动态预测和eBPF拦截，还有Dapr Actor状态机做重配。极端压力下这套东西扛得住吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我最近刚看了Chaos Mesh在类似密态计算场景的白屏实验报告，里面提到在CPU throttle下，任何动态决策模型都会退化成不可控延迟。我确实缺对这种硬件级失效模式的理解。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把GNN和Actor全砍了，换成静态分级熔断。但是eBPF拦截是不是还能保留？它内核态执行快啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，我把eBPF也砍掉，重配就用FPGA直出的中断信号驱动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设计个混沌实验：自变量是跨域网络延迟（从10ms阶梯注入到1000ms），因变量是重配触发延迟和成功率。样本量跑1000次重配请求，分两组，对照组是无降级裸奔，实验组是现在的FPGA硬中断方案。随机化每次注入故障的时间点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "极端压力熔断高可用评估约束确认如下：1. 彻底放弃GNN动态预测和Actor复杂状态机，采用静态分级熔断；2. 拦截降级不走eBPF，直接复用FPGA固化的PHE算子中断信号触发硬熔断；3. 异构架构统一为纯FPGA，降低长期维护成本和演进负担；4. 混沌验证采用随机延迟注入，对照组为无降级裸奔，实验组为硬件硬中断，样本量1000次。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

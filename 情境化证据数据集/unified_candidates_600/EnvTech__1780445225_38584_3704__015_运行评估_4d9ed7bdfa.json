@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在阻控策略执行效能监控背景下，用户与导师围绕下游执行回调方案、异步解耦及超时口径持续沟通（6轮），其中在执行回调捕获与性能影响部分与部署运维保障员沟通（3轮），并最终形成基于MQ异步解耦的回调方案、30秒超时口径及轻量级MQ选型。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控啊？不就是看接口响应时间、成功率，还有CPU和内存这些？Prometheus上都有吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我管不到啊。图算完策略发给他们了，他们用不用我怎么知道？我又不能强行改他们数据库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在策略推给下游了，怎么知道他们用没用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第二层回调？这怎么加？得让下游改代码配合我们吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "运维说现在只有接口调用监控，没有执行回调。得让下游调我们的接口告诉我们执行了。但这得让下游改代码，他们能愿意吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果加个HTTP回调接口，下游要是响应慢或者挂了，会不会把我们推演服务卡住？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "运维说同步回调会卡死推演，得用MQ异步收。超时没收到就标未知。就是得多部署个MQ，运维成本高一点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "10秒？还是30秒？下游有些GIS渲染可能挺慢的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径确认：30秒超时，状态分已执行、未执行、未知。MQ选轻量的，比如Redis Stream。我去跟运维对一下接口路径。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

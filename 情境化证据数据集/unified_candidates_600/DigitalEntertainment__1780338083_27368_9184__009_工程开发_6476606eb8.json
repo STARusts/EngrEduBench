@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在引擎与信令通道联调背景下，用户与导师围绕跨端延迟抖动定位、序列化改造及引擎接口适配持续沟通（5轮），其中在边缘ACK延迟与序列化排查部分与场控信令开发工程师沟通（1轮），在抓包分析与协议替换部分与联调与压测工程师沟通（1轮），并形成信令改Protobuf、ACK通道分离及引擎补PB输出的联调约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了引擎日志，时间轮出队的时间戳没毛病，肯定是信令下发那块堵了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "通道那边是不是卡了？边缘端收信令慢了快30ms。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "信令那边说ACK慢，还要我改序列化。JSON不是挺好嘛，反正能发过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "抓包怎么看延迟？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要换Protobuf，还要独立ACK通道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，我插桩预留的是对象接口，直接吐PB的话，我得加个序列化器。但我不会写PB的生成脚本啊。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

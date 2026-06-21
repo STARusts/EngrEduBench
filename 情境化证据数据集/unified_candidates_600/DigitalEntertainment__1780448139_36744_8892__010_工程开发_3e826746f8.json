@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发背景下，用户与导师围绕边缘探针与中心管控平台联调的通信协议、序列化格式及断网缓冲策略持续沟通（6轮），其中在联调协议与数据格式部分与探针联调工程师沟通（4轮），并最终确认gRPC上报、Protobuf序列化、RingBuffer缓冲及心跳机制等核心联调策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个接口POST过去呗，通就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这东西咋发啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "心跳就是定时发个1呗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "格式就JSON啊，把抓到的IP存起来发过去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Protobuf太麻烦了，还要编proto文件，JSON随便拼一下就完了。能不能就用JSON？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "五元组我知道，源IP目的IP那些。proto文件我不会写，我查查模板改改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就src_ip, dst_ip, src_port, dst_port, protocol, 还有啥特征偏移？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就在本地开个队列存着，网断了就塞队列里，算环形缓冲了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就覆盖老的。那我先去抄个Proto模板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "gRPC，Protobuf，五元组加偏移，断网存队列覆盖老的，心跳10秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

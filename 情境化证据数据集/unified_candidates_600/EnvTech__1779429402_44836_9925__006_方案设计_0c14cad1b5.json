@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在碳减排核算与数据流设计背景下与导师围绕LCA核算、排放因子、BMS流转及触发机制持续沟通（6轮），其中在动态因子接入部分与核算引擎工程师沟通（1轮），在BMS流转与预处理部分与数据流规划师沟通（1轮），并最终形成边缘粗洗、链下湖映射、准实时微批触发及动态因子适配器的数据流方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用标准的LCA模型。把拆解产线和梯次利用的BMS数据拿过来，算一下碳排放减量，然后哈希上链。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因子就先用国标默认值，写死在配置里，以后有变化再人工改。BMS数据直接算应该没问题吧，都是结构化数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电池LCA核算里排放因子必须动态获取吗？怎么接？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "BMS数据如果不直接算，要怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "因子要搞个适配器去拉API，不能写死。BMS数据得先在边缘洗一遍，存到湖里，核算引擎再从湖里拿快照算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "清洗规则我列个模板，找业务方填。触发机制用批处理吧，每天晚上跑一次，比较稳，不容易出bug。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据流是：边缘网关粗洗降采样 -> 入链下数据湖标准化映射 -> 准实时微批触发核算引擎(调动态因子) -> 结果哈希上链存证。因子适配器独立部署供引擎调用。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

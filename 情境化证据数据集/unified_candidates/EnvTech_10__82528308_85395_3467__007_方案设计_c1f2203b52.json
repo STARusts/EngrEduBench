@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段梳理数据接口与主数据规范背景下，用户与导师围绕主数据口径、接口契约与合规边界持续沟通（7轮），其中在主数据对象划分/编码与跨系统映射上与数据架构师沟通（3轮），在化验授权与A/B/C用途约束、审计留痕及敏感字段上云规则上与合规与标准经理沟通（1轮），并形成接口目录骨架与主数据对象及编码规则写入方案的口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主数据就是把表统一一下吧，比如设备表、点位表都放一起。接口就是对接DCS和化验系统，把数据拉过来就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "容易错的就是名字不一样，还有单位不一样。还有……权限？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 主数据这块到底要写到什么程度？我就怕写太细。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听起来就是ID要很长？能不能一个设备一个ID，然后测点就跟着设备走，不单独管tag_id了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是要分域，然后每个对象有id。接口就写实时和批量，嗯。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准经理 A/B/C这些在接口里要怎么写？是不是加个字段就行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那B类也能参与联动对吧？我理解是它可以当触发条件之一，只要不是唯一。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那我就写“B只能辅助，不当主触发”。C就只审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "园区plant_id，来源就…平台自己。单元unit_id，可能也是平台。设备asset_id，来源EAM？测点tag_id，来源DCS。样品sample_id，来源化验系统。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "化验项目就LIMS管吧，平台只用它的名字。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "都可以。我就担心I4写太多控制细节，会不会越界到联调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这条我能写进去。就是先抽样检查，免得后面全炸。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

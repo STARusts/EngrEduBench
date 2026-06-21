@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在微域孪生与边缘高可用方案设计背景下，与导师围绕弱网断网下阀控兜底与验证方案持续沟通（8轮），其中在边缘网关本地推演与状态机闭环容灾部分与边缘高可用架构师沟通（2轮），并最终形成弃用云端重连、采用边缘网关内置孪生推演与状态机闭环自治及混沌工程验证的架构决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接上云边协同架构，用K8s分发孪生模型，MQTT Broker做集群，断网了等云边一重连指令就能恢复，感觉挺省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那有没有那种一键自治的框架？我看网上KubeEdge好像有边缘自治功能，能不能直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农田断网阀控要毫秒级，云边协同来不及，怎么搞高可用？孪生推演放哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地跑孪生推演？网关那点算力够吗？状态机闭环是不是那种边边协同的容灾？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我之前看KubeEdge的边缘自治文档，好像也是断网自治的思路，是不是可以直接套这个方案？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这底层机制我确实没细看，光看了个名词。看来不能直接套KubeEdge。我得去查查边缘状态机怎么做无缝接管了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "认。只能在网关里写状态机了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那验证的时候，是不是拔网线试一下就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就多断几次？长短不一地断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能光靠手拔。得写脚本注入故障，跑个几十次看偏差分布，还得看不同丢包率下的状态机流转是不是还正常。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "弃用云端重连兜底，边缘网关内置轻量孪生推演与状态机闭环实现断网自治；验证采用混沌工程注入弱网故障，统计脱盐率偏差。我这就去查状态机无缝切换的写法。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在情感特征服务与策略服务联调背景下，用户与导师围绕通信方式、容错机制及熔断兜底策略持续沟通（5轮），其中在通信选型与容错部分与后端开发工程师沟通（2轮），在极端状态熔断兜底策略部分与心理干预策略师沟通（1轮），并最终形成区分向量缺失与熔断的两种兜底逻辑及接口契约基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解耦嘛。用消息队列，发个Event过去，策略服务订阅消费。教科书上都是这么写的，异步解耦削峰填谷，最标准的微服务架构。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "积压就，加消费者实例？或者，就丢弃过期的状态？只处理最新的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征服务往策略服务推情感向量，MQ选型还有容错，怎么搞？我倾向Kafka，吞吐量大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "gRPC？不是MQ吗？那熔断兜底是啥逻辑？直接返回空？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我这就去改接口定义，把MQ换成gRPC。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "熔断后的默认策略，能用中性陪伴吗？后端说给个默认的保底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "好险。那得区分向量缺失和熔断两种情况。兜底策略得拆成两种：缺失用中性陪伴，熔断用紧急舒缓引导。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

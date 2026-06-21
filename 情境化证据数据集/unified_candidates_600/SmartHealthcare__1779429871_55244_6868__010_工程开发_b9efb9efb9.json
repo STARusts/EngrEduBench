@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在模型下放边缘网关需接入ICU多品牌监护仪数据的背景下，用户与导师围绕多协议联调方案、网关侧适配责任划分与流式计算接口容错持续沟通（8轮），其中在私有协议解析与分工确认部分与边缘网关开发者沟通（2轮），在数据格式标准化部分与数据集成专家沟通（1轮），并最终确定网关出标准化Protobuf流带缺失标记、Flink按窗口接收的接口契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "开串口读数据呗，或者买那种现成的医疗物联网网关，应该自带驱动吧，把数据转成JSON发上来不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不熟啊，我就搞过纯软件的。解帧不就按文档对着截取字节？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘网关开发者 监护仪数据接进来是不是很难搞？买现成网关搞不定吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们肯定得延迟低啊，几十毫秒那种？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据集成专家 设备出数频率都不一样，接上来格式乱了咋办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以还得在网关上做单位换算和时间对齐。那我Flink接收端就只管收标准流了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写不了，Rust我只看过语法。这得找嵌入式的人写吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Protobuf吧，比JSON省带宽。丢包就填空值？或者上一帧插值？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口用Protobuf，网关侧负责解帧、单位换算和时间戳打平，丢包打上缺失标记。Flink这边按窗口收。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘网关开发者 刚才定了个分工，网关侧负责解帧、单位换算和时间戳打平，如果丢包就打缺失标记发上来，用Protobuf格式给Flink。这块你们能接吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "导师，网关那边说能接，打缺失标记会吃点CPU但没问题。Protobuf也同意了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

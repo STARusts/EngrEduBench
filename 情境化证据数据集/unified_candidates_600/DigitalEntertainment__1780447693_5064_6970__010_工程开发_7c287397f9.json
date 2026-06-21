@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在着色器逻辑落地背景下，用户与导师围绕跨端着色器编译策略与性能压测工具链持续沟通（5轮），其中在变体剥离与聚类策略部分与材质重映射工程师沟通（1轮），在移动端算力量化与压测工具链部分与跨端效能调优师沟通（1轮），并最终确认基于能量等效簇的宏定义静态分支剥离方案及包含GPU功耗的压测基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Uber Shader配合常量折叠，在运行时由差分触发器传入uniform控制分支。压测的话，主要盯指令流下发延迟和GPU执行耗时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "寄存器溢出确实是个坑，那可能还是得做变体剥离。至于工具链，我平时主要用Nvidia Nsight看PC端，移动端的话，我了解一些GPU Profiler的原理，但具体的自动化采集脚本和管线集成，这块我确实没实操过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想改用静态变体剥离。我们在PBR重映射时，参数组合大概有上百种，如果全剥离编译，加载时间会炸吧？有没有更优的聚类策略？另外，跨端转译（比如HLSL到MSL）有什么坑要提前避？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测方面，除了帧率和显存，跨端差分下发时移动端的算力开销怎么量化？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "功耗墙和降频确实容易被忽略。RenderDoc和Arm Streamline我听过，但Python驱动BatchMode拉Perfetto trace这套自动化流程，我之前没拼起来过，只知道单步抓帧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "坚决放弃Uber Shader，选宏定义静态分支加能量簇聚类。动态分支在移动端的寄存器压力和执行发散不可控。压测基线除了帧率和显存，必须加上移动端的GPU功耗计数和降频触发时间点，这是算力降级的前置依据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去梳理能量等效簇的宏定义映射表，并搭建Streamline的采集环境。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

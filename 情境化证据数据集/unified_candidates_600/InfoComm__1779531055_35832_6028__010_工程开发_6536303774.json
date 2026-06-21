@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在算子工程化背景下与导师围绕端侧算子封装、动态shape处理、量化校准与精度验证持续沟通（7轮），其中在动态shape量化、算子融合规则及Mask排布格式部分与模型工程化实施者沟通（3轮），并最终形成Mask+Value接口、手写融合算子、沙箱校准闭环及INT8精度验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "稀疏化出来的特征维度是动态的，算子封装得支持动态shape。理论上只要保证前向传播图不断，算子直接用PyTorch的nn.Module包一层就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "量化我知道，FP16转INT8嘛，算子融合就是把Conv和BN合起来。但端侧芯片架构不一样，融合规则怎么定我没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们稀疏化特征是动态维度的，后面接信源信道联合编码，这种结构转TensorRT或者做INT8量化，动态shape怎么处理？算子融合有没有现成规则？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "改成Mask+Value对？那特征存储不就翻倍了？手写CUDA kernel这个工作量大不大？我不太会写底层算子。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实施者说动态shape没法直接INT8量化，得改成固定维度，用Mask和Value分开传。还有TopK和Embedding得手写CUDA融合，他可以给模板，但我得定好接口。我之前想用稀疏矩阵传是不是不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "校准数据集，我之前联调存的统计量日志能用吗？不行，那只有统计量没有原始数据。那得从沙箱里重新跑一遍原始特征生成校准集？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Mask的排布格式，我是按C*N排还是N*C排？NPU对内存连续性要求高，我怕排错了一半算力浪费在转置上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Mask排布格式，NPU这边对齐C连续还是N连续？我打算按Batch在前排，也就是N*C，这样取同一个特征的所有样本比较快。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "C*N排布，特征通道连续。我这就去改接口定义和算子封装脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

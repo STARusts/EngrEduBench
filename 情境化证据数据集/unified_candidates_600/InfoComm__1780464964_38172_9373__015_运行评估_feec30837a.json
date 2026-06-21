@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上意图调度失败飙升需对极端信道丢包溯源的背景下，用户与导师围绕物理信道与算法失效的区分、条件触发阈值标定及归因落盘持续沟通（5轮），其中在判别指标选取与计算开销部分与信道异常研判员沟通（2轮），并形成基于CSI与散度相关性的条件触发归因逻辑、离线加在线阈值标定方案及落盘字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "极端丢包导致语义失真，进而意图重构失败。既然ClickHouse里已经有意图哈希和信道参数的明细，我倾向于先做关联分析。如果同一信道条件下大量意图哈希都失败，大概率是物理信道崩了；如果是特定意图哈希失败，可能是免疫算法对这类语义特征抗噪不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "光看意图哈希不够。得把物理层的误码率和语义层面的特征提取置信度结合起来看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从信道特征看，有没有什么指标能精准区分这两种情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就按相关性做归因分类：强相关归信道，弱相关归算法。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "计算语义特征散度的开销大吗？在线实时算的话，会不会把本来就卡的总线彻底压垮？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "在归因引擎里加一层逻辑：先看CSI是否突降，如果是，直接标记信道归因；如果不是，再触发散度计算，判断是否算法归因。这样既保证了溯源精度，又控制了算力开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们可以先拿前两周的信道历史数据跑个离线分布，取P95的波动率作为初始阈值。上线后再根据实际误报率微调。这样既不拍脑袋，也能快速闭环。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回ClickHouse，加两个字段：`root_cause_type`（channel/algorithm/unknown）和`semantic_divergence_score`。这样后续复盘或者给算法专家做模型迭代时，直接能拉出算法归因的样本集，不用再全量回扫原始包了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路灰度与排错背景下，用户与导师围绕灰度流量切分与背压降级阈值设定持续沟通（6轮），其中在边缘节点灰度染色与平滑切流部分与边缘智控工程师沟通（1轮），并形成基于设备ID打灰度标走Topic路由及wrk+Lua压测定阈值的排错方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切流量我直接在网关层按比例放行呗？先放1%跑跑看，没问题再放大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "谱仪那边能直接配IP白名单不？新服务只让几台机器连。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘节点灰度染色咋搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘那边用设备ID打灰度标，放MQTT的Topic里，云端新服务只订阅带标的Topic就行。排错还得看背压，识解慢了边缘得丢帧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢帧肯定影响精度啊，阈值我随便设个70%内存占用率？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前两天刚看了wrk，能发TCP包。但我没用它压过MQTT啊，这能通吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "wrk加Lua脚本压MQTT。我试试，压出极限QPS再算阈值。这样定阈值确实比拍脑袋准点，排错也有数据看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去写Lua脚本了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

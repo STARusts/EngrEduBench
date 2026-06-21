@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在流域微态水质侦测与排污溯踪系统边端固件开发背景下，与导师围绕边端软件架构、硬件资源边界与固件稳定性验证持续沟通（5轮），其中在边端架构与缓存可行性部分与微流控固件开发沟通（2轮），最终放弃K3s/DuckDB方案，敲定FreeRTOS核心模块与验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想在边端引入K3s，把水质采集、异常初筛、流场预计算都做成微服务容器化部署。另外为了防弱网断线，需要在边端部署一个DuckDB做本地时序缓存，这样重连后能做复杂的批量续传和断点查询。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "STM32L4系列，RAM大概128KB，Flash 512KB。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "128KB RAM的STM32上，能塞下K3s和DuckDB吗？如果不行，本地缓存和架构该用什么？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那边端不就只能做个傻采集了？我想在边端加个轻量图网络做预溯踪，降低云端压力，现在也跑不了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看来边端只能做FreeRTOS+裸数据采集+Flash环形缓存了。图网络预溯踪只能放云端。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对FreeRTOS下的内存监控不太熟，怎么保证采集任务不会栈溢出？以前都在Linux上用Valgrind，RTOS下两眼一抹黑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得补一下RTOS下的调试方法，这两天我定个短周期目标：查FreeRTOS的API手册，写个钩子函数记录任务栈的High Watermark，再看看怎么用Tracealyzer抓可视化日志，把这套内存监控机制加到固件里，验证任务调度有没有死锁。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心模块：1. 微流控泵阀驱动；2. ADC DMA采集；3. 滑动窗口滤波；4. 阈值初筛；5. 异动事件SM2签名；6. Flash环形缓存与幂等续传。验证口径：标准液标定ADC，测滤波信噪比，FreeRTOS栈水位监控与溢出钩子。放弃K3s、DuckDB和边端图数据库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

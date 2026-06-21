@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在精度监控P0阻断规则上线导致信贷转化率暴跌背景下，用户与导师围绕异常归因及降级授信通道落地规则持续沟通（7轮），其中在业务降级预案部分与绿色金融产品经理沟通（1轮），并最终形成阻断改降级、系数动态拉取、订单打标抽检及推送波动提示四条改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拉了下网关日志。报错码是BLOCK_BY_P0的占了大概65%，还有35%是流转到了信评引擎，但最后状态是REJECT。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在碳汇残差一超10%我们就直接阻断信评流转，导致信贷转化率暴跌。业务上这块怎么算？有没有什么降级策略，不能直接卡死吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是别直接返回失败，给个低额度？那风控能认？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "信评引擎入参加个字段，比如`degrade_flag`，如果是true，就把碳汇增信额度砍掉？或者乘个折损系数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我哪知道，得风控定吧。我就负责把开关加上去，系数给他们配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，阻断逻辑改成降级，入参加`degrade_flag`；第二，折损系数不能写死，走规则中心配置；第三，降级订单打标，走人工抽检。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就这四条：改降级逻辑、系数动态拉取、订单打标抽检、推送波动提示。我这就去改流转代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

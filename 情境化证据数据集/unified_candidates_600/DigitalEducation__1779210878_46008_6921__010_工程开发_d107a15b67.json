@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在端到端联调效能瓶颈背景下，与导师围绕硬编码检索脚本重构与Faiss参数调优方法持续沟通（6轮），其中在Faiss检索与LoRA推理调优部分与算法工程师沟通（2轮），并最终形成nprobe可配置化与8bit量化的重构及验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耗时全卡在Faiss检索和LoRA推理那块。召回率低，我猜是因为子集数据量太少，特征没凑够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调发现蒸馏推理P99要2秒，召回才15%。Faiss检索和LoRA推理都慢，这烂脚本怎么改？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "8bit量化掉点严重吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "量化误差0.02可以接受。我回去改这俩参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差0.02就是量化精度够用吧。误差来源，可能是特征提取模型本身的能力不行？我对Faiss的nprobe参数调优其实不太熟，之前一直用的默认值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去翻Faiss的官方调优指南，把IVF的参数关系理一下。刚才他说nprobe 32是折中，我自己跑一遍不同nprobe的benchmark，画个延迟-召回曲线，这样定参数心里有底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先把nprobe改成可配置的变量，加上8bit量化的模型加载逻辑。跑全量验证看P99能不能压到500ms以内，召回率目标先定40%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改nprobe和量化，验证P99和召回，盯Top5分布。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

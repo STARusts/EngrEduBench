@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧集平台方案设计收尾背景下，用户与导师围绕安全审计与高可用的控制点、SLO、降级与审计字段持续沟通（7轮），其中在鉴权/防伪防刷与最小披露审计留痕上与安全工程师沟通（2轮），在关键链路SLO、降级优先级与演练范围上与运维与SRE沟通（1轮），并汇总形成可评审的12条设计要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按链路拆一下：创作侧（编排/发布）+ 播控侧（GetNextChoices/CommitChoice）+ 播放取流。风险点我觉得三类：  \n1）鉴权与越权：创作侧可能跨项目/跨剧集读写；播控侧可能伪造 decisionToken 或刷 CommitChoice。  \n2）审计不可追溯：尤其是 choices 被裁剪后，端上看不到细节，审计要能在服务端还原“当时返回了哪些候选、为什么裁剪”。  \n3）可用性：CommitChoice 和取流是强依赖链路，任何一段抖动都会放大成卡顿；需要明确可用性目标和降级，比如“互动不可用但能继续看主线”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "信任边界我倾向这样：  \n- 端与播控 API：不信任端，所有分支决策以服务端为准；decisionToken 只做幂等锚点，不承载敏感信息。  \n- 编排控制台与编排服务：需要强鉴权+细粒度权限（项目/剧集/环境/发布动作）。  \n- 播控服务与策略/裁剪引擎：内部服务间要有服务身份，避免被横向调用。  \n一致性上：  \n- CommitChoice：必须“写入选择结果 + 生成 nextNodeMediaKey”的逻辑一致（至少读写同一版本的剧情图）。  \n- 审计日志：可以最终一致，但要保证不丢、可补偿。  \n- 指标埋点：最终一致，允许延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 我们的互动剧集平台在方案设计阶段，要补齐“安全审计与高可用设计”。想请你给：1）创作侧权限模型的建议粒度；2）播控侧 decisionToken/decisionId 的防伪与防刷思路（不展开到代码）；3）审计留痕字段最小集合，既能追溯又符合最小披露。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个担心：hash 只能证明“返回过某集合”，但如果要解释“为何裁剪掉某个选项”，要不要把裁剪规则也留痕？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 现在要在方案设计阶段补“高可用设计”。场景是互动剧集播放中要 CommitChoice 并拿 nextNodeMediaKey 直接取流。希望你给：1）关键链路的 SLO 建议（按用户体验口径）；2）降级策略优先级（互动失败如何不影响继续播放）；3）依赖故障时的隔离与演练范围。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这里我想取舍一下：L2 里“异步补写”如果不影响剧情，只用于统计，我认可。但我们之前把一致性与正确性放得比较靠前，会不会被认为“选择没落库就不算提交成功”？产品体验上，用户点了没反应也不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我建议把语义拆成两层：  \n- 交互层成功：端上拿到 nextNodeMediaKey 并顺利开始下一段播放，这叫“体验成功”。  \n- 记录层成功：CommitChoice 落库并进入审计链路，这叫“业务成功”。  \n正常情况下两者绑定；进入 L2 时允许体验成功但业务成功延后，通过 traceId + decisionTokenId 做补偿关联。端上如果进入 L2，需要明确返回一个可区分的状态（比如 successWithDegrade），让客户端知道不要重试导致重复提交。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计我倾向“本地缓冲+异步投递”，投递失败不阻塞主链路，但要有丢失保护：  \n- 关键审计（发布、回滚、权限变更、CommitChoice）必须至少落到可靠队列或本地持久化缓冲；  \n- 如果审计系统不可用超过阈值，发布侧直接禁止发布（Fail closed），播控侧继续服务但打高优告警并记录“审计降级标记”。阈值我不太确定，可能要跟合规一起定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先给一版要点清单：  \n1）权限模型：创作侧 RBAC + 资源域（项目/剧集/环境/发布动作），含 break-glass 紧急权限（短时效+强审计）。  \n2）服务间身份：播控、策略/裁剪、编排等内部调用使用服务身份鉴别，避免横向越权。  \n3）decisionToken：服务端签名；绑定 sessionId/nodeId/issuedAt/ttl/graphVersion/policyVersion 摘要；CommitChoice 校验签名、TTL、节点进度一致性。  \n4）防刷：CommitChoice 多维限流（账号/设备/session/ip/剧集）+ 异常模式（高频、跨节点、重放、同 token 不同 choice）触发降级到默认主线。  \n5）审计-决策最小字段：traceId、sessionId、匿名 userId（可哈希）、episodeId、nodeId、returnedChoicesHash、choiceId、decisionTokenId(hash)、policyFlag、hintCode、ruleHitCodes、graphVersion/policyVersion、nextNodeMediaKey、latency、errorCode。  \n6）审计-发布最小字段：actorId/role、resourceId、action、before/after 版本、变更摘要 hash、审批单号/理由、时间戳、来源信息。  \n7）SLO：GetNextChoices 99.95% 月可用；CommitChoice 99.9%；同时以“选择后 2s 内开播下一段的比例”作为体验指标。  \n8）降级 L1：策略/裁剪依赖异常时，用短 TTL 缓存策略 + 更保守裁剪（少给 choices），端仅拿通用 hintCode。  \n9）降级 L2：CommitChoice 超时/失败时，允许“体验成功但记录延后”：走 defaultChoiceId 主线播放，服务端返回可识别的降级状态；异步补写仅用于统计/审计关联，不改变已播放路径。  \n10）降级 L3：播控不可用时，播放器退化线性播放，互动入口置灰。  \n11）审计链路可用性：主链路不被审计投递阻塞；关键审计本地持久化缓冲/可靠队列；发布侧审计不可用触发禁止发布，播控侧继续但打审计降级标记并告警。  \n12）演练范围：策略服务超时、DB 主故障、区域 CDN 退化、限流误杀；验收点含“降级触发正确+播放不中断+traceId 可串起来”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

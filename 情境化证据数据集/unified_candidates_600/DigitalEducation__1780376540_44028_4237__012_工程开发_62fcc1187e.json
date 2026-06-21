@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在策略引擎联调收口背景下，用户与导师围绕前端渲染掉帧与主线程阻塞的性能优化持续沟通（5轮），其中在渲染分层与布局计算隔离部分与交互体验设计师沟通（1轮），在策略下发频控与状态合并部分与算法效能工程师沟通（1轮），并最终形成计算渲染分离、Worker处理布局与状态合并、差分包与零拷贝通信的架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "目前架构上是WebSocket双向长连接，策略引擎推演结果直接推到前端。渲染层我用SVG画图谱关系，微步进卡片用React并发模式。但压测时节点超过500，SVG重绘就明显掉帧，策略下发频率一高，主线程直接阻塞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了任务管理器的内存波动，但具体火焰图和长任务分布还没细抓。对Chrome DevTools的Performance面板分析脚本执行耗时这块，我抓不准哪个函数调用栈是瓶颈，只看到一堆React调度器的fiber节点更新。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱节点动态展开时，SVG重绘掉帧严重，除了减少DOM节点数，在渲染分层和布局计算上有什么隔离主线程的方案？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "策略引擎推演结果现在是通过WS全量推给前端，推演密集时前端状态合并跟不上。下发侧有没有频控机制？怎么配合前端的渲染帧率？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "布局计算放WebWorker，算好坐标主线程只管画；推演下发改差分包，前端用Idle回调合并状态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Worker通信序列化大图谱结构有开销，差分更新让前端状态管理逻辑变复杂，容易出合并冲突。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Worker通信开销是稳定可预期的，序列化用Transferable对象能零拷贝传ArrayBuffer。全量深拷贝的GC停顿是随机卡顿，必须干掉。差分合并逻辑虽然复杂，但可以收敛在状态管理层的一个reducer里，不影响视图层。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "架构定了：主线程零计算，只做DOM更新和动画；Worker负责布局和状态合并；通信只传差分和坐标数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

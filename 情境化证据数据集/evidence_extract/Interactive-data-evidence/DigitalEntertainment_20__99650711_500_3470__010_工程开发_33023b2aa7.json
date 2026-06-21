@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多端审片协同后续接入AIGC检测与风险标注背景下，用户与导师围绕将检测结果事件化落库、字段口径、幂等去重、证据引用与权限控制持续沟通（11轮），其中在检测接口最小输出与阈值版本复现部分与算法工程师沟通（4轮），在证据索引敏感性、可见范围与导出审计部分与合规与风控负责人沟通（1轮），并明确callback接口、表结构与联调开发顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是……检测结果一多就乱。然后标注会不会覆盖人写的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "检测类型就，AIGC吧，还有色情暴力？字段就，risk_level、score？不污染就是不改原来 annotation？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你们检测接口最小给啥？我这边要接进去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "shot_id 我们有吧，之前不是有镜头？score 是越大越危险？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "evidence_ref 我就存一串文字行不行，比如“第10帧有问题”？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行，我记一下。run_id 是每次跑都不同，那幂等不是冲突吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概就是 risk_type、score、model_version，和证据的 id。然后 run_id。trace_event 放这些小字段就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "API 入参就 asset_id，然后我就调模型。落库事件就存 risk_type、score。前端取就取这些显示红黄绿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "检测任务：asset_id、run_id。结果事件：shot_id、risk_type、score、model_version。证据引用：frame_ids？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "severity 就是高/中/低？我能直接用 score 分三段吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那证据 evidence_ref_id 我们怎么来？我就存 JSON？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 证据索引这块，frame_ids 这种算敏感吗？默认能给谁看？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就把 evidence_ref 放到单独表，然后只有特定权限能查。导出就不带。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我负责后端接 callback 入参，然后落 risk_event 和 evidence_blob。前端那边我不动。联调就是先让算法打一个假的回调过来，再看列表能不能出。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用 run_id？每次都不一样吧。那就 asset_id+run_id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "shot_ref_hash 我就把 shot_id 直接拼？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "400 就是参数错。行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不存 evidence_ref？只存 event？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "单测我就测个超过就截断。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时会打 debug log……那我就不打。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先建表和 callback。然后做唯一键去重和截断校验。权限我可能要等前端？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

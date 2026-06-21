@@ -1,0 +1,581 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在暗池拆单系统痛点调研背景下与导师围绕核心痛点、防窥探逻辑与合规红线持续沟通（8轮），其中在拆单意图感知与冲击成本部分与市场微观结构分析师沟通（1轮），在防窥探撤单合规边界部分与合规与审计规划师沟通（1轮），并最终锁定意图暴露抢跑与合规内自适应拆单两大核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "网上有VWAP的模板吧，我直接套过来改改参数能不能跑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点不就是单子太大嘛，直接砸盘价格肯定崩。拆小一点慢慢卖呗，VWAP不就是干这个的，大家都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池拆单意图怎么被感知的，有没有防窥探的现成算法直接用的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是不能固定拆，得变着法拆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池拆单合规有啥限制？撤单不能随便撤吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我缺暗池微观那些东西，还有合规限制。我这一周先看两篇暗池流动性的论文，搞懂探矿者怎么识别的，不然没法定拆单策略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能瞎撤单，得看流动性拆。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在建立暗池流动性分布画像背景下与导师围绕画像构建思路与核心特征选取持续沟通（4轮），其中在微观结构反演特征部分与市场微观结构分析师沟通（1轮），并最终确定画像底座的三个核心微观特征及合规反推获取方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "画像简单啊，网上那种用户画像模板一堆，我down一个改改字段名，把年龄性别换成买量卖量就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就搞几个标签呗，大单、小单、撤单多、撤单少。这还不行？没现成的我就随便先写几个凑合。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种通用的数据字典？我直接导进来用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还要搞什么冰山残留、回补速率，听着就头大。就弄个买卖方向和挂单量不行吗？简单点先把系统跑起来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在流动性画像底座锁死后的暗池拆单合规边界明确背景下，用户与导师围绕暗池拆单合规红线与量化约束持续沟通（6轮），其中在防信息优势滥用与防价格操纵的合规边界梳理部分与合规与审计规划师沟通（2轮），并最终确认锁死意图感知结果用途锁定与拆单流占比上限约束两条合规底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看隔壁组搞过，直接抄他们的合规文档不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池拆单怎么搞才不违规？有没有通用模板直接套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能被反推？那怎么感知意图啊，矛盾了啊。不造成价格操纵是不是就是别赚太多？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "意思就是不能让人看出来我们在拆单，也不能让我们的单子把价格砸穿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个阈值呗，超过多少就不拆了。或者搞个日志存起来证明我们没干坏事。"
+              }
+            ]
+          },
+          {
+            "microScene": "在冲击成本消解系统商业模式定调背景下，用户与导师围绕计费模式、动态基线与数据合规约束持续沟通（6轮），其中在冲击成本量化计费部分与市场微观结构分析师沟通（2轮），并最终形成动态基线对比与节省分成的计费模式及数据解耦约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "冲击成本怎么算钱？别人都按笔收，非得搞特殊？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还要算基线？太费事了。直接写死一个冲击比例，超过这个比例就给钱，行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "动态算还得拉一堆行情数据。我就想找个现成计费模板改改参数拉倒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算钱的数据要是拿去干别的，不就漏底仓了？那就把算钱的和感知的分开？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不收死钱，按省下的冲击成本分账。算账的数据不能乱用，模块得隔开。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在暗池拆单竞品策略与演进路线图制定背景下，与导师围绕照搬竞品逻辑风险、暗池验证缺口与折中方案演进阶段持续沟通（7轮），其中在竞品拆单逻辑适用性部分与市场微观结构分析师沟通（1轮），在防窥探延时合规性部分与合规与审计规划师沟通（1轮），并形成V1密态路由打底与V2意图感知接入的路线图约束及补学理论的决定。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接抄现成的呗。我看X公司那套拆单系统卖得挺好，先把他们VWAP逻辑搬过来，快点上线赚钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@市场微观结构分析师 X公司那套拆单我们直接拿过来用有啥问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计规划师 抄他们防窥探那块呢？我看他们加了个随机延时挺管用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我不抄延时了，拆单逻辑抄一下总行吧，改改参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑点历史数据看看呗，滑点小就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暗池微观结构这块我确实没看过，我回去把X公司发的暗池白皮书翻一下，看看他们怎么定义流动性的，套到咱们这先凑合用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都不选，太慢了。能不能这样，拆单壳子先抄X公司的，里面核心寻优换成咱们自己的暗池流态，防窥探听合规的用密态。先出个能跑的，后面再慢慢换。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "V1先跑通密态路由，V2再加感知。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这就去下两篇暗池微观结构的论文看看流动性指标怎么算。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在暗池意图感知模型架构设计背景下，用户与导师围绕架构选型、验证口径设定及特征计算短板持续沟通（6轮），其中在HGT适用性部分与意图识别研究员沟通（1轮），在流态特征编码部分与市场微观结构分析师沟通（1轮），最终放弃开源模型，暂定定制稀疏GNN方向与双约束验证口径，并决定查阅论文补齐特征计算逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我直接套HGT行不行？你们那特征直接拼进向量里不就得了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "他们说算不通，延迟扛不住，还会丢因果。那我不套HGT了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑跑看呗，谁准确率高谁就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "隐含流动性深度怎么算我都不知道，这对照我搭不出来啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去查那两篇暗池微观结构的论文，把流动性深度和撤单率突变的定义抠出来，今晚搞明白特征计算逻辑，明天回来弄对照。"
+              }
+            ]
+          },
+          {
+            "microScene": "在暗池拆单方案设计背景下，用户与导师围绕拆单算法选型、冲击成本消解及流控接口定义持续沟通（8轮），其中在暗池动态拆单流控逻辑部分与算法策略工程师沟通（1轮），在感知模型与流控解耦接口规范部分与量化交易架构师沟通（1轮），并最终形成基于意图感知联动的动态寻优拆单方案及FlatBuffers多维张量接口约束基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就TWAP或者VWAP呗，现成库多，直接按时间切或者按成交量切就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个随机延迟？网上有那种防窥探的随机拆单代码，我直接粘过来改改参数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池拆单不用VWAP的话，流控怎么搞？有现成模板吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就是根据感知结果动态切单呗？这有开源的吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就输出个分数？分数高就多切点，分数低就少切点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知模型和拆单流控的接口怎么弄？我就传个分数过去行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以接口就按这个传多维数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "拆单算法不用VWAP，用跟感知联动的动态寻优。接口不传分数，传多维张量，用FlatBuffers序列化。流控根据张量里的深度和撤单率来切单。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在暗池防窥探接口设计背景下与导师围绕防窥探方案选型、加噪参数设定与审计合规边界持续沟通（4轮），其中在轻量级防窥探技术选型部分与隐私计算专家沟通（1轮），在防窥探与监管穿透审计边界部分与合规与审计规划师沟通（1轮），并最终确定防窥探接口约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接套个MPC框架呗？我看网上有FATE，直接拿来加密不就防窥探了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "MPC太慢做不了暗池，防窥探轻量级怎么做？有没有现成能直接用的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就直接加个DP库，再套个SGX飞地，这不就完了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加噪防窥探的话，监管要看穿透日志咋办？能不能直接加噪不管审计？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "epsilon我随便设个0.1行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入DP加噪，epsilon零点五，路由SGX，审计双写。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极低延迟高可用链路评估背景下与导师围绕安全机制延迟压缩、拓扑排布、尾延迟测试及降级策略持续沟通（7轮），其中在SGX与FPGA拓扑及防脑裂部分与量化交易架构师沟通（1轮），在尾延迟压测设计部分与高性能计算工程师沟通（1轮），最终形成FPGA与SGX撮合拓扑、Paxos防脑裂、压测方案及限流撤单降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全上FPGA呗，网卡收包走DMA，DPDK旁路跳过内核，肯定快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SGX也放FPGA里？不行，FPGA写不了SGX。那就加机器，多起几个节点，挂了直接切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SGX和FPGA怎么排布，还有高可用怎么切。有没有现成的暗池架构图我参考下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存拷贝用零拷贝？Paxos撤单我不懂。我昨天看个推文说现在有SGX2指令集，进出飞地快很多，咱直接升级CPU不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么测刚才这套链路的P99延迟？要测哪些东西？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超了就把SGX关了？直接明文撮合？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在暗池拆单系统流式特征编码开发及算力资源受限背景下，用户与导师围绕轻量级流处理替代方案、无锁编程知识补充及对照测试验收标准持续沟通（8轮），其中在特征编码链路重构与轻量级方案选型部分与数据流研发工程师沟通（3轮），并最终确定无锁微批编码方案、扒Disruptor源码改写任务及对照测试验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "框架都定好了，Flink多方便，直接SQL写特征就行了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不用Flink用啥？自己写一套流处理？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有啥现成的轻量级流处理框架没？最好能直接替Flink的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "微批又是啥，我直接攒一批发不行吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺C++并发编程的知识，无锁编程没搞过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那特征提取的验证怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个main函数跑几遍，看看耗时呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就测无锁的不行吗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "无锁微批，对照测试，P99卡500us。"
+              }
+            ]
+          },
+          {
+            "microScene": "在拆单逻辑与动态调仓联调背景下，用户与导师围绕老代码改造、暗池拆单参数设定与事件驱动机制持续沟通（6轮），其中在动态调仓反馈机制缺失分析与意图感知接口对接部分与算法策略工程师沟通（2轮），并最终形成基于LatentDepthRatio的事件驱动发单与on_impact_signal回调挂起的开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "等分拆单，直接用就行，省得我重写。我就把意图感知的接口接上，按它这500毫秒发单的频率往下走"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我把500毫秒改小点？或者我网上找找有没有暗池拆单的现成模板，直接替换掉这个等分逻辑，反正网上这类算法多的是。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这有个老拆单代码，就死等分500毫秒发一笔，你看看缺啥动态调仓的反馈机制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是把500毫秒改成按深度切，加个if判断盘口变薄就停。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "比例系数我就设个0.5吧，先跑起来。盘口变薄我就看它成交量是不是突然没了。纳秒级捕捉太麻烦了，我能不能用毫秒级的定时器扫一下就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的深度切分和反馈回路，接口怎么接？我总不能自己定系数吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "意图感知会输出LatentDepthRatio，我乘上去就行。盘口变薄用ImpactSignal触发回调，把老代码的发单函数换掉，加个回调挂起调仓。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在暗池撤单风控与熔断机制测试背景下，与导师围绕熔断沙箱构造、事件源模拟及日志脱敏持续沟通（5轮），其中在闪崩沙箱构造与Tick重放部分与风控逻辑校验员沟通（2轮），并形成基于历史Tick重放与Disruptor注入的熔断测试及脱敏方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "熔断测试我直接抄之前项目那套普通订单的用例跑一遍，加个撤单率断言不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "撤单熔断怎么测？我准备直接复用普通订单那套测试代码。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我直接开JMeter大并发压一下不就崩了？日志脱敏太费事了，这步先跳过行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前看别人用过Disruptor，拿这个造数据是不是快点？脱敏我就把ID全写成\"123\"糊弄过去吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Disruptor怎么重放Tick？熔断线怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改写历史闪崩Tick的盘口深度，重放进去。撤单率均值加2个标准差定熔断线。ID全替换成占位符。"
+              }
+            ]
+          },
+          {
+            "microScene": "在纳秒级时序数据处理优化背景下，用户与导师围绕解析链路延迟瓶颈、技术选型分歧、合规留痕与降级容灾持续沟通（6轮），其中在FPGA卸载与日志硬过滤部分与高性能计算工程师沟通（2轮），在DPDK降级容灾备选部分与数据流研发工程师沟通（1轮），并形成FPGA硬过滤摘要留痕与DPDK降级容灾的优化决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟不就是慢吗，我搜了下，有个Netty现成框架能加速，直接粘进来不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分歧？@高性能计算工程师 你们俩到底争啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "FPGA太麻烦了，DPDK是不是有现成包？@数据流研发工程师 就用你的DPDK吧，赶紧弄完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "达不到就多买几台机器呗。微秒纳秒不就差一点点吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不打日志了，反正跑通就完事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@高性能计算工程师 FPGA能不能只传一点点日志？就那种脱敏的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用FPGA吧。摘要发主机，原始留1秒。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用FPGA做硬过滤，日志发摘要，原始留1秒。DPDK留着降级。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端行情意图误判边界消解背景下，用户与导师围绕动态阈值计算与闭环调试持续沟通（6轮），其中在置信区间退化部分与意图识别研究员沟通（1轮），在高频动态阈值实现部分与算法策略工程师沟通（1轮），并最终形成基于EWM算方差、对齐HPC及打审计日志的闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接把XGBoost的输出阈值卡在0.8了，跑回测没崩。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那调高一点？0.9？或者多写几个if判断？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天刚学了用Pandas算滚动方差，要不我把线上的特征方差算一下，动态调阈值？这样总行了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算不过来。我看别人论文里用滑动窗口算分位数，我直接把那段Python代码翻译成C++贴进去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "EWM？好，那我就在策略引擎里加个EWM算方差，直接改阈值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，EWM算方差，对齐HPC，打日志。我去改C++代码。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在暗池系统切流上线与运行评估背景下，用户与导师围绕切流灰度策略、统计验证方法及审计日志要求持续沟通（6轮），其中在切流数据对齐与防穿透部分与交付保障工程师沟通（1轮），并最终确认按白名单标的切流、用T检验算P值回滚及打审计日志的切流约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我直接套K8s的Canary发布模板把流量切过去行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@交付保障工程师 暗池切流这块有没有模板？我这边想快点推上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用Grafana连Prometheus看面板，两条线挨得挺近不就行了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂怎么用统计方法验证切流有效性。我这周末去把双样本T检验的原理弄明白，写个Python脚本用scipy.stats包算滑点P值，P值小于0.05就判定退化并自动触发回滚"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切流路由按低流动性标的白名单走，用T检验算实盘和沙箱的滑点P值，小于0.05就回滚，切流和回滚操作全打审计日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "在暗池拆单实盘监控背景下，用户与导师围绕滑点与冲击成本看板的指标选择、隐蔽滑点残差提取口径及告警阈值设定持续沟通（7轮），其中在看板核心指标部分与运营监控分析师沟通（1轮），并最终形成包含三专属指标、残差口径及盘口深度动态阈值的看板约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看板嘛，直接上Grafana连Prometheus，拖几个CPU内存的模板，再加个成交价折线图就完了。现成的东西改改就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这看板到底要画啥指标？我打算直接套现成的Grafana模板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就减呗，不然怎么算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "残差？太复杂了，能不能简单点？就算绝对滑点不行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入口就按标的池分，告警阈值我设个固定值，超过就报警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看板入口按标的池分，核心画那三个指标，隐蔽滑点用残差算，告警阈值跟盘口深度绑定。就按这个搞。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异常撤单飙升与潜伏期拉长的归因排查背景下，用户与导师围绕撤单根因与修复方案持续沟通（5轮），其中在撤单分类与潜伏期拐点部分与运营监控分析师沟通（1轮），在模型误判边界与置信度崩塌部分与意图识别研究员沟通（1轮），并形成盘口深度骤降致特征偏移及模型误触发熔断的归因结论，明确后续迭代模型而非硬编码跳过熔断。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接搜撤单日志呗，Kibana里搜error关键字，拉个时间线不就出来了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么分？现成脚本有没有？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异常撤单怎么查？有没有现成SQL直接拉分类统计的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是盘口深度骤降呗。Prometheus看盘口深度的面板就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盘口深度骤降时模型误判边界在哪？给个阈值我直接加个判断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "置信度低于0.3就崩塌呗。那我加个if判断，置信度低于0.3就不走防窥探熔断，直接放行。这不就完了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "盘口深度骤降导致特征偏移，模型误判触发熔断。后续改模型。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算力消耗与策略迭代规划背景下，用户与导师围绕模型偏移自适应改造、算力瓶颈与验证方式持续沟通（4轮），其中在偏移自适应改造部分与意图识别研究员沟通（1轮），在算力消耗卡点与极端场景复现部分与迭代规划师沟通（2轮），并最终形成流式增量学习与滑动窗口特征重算方案、特征管道重构及沙箱验证边界确认。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找个现成的自适应模型套进去呗，算力不够就加卡，这有啥好规划的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型怎么改？直接给个能自适应的开源库名。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征重算要吃多少算力？显存够吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个回测不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端场景怎么复现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前有个项目做过增量学习，我写了学习日志，把代码copy过来改改参数应该就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 流式增量加滑动窗口；2. 重构特征管道；3. 闪崩沙箱验证，超3倍失效。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

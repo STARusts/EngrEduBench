@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在容器弹性调度联调测试背景下，用户与导师围绕推演引擎与K8s调度器对接方案及联调压测验证持续沟通（5轮），其中在有状态跨AZ场景下KEDA适用性部分与云原生编排师沟通（1轮），在核心网信令风暴压测与故障注入部分与性能压测专家沟通（1轮），并最终确定采用Kubebuilder构建Custom Controller对接会话迁移，以及使用TRex与Chaos Mesh进行压测与降级验证的联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接用K8s原生的HPA机制。把推演引擎算出来的期望副本数当成自定义指标暴露给Prometheus，然后配个Prometheus Adapter，HPA不就能自动根据我们算出来的数去扩缩了吗？这样不用自己写Controller去调API了，省事点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "冲突的话，我可以把HPA的行为配置成直接透传？或者，网上说KEDA性能更好，支持事件驱动，能不能直接用KEDA？把推演结果当成事件触发KEDA缩放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "KEDA能直接用吗？还是得自己写Controller？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说必须自己写Custom Controller，KEDA管不了有状态网元的会话迁移。所以只能自己写Controller去Watch推演结果，然后调Scale API和会话迁移接口了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写K8s Controller有没有现成的脚手架或者代码生成工具？我不想从零手写Informer和Workqueue那些逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测的话，我打算用Locust写脚本，模拟大量SIP或GTP信令并发打进去，然后观察Prometheus上的扩缩容指标和Pod数量变化。Locust挺方便的，Python写脚本也快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Locust打不了SCTP和PFCP，这种压测应该怎么构造？有没有现成的核心网信令压测工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调这块，我不用KEDA了，用Kubebuilder生成Custom Controller脚手架，自己写调谐逻辑对接会话迁移。压测用TRex打SCTP/GTP风暴，并且加上Chaos Mesh注入故障，专门测推演超时降级到静态水位的情况。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

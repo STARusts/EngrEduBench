@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全图压力性能调优背景下，用户与导师围绕压测方案、动态造数据、结果评估边界持续沟通（6轮），其中在压测瓶颈与雪崩风险部分与极限压测调优师沟通（2轮），在分片策略与热点缓解部分与图计算核心开发者沟通（1轮），并最终形成加截断阈值异步降级、动态造数据跑一轮的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用JMeter直接对反演接口发压，把并发线程加到500，看看图计算那块会不会报OOM。我写的图遍历逻辑我熟，应该不是计算的问题，估计是图库查询慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全图反演压测主要会卡在哪？我猜是图库IO。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我去把图分片逻辑改一下，把大节点拆开，是不是能缓解膨胀？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "造数据这块我昨晚补了一下。之前我只会用CSV写死节点关系，昨天看了JMeter的Groovy脚本写法，现在能用函数动态控制节点度数分布了，造出来的担保圈拓扑有长尾特征，压测应该更准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想把大担保节点拆分到不同分片，缓解遍历时的热点。这在高压下会不会有数据倾斜问题？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那压测结果出来后，TPS和P99怎么评估能不能上线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找拐点，就是画对数坐标看延迟突增的点？这个我之前没做过，得再查查怎么算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改遍历截断逻辑，跑完这轮就收工。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

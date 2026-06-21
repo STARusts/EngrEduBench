@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在反演算法封装调优背景下，与导师围绕推理加速与精度平衡、时序特征输入方式及TRT编译策略持续沟通（5轮），其中在推理框架选择与时序上下文保留部分与算法工程师沟通（1轮），并最终形成C中间件用环形buffer攒周期特征抛给云端预编译TensorRT Engine的封装方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上ONNX跑呗，之前别的项目试过，挺快的。精度，跑出来别太离谱就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存，好像是不太够。输入就一帧帧往里塞呗。5%误差，这我得跑起来才知道啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演模型包C++，ONNX和TRT哪个好？时序特征怎么送？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C代码那边我加个环形buffer，存满一个周期再抛给TRT。TRT编译放云端吧，边端编太费事，交叉编译我也搞不定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

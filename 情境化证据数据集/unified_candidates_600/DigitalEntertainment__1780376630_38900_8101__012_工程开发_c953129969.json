@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端联调资源受限且流转链路偶现超时背景下，用户与导师围绕低成本排查方案持续沟通（6轮），其中在资源受限追踪方法部分与测试排障工程师沟通（1轮），在跨链超时特征与抓取部分与跨链网关架构师沟通（1轮），并最终形成基于OTel Trace与出块确认Span埋点的排查方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了日志，风控那边报timeout。但不知道是提取水印卡了，还是跨链网关没响应。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试排障工程师 偶现超时怎么低成本查？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这没算过。1%太低可能抓不到吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@跨链网关架构师 跨链流转偶现超时，有啥特征没？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "结合刚才OTel，在网关加个出块确认的Span埋点，这样Trace里直接能看到是不是出块卡了。我最近刚看了OTel的SDK用法，刚好能把出块耗时单独拎出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超时少的话，采样调高到10%？反正机器烂，压测也打不出多少流量，10%开销扛得住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 注入OTel Trace，采样率10%。2. 重点在跨链网关加出块确认的Span埋点。3. 查Trace里confirmBlocks>12的记录，定位是不是底层出块慢。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

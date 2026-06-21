@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感官负担自适应课件编排系统工程开发落地背景下，用户与导师围绕课件解析与素材抽取的省钱实现边界、最小IR字段、降级与可测口径持续沟通（7轮），其中在插件接口/队列幂等/错误码与合规降级设计上与后端工程师沟通（3轮），并收敛出JSON最小IR、幂等键、枚举化错误码与CI测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主路径走“结构化优先”：PPTX直接读XML拿到文本框、图片、形状、动画时间线；PDF能拿到文本流就拿，拿不到再走轻量OCR兜底；H5尽量解析DOM和CSS。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "抽取结果统一成一个中间表示IR。我甚至想把IR做成Protobuf，后面各服务都能复用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小字段我先想：page/slide_id、bbox、type(text/image/shape/audio/video/interaction)、content_ref、style(字号、颜色、对比度)、timing(出现/消失)、z_index、alt_text。失败降级：返回“抽取为空 + 失败原因码”，并且只留Request摘要，具体内容不进日志。验证：用一套golden课件做快照比对，输出的元素数、bbox分布、字体统计要对得上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 我这边要做课件解析与素材抽取的落地。预算紧，主路径不能依赖大模型。你给个建议：插件式解析接口怎么设计才轻量？任务队列怎么配幂等？错误码/降级怎么枚举，方便后面审计但不泄露原始内容？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "插件接口的`CanParse`评分挺实用，我本来想统一都走一个Parser入口。幂等键里加parser_version我认可，避免升级导致artifact混用。错误码我会照这个结构走。截图缩略图这块我担心合规，可能要默认关闭。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问一个偏实现的：PDF抽取“疑似文本块bbox但无内容”，你觉得怎么做最省？我怕搞版面分析又复杂。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白。我回去和导师把IR字段再砍一下，避免我搞成“万能中间层”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了后端工程师，拿到一套更轻量的落地建议。我打算把第一版IR用JSON，不上Protobuf；插件接口用`CanParse()->score`+`Parse()->IR+ParseReport`。幂等键用`tenant_id+course_id+content_hash+parser_version`，重复任务直接复用`artifact_id`。错误码按阶段枚举：不支持、解密失败、超时、损坏、抽取为空、兜底OCR被禁用/超预算。PDF省钱路线：能拿文本坐标就聚类成bbox，拿不到就只输出page_size和图片数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把style缩到负担相关：font_size、contrast_bucket、motion_flag（来自动画/视频）、interaction_flag、media_type。内容本身用content_ref指向对象存储，不在IR里放正文。text元素只放length和language_guess，不放文本字符串"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同意。bg_color_bucket我之前没加，但对对比度计算有用。AssetRef里的content_hash我想保留，后续去重省存储。就是担心hash会不会跨租户关联。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证口径我想做两层：解析单测 + 抽取统计回归。单测用一组小课件夹在仓库里（或用生成器），跑完断言：page_count一致、元素type计数在阈值内、bbox都在页面范围、duration_ms不超阈、error_code为0或白名单warning。统计回归：对同一份课件不同parser_version，比较关键bucket分布漂移不要超过阈值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "收到。我差点又把“回归”做成大工程。那原因码和降级也要进测试：比如遇到加密PDF必须返回`E_DECRYPT_FAIL`，不能卡死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把warnings限定为枚举，比如`W_FONT_MISSING`、`W_IMAGE_DECODE_PARTIAL`、`W_TEXT_LAYER_EMPTY`，不带自由文本。异常堆栈只进内部调试通道，且SystemOperator也只能看脱敏审计和队列态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）IR用JSON，字段按你那6类最小集；text不落原文，只留length/language bucket。  \n2）解析器插件接口：`CanParse->score`、`Parse->IR+ParseReport`，支持PPTX/PDF/H5各自实现。  \n3）幂等：`tenant_id+course_id+content_hash(租户salt派生)+parser_version`，复用artifact避免重复算和重复存。  \n4）错误码固定枚举（E_开头）+ warning枚举（W_开头），降级时输出最少结构信息并标记fallback_used。  \n5）CI测试只做结构完整性、IR_summary_hash确定性、性能上限、特定失败用例的原因码断言。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

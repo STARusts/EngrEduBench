@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高并发特征流计算性能调优背景下，用户与导师围绕延迟瓶颈定位、调优方向与验证手段持续沟通（6轮），其中在拓扑瓶颈定位与调优方案部分与性能优化工程师沟通（2轮），并最终形成两层聚合与侧输出的调优方案及Flame Graph抓图验证分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测延迟高，是不是Kafka分区不够？或者Flink内存给小了？我可以先把计算节点的内存翻倍试试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "看看特征流计算拓扑卡在哪，延迟太高了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "大客倾斜，我能不能把大客单独拎出来单独算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不要死等，倾斜的Key要打散。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我怎么确认调优有效？延迟降下来就行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑一遍压测，看P99延迟是不是降下来，吞吐量能不能上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看官方文档学了用Flame Graph做CPU采样。可以迁移过来，直接定位哪个算子吃CPU最多，比瞎猜内存准多了。我可以用它在压测时抓一下热点方法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我整理下：1. IntervalJoin改侧输出处理迟到数据，不死等水印；2. 聚合改两层，局部打散Key，全局合并；3. 我这边用Flame Graph抓CPU热点算子。你负责改拓扑逻辑，我负责抓图和压测验证，行吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

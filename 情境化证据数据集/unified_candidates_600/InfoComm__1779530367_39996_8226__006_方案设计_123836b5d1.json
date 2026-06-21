@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在5G与TSN网关机制确定后的边缘算力动态路由设计背景下，用户与导师围绕算网融合路由架构与防路由震荡持续沟通（4轮），其中在算力路由震荡风险与架构折中部分与边缘算力路由架构师沟通（3轮），并最终形成控制面协同与数据面解耦的半融合路由架构基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把边缘节点的CPU、NPU负载算成算力因子，编进IGP的扩展TLV里泛洪，路由器直接感知算力，SRv6选路一步到位。这样产线一换，算力和网络同时重算，随动性最好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用分布式算力路由，IGP扩展带算力因子，SRv6选路。导师担心震荡，我觉得加个dampening就能压住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "度量模型可以归一化啊，用归一化处理能力(NPU等效FLOPS)做基准。震荡的话，我设个阈值，负载变化超过20%才触发泛洪。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那退回集中式SDN？管控中枢全局视角算好路径再下发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "网关做锚点局部重定向可以接受。但数据面不能完全屏蔽算力，至少SRv6的Path段要能根据算力可用性做候选路径切换。算力心跳推给网关，网关根据5QI和算力标签做流分类，再映射到不同的SRv6 Policy。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算网全融合在工业边缘确实太激进，容易把确定性底裤赔进去。控制面gRPC通告算力，数据面SRv6保底，网关做聚合。但我得强调，gRPC的推送周期必须压到毫秒级，不然随动就是空谈。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

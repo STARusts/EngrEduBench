@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在信令无损切换接口定义背景下，用户与导师围绕接口方案选型、字段定义与验证维度设计持续沟通（6轮），其中在应用层状态迁移与跨区一致性风险部分与核心网架构师沟通（2轮），在基础设施层透明接管方案部分与可用区协同规划师沟通（1轮），并最终形成基于应用层Relocation接口的切换约束与三维度正交验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉用K8s原生的Service机制配合ReadinessGate就能搞定吧？缩容前把Pod标记为不可用，新Pod起来后流量自然就切过去了，这样最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种情况下，切换接口到底该怎么定义啊？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听起来网关层接管更方便啊，不用改业务代码，直接底下发包搞定。不过跨区的时候连接状态能同步准吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "其实我最近在补3GPP TS 23.502的AMF Relocation流程，发现标准里也是要求应用层先做N1N2Message Transfer把状态转过去，再改路由。如果用底层透明接管，可能跟3GPP的标准接口对不上，后面合规审计可能过不了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有风险。底层接管的话，信令的流转路径绕过了微服务自身的日志，审计留痕就断了。如果出了用户投诉，根本查不到Context是在哪一步丢的。还是得走应用层的Relocation接口，虽然开发量大了点，但状态一致性有业务层Ack保底，审计也完整。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口定义就按架构师说的那三个字段，再加一个AuditTraceId字段，强制要求迁移过程带上审计追踪ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组的话一组用应用层Relocation接口，一组用底层网关接管？然后看丢包率？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证维度有三个：接口机制（应用层迁移 vs 底层接管）、涌动强度（低负载 vs 风暴阈值边缘）、迁移模式（同步阻塞 vs 异步非阻塞）。指标看切换时延和信令丢失率。必须保证在风暴阈值边缘，异步非阻塞的应用层迁移丢失率也是0才算通过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

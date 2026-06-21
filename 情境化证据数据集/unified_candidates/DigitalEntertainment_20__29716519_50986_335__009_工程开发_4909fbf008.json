@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在播放端决策链路联调背景下，用户与导师围绕端上选择事件打到后端再回端、接口字段/时序/幂等/错误码/日志与验收点持续沟通（7轮），其中在时延预算与端上回退策略上与播放端负责人沟通（2轮），在commitId语义、session绑定与存储/错误码策略上与后端工程负责人沟通（2轮），并形成联调最小契约与本周联调用例范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解链路是：端上在某个 decisionPointId 抛出可选项，用户点选后生成 decisionEvent，带上 sessionId、nodeId、optionId、当前播放 position，发到后端；后端根据编排图+灰度规则算出 nextNodeId 和对应的播放地址/素材包，再回给端上做切换。最容易翻车的点我觉得有三个：端上状态机不一致导致重复上报、后端返回慢导致卡顿、以及 commitId 没对齐导致“端上按旧图选、后端按新图算”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "请求我先按最小集：episodeId、commitId、playSessionId、decisionPointId、selectedOptionId、ts、playheadMs、deviceId。响应：nextNodeId、nextAssetId 或者直接给 playUrl、还有一个 decisionToken 防重放。commitId 我倾向强制携带：端上进入剧集时拉一次“当前发布的 commitId”，之后每次决策都带上；后端如果发现不匹配就返回一个特定错误码，让端上刷新剧情元数据再重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放端负责人 端上这条互动决策联调，你们对决策接口的时延预算怎么定？commitId 不一致时，你们能接受怎样的处理：静默用旧图继续、还是必须刷新元数据并重试？另外端上幂等你们更倾向用什么键？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的“兼容结果”指的是后端在 commit 变更后还能把旧 commit 的 decisionPoint 算出来？这需要后端保留旧图吧。还有端上为了 200ms 反馈，我可以先本地切 UI 再等后端资源回来，但如果后端失败要怎么回退，你们希望怎么做？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程负责人 播放端想要两级处理：commitId 不一致尽量给兼容结果，避免强制刷新；同时需要 7 天左右保留已发布 commit 供重算+审计。后端这边 commitId 语义你们准备怎么定义？决策接口的请求/响应字段、错误码（特别是 commitMismatch、tokenInvalid、nodeNotFound）怎么落？还有幂等是用 decisionToken 还是我们自带组合键？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里我有点担心：端上如果必须先 /session 拿 assignedCommitId，那意味着增加一次 RTT，首帧风险会更高。我们能不能把 /session 的返回做得很轻，只下发首段 assetId，播放地址走既有 CDN 逻辑？另外冷热分层会不会影响“兼容重算”的时延？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向接受后端的 session 绑定 assignedCommitId，因为灰度漂移会带来不可解释的分支。折中在于：把 /session 做成必经但轻量，且端上把它放在“预加载/进入播放页”阶段，尽量不挡首帧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "决策接口我按两级处理：  \n- 常态：/decision 走热路径，后端按 assignedCommitId 算 nextNodeId+assetId，端上 UI 先反馈再切流。  \n- 异常：如果后端返回 COMMIT_MISMATCH，端上不弹刷新，直接用 playSessionId 去重新 /session 拿新的 session（或续期 token），然后自动重放一次 decision（带相同 clientSeq），以幂等保障不重复推进。  \n冷存导致的慢我接受，端上做 1.5s 超时兜底，落到默认分支继续播主线。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分层我改成三类：  \n1）可静默重试：SESSION_TOKEN_INVALID（可能过期）→ 走 /session refresh token（同 playSessionId）后重试一次 /decision。  \n2）不可静默：COMMIT_MISMATCH → 不自动换 commit，直接返回 decisionFailed，端上落“无互动继续播主线”，同时打点上报，避免在灰度切换时跨版本推进剧情。  \n3）硬失败：NODE_NOT_FOUND → 直接走主线兜底并上报，因为这代表编排数据问题。  \n日志方面：后端和端上都只记录 episodeId、playSessionId（hash）、assignedCommitId、decisionPointId、optionId、clientSeq、错误码、耗时；不记 deviceId 原值，不记用户输入文本。需要追查时靠 playSessionId 关联。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "依据是：兼容需要后端持有“旧 commit 的图 + 旧 commit 下 decisionPoint 的语义”，这会把联调范围从“跑通链路”扩大到“多版本图的计算与一致性保障”，本周联调很容易炸进度。并且我们已经用 assignedCommitId 锁定灰度，正常情况下不该发生 mismatch；发生了更像异常态，先走安全兜底更可控。等链路稳定再加“兼容重算”作为增强能力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小契约我按 6 条落：  \n1）入场接口 /play/session：返回 playSessionId、assignedCommitId、sessionToken、startNodeId、startAssetId。sessionToken 有效期短，端上到期刷新。  \n2）决策接口 /play/decision：请求带 playSessionId、sessionToken、decisionPointId、selectedOptionId、clientSeq、playheadMs；响应带 nextNodeId、assetId、decisionToken、serverCostMs。  \n3）幂等：后端以 (playSessionId, decisionPointId, clientSeq) 去重；端上 clientSeq 单调递增，重试保持不变。  \n4）错误处理：40111 tokenInvalid 静默刷新后重试一次；40901 commitMismatch 不自动换版本，端上走主线兜底并上报；41004 nodeNotFound 兜底并上报。  \n5）时延目标：服务侧 /decision P95 < 80ms（不含 CDN），端上点选后 200ms 内给交互反馈；资源切换超 1.5s 触发兜底。  \n6）可观测：端后统一日志字段 episodeId、playSessionIdHash、assignedCommitId、decisionPointId、optionId、clientSeq、错误码、耗时；不落可识别个人信息。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

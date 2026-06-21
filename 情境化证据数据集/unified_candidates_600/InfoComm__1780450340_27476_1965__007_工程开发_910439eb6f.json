@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云原生核心网流特征采集代理开发背景下，用户与导师围绕技术选型、内核态零拷贝与脱敏方案、eBPF验证器边界与背压机制持续沟通（5轮），其中在内核态无侵入采集与零拷贝部分与探针开发工程师沟通（1轮），在信令流IMSI脱敏合规部分与合规与安全审计员沟通（1轮），并最终敲定基于Cilium eBPF与RINGBUF的技术栈及补学验证任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接拿Prometheus的node_exporter改一改，再套个网上现成的BCC脚本抓包，这样拼起来应该很快能出活。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至于GTP和SIP解析，我可以把报文拷贝到用户态，用scapy或者dpdk拆解，虽然慢点，但采集代理嘛，功能先跑通再说。反正只要不丢包就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "内核态无侵入采集具体怎么搞？网上那些BCC脚本是不是全废了？GTP和SIP的解析如果不在用户态做，在内核态写eBPF C代码太复杂了吧，有没有什么框架能自动生成？还有map怎么零拷贝？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信令流里肯定有IMSI，我抓包的时候怎么脱敏？在内核态eBPF里做字符串替换是不是会严重影响性能？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "探针开发说可以用Cilium的eBPF库，自己写解析逻辑，用RINGBUF做零拷贝。审计员说eBPF里只提取TEID和信令类型，不拿IMSI，用户态用哈希加盐脱敏。所以我不改node_exporter了，直接基于Cilium写个插件，应该比较方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指令数限制我还没测，我以前只写过简单的网络过滤脚本。RINGBUF丢包这个，我查下文档看看有没有配置能防丢包。验证的话，我就在容器里打点流量看看CPU占用行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今天重点补两块：一是eBPF verifier的指令数和栈空间限制，我写个GTP-U变长头解析的测试程序，跑在内核5.15+上，看verifier报错红线在哪；二是RINGBUF的背压，我写个用户态故意睡眠的消费线程，制造积压，看内核态bpf_ringbuf_reserve的返回值是不是EAGAIN，然后加丢弃计数器。我把这两个实验结果记在开发日志里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

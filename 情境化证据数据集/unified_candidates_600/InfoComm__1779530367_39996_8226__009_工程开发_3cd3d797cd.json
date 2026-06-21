@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在TSN调度协议栈核心实现背景下，与导师围绕DRL动态调度可行性、控制面与数据面解耦及开发优先级持续沟通（6轮），其中在GCL动态更新时延与DRL推理影响部分与TSN协议开发主程沟通（1轮），并最终确定控制面与数据面解耦方案，调整开发优先级为CQF定时器、带鉴权审计的静态GCL下发及预留重配接口，推迟DRL。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TSC驱动CQF定时器我打算用DPDK timer callback挂载，精度能卡到纳秒级。但流调度GCL生成我想做得更彻底，传统启发式算法太死板了，我想引入DRL（深度强化学习）做动态调度，理论收敛后时延抖动是最优的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以做离线训练加在线微调，模型压量化后推理很快的。只要把状态空间定义好，收敛不是问题，我觉得值得一试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想在用户态协议栈里加DRL推理来动态生成GCL，用DPDK下发。这种方案下，GCL动态更新的时延开销大概什么量级？推理模块放主机CPU会不会对数据面有影响？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "把DRL放到控制面慢速重配，数据面保持静态GCL执行。这样确实能规避PCIe抖动，但灵活性就降级了，只能做到秒级重配，没法做到微秒级随动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "DRL模型集成确实比较耗时，训练框架还要适配，算力资源开销也大。如果全做，这周肯定出不来核心原型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "GCL下发接口我会加上RBAC鉴权和操作审计日志，防止非法重配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发优先级调整为：1. TSC驱动CQF定时器；2. 静态GCL解析与下发（带鉴权与审计）；3. 预留控制面GCL重配接口（空桩）。DRL推到后面迭代。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

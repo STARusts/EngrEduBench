@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路压测与边缘Debug背景下，与导师围绕压测流量构造、边缘动态追踪机制及生产降级方案持续沟通（5轮），其中在脏数据注入与eBPF追踪部分与联调测试工程师沟通（1轮），在eBPF动态开关与日志脱敏部分与边缘开发工程师沟通（1轮），并最终形成压测与Debug基线及生产降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算分两阶段。第一阶段是稳态压测，按最大机群规模并发注入标准气象和航点数据，验证边缘网关推理时延P99是否在5ms内。第二阶段是极限压测，模拟多机同时遭遇风向突变，看防碰撞和漂移推理争抢算力时的降级表现。Debug方面，准备在边缘侧加关键节点的耗时埋点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脏数据注入确实漏了，得补上异常传感数据的构造。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "动态追踪这块，我之前想用传统日志，但查死锁费劲，对内存暴增也后知后觉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测流量模型怎么加脏数据？边缘侧查死锁和内存用什么开销小？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "eBPF开销3%可以接受。压测时全量开启eBPF抓取，能拿到完整的边缘态。但上线后这3%也不能一直开着，生产环境得降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "生产环境不能一直开eBPF，只能做关键函数的耗时统计。如果出问题，得支持远程动态开启eBPF。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在边缘网关上实现eBPF的动态开关，技术上可行吗？还有，抓取的气象和航点数据包含地块坐标，日志合规怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测环境：全量eBPF加脏数据注入，定位毛刺。生产环境：默认关闭eBPF，只留耗时埋点，异常时云边指令动态开启；所有含坐标的日志落盘前必须脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

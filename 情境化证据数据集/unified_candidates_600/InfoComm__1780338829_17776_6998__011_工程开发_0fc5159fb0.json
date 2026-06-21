@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在意图复原畸变纠偏调试背景下，与导师围绕边缘特征区模态畸变纠偏方案持续沟通（6轮），其中在残缺特征注入与边缘区处理部分与畸变纠偏调测师沟通（3轮），并最终形成高置信区Laplacian正则化与边缘区切空间投影的混合纠偏策略及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "畸变率高是因为特征本身就模棱两可吧，传过来就变样了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不直接加个卡尔曼滤波平滑一下？或者把畸变太严重的帧直接丢掉重传？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就是用以前的数据去猜现在缺的是啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前看别人用过Laplacian正则化处理缺失数据，能直接套过来当补偿项吗？反正都是利用流形结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权重我可以先设小点，比如0.01，然后看重建出来的图有没有鬼影。我昨天刚下了个图正则化的库，正好拿来试，比从头写切空间投影快多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "误差就是局部线性假设在边缘区不成立呗。那，那我就只对置信度高于0.6的特征用Laplacian正则化，0.4到0.6的边缘区还是得用调测师说的切空间投影？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力开销我懂，投影矩阵可以预计算存着。那我现在的纠偏方案就是：高置信度特征走Laplacian正则化补偿，边缘特征走切空间投影补全。验证指标就用SSIM和意图保持度吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "意图保持度就是看复原出来的遥测数据，能不能触发正确的业务告警。如果原图该报高温，复原出来报了常温，就是意图失真。这个我可以写个脚本比对告警日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

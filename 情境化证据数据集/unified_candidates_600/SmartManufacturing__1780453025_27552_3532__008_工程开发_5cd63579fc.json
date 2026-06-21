@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图解析模型开发背景下，用户与导师围绕多模态融合、时序对齐、边缘实时性、量化部署及模型验证持续沟通（7轮），其中在时序多模态融合基线方案部分与感知算法工程师沟通（1轮），在边缘推理延迟硬约束部分与边缘计算工程师沟通（1轮），并最终明确双流网络架构、量化与重采样补学计划及验证指标方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用PyTorch写个网络，把摄像头和力传感器的数据拼一起，丢给Transformer试试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时序对齐我还没细想，可能加个时间戳对一下？延迟的话，如果太慢我就换个轻量级的，比如MobileNet？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视觉和力觉数据怎么融合比较好？时序怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种双流网络在咱们边缘盒子上跑，延迟能卡多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用ST-GCN处理视觉骨骼点，TCN处理力觉，最后特征层做注意力融合。时序对齐不用DTW，用固定窗口重采样。边缘那边说必须用TensorRT做INT8量化，不然延迟超100ms，帧长限制在1秒内。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "量化我只在教程里见过，没真搞过。校准数据集是要从采集的原始数据里抽一部分吗？重采样算子我也没实操过，不太清楚怎么写才高效。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对TensorRT的Python API和C++重采样算子不熟。我今晚先把TensorRT官方的INT8量化样例跑通，明天用C++写个重采样算子做单测，周末前把这两个点搞明白，下周一直接往项目代码里迁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑几组测试数据，看看预测出来的动作对不对，准确率高就行了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 双流网络ST-GCN+TCN，特征层注意力融合；2. 时序对齐用固定窗口重采样；3. 边缘部署INT8量化，总延迟<100ms；4. 验证指标Top-1准确率和早期识别时间，对比单模态基线。补学计划今晚开始执行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

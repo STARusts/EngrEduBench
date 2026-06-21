@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在多模态时序对齐与压测背景下与导师围绕对齐方案与压测验收标准持续沟通（5轮），其中在对齐硬要求与压测边界部分与联调与测试指挥沟通（2轮），并最终形成基于PTP硬同步与RTOS消息队列软对齐的方案及丢帧降级锁死标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用时间戳对齐加JMeter压测，但导师说不行。这块具体要怎么做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "丢帧率5%这个，我怎么测？是不是多跑几遍看看误判率就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有自带故障注入的测试工具包？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我回头得补一下PTP协议这块的知识，之前根本没接触过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是可以把触觉数据先进队列缓存，等视觉帧到了再一起喂给推理引擎？这样能省去我自己写锁的麻烦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收标准就是：硬件走PTP同步，软件用RTOS消息队列做双缓冲对齐，压测时按泊松分布注入延迟，如果丢帧率超过5%或者意图置信度低于0.75，夹具必须安全锁死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

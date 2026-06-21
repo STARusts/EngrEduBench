@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在大规模归集性能调优及严苛预算背景下，与导师围绕Gas压榨、状态优化、并发冲突及链下数据边界持续沟通（8轮），其中在Gas与状态优化部分与归集并发调优工程师沟通（1轮），在并发防锁与结构拍平部分与核心合约研发工程师沟通（1轮），最终形成包含批量打包、Event替存证、拍平、细粒度锁及位运算的5点调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "常规后端遇到这种高并发，就是加缓存，或者把写库操作扔消息队列异步掉。但在链上，合约里没法加Redis，状态更新也是同步的，直接套老办法肯定不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "应该是状态变量的读写，特别是多层嵌套的Mapping，每次改余额都要经过好几层hash计算。还有就是如果多笔归集同时去改同一个资金池的总账，并发冲突重试也会废掉很多Gas。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我没底，这种链上并发控制怎么做得便宜，我去问问调优专家。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大规模归集怎么压Gas，状态读写怎么优化？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链下延迟个一两秒，业务方查流水可以接受，只要最终余额别错。位运算我其实不太熟，但我昨天刚恶补了一篇Solidity汇编优化的文章，里面专门讲了用`unchecked`块和位打包压缩uint，我正想试着把归集计数器改成这种写法，应该能比常规加减省几十步Gas。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这我确实卡住了，后端加个分布式锁就行，合约里不敢乱加。我再问下合约工程师。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "批量归集时如果都往主账本写，怎么防并发冲突和重入？调优专家说拍扁平，具体怎么搞能不卡死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果节点挂了，链上Event还在，重新扫块就能重建。所以链下数据是可复现的，只是恢复期间查不到最新流水。这个边界业务方得认。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终方案：1. 归集操作走批量打包，不逐笔写状态。2. 资金流转明细用Event抛出，链下异步重组，容忍秒级延迟，链下节点宕机可通过重扫链上Event复现。3. 主账本数据结构拍扁平，按PoolID聚合，一次SLOAD/SSTORE。4. 并发控制按PoolID加细粒度锁，防止跨池归集卡死。5. 归集计数器用我刚学的位打包和unchecked优化省Gas。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

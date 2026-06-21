@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在诊断模型训练验证闭环落地背景下，用户与导师围绕数据选择、按student_id切分防泄漏、特征最小化与评测验收口径持续沟通（7轮），其中在弱标签与评测指标设计上与算法负责人沟通（3轮）、在离线评测集分层抽样与基线对照/回归机制上与评测工程师沟通（2轮），并明确脚本化训练-评测闭环与合规留存边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据就用事件里payload那堆吧，作业答题、课堂互动这些。切分我想按时间切，最近一周做验证？不过我不确定要不要按班级切，怕同一个学生跑到两边。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输出我倾向先做分数吧，0-1那种。标签…我没现成标注。可能用学生对题的正确率去推？就把指标和题目映射起来，算个覆盖的正确率，当成真值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 现在要做诊断模型训练验证，没人工标注咋办？我先用题目正确率推指标分数行不行，评测怎么定比较不虚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三档更简单我能做。难度权重就是通过率低的题权重大？时长异常过滤我怕把认真做题的也过滤掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那评测里“稳定性”阈值咋定？我没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行。我再问评测这块怎么做对照。@评测工程师 训练验证要做离线评测，你这边一般怎么做最小闭环？没人工标注情况下咋搞对照？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分层抽样我能写。对照指标还是相关性那些？还有你说“阻断合并”是要接CI？我这边只会写脚本跑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见捋一下：  \n- 任务先做三档或0-1分数都行，我先做三档省事  \n- 标签用映射正确率，但加题目难度权重和极端时长剔除  \n- 切分按student_id分组，按时间窗取训练/验证  \n- 指标：相关性、稳定性、解释命中、覆盖率  \n这样对吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接把事件payload展开成宽表，省事。字段…学生id肯定要。班级可能也要。名字手机号这些不会有。还有IP？我也不需要。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我得从事件里聚合出这些特征。时间窗按周还是按作业一次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证动作…我就跑评测指标，然后和规则基线比。泄漏这块就是按student_id切分。还要加啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打乱id这个我能做。每人K次也能在SQL里limit。  \n但“解释命中率”我还没想好怎么算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 解释命中率这块，输出证据题你们准备怎么吐？我这边好算的就是给一串question_id列表。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，那我就按贡献分排5个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "导师，我现在要落地的清单是不是：特征聚合脚本、弱标签脚本、训练脚本、评测脚本？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

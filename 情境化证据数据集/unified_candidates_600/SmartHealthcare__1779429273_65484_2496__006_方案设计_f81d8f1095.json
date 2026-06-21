@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在调平干预接口对接与推演服务高可用设计背景下，用户与导师围绕接口交互方式、消息队列选型及高可用验证方式持续沟通（4轮），其中在接口与高可用架构设计部分与系统架构师沟通（1轮），并最终形成异步事件驱动、熔断降级静默、RabbitMQ选型及混沌工程验证的方案定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接口就是把重整建议推给CPOE吧？高可用我不太懂，是不是搞个集群就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们只提示不拦截，接口怎么跟CPOE交互不会卡死？推演服务挂了怎么办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "消息队列我只会用RabbitMQ，以前项目用的。Kafka没碰过。验证的话，就是压测吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以设计一组实验，随机终止推演Pod，看熔断器状态和CPOE响应时间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RabbitMQ的话，吞吐量可能不如Kafka，但咱们一期只覆盖肝肾，并发应该不大，先用RabbitMQ行不行？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

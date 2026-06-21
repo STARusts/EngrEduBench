@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课堂对话智能助教编排系统工程开发背景下，用户与导师围绕多模型路由规则顺序、reason code、隔离key/熔断、审计字段最小化与单测清单持续沟通（8轮），其中在失败分类、降级链排序与重试退避策略部分与算法工程师沟通（3轮），并形成可测的路由降级实现与最小单测交付项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把路由做成“可解释的决策器”，不是拍脑袋选模型。输入是：任务类型、预算（时间/费用/token）、课堂模式（实时/课后）、以及风险级别。输出是：选中模型+原因码+可降级路径。容易写错的我觉得有三个：1）优先级互相覆盖，越写越乱；2）降级触发条件不稳定，比如超时/429/预算不足混在一起；3）重试把课堂打爆或者重复生成。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想用“有序规则表”，每条规则是 predicate + action。predicate 看上下文里几个字段：`scene=classroom_realtime|after_class`、`task=explain|quiz|check_answer|summarize`、`risk=low|medium|high`、`budget_tokens_est`、`deadline_ms`。action 给出：`target_model`、`fallback_chain[]`、`retry_policy`、`degrade_mode`（比如缩短上下文、改成检索+模板回答）。可测性：我会把每次决策都吐一个结构化 `route_decision` 事件，字段固定，单测直接断言事件里 reason code 和最终模型。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "reason code 我先枚举化：  \n- `R_PRIORITIZED_REALTIME`：课堂实时，强制走低延迟模型  \n- `R_BUDGET_EXCEEDED`：预估token*单价超预算或超token上限  \n- `R_TIMEOUT`：调用超时  \n- `R_RATE_LIMIT`：429/限流  \n- `R_MODEL_ERROR`：5xx或协议错误  \n- `R_SAFETY_BLOCK`：内容安全拒绝（这条我不确定应该算路由还是后处理）  \n“不选更强模型”就对应 `R_BUDGET_EXCEEDED` 或 `R_PRIORITIZED_REALTIME`，在 decision 里给 `rejected_models` 列个 top2 及原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "隔离 key 我会做两层：  \n1）路由侧的熔断/限流计数 key：`school_id:class_id:scene:target_model`，避免一个班把某模型的失败计数影响全局；  \n2）降级缓存 key（如果有）：只缓存“降级决策”不缓存内容，key 类似 `teacher_id:template_id:task:scene`，TTL 很短，比如 1-3 分钟，主要防抖。  \n单测里我会构造两个不同 class_id，确保一个触发熔断后另一个不受影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 路由和降级这块我准备做“规则表+reason code+fallback chain”。想确认三件事：1）失败分类怎么划分更稳（超时/429/5xx/质量差）？2）降级链路排序：实时课堂优先怎么排？3）重试/退避建议的默认值，怎么避免放大故障？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "质量差在线不做触发这点我之前想加个“回答不对就换模型”，看来会很难测。那我只留两个硬规则：输出为空/格式不合法 => 走一次降级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降上下文我能接上之前的白名单+size限制，降级时把历史截断到最近N轮，再把长文本变成hash引用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把“已尝试模型”加到 request scope。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说预算守门，我现在只有 `TokenEstimator` 接口，估算会有误差。预算触发用“预估+保守系数”可以吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从算法那边拿到一套更可测的触发分类：Timeout/RateLimit/Transient/Permanent/SafetyBlocked；质量差不做在线触发，只做确定性的“空输出/格式不合法”。降级链建议：Primary->Secondary->Small->检索+模板（或引导式短回答），同时可以降上下文（截断历史、只保白名单字段）。重试策略：Timeout/Transient 最多1次+50-150ms抖动退避；429基本不重试或尊重Retry-After；Permanent/SafetyBlocked 0重试直接降级。还要带“已尝试模型集合”防循环。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想是这样从上到下短路：  \n1）解析请求：场景/任务/risk/deadline/budget；初始化 `attempted_models=set()`  \n2）预算守门：用 `TokenEstimator` 算 `est_tokens*k`，若超上限，直接把 `target_model` 限制到小模型或模板模式（reason `R_BUDGET_EXCEEDED`）  \n3）场景约束：`classroom_realtime` 强制延迟优先的模型集合（reason `R_PRIORITIZED_REALTIME`）  \n4）选主模型：在候选集里按优先级取第一个没在 attempted 的  \n5）调用模型：如果成功就返回；失败按失败分类进入：  \n- Timeout/Transient：若重试次数<1且预算允许，重试同模型一次；否则切下一个 fallback  \n- RateLimit：直接切 fallback（可选尊重Retry-After但课堂实时我倾向不等）  \n- Permanent：切 fallback  \n- SafetyBlocked：切到“保守生成模式/模板”，并记录 `R_SAFETY_BLOCK`  \n6）fallback 用完：返回固定的“教学引导式”兜底（不生成敏感内容），同时把 decision 事件写审计队列（结构化字段）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我漏了。预算触发时优先：`context_trim` -> 重新估算 -> 还超再降模型/模板。trim 的策略就用白名单字段，历史保留最近N轮，N先写死比如 6，后面再参数化。单测我可以做：给一个超长history，期望先触发 trim，再选回 primary（如果估算回到阈值内）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在路由器里依赖一个 `FailureTracker` 接口：`incr(key, failure_type)`、`is_open(key)`、`reset(key)`。实现先用进程内 LRU+TTL（工程开发期够用），key 就前面说的 `school_id:class_id:scene:model`。阈值：比如 5 次 Transient/Timeout 在 30 秒内就 open 60 秒；RateLimit 单独计数更敏感，比如 3 次就 open。单测重点断言：A班触发 open 不影响 B班；open 后直接跳过 primary 选 secondary，reason `R_CIRCUIT_OPEN`。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我差点忽略。审计事件里不落这些原始id，改成 `isolation_key_hash`，hash用你上个微场景里同样的方式。路由器内部还是用原始key做 FailureTracker 的计数，但写审计只写 hash + scene + model + reason + failure_type + attempt_index。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小单测我先列 5 个：  \n1）`test_realtime_forces_low_latency_pool`：scene=classroom_realtime，候选里有大模型也得选低延迟模型；断言 chosen_model 和 reason 包含 `R_PRIORITIZED_REALTIME`。  \n2）`test_budget_trim_then_primary`：构造长history导致超预算；先 trim 再估算回落，最终选 primary；断言 decision 里有 `context_trim_applied=true` 且 chosen_model=primary。  \n3）`test_timeout_retry_once_then_fallback`：primary 超时两次；只允许 1 次重试，第二次应切 secondary；断言 attempt 次数=2 且最终模型=secondary，reason 有 `R_TIMEOUT`。  \n4）`test_ratelimit_no_retry_direct_fallback`：primary 返回429；不重试直接切 secondary；断言 retry_count=0 且 reason `R_RATE_LIMIT`。  \n5）`test_circuit_breaker_isolation`：A班对 primary 连续失败触发 open；A班后续请求跳过 primary，B班仍可走 primary；断言 A班 chosen_model=secondary 且 B班 chosen_model=primary；审计里只出现 `isolation_key_hash` 不出现原始id字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

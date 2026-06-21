@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端语速下口型保真压测背景下，用户与导师围绕单链路计算耗时、零分配红线与压测方案持续沟通（5轮），其中在极限切片流构造与观测指标部分与性能压测专家沟通（2轮），在高频切片下内存池堆分配风险部分与核心对齐开发组长沟通（1轮），并最终形成单链路高频切片压测方案与验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备搭一套基于Locust的分布式压测集群，模拟上千个并发直播间推流，再引入Kafka做音轨切片缓冲，确保压测数据不丢。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Kafka引入的延迟可能掩盖真实的计算耗时。那我先去掉消息中间件。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "音轨切片应该怎么构造？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "观测指标呢？除了看口型糊不糊，有没有更量化的标准？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以把Tracy集成进来，替代我之前想写的那些打点日志，这样抓耗时更准，也不会因为日志IO影响压测结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "连续30ms的音轨切片灌进来，对齐模块的内存池能扛住吗？会不会触发堆分配？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去调整Buffer预分配逻辑。结合Tracy，我应该能抓到是否有临时分配的毛刺。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测方案：单链路，构造连续30ms音素切片流，预分配3帧Buffer余量，使用Tracy Profiler抓取纳秒级耗时和内存分配事件。验收标准：在连续高频切片下，单帧计算耗时不超过切片间隔（30ms），无延迟累积；Tracy中无堆内存分配记录；BlendShape跳变率在合理区间，口型无糊化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在渠系闸控接口对接背景下，与导师围绕指令防重发、状态回传与降级机制持续沟通（5轮），其中在指令下发部分与后端开发工程师沟通（1轮），在状态回传与去重部分与嵌入式开发工程师沟通（1轮），并形成异步下发、幂等校验、超时锁定降级与权限隔离的闸控方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接调接口发指令呗，撮合成功就开闸，调通了就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个超时重试不就完了，卡死就再发一次，哪有那么多漫堤。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "撮合完直接HTTP调闸门开闸对吧？你们后端怎么发指令？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们闸门那边能做幂等吗？收到指令怎么回信？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "后端走MQ发指令带ID，嵌入式那边去重，开完给中枢回个到位事件，卡死了报故障码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没收到就一直等呗，或者超时了就当它开了，继续下一单撮合。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "异步发，等回传，没回传就锁渠段不发新指令，账号权限收窄。赶紧写去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

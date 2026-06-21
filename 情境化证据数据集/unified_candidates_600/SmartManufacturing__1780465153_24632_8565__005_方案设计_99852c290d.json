@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在架构草图细化背景下，与导师围绕扰动感知数据流图的流向与约束持续沟通（6轮），其中在扰动数据结构与落库可行性部分与能耗建模专家沟通（1轮），在算法侧数据消费形式部分与排程算法设计师沟通（1轮），并最终形成基于消息队列、流处理时序对齐与特征聚合的数据流图逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "扰动感知啊，不就是设备出问题上报嘛。写个接口接数据，存到DB，算法服务去查DB，完事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，不能直连业务库。那，放缓存里？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "扰动数据到底啥结构？能直接存表不？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "事件流，就是消息队列呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那算法怎么拿？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能耗节拍接入需时序对齐。急停和能耗流要时序对齐，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法这边拿扰动数据，是直接拿原始事件，还是要啥处理？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "懂了，不能给原始流，得先算特征。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "多源扰动进来，先进消息队列。然后搞个流处理节点，做时序对齐和滑动窗口聚合，算出特征。最后把特征推给算法服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没直连，中间过了流处理，算特征才给算法。业务库只做结果持久化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业平台对外API方案设计背景下，用户与导师围绕权限模型、审计留痕与分层脱敏持续沟通并收敛输出要点（11轮），其中在敏感字段清单/对外脱敏规则、scope授权依据与撤销、break-glass紧急访问约束等节点与合规与隐私官沟通并获取口径（4轮），最终复述scope三层与authorization_ref的评审表述并形成口头清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计就是留日志吧。脱敏就是打码。差不多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "坐标？之前说不能出精确坐标，那就都不给了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "给个大概范围？比如县级？不太清楚怎么定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 敏感字段到底哪些算？坐标站点照片这些怎么脱敏？审计日志要记啥字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规说对外不给多边形，只给网格或模糊点，还要一堆审计字段。那我们就把坐标全删了就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "client_plot_id。这个我记得。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按角色吧，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 scope咋定？证明授权靠啥？撤销怎么做？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这也太多字段了。接口不是已经很长了吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有 request_id、audit_trace_id、版本快照这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不露吧，怕人研究出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能？他们审计用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 紧急访问这种要怎么搞？是不是加个开关就行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我记不住这么多。我们就写“需要审批”行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "工单号、两个人批、自动过期。就这三个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对外主键用client_plot_id，内部plot_uid不出。回包带request_id和audit_trace_id，还有版本快照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "scope分三层：先按client_id隔离，再按合同比如保单号/授信产品，最后到client_plot_id白名单。授权证明就是把合同号或工单号记到authorization_ref里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

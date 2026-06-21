@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在自适应对冲策略流设计背景下，用户与导师围绕对冲触发机制、技术栈选型及边界约束持续沟通（7轮），其中在技术选型与防抖边界部分与期汇量化策略师沟通（3轮），在熔断降级机制部分与交易熔断安全师沟通（2轮），并最终形成基于Flink CEP的双流Join、5秒防抖及2秒降级熔断的架构结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定时任务呗。起个Cron，每隔5分钟扫一把报价，超了阈值就发锁汇指令，多省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没概念。事件驱动不就是写个监听器嘛，来一条算一条。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态对冲策略流怎么搞？要快，别整太复杂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩哪个好？我只要不挂就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Flink还要搭集群？太重了吧。我就几个对冲条件，直接写Java if-else不行吗？来一条行情我判断一下，超了就锁，多简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "搞这么麻烦。那就Flink CEP吧，不就是写SQL嘛，Flink SQL一写完事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "理由就是吞吐高，不用我自己拿Map去存滑动窗口的状态，它自带RocksDB防OOM，熔断那边也好搞反压。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Flink CEP，接行情和画像，防抖5秒，窗口左对齐，延迟2秒降级单次锁汇。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

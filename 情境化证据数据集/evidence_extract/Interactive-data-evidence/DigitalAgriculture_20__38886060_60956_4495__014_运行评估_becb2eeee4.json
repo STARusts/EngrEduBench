@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估构建“药耗与成本监控看板”背景下，用户与导师围绕指标口径、归因维度、风险可追溯与权限视图持续沟通（10轮），其中在看板展示字段、留痕与脱敏边界及风险事件卡片粒度上与合规与风控经理沟通（5轮），并形成最小可上线模块与指标清单及权限差异点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "药耗、成本、然后按服务组织和田块分。再加个趋势。大概就这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "药耗就 L/亩。成本=药剂钱+人工+机器。归因就按组织、作物、处方版本。阈值先用均值+3倍标准差？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 药耗与成本看板要做了。哪些字段必须展示，哪些只能内部看？还要啥留痕？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“操作者ID”这些也放看板里就行？大家都能看，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概是三套看板？业务一套，审计一套，监管一套。业务就看成本、用量、节省；审计看谁改了处方；监管就存档。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "业务视图：每亩用量、每亩药剂成本、总成本。风控视图：加 override 人、ban 规则列表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按“处方版本”和“是否override”分组，看看均值差。再按作物。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个红色告警卡片：ban_rule_hits>0 还回传，就显示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 风险事件卡片要做：ban_rule_hits>0但仍有作业回传。这种卡片能展示哪些字段，才不算越界？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模块一：总览。指标：本周每亩用量、本周每亩药剂成本、本周每亩总成本、节省幅度。模块二：分组对比。按服务组织/作物/处方版本/是否override 做均值差。模块三：趋势，按天或按作业批次看用量和成本。模块四：风险事件，ban_rule_hits>0仍回传的数量、田块数、组织数、等级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "业务视图不显示操作者和规则细节，就显示有无人工改动、风险等级。风控视图显示规则ID、操作者ID、有效成分、设备和时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从回传里拿工时和机时？没有就用默认单价乘面积。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。加“实测成本覆盖率”，低于比如70%就提示“成本为估算”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是，覆盖率低的组织不看他们的节省结论，先提示他们补回传。红黄线按分位数来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再加一条“重复计费/重复作业”的提示？有些回传会补传两次，成本会翻倍。看板里加“疑似重复回传次数”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

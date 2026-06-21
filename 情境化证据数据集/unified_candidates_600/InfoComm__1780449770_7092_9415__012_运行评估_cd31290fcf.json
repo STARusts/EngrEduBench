@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在算义孪生镜像部署验证背景下，用户与导师围绕现网数据合规处理与统计验证方案持续沟通（8轮），其中在数据流转限制部分与通信合规审计师沟通（1轮），并最终形成基于脱敏数据的A/B对照验证方案及脱敏模块开发计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "把现网流量导进来比对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全量同步过去就行。用Kafka的MirrorMaker把信令Topic镜像过来，消费端重放。这样数据最真实。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要把现网算义信令全量同步到孪生镜像环境做验证，数据流转有什么限制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合成数据验证结果还能作准吗？脱敏后特征向量都变了，意图识别和阻控算法不就认不出来了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就抽一小部分脱敏的跑一下，看看指标没大问题就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分两组，一组旧路由一组新路由，看延迟降没降。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，A/B对照，95%置信区间，效应量用Cohen's d。那数据源只能用脱敏后的了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太会弄脱敏脚本。我这两周先把特征哈希脱敏的方案学明白，写一个脱敏处理模块，下周跑通镜像环境的数据接入。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "看《电信数据安全治理指南》里的脱敏标准，写一个Kafka消费端的Interceptor做字段哈希，确保进孪生环境的数据合规。两周内搞定，能跑通脱敏数据接入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

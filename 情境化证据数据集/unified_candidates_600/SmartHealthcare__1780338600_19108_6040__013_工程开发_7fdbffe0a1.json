@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发全链路联调背景下，用户与导师围绕时序对齐验证与测试数据脱敏保真持续沟通（8轮），其中在端到端时序对齐部分与联调测试专家沟通（1轮），在脱敏与保真兼顾部分与联调测试专家沟通（1轮），并最终形成端到端集成测试验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备搭一套集成测试环境。用脚本往Kafka灌模拟传感数据，推演引擎跑轻量化模式，最后看阻断指令有没有落到Mock上。主要看数据别丢，指令别错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以在指令里带上触发时的推演时间戳，和Mock收到的时间比对，差值超过阈值就算失败。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端测试里，推演引擎和流式算发的时间戳基准不一致，怎么对齐验证？我担心处理时间延迟导致断言失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "统一用事件时间，测试靠控制Watermark推进来屏蔽处理延迟，断言只看事件时间差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "从历史日志里截取几段典型的播散序列，洗掉真实病房标识，做成回放集。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想那么深，以为只要脱敏姓名就行。那测试数据还得做泛化处理，把压差值加个随机扰动？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测试回放数据里的环境特征值可能暴露院感敏感信息，加随机扰动又怕推演发散，脱敏和保真怎么兼顾？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端到端集成测试的验收标准就定了：1.全链路事件时间对齐，Watermark驱动断言；2.回放数据做偏移量脱敏；3.P99端到端延迟<2秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

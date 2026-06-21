@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在容积重构着色器核心实现背景下，用户与导师围绕UBO高频更新防撕裂、降级标志位、情绪参数映射及防TDR持续沟通（7轮），其中在UBO防撕裂实现部分与图形渲染主程沟通（2轮），在着色器防TDR部分与图形渲染主程沟通（1轮），并最终明确核心实现约束，准备编写着色器骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上可以用Compute Shader写UAV，然后Pixel Shader读。不过情绪向量维度不高，用Uniform Buffer传参应该更轻量。直接把情绪特征向量塞进UBO，着色器里逐像素读取就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "帧撕裂，加锁？或者双缓冲？我印象里OpenGL还是DX里有这种机制，具体怎么写代码我有点卡住了。感觉驱动层应该会帮我处理这些同步吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频更新UBO怎么防撕裂？我只知道Double Buffer概念，具体在GPU端怎么搞没写过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "防撕裂是靠Ring Buffer的帧索引来隔离读写吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Ring Buffer持久映射，情绪向量要16字节对齐，靠帧索引偏移防撕裂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级标志位可以加，加个int就行。Ring Buffer多大我拿不准，是开3个还是开5个？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "根据Ray Marching的步进公式，紧张情绪可以映射到步长缩短，采样密度增加，焦距变大。公式里把情绪向量的分量作为系数乘进去就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "TDR，这个我确实没想过。步长越小循环越多，确实会爆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "着色器里怎么防TDR？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要在着色器里加MaxSteps硬上限，降级时只能跳步不能加采样。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先写UBO布局和Ray March的循环骨架，把MaxSteps和降级标志位加上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

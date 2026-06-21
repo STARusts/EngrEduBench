@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极低带宽抗语义干扰与传输高可用背景下，与导师围绕特征防篡改、高可用与合规冲突取舍及差分隐私验证持续沟通（6轮），其中在防对抗样本丢包部分与高可用与安全评估师沟通（1轮），在细粒度特征隐私合规部分与合规与隐私推演师沟通（2轮），并最终形成联合编码加特征掩码防干扰、DP加噪防隐私及端侧生成补全容灾的架构与验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加前向纠错FEC？或者重要特征重传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征提取后加个签名校验？或者在发之前做清洗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极低带宽下怎么防对抗样本和丢包？我只想到了FEC。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "提取细粒度特征做掩码和补全，会有隐私问题吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "冲突了。高可用说要细粒度特征掩码补全，合规说特征太细泄露隐私，只能传粗意图。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "前两天看DP-SGD的论文，差分隐私在特征上加噪，能限制单个样本对特征的影响。是不是可以在提取细粒度特征后加DP噪声，这样既保留了群体统计特征供端侧补全，又抹除了个体隐私？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个对照实验。控制变量是DP的隐私预算epsilon，因变量是端侧重构的PSNR和意图命中率。再加一个无DP的基线组对比。看看epsilon在哪个区间能同时满足合规阈值和保真度下限。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联合编码加特征掩码防干扰，DP加噪防隐私，端侧生成补全容灾。实验验证epsilon和PSNR的平衡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

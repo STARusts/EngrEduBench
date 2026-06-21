@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在网关算力约束下的推演模型轻量化背景下，用户与导师围绕模型选型、量化精度损失风险及验证口径持续沟通（5轮），其中在网关算力评估与网络结构替换部分与边缘架构师沟通（1轮），在微势特征量化风险与混合精度策略部分与推演算法工程师沟通（1轮），并最终形成TCN主干加混合精度量化的选型决策及漏报率验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在模型还是基于Transformer的，参数量太大。我想着直接导出ONNX，跑个INT8量化砍一刀，要是还不行就把Transformer换成LSTM，参数能少一半。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关那边的算力余量到底能塞多大的模型？现在Transformer导出来大概5MB，INT8后1MB多点，能塞下吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压力微势的突变特征要是做INT8量化，丢特征的风险有多大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "蒸馏周期太长，不符合我们敏捷迭代的要求。混合精度+TCN这个组合我觉得能打。TCN参数好调，混合精度能保住关键特征。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以把上一版离线跑出的凝血前30秒压力方差作为基准，方差超限就切FP16。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没验证过，这是弱项。我准备构造一组历史凝血发作的回放帧，跑一遍混合精度TCN，对比全精度模型的漏报率。漏报率如果超5%，就说明突变点没保住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策：主干网络从Transformer/LSTM切换为TCN；量化策略采用INT8为主、方差超限区间切FP16的混合精度。验证动作：用历史凝血回放帧对比全精度基线，漏报率<5%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

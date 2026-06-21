@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在环保监测平台方案设计的“监测数据流与接口”背景下，用户与导师围绕从排口到云的数据链路分层、接口契约、乱序/重复/补传与追溯闭环持续沟通（9轮），其中在现场采集形态与断链补传/对时约束上与现场边缘工程师沟通（3轮），在接口分三条逻辑流、幂等去重与版本留痕上与数据架构师沟通（3轮），并形成三流分层+统一入口envelope分type及保留与错误分级的接口设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按数据流拆一下：现场侧是CEMS和工艺侧DCS/PLC，先到边缘网关做协议适配和点位映射，再往云侧进时序库+消息通道。接口上我想统一成一个“观测数据API”，同时把分钟数据、秒级原始波形、事件/告警都塞进去，用一个通用schema，后面优化模块随取随用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须有三类吧：排放类（CO2、NOx、O2、流速、温压湿）、工况类（负荷、燃料量、氨水/尿素喷射、风机阀门开度、反应器温度）、能耗类（电表、蒸汽、压缩空气）。粒度上排放可能分钟为主，工况秒级也得留一部分，不然模型识别不出来。时延我想都控制在10秒内进云，丢失就用插值补齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@现场边缘工程师 现场CEMS和DCS这些数据，常见怎么采？秒级/分钟级能同时拿到吗，上云链路一般卡在哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那补传怎么搞？我总觉得断了就补上，不然分钟追溯会断档。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时钟不一致怎么修？我想直接用到达时间算了，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我们在设计监测数据流与接口，想问：接口怎么分层更合适？乱序、重复、补传、版本留痕在数据层怎么落？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规流里提到“质控标记”，是指把无效数据打标不参与报表，还是直接修正成可用值？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我担心接口多了会变复杂。能不能统一一个入口，然后用topic或参数区分流？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备采纳三件事：  \n1）分三条逻辑流：合规分钟、运行诊断秒级子集、优化特征流。原因是秒级全量上云确实会炸带宽和库。  \n2）补传只对分钟均值做强保证，秒级改成事件窗口保留，避免长期成本。  \n3）时间戳要双写：采集时间+网关接收时间，不能只看到达时间，不然抖动影响模型。  \n我还想坚持“统一入口”，但不是一个万能schema，改成envelope里带type，内部三种payload。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我先压到4个：  \nA. 数据上报入口（边缘->云）：/ingest/telemetry，envelope含tenant_id/site_id/stack_id/source_device/ingest_type(realtime|backfill)/batch_id，可选seq；payload按type=minute_compliance、second_ops、event。幂等键用(point_id, ts, source_device, batch_id)。  \nB. 元数据同步（云->边缘/边缘->云都可能）：点位映射、单位、量程、换算，带mapping_version。  \nC. 数据查询（云->应用）：按流分别查，合规分钟查支持时间窗+质量过滤；秒级子集查支持降采样。  \nD. 审计查询（云->审计/管理员）：查batch补传记录、映射版本变更、数据剔除原因。  \n\n错误码大类：鉴权失败、参数缺失/非法、点位未注册、数据时间异常（未来时间/过旧）、重复数据、落库失败/限流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可重试：落库失败、暂时限流、网络超时。必须人工：鉴权失败、点位未注册、时间戳越界太多（可能时钟坏了）、单位/量程不一致。限流返回里给retry_after秒数，边缘按指数退避，上限比如5分钟，超过就走本地缓存等补传。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在合规分钟payload里加quality_code和data_status：NORMAL、MISSING、ESTIMATED、BACKFILLED。追溯报表默认只用NORMAL+BACKFILLED，ESTIMATED要显式开关。补传一定带batch_id，审计能查到触发者和时间。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不敢写死。验证动作：让行业解决方案经理给我们一份该行业常见的环保报表口径，再让合规与隐私官确认“估算值能不能进对外上报”。在方案里先写成“口径可配置，默认不含估算值”，等他们确认再固化默认值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "保留策略我给个粗规则：  \n- 合规分钟：全量长期留存（至少3年，具体看业主要求），支持补传7天窗口。  \n- 秒级工况子集：常态只保30天；超过30天只保降采样或统计特征。  \n- 事件窗口原始秒级：只在事件前后各15分钟保原始，留存180天用于追溯与模型复盘。  \n- 优化特征流：留存1年，和feature_version绑定，便于回放。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "万能schema我先压住，用envelope+type。后面质量规则那场我可能还要多问几次，怕把“估算/补传/剔除”混一起。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在新病种体征注入与模型迭代背景下，用户与导师围绕增量训练方式、外推边界验证及特征分布校验持续沟通（5轮），其中在增量更新隔离机制部分与模型迭代工程师沟通（1轮），在体外循环体征耦合特点部分与重症临床主委沟通（1轮），并最终形成特征子图隔离注入、A/B回放测试验证及KS检验拦截偏移特征的策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接开增量训练把新数据喂进去就行了，反正图网络能动态加边。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "新来的ECMO数据能直接跑增量训练吗？会不会把原来脓毒症那些模型的图结构搞乱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ECMO联合CRRT的体征耦合跟常规重症有啥区别？我们需要单独建子图吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能直接增量，得做子图隔离。主委说体外循环下血压心率解耦了，得靠转速和ACT建边。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下测试集看看指标？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "上次是没做特征分布校验就直接合入了。这次我加上KS检验，分布偏移超过阈值的特征自动拦截，不进增量流。这个拦截逻辑我正好可以复用到这次ECMO数据流的对齐校验里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "新病种走特征子图隔离增量更新，不进全量图；上线前必须过A/B回放测试，旧病种AUC不退化且新病种召回率提升才放行；数据注入前用KS检验拦截分布偏移特征，超标直接拦截并告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

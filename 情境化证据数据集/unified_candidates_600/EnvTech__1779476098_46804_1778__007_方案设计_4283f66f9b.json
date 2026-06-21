@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边云信令流转链路设计背景下，用户与导师围绕流转链路、断网续传、增量压缩与反压机制持续沟通（5轮），其中在流转核心约束与实现机制部分与数据流转工程师沟通（2轮），最终确认边端增量特征提取、轻量时序库缓存续传、按序上云与云端反压接收的链路架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接MQTT发上去不就行了？断网就丢了呗，反正水是流的，丢几秒数据无所谓。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个时间戳呗。大不了上Kafka，吞吐肯定够。能不能别抠这些细节了，直接用现成中间件推就完事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我觉得直接Kafka推就行了，你有啥意见？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压缩？怎么压？缓存还要写边端数据库？太麻烦了吧。反压又是啥，听着就复杂。就不能简单点吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得没必要搞这么重，直接传全量数据，云端硬算不就行了？现在带宽很便宜的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加个边端缓存续传，压缩就传增量特征。反压就算了吧，我保证云端算力够行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端提特征，断了网就存本地，连上再传。云端收到如果处理不过来就让边端慢点发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

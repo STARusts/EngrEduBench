@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在熔池极热数据安全流转策略设计背景下，与导师围绕防重放、数据主权与验证方法持续沟通（7轮），其中在合规红线与使用控制部分与合规与主权评估师沟通（1轮），在边端防重放拓扑部分与热流感知架构师沟通（1轮），并最终形成包含数据最小化、Merkle树哈希防重放和IDS使用控制的安全流转基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加密传上去呗，用HTTPS或者VPN，保证链路安全就行了吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "重放攻击确实没细想。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "熔池极热数据往外传，合规上有什么硬性要求？主权怎么划？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端防重放攻击，拓扑上怎么加签比较好？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规专家说要“使用控制”，不能只做访问控制，还要数据最小化。架构师说用Merkle树哈希做签名，校验树根防重放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚补了工业数据空间（IDS）的参考架构标准，里面提到分布式数据使用控制策略，我觉得可以用在这里。数据包打上策略标签，云端就算拿到数据，没有策略引擎的放行，也跑不了反演计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看伪造数据有没有被拦住，也就是篡改检出率。还有加了Merkle签名后，端到端的时延增量不能超阈值，不然影响闭环。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一条，采集端执行数据最小化，剥离无关背景；第二条，边端按毫秒帧构建Merkle树哈希防重放；第三条，基于IDS使用控制策略打标，云端无授权不可反演。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

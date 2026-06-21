@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边端数据接入适配背景下，用户与导师围绕SDK遥测合规红线、自研GigE Vision解析链路及DPDK时序保障持续沟通（6轮），其中在闭源SDK遥测准入限制部分与合规与准入审查员沟通（1轮），在帧率降级对反演时序影响部分与边云协同架构师沟通（1轮），并最终形成合规优先倒逼自研替代SDK的决策及可量化验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我计划用供应商提供的VisionPro加速SDK，它直接输出NCHW的Tensor，能无缝对接反演输入Buffer，省去我们自己写的Shuffle开销。时序上通过硬件触发保证多源同步。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "遥测数据如果包含晶圆特征图，哪怕只传特征码，也违反数据不出厂区的要求。@合规与准入审查员 这种自带遥测的闭源SDK，在车规产线准入里是怎么卡的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果网关层阻断，或者强行Hook关闭遥测，供应商说会导致采集帧率从50fps降级到30fps，因为加速引擎依赖遥测授权Token。@边云协同架构师 30fps对咱们反演的时序门限意味着什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规没得商量，遥测必须断。既然断遥测会导致SDK降级，那SDK就不能用。我准备绕过VisionPro SDK，直接走GigE Vision协议解析底层流，用开源库+共享内存零拷贝自己封装。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序保障上，我打算用DPDK绕过内核协议栈，直接把GigE Vision数据包映射到用户态大页内存，反演引擎直接从这块内存读，省去一次拷贝。这比SDK的Buffer拷贝更极致。抖动控制，我准备写个PoC，用高精度计时器打点，连续跑1小时，验证帧间隔方差是否在5us内。至于GigE Vision协议，我之前只用到应用层，GVCP控制通道这块确实不熟，这两天得把标准规范啃下来，特别是心跳保活和流通道协商机制。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块是我的盲区。DPDK的内存池和Ring配置我能看懂，但真要定位网卡收包漏斗，像eBPF或者perf这种内核级追踪工具我基本没实操过，可能得请算子工程实现者帮忙搭个观测脚本。不过这不影响我先完成数据面解析逻辑，工具链可以并行补齐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证口径如下：1. 合规隔离：断开外网，自研链路无任何外部连接尝试；2. 性能基线：DPDK零拷贝模式下，稳定帧率>=50fps，帧间隔抖动<5us；3. 数据对齐：自研解析输出的NCHW Tensor与原SDK输出位对位误差<1e-6；4. 异常注入：拔插网线触发GVCP重连，恢复时间<100ms且无内存泄漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

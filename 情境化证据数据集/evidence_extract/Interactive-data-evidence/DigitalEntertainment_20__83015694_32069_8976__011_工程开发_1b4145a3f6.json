@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在创作者工作台预览/回放链路联调背景下，用户与导师围绕“转圈”问题定位、联调验收口径与隐私最小化日志/审计约束持续沟通（9轮），其中在前端预览调用/超时重试与并发覆盖修补上与前端负责人沟通（2轮），在fallback_action=CONTINUE_STORY与映射缺失兜底需返回panel_variant_id及reason_code上与后端负责人沟通（2轮），并明确工作台侧落地改动与联调检查点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卡住了。工作台点预览，有时候就转圈。也不是每次。然后我也不知道哪一段算“通了”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "request_id 我看过一次，有长串。event_type 我没注意。panel_variant_id 有时候是空的，有时候有个像 pv_ 开头。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 预览这块为啥会一直转圈？我这边看到 panel_variant_id 有时候空。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没有留那个 id。就刷新就好了。并发可能有，我点得挺快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 fallback 这块会不会没给 panel_variant_id？前端说空就会一直转。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就是你们后端的问题？我这边要改啥我也不清楚。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我记不住这些字段。就是要不空对吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能做…预览按钮别让狂点。还有 request_id 透传。还有空就别转圈，报错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第4条我不太懂。chosen_persona_tag 也不能打？那怎么查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就怕我查不到。要不一直开 debug？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我做 header 这个可以。别的我有点乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。我就用浏览器 network 里搜那个 id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 旧请求覆盖新请求怎么挡？我不想搞很大改动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。就禁用吧，我怕写错 seq。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边：预览点了就 disable，等回来再开；每次带 request_id header；返回没 panel_variant_id 就直接提示失败别转圈。后端那边：不管 matched 还是 fallback 都得给 panel_variant_id，缺映射就用 default 的，还要 reason_code。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

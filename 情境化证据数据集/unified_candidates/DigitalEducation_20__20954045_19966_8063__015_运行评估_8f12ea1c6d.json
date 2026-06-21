@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估收尾的复盘迭代与版本规划背景下，用户与导师围绕首响起点事件选择与回滚阈值落地持续沟通（7轮），其中在SLA首响口径与可审计证据上与企业导师运营经理沟通（2轮）、在教务指标命名与回滚边界上与教务流程负责人沟通（1轮）、在阈值回放验证与试点回滚实现上与SRE运维工程师沟通（2轮），并对齐三条可执行版本计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按监控那边的事件表去挑。首响我还是偏`task_assigned`，因为那是调度出来的第一步。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@企业导师运营经理 现在要定首响起点事件。我们在`task_assigned`和`mentor_checkin`之间纠结。你们导师服务SLA里，首响通常按什么算？用系统事件能当结算/考核证据吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在重点监控的是`score_submitted/evidence_uploaded/mentor_checkin`这些。没有“接单”事件。那你意思是首响用`score_submitted`？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记住：结算别用`task_assigned`，`mentor_checkin`也不稳，`score_submitted`至少是导师动作，但会晚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教务流程负责人 首响起点我们想用现有事件做代理。运营那边建议别用`task_assigned`，更像平台派单；`mentor_checkin`可能漏；如果一定选，可能用`score_submitted`当导师响应的代理。教务侧能接受这种口径吗？另外“归档数据不一致”按15分钟≥3次触发试点回滚，你们流程上有没有红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以教务侧不太想叫“首响”，更像“评价提交时效”。回滚可以，但不能影响签核，且限定试点范围。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先试着说：\n1）“首响”这个词不进教务口径，教务就叫“形成性评价提交时效”，事件用`score_submitted`。运营那边也先用这个当代理，但只能看趋势，不做扣款。\n2）回滚：`归档数据不一致` 15分钟≥3次触发，只在试点班级；回滚回到归档前，不动签核结果。阈值让SRE+教务流程负责人一起定。\n3）下一版要补一个“导师接单/确认开始”的事件，不然首响一直偏晚，很多情况会被标不可解释。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 我们要把“归档数据不一致”作为试点回滚触发：15分钟≥3次。你这边怎么看？能不能给一个验证办法：用历史数据回放估算触发频次和误伤？还有回滚不动签核结果这个限制，SRE侧能支持吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“冷静期/人工确认”我有点怕流程变复杂。是不是就先不加？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解：先按15分钟3次跑回放，看触发频次；如果一天触发太多就停用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终我这边定成：\n- “首响”不进教务用语，教务侧指标叫“形成性评价提交时效”，起点事件用`score_submitted`；运营侧暂时也用`score_submitted`当代理，只看趋势不做扣罚。下个小版本加“导师接单/开始辅导”事件，才算真正首响。\n- 回滚触发：`归档数据不一致`按15分钟窗口≥3次，限定试点班级；回滚动作只影响归档/回写链路，不改签核结果；先用近14天结果码回放估触发次数，必要时加“一天触发上限超N则停用”。\n- 审计只留操作者ID/时间/对象ID/结果码，不存明文PII。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

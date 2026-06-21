@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在处方图落地执行端接口设计背景下，与导师围绕指令下发路径、时延与时钟同步、硬件互锁持续沟通（6轮），其中在MAVLink高频指令可行性部分与飞控物联接口工程师沟通（2轮），并最终形成双总线分离、硬件脉冲同步与GPIO互锁的接口架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把处方图坐标和流量值直接塞进MAVLink的mission_item里发下去，飞控解算位置后，再转成PWM信号给喷洒板。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时延确实没细算。MAVLink有扩展位，我可以用自定义payload。不过如果飞控解算慢了，喷洒板响应会不会不同步？2米网格，飞机飞过去就一瞬间，指令晚了就喷错位置了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "处方图转喷洒指令，直接走MAVLink下发到飞控再转给喷洒板，这路子通吗？2米网格的粒度，时延会不会炸？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "两条线？航线和喷洒分开走？那时间戳对齐这块我有点懵，万一飞控时钟和喷洒板时钟漂了咋办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "互锁可以加个GPIO引脚检测，飞控给高电平才允许开阀。时钟漂移这块，是不是得飞控定期发个心跳给喷洒板？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "误差不能超0.2秒吧，不然偏出网格了。我可能得让飞控每到一个航点触发一个硬件同步脉冲给喷洒板，用这个脉冲做时间基准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "MAVLink航线下发，CAN总线带处方流量值，飞控航点到达脉冲触发喷洒板执行，GPIO电平做互锁。我这就去理这几个报文的字段和时序图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在活体图谱入库的防篡改与隐私脱敏背景下，用户与导师围绕脱敏策略的可用性取舍、隐私预算验证设计及防篡改校验拦截时机持续沟通（8轮），其中在脱敏合规底线部分与隐私合规风控官沟通（1轮），在动态本体防篡改机制部分与本体衍编工程师沟通（1轮），并最终形成差分隐私脱敏与增量哈希链防篡改的方案约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个脱敏接口呗，把专家名字和工号抹掉，防篡改就加个MD5校验。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "生物特征确实能识别。那就再加一层加密？防篡改我确实没细想，动态更新确实没法每次全量算哈希。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "活体图谱入库的合规底线和脱敏策略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态图谱的校验锚点怎么设计？每次演进都重新算太慢了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "取舍的话，噪声加小点不就不失真了吗？校验就放在gRPC推流后面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了差分隐私的参数调节，epsilon越小隐私保护越强，但数据可用性越差。我打算就设个0.5试试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就拿加噪前后的特征算个余弦相似度，看看跌没跌到0.8以下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "多组epsilon对照，t-SNE聚类，还有下游匹配准确率。好，我按这个来设计验证。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，脱敏用差分隐私，epsilon通过多组对照实验定，验证看t-SNE聚类和下游匹配准确率。第二，防篡改用增量哈希链，在图谱入库前做同步校验拦截。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

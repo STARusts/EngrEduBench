@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方推演引擎压测与时延消解背景下，用户与导师围绕压测模型构造、推演时延优化及误差方向选择持续沟通（6轮），其中在压测指标部分与性能压测师沟通（1轮），在图推演时延降级部分与推演算法工程师沟通（1轮），并形成基于生产复杂度分布压测及子图采样加INT8量化的时延消解方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用JMeter起500个线程并发请求，看报错率呗。如果超时我就把Semaphore的超时时间调长点，或者把队列长度再改大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我平时就JMeter配个CSV随便压，这处方数据得怎么造才对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得按复杂度分布来压，还得看TP99。造数据我找个导库工具从线上拉点样本吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演算得太慢咋整？能不能加个Redis缓存把算过的结果存起来？或者换个更快的图数据库工具？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "近似算？误差边界能稳住就行吧。局部子图采样这招听着能快不少。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "偏向误报我能接受，总比漏了配伍禁忌强。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "GNN底层我真不熟，平时就调调包。前两天我看别人用TensorRT给大模型做推理加速，不知道咱这图网络能不能套这工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那压测方案就按真实分布造数据，时延优化就试子图采样加INT8量化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

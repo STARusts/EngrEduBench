@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在灰度发布运行评估的异常告警与根因定位背景下，用户与导师围绕开启率不变但delivery_ok下滑及“动作跟不上音乐”现象持续沟通（10轮），其中在告警与trace取证、边缘节点变更影响及旁路降级处置节点与SRE运维工程师沟通（3轮），并形成证据链、短期止血与分级降级及后续验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听着像链路问题。入口没掉嘛，那就应该是后面下发那段有问题。先按链路看。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就看下发成功率的分端分网络，还有延迟吧。还有是不是只有灰度桶。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标名我记不住太细。大概就是 delivery_ok 那条链路事件，按 sample_rate 统一。然后对比 control 和 treat 的 delivery_ok、latency。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "4G/5G 更差，像下发链路或者弱网同步。生成失败应该不挑网络。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 21:10-21:25 灰度桶 delivery_ok 掉到 91%，4G/5G 更差，Wi-Fi 正常。你这边告警看到了吗？哪个组件错得多，能定位到根因吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以就是边缘节点发布搞坏了？那回滚就行了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "user_hash 连接次数激增这个要聚合，我记住。那现在是不是先把新边缘池停了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我回去跟导师说，就是新边缘节点的 edge_write 超时导致 delivery_ok 掉，蜂窝网更容易命中，所以更差，然后先旁路新池子加降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "告警是指令网关下发失败率>5%。错误码 502/504 上升，trace 卡在 edge_write。21:07 边缘节点灰度发布改了心跳重连。动作跟不上音乐就是延迟抖动大，端上对齐就乱了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看开启率没掉，而且是蜂窝网更差，内容不适配不该按网络分。再看映射侧的版本号有没有变更？如果没变更就更不像内容。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "短期止血就是蜂窝网不走新边缘池，然后指令降频。定位验证就是对比新旧边缘池失败率、看连接次数聚合、看 edge_write 超时和端上偏移相关。长期修复就是把心跳/重连策略改回去，或者做成按网络自适应。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "监控连接数和重连次数，还有边缘写队列积压？触发就降频、关特效，优先保基础编舞指令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是 L1 留段落切换关骨骼，L2 10Hz 到 2Hz，L3 蜂窝网只发灯光字幕舞蹈用预编排，还要记录触发和影响范围。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只做聚合分布，比如“每 5 分钟连接次数分桶”，不拉单个用户轨迹。要查单用户得走工单和审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）现象：treat 灰度桶 delivery_ok 99%→91%，control 稳；蜂窝网更差，Wi-Fi 正常。  \n2）告警：指令网关下发失败率>5%，502/504 增多。  \n3）证据：trace 大量卡在 edge_write；21:07 新边缘节点灰度发布调整心跳/重连。映射版本无变更，排除内容侧。  \n4）止血：蜂窝网调度权重新边缘池降到 0；开启指令降级 L1/L2/L3 逐级；记录审计字段（时间、房间数、持续时长）。  \n5）验证：对比新旧边缘池失败率与 edge_write 超时；聚合连接次数分桶验证重连风暴；端上音画偏移/同步指标与 edge_write 做相关。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

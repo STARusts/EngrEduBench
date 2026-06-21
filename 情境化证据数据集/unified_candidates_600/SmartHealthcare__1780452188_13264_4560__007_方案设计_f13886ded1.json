@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在老年居家网关算力极弱且无加密芯片的边缘感知可信防护背景下，用户与导师围绕加密算法选择、脱敏方式、物理窃取风险及防窃取策略持续沟通（5轮），其中在轻量级防篡改与隐私保护实现部分与边缘感知安全官沟通（2轮），并最终形成基于CMAC防篡改、脱敏前置、按需拉取与软绑定防窃取的边缘可信防护及MQTT接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这破环境怎么做可信防护？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只传哈希摘要，那推演引擎要真实数据时怎么办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "CMAC我能找到C库直接调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用CMAC做防篡改，网关侧把ID和体征拆开，平时只发哈希摘要，引擎要数据再推。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "总不能给网关加个防拆壳吧，没钱啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把Key跟网关的MAC地址和CPU ID混起来生成。就算拿走Flash也用不了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口用MQTT，Topic按摘要、全量、请求分开。CMAC校验放连接层。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

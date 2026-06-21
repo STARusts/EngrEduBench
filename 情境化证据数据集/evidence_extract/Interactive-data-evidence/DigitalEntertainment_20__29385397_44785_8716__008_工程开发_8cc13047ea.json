@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场编排工作台前端工程开发背景下，用户与导师围绕状态管理重构、保存发布冲突与回滚审计落地持续沟通（8轮），其中在编辑器分层状态/撤销重做/校验与base_version冲突提示上与前端负责人沟通（3轮），在回滚原因码强制与审计字段/策略版本获取上与合规与内容安全官沟通（2轮），并形成最小可行的前端模块拆分、交互限制与接口参数方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在我手上有一份老的前端实现说明，但我越看越不对劲，想让你帮我把坑点挑出来，别一上来就写死。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第一是状态管理写得很乱，图节点拖拽、属性面板、校验提示都各管各的。第二是保存发布流程写成“直接覆盖”，没提版本和冲突。第三是审核/灰度那块的回滚审计，前端完全没入口，也没强制原因码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直觉是弄个 store：sceneGraph 放节点和边；uiState 放选中节点、面板tab；validation 放错误列表。草稿就 sceneGraph 的一个 JSON。发布就是提交 JSON 到后端。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ID 我准备用 uuid，拷贝就新 uuid。撤销我没想好，可能做个 history stack。校验我想前端先做必填、类型这些，服务端再做合规和更复杂的。diff 展示……可能先不做，只提示有更新？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 编排工作台这块，老实现说明里状态很乱。你们一般怎么拆 sceneGraph、UI、校验、撤销重做？我只想先做单人编辑，但别把以后联调和扩展堵死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "命令栈我能理解个大概，但“图是否有环”这类校验我担心会卡性能，节点多了是不是每次改都全跑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 diff 展示呢？导师刚提到不做 diff 会坑，但我现在真不想做完整对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 回滚审计这块，之前方案说回滚也要审计，还要强制 reason_code。前端在编排工作台里要怎么做才算合规？需要哪些字段必须带上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码这些我能做下拉。policy_version 前端怎么拿？是后端返回还是我写死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先做这些：  \n1）store 里分 DocumentState（nodes/edges/metadata/version/base_version）和 ViewState（选中、缩放、面板）。  \n2）命令栈我先覆盖 5 类：addNode、deleteNode、updateProps、connectEdge、disconnectEdge。撤销重做只对 DocumentState 生效。  \n3）校验：前端做必填、枚举、引用存在、连边成环检测（只在 connectEdge 时跑）；服务端返回的合规/策略校验用统一列表展示。  \n4）保存/发布接口都带 base_version；后端冲突就弹窗提示版本不一致，不自动覆盖。  \n5）回滚按钮我做在“发布管理”里：二次确认 + reason_code 必选；调用回滚接口时带 reason_code、policy_version（进面板时拉）、content_hash（前端算）和 operator_id 从登录态透传。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "canonical 这块我不太确定。我能做 JSON stringify 排序 key，但嵌套对象排序我怕漏。要不我让后端返回 content_hash，我前端只展示和带回？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就改成回滚请求只发 `target_version`、`reason_code`，再加个 `client_observed_policy_version`。UI 上把 reason_code 做成下拉必选，不选不给点确定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这 5 条拆分去写代码和接口联调点。冲突弹窗我先做“刷新最新/取消”两按钮，别让它悄悄覆盖。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

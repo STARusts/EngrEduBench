@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构网关协议联调背景下，用户与导师围绕联调方案从开源粘合到轻量级自研持续沟通（7轮），其中在时隙冲突与轻量级适配部分与底层协议研发客沟通（2轮），在帧头格式与信令转译部分与接口与数据流设计师沟通（1轮），并最终形成裸写C状态机、硬件定时器时隙调度、帧头查表硬转及信令存flash审计的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就找个开源协议栈呗，像OpenAirInterface那种，把5G和卫星的代码拉下来，编译一下粘上去跑通就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构网关协议联调直接粘开源代码行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个中间件呗，比如用ROS或者ZeroMQ做消息转发，这玩意现成的，肯定能对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "板子上跑不了ZeroMQ吧？轻量级的协议适配怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不过审计日志这个我知道，之前合规专家强调过，所有转信令必须打时间戳存flash，不能光顾着转发不留痕，不然出事查不到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用重型中间件，裸写C状态机，硬件定时器做时隙调度，帧头查表硬转，然后跨域信令必须打时间戳存flash留审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在病斑识别模型边侧推理引擎封装背景下，用户与导师围绕解决模型运行段错误问题持续沟通（5轮），其中在NPU内存映射部分与嵌入式开发工程师沟通（1轮），在模型量化与预处理部分与算法工程师沟通（1轮），并最终明确段错误原因为内存分配方式错误，确定修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把算法给的onnx直接丢进引擎了，用的默认配置跑的。输入tensor我就直接memcpy图像数据进去，没管别的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我推理引擎一加载就段错误，是不是板子不支持某些算子？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来是这样，我只写了malloc。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型这边有没有坑？量化方式对不对？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预处理我写了，但确实没做物理内存映射。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不是算子问题，是我给NPU喂数据的方式不对，直接用了CPU的虚拟地址，NPU读不到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得把输入节点的内存分配换成引擎的专用API，保证物理连续，然后做Cache刷新再拷贝数据进去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改输入内存接口，加上Cache刷新，预处理参数我也找算法再对一遍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

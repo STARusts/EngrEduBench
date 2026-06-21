@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端边云联调压测与10%灰度发布背景下，用户与导师围绕边缘CPU飙高、策略延迟与重复启停指令的定位、幂等去重方案、日志补齐与灰度可控验收持续沟通（13轮），其中在压测复现与重复指令条件核查部分与测试工程师沟通（2轮），在LIGHT_MODE缺省传输与schema默认处理部分与后端工程师沟通（1轮），并明确边缘侧LRU去重缓存与字段/指标/合规日志改动项。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先加机器配置吧，把CPU调大不就好了。重复指令可能前端点了两次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就看error吧。延迟就看请求时间。重复启停…可能就是接口没拦住重复调用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 你们压测怎么弄的？重复启停怎么复现？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重复是因为网络抖动重试？那就把重试关了？或者把超时调大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "LIGHT_MODE没带…那我就默认都开LIGHT_MODE算了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 重复指令是网络抖动触发重试，planId一样但messageId不一样。还有LIGHT_MODE字段有时没传，边缘端跑了重的计算，CPU高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都做吧…云端按planId不重复发，边缘按planId不重复执行。验收就是不重复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放Redis？边缘也起个Redis就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是JSON序列化把空字段删了？我看有些库默认不传null。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 LIGHT_MODE有时候没带是怎么回事？默认怎么处理？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我边缘端就改成没字段就当true。strategyVersion我不确定哪里取。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志字段…traceId、planId、LIGHT_MODE、strategyVersion、耗时ms。再加reasonCodes。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用配置文件写泵站ID名单，发版的时候带上。回滚就再发一次旧版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂，就是边缘读flag，日志里写NEW_ENGINE开没开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CPU别超过80%？内存别爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不打地块ID了，只打planId。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TTL就10分钟，容量…1000条？反正plan不多吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

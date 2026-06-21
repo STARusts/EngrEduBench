@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在厌氧发酵产气预测与柔性调度平台工程开发的设备接入采集背景下，用户与导师围绕API/前端统一6态状态字段与5类审计事件模型持续沟通（6轮），其中在统一envelope与reason_code/有效期字段设计上与解决方案架构师沟通（2轮），在断网缓存补传下DEGRADED_DELAY与EXPIRED边界及时戳口径上与物联网集成工程师沟通（2轮），并明确以OpenAPI枚举对齐与审计字段清单同步架构师作为交付。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前面评审提到的“前后端统一6态、原因码、有效期”和“5类审计事件字段”，我有点糊，得把这俩同步出去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都返回吧…统一点。就是接口里加个 status 字段。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "触发条件…就是断网算延迟？质量差算质量降级？有效期就给个时间戳，过了就 EXPIRED。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 6态+原因码+有效期，这个你们想放到 API 里怎么定？字段名、reason_code 大概有哪些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就是 meta.status 这一套都带着。reason_code 也给枚举。TTL 不同接口不一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我让前端别混着用。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就把 OpenAPI 里的 enum 加上，然后前端用生成的类型。我们现在用 swagger 的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 边缘断网缓存补传这块，DEGRADED_DELAY 和 EXPIRED 怎么区分？last_update_ts 应该用设备时间还是服务器时间？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我懂了，就是延迟还没超 TTL 就降级延迟，超 TTL 就过期。时间戳…我有点乱，但大概 last_update 用 ingest_ts。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我先不把断网当漂移。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计动作…就记录谁改了配置、谁导出了数据这种？字段就 user_id、时间、动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就：登录、改配置、导出、手动下发调度、还有…切换降级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MODE_SWITCH 就是状态切了要记，记谁触发的、从哪个 state 到哪个 state，然后 reason_code，还有时间、站点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一条：OpenAPI 里加 meta.status（6态+reason_code+last_update_ts+valid_until_ts），前端用生成类型跟着走。第二条：把 5 类审计事件和字段清单给架构师，让他按这个建模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构数据采集管道开发落地背景下，用户与导师围绕低延迟微变捕捉与严苛脱敏合规的权衡持续沟通（6轮），其中在管道脱敏与延迟损耗部分与数据管道工程师沟通（2轮），在脱敏留痕与数据最小化部分与数据合规规划师沟通（1轮），并最终形成管道侧脱敏、异步审计与Exactly-Once保障的落地约束及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构上我倾向在管道源头做轻量级拦截，但具体的脱敏点我不太确定。如果全量同步再下游脱敏，延迟肯定最低，但传输链路有裸奔风险。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "为了保低延迟，采集侧能不能先不脱敏，直接把原态数据推到Kafka，让下游消费端再洗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加密损耗有多大？我们微变侦测对延迟极度敏感。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "管道侧做字段级脱敏，能满足合规要求吗？我们想用AES加密敏感字段，非敏感特征原样透传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冗余字段过滤可以做，在Source端加个白名单。但脱敏映射留痕这块，如果要在管道里同步写DB记日志，肯定拖慢速度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "折中一下。管道侧必须做脱敏和最小化，这是红线。脱敏用AES-GCM，对称加密快，且带鉴权。映射留痕不写DB，改成异步发一条脱敏审计事件到专门的Audit Topic，解耦处理。这样管道主干延迟可控。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个漏洞。我想到可以用Exactly-Once语义保障，或者把映射关系放在本地WAL里先写盘，再异步同步。但具体怎么实现WAL和Kafka Source的原子性写入，我目前对Flink的Two-Phase Commit机制细节吃不透，这是我现在最大的卡点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚把Flink Checkpoint和Kafka事务的源码交互逻辑过一遍，重点看ChainedStateBackend的持久化时机。明早我写个MVP验证一下WAL恢复的准确性，确认能防映射丢失再往下推。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 采集约束：Source端白名单过滤，严格数据最小化，非白名单字段丢弃；2. 脱敏策略：敏感字段强制AES-GCM加密，非敏感原态透传，禁止原态进Broker；3. 审计保障：脱敏映射异步发Audit Topic，但通过Flink 2PC保障Exactly-Once，防映射丢失；4. 验证口径：造一批含敏感字段的发票流，对照测试管道端到端延迟增量（目标<10ms）和脱敏恢复一致性，失败用例必须能通过WAL复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

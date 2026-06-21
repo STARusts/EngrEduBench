@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在师资调控指令下发安全与高可用设计背景下与导师围绕指令防重、密钥管理、降级容灾与验证方法持续沟通（7轮），其中在幂等与降级设计部分与算法后端开发工程师沟通（2轮），在合规留痕部分与教育数据审计师沟通（1轮），并形成包含幂等校验、网关验签、Saga补偿、人工兜底及审计摘要的约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发指令嘛，用消息队列保可靠性，然后接口加个RSA签名防篡改，基本就稳了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重复消费确实是个坑。防重的话，加个唯一ID？密钥管理我确实没细想，这块感觉挺麻烦的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用唯一ID防重，但具体怎么在接口层实现？密钥直接配在学校端是不是风险太大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关统一验签确实比分发密钥靠谱。那高可用降级呢？如果MQ积压或者挂了，指令发不出去怎么办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Saga模式！前两天我看分布式事务的资料正好看这个，补偿事务那套。虽然还没完全吃透，但意思是给每条指令建状态机，失败了能反向操作撤回对吧？这个思路可以用到降级里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令下发这块，除了防篡改，合规上还有什么硬性要求？比如调配指令的内容要怎么留痕？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "带推演依据摘要，这招好，不然学校收到调令不知道凭啥调的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "防重用RequestId加业务幂等校验；密钥走网关统一验签，学校端不拿私钥；降级用Saga补偿思路，给指令加状态机；审计的话，报文里得塞推演依据摘要。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不是，刚才后端专家提了一嘴，我之前正好看过相关论文，就试着套进来了。不过Saga具体实现挺复杂的，我有点拿不准状态机定义到多细。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全瘫了？那就发不出指令了。总不能发短信吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个测试脚本模拟并发重试？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，指令下发带全局RequestId，接收端做幂等拦截防重；第二，密钥收归网关层统一验签，学校端只验Token；第三，指令加状态机，失败按Saga补偿逻辑回滚；第四，极端故障走批量导出人工审批兜底；第五，报文必须附推演依据摘要供审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

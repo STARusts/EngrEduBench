@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在生成编排服务架构MVP方案设计背景下，用户与导师围绕服务拆分、编辑态/播放态策略、接口与状态机及回退/预算开关持续沟通（8轮），其中在同步/异步接口形态与job状态设计上与解决方案架构师沟通（3轮），在Track展开失败与PolicyGate unknown处理、三层回退与最小可解释输出字段上与AI编排工程师沟通（2轮），并对齐前后端可落地的编排架构与对外状态/字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是一条工作流。输入是叙事组件+Track+StateKV，跑一遍生成，然后给前端一个能播的包。就是我不确定拆成几个服务，怕拆太多联调会爆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "共用的是生成策略和模板吧，还有合规限制。分开可能是播放态更要快，不然卡住。编辑态可以慢点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入口就是 Orchestrator。能力服务…一个是叙事生成，一个是节奏编排，一个是合规检查？但合规这块我不懂是不是要单独。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 生成编排这块，Orchestrator 跟 NarrativeGen/RhythmArrange/PolicyGate 的接口你建议怎么定？同步还是异步？job 状态要怎么搞才不乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级这个状态是给前端看的？还是内部自己用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那事件通知咋办？一直轮询会不会很丑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我问完了，大概是 validate 同步，真正生成用 job 异步，状态有个 DEGRADED。Orchestrator 只存引用不存大块内容。前端先轮询就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "播放态就提前把常见分支生成掉？比如每个节点预生成两步。观众点了就直接取。要是没命中才临时生成，但可能要给一个 loading。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI编排工程师 编排里回退怎么分层比较稳？Track 的 beat_grid/cut_rate/intensity_curve 这些可能生成失败或超时时，最少要返回哪些可解释字段？还有 PolicyGate 判 unknown 时编排要怎么处理？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点担心 beat_grid 降采样前端会不会画错图。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我回去跟前端说加 resolution。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这边给了三层回退：正常、轻回退只保核心曲线和模板引用、硬回退用默认模板+叙事骨架。最少返回 job_id/status/degraded_level/reason，还有 rhythm_core 三条曲线带 resolution，PolicyGate unknown 就只给预览，发布导出都关掉，并在 artifact 上打 restriction_tag。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放最前面。至少 export/publish 这种直接挡住，省得生成完又不能用，还浪费算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开关…一个是最大并发 job 数。一个是超时时间，超时就 L1/L2 回退。还有播放态的预生成深度，比如预生成 1 步还是 2 步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要就是前端要改成按 resolution 画节奏图，还有他们要理解 DEGRADED 不是失败。别的我感觉能讲清。状态字段命名我可能还会说乱，你给我一套固定枚举我就照着念。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

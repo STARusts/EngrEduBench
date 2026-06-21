@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在过程作业溯源与诚信评估系统方案设计背景下，用户与导师围绕多源过程数据接入的边界、事件模型/字段、接入方式与幂等校验持续沟通（6轮），其中在事件基类字段与接入方式排序上与数据治理经理沟通（3轮），在raw_ref存储形式与hash用途边界上与合规与隐私官沟通（1轮），并形成试点数据源与分阶段接入的可执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多源就是，作业平台、写作工具、编程的提交记录这些。然后都接过来就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "编程就接提交次数、提交时间。写作就接版本，反正有历史记录就够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就，学号、作业号、时间戳。还有内容…内容也要存吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须有就是学号作业号时间。能不要就不要的是内容全文，还有那种键盘敲了啥。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都可以吧，能拿到数据就行。导出文件最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 事件模型要怎么定？字段要哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "hash是要把全文都hash吗？那也算存内容吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那raw_ref存URL就行了吧，直接点开看。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那导入方式你们建议啥，导出表也可以吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "源就是编程平台和写作平台。接入先用文件导入，后面再改成推送。事件就提交、版本、最终提交这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "靠时间戳？一样的时间就算重复。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "唯一定位就是source_system和source_record_id，再加event_type。关联作业就是course_id、class_id、assignment_id，还有actor_id。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 raw_ref到底能存URL还是只能存主键？hash能不能用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们就不存URL了，存主键。hash就只做去重。行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。数据源：编程的提交/测评记录，写作的版本记录。接入：M2先用文件导入，M3争取用增量拉取。事件字段：event_id、event_time、event_type、actor_id、course_id、class_id、assignment_id、source_system、source_record_id，再带ingest_time和ingest_batch_id。校验：source_system+source_record_id要唯一，时间要在学期范围里。权限审计：跳转到源系统要鉴权，操作都记operator和auth_scope。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "文件导入每次都得人工搞，容易漏，出问题也不好查。增量拉取就按时间拉，比较固定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第3条吧，M3切增量拉取，源系统不一定给接口。要是不给就还是导出表。其它都可以。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

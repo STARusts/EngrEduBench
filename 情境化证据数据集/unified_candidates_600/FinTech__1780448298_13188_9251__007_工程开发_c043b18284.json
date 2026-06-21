@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在驾态风险系统SDK埋点与清洗管道工程开发背景下，与导师围绕车端算力约束下的LDP加噪机制、清洗架构及验证脱敏持续沟通（4轮），其中在T-Box算力红线部分与车联网架构师沟通（1轮），在边缘断链兜底部分与数据工程师沟通（1轮），并形成轻量随机响应加噪与云侧Watermark补偿清洗架构及脱敏验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备先把车端SDK埋点和数据清洗管道落地。LDP加噪在端侧做，特征降维也依赖端侧采集的网格ID和停留时长，所以SDK怎么埋、原始流怎么洗，直接决定后面TEE里的特征质量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算SDK里直接集成RAPPOR机制做LDP，虽然计算重但隐私保真度高。清洗全部下沉到路侧单元做流式ETL，云侧只收干净特征，这样延迟最低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "T-Box跑RAPPOR这种频率扰动算法会不会OOM？上报协议怎么定才能不阻塞CAN总线读取？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果边缘侧断链，原始流积压在端侧，清洗管道怎么防数据乱序和丢失？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对车规级内存约束理解太理想化了，RAPPOR确实跑不通。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把加噪算法换成随机响应机制。清洗架构改成：端侧极轻量打标加环形队列防积压，云侧用Flink Watermark做乱序补偿和特征提取。这样既不压垮T-Box，也能保证清洗完整性。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证设计我定两个口径：端侧加噪写个Mock T-Box压测脚本，看内存峰值是否低于15MB，加噪耗时是否在50ms内；云侧清洗注入乱序流，验证Watermark能容忍的最大延迟差。测试日志脱敏我直接在SDK里内置硬编码替换，真实经纬度替换为网格ID，时间戳只保留相对偏移量，坚决不落盘原始坐标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实时共玩解谜链路上线前压测与故障注入验收背景下，用户与导师围绕并发模型、指标阈值、失败判定与合规脱敏持续沟通（6轮），其中在房间同步压测设计与网络/服务/时序故障注入上与实时通信工程师沟通（3轮），在准入门槛写法、中止条件及审核回调吞吐/乱序重复压测上与测试负责人沟通（3轮），并汇总形成一页压测+故障注入口径清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我大概知道要测 QPS、延迟、错误率。就是把房间数、玩家数拉高，然后看 RT。故障注入我只想到把某个服务停掉看会不会挂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发模型…按直播间共玩，可能一个房间 6-10 人？接口主要是 joinRoom、syncState、sendAction 这类。成功标准是延迟别太高，不掉线。不能用真用户聊天原文和 IP 之类的压测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时通信工程师 房间同步这块压测怎么设计？我需要并发模型、要打哪些接口，故障注入丢包/延迟/乱序怎么做，验收看啥。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "丢包这些怎么弄？我只会想到网络开关。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验收口径呢？我怕只看 RT 没意义。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果乱序了，平台期望是“最终一致”就行吗？还是必须强一致？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问到了：压测模型按 R 个房间、每房间 U 个用户，U 用 8/16，R 从 100 到 2000 拉；每用户动作频率 a 设 0.2/1/3。重点压稳态 action+广播，跑 30 分钟，还要每 5 分钟 2% 用户断线 10 秒再重连。故障注入包括网络整形（丢包 1-5%、额外 50-300ms、1% 乱序）、服务层随机超时和广播节点过载、以及动作事件重复/乱序。验收看 P95/P99 同步延迟、关键状态分歧率、重连恢复 P95、资源曲线拐点。合规上压测数据用假 actorId，别带聊天原文和用户标识明文。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值…同步延迟 P99 小于 500ms？重连恢复小于 3 秒？错误率 1% 以下？分歧率我不太会定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测与故障注入这块，准入门槛阈值怎么写比较靠谱？特别是同步延迟、重连恢复、分歧率、以及压测中止条件。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分歧率用 hash 统计是指客户端算一个 hash 上报吗？会不会泄露内容。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审核回调怎么压？我们是回调只在服务端消费。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，测试负责人给了门槛写法：关键路径 action 广播 P95≤200ms、P99≤350ms（稳态30min，U=16，a=1）；关键状态分歧率≤0.01%，用关键状态白名单字段 hash 对齐；重连恢复到最新 stateVersion 的 P95≤2s。非关键路径 P99≤800ms。错误率稳态≤0.2%，尖峰1分钟≤1%。中止条件是关键路径 P99 连5分钟>2倍门槛，或分歧率连2分钟>10倍门槛，或房间崩溃/重建>0.5%。审核回调压测要做吞吐+乱序重复，验收点是状态单向、幂等、乱序不回滚，未过审输入不进规则引擎。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三种…  \n1）广播节点过载导致延迟飙。  \n2）乱序/重复导致状态错。  \n3）审核回调堆积导致 pending 卡住？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟飙…看端到端 P99 和服务端处理耗时。状态错用分歧率 hash。pending 卡住看消费滞后，比如队列堆积长度和 oldest lag。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测日志不要打原文内容，不记录 IP、设备明文。还有审核 evidenceRef 也别乱打印。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则引擎我能拿到每条 action 的执行耗时分布，超时次数，还有被审核挡住的次数。更多我不确定，要问规则同学再补。整体口径我认。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

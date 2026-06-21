@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边端智控节点堆栈爆满与算力受限的调优背景下，用户与导师围绕模型量化、降采样率与召回率及瞬态捕捉的权衡持续沟通（5轮），其中在INT8量化损失边界及折中方案部分与算法工程师沟通（1轮），在混合精度下内存时延红线部分与嵌入式开发主管沟通（1轮），并最终形成动态采样策略与环形缓冲区内存分配方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接上INT8量化，把声磁流特征矩阵从FP32压下来，内存直接省一半，算力也能快不少。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "召回率肯定掉，但我还没跑验证。不过内存不够也是死路，OOM了连阻抑指令都发不出去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FP32直接转INT8，声磁流融合层的极化漂移特征会不会直接糊掉？有没有折中方案？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "混合精度的话，边端内存和时延能扛住吗？现在压测并发一高就OOM。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混合精度加砍特征，召回率掉2%能接受。但内存还是悬，200KB太抠了。我想把声磁采样率从1kHz降到500Hz，数据量减半，内存肯定够，时延也能压下来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前跑过稳态仿真，500Hz能复现相变轨迹。但瞬态确实没测。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对嵌入式内存池管理不熟，一直以为只要模型小了就能塞进去。我得去补一下vxWorks的内存分配机制，看看能不能改成静态预分配，避免碎片化溢出。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改特征提取逻辑和缓冲区分配，顺便把内存申请全改成静态预分配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

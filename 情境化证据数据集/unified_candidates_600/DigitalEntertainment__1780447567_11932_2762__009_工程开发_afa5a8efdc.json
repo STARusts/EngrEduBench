@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图感知大模型微调部署面临算力与显存硬约束背景下，用户与导师围绕极限微调推理替代方案、量化钝感风险权衡与验证口径持续沟通（4轮），其中在极限微调与推理方案部分与意图感知模型工程师沟通（1轮），在vLLM与流变引擎显存隔离配置部分与流变引擎架构师沟通（1轮），并最终形成QLoRA微调加vLLM推理的妥协方案、显存隔离配置及精度验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "4张A100跑7B模型全参微调肯定爆了。我原本打算用LoRA做微调，把玩家行为序列和文本输入拼成Prompt，冻结底座。但推理显存卡得死的话，LoRA合并后的权重如果用HuggingFace原生pipeline并发一高还是会OOM。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LoRA之后还有什么更极限的方案？我怕显存不够导致推理阻塞。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "量化导致微行为隐性意图变钝，这个风险很大。我们系统就是靠微行为诱导流变的。如果在量化后，原本KL散度大于0.15的异构意图被压平了，推演就失效了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备在微调后，用验证集跑一个成对意图对比测试。对比全精度底座和QLoRA模型在“微行为-意图”映射上的余弦相似度，设定阈值大于0.92。如果低于这个值，说明量化把意图空间压坏了，就得回退到8-bit。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "vLLM的PagedAttention显存分配机制，如果跟流变引擎的GPU显存池做隔离，具体参数怎么配？我担心引擎图计算和vLLM推理抢显存导致OOM。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "continuous batching加gpu_memory_utilization设0.4。这样推理和推演能隔离开。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案定在QLoRA 4-bit微调加vLLM推理。约束清单如下：\n1.微调资源上限4卡A100 72小时，单卡跑QLoRA；\n2.推理显存隔离，vLLM占用上限40%，推演引擎60%；\n3.开启continuous batching防时延毛刺；\n4.验证口径：量化前后意图向量余弦相似度大于0.92，若不达标回退8-bit；\n5.若微行为意图识别F1下降超5%，触发重训。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

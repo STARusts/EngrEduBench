@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在聚合网关核心编码与调优背景下，用户与导师围绕规约解析扩展性、指令防篡改验签、线程池数据交换及内存管理持续沟通（7轮），其中在端侧规约对接与防篡改部分与边缘网关开发者沟通（1轮），在无锁队列选型与端侧验签部分与边缘网关开发者沟通（1轮），并最终形成网关核心编码确认项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Netty做底层通信，自定义ChannelHandler处理规约解析。上行微脉数据解析成内部POJO，下行调频指令编码成对应规约字节流。性能调优的话，就调调Netty的ByteBuf池化，开启池化应该就够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "扩展性我就写个工厂模式，根据设备类型分发解析器呗。不阻塞的话，Netty本身不就是异步非阻塞吗，这还能卡？日志我直接logback输出，脱敏是啥意思，电表数据还要脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧规约对接的坑，内存管理和指令防篡改怎么搞？我原想用Netty加工厂模式就完事了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备把规约校验抽到单独的DecodeWorker线程池，Netty只负责收发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据交换我就用并发队列ArrayBlockingQueue吧，简单好用。签名校验放云端吧，网关算力那么弱，做不了加解密。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "无锁队列选哪种？端侧验签具体怎么做，网关算力够吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JCTools的MpscArrayQueue替代ArrayBlockingQueue。端侧用ECDSA公钥验签，云端私钥签。不通过就丢弃告警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认项有四个：一是用JCTools的MpscArrayQueue做线程池和EventLoop的数据交换；二是端侧用ECDSA公钥验签，不通过丢弃告警；三是规约解析对象池化，防FullGC；四是开发期开启ResourceLeakDetector的PARANOID级别查内存泄漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

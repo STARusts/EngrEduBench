@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在传感流式数据接入联调背景下，用户与导师围绕数据接入LBM的链路设计、时间对齐、合规脱敏及解耦方式持续沟通（3轮），其中在断连容错与乱序处理部分与物联架构师沟通（1轮），在数据脱敏与审计留痕部分与院感合规师沟通（1轮），并最终形成边缘网关缓存加Kafka加Flink查Redis解耦及Watermark对齐注入LBM的链路方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Kafka接病房传感原始流，Flink做窗口清洗和特征提取，然后转成推演引擎需要的Zou-He边界格式注入。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我担心Flink的窗口对齐和LBM时间步对不上，导致边界条件时间错位，把刚跑稳的流场搞崩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传感数据接入Flink这边，断连容错和乱序处理怎么设计比较好？我担心跟LBM时间步对不齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "病房温压微粒数据采集，脱敏和审计留痕有什么红线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备把Flink窗口设成0.5秒，解耦逻辑写在Flink的MapFunction里。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，改代码太笨。我改成Flink查Redis的映射表做热加载解耦。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "存储成本的话，原始流存Parquet列存压缩，应该能扛住，我后面写个脚本估算下容量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在先定下接入链路：边缘网关(断线缓存) -> 内网Kafka -> Flink(查Redis解耦+Watermark对齐+特征提取) -> 注入LBM。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

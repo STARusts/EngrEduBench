@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发的声纹特征服务实现背景下，用户与导师围绕enroll/match/delete接口字段、错误码与剧情兜底返回持续沟通（9轮），其中在特征向量格式、阈值与低质量处理上与语音算法工程师沟通（3轮），在特征加密存储、保留周期与审计字段上与隐私与数据治理官沟通（1轮），并对齐最小可实现的接口与合规约束口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就有点懵。特征就是一串数字吧，发过来就行了？为啥还要服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就…向量？输出就给个ID？失败就返回空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 特征是啥格式啊？我这边要怎么接。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "512就512。余弦就是点乘除以长度那种？阈值0.75写死行不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我直接质量低就不比对了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是512的数组，带个quality、model版本。然后返回score和阈值。质量太低就…不给结果。然后reason_code要有。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "HTTP就200吧。业务码写在json里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存…随便存一条最新的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与数据治理官 声纹特征存库有啥规矩？要留多久，日志要写啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加密、审计、180天。听着就很重。能不能先不加密，先跑通？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就怕我写错。错误码要写多少个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "fallback_action这也要我加？上层自己定不行吗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那注册(enroll)咋弄，多条样本我也不想管。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…最多3条，新来的顶掉最老的。版本不一样就开新桶？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "物理删吧，直接删掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在还是不知道match返回啥给剧情，我怕泄露用户ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "persona_tag是作者配的那个角色？我懂一点。那enroll要带persona_tag。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 match要topK吗？还是就一个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "预留数组…我怕麻烦。就先best_candidate行不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就记住三条：不存音频只存512向量，加密不打日志；match得带reason_code和fallback继续剧情；enroll最多三条滚动。其它我回头看你刚说的再抄到接口里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

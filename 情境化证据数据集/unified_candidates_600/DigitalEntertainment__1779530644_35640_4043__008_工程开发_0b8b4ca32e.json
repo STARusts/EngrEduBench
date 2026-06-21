@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在沉浸演艺视效流形随动重构系统核心模块开发背景下，用户与导师围绕端侧Shader顶点异常排查、验证方案设计与基础补全持续沟通（6轮），其中在流形插值逻辑与NaN异常部分与视效流形算法专家沟通（1轮），并最终形成插值算法换Slerp加Epsilon、对照测试验证及阈值校准的修改方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就按后端习惯把旋转矩阵和偏移向量直接乘了，但帧同步过来的四元数在端侧一转就炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我在写流形随动重构的端侧Shader，视角一变，顶点偏移就算出NaN。我用的是Lerp做帧间插值，是不是插值算法有问题？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "原来是除零了，怪不得算出NaN。我改成Slerp加Epsilon保护试试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我写个对照测试吧。控制变量就是插值算法，实验组用Slerp加保护，对照组还是Lerp。输入同一组高频视角抖动数据，对比两组输出的顶点距离误差。如果Slerp组的误差在0.01以内且无NaN，就算通过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我拍脑袋定的，确实没依据。可能得跑几组真实演艺动作数据看误差分布再校准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我图形学底子确实差，今晚把《3D Math Primer》里四元数插值那章看了，自己先写个纯本地Slerp验证Demo，跑通了再把逻辑迁到项目的Shader里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

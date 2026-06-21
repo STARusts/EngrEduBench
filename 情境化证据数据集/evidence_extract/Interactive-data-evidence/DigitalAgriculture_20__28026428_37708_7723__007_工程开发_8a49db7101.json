@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虫情气味多模预警协同系统工程开发的设备接入与边缘计算实现背景下，用户与导师围绕网关鉴权注册、MQTT协议字段、断网落盘补传幂等、边缘初筛策略与验收测试持续沟通（8轮），其中在平台注册与topic/msgId/去重机制上与物联网平台工程师沟通（5轮），在边缘初筛门控与滑窗评分及阈值下行可配落盘上与边缘计算工程师沟通（4轮），并明确网关模块拆分与可测试验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小链路就是设备吐数据->网关转发->云端收？我直接MQTT上报就完事了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要问一圈太慢了。我先随便搞个token写死不行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "payload…就voc、温湿度、时间。再加个设备id。差不多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这么多字段前端会炸吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网平台工程师 设备怎么注册？topic怎么定？我就想赶紧能发数据到你们平台。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "token刷新我能不能先不做？24小时也太短了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等你们怎么搞？我补传会不会重复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我就msgId用时间戳拼一下，够了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我还得存seq，烦不烦啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 平台说要deviceSecret换token，topic三条，msgId用bootId-seq。我要在网关做缓存队列，还要401自动换token再重发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "初筛就阈值呗，voc高就报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关边缘初筛你给我个能直接落地的最简方案，别讲理论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "p20我不会算，边缘上搞统计太重了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用最小值，简单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值0.35是拍脑袋？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "远程可配我先写死常量，后面再说？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 边缘那边建议两层：先质量门控（预热、突变、泵故障），再滑窗均值m5减基线b算score，超0.35就发“疑似”。基线我用滚动最小值，不搞p20。阈值要能下行改，还得落盘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模块就三块：MQTT发、缓存、初筛。验收就能发出去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就随便跑几条看日志不行吗？写测试太慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我用docker起个本地mosquitto，再写个脚本发消息，算测试吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志别打原始值我有点不爽，我调试要看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就默认info不打voc_raw，debug才打。那今天我就按你说的字段和三条测试弄完。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

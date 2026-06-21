@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在拆单逻辑与动态调仓联调背景下，用户与导师围绕老代码改造、暗池拆单参数设定与事件驱动机制持续沟通（6轮），其中在动态调仓反馈机制缺失分析与意图感知接口对接部分与算法策略工程师沟通（2轮），并最终形成基于LatentDepthRatio的事件驱动发单与on_impact_signal回调挂起的开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "等分拆单，直接用就行，省得我重写。我就把意图感知的接口接上，按它这500毫秒发单的频率往下走"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我把500毫秒改小点？或者我网上找找有没有暗池拆单的现成模板，直接替换掉这个等分逻辑，反正网上这类算法多的是。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这有个老拆单代码，就死等分500毫秒发一笔，你看看缺啥动态调仓的反馈机制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是把500毫秒改成按深度切，加个if判断盘口变薄就停。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "比例系数我就设个0.5吧，先跑起来。盘口变薄我就看它成交量是不是突然没了。纳秒级捕捉太麻烦了，我能不能用毫秒级的定时器扫一下就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的深度切分和反馈回路，接口怎么接？我总不能自己定系数吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "意图感知会输出LatentDepthRatio，我乘上去就行。盘口变薄用ImpactSignal触发回调，把老代码的发单函数换掉，加个回调挂起调仓。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度运行复盘背景下与导师围绕监控指标与体验差异、P95毛刺归因及报警策略持续沟通（6轮），并在导演体验反馈议题上与用户运营分析师沟通（2轮）、在监控指标与资产加载耗时分布议题上与运维监控工程师沟通（2轮），最终产出监控盲区、根因定位及开发期优化策略的复盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看面板上都是绿的，P99延迟没超15ms，应该挺顺的吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户运营分析师 导演那边反馈怎么样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "撕裂？@运维监控工程师 你那边没抓到异常吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "两边对不上啊。指标正常，体验极差，这怎么复盘？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "帧间抖动之前没打点。资产加载耗时打点了，但我只看了有没有超时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维监控工程师 拉一下资产加载耗时的P90到P99分布，看有没有毛刺。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户运营分析师 你再跟导演确认下，是刚转头那一下卡，还是一直卡？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "查清楚了，转头时触发资产加载，P95有45ms的毛刺。是不是超时阈值设太高了？调到20ms就能报警了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那不能调阈值，这毛刺怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是：1. 监控只看P99和超时阈值不够，掩盖了P95毛刺导致的体验劣化；2. 根因是转头瞬间资产加载触发长尾毛刺；3. 报警策略不能简单调阈值，得在开发期优化转头加载策略。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

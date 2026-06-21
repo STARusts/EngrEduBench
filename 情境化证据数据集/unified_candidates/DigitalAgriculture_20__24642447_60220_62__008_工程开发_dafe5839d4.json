@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在设施园艺能耗水肥协同管控云边平台开发背景下，用户与导师围绕边缘网关“采集-缓存-上云-下发-回执”的最小闭环实现与验收持续沟通（6轮），其中在控制器回执字段/点位映射/错误码分类上与物联网集成工程师沟通（2轮），在SQLite落盘队列、断网补传节流顺序与升级回滚兼容上与边缘计算工程师沟通（2轮），并收敛出数据结构、状态机、幂等与故障注入验证清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在卡在“点位采集-本地缓存-上云-下发控制-回执”的链路怎么写得既稳又不臃肿，我想把断网、重复下发、时间漂移这三类都在实现里兜住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想拆四块：采集适配器、控制适配器、边缘消息总线、离线队列/状态机。验收我倾向用三条链路KPI：采集端到云入库延迟P95<3s（局域网正常时）、控制下发到执行器动作回执P95<1s、断网30分钟数据不丢且恢复后按时间序补齐。实现上我更想把本地也搞成事件溯源，所有点位变化和控制指令都写日志再回放，感觉很优雅。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制那块。幂等我想每个控制指令都带commandId，边缘维护最近N个已执行commandId的缓存；顺序靠每个设备一个串行队列；时钟漂移我想用网关的单调时钟给事件打序号，再映射到云时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 边缘网关这块我在做采控闭环。想问三个具体点：1）温室里常见的水肥/环控控制器回执一般有什么字段，能不能稳定拿到“已执行/失败原因/设备时间”？2）点位映射你们一般怎么编码，避免后期换设备点位对不上？3）控制失败常见原因和建议的错误码分类是什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "控制器不保证带设备时间这点挺关键，那我时钟漂移那套就别压在设备回执上了。点位我喜欢业务语义pointKey，但我还想把单位、量程、采样周期也放进去，做成自描述点位，后面扩展更爽。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制失败四类我先用上。那回执没有设备时间，我这边就以“网关收到回包时间”做回执时间，云端只当观测，不当农艺真值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把集成侧信息捞回来了：设备回执通常很弱，可能只有写寄存器成功/超时；设备时间别依赖。点位标识建议用 site/棚/设备 + 业务语义pointKey，协议地址在映射表里版本化。错误码先四类：超时、设备拒绝、设备故障、互斥冲突，保留rawCode。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）幂等：commandId+deviceId做去重键。重启后我想把最近执行记录也落盘，ring-buffer存最近比如5000条，TTL 24h。\n2）断网缓存：我想用轻量KV落盘，每条记录是{pointKey, ts, value, quality}，再加一条索引；容量按棚数估一下，假设2000点位、1分钟一条、断网30分钟，大概6万条，压缩后几十MB。我倾向用SQLite，因为好调试。\n3）上报：采集是时序事件流；设备状态是“最后值”+质量位。云端只需要时序入库和一个最新状态表。我边缘上云时对时序做批量、对状态做变更上报（value或quality变化才发）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 我现在在实现边缘网关采控：采集入本地缓存、断网续传、控制下发幂等。我想用SQLite落盘队列。你帮我挑刺：1）SQLite在边缘高频写有没有典型雷点，怎么设置批量提交/索引才不拖垮CPU和闪存？2）断网恢复后补传怎么做节流和顺序保证？3）升级/回滚时，本地队列怎么保证不损坏、版本兼容怎么处理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "补传不追求全局顺序这点我有点不甘心，我想保证同一设备的控制指令严格有序，采集数据就算了。WAL+单写线程OK。升级我原来想直接改表结构，现在看得加schemaVersion了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从边缘侧拿到的建议：SQLite按日志队列用，单写线程+批量事务+WAL；队列表尽量少索引。补传做窗口+限速，顺序按topic/pointKey分区即可，采集不强求全局顺序；控制可以设备级串行保证。升级要schemaVersion和payload version，迁移考虑断电原子，回滚优先保证“旧代码还能读新数据”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着收敛成最小集：  \n- 点位标识：{siteId, greenhouseId, deviceId, pointKey}，pointKey用业务语义枚举；协议地址在映射表，映射表带version。  \n- 采集落盘：SQLite队列表(edge_events)：id自增、ts、key、value、quality、payloadVersion、status；单写线程，WAL，100-500条一批提交；保留窗口按id滚动删除。  \n- 上云：时序批量上报+最新状态变更上报；补传限速，旧数据优先，但同时上报最新状态避免看板空。  \n- 控制：每设备串行队列；指令带commandId；去重键(deviceId, commandId)，执行记录落盘ring-buffer+TTL；回执字段自己生成requestId/sendTs/retryCount/result，错误码四类并带rawCode。  \n- 状态机：PENDING->SENT->ACKED/FAILED；超时重试有限次；发现读回状态与期望冲突标CONFLICT，不无限重试。  \n- 故障注入验证：云断（断网30min补传不丢）、重复下发（同commandId只执行一次且回同一结果）、时间漂移（网关时间跳变时ts仍可排序：用单调序号+记录校正偏移，不影响队列推进）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我说得太绝对了。时间这块我改成：内部用eventSeq保证队列推进；上报带eventSeq和gatewayTs，云端入库用gatewayTs但允许偏差，关键是不出现“同一网关时间倒退导致重复补传”这种问题。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

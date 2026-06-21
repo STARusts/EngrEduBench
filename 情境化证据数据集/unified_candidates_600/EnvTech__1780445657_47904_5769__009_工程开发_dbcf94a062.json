@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声纹图谱解混核心逻辑开发背景下，用户与导师围绕算法选型、算力加速与工程化部署持续沟通（5轮），其中在复数域盲分离算法选型与MFCC先验加速部分与图谱解混设计师沟通（2轮），在NPU内存分块与DSP时延及验收口径部分与图谱算法工程师沟通（2轮），并最终形成解混核心逻辑开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构上，我倾向于把离线声纹预训练和在线实时解耦推理分开，避免在线重计算拖垮时延。但算力天花板卡得很死，网关侧的NPU显存只留了512MB。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盲源分离如果强行拆成实虚部独立跑ICA，相位耦合就断了。直接上复数NMF或者深度复数网络，网关侧NPU算子支持度怎么样？显存和算力折中点在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果能用MFCC做声纹预聚类，NMF的基矩阵初始化收敛速度能提不少，也能省在线算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "复数谱建协方差，MFCC锚点加速NMF收敛，MUSIC在DSP跑。这方案算力分布合理，但复数NMF在NPU上的部署，算子融合和内存分块我还拿不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "复数NMF基矩阵微调推理，网关NPU显存512MB，滑窗长度256。复数特征图怎么分块能避免频繁DMA搬运？另外MUSIC算法在DSP侧跑，特征值分解的迭代次数上限设多少能卡住时延？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "高频压缩进NPU会不会有精度损失？验证口径怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "解混核心逻辑基线确认四点：一，算法选型复数NMF粗分离加MUSIC精定位；二，计算加速利用MFCC先验锚点退化在线NMF为基矩阵微调；三，工程分块按频带切分复数特征图，低频大块高频压缩，减少DMA中断；四，验收指标NMF重构信噪比大于15dB，MUSIC方位角RMSE小于2度，单次定位时延15ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

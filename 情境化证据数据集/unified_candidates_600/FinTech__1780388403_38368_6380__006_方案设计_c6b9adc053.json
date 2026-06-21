@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态信配算法选型背景下，用户与导师围绕算法合规可解释性、求解器验证、选型成本与兜底逻辑持续沟通（8轮），其中在合规底线与白盒化部分与业务架构师沟通（1轮），在链路延迟与收敛性部分与图谱算法专家沟通（1轮），并最终形成规则引擎兜底加开源OR-Tools求解器的选型及降级回测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我考虑用深度强化学习，DDPG那种。图谱状态做state，信配比例做action，收益做reward，理论上能收敛到最优策略。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可解释性，确实没细想。加个注意力权重勉强能看，但真出了极端调仓，业务肯定不认。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信配算法选型，业务和合规上有什么死要求？强化学习能用吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "白盒，规则加求解器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以做个回测对照。拿过去三年发生过漂绿争议的债券池，分别跑纯规则和规则加求解器。对比它们在漂绿暴露时的资产回撤幅度，还有信配调整的响应时延。如果求解器回撤小且时延可控，就算有效。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "商业的Gurobi快但License贵，开源的OR-Tools慢点但免费。长期看，商业版升级绑定厂商，开源版底层出bug得自己填坑，维护负担重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱出特征向量，接求解器输入，这链路延迟什么水平？OR-Tools单次求解能收敛吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "150毫秒，延迟没问题。OR-Tools可以扛住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "求解器异常时，直接降级，用规则引擎的结果。规则引擎的结果是绝对安全的静态配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法选型定为规则引擎兜底加开源OR-Tools求解器。不用强化学习。规则引擎拦截底线风险，求解器在合规约束下寻优。求解器不收敛时降级到纯规则。验证方式是用历史漂绿池做回测，对比资产回撤率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

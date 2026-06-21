@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在互作阻截规则引擎设计背景下与导师围绕多药互作阻断逻辑及性能合规折中持续沟通（4轮），其中在Rete算法落地与轻量级审计部分与互作阻截策略师沟通（2轮），在规则白盒可解释性部分与医疗合规审计师沟通（1轮），并最终形成Rete算法核心加监听器与审计事件流输出的引擎定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写If-Else分支？或者用决策树？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模糊推理引擎搞多药互作，工程上怎么落地？是不是特别难调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规这边，规则引擎必须全白盒吗？Rete算法这种算黑盒不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略师说Rete能处理级联传导，好实现；合规说要能查推理路径，否则违规。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来想搞个加权决策树，两边都应付一下，但决策树好像搞不定脏器级联传导。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量落盘肯定扛不住，数据量太大。那只记触发结果和规则ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Rete引擎能不能在规则匹配成功时，只把触发的规则ID和输入事实快照推出来？不要全量推理过程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就用Rete算法做核心引擎，加上监听器输出审计事件流。合规这边用事件流做回溯，应该能过审。性能也不受影响。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

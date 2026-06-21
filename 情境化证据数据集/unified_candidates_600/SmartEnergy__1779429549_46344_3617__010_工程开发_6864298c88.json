@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在流固耦合求解器工程化及降阶模型边缘部署背景下，与导师围绕C++重写、ARM适配、浮点精度折中验证、单步耗时KPI及降级策略持续沟通（8轮），其中在矩阵运算与内存管理部分与算法工程化工程师沟通（1轮），并最终确定定长数组与NEON加速骨架、极端工况float32对照测试及50ms单步耗时指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿C++重写呗。我看了下Python原版，核心全是矩阵运算，套个Eigen库应该很快就能出个能跑的版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Python转C++到ARM上跑，矩阵运算和内存这块怎么搞比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那精度呢？Python里是float64，C++我也全用double？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就改float试试？反正差不了多少吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这我得想想。跑两组数据对比一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿建模师给的几组历史温压数据，Python跑一遍double，C++跑一遍float，看差多少。差得太多我再换回double。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就先搞个预分配内存的定长数组骨架，然后拿极端工况数据做float32对照测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "当然是越快越好，10毫秒以内？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过如果NEON实在写不顺，我能退回普通C代码吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先去写NEON intrinsics和内存池，极端工况测试集我顺道就找建模师拉一份。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感知联调与端云指令闭环背景下，用户与导师围绕边缘网关协议选型、资源约束权衡及联调验收标准持续沟通（4轮），其中在轻量协议栈组合与容错机制部分与数据流架构师沟通（2轮），在端侧SDK适配与内存池开销部分与全栈开发工程师沟通（1轮），并最终形成上行UDP/下行CoAP(DTLS)协议矩阵及P99<150ms验收KPI。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "感知侧的核心挑战是流式数据帧同步，反演算子需要连续的时序切片；指令侧则是低时延与可靠性的权衡。我初步设想：云端下发调光指令用MQTT QoS 1保可靠，感知数据上行用gRPC双向流，减少连接建立开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "针对边缘网关这种资源受限场景，感知数据高频上行和指令低频下发，有没有更轻量的协议栈组合方案？特别是要考虑长连接维护的内存开销。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "UDP上行容易丢帧，反演算子对数据连续性有要求，丢帧怎么补？CoAP我了解不多，它在NAT穿透和心跳维护上表现如何？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果感知改UDP，指令改CoAP，你那边端侧SDK改造工作量多大？之前定的内存池预分配能覆盖DTLS的开销吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知上行走UDP+自定义帧头，指令下行走CoAP+DTLS。我需要补一下CoAP的observe机制和DTLS资源开销的细节，确保合规审计要求的指令留痕能对齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个协议矩阵定下来后，联调验收标准怎么定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "150ms的P99有点紧，特别是DTLS首次握手。我们做个优化：网关启动时预建DTLS Session并缓存，后续指令复用Session，这样能压到100ms以内。联调时我会重点盯UDP帧率稳定性和CoAP重传率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议矩阵：上行UDP/下行CoAP(DTLS)，验收KPI：P99<150ms，指令成功率>99.9%。我现在就去拉齐这两个指标，顺便看下Copper库的接口文档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

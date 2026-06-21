@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在预警模型上线生产环境核验背景下，用户与导师围绕核验标准、漏报风险、CRS亚组召回率排查、日志合规及统计评估短板持续沟通（9轮），其中在线上预警分布与置信区间查询部分与运行效能评估师沟通（1轮），在推理日志脱敏与审计链路确认部分与运维部署工程师沟通（1轮），并形成部署核验结论与降级旁路观测策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看Pod状态是不是全Running，接口延迟P99能不能压在200ms内。刚才性能优化搞完算子融合，这块应该稳了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "怕误报？不对，毒副反应这种漏报才要命。但我不知道线上真实召回率怎么算，这得看临床反馈吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上预警模型的召回率和置信区间现在什么情况？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "CRS召回率这么低？区间还这么宽，这肯定不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是上游标注数据本身就少？或者推理时特征没对齐？我得查查推理日志，看看CRS的特征是不是有缺失。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想查CRS亚组的推理日志找特征缺失原因，现在的脱敏和审计是怎么配的？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对刚才说的置信区间和效应量真看不太懂，不知道怎么定下一步的优化验收标准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我对线上A/B测试和统计显著性分析确实不熟。我这周每天晚上花1小时看Kaggle上的医疗AI评估案例，重点学怎么算置信区间和效应量，周末前把CRS的评估验证脚本写出来，跑在旁路流量上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "工程部署状态正常，延迟达标；但CRS预警召回率65%不达标，且置信区间过宽不可信；审计链路脱敏合规。下一步我用TraceID查特征对齐，并补学统计评估写验证脚本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改路由配置降级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

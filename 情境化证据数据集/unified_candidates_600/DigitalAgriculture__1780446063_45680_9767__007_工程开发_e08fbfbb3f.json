@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在集约池养传感数据入湖背景下，用户与导师围绕流式数据清洗逻辑、时间戳对齐、流处理工具选型及验证方案持续沟通（8轮），其中在协议层异常模式与滤波处理部分与物联网集成工程师沟通（1轮），在入湖合规审计与规则版本化部分与数据资产运营沟通（1轮），并形成基于Flink SQL的流式清洗配置化方案与对照测试验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传感器出来的数乱跳，我能不能直接写if，大过多少就扔了？你们协议里这玩意儿咋弄的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据进湖要建表，我随便建个行不？还有清洗规则要不要留底？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时间要对齐，改了啥要记下来。我打算用Python写个脚本过滤一下，然后导进去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我下午去看Apache Flink的文档，专门看Flink SQL处理时间窗口和毛刺的那块。明天我把Python脚本扔了，用Flink SQL把清洗规则抽出来做成配置表，这样改阈值就不用发版了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我造点坏数据扔进去？把带毛刺的和没毛刺的分开跑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就按重排时间、Flink洗、带审计字段、造坏数据验证来弄。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

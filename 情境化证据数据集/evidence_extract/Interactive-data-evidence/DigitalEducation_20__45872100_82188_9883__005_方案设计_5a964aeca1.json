@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段的诊断分析引擎选型背景下，用户与导师围绕引擎边界、选型维度、验收口径及灰度回滚/多租户与合规约束持续沟通（9轮），其中在混合路线落地与评测指标部分与算法负责人沟通（3轮），在未成年人数据最小化下的解释输出与日志留存/鉴权部分与合规与隐私官沟通（2轮），并形成第一期以规则+标定函数为主的能力清单与评测/合规边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是把 EvidenceEvent 跑一遍，算出 DiagnosisSnapshot。引擎可能是规则的，也可能是模型的？我有点分不清边界，算引擎的是算法，还是连调度都算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏混合。规则先上，模型以后再加。因为教研那边好解释。纯模型我怕说不清为什么给这个等级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须项：1）能按 competency_code+version 出结果；2）要能追溯用到哪些 evidence_id；3）能做班级和个人两种 scope。可选：准实时更新、还有能做置信度之类的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 诊断分析引擎选型这块，混合路线怎么做才算“引擎”？需要哪些能力才方便评测和上线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "评测这块要怎么定？我就怕最后比不出来谁好。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "模型那块必须上深度学习吗？我们资源不多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 诊断分析引擎要留哪些日志、输出哪些解释，才不踩未成年人数据合规？我们还要做追溯。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师想看“为什么我家孩子是2级”，能给到什么粒度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我把两边听到的点捋一下：算法那边说引擎要有任务定义、计算图、解释器三层，还要能版本化和评测。混合做法是规则先聚合成特征，再用轻量模型或标定函数映射等级，或者模型出分再规则兜底。评测看一致性、对标教研标注、稳定性，还有解释必须能给TopK evidence_id。合规那边主要是解释别回显原始内容，用ID和统计；raw_ref 默认不落，只给审计权限的人解链；日志要脱敏；个人诊断鉴权要用 Roster 授课关系；解释粒度偏行动建议，不给逐题细节。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多租户我想就是 tenant_school_id 分开算，别串。灰度回滚是同一批数据用不同规则版本跑，留两份 snapshot？我不确定是不是会很费资源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度我先列：可解释性、评测方便、开发维护成本、性能/时延、版本管理、合规风险。差不多这样？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可解释性：每个 DiagnosisSnapshot 能返回 3-5 条贡献证据的 evidence_id。评测方便：能离线重放同一批 EvidenceEvent，输出一致。维护成本：教研规则更新不用改太多系统。性能：班级级别能在，比如5分钟内出结果？版本：规则版本能回滚。合规：解释里不出现题目文本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没数，只能猜。一个学校一天几万条 EvidenceEvent？因为作业+课堂点名+测验。依据就是一节课几十人，每人几条事件，加上作业提交。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度并行跑新旧版本我有点慌，感觉成本高。还有“对标教研标注样本”，样本从哪来我不清楚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我理解就是：先用规则聚合+标定，不上重模型；解释只给证据ID和摘要；灰度先抽样不全跑；评测先做一致性和稳定性这些基础的。对吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

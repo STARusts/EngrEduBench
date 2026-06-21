@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在超声固件联调FPGA资源吃紧背景下，用户与导师围绕调控指令流轻量化下发方案持续沟通（4轮），其中在压缩方法部分与嵌入式固件工程师沟通（1轮），在差分还原实时性影响部分与算力与高可用评估师沟通（1轮），并确定差分编码下发与移位加法器还原方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全帧率塞不下，能不能降一半下发频率？或者把32bit参数砍成16bit？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控指令流除了降频和砍位宽，有没有别的压缩法子能塞进去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "差分还原多吃几个周期，在舱内这种震动高温环境下，会不会把实时闭环卡死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "差分编码只传变化量，带宽能降六成，延迟多几个微秒但闭环来得及。而且包短了在舱内误码率反而低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开局先发一帧全量参数做基准同步，后面全走差分。还原逻辑就用移位加法器搭，不占DSP切片。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

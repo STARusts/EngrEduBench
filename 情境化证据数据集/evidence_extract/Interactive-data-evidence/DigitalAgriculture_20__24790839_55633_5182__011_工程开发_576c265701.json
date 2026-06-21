@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发阶段收尾需固化任务包/回传字段与状态码到闭环结果映射、并为次日模拟回传联调做准备的背景下，用户与导师围绕接口常量、校验阈值、有效作业段判定、execution/acceptance分层与内部状态码枚举持续沟通（12轮），其中在回归用例与最小校验集定义部分与测试与质量工程师沟通（2轮），在审计事件字段最小化与留存脱敏边界部分与合规与数据治理官沟通（1轮），并形成可落地的常量清单、映射规则与审计记录要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想分三块做：1）task包请求字段常量；2）设备回传字段常量；3）闭环结果映射表（含failed/degraded/ok的规则）。校验逻辑就按“必填+单位+时间序列长度+rate上下限”先挡一层，再进状态机和对账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "任务包必填我先列：task_id、field_id、operation_type、material_id、unit、min_rate、max_rate、rate_curve（planned_timestamp + planned_rate）。参数里有幅宽、速度范围、offset_ms。回传我觉得至少要：actual_timestamp、lat/lon、speed、applied_rate、section_state（开关）、device_status_code。有效段可能需要section_state=ON，speed在范围内，GNSS有效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "offset_ms我理解是计划曲线时间和设备执行时间对齐用的，回放时拿actual_timestamp减offset去找planned点。GNSS短断的话，如果只有几秒，就标degraded但还可以算量；如果长时间缺点，可能就不能算有效段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先按MVP：GNSS gap <= 3s 记degraded但可累计用量；>3s就不累计该段，仍记事件。通信短断同理，用heartbeat gap来判，<=10s degraded，>10s把缺口段标invalid。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 你从回归角度看，“任务包字段/回传字段/状态码映射”这块最容易出问题的校验点有哪些？我需要一套最小回归集，能保证明天模拟回传不翻车。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第3条你说“回传缺字段判failed”，那跟我们短断degraded会冲突吗？比如lat/lon缺几秒是短断，我本来想degraded但仍可累计用量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我把回传“计量字段”改成二选一：applied_rate(1Hz) 或 total_applied(累积)。那校验就是缺一个不死，两个都缺才failed。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳这些：\n- 任务包：planned_timestamp必须严格递增；planned_rate超界我倾向clamp到[min,max]，同时写审计事件（方便回归稳定，不至于一直400）。\n- 回传：计量字段二选一；lat/lon可短缺但要触发degraded且空间指标不算。\n- 未知状态码：degraded + audit。\n我不太确定的是“对账超15%”到底是failed还是degraded，之前我们说MVP门槛，但没说结果态。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我整理成：\n- execution_state: planned / running / completed / failed / degraded（degraded算运行质量标记，不是终态？我有点混）\n- acceptance_state: pass / warn / fail（按对账和质量指标）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我先给一个版本：\n1）TaskPackage必填常量：task_id、field_id、operation_type、material_id、unit、min_rate、max_rate、rate_curve[]、width_m、speed_min_mps、speed_max_mps、offset_ms。\n2）rate_curve元素必填：planned_ts_ms、planned_rate；规则planned_ts_ms递增，间隔允许900-1100ms；planned_rate若越界则clamp并audit。\n3）Telemetry回传必填常量：task_id、device_id、actual_ts_ms、section_state、speed_mps、status_code；计量字段{applied_rate, total_applied}至少有一个；定位字段{lat,lon}可选但缺失会打flag。\n4）有效作业点：section_state=ON 且 speed在[speed_min,speed_max]；若actual_ts gap<=3000ms则点仍可用但加GNSS/COMMS flags按缺失来源；>3000ms该段points不入账。\n5）execution_state判定：出现致命status_code或计量字段全缺->failed；否则有任何flags->completed + flags；无flags->completed。\n6）acceptance_state：总量偏差<=15%为pass；>15%为fail；直线段P90空间误差若有>=100有效点才计算，超阈值为warn（不改execution_state）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "致命码我先按设备侧常见分：\n- E_STOP、METER_FAULT、VALVE_STUCK、CALIBRATION_INVALID -> fatal\n- GNSS_WEAK、RTK_FLOAT、COMMS_LOSS_SHORT -> nonfatal，进flags\n- UNKNOWN -> nonfatal + UNKNOWN_CODE flag\n我不确定农机那边具体码表是不是这样，需要对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "内部最小集合我建议：\n- INTERNAL_OK\n- INTERNAL_FATAL_METER（计量异常）\n- INTERNAL_FATAL_ACTUATOR（阀/喷头卡滞）\n- INTERNAL_FATAL_ESTOP\n- INTERNAL_WARN_GNSS\n- INTERNAL_WARN_COMMS\n- INTERNAL_WARN_CALIB（标定/参数不一致但可运行？这条我拿不准）\n- INTERNAL_UNKNOWN"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把校验逻辑也加一条：出现INTERNAL_WARN_CALIB不failed，但completed+flag，acceptance_state至少warn。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 审计事件里我们要记录任务包校验、clamp、未知状态码、对账结果这些。坐标和设备信息哪些能写进审计？开发/测试环境留存怎么控，最小化记录的建议是什么？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "坐标不存逐点这个我之前确实没想到。我会把审计事件结构拆成“聚合统计”而不是点级数据。开发环境7天也能接受，调试开关才落全量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我最后按这版执行：\n- 任务包TaskPackage必填：task_id/field_id/operation_type/material_id/unit/min_rate/max_rate/width_m/speed_min_mps/speed_max_mps/offset_ms/rate_curve[]；rate_curve元素planned_ts_ms递增，允许1Hz抖动；planned_rate越界走clamp并产生日志事件（含clamp计数与最大超界幅度）。\n- 回传Telemetry必填：task_id/device_id/actual_ts_ms/section_state/speed_mps/status_code；计量字段applied_rate或total_applied至少有一个；lat/lon可缺但会导致空间质量不算并打flag。\n- 有效作业点：section_state=ON且速度在范围内；actual_ts gap>3000ms的点段不计入对账；<=3000ms允许计量但质量flags增加。\n- 状态映射：设备码先映射到InternalStatusCode（OK、FATAL_METER、FATAL_ACTUATOR、FATAL_ESTOP、WARN_GNSS、WARN_COMMS、WARN_CALIB、UNKNOWN）；fatal -> execution_state=failed；其余 -> completed，并携带quality_flags；UNKNOWN也进flags。\n- 闭环结果：acceptance_state只按对账/质量聚合判：总量偏差<=15% pass，>15% fail；出现WARN_CALIB或未知码至少warn；空间误差如有足够有效直线点再算，阈值先走配置不写死。\n- 审计事件最小字段：task_id/field_id/event_type/event_ts/internal_code/execution_state/acceptance_state/rule_version + 聚合统计（总量、有效点数、缺失点数、最大gap、clamp计数）；不落逐点坐标，必要时只存模糊化或hash；默认留存7天，全量轨迹需调试开关。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在非均匀网格暴露风险计算与HVAC阻抑联动方案设计背景下，用户与导师围绕算力切分和楼控接口协议持续沟通（7轮），其中在算力分摊部分与边缘算力调度专家沟通（1轮），在工控接口协议部分与阻抑联动联调专员沟通（1轮），并最终形成边缘按病区物理边界分区计算局部风险、中心聚合跨区耦合的算力规范，以及边缘网关转BACnet带ACK闭环及超时3次转人工报警的接口规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算力的话，我后端多起几个实例，用Redis存风险值，网格ID做Key，TTL设短点。接口就RESTful推给楼控系统呗，JSON格式，多通用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "几万个也不多吧，我分库分表。楼控那边我不熟，他们不提供API吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几万个网格的暴露风险，全在后端算会挂吗？怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "楼控系统能接RESTful的JSON吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "BACnet，还要ACK闭环。这比RESTful麻烦多了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力就是不在中心算，放边缘节点算局部风险，只推高风险变动给中心。接口不能用RESTful，得用边缘网关转BACnet，还要带ACK确认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个病区一个节点应该行吧，病区相对独立。超时重发，我设3次？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "算力规范：边缘按病区物理边界分区计算局部风险，中心聚合高风险变动与跨区耦合。接口规范：边缘工控网关转BACnet，指令需ACK闭环，超时3次转人工报警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多节点压测与密文吞吐调优背景下，用户与导师围绕压测指标、流控调优策略、资源成本基线及P99误差来源持续沟通（8轮），其中在压测指标与网络抖动部分与压测调优工程师沟通（1轮），在同态加密耗时与密文膨胀部分与密码学底座研发沟通（1轮），并最终形成令牌桶限流参数、资源消耗基线降级规则及压测报告要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个压测脚本，起5个机构节点，用JMeter模拟并发推密文数据。主要看耗时和吞吐量吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看QPS和平均响应时间呗。加密慢的话就加机器或者换强CPU。抖动这个，我不太懂怎么看，之前单机测没这问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多节点压测，网络抖动怎么抓？我光看平均耗时行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "同态加密这块耗时怎么压？有没有什么黑科技？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测说要看P99长尾，不能只看平均，有节点抖动会卡死全链路。密码说密文会膨胀2倍，带宽很容易扛不住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用上次学的gRPC流控，给密文发送加个令牌桶限流，应该能防抖动卡死。但我不知道桶容量设多少合适，之前只看了个Demo。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "批处理窗口如果是100条，令牌发放速率得略高于稳态吞吐，大概1.2倍，留点缓冲。这样既不堵，也不至于抖动时空窗等太久。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "成本这块，我之前没细算。就觉得压测过了就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 压测盯P99长尾延迟；2. 令牌桶限流，速率1.2倍稳态吞吐；3. 密文膨胀2倍，监控带宽占比；4. 设CPU和带宽消耗基线，超了降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是跨域网络抖动，还有JVM的GC停顿，密文序列化也吃时间。这些不可控，所以P99只能作为上限参考，不能当稳态预期。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

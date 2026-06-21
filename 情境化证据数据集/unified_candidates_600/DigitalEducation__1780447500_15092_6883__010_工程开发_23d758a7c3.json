@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在招录引擎与测评微服务联调背景下，与导师围绕查询性能、缓存穿透、数据脱敏及快照库版本校验持续沟通（7轮），其中在缓存穿透与联调架构部分与后端开发工程师沟通（1轮），在脱敏样本与回放验证部分与招录数据分析师沟通（1轮），并形成含布隆过滤器、二级缓存、租户隔离及带版本校验脱敏快照库的联调优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查询慢就加索引呗。要是还慢，我就把录取分数线这些数据塞Redis缓存里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "穿透的话，返空值缓存？脱敏，我随便造点假数据行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "招录引擎查录取数据，缓存穿透怎么防？还有微服务联调架构怎么搭比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那脱敏的事呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调环境要用录取数据，不能明文，样本怎么出才不影响回放验证的AUC？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "招录查询防穿透用布隆过滤器，缓存用Caffeine加Redis二级，服务间Feign加租户头。数据用分析师给的静态脱敏快照库，不连生产。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我没想过。定时刷？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

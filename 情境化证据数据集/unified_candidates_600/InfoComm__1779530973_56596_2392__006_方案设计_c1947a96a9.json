@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在触觉力觉数据流接口规范敲定背景下，用户与导师围绕接口序列化格式、帧结构与关键元数据持续沟通（6轮），其中在序列化格式与哈希必要性部分与接口协议规范专家沟通（2轮），并最终形成零拷贝二进制、纳秒时间戳带哈希、帧头强含降级标记的接口规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JSON包一下，把力的大小、方向、坐标塞进去，再发个时间戳，不就完了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JSON加个gzip压缩不就小了嘛。解析能慢到哪去，现在的CPU随便扛。降级就降级呗，接口里加个字段说\"我降级了\"不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就觉得JSON挺好，非说不行。你给说说触觉力觉接口到底咋弄，别整太复杂啊。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "二进制调试起来看都看不懂，多费劲。还啥哈希，加个校验和不够吗？上下行解耦就在包头上写个方向位不就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家非要搞二进制和什么哈希。我觉得太过度设计了，JSON加压缩绝对够用，调试还方便。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就分三块：帧头放方向和时间戳，载荷放力觉数据，尾部放个校验。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "帧头包含版本、方向、纳秒时间戳、不变量哈希、降级标记；然后载荷放触觉和力觉；尾部校验。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

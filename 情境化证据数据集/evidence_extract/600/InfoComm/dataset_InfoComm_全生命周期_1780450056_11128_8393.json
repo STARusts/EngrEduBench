@@ -1,0 +1,584 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在6G高动态通感载波畸变反演系统立项背景下，用户与导师围绕高动态场景痛点挖掘、可验证假设量化及通感算资源冲突机制持续沟通（8轮），其中在业务损失与边界判断部分与通感场景架构师沟通（1轮），并最终锚定核心痛点与验证假设，形成资源冲突学习计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做“高动通感载波畸变反演与波束随动织合系统”，主要解决6G里高速移动节点信号畸变和波束跟踪跟不上的问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是无人机或者车开太快，多普勒频移太大，波束没对准就断了，用户肯定抱怨网不好用嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动态场景下通感算业务连续性断裂，实际业务损失和边界具体是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点不是网卡，是感知丢轨迹和算力卸载失败，还会出安全事故。边界是感知对时延要求最高。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设就是反演快了就不容易断？怎么证明这块我还没想好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是要定个时延指标和失锁率指标，反演快了失锁率就降下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太熟，我就知道通感算是一起做的，具体怎么共享没搞明白。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周去看几篇论文，搞懂通感算资源冲突。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在频移畸变补偿技术可行性研判背景下与导师围绕时频域资源冲突、补偿技术可行性及算力卸载与本地化持续沟通（7轮），其中在反演收敛条件与算力开销部分与畸变反演总体设计师沟通（1轮），在5ms时延约束下算力卸载可行性部分与基带算力协同调度师沟通（1轮），并最终形成频移畸变补偿技术可行的三条严苛约束结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知和算力在时频域抢资源，频移大了算力就不够，补偿就废了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就频移太大，补偿不过来，肯定会失效吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频移大于10kHz补偿不了怎么办？反演织合的算力开销有多大？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该可以卸载吧，边缘算力池大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "5ms总时延内，反演算力能卸载到边缘吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能做，就是得本地硬加速，不能卸载。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "相干时间得够，不然反演也闭环不了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在通感算协同系统商业推演背景下与导师围绕变现标的、定价口径与算力成本分摊持续沟通（6轮），其中在变现逻辑与成本分摊部分与商业闭环推演师沟通（1轮），在边缘算力共享接受度部分与通感场景架构师沟通（1轮），并最终形成基于任务SLA与反演精度双重定价及多租户共享摊薄算力成本的闭环结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按流量计费呗，或者包月卖给运营商，跟5G套餐一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力成本高那就收贵点。弄个高端套餐，专门给低空无人机那种用的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动通感算切片怎么闭环？我们算力成本很高，怎么收钱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "卖联合切片，按SLA收钱，还有反演精度计费。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不卖流量了，卖态势反演和波束随动，搞个新套餐按SLA收费。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单租户肯定亏。那就让运营商掏钱建算力池呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "低空物流愿意出钱买边缘算力吗？能共享吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "业务方要普惠，要多机群共享。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是卖态势服务，按SLA和反演精度收钱。算力成本让运营商建池子，多租户共享摊薄，这样就能闭环了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在频谱重耕合规与战略路标拆解背景下，用户与导师围绕频谱合规红线、路标阶段划分及第一阶段准入验证持续沟通（7轮），其中在频谱重耕合规红线与路标部分与合规与频谱策略师沟通（1轮），并形成频谱合规三红线、三阶段路标及第一阶段硬件在环与外场双重验证准入策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是保证别干扰到现有的通信业务呗，发射功率别太大就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频谱重耕给通感算用，合规上到底有哪些红线？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "准入条件就是拿到授权呗。验证的话，跑一下软件仿真看看干扰量应该就行了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太熟，平时没怎么接触过具体的无线电管理法规和测试标准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备把《无线电管理手册》和通感复合信号标准看一遍，把带外泄露和功率比指标摘出来，更新到我的阅读笔记里。然后把合规检查项加到路标第一阶段的准入清单里，以后做路标规划，先过这关。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在载波畸变感知与反演总体架构设计背景下，用户与导师围绕模块拆分与核心假设选择持续沟通（6轮），其中在对照假设设定部分与畸变反演总体设计师沟通（1轮），在基带算力切分与接口带宽部分与基带算力协同调度师沟通（1轮），并最终锚定采用多径假设B作为架构基线及特征压缩协议。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步打算把感知和反演拆成两个独立模块，中间做个数据通道传特征就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知侧就提取多普勒频移和信道衰落特征，反演侧拿这些去算速度和位置，假设就是信道变化能反映目标运动呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知侧提特征和反演侧算态势，这中间的假设怎么定？单径的行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设A快但多径不准，假设B准但怕慢。我觉得假设A简单点，先试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "依据就是假设B可能太慢了，我怕时延超。不过确实多径下A不行。那还是得看B能不能把时延压下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我有点拿不准，多径角谱估计的加速方法我不熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去查几篇关于压缩感知和子空间追踪做角谱估计的文献，看看能不能把复杂度降下来，把时延控制在5ms内的可行性。看完我拿计算量评估来定架构。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用多径角谱+频移扩展这套架构，基带算力切分怎么做？接口会不会卡住？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知侧做压缩，只传有效径，反演侧做求逆。这样带宽就够了吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在通感融合信道态势数据流设计背景下与导师围绕数据流载荷结构、时序对齐与切片周期持续沟通（5轮），其中在波束织合更新粒度与抖动上限部分与波束织合算法专家沟通（1轮），在特征压缩协议映射流帧部分与畸变反演总体设计师沟通（1轮），并最终形成500微秒切片周期、稀疏径特征载荷及带时间戳与序号帧头的设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "装角谱和频移数据，时序按帧头对齐，波束那边要得快就缩短发送周期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@波束织合算法专家 波束随动织合对态势数据更新频率和抖动有什么要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@畸变反演总体设计师 特征压缩协议怎么映射到流帧结构？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "波束那边要1ms内更新，抖动不能超50微秒。反演这边要子帧切片，帧头带时间戳和序号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切片周期就1ms，帧头加时间戳和序号，抖动靠高优先级调度保证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在波束随动织合与资源切片路由设计背景下，用户与导师围绕波束随动、资源路由、预测模型及更新判据持续沟通（7轮），其中在波束权值更新机制部分与波束织合算法专家沟通（1轮），在资源路由与算力协同映射部分与基带算力协同调度师沟通（1轮），并最终形成差分织合、简化版IMM预测及增量路由更新等设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就根据反演出来的速度和角度，实时算波束权值，然后把资源分配过去呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "波束权值更新怎么做？直接算延迟太大跟不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资源路由怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "预测就用线性外推吧，算得快。增量更新就看算力变化超过20%就刷一次。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "波束用差分织合，预测用简化版IMM，检测到机动拐点全量重算。路由做算力卸载，增量更新，差分织合失败或者算力波动大时触发重配。"
+              }
+            ]
+          },
+          {
+            "microScene": "在越区切换容断高可用设计背景下，用户与导师围绕高动场景越区切换的判决依据、状态接力与容断兜底持续沟通（7轮），其中在预测硬切换与状态接力部分与高可用容断设计师沟通（1轮），在接力失败与反演状态处理部分与畸变反演总体设计师沟通（1轮），并最终形成畸变驱动判决、脱敏快照接力及宽波束保底全量重算的方案约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以搞双发选收，两边同时发，这样断开时间短，业务不会断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就加快信令交互速度？状态接力就是把上下文打包发过去？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "捕获失败就算断了吧？那就重新建链。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "畸变反演的状态快照如果目标小区用不了，捕获失败，能直接触发重配吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说捕获失败就宽波束保底，再全量重算，跟前面的重配逻辑对上了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "越区切换用畸变特征驱动，做预测硬切换。状态接力靠Xn推脱敏快照。兜底是捕获失败就宽波束保底加全量重算。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在控制信令防劫持安全评估背景下，与导师围绕物理层防劫持方案、误伤率权衡、仿真验证及隐私合规持续沟通（9轮），其中在信道互易性防劫持机制与仿真样本量设计部分与物理层安全密码师沟通（2轮），并最终形成基于畸变特征哈希签名的防劫持设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个密呗，用AES加密信令，不就防篡改了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对，上层确实慢。那就物理层也加密？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信道互易性防劫持，这具体咋弄？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误伤，就，就放宽点校验？容差大点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "前两天看了个论文讲信道互易性提取密钥的，虽然没细看推导，但感觉可以拿来给信令做个签名。不用全量加密，就畸变特征哈希一下当签名，比单纯水印强点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑仿真呗，看劫持成功率降没降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，多普勒设几个档，500Hz，1000Hz这种，跑个几百次看失败率？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征只留频移和相偏，不带时延泡，就不带位置了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用畸变特征哈希做物理层签名；第二，校验误伤率按1e-4控，仿真跑上万次；第三，特征提取不带位置信息。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在频移反演算子拆解背景下，用户与导师围绕算子流水线拆分、定点截位与时序折中及验证口径持续沟通（5轮），其中在浮点精度与失锁风险部分与波束织合算法专家沟通（2轮），并形成接口降定点、累加器展宽防溢出、流水级数限约束及残差1e-3验证的拆解决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就按功能模块拆呗，先做频偏提取，再做矩阵反演计算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资源确实紧张，浮点是不是太重了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "失锁肯定不行，但资源爆了也上不了板啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不接口改成定点，但多留几位？或者拆成多级流水？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我定点化截位规则没吃透，我这就去查定点化手册，把截位误差传播机制搞明白，写个C model先跑通截位逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑对比测试，拿MATLAB浮点结果和C model定点结果比，差得不多就算过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对，先跑极值边界，门限就按频偏残差1e-3卡。"
+              }
+            ]
+          },
+          {
+            "microScene": "在波束权值码本生成与基带联调背景下，用户与导师围绕码本生成方案和基带查表时序开销持续沟通（5轮），其中在码本适配高动态畸变部分与波束织合算法专家沟通（1轮），在基带查表开销与时序评估部分与信号处理工程实现者沟通（1轮），并最终形成非均匀过采样码本生成与分段线性插值查表方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "码本生成直接套DFT码本，基带那边把反演结果接上去跑通就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分辨率不够就多插几个点？时序还没看，先写代码再说。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动态下码本怎么生成，DFT码本够不够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我直接按这个改代码？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法要上非均匀码本，基带查表开销和时序能跑通吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "非均匀生成，分段线性查表，先去对齐接口。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在高动态势注入与极值边界测试背景下，与导师围绕极值边界维度、反演发散用例构造、验证口径及数据审计持续沟通（8轮），其中在极值边界维度与仿真器分辨率补偿部分与极值边界测试工程师沟通（2轮），并确定物理模型推演临界点、条件数判发散及数据合规入库三条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高动态势注入的极值边界都有啥，怎么构造反演发散的用例？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得找协方差矩阵奇异的临界失锁点。我回去构造这种失锁场景。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "物理模型推演临界点，条件数超阈值判发散，数据带时间戳场景标签入库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "要是仿真器多普勒注入分辨率不够，咋补？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "级联分数倍采样率转换模块提高精度。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在随动帧时延消减与性能调优背景下，与导师围绕时延瓶颈定位、验证口径与微码配置缺口持续沟通（6轮），其中在时延热点定位部分与性能调优专家沟通（1轮），在算力切分与搬运时延消减部分与基带算力协同调度师沟通（1轮），并最终确认跨核搬运热点、微码重排方案、抖动分布验证口径及微码补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得应该是波束权值计算那块太耗时，或者板子算力不够，得提提速。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就整体跑一遍看哪里耗时最长呗。真慢就加核或者提主频。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "随动帧时延到底卡在哪了？算力切分怎么配合？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力切分怎么配合消减这搬运时延？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说卡在跨核数据搬运和流水线气泡。算力那边说要微码切分和流水线重排，把预取和执行错开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把预取提前呗，算的时候正好数据到了。验证的话，跑一下看时延降没降下来不就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "切分重排大概知道意思，但具体微码怎么配寄存器我一直没搞太明白，这块我得再看看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚才把专家给的微码配置手册下下来了，今晚照着把寄存器映射表和时序图啃一遍，明天把重排逻辑套到现在的随动帧流水线里试一把，应该能把搬运时延藏起来。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在通感算边缘节点灰度部署验证背景下，用户与导师围绕流量切割、频谱合规、掩码动态下发与反演精度验证持续沟通（9轮），其中在容器部署失败与固件热更新部分与灰度部署与运维官沟通（2轮），在频谱泄露与滤波系数合规部分与合规与频谱策略师沟通（1轮），并最终形成包含补全掩码、gRPC动态下发、A/B对比验证及秒级回滚的灰度调整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按5%切呗，老项目都这么干。算力隔离我配了cgroup限制，应该够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才推容器失败是怎么回事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这泄露会怎样？必须加掩码吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑个单元测试看看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就对比一下灰度组和基线组的反演误差率？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我不太会写，之前都是静态编译的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看看灰度部署与运维官给的配置手册，学一下怎么在编排里加动态下发接口。明天把掩码下发逻辑补上，再跑灰度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看《边缘算网元容器编排规范》，补gRPC接口给射频单元下发滤波系数。今晚2小时内看完接口定义，明天上午10点前给出新版编排脚本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，暂停当前灰度，先补基带算子包的成型滤波系数和频谱掩码。第二，改编排脚本，加gRPC接口动态下发掩码。第三，重新灰度5%流量，对比基线组，看多普勒频移估计误差的95%置信区间和效应量。第四，发现异常秒级回滚。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在6G高动场景运行评估背景下，与导师围绕波束失锁与畸变溢出告警的根因联动、动态阈值替代指标及算力时延权衡持续沟通（9轮），其中在告警触发链路与静态阈值失效风险部分与异常溯源监控员沟通（1轮），在动态阈值替代指标与算力开销部分与波束织合算法专家沟通（1轮），最终形成按切片类型分级判定与算力池隔离调拨的监控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "溢出是因吧，阈值按以前的经验定的，3%左右。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘上波束失锁和畸变溢出告警是什么联动关系？3%的阈值在高动场景是不是不准？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异常溢出判定不用静态阈值的话，用什么指标？算力吃得消吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就用发散度吧，时延多0.8ms应该能忍，算力挤一挤反演那边应该也行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "因为发散度算特征值多0.8ms，极低时延切片超时延预算，所以只能降级；算力预留不能动反演实时池，所以从非实时池调。畸变溢出是因，失锁是果。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在外场高动实测数据回传与反演模型修编背景下，与导师围绕实测仿真对齐口径、二阶多普勒补偿部署、滞后误差限幅及验证切片持续沟通（10轮），其中在偏差特征提取部分与实测模型修编师沟通（1轮），在算力池调度部分与基带算力协同调度师沟通（1轮），并最终形成反演模型修编的四条硬约束及执行顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看差值？我直接算个均方误差？这块我有点拿不准，具体看啥特征。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "外场这批数据反演模型偏差在哪，特征怎么提？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一阶多普勒跟不上，得加二阶的补偿，不然波束随动滞后。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力可能不够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要在反演里加二阶多普勒补偿，算力能放下吗？实时池会不会超时延？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "放实时池必超，只能放非实时池，用历史数据外推。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "设个固定阈值？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "选极低时延切片？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，补二阶多普勒补偿项；第二，加动态限幅截断回退；第三，放非实时池外推；第四，用极低时延切片做验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估资源占空复盘与迭代规划背景下，与导师围绕非实时池外推算力占空、DDR访存冲突及多普勒频移边界持续沟通（4轮），其中在算力占空与复现边界部分与基带算力协同调度师沟通（1轮），在时延瓶颈与DDR冲突部分与性能调优专家沟通（1轮），并最终形成优化访存模式与守住2kHz截断边界的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "非实时池外推后，算力占空现在是什么情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延瓶颈呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "非实时池算力占空92%，DDR带宽卡住了，时延抖动也是因为抢DDR。外推在多普勒2kHz以上就失效。我觉得得加DDR带宽。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不加带宽的话，是不是调调优先级？2kHz以上就，就截断回退？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "DDR冲突是因为访存密集，切片算力分配也得考虑访存，不能只看计算量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "2kHz以上的复现边界，迭代规划里要加一条：监控到频移超限直接触发截断，不计入占空率统计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

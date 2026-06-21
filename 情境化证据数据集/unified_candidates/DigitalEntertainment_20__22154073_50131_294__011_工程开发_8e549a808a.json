@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发阶段收尾的自动化测试与验收链路建设背景下，用户与导师围绕单包send耗时测量点、每tick上限N的回归门禁与失败定位持续沟通（7轮），其中在真实socket/网络可重复测量与分位数口径部分与测试工程师沟通（2轮），并对齐CI用回环、专项用netem、N三点验证、send_fail映射DROP及日志脱敏的落地结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接把它做成一套“实时链路验收框架”，把send点的耗时、队列深度、late_ms全都打点，然后用属性测试随机生成节目单，甚至引入形式化检查，保证任何输入都满足p99门禁。N也做成自适应，跑的时候动态调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分三层吧。  \n1）单元：send测量点的准确性，确保用同一时钟源；N上限逻辑在极端输入下不会越界。  \n2）集成：用仿真协议适配器固定单包耗时分布，比如p50=0.2ms、p99=0.8ms，验证反推出来的N能把每tick IO预算控制在2ms内。  \n3）端到端：回放一段固定曲目+固定编排，跑10分钟正常负载、边界负载，检查COMPRESS/DROP门禁以及相邻帧间隔p99/max。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 单包send耗时我们要落到自动化验收：在尽量真实的socket/网络条件下怎么做可重复测量？分位数结果要不要带置信度或重复次数口径？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那N的初始值范围，建议怎么在自动化里验证？我想把N做成运行时可配，多组N扫一遍，自动挑一个最优。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳：  \n1）CI里用本机回环做单包send耗时基准，输出p50/p90/p99/max+样本量，做门禁；避免真实网络噪声。  \n2）近真实网络用tc netem放到“验收前专项”，重复3次、2/3通过算过，报告写清warmup剔除。  \n3）N不做自适应，做运行时配置+固定三点验证：N_low/N0/N_high。N0用2ms/单包p99反推。  \n不采纳：CI里自动挑N最优，因为会漂、也不利于回归比对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把测量点放在协议适配层的最底部：真正调用sendto/sendmsg前后围一圈，只记录到环形缓冲区，不做格式化字符串；每tick结束再聚合一次分位数，验收用离线聚合避免污染。  \nEINTR重试算同一条样本；EAGAIN就记一个失败计数并单独输出比例，不把它塞进耗时分布里。  \n我们现在是单包send，不上sendmmsg；批量上限N是“每tick最多发N个包”，不是一次系统调用批量，所以统计就是N条样本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我改成：每个包记录一个轻量样本（ts_before, ts_after, rc, errno, payload_size），按采样率写入无锁队列，测试进程结束统一聚合。  \nEAGAIN/EWOULDBLOCK：在适配层直接记为send_fail，并在上层将该包标记为DROP原因=send_fail，而不是late_ms触发。验收门禁里额外加一条：send_fail必须为0（正常/边界负载都为0），否则判失败。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们验收只存技术指标，不存曲目文件内容。日志字段里不打曲目名，改成hash；操作记录只保留操作类型和时间戳，不保留用户标识明文，用内部uid且只在安全域可映射。端到端回放用我们自造的短音频占位，不拿真实演出曲目进CI。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）CI回归：本机回环测单包send耗时，记录样本量+warmup剔除，输出p50/p90/p99/max；门禁以p99/max对齐IO预算反推的N0范围。  \n2）N验证：固定三点N_low=0.8*N0、N0、N_high=1.2*N0，三组都跑端到端10分钟正常/边界负载；任何一组触发相邻帧间隔或COMPRESS/DROP门禁即失败。  \n3）错误口径：EINTR重试合并样本；EAGAIN/EWOULDBLOCK记为send_fail并映射为DROP原因=send_fail；验收额外门禁send_fail=0。  \n4）专项验收：双机+tc netem只在验收前跑，重复3次取2/3通过；报告同时列单包耗时分位数、N0推导、以及门禁结果；日志最小化：曲目名hash、无真实曲目内容、操作用户脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

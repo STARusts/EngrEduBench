@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极端热环境高可用评估背景下与导师围绕边缘算力生存策略、降级逻辑取舍与验证实验设计持续沟通（7轮），其中在散热与降频策略部分与算力与高可用评估师沟通（2轮），在FPGA看门狗与实验变量设计部分与算力与高可用评估师沟通（2轮），并最终形成无风扇被动散热、高温降级逻辑及三组加速老化验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算加个大风扇，然后机箱做密封。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "舱内温度可能峰值85度，还有金属粉，边缘计算模块和FPGA驱动板怎么防？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "热降频这个，我前两天看了一篇关于Jetson Nano在高温下做YOLO检测的论文，他们用动态调频，我也想这么干，但具体怎么定降频曲线我还没搞懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就想如果温度超了，就把推演的时间步长拉长，或者跳帧算。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "一维近似会不会误差太大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "保干预。宕机了就彻底没调控了，降精度至少还在干预。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么验证这套降级逻辑？总不能真放炉子里烤吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用温箱？把板子放恒温箱里跑程序？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "温度是主变量，然后粉尘浓度是另一个？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那寿命这块，咱们不可能测几个月吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没细看那部分，我就看了调频代码。我回去把Arrhenius模型那章补一下，看能不能算出加速系数，直接套到咱们的测试方案里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略是：无风扇被动散热加正压隔离；降级逻辑是：T>80℃关高阶算子转一维近似，声学功率降额30%，FPGA看门狗直控。验证用三组实验：阶梯升温、粉尘短路、热冲击，加无保护对照组。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

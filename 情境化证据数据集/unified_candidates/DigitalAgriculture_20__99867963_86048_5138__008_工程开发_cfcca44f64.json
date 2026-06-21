@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在授粉任务“任务-资源-时间窗-地块”排程引擎工程开发背景下，用户与导师围绕约束落码、事件输入输出幂等回放、链不可用与迟到数据不乱结算及合规日志门禁持续沟通（8轮），其中在约束建模/解释与确定性回放、对照测试和性能边界部分与优化调度工程师沟通（2轮），并形成三段式求解、原因码体系、锁定与ADJUST事件、以及最小测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把调度问题拆成两层：先算每个地块的可作业时间窗（来自花期窗口+微气候置信度），再做任务分配。约束我能想到的有：时窗、资源容量（蜂群/设备数量）、行驶时间、同一蜂群一天最多跑几单、还有“不能跨太远”。但我不太确定怎么把“效果结算”这块和调度引擎接起来，怕后面证据链对不上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我打算用统一的TaskEnvelope：`task_id、orchard_id、plot_id、service_type、window_start/end、priority、location_geohash、estimated_duration、resource_requirements`，再带`schema_version、calculation_version`。资源侧是`resource_id、resource_type、home_geohash、capacity_per_day、availability`。\n输出我想写成ScheduleProposal事件：`proposal_id、task_id、resource_id、start_ts、end_ts、score、constraints_summary_hash、source_event_ids_hash`。幂等就用`proposal_id`+`calculation_version`做唯一键。\n降级：求解失败就产出“UNASSIGNED”提案+原因码，不会进入任何结算投影，链不可用时状态机还卡在PREVIEW_VOUCHER，放款那条不会通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@优化调度工程师 约束求解这块，工程上你建议怎么建模？我现在只有时窗/容量/路程这些直觉。还想问：回放怎么做成可重复、可对照？迟到数据只出ADJUST候选，会不会影响重新排程？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个点不确定：你说固定随机种子+排序规则，那如果输入事件顺序不同会不会导致输出不同？我们事件接入那块是多源的，乱序很常见。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三段式：预处理生成可行性+原因码，求解先出初解再小范围精调，最后给未分配任务的主因解释。回放我会做快照排序+固定种子，指标按我列的四个。\n我暂时不想立刻上MILP全量大优化，只做“高优先级+近窗”这段精调，别把求解时间拖爆。可行性矩阵缓存我会做，但担心缓存键太细导致命中低，我想先按“距离+时窗粗桶”做一版简单缓存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "迟到数据我会把“调度快照”的时间范围限定为`now`到`planning_horizon_end`，已完成/已结算窗内的任务直接标成LOCKED，不进入重排集合。迟到事件如果指向LOCKED任务，就只发一个`ADJUST_CANDIDATE`类的调度解释事件，不回写排程。\n合规这块我之前没太关注调度日志。我可以把位置用`location_geohash`或者直接用“距离分桶”，解释里只放hash，比如“resource_home_hash、plot_hash、distance_bucket”。精确经纬度只在权限受控的地理服务里算距离，调度服务拿不到明文坐标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入事件我这边先接三类：`TASK_CREATED/UPDATED`（含时窗、地块、优先级、位置hash）、`RESOURCE_STATUS`（可用性、日容量、home位置hash）、`PREDICTION_WINDOW`（花期窗口和置信度，映射到task window）。全部强制带`schema_version、calculation_version`。\n输出事件：`SCHEDULE_PROPOSAL`（分配/未分配都出）、`SCHEDULE_EXPLANATION`（未分配原因码+证据hash）、以及`ADJUST_CANDIDATE`（迟到数据触发但任务LOCKED时）。\n原因码先做：`WINDOW_MISS、CAP_EXCEEDED、DIST_TOO_FAR、LOCKED_TASK、CHAIN_GATE、DATA_INVALID`。\n测试我想做：\n1）确定性：同一快照不同输入顺序，输出proposal一致；\n2）约束：时窗/容量/距离三类各一组；\n3）迟到：结算窗外事件只出ADJUST，不改proposal；\n4）链不可用：状态在PREVIEW_VOUCHER时proposal照出，但任何“放款相关事件”不产出（这块我只在门禁里断）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，我把`DATA_INVALID`拆了，并且在校验器里把`schema_version/calculation_version`缺失当硬失败进隔离队列。性能门槛我先定测法：每次回放固定输入规模，跑10轮取p95；内存我就用容器的RSS采样。阈值我不敢拍脑袋，先跑一轮基线再回来跟你对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

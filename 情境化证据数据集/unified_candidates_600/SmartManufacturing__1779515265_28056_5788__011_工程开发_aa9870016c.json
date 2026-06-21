@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在柔性产线极端工况性能调优背景下，用户与导师围绕算法求解瓶颈、Flink反压、压测误差与Sentinel熔断降级兜底逻辑持续沟通（7轮），其中在压测拐点摸底与反压配置部分与极限性能调优师沟通（2轮），并最终形成包含注入网络延迟、切Credit-based反压、接入Sentinel熔断及前置设备状态校验的降级策略等四点调优基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种并发突增，是不是直接调大Flink的算子并行度就行了？我看网上很多人遇到反压就加并行度，或者我拿JMeter对着Kafka数据源猛打一发，看看哪里先崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果是启发式算法，节点多了算得慢是肯定的。我只知道如果超时了，线程池会排队。有没有什么现成的框架能自动检测到超时然后限流的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端工况下压测拐点怎么摸？Flink和算法引擎的反压调优怎么配？我准备用JMeter打流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "P99延迟指数飙升，这我懂了，就是看曲线拐弯。那算法引擎那边如果算不过来，除了加机器，有没有更省事的配置能兜底？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近刚好在看Sentinel的熔断降级文档，里面有基于响应时间的慢调用比例熔断，能不能直接套进来？当算法响应超过2秒就触发熔断，走降级逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "返回次优解的话，我可以从缓存里拿上一次排程结果顶一下，死锁应该不会吧，因为上一次的肯定是安全的。Sentinel配置起来挺方便的，加个注解就行，能防住雪崩。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "JMeter压测本身就有网络延迟误差，还有车间数据上报的时间偏移，我估计误差在5%以内吧？只要P99没拐，我就认为系统扛得住。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我就在压测脚本里把网络抖动加上，然后用Sentinel包住算法调用接口，超时就走缓存旧结果，不过我会在旧结果上加个设备状态校验，如果设备挂了就跳过该工序。这样既用了工具，也防了撞机。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在密态链路线上报红超时断连背景下，与导师围绕异常自愈与阻断留痕的取舍及分流策略持续沟通（7轮），其中在重试风险与错误码分类部分与密态链路排障师沟通（2轮），在中断留痕合规要求部分与金融合规官沟通（1轮），并最终形成基于错误码前缀的网关拦截分流与异步审计策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重试呗？业务不能断啊。我写个catch，超时就重发三次。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态通信超时断连，能不能直接在网关层加个重试逻辑自动重连？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那加个次数限制？重试两次不行就放弃。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态通信断了，我写个自动重试逻辑，重试失败就记个error日志，这样行不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自愈保业务，合规要阻断留痕。那只能折中？重试我保留，但每次重试前先拍个快照发到审计服务？不行，这太慢了，加解密本来就耗时，再插审计肯定卡死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步可以。我可以用个队列，重试逻辑照跑，同时把断点上下文扔到Kafka里，让审计服务异步消费。但什么类型能重试什么不能，我不懂密码学那套，我怎么判断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态交互的错误码里，哪些是可以安全重试的，哪些是绝对不能重试的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按错误码前缀分流。`NET_`开头的我放行重试，同时异步发审计日志；`MAC_`和`CERT_`开头的直接熔断，同步告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我在网关层的拦截器里写。抓异常码，正则匹配前缀。`NET_`走重试+Kafka异步发审计事件；其他走熔断+同步调审计接口报错。重试最多两次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "traceId肯定带，机构ID我从上下文里拿。行，这块逻辑我清楚怎么写了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

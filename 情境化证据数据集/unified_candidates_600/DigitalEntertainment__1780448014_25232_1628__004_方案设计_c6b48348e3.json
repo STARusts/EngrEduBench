@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在触感渲染云端卸载系统方案设计背景下，与导师围绕云边端串流架构的延迟基线约束与过度设计取舍持续沟通（4轮），其中在弱网串流延迟可行性部分与流控协议攻坚客沟通（1轮），在端侧沙箱资源可行性部分与硬件端侧开发匠沟通（1轮），提出对照假设验证精简架构，并最终确定极简链路架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Service Mesh有本地缓存能加速路由，WASM也能AOT编译预热，我觉得延迟是可控的。P2P同步也是为了去中心化，万一云端挂了终端能自洽。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你看看我这套Service Mesh加WASM的串流架构，在极弱网下延迟抖动能压住吗？我们基线是20ms。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧跑WASM沙箱做零留存解密和力场重构可行吧？你们端侧资源够不够？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对端侧MCU的真实资源水位和用户态协议栈的底层延迟分布确实缺乏量化概念，这是我当前的设计盲区。我今晚得去补一下DPDK和XDP这类内核旁路技术的延迟测试报告，还有RISC-V微控制器上跑WASM的实际Benchmarks，明天中午前把这两个约束边界摸清带回设计里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设“云端裸算力池加用户态协议栈直推加端侧裸金属解码”的极简架构，相比“Service Mesh加WASM沙箱”架构，在99分位端到端延迟上至少低15ms。对照组就是这两套架构的同等工况仿真压测，关键变量是协议栈路径长度和端侧解码耗时。如果WASM方案在MCU上的解码耗时超过2ms，就推翻我原来的复杂架构选型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "砍掉Service Mesh、WASM和P2P。架构定为：云端物理演算集群直出力场指令，走用户态协议栈绕过内核，边缘节点零留存透传，端侧MCU裸金属硬解驱动。这样最短路径，满足20ms和合规零留存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

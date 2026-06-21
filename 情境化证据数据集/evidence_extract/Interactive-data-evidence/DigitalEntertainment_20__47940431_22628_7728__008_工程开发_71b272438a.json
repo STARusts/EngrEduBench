@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在星栈云原生电竞观赛编排系统工程开发背景下，用户与导师围绕低时延转码/封装/分发链路打通、验收指标与过载降级持续沟通（8轮），其中在协议与转码参数/时延测量部分与媒体链路工程师沟通（5轮），在资源配额/并发限流/观测与日志合规部分与云原生平台工程师沟通（3轮），并最终确定LL-HLS两套profile、两档多码率、429降级与幂等去重的最小实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在开始做工程开发这块，先搞低时延转码和分发的实现，但我不知道从哪里下手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "低时延就是尽量快点吧。协议就用直播常见的，HLS？时延我没概念，差不多两三秒？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先把转码服务起起来，然后能播就行。CDN那块我也能对一下配置。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@媒体链路工程师 低时延转码和分发，我要怎么配才能快？我现在就想先跑通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就LL-HLS。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "参数我就默认？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分片200ms听起来很碎，会不会很费钱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时延怎么测？我看播放器上有进度条就算了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听懂了，就是把时间戳打到画面里，然后差一下。CDN缓存怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就用LL-HLS，segment 1秒，part 333毫秒，GOP 1秒。然后画面打时间戳，播放器拿时间比一下。验收就是延迟小点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多码率就出三档吧，1080、720、480。码率就随便填个，比如8M、4M、2M？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就三档：  \n1080p 60fps 8M，720p 60fps 4M，480p 30fps 1.5M。音频就128k。GOP都1秒。B帧就关掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先两档吧，720p和480p。1080先不做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@云原生平台工程师 转码这块我需要怎么配资源，才不会一跑就把机器打满？我现在只做两档。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拒绝会话会不会影响观赛？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "指标我就看CPU不红就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，日志不写票据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是转码Pod设个最多1路，满了就不给新流。然后如果满了就把低时延关掉，用普通的。观测就看CPU、丢帧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "错误码就500？上层就重试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就返回429，然后上层改成normal profile，再试一次。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放API层吧，进来就查一下eventId，存在就直接返回已创建的会话信息。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我就按这5条做，先把429和两套profile接上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

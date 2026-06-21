@@ -1,0 +1,505 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在无源物联射频指纹溯源系统需求梳理背景下，用户与导师围绕标签克隆痛点、安全与隐私合规冲突、边缘侧处理策略及待验证假设持续沟通（8轮），其中在射频数据采集合规红线部分与合规策略专家沟通（1轮），在安全架构权衡部分与物联安全架构师沟通（1轮），并最终确立边缘反演与特征就地销毁策略及4条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就全抓呗。安全第一嘛。不抓全怎么防伪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规策略专家 射频原始波形采集有什么合规红线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联安全架构师 原始数据不出域，那反演怎么做？指纹准不准？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能存原始波形，得在边缘算完再传特征。这样安全也能保证。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我不懂怎么在边缘同时做反演和脱敏。这块我完全没概念。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周要补这块。看三篇边缘射频信号处理的论文，跑通一个特征剥离的demo，搞懂怎么在提取特征后立刻把原始数据冲掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设？就是看EER涨不涨。涨太多就不行。2%是个界限。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得应该不会涨太多。5维够了吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在射频指纹溯源市场可行性评估背景下，用户与导师围绕买单意愿、目标客群、增量市场规模及商业模式持续沟通（7轮），其中在客户画像与商业化阻力部分与商业运营专家沟通（2轮），并最终形成聚焦高安全B端增量市场、按调用计费及放弃存量做增量的核心结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这指纹溯源谁会买？阻力是啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我拿手机搜了下，网上说电力每年新装好几十万个表。就搞新的呗，旧的不管了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按个卖？卖鉴权机器？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在高安全B端按次计费背景下与导师围绕环境载波反演合规红线及需求变更持续沟通（5轮），其中在探针功率与射频指纹数据合规部分与合规策略专家沟通（1轮），并最终确认探针EIRP合规上限、特征脱敏与最小化留存三条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规策略专家 探针功率，还有数据，就是不能被抓，怎么弄？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是，就是一串波形吧。我刚才搜了一下，数据安全法，对，有这法。波形应该不算隐私吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "功率不能大。然后，波形，波形要洗一下。不能留太久。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "确认。硬的。反正不能超功率，不能被人查。我记下了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求与战略商业化确定背景下，用户与导师围绕无源物联高安全接入系统的目标客户画像、商业模式及最小可行性验证持续沟通（6轮），其中在目标客户与商业模式部分与商业运营专家沟通（1轮），并初步确定“探针买断+鉴权API按量计费”方向及医药防伪切入口，明确需查招投标数据验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，大厂吧。大厂有钱。他们不是老丢东西嘛。我们就收年费，一年交多少那种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业运营专家 商业模式咋弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "医药防伪。卖探针，然后接口收钱。阶梯就是打折呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，去问他们呗。找几个卖药的问问。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我本子上写“医药，按次，查招投标”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我们就定卖探针和按次收费了？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在无源物联载波反演与射频指纹溯源系统架构设计背景下，用户与导师围绕反演算法选型、多径消除、对照实验标准及合规算力约束持续沟通（6轮），其中在反演算法选型部分与射频信号分析师沟通（1轮），在采集合规与边缘算力部分与物联安全架构师沟通（1轮），并最终确定窄带子载波反演为主线的架构方案及对照实验驳回标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "多径干扰我不懂啊。信道估计啥的，公式推不动。我得去查查别人咋建模的，找几篇近两年的IoT-Journal论文看一眼，把导频辅助的信道估计算法搬过来试试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "载波反演咋做？环境干扰咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有窄带和宽带，宽带听起来好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就跑一下呗。宽带准吧，窄带不行就换。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "采集合规和算力咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用窄带吧。宽带算力吃不消。我昨天查了那几篇论文，导频辅助信道估计能去多径，套进窄带架构里。宽带就放服务器上做离线对照。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我下午把算法流程图补上，套进窄带架构里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在射频微特征提取流规划背景下，用户与导师围绕提取流节点排序、瞬态与稳态特征衔接及算力限制持续沟通（5轮），其中在提取流节点与算力卡口部分与微特征提取工程师沟通（1轮），并最终确定四段提取流顺序、信噪比拦截标准及SVD截断近似思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四段。预处理，均衡，剥离，映射。矩阵太大ARM跑不动。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在指纹库高可用存储选型背景下，与导师围绕海量标签高频比对与漂移更新的存储痛点、混合存储组合及合规约束持续沟通（5轮），其中在比对时延与漂移存储部分与数据流架构师沟通（1轮），在指纹长期存储合规风险部分与合规策略专家沟通（1轮），并形成KV前置比对、时序存漂移轨迹及合规脱敏淘汰的核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 比对和漂移怎么弄，还有资源开销。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我我不太懂这种混合存储怎么联动，我得去查查时序库和KV在鉴权流里怎么配合，这块我完全没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规策略专家 指纹一直存会不会违规啊？"
+              }
+            ]
+          },
+          {
+            "microScene": "在无源标签受干扰的数据流设计背景下，用户与导师围绕环境动态适配、反压机制与分流逻辑持续沟通（5轮），其中在高并发反压与动态分流部分与数据流架构师沟通（1轮），在反演失败样本环境建模及反馈流汇入部分与射频信号分析师沟通（1轮），并最终形成双流动态适配核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高并发反压咋搞？动态分流啥意思？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是数据多了挡一挡，环境好坏采样频率不一样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "失败的就丢了吧，或者再试一次？放一起处理不省事吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演失败的信号有啥用？怎么搞反馈流？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "能拿去更新图谱。还要降维。不能丢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双流，主反演和反馈。降维存时序。记下了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在端侧安全与鉴权接口设计背景下，用户与导师围绕接口定义、JWT适用性、数据最小化及防重放验证持续沟通（6轮），其中在接口约束与轻量级查询衔接部分与接口鉴权设计师沟通（1轮），在特征向量合规与审计留痕部分与合规策略专家沟通（1轮），并最终形成轻量级查询式鉴权接口定稿与防重放验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我昨天看个博客讲JWT，无状态，挺快的，用这个就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "传，传指纹呗。JWT不是加密的吗，看不见。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JWT能不能用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用JWT。轻量查询。入参ID和向量，出参结果。不传波形。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接口传特征向量行不行？日志怎么打？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只传状态码。向量留边缘。日志记ID时间结果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个时间？测一下抓包能不能重放。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查询式，入参ID时戳，出参状态码。防重放测千次。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发背景下，与导师围绕信号采集参数配置、反演算法实现与基线验证方案持续沟通（8轮），其中在反演输入信号硬性要求与参数卡点部分与射频信号分析师沟通（1轮），并最终确定IQ流与2.5倍采样率配置及基线误差收敛验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采集不就是读数据嘛，读进来存起来。反演，反演就是把它还原回去？我直接调个库行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采样率设大点呗，越大越好。窗函数是啥窗？频偏补偿，这我完全没概念啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演输入要啥，采样率怎么弄。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我去CSDN搜个信号处理的代码改改？或者看个B站教程跟着敲一遍？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑一下不报错就是对了吧。或者，加个对比？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采集配IQ流，采样率2.5倍，反演要过基线误差验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在特征引擎与反演模块联调优化背景下，用户与导师围绕维度对齐、时延压降、合规审计及配置项确认持续沟通（5轮），其中在特征输出协议部分与微特征提取工程师沟通（1轮），在时延瓶颈分析部分与算法优化工程师沟通（1轮），并最终在导师纠正下形成联调核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就接上跑跑？看报不报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度不都一样嘛，看看日志没红应该就行。时延就快点弄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接反演怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延卡哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "问了。开降维，别打印。时延开加速。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "归一化默认呗。审计啥，关了打印就没日志了啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开降维，配默认，开加速，关打印，留审计。行了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在环境干扰容忍度极限测试背景下，与导师围绕强干扰下反演与指纹提取的测试构造及参数约束持续沟通（4轮），其中在现网干扰模型与阻塞临界点部分与抗干扰测试专家沟通（2轮），并最终形成包含瑞利衰落、多普勒频移、LoRa阻塞及越界判据的信道模拟器配置约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就弄多点干扰源呗。具体多大我也不清楚，反正跑挂了就算极限呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减步进啥意思？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多普勒啥的，我哪知道。默认跑呗。调制随便选。信噪比我回头再看。"
+              }
+            ]
+          },
+          {
+            "microScene": "在伪造标签攻击防御压测背景下，用户与导师围绕重放攻击鉴权阈值、误伤率权衡及压测失效边界持续沟通（6轮），其中在重放特征畸变与脚本编写部分与安全攻防测试员沟通（2轮），并最终形成压测约束条件及TensorRT降误伤优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "防伪造，就测一下呗。弄几个假标签发信号，看能不能骗过去。骗不过去就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重放吧。把真标签信号录下来再发。骗不过去就调参数，调到骗过去为止。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重放攻击，特征畸变，脚本怎么写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他说重放有相位跳变。要拿重放器发信号，调保真度，看啥时候失效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "0.69没过0.7啊，没攻破吧。防御就拦住呗。阈值调不调，我不知道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误伤，不能误伤。上限，千分之一？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TensorRT，对，我看了。可以把指纹比对模型转成engine，算得快。算得快就能多比对几次，误伤就少。我准备把特征提取那块换成TensorRT跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "攻破了就攻破了呗。结论就是防不住0.85的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重放器，保真度0.5到0.95，阈值0.7，误伤千分之五，说清楚特征维度。配去。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在运行评估的边缘节点部署与信令验证背景下，与导师围绕探针信令验证逻辑、稳定性指标与部署约束持续沟通（6轮），其中在信令配置规范部分与边缘部署运维师沟通（1轮），并最终形成包含注册信令、心跳包机制及成功率时延指标的完整部署验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探针注册信令和心跳包怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "问了，说要发注册信令，还要抓包看有没有丢包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看，看有没有红字报错？没报错就是稳定吧。数据有效性，就是数据都在，没少就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实搞不定这些统计的东西，什么P99我根本不会算。我接下来一周要去学python的pandas库，照着网上的例子写个脚本算时延和成功率，达到能自己跑出这10分钟统计结果的程度。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是，要先发注册信令，然后抓包。成功率要99.9%，时延50ms以内。跑10分钟看。"
+              }
+            ]
+          },
+          {
+            "microScene": "在指纹鉴权监测分析背景下，用户与导师围绕鉴权失败归因拆解、漂移量化判定及合规落库审计口径持续沟通（5轮），其中在漂移判定标准与分析口径部分与指纹库演进分析师沟通（2轮），并最终明确监测口径与看板修改任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看着大盘呗。绿的就没事，红的就是出事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "老化是啥？标签坏了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "鉴权失败怎么分？还有漂移标准是啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不能就看个失败率吗？找个现成Python工具包跑一下不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是一开始存进去的那些特征？算距离，超了就更新库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口，就，大一点？阈值我不知道。报警就发消息呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "拆三个原因。算距离，基线是入库的。还有，判定结果得存起来审计。"
+              }
+            ]
+          },
+          {
+            "microScene": "在载波反演时延抖动飙高的排查背景下，用户与导师围绕根因分析、时延与成功率平衡及降级保活策略持续沟通（7轮），其中在现网干扰与CPU占用排查部分与抗干扰测试专家沟通（1轮），在降级重算触发确认与阈值调整建议部分与算法优化工程师沟通（2轮），并最终形成放宽畸变率阈值至0.2及强干扰降级配置的排查结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@抗干扰测试专家 抖动咋回事？外面有人搞干扰吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法优化工程师 刚才说CPU飙了，是不是你们降级重算搞的鬼？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法优化工程师 阈值多少现在？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跳过还反演个啥，系统白做了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论就是，CPU飙了因为重算，重算因为阈值低。把阈值改大点，干扰大就跳过。就这两条。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "改阈值0.2，加强干扰降级配置。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在标签老化漂移复盘背景下与导师围绕漂移应对方案与增量学习安全边界持续沟通（4轮），其中在漂移数据分布与增量更新可行性部分与指纹库演进分析师沟通（1轮），在增量学习期间业务容忍度部分与体验反馈运营沟通（1轮），并最终形成增量学习策略及失败率红线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不准了就重录呗？清库重新抓一遍不就好了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在数据啥情况？能增量不？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分析师说偏了，角偏了。然后要加学习，把错的变成对的放进去。还要改圆的大小。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "增量学习的时候，失败多一点，你们受得了不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能超0.5。不能连着3次不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "老化偏移，增量加改圆，红线0.5不连3次。记了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估阶段制定指纹库演进规划背景下，与导师围绕增量学习触发机制、冷热分离存储及演进策略适用边界持续沟通（9轮），其中在增量触发、冷热分离及外推边界部分与指纹库演进分析师沟通（2轮），并最终形成偏移触发、冷热分离、渐进增量与突发阻断三条演进规划核心点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看Prometheus的alert rule，有强干扰的图。我把这俩加进去，分两拨告警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发看偏移40。分冷热，热内存冷SSD。渐进的能增量，突发的得阻断告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高负载网关鉴伪拦截开发背景下，用户与导师围绕微秒级拦截方案、规则更新、拦截动作及内存淘汰策略持续沟通（9轮），其中在拦截实现、增量更新与内存淘汰策略部分与高可用网关工程师沟通（3轮），并最终形成Lua+Shared Dict+双权重淘汰+cosocket增量更新的开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "85%这么高？那加机器啊。或者我用Sentinel加个规则扩展点，把模型判定的分数拿过来做比对？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "50MB能存啥啊。网关这破机器，50MB内存，还要微秒级拦截，怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说用Lua写，放shared dict里。不用Redis也不用Java。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我写个定时器轮询？或者推流？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则怎么更新？不能重启，也不能一直占着连接。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说用cosocket长轮询拉增量，启动时读磁盘。流量大的时候少拉点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接断连接最快吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "返回403加个特殊Header，日志用ngx.log写。我去改那块access_by_lua。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "50MB存规则，如果规则太多装不下怎么办？会OOM吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说写满不会OOM，会报错。建议用命中率和风险等级双权重淘汰，高风险的优先留。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我写个单测？造一堆假规则塞满，看高风险的还在不在。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

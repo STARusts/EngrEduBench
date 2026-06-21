@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在术周稳态相变感知平台方案设计背景下，用户与导师围绕高低频体征时序对齐、插值策略选择及跨源融合合规边界持续沟通（6轮），其中在高低频数据对齐与插值因果性部分与流态架构师沟通（1轮），在跨源融合合规与隐私计算部分与数据合规师沟通（1轮），并最终形成基于时间窗口对齐、阶梯保持插值及隐私计算融合的架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接Kafka接进来，按时间戳join一下不就行了？别搞太复杂，赶紧定完往下推。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流态架构师 高频低频数据对齐怎么做？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据合规师 合规怎么说？加个脱敏接口是不是就完了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是要做插值，然后加个隐私计算接口。用Flink搞"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "样条插值平滑啊，肯定更好。伪相变是什么？不管了，先跑起来再说。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我不懂，插值还能搞出假相变？我查查时序插值误差传导的资料，今天下班前看两篇，看能不能搞个保守点的插值，别弄出假告警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 用时间窗口对齐高低频；2. 插值先选保守的阶梯保持，后面跑对照看样条插值的假阳性率；3. 融合走隐私计算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

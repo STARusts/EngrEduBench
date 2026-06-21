@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光阵织控联调与压测背景下，用户与导师围绕压测方案复杂度与核心目标持续沟通（6轮），其中在联调卡点与数据构造部分与联调测试工程师沟通（1轮），在IO隔离与脉冲模拟部分与性能优化工程师沟通（1轮），并最终形成聚焦数据契约对齐、JMeter阶梯加压、异步队列隔离IO及核心埋点的务实压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然是生死线，压测环境必须百分百仿真。我准备引入一套全链路流量录制回放框架，把线上真实潮汐流量录下来，回放到联调环境。同时接入Service Mesh做全链路Trace，还要加上Chaos Mesh做网络丢包和CPU抢占的混沌实验，确保极端情况下的韧性。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复杂度确实高，但如果不做全链路Trace，联调出问题根本定位不到是算子慢还是织控指令序列化慢。回放真实流量比构造压测数据准多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "从你的角度看，潮汐感知到光阵织控这半截链路，集成时最容易断在哪里？压测数据怎么搞最快？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据契约确实容易出事，上次接口定义有个坐标系的换算差点搞反。不过模拟造数据能覆盖到极端的潮汐突增吗？回放框架能直接复现线上毛刺。日志埋点太原始了吧，查问题得靠肉眼grep？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测如果上Service Mesh，Sidecar开销会不会影响P99精度？另外如果不用流量回放，怎么模拟那种瞬时打满的潮汐脉冲？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Sidecar开销确实不可控，阶梯加压加异步队列刷盘这招挺实在。我收回上Service Mesh的想法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定这四条：1. 联调前先对齐算子到织控的数据契约，防止空指针；2. 压测不带Mesh，用JMeter阶梯加压造潮汐向量，验证5k并发生死线；3. 非核心IO全走异步内存队列，打满算子链路CPU；4. 耗时监控先靠核心节点埋点，不搞复杂Trace。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

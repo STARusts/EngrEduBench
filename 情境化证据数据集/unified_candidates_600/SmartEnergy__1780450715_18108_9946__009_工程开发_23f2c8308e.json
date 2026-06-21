@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在形变推演模型训练调优背景下，用户与导师围绕物理约束融入、Loss设计、算力与采样策略持续沟通（6轮），其中在物理惩罚项设计部分与热力学算法专家沟通（1轮），在防漂移与验证集划分部分与模型训练调优师沟通（1轮），并确定含物理残差的自定义Loss、按工况配平DataLoader及分状态验证集的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接拿对齐后的数据跑训练呗。之前不是选了图网络架构吗，我把数据灌进去，看Loss收敛就行了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "机理约束怎么加？我不懂热力学公式。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "蠕变本构约束怎么加到训练里？我只会写普通的MSE Loss。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "超参搜索怎么搞？防漂移呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "残差就是公式算出来不为0的部分吧。实现的话，我写个自定义Loss类，把MSE和残差加一起。权重我设成0.1先跑跑看？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力确实是个问题。那权重先设0.01？训练时间翻倍的话，我先把数据采样率降一点，每10条取1条？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "自定义Loss写起来不难。DataLoader配平我得查查API怎么写。先去改代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

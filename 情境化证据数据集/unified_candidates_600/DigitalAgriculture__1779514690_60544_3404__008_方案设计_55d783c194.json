@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在渔群摄食声纹特征库安全策略设计背景下与导师围绕防篡改、防投毒及访问控制持续沟通（6轮），其中在访问控制与防篡改机制部分与安全与隐私审计师沟通（1轮），在防投毒验证实验设计部分与算法实现工程师沟通（1轮），并最终形成边缘侧哈希校验、云端RBAC权限控制及异常样本注入测试的安全策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就加个登录？密码弄复杂点，外人进不来就行了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "投毒？自己人搞自己干嘛。运维手滑倒是有可能。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私审计师 声纹特征库怕被乱改或者乱看，这安全咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "签名？是不是得搞证书？太麻烦了吧，校验个格式不行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TEE我搞不定，哈希校验能弄。边缘端算个哈希存进去，读的时候再算一遍？这样就不怕被改了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "往里塞几条假数据，看它拦不拦得住呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法实现工程师 怎么造假声纹数据来测防投毒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "破坏哈希的肯定被拦。特征畸变的，模型没见过，预测分应该很低，也能拦住？那测试方案就是：注入这两种异常样本，统计拦截率和误触发增氧机的次数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧特征写入带哈希校验防篡改；云端用RBAC控制权限，运维只读，算法改写留日志；前端只看聚合数据不导出原声纹。验证防投毒：构造哈希破坏和特征畸变两组异常样本注入，看拦截率和误触发率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

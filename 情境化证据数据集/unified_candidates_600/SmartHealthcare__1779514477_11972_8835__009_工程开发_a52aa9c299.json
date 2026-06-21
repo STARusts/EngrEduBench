@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在动作序列灌入并发关联图谱进行风险推演背景下，用户与导师围绕并发写入Neo4j死锁问题、UNWIND批量更新改造及批次与反压设定持续沟通（6轮），其中在高并发属性更新死锁解决部分与知识图谱工程师沟通（1轮），在批次大小与反压参考部分与图谱联调工程师沟通（1轮），并最终形成逐条改UNWIND、批次定500及加反压控制三项修改点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写不进去。并发一上来Neo4j就卡死，一直报DeadlockDetected。我看了机器资源，CPU和内存都没满，就是锁住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志里全是 `Neo.TransientError.Lock.DeadlockDetected`。我猜是同时更新同一个手术动作节点的属性导致的，但我加了重试也没用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并发往Neo4j写动作节点属性一直死锁，我加了重试还是报错，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不能用for循环一条条写，得攒一批一起写。那我就改成UNWIND。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先定个100条一批？感觉应该差不多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UNWIND批次大小定多少合适？我怕设大了还是锁，设小了没效果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，500一批，加反压控制。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三件事：第一，把逐条写入全改成UNWIND批量参数化；第二，批次大小定500；第三，写入端加反压，超2000 QPS就降速。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

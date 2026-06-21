@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农田用水碳效协同调度系统进入工程开发、需设备接入与边缘可靠执行并贯通审计链路ID背景下，用户与导师围绕遗留脚本重构、接入字段/命令闭环/回执与重试机制及最小验证用例持续沟通（10轮），其中在离线执行、本地队列持久化、三段回执、幂等去重与验签默认拒绝部分与边缘计算工程师沟通（4轮），并形成网关最小实现清单与改造方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备接入和边缘网关我想直接找个现成物联网demo抄进去，能跑就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一堆脚本。MQTT连上就发数据，策略下发就HTTP打一下，失败就while一直重试。反正能通。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "坑点就……掉线、丢包、时间不准？我也说不太全。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第1条不带设备类型？也没校验。第2条cmd我就直接透传字符串行不行？回执没必要吧，200不是成功了吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关这块，我要抄个demo改改。断网还能执行策略怎么搞？回执要怎么回？一直重试是不是不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就一个回执不就好了？收到就算了。三段太多了吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "签名也要？我还以为token就够了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线的时候，云端看不到回执怎么办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师我问了边缘计算工程师。他说别while死循环，要本地队列存策略，回执要分收到/下发/执行三种，还要auditTraceId加cmdId做去重。还有签名校验，不对就不执行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就加auditTraceId和cmdId？行为就不无限重试，改成重试3次？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "telemetry里还要auditTraceId？那不是策略才有吗。我感觉不用。quality我也不知道怎么写。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那msgId我就用时间戳拼deviceId？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警上报也要带auditTraceId？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我是不是要加很多表？我不想搞数据库。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "重试我就写个for循环，失败就放DLQ。DLQ就是另一个文件夹？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "日志我就print就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "断网怎么模拟？拔网线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕V2做不出来，补报顺序会乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在要写哪些接口？我直接照你那三个对象写就行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就按这5条改。resultCode我能先抄你这几个字符串吧？我也不想再想新的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去把网关那堆while删了，改成队列+DLQ，然后把auditTraceId带上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在绿债信配核心算法工程化背景下，用户与导师围绕理论推导的工程化替代与实现细节持续沟通（5轮），其中在流式计算延迟与溢出处理部分与算法工程师沟通（1轮），在权重调整合规限制部分与合规审查官沟通（1轮），并最终形成增量梯度更新、分段查表与合规拦截器的实现方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用凸优化求解多目标函数，把漂绿概率作为惩罚项加进去，拉格朗日乘子法一求导就出来了。数学推导我昨晚算过了，绝对闭环。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟这块确实没细算，溢出的话大不了我加个try-catch？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我有个拉格朗日求导的信配公式，要塞进流式引擎里，延迟和溢出怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "信配权重算出来后，直接下发给资金端口行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法这边说别硬解，做增量更新，还要梯度截断和分段查表。合规那边说权重变动不能超20%，要加个拦截器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长我设个0.01试试？拦截器挂在算法输出后面串行吧。但我不知道这0.01合不合适，分段查表的区间我也没概念。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改CreditAllocator的实现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

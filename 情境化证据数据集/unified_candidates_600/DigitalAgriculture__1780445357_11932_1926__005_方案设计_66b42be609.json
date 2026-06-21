@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边端资源受限的方案设计背景下，用户与导师围绕极简数据流的时序对齐、拐点提取、阈值设定及参数闭环持续沟通（6轮），其中在时序对齐与拐点提取实现、斜率阈值与农学模型关联及Topic划分部分与数据流设计专家沟通（4轮），并最终形成极简数据流骨架规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上可以用Flink的CEP做事件时间窗口对齐，水位线处理乱序数据。至于特征拐点提取，小波变换检测突变特征的效果是最好的，能精准定位光强跳变点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微气候和电表这种快慢不一的数据怎么对齐？拐点怎么抓才省内存？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "插值算斜率变化，这个我懂，就是用差分代替微分嘛。但是逻辑时钟打标，如果某路传感断线了，时钟不就卡死等不到数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用环形缓冲算插值斜率抓拐点，逻辑时钟用网关自增序列，断线打脏位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以根据历史数据统计出来一个均值？或者用Pauta准则剔除异常后算方差，超3倍方差就算拐点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的斜率变化阈值，不能纯写死个常数，也不能纯统计。怎么跟作物的光补偿点挂钩？边端又存不下农学模型。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据流上行Topic怎么划分？全挤一个Topic会不会导致消费延迟？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端用环形缓冲算三点斜率，抓相对突变超30%的拐点；逻辑时钟网关自增，断线打脏位；上行按设备物理分区发Topic。云端负责根据农学模型修正突变阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边端收到阈值参数，回发一个ACK确认包？云端收到ACK才把新阈值标记为生效状态。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

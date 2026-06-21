@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在破碎生境系统方案设计背景下，用户与导师围绕多源异构数据融合选型、IO延迟对照组验证及Sedona技能补齐持续沟通（6轮），其中在底座选型与入库规范部分与空间数据架构师沟通（3轮），并形成基于研究假设的Sedona选型验证方案与技能补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "多源异构生境数据融合这块，我打算直接用PostGIS做中心库，把遥感影像和物种分布表都往里塞，统一转成空间表，这样最稳妥。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个空间索引就行了啊，GIST索引查邻接斑块很快。而且这套我都熟，开发快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用PostGIS做融合底座，把多源数据都ETL成空间表。你觉得这方案行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "数据湖太重了吧，还得搞Hadoop或者Spark那套，部署维护多麻烦。我就想快点把数据层弄完去写廊道推演的逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以造点测试数据跑一下啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "嗯，我确实没想这么细。我就想看看建索引后查邻域要多久。对照组就是不用索引直接扫表？不对，应该跟Sedona比。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那假设在十万节点下，Sedona的IO延迟比PostGIS低30%以上，我就换方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不熟，我只用过Spark做普通批处理，没搞过上面带空间算子的。我得去补一下Sedona的文档，看看它的空间分区策略怎么配。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三天吧。我把Sedona的官方Tutorial跑通，能把GeoJSON写进Parquet并做空间查询，就算补到了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果测试结果真像架构师说的那样，IO差很多，我就选Sedona数据湖方案。但我得要求架构师出一份时空数据的入库规范，Parquet的Schema和分区字段得定死，我不懂生态数据的最佳分区方式。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

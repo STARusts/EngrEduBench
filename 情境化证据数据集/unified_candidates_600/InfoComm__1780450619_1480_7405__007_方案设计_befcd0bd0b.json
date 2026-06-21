@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在推演动作下发背景下，用户与导师围绕跨域信令同步方案、安全防护机制及可靠性验证持续沟通（9轮），其中在异构状态同步与防越权重放设计部分与信令协议开发客沟通（1轮），并最终形成核心轻量异步回滚加边缘Saga补偿、意图标签鉴权与序列号校验、以及变量控制异常注入验证的约束条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接用gRPC调接口呗，网上好多跨域通信的现成脚手架，安全的话加个TLS证书是不是就够了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键适配异构接口的组件啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域信令同步有没有比较省事的方案？防越权和重放有没有现成的拦截器？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是搞个两阶段提交，然后信令里加个序列号和时间窗校验。听起来好像也不难写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "前几天看了个Saga模式的文章，说是可以补偿避免阻塞。要不咱们别用两阶段了，直接套Saga？虽然具体怎么补偿我还没细看，但感觉比两阶段好。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "维护成本，这我确实没想。那Saga太重了就不用了呗？还是两阶段？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测的话，就发点并发请求压测一下呗，看看会不会卡死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令同步用轻量异步加回滚，边缘用Saga补偿；安全加意图标签鉴权和序列号时间窗校验；验证要做变量控制和异常注入。差不多就这些吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在大田农机并发路权协商服务压测与调优背景下，用户与导师围绕压测方案、验收指标制定及性能分析方法持续沟通（7轮），其中在压测工具选型与指标设定部分与测试工程师沟通（2轮），在性能卡点排查部分与后端开发工程师沟通（1轮），并最终形成基于Locust的压测方案、明确的验收标准及锁与连接池的调优方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测我打算用JMeter，直接照着接口文档配一波并发线程组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，压到报错为止？指标看吞吐量和响应时间呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JMeter不太行的话，用什么工具注入高频位姿流？指标怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果压测时P99延迟飙红了，我怎么调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "令牌协商服务如果P99延迟高，一般是什么卡点？连接池还是锁？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天刚好在补Locust的协程机制，本来只是想用来测普通接口，现在看来正好能用来模拟农机并发长连接，比Jmeter省资源多了，这回压测脚本我直接用协程写。锁竞争这块，我让开发把粗粒度锁改了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看日志找报错呗，看看是不是哪个接口慢了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那压测验收标准就定在：并发200台农机，P99延迟小于100ms，死锁率0%，且结果波动不超过10%？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去拆任务。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

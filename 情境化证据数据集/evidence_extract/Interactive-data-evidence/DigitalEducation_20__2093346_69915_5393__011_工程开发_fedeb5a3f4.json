@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在评分系统工程开发收尾阶段，用户与导师围绕证据链存证与回放的字段定义、写入时机、防篡改、回放API与降级语义持续沟通（8轮），其中在证据包结构与保留/删改策略上与数据架构师沟通（3轮），在告知同意、权限分层与审计不可抵赖控制项上与安全与合规官沟通（2轮），并最终明确MIN/FULL分级、音频短TTL与联调验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把“可复现”拆成两层：一层是评分输入可复现（音频/转写/题干上下文/版本），一层是评分过程可复现（模型版本、prompt模板、特征提取版本、阈值、降级策略）。存证我倾向做两条链：业务链存明文最小集，审计链存hash和签名，回放时按权限取不同粒度。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段我先列一版最小可用：  \n1）score_id、submission_id、user_pseudo_id、item_id  \n2）audio_digest（sha256）+ audio_object_key（可空）  \n3）asr_text_digest + asr_text_object_key（可空）+ asr_engine_version  \n4）rubric_version、scoring_model_version、prompt_template_version  \n5）evidence_level（MIN/FULL）、evidence_digest（整体包hash）  \n6）reason_code、short_explain、confidence、created_at  \n写入时机：评分服务出同步响应前先写“不可变元数据+digest”，完整证据包异步写，写成后更新evidence_digest和evidence_level=FULL。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先做可验证不可抵赖：证据包按固定顺序序列化（canonical json），算digest；再对digest做服务端签名（key在KMS）。数据库里存digest+signature+key_id。回放时验签。篡改会直接验不过。后续若要外部公证，再把digest定期批量锚定到第三方。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 证据链这块我需要两件事：证据包的数据模型（字段分层、canonical规则、包内索引），以及保留/删改策略（未成年人、申诉窗口期、最小化）。你按可落地给建议。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放时如果只有manifest，没有blobs，会不会解释不够？比如家长申诉要听音频。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "升级保存这条会受限：端侧不一定留音频，上游也可能只传digest。那我们是不是要在提交时就先把音频落对象存储，只是默认不开放访问？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳两级证据：  \n- 默认MIN：只保证manifest完整+可验签+短解释可回放；回放页面显示证据目录但不承诺音频存在。  \n- 触发FULL：申诉/抽检/教师开关才保存blobs。  \n音频是否“先存再控权”：我倾向先存7天加密对象，过期自动删；不进入FULL就不延长。这样回放链路在多数情况下只读库，压测时不会被对象存储拖慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回放我想做两个API：  \n1）GET /evidence/manifest?score_id=：返回manifest+验签结果+证据目录（每个blob的状态：AVAILABLE/MISSING/EXPIRED/NOT_COLLECTED）  \n2）GET /evidence/blob?score_id=&type=audio：需要更高权限，返回带时效的下载URL（或直接流式代理），失败时返回reason_code：policy_denied / ttl_expired / not_found。  \n另外把回放请求也写审计：谁查了什么score_id、查到什么级别。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与合规官 我们在做证据链存证与回放。当前方案：manifest常驻（含digest+签名+版本矩阵+short_explain），blobs按策略可选保存（音频默认加密存7天，申诉/抽检可延长到30天）。回放分manifest接口和blob接口，后者要更高权限并写访问审计。你帮我找合规雷点和必须加的控制项。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“零存储”会影响可复现输入，这块我们怎么解释给评测可信？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解了：可信评测的底座是digest+签名+审计；回放听音频只是可选增强。那我回到实现层，补两点：  \n- 审计日志也做digest链：audit_digest_n = sha256(audit_record_n + audit_digest_{n-1})，每天封存签名一次。  \n- “零存储”模式下，manifest里audio_object_key为空，状态就是NOT_COLLECTED，但digest仍在。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级策略我写进回放返回：  \n- 如果asr全文缺失但有asr_digest：只展示short_explain + reason_code + 版本矩阵，提示“原文未保留”；  \n- 如果prompt_template_version缺失（理论不该）：manifest验签失败，标记evidence_invalid，回放拒绝出具“可信”标签；  \n- 如果模型版本在回放时已下线：仍然能展示当时版本号与digest，不做重算，只做展示。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收点我给5条：  \n1）同一score_id回放manifest验签必过；任意字段被篡改（如confidence）验签必失败并返回evidence_invalid。  \n2）evidence_level=MIN时，manifest完整可取；blob目录全部给出明确状态码，不出现“空白成功”。  \n3）blob接口权限：无权限返回policy_denied；有权限且过期返回ttl_expired；都有统一reason_code。  \n4）访问审计：每次回放manifest/blob都会生成审计记录，且审计记录可通过digest链校验连续性。  \n5）零存储配置：audio_object_key为空但audio_digest存在；回放展示NOT_COLLECTED且不影响评分结果展示。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

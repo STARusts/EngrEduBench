@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在柔性产线孪生系统灰度部署背景下，用户与导师围绕切流比例、排程效果验证方案及合规留痕持续沟通（7轮），其中在排程偏离度与置信区间计算部分与产线监控分析师沟通（2轮），并最终形成三条灰度准入硬性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用Istio的VirtualService把5%的流量切到新版本，先跑跑看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加了熔断嘛，前面调优阶段配了Sentinel。而且我可以在Grafana上看排程耗时的大盘，如果红了我就切回来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "显著性差异？我不太会算。我看网上灰度发布都是看成功率有没有跌，或者用Arms自带的对比功能。有没有更方便一点的办法，能直接出结论的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期排程偏离度怎么算置信区间？对照组和实验组要怎么比？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Grafana里能直接算置信区间吗？还是我得自己写个PromQL？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说要算排程偏离度，就是实际和建议的差值，还要算95%置信区间，看包不包含0。还要看OEE方差。工具的话好像得自己写脚本算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "具体数学推导我不太懂。我现在确实缺这块统计检验的知识，只会看图表。我这周找时间补一下假设检验，写个Python脚本把灰度期的偏离度p值算出来，p<0.05才算通过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用了EFK收集日志了，算留痕了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，灰度比例从1%起，只切非关键订单；第二，排程偏离度要算95%置信区间，写Python脚本算p值；第三，排程指令下发必须带TraceId绑定工单号做审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

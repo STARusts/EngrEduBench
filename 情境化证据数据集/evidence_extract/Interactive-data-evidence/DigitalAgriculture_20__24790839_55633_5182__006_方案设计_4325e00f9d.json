@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计中定义“处方执行联机接口”背景下，用户与导师围绕接口边界、字段/事件契约、版本与幂等、弱网补传与追溯审计持续沟通（9轮），其中在下发模型与回传字段/错误码部分与农机与施用接口工程师沟通（3轮），在权限粒度、审计字段与轨迹数据保留分级部分与合规与数据治理官沟通（1轮），并形成拉取+缓存为主的最小接口清单与治理约束结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是处方生成完，不是只给个PDF，而是要能下发到执行侧，比如农机、喷施设备、或者田间APP，然后把执行结果回传。联机接口要解决：处方怎么被“领用”、怎么确认执行、执行偏差怎么记录，还有异常时怎么降级不把作业卡死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至少三类：1）处方查询/拉取；2）处方下发或派工；3）执行回传。可能还要一个“回退原因/降级说明”的查询，不然审计看不懂为什么出的是粗颗粒处方。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把“处方ID”作为业务唯一，然后加两个版本号：rx_version（处方内容版本）和feature_version（特征/桶版本）。执行侧拆单用task_id，不改rx_version，只在task里记录拆分规则和设备能力映射。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回传用 event_id 做幂等键，事件里带 task_id + seq，服务端以 event_id 去重。处方领用也要幂等，设备端可以用 client_request_id，避免连续点两次领用生成两条任务。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "处方拉取返回里我想放这些：\n- rx_id, rx_version\n- scope：地块/网格范围\n- recommend_actions：动作列表（施用菌剂/有机肥/轮作建议等），每个动作有 target_rate, unit, window\n- provenance：reference_bucket_id，fallback_chain（数组，比如[\"crop+season+soiltype\" -> \"crop+season\"]），feature_version\n- data_policy：zero_value_policy（比如 “treat_as_missing” 或 “keep_zero”），missing_fields（列出缺失维度）\n执行回传里带：\n- task_id, rx_id, device_id\n- applied_rate, applied_area, start_end_time\n- deviation_code（超出阈值、漏施等）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件我先粗分四种：\n1）RxGenerated：处方生成\n2）RxDispensed：处方被某设备/某作业员领用\n3）RxExecuted：执行完成或阶段回传\n4）RxFallbackApplied：生成时发生降级/回退\n每个事件都有 occurred_at、actor、trace_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回退应该是生成过程中的一步，我倾向：生成结束时统一发 RxGenerated，里面引用一个 decision_trace_id；如果过程中发生回退，再额外发 RxFallbackApplied，关联同一个 decision_trace_id。参考桶选择我觉得每次生成都要记录，不然复现不了；可以在 RxGenerated 里放 bucket_id，同时再发一个 RxBucketChosen 事件感觉有点冗余。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农机与施用接口工程师 处方执行这块，设备端更适合“拉取”还是“推送”？弱网/离线情况下通常怎么做？另外执行回传你觉得最小必须包含哪些字段，常见错误码有哪些？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从农机那边拿到的结论偏向“设备拉取+本地缓存”，推送丢包重连麻烦。回传的最小字段集分成任务/空间/用量/证据四层，错误码里 version mismatch、设备能力限制、越界、重复事件这些要有。感觉我们接口应该天然支持补传和部分证据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先列一个最小集合：\n1）GET /rx/{rx_id}：处方详情（含 provenance 决策快照）\n2）GET /rx/{rx_id}/tasks?device_id=：设备可领用任务列表/摘要\n3）POST /tasks/{task_id}/claim：领用确认（幂等键 client_request_id）\n4）GET /tasks/{task_id}/params：拉取任务参数（网格剂量表、窗口期等，支持分页/分片）\n5）POST /tasks/{task_id}/events：回传事件（幂等 event_id，支持 batch）\n6）POST /tasks/{task_id}/evidence：轨迹/传感证据摘要或分片（允许 partial + checksum）\n7）GET /tasks/{task_id}/status：设备侧查询服务端状态与补传缺口"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可能会把 operator_id 设为可选，默认不传姓名手机号。地块位置不直接给坐标，给网格ID或地块内部编码；如果必须给边界，就给加密后的引用。检测结论也不在执行接口里全量下发，只下发与执行相关的剂量参数和约束，详细诊断留在“处方解释”页面走另一个权限域。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 执行联机接口这块，权限粒度和审计留痕你给个底线：设备/作业员拉取处方参数需要什么授权？哪些字段必须进审计日志？回传的轨迹证据保留周期一般怎么定，是否要脱敏或分级存储？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边的底线是：权限至少到组织-地块-任务，设备身份最好绑定证书或设备ID；审计日志必须有 who/what/when/where/result/trace_id，where 用网格摘要别放全坐标。轨迹点位默认高敏，建议30-90天存原始，后面只留摘要+校验和，必要时加密长期留存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用事件时间和序号。每个 task 里带 client_seq 单调递增，服务端按 seq 重放；如果缺 seq 就标记 incomplete，status 返回缺口让设备补。最终状态由 explicit 的 done/aborted 事件决定，且要求 done 事件包含累计用量与覆盖摘要，服务端才能结算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回传事件体里带 rx_id + rx_version 就够？feature_version 可能也要带，但我怕太冗余。折中：task 创建时写死 rx_version 和 feature_version，回传只带 task_id，服务端可查回。只有在离线补传跨天、task 被迁移时才会出错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我先锁：\n1）设备侧以“拉取+本地缓存”为主，接口要支持断点补传、部分证据。\n2）幂等：领用用 client_request_id，回传用 event_id 去重；事件支持 batch。\n3）追溯：处方返回含 decision_trace（bucket_id、fallback_chain、zero_value_policy、feature_version），执行回传至少带 rx_id+rx_version，审计用 trace_id 串起来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会按这5条结论把字段字典补全，特别把 provenance、审计字段、以及错误码那组先固定住，避免后面联调来回改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

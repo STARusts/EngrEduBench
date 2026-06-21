@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在厌氧发酵产气预测与柔性调度平台灰度运行评估背景下，用户与导师围绕指标看板设计、巡检触发条件、分级处置与记录合规持续沟通（12轮），其中在稳定性指标/阈值与可追溯巡检记录口径上与SRE运维工程师沟通（1轮）、在业务安全边界与关键工艺变量触发收紧策略上与环境工艺顾问沟通（1轮），并形成看板最小指标集与巡检记录字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就盯 p95、5xx、还有 RUNNING 队列。巡检就每隔一会看看，有红的就处理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据进来就看有没有数据，预测就看准不准，调度就看有没有执行，发电就看电量有没上去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 运行评估这块，看板现在要盯哪些稳定性指标？阈值一般设多少？巡检记录要写到什么程度才算能复盘？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是分平台和业务，两套看。记录就写时间、租户、指标、处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境工艺顾问 业务侧巡检看什么最关键？哪些变量一旦异常要先把调度策略收紧或暂停，别继续自动调？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收到，就是压、温、气质、来料。碰到压力高就先停自动调度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先别加料？或者把策略关了，等恢复再开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据延迟飙升就提示一下，压力接近上限就暂停，然后回滚。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哦，那我记住：回滚只给发布用。业务就限幅、暂停策略。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "一屏上面就是平台健康：5xx、p95、RPS。中间放任务：RUNNING、FAILED、重试。再放数据：上报延迟、缺失点。下面放业务：产气、CH4、压力。差不多就这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预测效果就看误差，调度效果就看收益。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先上 MAPE 和采纳率吧，简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就看数据有没有缺失，有缺失就是数据问题；没缺失就是来料问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我照着比对灰度和非灰度，再看缺失和进料突变。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就别写用户隐私，留痕就留链接。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，我就写 tenant_hash 和指标结论，不写站点名。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板就平台 p95/5xx/RPS，任务 RUNNING、失败、重试、时长，数据延迟缺失对时，预测看 MAPE，调度看采纳率和违约次数，业务看压力温度 CH4 H2S。触发就是 5xx 1% 持续、p95 高 30%、RUNNING 堆、任务太久，还有压力快到线、温度不对、H2S 高、30 分钟没数据。记录字段写：时间窗、tenant_hash、指标和数值、影响不影响调度、处理动作和链接。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

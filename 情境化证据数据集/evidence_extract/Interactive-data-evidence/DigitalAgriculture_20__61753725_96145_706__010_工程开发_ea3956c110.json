@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农田风险指数定价服务平台进入开发落地背景下，用户与导师围绕数据管道与质量校验的最小闭环、降级与验收口径持续沟通（6轮），其中在入湖分层/质量指标/失败处置节点与数据架构师沟通（4轮），在质量规则可重复验收与原因码测试节点与测试工程师沟通（2轮），并确定以气象数据为起点按dt增量实现分层、quarantine隔离与API降级标记。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我卡在数据这块，数据管道和质量校验我完全不知道从哪下手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，把数据拉过来，存起来，然后跑个脚本算指数？质量就…看下有没有空？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失败…就重跑？或者直接报错给前端？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RTO是30分钟以内，RPO 5分钟。然后同城两个AZ主备优先，异地就备份恢复。数据源坏了就返回最近一次可用的指数版本，还要标记一下，然后限流熔断保护依赖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对。就感觉规则很多，我也不知道该写哪些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 我们这数据管道到底怎么分层？质量校验要写啥？失败了咋整？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着好多层。我是不是就照着建四个表就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那质量flag我随便取个名字？比如 ok/bad？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我懂一点了。那告警是不是也要我做？我不太会。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 数据架构师说要ODS/DWD/DWS/ADS，还有硬失败隔离、软失败打flag，线上缺新版本就用旧版本加标记。现在我到底先写哪块？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）把气象数据拉下来存ODS。2）做个清洗到DWD。3）做质量校验，失败就隔离或者打flag。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则…  \n- 地块id、日期这些不能空。  \n- 同一天同一地块别重复。  \n- 气象晚了就算延迟，打标。  \n- 雨量不能是负的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "血缘是要存source_file那些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道…做个表？反正别让它进下游。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要把所有数据都扫一遍很费？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警阈值我随便填个5%？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 质量校验这块你们咋验收？我得写哪些测试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码也要我弄？我只会打个true/false。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@导师 测试说要每条规则正反例，还要原因码，API要带degraded和原因。还有ADS缺新数据别产新版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就先做气象这条，按dt增量，失败进quarantine，软的打WARN，再把degraded原因码接到API。其它先不碰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

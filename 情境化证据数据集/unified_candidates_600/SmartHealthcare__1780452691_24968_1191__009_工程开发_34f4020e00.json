@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在HIS处方提交链路资源受限背景下，与导师围绕并发拦截方案、降级策略与审计机制持续沟通（5轮），其中在并发限流与降级实现部分与切面拦截开发沟通（1轮），并最终确定AOP切面+Semaphore限流+有界队列+溢出降级异步写审计方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想直接用Spring AOP加个自定义注解，在切面里同步调推演引擎。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就丢到线程池里异步跑？或者塞Redis队列里排队？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "HIS里不让加Redis，内存又只有几十兆，高并发处方拦截怎么搞？有没有不费资源的现成玩法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Semaphore加有界队列，满了就放行。这样不用外部依赖确实省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "队列大小我随便设个100吧？审计表就建个单表，把处方ID和降级原因存下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "AOP切面加Semaphore，队列长度20，降级异步写审计表。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在维产联调接口与事务控制设计背景下，用户与导师围绕分布式事务选型、补偿逻辑与防误发机制持续沟通（5轮），其中在事务选型与补偿实现部分与后端联调开发沟通（1轮），在防误发停机指令机制部分与联调调度架构师沟通（1轮），并最终形成基于本地消息表与Saga的事务控制、接口幂等与防重放、停机指令双人复核与审计、排产拒绝触发降级运行等联调开发基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备用强一致性的分布式事务，比如2PC或者TCC，保证维修工单下发和排产调整的原子性。接口统一用RESTful，加上Token鉴权应该就够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "长事务确实容易出问题。补偿的话，TCC有try阶段可以撤回。误发停机，再加个角色权限校验？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工业联调接口用TCC还是Saga更好？补偿逻辑具体怎么实现？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误发停机指令的防范，加权限校验够吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本地消息表加Saga，接口幂等，停机指令双人复核加审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "排产拒绝的话，亚健康状态不回滚，还是保持报警。补偿事件就是发一个取消维修工单的事件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 事务控制用本地消息表加Saga，不用2PC和TCC。2. 接口必须幂等，加时间戳和nonce防重放。3. 停机类指令必须双人复核接口校验，全链路审计留痕。4. 排产拒绝的补偿不是取消，是发降级运行指令。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

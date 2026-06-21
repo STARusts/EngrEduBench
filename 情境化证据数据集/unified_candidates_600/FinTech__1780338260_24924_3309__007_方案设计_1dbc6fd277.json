@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态对冲高可用容灾方案设计背景下，用户与导师围绕容灾架构选型（主备切换、双活脑裂与成本、热备重放）及核心约束持续沟通（7轮），其中在微秒级容灾架构与状态保存部分与高并发系统架构师沟通（1轮），在切换瞬间重复发单与漏单合规红线部分与合规风控专家沟通（1轮），并最终确定同城热备加重放方案及落实幂等键与校验约束至设计文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄个主备切换吧，主机挂了自动切到备机，保证服务不断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就同步一下状态呗，在数据库里记一下发到哪了，备机起来先读库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态对冲节点要是挂了，怎么保证微秒级切过去，而且订单状态不乱？数据库同步是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "容灾切换瞬间如果出现重复发单或者漏单，合规那边怎么判定？有什么红线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说要用同城双活，状态放内存网格里共享，发单得带幂等键。合规说超限必须熔断，不能盲目对冲。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "脑裂确实没想过。双活成本高是高，但安全嘛，贵点就贵点呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重放的话会不会慢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太确定现在的指标定多少。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

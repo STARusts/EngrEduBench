@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发Sprint首周背景下，用户与导师围绕果径特征提取算法选型、TCN时序对齐与SensorID合规脱敏持续沟通（5轮），其中在边缘算力可行性与验证环境基线控制部分与时序特征工程师沟通（2轮），并最终形成多尺度统计特征加轻量TCN、输入侧哈希脱敏及剔除环境协变量的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然是高频微米级数据，我打算直接上轻量Transformer做时序编码，自注意力机制能最好地捕捉膨大节律的长期依赖，这比手工拼特征工程优雅得多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@时序特征工程师 在4G网关加NPU的配置下，微米级果径传感器20Hz采样，直接跑时序Transformer编码现实吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "纯统计特征对噪声太敏感，1D-CNN感受野又受限，容易丢失长周期节律。折中一下，用多尺度滑动窗口提取统计特征作为基础，再过一个小型TCN？TCN的因果卷积很适合这种绝对不能看到未来数据的控制场景。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "TCN的膨胀因果卷积我对齐齐设置确实不熟，之前主要做RNN类的时序任务。这是我的能力缺口，我今晚先把DeepLearning.ai的TCN实战课过一遍，把时序对齐的Padding逻辑跑通，明天直接把对齐策略迁移到果径序列的膨胀卷积层里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "果径数据就是一串float，加上时间戳，哪有什么位置隐私。只要不传果园GPS坐标就行了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我在特征提取模块入口加一层ID哈希映射，只保留哈希后的ID和果径值。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证方面，我准备用两组数据：一组是人工注水模拟的膨大曲线，一组是真实干旱胁迫下的停滞曲线，看提取的特征向量余弦相似度能否有效区分这两种节律。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在特征提取后把温湿度作为协变量剔除，或者在输入时做正交化处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那MVP方案就定：多尺度统计特征加轻量TCN，输入侧SensorID哈希脱敏，验证采用注水模拟与干旱胁迫的双组对照，并剔除环境协变量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

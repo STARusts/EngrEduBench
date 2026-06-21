@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在隐态思流解析特征抽取模块落地背景下，用户与导师围绕特征抽取方案选择、可解释性要求及验证约束持续沟通（6轮），其中在行为图结构编码与映射逻辑部分与算法实现极客沟通（2轮），并最终确定硬编码行为转图加PyG跑GCN的方案及图特征方向差异验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我想直接上HuggingFace的multimodal库，把文本和操作日志拼一起，调个预训练模型直接出embedding，应该挺快的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这，我加个时间戳进去行不行？或者找个带时序的预训练模型，网上好像有TimeSeriesTransformer之类的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "草稿删改和停顿这些行为怎么编码？我本来想直接用预训练模型出向量的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自己写编码器和GCN？这也太麻烦了吧，有没有那种能自动把序列转成图特征的工具包？或者我拿PyG调个现成图模型试试？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉自己写映射很容易出bug，能不能找个类似AutoML的结构，让它自己学怎么把行为映射成图？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，可解释性确实不能丢。那我就用PyG搭GCN，行为转图的映射逻辑按极客说的写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征这块就是：行为序列硬编码转图，PyG跑GCN出图特征，再拼上文本语义向量。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

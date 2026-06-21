@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在可验证数字藏品体验链路平台权益核验服务开发背景下，用户与导师围绕接口契约/幂等边界、失败码分层与HTTP映射、trace_id兜底与返回结构持续沟通（7轮），其中在redeem_submit幂等键来源与TTL、幂等命中返回口径部分与后端技术负责人沟通（5轮），并形成实现与单测交付拆分方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在卡在一件事：核验接口我想直接接个现成鉴权中间件就完事，但你之前说要分失败码层级、还有trace兜底，我怕我写着写着就乱了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就两个？一个是前端点“核验”调用的 verify，一个是兑换提交 redeem_submit。verify 可能给个 true/false，redeem_submit 就扣库存发凭证。大概这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看很多人用 requestId，然后 Redis setnx 一下，重复请求就直接返回上次结果。这个我可以抄一下。幂等键就 requestId？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端技术负责人 幂等这块到底咋搞？我现在只有 requestId 的想法，redeem_submit 要不要幂等键？键从哪来比较靠谱，结果要存多久？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "nonce 就是随机串？前端传我就信了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "verify 呢，也要幂等吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等命中时要返回啥？200 还是 409？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我大概懂了。我回去把 sha256 那套粘进去。trace_id 要跟这个一起存是吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 后端TL说 redeem_submit 必须幂等，idem_key 用 user_id+benefit_id+client_nonce 做 sha256。幂等表存 status、券码/交易id、created_at、trace_id、err_code，TTL 先按 7 天。重复同 idem_key 返回 200 原结果；同用户同权益但不同 idem_key 且已成功，返回 409 和 BENEFIT_ALREADY_REDEEMED。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想直接抛异常，然后全局拦截器转成 code/msg。code 可能就写 40001、40002 这种。分层我不太会分，就照网上通用那套：参数错、鉴权错、系统错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要写很多 if…else。有没有省事点的，比如接个现成错误码库？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我调试的时候习惯直接把 user_id、benefit_id 都打印出来……那我是不是要改下日志？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 trace_id 兜底这块我怎么写得不别扭？我怕每个接口都写一遍生成逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只对 redeem_submit 兜底？verify 不兜底会不会断链？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我现在要把这些写成任务拆分吗？我怕我漏东西。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能做：1）redeem_submit 接口：验参、鉴权、幂等表写入/命中返回；2）失败码先把你说的那几类写成枚举；3）中间件做 trace_id 读取和 redeem_submit 兜底生成；4）简单单测覆盖幂等命中和已兑换 409。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "client_nonce 超长我之前没想到。我加个最大 64？还是 32？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好。我按 7 天先上。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我现在就按你说的错误码分层去写返回结构，返回体我准备统一成 `{code,message,data,meta}`，meta 里放 trace_id、trace_source。这样前端也好处理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

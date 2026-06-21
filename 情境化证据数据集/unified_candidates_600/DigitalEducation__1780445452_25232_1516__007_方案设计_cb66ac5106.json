@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在灵感沙盒高可用与隐私设计背景下，与导师围绕沙盒降级兜底、行为序列脱敏、加噪验证及隐私预算熔断持续沟通（8轮），其中在沙盒算力阻塞降级部分与轨迹溯源架构师沟通（2轮），在行为序列重新识别风险与脱敏部分与合规守门人沟通（1轮），并最终形成沙盒降级、脱敏、验证与熔断四条硬约束基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "沙盒崩了破壁信令就推不出来，等于系统白瞎。数据泄露的话，搜索词和停顿记录被看光，合规肯定过不了。我之前想的就是做个主备库，然后把用户ID哈希一下。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力阻塞，我，我就没想过这块。是不是得限流？但限流又跟前面信令流控冲突了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果概念碰撞的沙盒引擎卡死了，怎么保证破壁信令还能出？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "搜索词和停顿动作连在一起，就算没ID，感觉也能猜出是谁。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "搜索词和停顿特征这种序列数据，脱敏怎么做？只脱ID好像不够。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加噪会不会把破壁的触发条件给弄坏了？本来停顿3秒触发，加完噪变成1秒，乱推一气。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我，我就跑两组数据对比？一组加噪一组不加。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "验证的时候重点看epsilon取多少能让破壁率和隐私平衡。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "预算耗尽就停掉轨迹采集，只靠本地缓存推信令？这样系统还能转，就是不够精准。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 沙盒降级用本地高频概念缓存加内存快照；2. 搜索词K-匿名泛化，停顿特征抹绝对时间加差分噪声；3. 验证用固定固着样本调epsilon看破壁率；4. 隐私预算耗尽熔断，切纯本地信令。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

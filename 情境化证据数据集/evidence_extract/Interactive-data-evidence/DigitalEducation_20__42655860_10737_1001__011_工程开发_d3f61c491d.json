@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在数字教育内容合规的审计日志与证据导出设计背景下，用户与导师围绕审计事件类型、关联ID（request_trace_id/decision_id）、两档导出与异步任务折中方案持续沟通（10轮），其中在字段口径/不可变快照/留存脱敏与manifest部分与数据治理经理沟通（1轮），在decision_id幂等、snapshot防篡改与导出任务实现部分与后端负责人沟通（1轮），在403/409/DEGRADED可复现验收用例与幂等链路部分与测试负责人沟通（1轮），并口头列出event/snapshot/export_task字段与接口状态分支及TTL/大小限制。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着就用现成的审计中间件打点，存 user_hash、action、time、resource_id。证据导出就把 citations 摘要塞进去，再加个结果 status。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件类型…大概是：\n1) content.save\n2) content.publish\n3) compliance.block\n4) compliance.override？\n5) content.takedown\n6) appeal.submit\n差不多这些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想直接用 trace_id，框架里自带，不用自己造。submission_id 我怕要改一堆接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 审计日志和证据导出这块，字段口径一般怎么定？哪些要做不可变快照，留存和脱敏怎么弄？我们现在有 citations 摘要和 hash 传参的约束。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是要分 event 和 snapshot 两张，event 可查，snapshot 锁一次 decision。citations 摘要最好不直接全量明文，至少 hash 一份。导出时带一个 manifest，能用 snapshot_hash 校验没被改。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是就两档导出？普通人只给 hash+引用位置，法务权限再带原文片段？我怕实现复杂…能不能就统一导出都带原文，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 decision_id / 证据快照 / 导出这块怎么落？我想尽量复用现成的 tracing 和导出库，但导师要我加不可变快照、两档导出。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步任务这块我本能想直接上现成的队列组件，但我们现在环境里好像还没配齐。要不先做同步导出，限制包大小？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用数据库表当任务表？轮询跑一个 worker？就是…我怕不稳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我做个 export_task 表：task_id、evidence_id、mode(standard/legal)、status(PENDING/RUNNING/DONE/FAIL)、created_at、updated_at、expire_at、error_code。worker 就是我们服务里起个定时任务扫 PENDING，锁一条跑，生成包上传对象存储，DONE 后写 download_url。幂等靠 (evidence_id, mode) 唯一索引，重复点导出就返回旧 task。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "DEGRADED 我理解是附件拉不到，比如对象存储超时，就只生成 manifest，不带附件，然后 status 写 DEGRADED？测试就把对象存储地址配错…或者用 mock？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 审计日志+证据导出这块，你能给我一套可复现的用例吗？重点是 403/409/DEGRADED，还有引用标注那套 citations 摘要要能串到 evidence_snapshot。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住了：409 的时候 decision_id 可能空，导出 403 要写 export.denied 事件，DEGRADED 用开关强制失败附件拉取。还有重试幂等：快照一条，event 两条允许。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我按我能写的范围说一版：  \n1）审计 event：event_id、occurred_at、actor_hash、actor_role、object_type+object_id、action、request_trace_id、result、error_code、decision_id（可空）、client+client_version。  \n2）证据快照 snapshot：evidence_id、decision_id（唯一）、decision_time、decision_outcome、rules_hit(带版本)、license_refs(带版本)、citations_digest（先存结构化摘要+再算 hash，明文片段不进标准包）、evidence_refs、content_version、snapshot_hash、supersedes_id（可空）。只插入不更新。  \n3）导出：POST /evidence/{evidence_id}/export?mode=standard|legal -> 返回 task_id。创建时做权限，legal 需要更高权限还要写 reason。GET /export/task/{task_id} 查状态，GET /export/download/{task_id} 再校验权限。  \n4）状态：403 权限不够；409 evidence 不存在或 superseded；DEGRADED 附件拉取失败只出 manifest，manifest 里写 attachments_included=false，同时 task 的 result=DEGRADED。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "导出包我给个 expire_at，比如 7 天删；包大小上限先 100MB，超过就直接 FAIL 并提示走线下取证？event 里写 export.failed + error_code=PAYLOAD_TOO_LARGE。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

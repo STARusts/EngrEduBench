@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在透析管路凝血感知与抗凝推注系统工程开发背景下，用户与导师围绕感知固件1kHz确定性采集卡点解法及验证口径持续沟通（3轮），其中在采集稳定性与DMA替代方案部分与感知固件开发沟通（2轮），在时序抖动容忍度与数据脱敏部分与边缘架构师沟通（2轮），并最终形成改用硬件DMA采集、对照测试验证口径及数据最小化合规约束的决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我拆了三个任务：1. 适配费森尤斯和贝朗两家的通讯协议；2. 把采集频率顶到1kHz；3. 做丢包检测和置信度打标。新鲜度靠时间戳和看门狗双重保障，超时就置位置信度标志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨机型适配搞定了没？1kHz能稳住吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边能容忍这个抖动吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "软件轮询有抖动，加缓冲又破坏时序。咱们用的MCU不是有高级定时器和DMA吗？能不能绕开CPU，让硬件定时器触发ADC，DMA直接搬数据到RAM？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块确实是我的知识盲区，我对这颗STM32H7的DMA双缓冲和D-Cache维护机制不熟。我今晚把Reference Manual里DMA和Cache那几章啃了，写个最小验证代码把环形缓冲区跑通，明早把方案合进来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设计个对照测试：软件轮询和硬件DMA同时跑，采集同一个方波信号。用逻辑分析仪抓GPIO翻转测实际间隔，算P99延迟和方差。只要DMA方式的抖动方差小于5us，就算达标，否则不能合入主干。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "固件层只剥离纯物理量（压力值、流量值、时间戳），设备标识在边缘网关入网时做单向哈希脱敏，原始帧里的患者ID直接截断不往上送。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策点：放弃RTOS软件轮询，改用硬件定时器触发+DMA搬运实现1kHz确定性采集。验证动作：明早跑通DMA双缓冲最小代码，对照测试确认抖动方差<5us。合规约束：采集层剥离患者ID，只传裸物理量和时间戳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

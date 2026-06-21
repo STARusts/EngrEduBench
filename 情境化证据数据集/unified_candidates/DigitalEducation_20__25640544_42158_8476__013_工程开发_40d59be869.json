@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在教师端批改闭环开发背景下，用户与导师围绕批改状态机、幂等与诊断触发时机持续沟通并收敛默认链路与测试用例（10轮），其中在幂等键/任务去重/订阅指针与撤回回滚实现上与后端负责人沟通（3轮），在逐题实时体验诉求与进度接口兜底折中上与前端负责人沟通（2轮），在任务payload最小化、鉴权审计与日志脱敏要求上与合规与数据治理官沟通（2轮），并形成可执行的状态机、接口最小集合与约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把闭环拆成三段：批改写入、诊断触发、订阅写入。状态机上我倾向“草稿批改/已提交批改/已撤回/已作废”，关键是提交那一步要幂等，避免老师重复点导致重复诊断和重复订阅。触发时机上，我偏向“提交批改后异步触发诊断”，而不是每次改一题就触发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我站“提交后统一算”为默认路径，理由：1）一致性更强，诊断输入是完整批改结果；2）避免老师改到一半就触发诊断造成反复写订阅；3）资源成本可控。折中是：前端可以做“实时预览”但只在本地/轻量接口算一个“临时错因草案”，不落库；真正写诊断与订阅只认提交事件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等键我想用 `assignment_id + teacher_id + submission_version`。每次“提交批改”生成一个 version（递增或时间戳），后端以 version 作为唯一提交批次。诊断任务以 `diagnosis_job_key=assignment_id+version` 保证重复提交同版本不会重复排任务。撤回的话：如果 version 已经提交并触发诊断，撤回要把该 version 标记为 REVOKED，并让订阅侧只对“最新有效 version”生效；旧 version 的订阅记录要可追踪但不再推送。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 幂等这块你们坚持的做法是什么？`submission_version` 用自增、时间戳还是后端生成的提交号？诊断任务如何去重，订阅写入怎么保证不会重复或串版本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撤回怎么做？如果诊断已经跑完并写了订阅，再撤回会不会留下脏数据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "诊断任务如果正在跑，撤回时怎么办？要不要取消任务？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "后端方案的优点：不需要分布式锁；幂等边界清楚，重试靠 token；订阅用指针避免重复推送。复杂度增加在：前端要管理 token 的重试一致；撤回要定义“回滚到上一个有效 commit”的查询逻辑；另外要保证“历史诊断不可下发”在所有下游都检查到。还不清晰的是：批改草稿怎么存，是否也用同一套 commit 表，还是单独 draft 表。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 你们要逐题实时算的核心诉求是什么？是老师需要边改边看到错因和分层建议，还是担心提交后等待时间？如果后端只在提交后落库诊断，前端能不能做本地预览但不写订阅？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果十几秒是主要问题，那可以“提交后异步+前端轮询/推送进度”，同时给一个“先给粗粒度班级错因统计”的快速结果？逐题调用诊断接口会把后端打爆，也会产生中间态脏数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我听懂了，你们底线是：1）提交后不要黑盒等待；2）改到一半能看到趋势。那我建议：草稿阶段前端本地聚合错因候选（基于题目知识点+错误类型），服务端提供一个轻量 `preview_aggregation` 规则接口可选；提交后才触发正式诊断与订阅，并提供 `diagnosis_job_status` 进度接口。你们能按这走吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "决策我选“提交后统一诊断+订阅写入”为唯一真值链路。实时需求用“草稿期本地/轻量预览聚合”满足，不落库不写订阅。接口最小集合我建议四个：  \n1）`POST /grading/draft`：保存草稿（可选），返回 `draft_id`；  \n2）`POST /grading/commit`：提交批改，入参带 `client_commit_token`，返回 `grading_commit_id`；服务端唯一约束 `(assignment_id, teacher_id, token)`；  \n3）`POST /diagnosis/trigger` 可内置在 commit 内部，不对前端暴露；对前端只暴露 `GET /diagnosis/jobs/{grading_commit_id}` 返回 `QUEUED/RUNNING/DONE/FAILED` + `error_code`；  \n4）`POST /grading/revoke`：撤回 commit，导致订阅指针回滚到上一有效 commit。  \n测试上：我会补三类可复现用例：  \n- 幂等：同 token 重试多次只产生一个 commit、一条诊断任务、订阅指针不抖动；  \n- 版本串写：先 commit A 再 commit B，诊断 A 晚于 B 完成时，订阅指针仍指向 B（用“只允许更新为更晚 commit_time”的条件）；  \n- 撤回：诊断进行中撤回，最终结果落库但标记 INACTIVE，不触发推送；订阅指针回滚正确。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，时间戳不稳。我改成“指针更新必须基于当前指针的 compare-and-swap”：订阅指针表带 `current_grading_commit_id` 和 `row_version`，更新时携带期望的 row_version；只有在“提交链路”里按顺序更新成功。诊断任务完成只写结果，不改指针；推送侧根据指针取当前 commit 的练习包。这样就不会出现 A 反超 B。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 批改闭环这块，提交批改触发诊断任务时，任务payload我们准备只带 `grading_commit_id` 去服务端拉取明细。你这边对payload字段、日志脱敏、以及撤回/删除的留痕有硬要求吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计记录里能存 teacher_id 吗？算个人信息吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。我把这几条落到接口和日志规范里：payload只传 commit_id；服务间鉴权+审计表；撤回只做业务失效不做物理删除；排障日志不打明文标识。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终清单我这样发：  \n- 状态机：`DRAFT`（可选）→ `COMMITTED` →（可选）`REVOKED`；诊断结果状态 `ACTIVE/INACTIVE` 由 commit 状态决定。  \n- 幂等：前端提交带 `client_commit_token`；后端以 `(assignment_id, teacher_id, token)` 唯一约束；返回 `grading_commit_id`。  \n- 触发：仅 `COMMITTED` 触发正式诊断；逐题不触发、不写订阅。  \n- 订阅：维护“当前生效订阅指针”只在 commit/revoke 时变更；诊断完成不改指针，避免乱序。  \n- 撤回：`POST revoke` 将 commit 标为 REVOKED，并回滚指针到上一有效 commit；诊断任务不必取消，落库标 INACTIVE。  \n- 教师体验：草稿期提供本地/轻量预览聚合；提交后提供 `job_status`（QUEUED/RUNNING/DONE/FAILED+error_code），避免黑盒等待。  \n- 合规：任务payload仅 commit_id；服务间鉴权；审计记录访问行为；排障日志脱敏，不出现学生/教师明文标识。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

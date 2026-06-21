@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在“万人同场互动+云台编排”方案设计收尾背景下，用户与导师围绕安全边界、风险清单、限流维度、容灾降级与验收口径持续沟通（12轮），其中在反作弊证据链、鉴权/密钥/审计与风控/审计故障降级部分与安全风控工程师沟通（3轮），并整理为可评审的章节结构与要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "刷票这种肯定有。还有接口被刷，房间被打挂。容灾我就想到多机房，主备切一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "观众端就是外挂，模拟点投票。SDK可能被人改包。网关就是DDoS把连接撑爆，影响就是大家互动都没了。控制点我能想到限流、封号。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全风控工程师 反作弊证据链要怎么设计？还有鉴权、密钥、审计在我们这种互动云平台上一般怎么做，给我能写进方案设计里的点就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备指纹这块是不是会踩隐私？我不太确定要不要写进方案里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问个容灾相关的：风控策略服务挂了，或者审计日志写不进去，会不会把主链路拖死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想分三块：鉴权接入、反作弊、容灾降级。鉴权写appKey签名+roomToken。反作弊写证据链四层。容灾写风控超时怎么处理、审计失败怎么处理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按IP？还有按用户。房间也可以吧。具体阈值我不知道怎么写。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "互动事件超过就丢弃吧，不然排队延迟更炸。连接层超过就拒绝连接。房间事件总量超过就降级成“只看不投”？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先做安全这套，不然刷票就没法解释。双活我怕太大了，可能来不及。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "双活要改很多，成本高，也会影响延迟。我觉得我们先保证单地域能扛住攻击、出事能降级，不至于全挂；双活先留成后续迭代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RTO是恢复时间？RPO是丢数据时间窗口？差不多这意思。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "互动事件RPO可以有一点点丢，RTO要短。编排配置RPO要接近0，RTO也要短，计费接口更严格。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就做演练？比如把风控服务停掉，看会不会阻断主链路。还有模拟刷票，看规则能不能命中。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对抗：压测投票刷量，看命中率和误伤率？故障：风控超时情况下互动成功率和延迟变化。审计：抽样追踪一个封禁，能不能从日志串起来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不知道谁对。同步看起来更安全，但会卡延迟。能不能关键操作同步，普通投票异步？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我定三类：A计费/管理端变更同步判定失败就拒绝；B剧情分支同步判定，超时就降级到默认分支？C应援投票异步判定，命中就降权或验证码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这八条我能照着塞进去。第6条里“B剧情关键”的回退，我先写成“安全态回退”，不写具体分支。还有隐私最小化我会在证据链那条里加一句“保留期/目的限定”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

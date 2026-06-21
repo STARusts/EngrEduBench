@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在寻优链路压测与调优背景下，与导师围绕反演计算锁瓶颈、核销记账吞吐与原子性持续沟通（8轮），其中在压测指标与合规打标部分与联调测试工程师沟通（1轮），在算法并发锁竞争部分与算法引擎主程沟通（1轮），并形成对照压测方案、攒批写入策略及调优边界结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算基于JMeter构建压测脚本，模拟多路固废投料并发触发反演寻优，然后自动触发核销。QPS目标初步定在200，但我不太确定反演算法这边的计算耗时会不会成为瓶颈。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "除了TPS和响应时间，反演计算这种CPU密集型任务，需要重点采集哪些JVM或系统级指标来排查级联延迟？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还没加压测标，这个确实容易引发合规问题，我补上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优算法在多线程并发调用时，内部有没有共享的可变状态？我担心高并发下存在锁竞争导致P99飙升。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我刚查了JIT编译对锁的优化机制，发现synchronized在极端争抢下会直接膨胀为重量级锁，开销剧增。如果把全局最优解的更新改成基于CAS的无锁结构，或者用StampedLock的乐观读，是不是能减少阻塞？我想把这种无锁化改造迁移到我们的寻优引擎里试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备设计两组对照实验：一组改CAS，一组改分段锁。压测时固定并发线程数400，持续5分钟，对比两组的P99延迟和CPU利用率。这样能明确写冲突下的真实边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "CAS方案在并发400时，P99延迟比synchronized降低了40%，但CPU利用率高了15%；分段锁方案延迟降了30%，CPU只高了5%。不过，核销端还是偶发乐观锁冲突重试超时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Append-Only写入目前是逐条提交。我考虑把高并发下的核销记账改成小批量攒批写入，比如每50ms或凑满50条刷一次PG，这样能大幅降低DB交互次数，提升吞吐上限。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用PG的COPY命令或者批量INSERT配合事务控制，保证整批原子性。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 寻优端：将全局最优解更新的synchronized替换为分段锁，在并发400下P99延迟降30%，CPU开销可控；CAS方案CPU消耗过高暂不采用。2. 核销端：Append-Only写入改为50ms定时攒批提交，使用批量INSERT保证原子性，吞吐提升3倍，乐观锁冲突率降至0.1%以下。3. 边界：当并发超过600时，PG写延迟仍会上升，需引入消息队列削峰，但当前产线设计容量400已满足需求。4. 合规：压测数据已全量打标隔离。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

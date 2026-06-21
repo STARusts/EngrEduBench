@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在核心逻辑层协控策略落地困难背景下，与导师围绕边端模型部署、碳迹结算延迟与合规熔断持续沟通（5轮），其中在模型算力与状态快照部分与算法设计师沟通（4轮），在内存限制与结算熔断部分与协控开发主管沟通（4轮），并最终形成协控逻辑落地架构共识。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那伪码跑在边端到底要多大算力？你卡在哪了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "128M确实跑不动训练。查表的话，状态空间那么大，表也建不完啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "咱用异步消息队列隔开行不行？推理放独立线程，主控不阻塞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但算法那边能接受只看3轮？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "30轮全放内存肯定爆。要不这样，边端就做推理，重训练全放云端。边端只下发模型参数？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "50毫秒内闭环，边端就必须把碳因子挂载和结算做完。云端只做异步对账。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "熔断这词我熟。就是加个try-catch，异常了就返回默认安全值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "冻结设备控制权？这会不会太严了，万一大面积误杀呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边端主控用异步队列隔离，推理独立线程；2. 状态快照只留3轮，重训练上云端；3. 碳迹结算同步执行，失败直接熔断并冻结设备，写审计日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

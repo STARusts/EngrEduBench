@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多视角切换的事件驱动数据流方案设计背景下，用户与导师围绕事件拆分、观测点映射、口径计算与合规字段持续沟通（9轮），其中在最小事件集与统一envelope及source/target字段规则上与实时数据工程师沟通（2轮），并确定switchTxnId主键、Requested/Routed/Issued/Rendered事件与失败/时延口径及最小验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是播放器点一下，然后就切了。事件就发一下“切换了”这种。然后链路上都带上你说的那三个 id 就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件名就……SwitchStart、SwitchEnd？失败就是没 End。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端上吧，端上最知道有没有出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时数据工程师 事件最小集合怎么定？还有你说的 envelope 字段要放啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "envelope 字段呢？就那三个 id 吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "switchTxnId 我之前没想过。我理解就是每次点切换生成一个 id，然后后面都带着？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 X 秒窗口固定吗？还是要分网络？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一要加 switchTxnId。第二首帧渲染要用 FirstFrameRendered。第三就是服务端也要有 ViewSwitchRouted 这种，不然只看端上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "四类就是……端上、网关、编排、播放器？我有点记不牢。那就：端上请求是 ViewSwitchRequested，编排是 ViewSwitchRouted，网关是 StreamAccessIssued，播放器是 FirstFrameRendered。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Requested 里放 targetViewId？因为点的是目标。Routed 里也放 targetViewId。Rendered 里也放 targetViewId。source 就……可能不放？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时数据工程师 sourceViewId 和 targetViewId 放在哪些事件里比较标准？我怕写乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延就是 Requested 的 eventTime 到 Rendered 的 eventTime 做差，然后算 P50/P95。重复上报就用 eventId 去重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "取最后一条更准？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在 ViewSwitchRouted 里放 reason，写“prewarm / ondemand / degrade”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接放进去？方便排查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是压测一下看有没有事件丢？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能，闭环率和造 10 次失败这两条我写上去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "X 先填 3 秒吧。viewId 我写成 sourceViewId 和 targetViewId 两个，省得搞混。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

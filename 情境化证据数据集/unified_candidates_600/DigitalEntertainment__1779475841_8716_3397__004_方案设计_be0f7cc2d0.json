@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在弹幕引流引擎接入与清洗架构设计背景下，用户与导师围绕清洗层级选择、Flink反压、验证方案及兜底策略持续沟通（8轮），其中在接入层性能与反压风险部分与流式计算架构师沟通（2轮），在合规漏报与兜底拦截部分与合规与风控专员沟通（2轮），并形成正则加词典过滤与轻量兜底校验的折中方案及压测计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "之前定了3秒红线，这块得守住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流式计算架构师 你们具体卡在哪了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控专员 你觉得呢？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "两位说得都对，安全肯定第一，性能也得保。要不我们在接入层多加几个Flink节点？分摊一下压力。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我其实不太懂Flink反压这块，底层机制没吃透。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我今晚就看Flink官方文档的反压章节，明天上午跑个本地demo压测一下延迟数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是清洗方式，对照组一组用正则一组用模型。看哪个不超3秒。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控专员 正则漏掉的那些高风险变体，能不能先给个高频黑话词典？接入层正则加上这个词典，漏报率能不能压到5%以内？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接入层用正则+词典硬抗，保证延迟；引流消费前再加个轻量校验兜底。这样既不卡接入，也不漏黑产。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "兜底校验应该很快吧，几十毫秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接入层用正则加黑话词典过滤，不做模型；语义清洗异步推到下游；引流消费前加轻量合规兜底校验。验证方案是5万到15万三波压测，看延迟、漏报和CPU，前置模型超2秒就毙。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

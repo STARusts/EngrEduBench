@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在交互边界动态拓扑方案设计背景下，用户与导师围绕情绪流形降维映射、计算延迟与合规冲突拆解持续沟通（6轮），其中在流形降维计算与增量投影部分与边界拓扑设计师沟通（2轮），在业务延迟红线与脱敏合规部分与沉浸业态架构师沟通（2轮），并最终形成边缘端增量近似降维与中心端边界映射的折中架构及合规处理方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "映射的话，我看了下，Neo4j这种图数据库能不能直接搞定？或者有没有那种拓扑映射的开源框架能套一下？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "流形降维我就不太熟了。是不是有那种UMAP的Python包？调一下包能不能对付过去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流形到离散边界的映射，一般有没有比较方便的现成组件？自己写感觉很容易出错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务上对这步映射能容忍多大延迟？如果算得太慢有没有兜底？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算得准就得慢，还要脱敏。这有点难搞啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一边要算流形同调，很重；一边要200ms内出结果，还不让存原始数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能边缘端先把降维做了？只把低维的拓扑坐标传上来。这样中心端算得快点。不过UMAP调包在边缘端跑得动吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "增量近似？听起来有点复杂。有没有这种增量降维的库？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上行接口只留拓扑坐标和图索引字段，原始特征在边缘端用完就丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘端用增量近似流形投影，算出低维拓扑坐标，不存原始数据，只传坐标和图索引给中心端。中心端做边界映射，保证200ms内下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

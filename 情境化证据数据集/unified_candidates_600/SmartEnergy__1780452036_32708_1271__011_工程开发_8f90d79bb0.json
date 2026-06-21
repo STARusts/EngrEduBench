@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨季蓄池集成测试验收背景下，用户与导师围绕测试工况覆盖、反演误差校验口径及滞后验收红线持续沟通（4轮），其中在工况用例与精度校验部分与测试验证工程师沟通（2轮），在查表越界兜底部分与算法实现工程师沟通（1轮），并形成Bootstrap算置信区间、补阶跃工况、加线性插值兜底及阶跃滞后仅预警的测试修订方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "集成测试我就把所有模块启动跑一遍长周期数据行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "集成测试咋跑？我直接灌全量数据看平均误差行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "置信区间咋算？我只懂算平均和最大误差。极端温度阶跃我代码里也没写触发条件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重采样我之前搞性能测试时用过Bootstrap，我把它挪过来算反演误差的置信区间，能看出来误差波动是不是随机的。阶跃工况我加个温度突变注入。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "查表法碰到温度突变会不会查越界？要不要加插值兜底？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂，加线性插值。测试用例就按那三组跑。置信区间95%在1.5%以内就算过？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "滞后是因为潜热释放有延迟吧？查表法加速了计算，正常工况滞后肯定能缩短。但阶跃工况下潜热模型本身就不准，这时候算出来的滞后是不是不能当拒收依据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我去改脚本加工况，用Bootstrap算置信区间，补上线性插值兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在孤岛反演系统特征提取流设计背景下与导师围绕业务特征定义、流式计算实现与容错机制持续沟通（7轮），其中在业务特征定义部分与关联图谱业务主理沟通资金孤岛与隐匿担保特征（1轮），在流式管道实现部分与资金穿透数据规划师沟通2跳穿透与状态存储（1轮），并最终形成特征提取流设计约束与容错降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是在Flink里加几个算子，算点度中心性、连通分量啥的，然后写回图里。这块Flink GDL库有现成的API，我直接套应该就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务上资金孤岛到底指啥？我光算连通子图行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "2跳穿透聚合，这个计算量不小啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink流里怎么做这种聚合？状态存哪？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态丢了确实会漏算。水位线之前定的是按账务时间，图库抖动的话，异步IO等不到结果，算子会卡住吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态TTL我得跟业务再对一下担保休眠期。异步超时就降级算1跳，打缺失标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征提取流设计约束：1. 核心特征三个：圈内周转率、对外敞口比、隐匿关联度；2. 隐匿关联用1跳状态加异步IO查2跳实现，状态存RocksDB；3. 窗口1小时滑动10分钟；4. 状态TTL按担保休眠期定，不能写死24小时；5. 异步IO超时降级只算1跳，打缺失标记，不能卡流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

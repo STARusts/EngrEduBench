@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨域流转智能合约联调测试背景下，用户与导师围绕合约与跨链网关交互模式、回滚测试及异常留痕持续沟通（6轮），其中在交互模式选择部分与智能合约开发工程师沟通（2轮）、与跨链网关架构师沟通（1轮），并最终形成异步事件驱动、补偿回滚及Event日志留痕的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得直接同步调用最省事。合约里调网关接口，等跨链确认返回，状态一把全更新。异步还要搞事件监听，写回滚逻辑，太绕了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟我本地mock的时候没感觉啊，反正加个timeout就行。超时就直接判定流转失败，状态回滚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我倾向同步，你们觉得呢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步太搞人了，回滚那一堆状态恢复逻辑，我上回写就出过事。补偿合约具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "成吧，看来同步确实不行。那我就按异步写。回滚加个补偿合约。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就造一个跨链超时的测试用例呗。让网关故意不返回确认，看补偿合约能不能把状态改回去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "留痕我加个Event日志行不行？FailedTransfer事件，把资产ID和失败原因打出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改合约代码，先把回滚逻辑补上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

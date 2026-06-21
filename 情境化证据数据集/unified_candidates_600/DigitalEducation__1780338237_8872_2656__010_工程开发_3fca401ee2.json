@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在血缘图谱与链上存证联调背景下，用户与导师围绕落库与上链一致性、异步状态机、异常处理及接口契约持续沟通（4轮），其中在图谱写入接口与状态定义部分与数据血缘设计师沟通（1轮），在上链异步机制与Gas费部分与链上存证开发员沟通（1轮），并最终形成包含异步回调、重试策略与告警阈值的接口契约清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先把指纹模块吐出来的数据接进图数据库，跑通写入逻辑，然后再对接链上存证的接口，把哈希上链。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "强一致吧？写库成功马上上链，失败就回滚图库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱写入接口怎么定义的？如果链上存证失败，图里的节点状态要怎么变？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上链接口是同步调的吗？Gas费怎么算？失败了怎么通知图谱改状态？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱写入先置为pending，存证走消息队列异步上链，成功后回调改状态。Gas费他们建议批量打包或者用ZK压缩。失败超3次进死信队列告警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查询的时候加个过滤条件，只查confirmed状态的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "告警阈值我定10条吧，超过10条就发邮件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我现在去写接口契约，把参数和状态流转定下来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "契约清单：1. 图谱写入接口入参包含fingerprint_id、parent_ids、op_type；2. 初始状态pending；3. 存证走MQ异步，不阻塞图谱写入；4. 回调接口改状态为confirmed或failed；5. 重试上限3次，超限进死信队列；6. 死信队列积压超10条触发邮件告警；7. 图谱status字段加索引。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

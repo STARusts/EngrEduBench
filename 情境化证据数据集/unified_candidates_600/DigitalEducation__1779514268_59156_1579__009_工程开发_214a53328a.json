@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在伴学系统数据清洗与标注规范制定背景下，与导师围绕标注质量、工期约束与弱监督风险持续沟通（4轮），其中在工期成本与安全云效率部分与数据工程师沟通（2轮），在脱敏合规与偏见控制部分与合规与伦理审查员沟通（2轮），并最终形成平衡质量与约束的清洗标注规范要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "清洗端用多重正则加BERT做脱敏复核。标注必须做细，不仅标意图，还要标认知层级、论证结构、隐含假设。为了保证质量，标注一致性Kappa必须到0.85，每条数据三人交叉复核。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "质量不能妥协，Kappa 0.85是底线，低于这数微调出来的模型就是垃圾。时间不够加人，预算不够砍别的地方。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那核心维度人工标，边缘维度用弱监督？或者先标一批Golden Set，用模型预标注辅助？但我对弱监督的置信度评估不太熟，怕引入噪声把模型搞坏。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚看Snorkel相关的论文，重点看概率标注的方差估计和置信度过滤，明天搭个Pipeline试跑验证下噪声率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与伦理审查员 标注这块合规上有什么要求？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前面不是加了NER脱敏吗？偏见多找几个不同背景的人标不就行了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "安全桌面云搭建周期长吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "效率降就降吧，合规没得商量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那标注规范我调整一下：核心意图和认知层级双人标，论证结构用Golden Set+模型预标注+单人校验。Kappa降到0.8，增加组间IAA审查。脱敏加上下文关联检测，标注环境切安全云。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清洗：多重正则+BERT复核脱敏，增加上下文长尾关联检测。标注：核心维度双人标，边缘维度Golden Set+模型预标+单人校验；一致性阈值Kappa 0.8，增加组间IAA审查和偏见测试集探测；标注环境强制使用安全云SaaS，禁止落盘。验证：基于Snorkel的弱监督置信度Pipeline试跑，评估噪声率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

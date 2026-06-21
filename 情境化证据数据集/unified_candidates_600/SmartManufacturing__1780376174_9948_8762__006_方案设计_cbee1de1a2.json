@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在渐进纠偏算法选型背景下与导师围绕温张耦合解耦、工艺安全边界、算力降级及平滑升级持续沟通（4轮），其中在边缘算力下解耦方案对比部分与纠偏算法架构师沟通（1轮），在超调限幅与降级保底部分与复材工艺分析师沟通（1轮），最终形成模糊PID主环加前馈混合架构、超调熔断、开环降级锁死及预留MPC插拔接口的选型基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向模型预测控制（MPC），能直接处理多变量耦合，把张力和温度的约束写进优化目标里。但边缘侧算力是个坎，MPC的滚动优化可能扛不住毫秒级硬实时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工艺红线必须前置"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在边缘算力受限下，MPC和自适应模糊PID处理温张耦合，哪个更稳？解耦效果差多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "前馈补偿温度扰动，把温场当可测扰动前馈掉，主环只控张力，这解耦思路清晰。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "张力超调多少会出褶皱？系统该怎么降级保底？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "弃MPC选混合架构：主环自适应模糊PID控张力，温场前馈补偿，加上8%超调硬限幅和开环降级。这样硬实时和工艺安全都能兜住。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个坑，我刚才只顾眼前算力约束了。如果现在把前馈写死，以后加MPC就得重构。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以在架构上把前馈补偿做成独立插件，主环控制器和补偿器解耦。现在插模糊PID，以后算力够了直接热插拔MPC模块，控制接口定义统一就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级切开环时，张力给定值要锁死在当前安全值，不能突变，否则铺放头会扯带。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

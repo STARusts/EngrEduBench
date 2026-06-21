@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场联调后的压测回归与故障演练背景下，用户与导师围绕事件闭环压测设计、日志字段贯穿、故障注入与门禁条件持续沟通（9轮），其中在回归场景/指标阈值与数据要求上与测试负责人沟通（3轮），在下游超时与消息积压演练注入及验收上与SRE稳定性工程师沟通（3轮），并收敛三场景流量模型、最小日志字段补齐与回归门禁表述。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我后端这边能做的就是把几个核心接口压起来：join、pull active、resume、ack。压测工具我用 k6，先 1k 并发看看。指标就看 p95 延迟和错误率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺口就是我这边没有 client_render_ts，我只能在压测脚本里假一个时间。分支选择和弹幕触发我能模拟成不同 event_type。故障演练我不太会做消息积压，只会把下游 mock 延迟拉高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测回归这块你们一般怎么定门槛？我这边接口是 join/pull/resume/ack，还有事件闭环要算 ack_delay。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "端到端 p95 <800ms 这个是经验值吗？我们现在弱网 ack_delay 之前挺高，但不影响展示。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。错误码分布这块要细到哪些？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE稳定性工程师 故障演练你这边建议怎么做？导师说要下游超时和消息积压两类，我只会把 mock 延迟拉长。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在有 send_seq/ack_seq，但“暂停一个分区消费”我没权限搞。只改消费者速率可以吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验收里提到乱序，我们现在客户端按 event_id 渲染，顺序更多靠 send_seq。我不确定怎么证明“不乱到不可用”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我采纳三场景：A 纯观看、B 高频互动、C 弱网重连。指标我先按测试给的五个：接口 p95、端到端 p95、丢/重复、错误码分布。阈值就先用 e2e p95 800ms，弱网 1500ms。\n故障演练我采纳两类：下游延迟/超时 + 消费者降速堆 backlog，并加 chaos_id。\n我搞不定的是：队列 lag 的指标我这边不知道怎么拿，还有“抽样验证 send_seq 单调”我能写脚本，但不知道字段是否齐。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小集合我这边准备这样打：request_id、session_id、event_id、event_type、send_seq、server_send_ts、ack_receive_ts、ack_seq、ack_delay_ms、degrade_flag、fallback_reason、downstream_latency_ms、error_code。client_render_ts 只能在压测脚本里模拟，不进服务端日志。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "publish_ts 我们事件总线那层有，我加到发送日志里。resume_reason 我之前没加，我加到 resume 接口日志参数里。error_class 我按鉴权/状态/限流降级/下游/内部这几类。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先拍个比例：A 70%，B 20%，C 10%。B 里分支选择每 8 秒一次，弹幕触发每 2 秒一次，ack 全部回。C 里每个 session 30 秒触发一次 resume，顺便拉 active。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比例我参考我们上一轮联调的用例：大多数用户只看，少部分点选，重连更少，所以先用 70/20/10。频率我按互动剧的节奏估的，分支点不可能太密。\n日志量我准备：正常压测只采样 5% 的全链路明细，其余只记聚合计数；故障演练那 10 分钟把采样提到 20%，并且日志保留 3 天，超过就清理。字段里不落内容原文，只留 id/hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "门禁条件我按这版：A+B 必跑；如果错误率≥0.5% 或端到端 p95 超过阈值（正常 800ms、弱网 1500ms）或丢事件率≥0.1% 或重复事件率≥0.2%，就算回归失败；同时日志里必须能用 request_id 串起 session，并能从 publish_ts、server_send_ts、ack_receive_ts 算出 ack_delay 和服务端排队时间；故障演练要看到 degrade_flag 和 backlog/降速导致的 dropped_reason。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

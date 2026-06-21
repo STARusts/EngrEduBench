@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在百万级微操信令接入与网关脱敏背景下，用户与导师围绕流式吞吐与合规脱敏的冲突及折中方案持续沟通（5轮），其中在流式架构吞吐底线部分与流式架构设计师沟通（2轮），在合规脱敏红线部分与合规与风控规划师沟通（2轮），并形成网关时序间隔明文与特征哈希降维的折中处理流。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上Kafka吞数据，脱敏就MD5加密呗，我看网上的反作弊系统都这么写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Kafka接不住吗？脱敏放到后端甄判模块前面行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原始特征往后传合规过得了吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一个要原样传，一个要入口加噪，这咋弄？要不先存原始数据，出事了再删？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前天看了个特征哈希的推文，说能降维还能脱敏，直接套这个不就完了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "碰撞就碰撞呗，大不了多测几次。我跑个脚本撞撞看，撞得多我就换哈希函数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关过时序间隔明文，加上特征哈希后的降维指纹。哈希碰撞率我后面写个测试脚本验一下，看误判率能不能接受。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1.协议解析；2.提取时序间隔明文传；3.对硬件和键位特征做特征哈希降维；4.打包发下游。就这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

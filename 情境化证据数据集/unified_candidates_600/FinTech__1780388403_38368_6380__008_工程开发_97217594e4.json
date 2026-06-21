@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在漂绿微鉴与绿债信配引擎代码开发背景下，用户与导师围绕ESG事件转图特征、实时流增量更新、跨语言交互、流图一致性风险及静态抽取代码结构持续沟通（7轮），其中在Flink实时拼边逻辑部分与数据流设计师沟通（1轮），在GNN节点Embedding局部增量更新部分与图谱算法专家沟通（1轮），并形成延迟对照实验设计与静态抽取模块类图及方法签名。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们可以用异构信息网络建模，发债主体、项目、ESG评级机构作为节点，担保、资金流向、评级作为边。特征抽取方面，我查过很多论文，用异构图注意力网络HAN比较适合处理这类meta-path丰富的场景，能自动学习不同路径的权重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力开销这块，我想着可以先用预训练的GraphSAGE做冷启动，后面再换HAN。但是实时流怎么增量更新图结构，我确实没想好。我只会用离线的数据集跑通图模型，流式的图构建没写过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink那边出来的ESG事件流，怎么才能实时拼成图谱的边？有没有现成的connector？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图库这边收到更新指令，拓扑结构变了，GNN的节点Embedding怎么跟着变？全图重算肯定来不及。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "DGL和Flink之间怎么交互？DGL是Python生态，Flink是Java，这跨语言调用好麻烦，性能会不会拉胯？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这属于数据一致性问题。如果用旧状态，确实会产生漂绿误判，信配给多了。我之前没考虑到流图更新的中间态风险。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不懂流图一致性保证机制。我得去查一下DGL关于动态图状态快照的文档，还有流处理里Exactly-once语义怎么传递到图侧。我定个目标，今晚把DGL的动态图Tutorial过一遍，写个Demo验证下局部更新和全量计算的误差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以构造一组带漂绿特征的数据，控制Flink到图库的延迟时间作为变量，比如0ms, 100ms, 500ms。观测指标是信配引擎输出的漂绿评分差异。如果延迟超过阈值导致评分偏差大于5%，就必须在信配读取图状态时加版本校验，拒绝读取过期快照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我建三个模块：DataParser解析ESG指标，GraphBuilder用NetworkX构建异构图，FeatureEncoder跑HAN出Embedding。这块逻辑闭环没问题。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

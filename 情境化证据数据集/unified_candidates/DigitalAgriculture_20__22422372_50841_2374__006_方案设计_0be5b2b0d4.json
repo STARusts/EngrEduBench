@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在评审前输出权限审计与高可用MVP的方案设计背景下，用户与导师围绕权限模型（RBAC+数据域+动作）、审计关键动作清单、离线可用范围与SLO指标持续沟通（10轮），其中在审计日志最小字段与敏感信息边界部分与合规与隐私官沟通（3轮），在离线队列防篡改/防重放、鉴权不可用策略与告警规则部分与安全工程师沟通（3轮），并整理成8条清单+3项指标供评审。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先按角色拆权限：基地管理员、农服队长、工人、财务、审计。然后每个API上标读写。审计就把谁什么时候改了什么记下来。高可用我不太确定要写到多细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RBAC肯定要有。数据范围…按租户是必须的，再按基地/地块分。比如农服队长只能看自己队的任务，不能看别的队结算。就这样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 审计日志要记哪些字段才算够？我们这里有任务派工、核验、结算、争议，还有移动端离线同步。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "导出报表算不算也要记？有的人可能把工人绩效导出走。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "离线端同步时，会一口气提交很多核验记录，日志怎么记？每条都记会不会太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "审计日志要按最小化：只记内部ID、角色、组织。行为要有action、对象类型和ID、成功失败、失败码。证据不放链接，只放evidence_id。导出要记范围。离线同步可以批次记一条，再对结算/争议这种关键的逐条记。关键动作我先列：派工assign、改任务、核验verify、结算settle、争议工单create/close、导出export、权限变更grant/revoke。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用RBAC加数据范围控制。数据范围用基地/地块/组织/班组这些维度，绑定到用户或角色上。具体表达我有点不确定，是做成policy表？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "顺序：先tenant，tenant不对就直接拒；再基地或农服组织范围；再到班组/任务归属。动作是读/写/导出。防误伤：1）默认最小权限，新账号没授权就只能看自己的任务；2）导出默认禁用，必须显式开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "移动端看当天任务、做核验采集、拍证据、先保存。断网就本地队列，恢复再同步。管理端看板挂了对地头影响小。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 离线核验+同步队列这块，怎么做防篡改/防重放？还有权限审计要和高可用一起写哪些点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "鉴权服务挂了还允许写进本地，这会不会被人拿过期token乱录？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警规则要写到具体阈值吗？我不太会定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）权限模型：RBAC+数据域，决策顺序tenant→基地/组织→班组/归属→动作类型（读/写/导出/权限变更）。  \n2）默认最小权限，新人仅自见；导出默认关；结算和权限变更要双人复核或至少二次确认。  \n3）审计日志最小字段：tenant/operator_id/role/org + action/object + result/错误码 + timestamp/client/device_hash/request_id + evidence_id引用；不记录裸链接和原始敏感信息。  \n4）导出/批量查询审计记录scope（范围hash），便于追责。  \n5）离线同步：SYNC_BATCH聚合日志+关键动作逐条日志（派工/核验/结算/争议/导出/授权）。  \n6）离线队列本地加密，事件有event_id并做签名；服务端幂等+状态机/version校验防重放。  \n7）鉴权高可用：短期token；离线仅允许查看已下发任务和采集，真正入库同步时二次鉴权和权限重算。  \n8）安全告警：对EXPORT/SETTLE异常重试、频繁核验、频繁权限变更设可配置阈值并留trace_id联查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标我给保守点：核心API可用性99.5%（派工下发/任务查询/核验同步）；RPO=0（平台确认的数据不丢）；RTO 30分钟内恢复核心服务。离线侧保证当天任务可看、采集不丢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "保留期按租户配置，默认180天？删除走管理员审批？我不确定合规上要多久。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

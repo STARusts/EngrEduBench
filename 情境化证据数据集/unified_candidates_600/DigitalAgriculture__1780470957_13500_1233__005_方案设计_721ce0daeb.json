@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计多源数据融合流拆解背景下，用户与导师围绕传感与遥感时空对齐、状态存储及脱敏算子位置持续沟通（5轮），其中在时空对齐与插值逻辑部分与数据流设计专家沟通（2轮），在脱敏算子位置与状态TTL配置部分与数据流设计专家沟通（1轮），并形成遥感快照基准流与传感增量流模式、RocksDB加TTL清理及脱敏前置的融合流基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢进Kafka，Flink读进来做个Union算子就行了。都是流，拼一起不就融合了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端这边就管流进来啊。对齐不是算法那边的事吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频点传感和低频面遥感怎么在流里做时空对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MapState存快照？这我懂，就是拿传感流去查状态。云遮挡插值我不清楚，是不是得设个时间窗口？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用MapState存遥感快照，传感流查状态做关联。还有插值事件流，超时没更新就触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存RocksDB呗，不会炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TTL我设个几天吧。脱敏在流算子之前，那就Kafka消费出来先脱敏再进Flink？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

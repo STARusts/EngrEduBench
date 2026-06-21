@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场实时互动数据流方案设计背景下，用户与导师围绕入口到裁决到下行的事件类型、字段、顺序去重、回放与回退衔接持续沟通（8轮），其中在事件字典与窗口/版本号设计上与数据架构师沟通（2轮）、在原文分流取证与审计字段权限边界上与合规与内容安全官沟通（2轮）、在下行指令包抗弱网与resync降级上与播放器与直播工程师沟通（2轮），并汇总形成双层事件+增量指令+快照与RollbackEvent的要点及最小验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是弹幕/选择先到服务端，然后服务端写一条事件，再推给直播间。回放就把事件再跑一遍。细节我不太敢定，主要怕延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件我先按三类：InteractionEvent（用户点选/发弹幕）、DecisionEvent（系统判定走哪个分支）、WorldStateSnapshot（锚点快照）。字段大概：event_id、session_id、user_id、ts、payload。DecisionEvent再带target_state_id。差不多就这些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 互动剧场这种实时链路，事件字典要怎么定才方便追溯？顺序、去重、窗口这些字段你建议怎么放？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "window_id 是要固定3秒吗？感觉会卡互动节奏。还有 base_state_version 是不是就等于我状态机里的版本号。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 实时互动里用户弹幕原文要进取证库，链路上我应该怎么分流？审计日志能留哪些字段，权限边界一般怎么写才不踩雷？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "研发没权读原文这点我有点慌。那我调试文本风控咋办？总不能盲调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着拼一下：  \n1）客户端互动进来先生成interaction_id或client_seq，服务端做dedup_key去重。  \n2）InteractionEvent会落库，但裁决链路不带原文，只带标签和分数。  \n3）按window_id聚合互动，出一个DecisionEvent。  \n4）DecisionEvent带base_state_version/result_state_version，保证顺序。  \n5）下行给播放器的是“剧情指令”，应该能关联trace_id。  \n6）回放只放DecisionEvent，必要时用WorldStateSnapshot当锚点。  \n我不确定窗口怎么配，还有播放器指令要不要每次带全量状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下行字段：room_id、episode_id、window_id、decision_id、target_state_id、display_assets_id（要播的段/镜头）、ttl_ms（多长时间内有效）。再带state_version。  \n全量状态我觉得太大了，我倾向增量，就告诉播放器“从A切到B”，播放器自己本地有资源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放器与直播工程师 互动裁决结果要下发到播放器，弱网和抖动下怎么保证玩家看到一致？版本不一致、资源没缓存这些一般怎么降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "resync 是拉“播放简化态”，不是我那种WorldStateSnapshot？我有点混了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我补：  \n- 下行是增量指令包，带apply_at_ms和state_version。  \n- 端上版本缺口就用resync_token拉PlaybackStateSnapshot恢复。  \n- 回退算一种DecisionEvent？或者单独RollbackEvent，带operation_id、target_state_id、target_snapshot_id，然后也走同样下行。  \n最小验证动作：压一下window=2s和window=5s，看端上互动响应和丢包下的resync次数。我不太会定指标阈值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能把事件字段和去重、版本号这些后端侧串起来，RollbackEvent我也能跟着做。apply_at_ms和端上resync这块我只能写接口约定，具体端上怎么接我得播放器那边兜。取证库权限边界我怕写过头，合规那边得给最终口径。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

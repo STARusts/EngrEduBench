@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在多节点凭证验证联调部署背景下，用户与导师围绕凭证流转一致性验证、Redis缓存过期时间设定及延迟分位数测算持续沟通（7轮），其中在状态同步延迟容错解法部分与分布式架构师沟通（1轮），并最终确定需自行设计同步延迟窗口，计划通过压测测算P99延迟来定容错窗口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备用Helm一键拉起几个机构节点，然后用JMeter现成脚手架发压跑验签，应该能直接出结果吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "K8s内部不是有NTP对时吗，应该差不了太多吧？我主要怕手写对齐逻辑太容易出错了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多节点部署时，凭证状态同步有延迟，验签这块有没有现成的容错组件能直接用的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以还得自己写窗口判断。那我就在验签服务里加个Redis缓存，把刚注销的凭证ID放进去，设个过期时间，别的节点来验签先查Redis，命中就按注销算，没命中再走正常逻辑。这样算兜底了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就设个5秒吧？一般网络抖动几秒也就够了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会算这种分布式的延迟分位数。平时都是看监控大盘有没有红线报警，没深究过底层怎么统计的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚去搜一下Prometheus怎么算histogram分位数的博客，照着配个P99延迟的监控规则，跑一遍压测把真实延迟拉出来，再定Redis过期时间。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

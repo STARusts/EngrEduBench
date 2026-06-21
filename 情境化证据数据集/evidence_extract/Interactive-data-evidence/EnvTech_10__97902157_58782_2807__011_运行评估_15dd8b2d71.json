@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在全氟污染去除智能验真平台运行评估中，用户与导师围绕线上阈值漂移监控的监控量、基线窗口、工况区分、告警与审计留痕等持续沟通（11轮），其中在漂移统计量与分层指标选择上与光谱算法工程师沟通（2轮），在告警分级抑制、边缘计算与Runbook配置上与SRE运维工程师沟通（1轮），并形成可执行的三步判别路径与告警/变更记录要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把报警阈值设死，比如光谱代理指标超过上限就报警，这样就能盯住漂移了，对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就都监控吧。光谱那边看个均值，模型看个通过率，验真看最终合规通过率……超过就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就用上线前一周的平均值？窗口就一天？触发后让运维去看下设备就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@光谱算法工程师 漂移监控一般盯哪些指标？我现在只想到均值超过上限就报警。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PSI我听过，就是分箱对比嘛。那是不是我就设个PSI>0.2就算漂移？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "懂了。那漂移告警先不动主阈值，先让人复核。@SRE运维工程师 线上阈值漂移监控要怎么配报警，才不会一堆告警把人淹了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "PSI>0.2持续触发再报，然后EWMA也报，应该就差不多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漂移就两类吧：设备漂移和水质漂移。信号就是PSI，还有模型score的均值变化。第三个我就看一下有没有数据断点，断了就不是漂移。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就三步：先看数据有没有缺、时间戳有没有跳；再看PSI/KL；最后看抽检对照。如果抽检也偏了，就认为阈值可能不准。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，那就加工况标签。我怕标签不准会漏掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改阈值就……你们批？我这边就记录一下版本号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那我把这些字段加到变更日志里：变更人、原因、证据、范围、回滚。报警确认也写进去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就边缘算分箱计数、分位数，云端只收这些；真的要排查再拉取有限时间段原始数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第4点就是先查采集：缺数、时钟偏移、还有 is_backfill 这类补传标记；再查模型的输出分布和置信度；最后查验真规则命中和审计链路。这样就不容易把补传当漂移了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

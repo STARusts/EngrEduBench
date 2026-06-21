@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段的传感数据标准化背景下，用户与导师围绕字段结构、点位字典、单位口径、时间基准、元数据留存与合规最小化持续沟通（11轮），其中在数据模型/质量码/留存与点位编码规则上与数据工程师沟通（2轮），在时间同步、采样对齐与弱网补传延迟标记上与物联网集成工程师沟通（2轮），并汇总形成试点最小字段清单、优先指标与最小验证门槛。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把各站点数据弄成一样的格式，方便上云算指标和预测。字段统一一下就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单位就都换成一样的，时间就用服务器时间。后果就是算出来不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工艺有温度、pH、进料量；储气有罐压；发电有发电量。差不多这些吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行。我先问数据这块。@数据工程师 我们要把传感数据标准化，你给个最小能跑的字段和规则，别太复杂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "质量码就用 0/1/2/3/4/5 这种。metric 就写英文。那点位编码我随便起也行吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 时间戳、采样这块怎么统一？弱网时补传会不会乱？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是都用 PLC 时间，然后上云再排一下序。delay_flag 也加上。NTP 偏移我感觉不用太管，反正差几秒也没事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概四块：字段结构、点位编码、质量码、时间戳。再加个单位转换表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是别采太多，能不用就不用。权限就按管理员/操作员/审计那套。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那操作员名字就不进来，留个工单号行不行？反正能追溯就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优先产气流量、甲烷、硫化氢、温度、pH、罐压、发电功率。像什么搅拌状态也可以先不管？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记住了。就是三列时间，再加 time_source。range 和 sample_period 放维表里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选 Nm3/h 吧，因为小时级看起来更细，调度也方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就挑一个站点跑一下，看有没有数据进来，然后看单位对不对。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "行，我就按这三条说。对齐会我拉上物联网、数据、算法一起，把 metric 和单位先定死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

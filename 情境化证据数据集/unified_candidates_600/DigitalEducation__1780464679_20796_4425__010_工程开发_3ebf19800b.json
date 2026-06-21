@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在心智对齐演算模块联调背景下，与导师围绕偏差计算逻辑、特征对齐方案及联调顺序持续沟通（9轮），其中在特征对齐与分布距离计算落地部分与对齐演算工程师沟通（1轮），并最终形成基于KL散度与投影层的四步联调步骤及验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备直接用Wasserstein距离来算当前状态和目标状态的对齐偏差。理论上它对分布偏移最敏感，比余弦相似度严谨多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度不一致的话，我可以先做零填充对齐？或者加个全连接层映射一下。计算开销的话，我想着偏差算子本身就是核心，慢一点也能接受吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心智状态向量和图谱特征维度不一致，还有Wasserstein距离计算开销的问题，联调时怎么处理？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不算Wasserstein了，改用KL散度，然后加个投影层处理维度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先调投影层权重？把特征对齐了再调温度系数？判断成功的话，看偏差值的方差变小了就算对齐了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我就先把干预策略断开，只跑特征投影和偏差计算。用Mock数据流喂进去，看映射前后的Spearman相关系数，保距了再接干预？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写特征投影层的代码，用认知基座初始化，然后造Mock流测Spearman系数。KL散度的温度系数先给个0.07的默认值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "之前有篇论文里认知状态对齐用的这个值，效果还行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，构建Mock流式数据，包含正常和边缘分布；第二步，接入特征投影层，用认知基座初始化，验证映射前后Spearman相关系数大于0.85；第三步，接入带温度系数的KL散度计算偏差，温度初始1.0，观察偏差收敛；第四步，偏差收敛稳定后，接入干预策略。验收指标就是Spearman系数和偏差收敛曲线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

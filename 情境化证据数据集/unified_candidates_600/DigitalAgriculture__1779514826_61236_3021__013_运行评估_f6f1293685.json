@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段流变解析数据漂移监控缺失背景下，用户与导师围绕漂移监控指标、基线设定与熔断机制持续沟通（7轮），其中在漂移量化与探针部署部分与运维监控分析师沟通（2轮），在生长周期下的动态基线设定部分与点云算法工程师沟通（1轮），并形成加探针算PSI、7天滑动窗口基线及超限熔断降级的监控与调度策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大屏上有流变模块的吞吐量，还有接口延迟，都是绿灯。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "漂移量是啥？是数据积压延迟吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没监控分布。就按您之前说的，把接口成功率加上了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分布这东西咋监控啊？总不能把每一帧点云都存下来看吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流变解析这块的数据漂移，一般看啥指标？现在大屏上只有QPS和延迟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PSI，0.2。这玩意儿好算吗？在哪个环节加？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是加个探针算直方图对比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "探针加在特征提取后。基线的话，就用刚上线那几天的数据当基线呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，树会长。那基线咋定？总不能天天手动改基线吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "冠层点云特征随着树长，基线怎么定比较好？导师说固定基线会天天爆表。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "滑动窗口，过去7天。这个好办，我在Redis里存最近7天的直方图统计就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "飙高了就别跑了吧，模型都不准了，寻优出来的靶窗肯定不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 特征提取后加探针算PSI；2. 基线用7天滑动窗口；3. PSI超0.2连超3次就熔断，降级成盲喷。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去改监控脚本和调度逻辑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第一天没基线就跳过PSI计算，直接放行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

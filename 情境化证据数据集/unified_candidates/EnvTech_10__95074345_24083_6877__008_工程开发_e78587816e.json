@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在园区雨洪污染智能调蓄与排口预警系统进入工程开发、需打通边缘网关采集到云端联调背景下，用户与导师围绕联调验收口径、数据契约、离线补传、鉴权错误处理与审计对时持续沟通（11轮），其中在采集侧点位映射/时间戳质量位/缓存规则上与物联网工程师沟通（1轮），在上报payload/批量重试/幂等去重/HMAC签名与离线降级审计上与边缘计算工程师沟通（1轮），并形成联调验收清单与分工用例推进计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要进工程开发，先把边缘网关采集跟云端这块联调跑通，但我不太确定联调要先卡哪些点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点位表有一版，协议就是Modbus和4G上报，网关型号也选了。云端接口就是HTTP上报吧，我感觉能通就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集成功就是网关上能看到数，然后云上也能看到数，差不多就算成功。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 采集联调这块，点位映射、时间戳和质量位、还有断点续传缓存，现场一般怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等键就用point_id和时间戳吧。排序就用设备时间戳，设备更准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "device_id、点位、值、时间，就这些吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关到云上报这块，上报格式最少字段、重试机制、签名/鉴权怎么做、离线时采集需要怎么降级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证失败就重试吧，重试到成功。nonce就不存也行，反正有timestamp。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，那401/403就别一直打，进隔离态，其他按5xx重试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺测就quality=1，修正就把值改一下再发？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我记住：原始不动，修正要另存并记审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看一下时间差不多就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，offset>2秒算异常，上报个事件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）字段我能照着加。2）幂等键也行。3）72小时缓存我不确定够不够，但先按这个。4）401/403隔离态我大概能做。5）质量位三态可以。6）审计我不太清楚要报哪些，但你这几类我就都报。7）offset>2秒我就按这个阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "点位大概一百来个，一分钟一次，200字节，那一天就是 100*1440*200 大概…二三十兆？三天就一百兆不到，应该够。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我负责把网关上报先跑起来，后端同学配合接收接口，现场实施配合接PLC点位。卡点可能就是寄存器地址对不上和4G不稳定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

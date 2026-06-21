@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实时共玩解谜编排平台方案设计背景下，用户与导师围绕实时协作同步架构的编辑态/试玩态拆分、权威来源、顺序发号、冲突模型与重连补齐持续沟通（8轮），其中在RTC通道能力边界与可靠分级上与实时通信工程师沟通（2轮），在协作服务权威写入、校验幂等与服务拆分上与后端负责人沟通（2轮），并形成“Collab Service发号落库+RTC广播加速+op流/快照+分对象冲突策略+重连补齐”的约束共识。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是“多人编辑”那套。每个人操作发到服务端，服务端广播。冲突就按时间戳，晚到的覆盖？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "结构应该强一点吧，比如 Stage 的增删改。素材引用应该也强，不然引用错了。运行态应该最终一致？我不太确定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "论文里 CRDT 很香，理论上无冲突。OT 也行但实现复杂。中心化锁最简单，但体验差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时通信工程师 事件都走你们RTC通道的话，编辑态同步能保证顺序吗？重连怎么办？成本会炸吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果编辑态走RTC，你建议怎么补齐？只补最近N条？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权威状态是指服务端保存一份最终RoomTemplate吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 如果编辑同步全走你们业务服务，为什么不让RTC扛？你们担心啥，吞吐还是一致性？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那编辑体验的低延迟咋办？全走HTTP会慢吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们想要的“协作服务”是新服务？还是挂在资产服务里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来像是：RTC可以用来广播，但不能当最终来源。权威在协作服务里，协作服务给操作编号，然后广播。重连就拉快照再补操作。顺序靠服务端发号。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "树结构就强制串行？比如同一时间只能一个人改结构，别人只能看？属性字段可以最后写入生效？引用关系……引用关系如果两个人同时改，可能导致指向不存在的版本，所以也要串行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可以。就是客户端回滚会很跳。有没有更温和点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "op更省，patch可能更简单。op要求每个动作都定义，挺多的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "op可以让服务端校验更明确，还能回放。patch适合大文本，不值得把编辑器每次光标移动都变成业务操作。然后大文本冲突让用户自己处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时通信工程师 我们想改成：协作服务发号和落库，RTC只做广播通道，加速回声。你们这边能保证哪些？哪些不负责？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那可靠级别我们用中等？关键op可靠，非关键不可靠？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 RTC做广播，结构op走可靠，指针这类走不可靠。你们介意吗？还是希望统一WebSocket？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记到的就是：协作服务是中心，先发号再广播；RTC是加速层，不背一致性锅。结构改动排队，字段能合，引用要校验不过就打回。重连先快照后补op。op都要幂等key。试玩那条链路今天先不深挖。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

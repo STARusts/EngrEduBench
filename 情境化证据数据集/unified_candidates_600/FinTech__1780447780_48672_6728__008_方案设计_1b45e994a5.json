@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在沙箱高可用部署约束推演背景下，与导师围绕沙箱隔离方案、Binlog延迟处理及降级预案持续沟通（6轮），其中在资源抢占与隔离、延迟监控降级及离线规则更新部分与风控沙箱安全员沟通（3轮），并最终形成沙箱高可用底线约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就主备呗，沙箱挂了切备机。资源的话，用K8s的limit限制一下沙箱pod。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "K8s的limit能防住沙箱推演时的资源抢占吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "物理隔离多一套集群，成本有点高啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没设计过这实验。不过我最近在看金融系统容灾指引，里面提到“计算与交易物理剥离原则”，说逻辑隔离的CPU调度延迟会导致阻尼计算结果晚发几十毫秒，可能错过最佳阻截窗口。所以还是得物理隔离。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果Binlog延迟太大，沙箱图数据不准，推演出来的阻截策略也是错的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级预案的离线规则更新频率也得定一下，不能拿太旧的数据兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

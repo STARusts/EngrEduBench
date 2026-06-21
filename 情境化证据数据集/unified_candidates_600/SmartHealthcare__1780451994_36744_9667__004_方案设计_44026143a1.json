@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在核温孪生推演架构设计背景下，用户与导师围绕架构范式选择、鲁棒性验证、端侧算力切分与模型热更新余量持续沟通（5轮），其中在反演算法鲁棒性部分与核温生消推演算法师沟通（1轮），在算力切分与混合架构部分与边缘算力与孪生调度师沟通（1轮），并最终形成数据驱动与物理约束混合架构及算力切分与热更新约束决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步设想了两条路：A是重反演轻预测，用复杂物理模型算当前核温，简单时序推未来；B是重预测轻反演，反演简化，靠历史趋势外推。我倾向A，基础核温不准预测肯定飘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查过文献，端侧跑Pennes生物热方程的有限元求解，算力开销极大。如果换成轻量化Transformer直接从多模感知映射到核温，速度快，但黑盒抗噪性存疑。我想验证一个假设：当腔道多模数据丢包率超30%时，纯数据驱动的Transformer反演误差是否会突破0.2°C，而物理约束模型能靠方程兜底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "纯Transformer反演和Pennes物理约束反演，在30%数据缺失下鲁棒性差多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "NPU跑不了Pennes求解吗？那算力怎么切？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对Pennes方程在DSP上的离散化映射和算子转换真不熟，这块是我现在的盲区。我今晚去翻一下ONNX Runtime对自定义算子的扩展文档，还有Pennes有限差分法的C++实现案例，明天上午把算力切分的可行性评估补上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定混合架构。多模感知先过NPU做Transformer粗反演，再扔给DSP做Pennes物理修正和卡尔曼滤波状态估计，最后时序模型推演进。既利用了NPU并行算力，又保住物理兜底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想远，只顾着塞推理逻辑。如果后续要微调Transformer权重，NPU内存可能不够直接加载新模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核温孪生推演架构决策：1. 架构范式：数据驱动粗反演与物理约束精修正的混合架构；2. 算力切分：NPU负责特征提取与粗反演，DSP负责物理修正与状态估计，CPU负责演进预测与调度；3. 鲁棒性验证：以30%数据缺失为压力测试基线，反演误差阈值0.2°C；4. 可持续性约束：预留20%端侧算力与内存用于模型热更新。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

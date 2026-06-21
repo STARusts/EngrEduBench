@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段UWB硬件选型收敛背景下，用户与导师围绕时空数据流设计、UWB数据清洗与时空对齐及停留事件阈值持续沟通（5轮），其中在流拓扑与清洗逻辑部分与时空数据工程师沟通（1轮），并最终确定边缘预洗加云端聚合的两层流拓扑及GeoHash加时间切片索引方案，停留时间阈值待后续对齐。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Kafka接网关传上来的原始包，后面挂Flink做流式清洗，洗完写到时序数据库里？轨迹嘛，按蜂ID分组，按时间排序就能拼出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漂移的话，就滤掉偏差大的点？对齐的话，按时间戳对齐就行吧，网关上报时带个时间戳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UWB包发上来漂移怎么洗？流拓扑怎么画？我原本想全丢Flink里洗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘预洗能减不少数据量。云端聚合离散点这个思路好，之前没想到。GeoHash加时间切片索引，这比单纯用时序库合理。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这阈值我定不了，凭经验拍个脑袋？或者去查查文献？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据流拓扑两层，边缘网关负责基准校准和边界飞点过滤；云端Flink负责二次清洗和停留事件聚合。索引结构用GeoHash加时间切片，不单靠时间戳。停留时间阈值待定，找昆虫专家给。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

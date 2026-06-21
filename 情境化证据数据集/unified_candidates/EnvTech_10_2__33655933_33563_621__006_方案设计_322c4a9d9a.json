@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段的楼控联动接口设计背景下，用户与导师围绕将算法风险输出安全可追溯地转为楼控可执行动作、确定网关抽象API与命令/回执/状态/撤销语义及审计降级规则持续沟通（8轮），其中在接口字段与能力分层字典设计上与解决方案架构师沟通（2轮），在安全必需字段、限位/手动优先与回退约束上与控制策略工程师沟通（2轮），并口头形成核心必选与可选扩展的接口契约清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是两层：上层是“策略意图”，下层才是“设备命令”。算法输出risk_level这些先喂给策略引擎，策略引擎再按区域约束生成动作。楼控接口我更想做成“动作单”，包含zone、设备组、目标值和有效期，楼控回执状态。具体到命令粒度我不太确定，担心不同楼控差异太大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "倾向网关抽象API。直接点位太难维护，现场每栋楼都不一样。网关这层可以把设备能力做成能力模型，比如新风机组是风阀/风机频率，VAV是风量设定，净化器是档位。缺点是要先跟网关厂商对齐一套能力字典。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 楼控联动接口你建议走网关抽象API还是直连点位？动作单字段怎么设计更不坑交付？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个担心：capability字典如果太细，会不会还是变成另一种点位？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制策略工程师 楼控联动如果走抽象能力+动作单，你觉得安全必需字段是什么？哪些动作必须强约束或禁止？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想着target+有效期，没把限幅带进去。guard_condition_id也能把“室外污染高禁新风”这种逻辑固化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我怕把这些都塞进命令会让网关太复杂；能不能限幅和guard都在策略侧做完，网关只负责执行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给一版分层：  \n核心必选（所有网关都得支持）：  \n1) Command：command_id、zone_id、capability(L1限定)、target_value+unit、valid_from/valid_to、priority、issuer、reason_code、risk_snapshot里至少risk_level/conf/dominant_pollutant/data_stale、dry_run。  \n2) Safety：allowed_setpoint_band（或min/max）、ramp_rate_limit、override_lock检测（来自State，若true则Ack拒绝）。  \n3) Ack：accepted、reject_reason（枚举）、effective_value、expected_apply_time。  \n4) State：zone_id、capability、current_value、source、override_lock、last_changed_at。  \n可选扩展：baseline_profile_id、guard_condition_id（先引用规则编号）、L2设备类型能力、批量命令batch_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更倾向单独Cancel：cancel_command_id、reason_code、issuer。网关收到就把该command标记终止并回到baseline或交还BMS。要不然用新命令覆盖，会把审计链搞乱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则我想先简单：同一zone+capability同时只允许一个active命令；priority大者胜出，相同priority按最新生效。手动override_lock为最高优先级，直接让自动命令拒绝。跨capability冲突，比如同时调新风和净化器，我暂时不在网关处理，交给策略侧算好组合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "risk_snapshot只带风险字段，不带原始传感器序列，也不带人数估计这种敏感项。zone_id用内部编码，映射表留在客户侧或私有域。审计我理解要记录issuer、reason_code、命令前后effective_value和override情况，方便追责；但日志留存周期我不确定，得听合规的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基本一致。我想补一条验收口径：联动失败不能卡死，必须能返回reject_reason，而且策略侧看到reject要降级成“只告警不联动”。这条我怕被忽略。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

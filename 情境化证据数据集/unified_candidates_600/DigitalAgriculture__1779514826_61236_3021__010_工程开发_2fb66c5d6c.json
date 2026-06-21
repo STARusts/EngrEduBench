@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在冠层避障与风场扰动联合测试背景下，用户与导师围绕风场下机体晃动导致避障误触的补偿方案与实现层级选择持续沟通（8轮），其中在机体晃动滤除与IMU前馈解耦部分与群体智能算法师沟通（2轮），并最终确定底层驱动层融合IMU补偿方案及风速-系数记录策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风场发生器一开，飞机全趴窝了。日志刷屏，全是Obstacle_Avoidance_Trigger，根本不往前飞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点云没问题，我看了rviz里的可视化，枝干轮廓都在。就是飞机自己晃，然后一直报避障。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是相对速度计算里没把机体晃动滤掉？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "飞控IMU数据有，但没往避障模块送。我直接在避障输入接口那儿加个补偿项行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用IMU数据把机体晃动减掉。我准备在飞控的回调里加这步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "改固件太麻烦了，还得重新烧。我在应用层加吧，延迟就几毫秒，应该还行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主要怕改飞控底层烧板子变砖，还得找硬件组重刷。应用层改了直接重启服务就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我改飞控底层的点云预处理节点。系数1.0先硬编码进去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我跑的时候把风速和补偿系数对应的触发率记下来，弄个CSV存着。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

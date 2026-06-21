@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发落地音游多人对战匹配与回放最小闭环背景下，用户与导师围绕模块拆分、同步时基、回放数据口径与合规边界持续沟通（7轮），其中在时间基准/输入同步/回放字段与快照频率上与实时对战工程师沟通（3轮），在事件落库分片/TTL冷热/鉴权与可跳转回放上与后端负责人沟通（2轮），并输出最小可跑版本的接口字段、chunk/快照频率、TTL及不做项清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我直觉上分三块：匹配（排队+分段）、房间同步（开始时间/节拍基准/输入上报）、回放（事件流存储+重放）。坑主要在两点：1）每端时钟不一致导致判定分歧；2）回放如果只存“分数结果”会丢掉触觉与判定可复现性。  \n我倾向回放存“输入事件+关键状态快照”，然后重放时走同一套判定管线，但我不确定存储粒度和带宽/成本怎么折。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时对战工程师 我们要做PVP匹配+回放，想对齐三件事：1）房间的时间基准怎么定（音频开始时刻/服务器tick/客户端本地时钟？）；2）对战同步是只同步输入还是同步状态；3）回放事件流最小要存哪些字段才能复现判定与触觉，同时能做争议仲裁？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入时间戳这块，event_time_ms 是客户端本地时间还是对齐到 start_time_ms 的“曲内时间”？如果客户端上报本地时间，服务端怎么避免被篡改？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "快照频率你建议多少？快照里只放分数/连击够吗，还是要放更底层的判定游标？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 需要落地对战回放：输入事件流+服务端裁决+每2秒快照校验。你看下：1）落库模型怎么设计便于按 room_id/player 查回放；2）事件量级估算下存储/带宽；3）TTL/冷热分层怎么做更稳；4）日志最小化和权限上有啥红线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "chunk按10秒切，回放重放时需要“从头到尾”才能算分吗？如果用户只拖到中间看，判定和触觉重建会缺上下文。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先收敛下：  \n1）时间基准：房间用 server 下发 match_start_time_ms，客户端计算曲内时间 t_in_song_ms；输入上报带 client_seq+t_in_song_ms。  \n2）同步：以“输入同步+服务端裁决”为主，不做状态锁步；弱网靠窗口纠偏，校验序列和可达范围。  \n3）回放存储：meta+chunk；chunk里放输入事件、服务端裁决、每2秒快照（score/combo/life/note_index/rolling_hash）。TTL普通7天、争议30天。  \n触觉这块我倾向不存pattern，重放时用同一映射生成。理由：pattern体积大且版本敏感；我们已经在日志里带 device_profile_ver，回放也带版本三件套，能回溯映射一致性。风险是：SDK版本差导致同版本策略也不一致，但这属于客户端依赖，回放至少可解释。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "仲裁优先看“判定与输入”，触觉只作为体验复现，不作为裁决依据。回放里我会把触觉链路标成“非仲裁证据”。  \n另外我们可以在回放meta里加一个 haptic_sdk_ver（不带用户信息），用于提示“触觉可能有差异”。如果要更硬，仲裁回放在服务端渲染触觉也不现实，所以先把证据边界写清。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "实现动作：  \n- chunk内用二进制序列化（自定义定长字段+varint），事件按 time_delta_ms 存增量；  \n- 同一秒内多事件按 seq 合并写批；  \n- 写失败降级：优先写 meta，再异步写 chunk；chunk写失败时标记 replay_incomplete，只允许“本地回放”或不展示回放入口；争议局则同步重试并告警给测试环境先。  \n资源上控制：默认只保7天+对象存储冷转；chunk大小10秒，避免小文件过多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不放明文账号、昵称、设备唯一标识。player维度只放 room内的匿名slot_id 或 hash_id；日志沿用 tick/time_ms/pattern/设备类型/错误码，再加 device_profile_ver、haptic_sdk_ver 这种版本字段。回放读取做鉴权，只给当事人或裁判工具。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小可跑版本我定成这几条：  \n- 匹配：按段位/延迟区间做简单队列，匹配成功创建 room_id，下发 match_start_time_ms、chart_hash、judge_profile_ver、device_profile_ver。  \n- 同步：客户端上报 input_event{room_id, slot_id, client_seq, t_in_song_ms, button_id, action}；服务端回推裁决 judge_event{client_seq, judge_type, judge_time_ms, score_delta, combo_delta}。  \n- 回放：replay_meta 记录版本三件套 + haptic_sdk_ver；replay_chunk 每10秒一个，内含输入、裁决、每2秒快照{song_tick, score_total, combo, life, note_index, rolling_hash}；普通TTL=7天，争议TTL=30天只读。  \n- 暂不做：从任意位置精确复算（先支持从头播放）；触觉pattern入库存储（先重放生成，且明确非仲裁证据）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

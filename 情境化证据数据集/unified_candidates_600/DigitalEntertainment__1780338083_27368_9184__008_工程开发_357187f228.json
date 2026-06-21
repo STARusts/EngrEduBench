@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在时序解析与编排引擎核心代码开发背景下，用户与导师围绕时钟漂移验证口径、能力缺口补充及初版核心取舍持续沟通（5轮），其中在跨端时钟漂移处理与验证设计部分与编排引擎主程沟通（1轮），并确定PTP同步与补偿方案、对照实验验证口径及初版插桩取舍策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用Netty的HashedWheelTimer做时间轮，把所有声光视效指令挂上去延时触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间轮不就是排序执行吗，精度不够我把tick调小点呗。验证口径，就写单元测试，Mock一下时间流逝，看任务是不是按时触发的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序解析引擎这块到底该怎么搞？我只会写时间轮调度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我没写过时钟补偿算法，这块物理时钟怎么跟逻辑时钟映射，我完全没思路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不懂PTP协议和时钟补偿原理。我这两天先看IEEE 1588标准里时钟同步那部分，然后把主程以前写的补偿模块代码拉下来跑跑，打日志看offset变化，再试着写个最简单的线性补偿。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第一版先把PTP对齐和基准调度写死，补偿算法太复杂容易搞崩，我先留个接口插桩，等日志跑出漂移规律再补。验证口径就跑对照看P99漂移能不能压到5ms以内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

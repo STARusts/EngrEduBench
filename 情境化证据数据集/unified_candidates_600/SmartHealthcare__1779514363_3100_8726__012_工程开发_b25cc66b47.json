@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在模型推理延迟优化与排错背景下，用户与导师围绕P99延迟尖刺排查、GPU推理瓶颈定位、日志合规落盘及优化优先级持续沟通（5轮），其中在核函数并行效率与尖刺定位部分与CUDA开发专家沟通（1轮），在边缘侧合规日志与性能解耦部分与边缘计算工程师沟通（1轮），并形成核函数排错重构、日志整改及量化微调的行动优先级与验收KPI。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "目前平均延迟大概在60ms左右，看起来勉强达标，但P99延迟偶尔会飙到150ms以上，出现尖刺时直接导致MLC指令下发超时重传。我做了INT8量化裁剪，平均降了30%，但尖刺问题没解决，甚至更频繁了。排错时看了CPU侧耗时，没发现死锁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GPU侧我只看了nvidia-smi的显存占用，没细查过执行流水的耗时分布，尖刺确实没复现规律。日志这块，目前为了调试方便，主要是前端console打了一点，后端只记了MLC下发成功与否，推理中间态没留痕。审计追溯这块我确实没考虑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我对形变场解算的CUDA核函数做了INT8裁剪，但P99延迟出现不可预测的尖刺，从GPU底层看，可能是什么原因导致的？用什么工具能精准定位这种偶发耗时？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前只用过Nsight Systems看个大概，Nsight Compute的具体指标我这两天刚在补，正好拿这个核函数练手，把warp stall的逻辑理一理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推理中间态日志目前基本没落盘，这块在加速器边缘端怎么搞才不会反噬推理性能？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "独立核绑核写环，这招能解耦。我之前一直怕写日志卡主线程才没敢加。Nsight Compute我也正好能直接用上，之前看文档说可以分析指令级的吞吐，我马上把形变场核函数挂上去跑一次profiling，看看是不是分支分歧导致的stall。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "优先级第一是CUDA核函数排错与重构，用Nsight Compute定位分支分歧，消除warp stall，从根上压平尖刺；第二是边缘侧日志整改，按ATNA框架开异步审计环，绑隔离核，确保超时快照可查；第三才是继续微调INT8量化策略。验收KPI：1. 连续模拟呼吸周期1000次，P99推理延迟<50ms，Max无超时；2. ATNA日志覆盖关键推理节点，异步写入延迟<1ms不卡主线程；3. 超时重传时共享内存快照必须完整恢复现场。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

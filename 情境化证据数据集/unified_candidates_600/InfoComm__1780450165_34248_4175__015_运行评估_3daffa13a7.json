@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上声光切换失败报警归因背景下，用户与导师围绕异常根因拆解与验证方案持续沟通（6轮），其中在跨介质切换超时归因拆解部分与异构协议栈设计师沟通（1轮），在不改线上代码的假设验证部分与迭代规划师沟通（1轮），并最终确定优先定因于触发层误判及采用离线数据回放验证的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看日志了，基本上都是光链路建立超时。声学那边刚发切换指令，光端机半天不响应，最后回退到声链路。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不确定，日志里就只看到MAC层报了timeout。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声光切换超时这种异常，怎么拆解根因？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家讲分三层，我看大概率是触发层问题，光链路明明不好还硬切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为日志里光端机收包率已经是0了，还往上切。验证的话，我就加点日志看看探测包是不是丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么不改线上代码验证探测包丢失导致切换误判的假设？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

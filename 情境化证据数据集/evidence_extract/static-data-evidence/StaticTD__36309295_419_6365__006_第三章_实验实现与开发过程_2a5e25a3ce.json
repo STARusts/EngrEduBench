@@ -1,0 +1,29 @@
+[
+  {
+    "domain": "基于改进Mask R-CNN的工业零件智能分拣系统",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与开发过程」阶段，本段围绕核心模型训练的实现展开记述，依次说明训练参数配置、应对显存溢出而引入梯度累积的解决过程，以及训练损失收敛与耗时情况。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "使用AdamW优化器，初始学习率设为0.001，权重衰减系数为0.0001。训练全过程执行120个Epoch，Batch Size设为8。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "由于RTX 3060显存仅为12GB，在进行大规模特征融合时出现了OOM错误，我们通过引入梯度累积技术（设置accumulation_steps=4）在不增加显存消耗的情况下变相扩大了有效Batch大小，保证了训练的稳定性。"
+              },
+              {
+                "behaviorLabel": "数据分析",
+                "behaviorEvidence": "监控日志显示，Loss值从初始的2.54平滑下降至0.28，验证集损失在第105个Epoch后趋于平稳，耗时共28小时完成训练。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

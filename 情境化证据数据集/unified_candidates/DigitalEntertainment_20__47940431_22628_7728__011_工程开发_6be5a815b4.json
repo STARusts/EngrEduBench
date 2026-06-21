@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在规则引擎工程开发收尾的联调压测与故障定位背景下，用户与导师围绕压测观测口径、trace_id贯通、分段耗时与slot冲突基线对照等最小闭环持续沟通（9轮），其中在压测分段方案与失败阈值/日志采样及合规约束上与测试负责人沟通（2轮），在压测环境资源配额、日志/指标限流与固定副本数护栏上与云原生平台工程师沟通（2轮），并形成可落地的改动清单与排障路径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可能就是match慢，或者写队列失败。还有重复事件没去掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没写去重，那块好像在入口服务里。我这边就按event_type筛规则，然后match。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有打埋点。串起来…应该能吧。action_id我有，slot_key也有，target_seq也有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "评估器里就event_id。仲裁就action_id。trace_id我没管。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，可以。我加一下透传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测要怎么弄？压哪些？失败怎么算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "200ms是全链路吗？还是我这段？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我加耗时。就打个时间差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，用假的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就把trace_id透传，然后加三个耗时。还有expr_error就disable版本。然后压测按他们说的三段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值…就先看一遍线上的？不是，咱没上线。那就随便定个，比如10%？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，我加个配置，slot_key后面拼个随机数，就不冲突了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@云原生平台工程师 压测环境资源怎么配？日志会不会把pod打挂？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "HPA固定副本数是把它关掉？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "知道了，我就先固定6个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）trace_id从入口透传到评估、action、队列、下发埋点。2）加评估、仲裁、写队列三个耗时字段。3）加debug_no_slot_conflict开关，slot_key拼event_id。4）压测时固定副本数，日志采样按trace_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先看CPU吧。CPU高就是慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是…看哪个耗时高。评估高就规则慢，写队列高就队列慢，仲裁高就冲突多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不会，我只打event_type和几个ID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "都能改吧。trace_id透传和耗时我能弄，开关也能加。日志不打payload我本来就没打。固定副本数得平台那边配，我就提需求。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

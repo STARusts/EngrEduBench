@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在变构部署验证上产线背景下，用户与导师围绕切换护航策略与验证有效性持续沟通（4轮），其中在灰度控制与回滚机制部分与产线部署护航员沟通（3轮），在节拍漂移统计推断与样本量估算部分与漂移监控员沟通（3轮），并最终形成基于哈希分流、统计指标检验与死锁熔断的灰度护航方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着先切一部分流量过去跑跑，没问题再全量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我写了个回滚脚本，要是新系统报错率高，就直接切回老路由。@产线部署护航员 你那边做切换应该顺滑吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "哪有那么复杂，先跑起来看嘛。大不了我盯着大屏，漂移超阈值我就手动切回来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不就看个平均值吗，新系统节拍均值比老系统低不就说明有效？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@漂移监控员 那你说怎么算？我平时只看大盘曲线，这套统计我不太熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产线部署护航员 监控员说要算这些指标，你们灰度平台能算吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只在代码里写了按比例随机分流。这改起来有点麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我改成分流哈希键。那灰度比例怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "15%跑两小时。@产线部署护航员 能切15%吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对这套统计验证没概念，回头得补。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周末我把A/B测试的统计基础看一遍，写个Python脚本把置信区间算出来，以后自己能算，不用每次靠猜。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度15%切流，用订单ID哈希分流防横跳；运行2小时积累至少2000样本；核心看节拍漂移率的T检验p值<0.05和效应量>0.5；护航员负责跨岛死锁熔断，达标后扩容。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

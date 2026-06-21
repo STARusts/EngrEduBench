@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在作业计费与仲裁口径的方案设计背景下，用户与导师围绕质量指标定义、阈值分层与计费/复核/拒付决策映射持续沟通（10轮），其中在漏作/重叠从轨迹生成作业面与输出字段部分与核验规则工程师沟通（1轮），在质量分段计费、幂等与可追溯字段设计部分与结算与对账工程师沟通（1轮），并收敛最小指标集与settlement_snapshot需携带的版本与审计字段用于绘制流程图。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就是“面积对不对”“有没有漏作/重叠”“速度深度合不合规”。然后我想用现成的规则引擎，把这些都写成规则就行了？不太确定口径怎么定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重叠率就是轨迹覆盖有重复的面积占比？漏作率就是地块里没被覆盖的占比。范围应该是地块内。时间窗口…就这次任务的开始到结束？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@核验规则工程师 漏作率、重叠率这种指标，你们一般怎么从轨迹算作业面积？掉头这种段要不要算？还有最终结果要输出哪些字段，方便仲裁和计费？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这意思就是先把“有效作业段”筛出来，再算面积。掉头主要靠速度阈值和状态来剔除。输出还要带 excluded_reason_codes。那我漏作率用“地块有效作业区面积”当分母。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入质量：比如 GNSS 精度差、点很稀疏就算低置信度。过程一致性：状态不一致、长断点、跨地块漂移。结果质量：漏作率过高、重叠率过高，或者有效面积和地块面积差很多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想漏作、重叠会影响应付面积吧？速度深度合规就做扣分，影响质量系数。输入质量差就进复核，不直接扣钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@结算与对账工程师 质量指标（漏作/重叠/速度等）要怎么映射到计费更不容易扯皮？哪些建议只做扣分，哪些能改应付面积？另外结算侧要留哪些字段保证对账幂等和可追溯？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是：面积这块别用漏作直接扣，主要用有效覆盖面积；漏作重叠更多做档位/系数；真要拒付也得是硬性违规而且置信度高。结算要存 policy_version、rule_version 这些，幂等用 settlement_id 的组合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "计量类：effective_area、billable_area。质量类：overlap_rate、miss_rate、speed_compliance_rate、quality_score(或factor)。风控类：confidence、need_review、diff_reason_codes（算一个）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "漏作、重叠我觉得主要是软阈值降档，特别高再硬阈值。速度是硬阈值？比如超速就算不合规。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能画。就是 invalid_area 的定义我怕讲不清，感觉又要一堆规则。能不能简单点，只给 excluded_distance 就完了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，我图里把 settlement_snapshot 里带上 plot_version、rule_version、billing_policy_version、confidence、need_review、diff_reason_codes，还有 invalid_area、billable_area。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在无障碍口述作业可信评测系统工程开发背景下，用户与导师围绕端侧音频采集SDK的最小可提交链路、接口字段、加密缓存与错误码处理持续沟通（6轮），其中在录音规格与VAD切片策略上与语音算法工程师沟通（4轮），在P3缓存加密/密钥管理与默认拒绝处理原则上与安全与合规官沟通（2轮），并形成可开工的SDK最小API/落库字段与测试对照口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算先做一条“能提交”的链路：录音->生成片段文件->算hash->写本地索引->走提交接口拿upload_url->分片上传->回传evidence_pointer_id。然后再加VAD自动切片和弱网重试。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "几个点我不确定：\n1）低端机上录音参数（采样率/编码）怎么选才能兼顾ASR和流量；\n2）VAD触发切片的边界，怎么避免把一句话切碎；\n3）缓存的加密和过期策略，跟我们P3要求怎么对齐到代码里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 端侧采集SDK我准备支持实时录音+VAD切片+断点续传。你这边给我一个“可落地的音频规格+VAD分段建议”：采样率/位深/声道/编码（PCM/AAC/OPUS），以及VAD的窗口、hangover、最短片段/最长片段建议。最好能说下对ASR字错率和噪声鲁棒性的敏感点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果用OPUS 16~24kbps，服务端转写那边需要额外解码，字错率会比PCM差很多吗？我们这边评分还要做证据链，担心申诉复核时说“压缩损失”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "VAD这块，你给的最短1.2s/最长30s。我们口述作业有时会停顿很长再继续，hangover 500ms可能会频繁切段。要不要加“静音超过X秒强制切段”，或者“段间合并”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心低端机CPU。10ms帧+特征+VAD如果再加OPUS编码，会不会爆？有没有更轻的VAD路径？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回到导师那边把取舍敲掉：内采PCM、外传OPUS；VAD先粗后细、配置可下发；分段用最短/最长+静音强切+短段合并。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "SDK侧我想定义三层对象：\n- RecordingSession：一次作业口述的录音会话，生成session_id；\n- AudioSegment：VAD切出来的段，segment_id、start_ms/end_ms、codec_params、file_hash；\n- UploadTask：每段对应一个上传任务，保存upload_id、分片offset、重试次数。\n事件上我只打元数据：actor/role（学生端就actor=student_id，role=learner）、action（start_record/stop_record/create_segment/request_upload/complete_upload）、resource_id（segment_id或session_id）、evidence_pointer_id、hash、reason_code（比如permission_denied/expired/approval_pending）。内容不进日志。\n分级：segment编码文件是P3；本地仅保留加密缓存；展示用的转写P2不在SDK做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与合规官 端侧音频采集SDK会落盘P3编码文件并做离线缓存，之后断点续传。我们之前定了RBAC+ABAC+purpose、证据访问有受限预览/原件解锁双接口、默认拒绝且要区分权限不足/审批未通过/附件过期。你给我两块建议：1）端侧缓存加密与密钥管理最小实现；2）这三类拒绝在端侧的处理原则（是否重试、是否清理缓存、需要怎样的审计字段）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "你这边提到hash算密文或明文二选一。我倾向于对“落盘的首次文件（编码文件）”算明文hash，后续加密后再算一个cipher_hash。这样申诉时解锁拿到的就是首次编码文件，hash能对上；同时本地缓存层还能校验密文是否被篡改。这样会不会过度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "OK，我的实现是：本地缓存是加密文件；上传走HTTPS直接上传编码文件明文（不二次转码），hash按编码文件算；本地加密只是为了离线存储安全。密文hash只用来本地校验，不上报。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小API我建议这样：\n- init(config)：含采样率=16k、mono、编码=OPUS优先（fallback AAC）、VAD模式（energy/webRTC）、分段阈值（min=1.2s、max=30s、silence_cut=2s、hangover=400ms）\n- startSession(homework_id, purpose_tag) -> session_id\n- startRecord(session_id) / stopRecord(session_id)\n- onSegmentReady(callback)：回调segment_id、start_ms/end_ms、codec_params、file_path(加密缓存路径)、plain_hash\n- requestUpload(segment_id) -> upload_url, upload_id, expires_at\n- uploadSegment(upload_id, segment_id)：支持分片/断点续传，失败按错误码策略处理\n- completeUpload(upload_id) -> evidence_pointer_id\n本地索引字段：session_id、segment_id、homework_id、created_at、expires_at、start_ms/end_ms、codec_name/bitrate/sample_rate、plain_hash、cipher_path、dek_wrapped/iv、upload_id/upload_state/offset、last_error_code/reason_code。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我做两组最小对照：\n1）同一批口述样本（先用30条起），A=OPUS 24kbps，B=AAC 48kbps（如果有条件再加C=PCM但只做离线对照不上传），看ASR的字错率/WER和长停顿场景的断句一致性；\n2）切片策略对照：静音强切2s vs 3s，观察段数、平均段长、以及ASR时间戳漂移（用start_ms/end_ms与转写token时间对齐误差做统计）。\n如果差异不大就先用OPUS+2s强切；如果某类样本明显变差，我再按你说的把VAD阈值做成可下发，后续迭代。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,521 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在碎单微势聚构系统需求阶段背景下，用户与导师围绕拆单滑点归因假设设定与暗池探测合规边界持续沟通（7轮），其中在滑点因子拆解与假设设定部分与量化策略研究员沟通（1轮），在暗池探测合规红线部分与合规与报送架构师沟通（1轮），并最终确定三个归因方向及合规约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我列了个步骤：1.收集历史拆单数据；2.计算总滑点；3.寻找滑点产生的原因。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定得看数据吧。一般不就是市场冲击嘛，单子太大把盘口吃穿了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太会设这种。我就知道滑点就是成交价跟预期价差多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拆单滑点归因怎么搞？我只会算总滑点，不会分因子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "暗池不就是黑盒嘛，我们发单进去探探流动性，应该没事吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探暗池有钓鱼单风险，这具体卡在哪？我们怎么拆单才算合规？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滑点主要是三个因子，得验流速和回复率的关系；然后合规上不能乱撤单探深度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "审查机制这块我真不懂，以前没做过交易报送。我接下来两周得补一下MiFID II里的交易报告标准，至少搞懂拆单链路的留痕字段要求，把字段清单列出来，这算我这阶段的学习目标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因方向就定微观冲击、流动性透支、延时价差这三个。优先验证流动性透支假设。合规约束就是撤单率限制和留痕审查。"
+              }
+            ]
+          },
+          {
+            "microScene": "在暗池合规边界与报送要求界定背景下，用户与导师围绕暗池合规矛盾、防自成交机制、防意图泄露探测方式及模块约束边界持续沟通（6轮），其中在暗池监管底线与报送增量需求、流式自成交与暗池探测合规红线部分与合规与报送架构师沟通（2轮），并最终形成路由、拆单与报送模块的合规约束边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然留痕审查已经定了，暗池报送就按现有的模板填？反正就是确保每笔成交都能查到，撤单率控制住应该就合规了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们做碎单微势和暗池寻优，合规报送跟常规交易有啥区别？需要加哪些特殊规则？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防自成交就加个判断，买卖方向相反且价格匹配就拦住呗？路由探测的话，不发IOI，那发什么？直接下限价单探测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以合规红线就是：必须用状态机防流式自成交，禁止留盘口单只能受限Ping，报送要穿透式留痕。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "路由模块约束：1. 禁止留盘口限价单探测；2. 只能用受限频率的Ping机制。拆单模块约束：1. 发单前必须核对未成交状态机防自成交；2. 禁止发送IOI。报送约束：1. 毫秒级留痕；2. T+1穿透式报备父子单链路。"
+              }
+            ]
+          },
+          {
+            "microScene": "在算法商业模型与收益测算背景下，用户与导师围绕收益口径、商业模型和验证动作持续沟通（5轮），其中在净收益指标拆解与验证数据选择部分与管法效能评估师沟通（1轮），在商业分润模型与验证样本分组部分与量化策略研究员沟通（1轮），并最终确定BPS分润商业模型、shortfall净收益口径及历史切片A/B对比的最小验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大单拆碎执行，滑点降下来的那部分，减去手续费，就是赚的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分润吧，效果越好我们赚越多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据口径，就拿历史回测跑一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "滑点降了算收益，但还有合规那些成本，净收益具体怎么算？验证用历史回测行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "商业模型选分润行吗？验证样本要怎么选才能不自嗨？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "BPS分润，净收益是shortfall减成本。开盘收盘要单独分组。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收益口径用实现shortfall扣合规与路由成本；商业模型选BPS分润。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "验证动作这块我确实短板了，我不懂怎么设计对照组剔除微势噪音。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得补一下这块，先去找两篇微结构实证的论文看下开盘收盘分组的设置方法。然后我准备先用上个月的实盘历史切片，按评估师说的跑个A/B对比，看净收益是不是显著为正。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在碎单微势感知与流态重构方案设计背景下，用户与导师围绕微势数据流组织、状态机切分及验证假设严谨性持续沟通（5轮），其中在流态状态机切分与特征聚合及对照组设计部分与微势流态设计师沟通（2轮），并最终确定三态状态机框架、动态阈值及A/B切片对照验证口径，明确补学CEP任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Flink接行情，算微势特征，然后发给下游。但微势特征具体怎么提，还有流态重构具体指啥，我不太敢定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对复杂事件处理的状态机设计确实短板了。我得补一下这块，准备这周把Flink CEP的官方Doc过一遍，再找两篇流式量化架构的案例，看人家怎么定义状态转移的，然后把状态定义迁移到咱们项目里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碎单微势感知这块，流态状态机怎么切分？微势特征怎么聚合？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得可以假设深度变化超过均值两倍就升温。对照组就分两组跑，一组用这个状态机，一组不用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就用A/B切片对照，看shortfall差值。状态机先按升势、降势、常态三态来设计，阈值用动态的。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨源行情融合与价差建模背景下，用户与导师围绕暗池数据颗粒度、合规与寻优精度取舍及流式特征提取方案持续沟通（5轮），其中在寻优数据需求与替代特征有效性部分与量化策略研究员沟通（2轮），在意图流合规性部分与合规与报送架构师沟通（1轮），并最终确定合规优先的暗池聚合数据边界与流式特征提取架构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "准备把几个主流暗池的行情快照全拉过来，再把明池盘口对齐，直接算价差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池的行情数据我们需要拿到多细的粒度？全量快照够不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种数据我们直接拉取并存储来做价差建模，合规上能过吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那肯定不能碰合规红线。只能放弃意图流，就按合规说的，只拿聚合深度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "聚合深度变化太快，如果直接算价差，噪声会很大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们不存原始意图流，只在内存里实时算深度消耗速率这类统计特征，然后喂给寻优引擎，能缓解精度问题吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "跨源行情输入源：明池全量+暗池聚合TOB；处理链路：流式抽取特征，原始报文即丢；严禁落盘。我这就去更新架构设计文档的接口和存储规范。"
+              }
+            ]
+          },
+          {
+            "microScene": "在暗池探测与智能路由设计背景下，用户与导师围绕流动性探测方式、路由状态机跳转及探测频率约束持续沟通（4轮），其中在暗池嗅探与状态机设计部分与智能路由工程师沟通（1轮），在探测链路低延迟架构部分与极低延时架构师沟通（1轮），并最终形成基于微势信号强度的四状态机路由与动态频率探测约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "比价嘛。暗池报价好就走暗池，不行就走明池。我准备弄个规则树，按价差排序往下发单就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池流动性怎么探测？直接发单测会不会被猎手盯上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "探测链路延迟要压到多少？用普通TCP发试探单行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源消耗，我没细算，发太多是不是会把网卡打满？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "路由状态机：1.探测态，微势信号触发，发极小量试探单；2.确认态，收到暗池部分成交或TOB刷新，转执行；3.执行态，发剩余碎单；4.撤单态，超时或信号消失，撤单回明池。探测约束：频率随微势强度动态调整，链路走内核旁路，禁用TCP。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去更新设计清单。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极低延时容错与风控熔断方案设计背景下，与导师围绕熔断机制实现、合规报送同步与软硬件取舍持续沟通（5轮），其中在合规报送同步与状态留存部分与合规与报送架构师沟通（3轮），在硬件加速与排期风险部分与极低延时架构师沟通（2轮），并最终形成状态机内嵌FPGA硬撤单与软件Seq快照兜底的熔断约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用错误率熔断。设个滑动窗口，如果暗池拒绝率超过阈值，就把路由状态机强制跳转到撤单态，退回明池。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "滑动窗口确实有延迟。那用心跳检测？暗池没心跳就直接熔断。不过心跳间隔也不好定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果暗池链路异常，我们在微秒级直接熔断撤单，监管报送这边来得及同步吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果等报送确认再熔断，延迟就上去了。硬件层面有没有办法让报送和熔断同步？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "FPGA预校验能解决下单前置，但熔断撤单时的状态留存怎么保证？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近在看PCIe DMA零拷贝的规范，里面提到硬件直出带校验和的帧结构。能不能让FPGA生成撤单报文时，直接把合规字段和校验和写死在硬件描述里？这样既快又不可篡改。我来设计个实验验证下延迟和合规完整性。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量控制：软件撤单和FPGA硬撤单两组。控制订单吞吐量变量，从1万TPS到10万TPS递增。观测指标：撤单指令P99延迟，和合规报送流的匹配完整率。跑三轮取均值，如果FPGA硬撤单P99在5微秒内且匹配率100%，就说明方案可行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个大坑。如果现在改RTL，项目排期肯定超期。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选硬软结合。FPGA做前置拦截和撤单报文硬封装，软件侧并行做状态快照兜底。如果FPGA撤单失败，软件快照补发合规报送。排期上，FPGA逻辑复用现成的网卡帧头模板，只改payload，周期可控。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用序列号对齐。FPGA发出的撤单包带全局递增Seq，软件快照只补发Seq缺失的段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "熔断约束：1.触发源仅限状态机跳转，禁用外部心跳；2.撤单通道走FPGA硬封装，带合规字段与Seq；3.软件侧维护Seq快照，仅补发缺失段；4.滑动窗口废弃，改用瞬时错误码直接驱动状态机。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碎单微势聚构与价差收敛寻优系统工程开发背景下，用户与导师围绕微势特征提取与流态编码的Seq对齐、扩展性及验证口径持续沟通（5轮），其中在流态编码与对齐部分与微势流态设计师沟通（1轮），在验证口径部分与量化策略研究员沟通（1轮），并最终确定Flatbuffers版本化编码、同Seq打包及Tick重放验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算算完一个特征就发一个事件，带上当前的Seq号发下去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加因子就改结构体呗，重新编一版。流态重构我不太懂，我就把数据传下去，下游自己拼。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微势特征怎么编码成流态？以后加因子怎么扩展？还有怎么跟Seq对齐？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流态要用Flatbuffers做版本化编码，同一Seq的特征组一起发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flatbuffers我以前没用过，我只会写定长struct。验证的话，我就打印出来看看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取的验证口径是什么？我怎么测我提的特征跟你们离线算的一不一致？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证要重放Tick，跟Python基准比，Seq一致，误差1e-4。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查Flatbuffers文档，写个demo测下序列化性能，顺便看怎么零拷贝。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "打算今天下午写个demo把几个基础因子序列化跑通，明天迁移到提取模块里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微势特征提取与寻优引擎联调背景下，用户与导师围绕接口数据格式冲突及折中方案持续沟通（4轮），其中在引擎输入格式与零拷贝可行性部分与核心寻优引擎开发沟通（2轮），在流态上下文保留与状态压缩可行性部分与量化策略研究员沟通（2轮），并最终形成128维潜空间向量接口协议。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "输入接口是哪个？直接传Flatbuffers对象行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎那边说只要8个标量，不要完整状态机，你看砍掉流态上下文对寻优有影响吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "引擎嫌状态序列太重影响延迟，研究员说没状态寻优就是瞎搞。我都不知道该传啥了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点不就是嫌解码慢嘛。研究员那边又必须要有上下文信息。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我不传Flatbuffers对象，也不传状态序列，我把状态压缩成一个定长数组，比如128维的float，你这边能直接用吗？不用解码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "把流态状态序列压成128维的float数组，能做到吗？信息够不够寻优用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "引擎接受定长数组零拷贝，研究员用潜空间向量输出128维。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "马上改输出层，把Flatbuffers转成128维数组往下发。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在撮合模拟与滑点回测压测背景下，与导师围绕虚拟对手盘必要性、压测环境选型及核心场景指标持续沟通（6轮），其中在模拟器搭建部分与高并发测试工程师沟通（1轮），在压测环境去噪部分与极低延时架构师沟通（1轮），最终明确三个核心压测场景及验收指标并计划对接测试工程师。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备把历史Tick数据导进去，看成交价和期望价的差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "撮合模拟器怎么搭，滑点压测指标有哪些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "造对手盘有点复杂，能不能先拿历史数据顶一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我把任务拆一下：先找研究员要微势特征的样本分布，然后让测试工程师出个虚拟对手盘的框架，我再往里填撮合逻辑。大概明天能出初版。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测我平时就用JMeter配个插件，单机跑。分布式没搞过，算力不够的话，单机多开几个进程行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JMeter压不到微秒级撮合，压测环境怎么搭才能不引入系统级噪声？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我没弄过共享内存通信，这改动挺大，我可能得找测试工程师一起弄。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心场景三个：1. 常规碎单流态下的冲击成本偏离度；2. 极端行情（比如瞬间跌5%）的单笔穿透率；3. 对手盘撤单率突增时的成交时间衰减。验收指标就是这三个场景的均值和P99都不能超过研究员给的阈值。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极速系统链路耗时剖析与极致调优背景下，用户与导师围绕剖析工具选择、eBPF脚本迁移落地、P99毛刺定界及调优动作总结持续沟通（7轮），其中在剖析工具选择部分与全链路调优专家沟通（1轮），在P99毛刺定界方法部分与全链路调优专家沟通（1轮），并形成换用eBPF追踪、对照实验定界毛刺及改代码约束的三步调优落地动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算跑一遍代码，用gprof看哪个函数耗时最长，然后把那块逻辑用C++重写或者加内联。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这种极速系统要怎么剖析耗时？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没写过，我只用过perf stat看全局计数器。这块我确实不会，我得花半天时间看看BCC工具链怎么用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚查了几个BCC的现成脚本，有个叫offcputime的能追踪线程被切换出去的等待时间。我可以把它挂载到咱们寻优引擎的下单线程上，这样就能单独算出线程因为等锁或者等网卡队列被挂起的时间，比以前光看总耗时精准多了，能直接定位是哪个锁把单子卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "毛刺可能是GC，也可能是网卡软中断抢了CPU。我不太确定怎么把这两个因素分开测。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先绑核隔离中断，如果毛刺没了就是中断的问题，还有毛刺再查内存分配器。这算是排除了一个环境变量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，停用gprof，换eBPF的offcputime脚本追踪下单线程的offcpu时间定位锁竞争；第二步，做对照实验，把下单线程绑核并隔离网卡中断，验证P99毛刺来源；第三步，基于火焰图改代码时，只改内核态开销占比超过15%的热点函数。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在暗池路由生产效果验证背景下，与导师围绕微势试探单的滑点收益与合规风险持续沟通（6轮），其中在寻优收益测算部分与算法效能评估师沟通（1轮），在监管报送与刺探边界部分与合规与报送架构师沟通（1轮），并最终决定降频试探单逻辑并增加撤单率硬限与监控。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我跑了A/B分组对照实验，新路由在暗池里的滑点降了大概15%。不过我发现一个情况，微势感知模块发的那种极小碎单，去摸暗池深度的效果特别好，价差收敛很快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "暗池路由里用极小碎单做微势探测，这部分的寻优收益数据你怎么看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种高频发碎单去摸暗池深度的做法，监管报送那边能过吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "评估师说滑点降15%且效应量显著，合规架构师说这种高频碎单加撤单会被认定为诱导性报价，有熔断风险。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实没关注过撤单率这个合规指标，只盯着价差收敛看了。这是我工程规范的盲区。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周得把MiFID II里关于暗池订单撤销率的阈值规定看完，总结成检查项加到路由参数配置流程里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "监管熔断风险不能冒，我决定把高频试探单的逻辑降频或者关掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在路由配置里加一个撤单率硬限，超过阈值就停止发试探单。然后跑一轮压测，看撤单率指标是否合规。"
+              }
+            ]
+          },
+          {
+            "microScene": "在滑点收敛监控与异常归因背景下，用户与导师围绕滑点毛刺异常归因、拆分粒度联动逻辑修改及资源开销处理持续沟通（6轮），其中在收敛指标口径确认部分与算法效能评估师沟通（1轮），在流态切变归因部分与异常猎手与复盘师沟通（1轮），并最终确认拆分粒度脱节为根因，形成补充联动逻辑与回归验证动作及流态机开销优化待办。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "整体滑点收敛了大概15%，但下午2点半那一段，滑点突然放大，出现几个明显的毛刺。我按流程导出了异常时段的日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志里有很多微势流态切变的记录。我猜是行情波动太大导致模型没跟上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "想确认下咱们滑点收敛度的计算口径，是不是排除了盘口深度瞬间清空的情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "下午2点半出现微势流态切变，滑点放大，这种一般怎么归因？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来是因为拆分粒度没跟上波动率。流态机频繁初始化也会吃资源。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "得把波动率因子加到碎单拆分逻辑里。不过流态机频繁初始化的资源问题，我没什么好办法，只能加个限频或者扩大内存。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就先改拆分粒度的联动逻辑，跑一轮回归验证滑点毛刺是否消除。资源开销的事我记在迭代清单里。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在算法迭代与参数动态调优背景下，与导师围绕触发机制、收益约束、复现性与降级逻辑持续沟通（6轮），其中在触发机制与复现性部分与异常猎手与复盘师沟通（1轮），在收益边界与降级逻辑部分与管法效能评估师沟通（1轮），并最终形成异象驱动调优闭环及四项改造待办。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个定时任务？每隔两分钟扫一次滑点监控表，如果滑点超标就调大拆分粒度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "定时轮询太慢，参数动态调优该怎么触发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调参的收益边界怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发规则是波动率跳升等异象驱动，不是定时。约束是预期收益覆盖计算开销。复现性靠打参数快照和市场切片。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "开销计算这块我不太会定接口，我记在迭代清单里，得找引擎组确认算子重配耗时。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没概念，之前只写过定时轮询脚本。我记一下，回去得补学CEP流式事件触发的模式，看能不能把这套逻辑迁移到流态机的初始化重构里去，替换掉现在的静态配置。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "待办四项：一、流态机改造为异象驱动触发；二、对接算子重配开销计算接口；三、补充极端行情降级锁参逻辑；四、实现调参快照与切片落库。马上推进。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

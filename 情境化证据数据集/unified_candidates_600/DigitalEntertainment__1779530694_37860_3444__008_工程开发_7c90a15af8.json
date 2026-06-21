@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在记忆分片与跨端同步MVP开发背景下，用户与导师围绕分片策略、同步协议、冲突消解及验证口径持续沟通（6轮），其中在同步协议与冲突消解部分与数据一致性研发专家沟通（1轮），并最终形成信令信封分离、版本向量加衰减合并及对照组验证的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分片我打算按用户ID hash切，同步直接用Redis pub/sub推，写起来快。冲突的话，后到的覆盖先到的就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨端同步如果用Redis pub/sub，密态信封怎么处理？还有那种旧快照冲掉新状态的冲突，一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令和信封分离，冲突用版本向量加衰减合并。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本向量我之前没写过，逻辑有点绕，特别是并发节点的比较。我得补一下这块。我今晚把CRDT的GO开源库过一遍，写个向量时钟的demo跑通，明天集成进来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以写个脚本，模拟手机切后台断网，然后PC端改记忆，手机再连网。看合并结果对不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分片逻辑我就按用户ID hash切，同步信令走MQ，信封走OSS，冲突用向量合并。先出这个MVP。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

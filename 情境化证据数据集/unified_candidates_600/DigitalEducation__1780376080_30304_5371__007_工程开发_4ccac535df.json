@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在漂移追踪引擎联调背景下，与导师围绕链路阻塞与并发问题权衡持续沟通（8轮），其中在特征积压与锁优化部分与漂移追踪引擎开发员沟通（5轮），在反压卡死与降级方案部分与端到端链路联调专员沟通（5轮），并最终形成读写锁加版本号及滑动窗口覆盖的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，锁太粗确实会卡。那细化一下锁？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "也是，算错更麻烦。那就还是粗锁，把上游推送频率降一降？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "实时性肯定得保吧，召回率掉系统就废了。算错一点，稍微偏一点应该也行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是。那能不能换个算法？不用全局锁的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那就加读写锁。你先改一下，改完我们再跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写操作频繁的话，读写锁也会退化成互斥锁。那就还是卡。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "兜底的话，要是退化卡住了，就先丢弃一部分特征？反正是联调阶段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，就按这个来。引擎侧读写锁加版本号，特征侧做最新窗口覆盖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，引擎侧改用读写锁加版本号控制；第二，特征侧做滑动窗口覆盖，积压时推最新；第三，先这样跑一下看压测结果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

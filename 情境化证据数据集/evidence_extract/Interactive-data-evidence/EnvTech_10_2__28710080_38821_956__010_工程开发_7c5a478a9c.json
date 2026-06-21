@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧调度引擎与工单闭环开发背景下，用户与导师围绕P2触发条件、输入事件最小字段、审计字段落地及端到端验收口径持续沟通（10轮），其中在固定审计字段骨架与边缘详细/云端摘要划分节点与合规与审计官沟通（3轮），并对齐P2生成低优先级核查工单的幂等与重试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P2就是高风险但设备正常。链路我理解是：事件进来->模型推理->规则判P2->然后生成一条“需要处理”的工单？审计字段就把版本、阈值、时间这些放进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高风险应该是模型输出score超过threshold。设备正常就是设备自检状态OK、最近心跳正常、冷却策略没触发。最小字段：event_id、outfall_id、ts、features_hash、model_version、threshold、score、risk_level=P2、device_status、decision_rule。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 P2这类触发记录，审计要哪些字段？边缘存详细、云端存摘要具体怎么分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "cloud是不是一定不能存payload？如果以后复盘要看呢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我先按默认最小化来。那decision_path摘要截断会不会审计不认可？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧我会把固定骨架都记：site/outfall/edge/event时间、bundle_id、schema_version、payload_hash、clock_skew、missing_fields。模型链路记model_name/version/hash/slot、policy_version、threshold_set_id、rollback_flag。决策记score、level=P2、decision_path全量、device_health和异常码数组。处置关联就是workorder_action先写“派单”或“仅记录”，如果生成工单就补workorder_id。上云就去掉原始payload、中间项，留payload_hash、decision_path_hash加前几条规则ID。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向生成工单，不然就只是日志。可P2设备正常，可能只需要安排巡检或下次清掏窗口？我不确定必须派单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我卡在边缘怎么“创建工单”。是直接写本地队列还是调用工单服务API？我怕弱网会失败，然后重复创建。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工单字段：workorder_id（服务端回）、event_id、outfall_id、priority（低）、type（核查）、recommended_action（复核传感、检查拦截网是否堵）、created_ts、status=OPEN。回执ACK就写ack_ts和ack_by（可能是设备或者值班人）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关联就是在审计记录里写workorder_id，工单里也带event_id。失败重试我就一直重发？留痕可能在审计里加retry_count和last_error？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则串我写成：RISK_SCORE_GE_THRESHOLD && DEVICE_HEALTH_OK && NO_COOLING -> P2。decision_path里就存[\"R01_score_ge\",\"R12_device_ok\",\"R20_no_cooling\",\"OUT_P2\"]这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "score=0.82，threshold=0.75。device_health=\"OK\"。device_anomaly_codes为空数组。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入事件最小：event_id=\"evt-20260330-001\"，outfall_id=\"OF-17\"，site_id=\"PARK-A\"，event_ts=1711760000。传感包sensor_bundle_id=\"sb-8891\"，里面有rain_intensity_mmph=35，water_level_cm=68，turbidity_ntu=120，还有摄像头微塑料疑似计数mp_count=45。再带device_heartbeat_age_s=8，self_check=\"PASS\"，cooling_active=false。schema_version=\"v3\"。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收三条：  \n1）输入上面那条扰动事件，边缘推理score=0.82并按规则输出risk_level=P2，device_health=OK。  \n2）边缘生成一条低优先级“核查”工单请求，带idempotency_key=event_id+policy_version；拿到workorder_id后工单状态能到ACK（哪怕是模拟回执）。  \n3）审计记录里必须有：event_id/outfall_id/edge_id、payload_hash、model_version+model_hash+slot、policy_version+threshold_set_id、risk_score+risk_level、decision_path(边缘全量)以及workorder_id、retry_count、error_code（无错就为空）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

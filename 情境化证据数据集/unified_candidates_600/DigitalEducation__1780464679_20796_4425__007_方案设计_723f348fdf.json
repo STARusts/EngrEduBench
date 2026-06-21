@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在认知桥接调度接口定义背景下与导师围绕通信模式、策略包契约与接口粒度持续沟通（7轮），其中在流式触发与策略下发规范部分与接口设计师沟通（1轮），并最终确定WebSocket双工通信、拆分感知与下发接口及保留Mock资源URI的策略包契约方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按理说应该用标准的RESTful API，保证松耦合。输入就是刚才定的心智向量，输出是干预动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "流式的话，轮询开销太大。长连接？用WebSocket？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "认知桥接调度的接口，流式触发干预的，如果用WebSocket传心智向量，然后下发干预策略包，这接口的契约和规范怎么定比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP上消息总线是不是太重了？还是先用WebSocket直连吧。偏差上下文里源向量和目标向量肯定要，算子ID也要，资源URI能不能先写死在算子内部？省得再查一次。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就WebSocket加异步回调。策略包三字段全保留，URI指向Mock资源。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开吧，单一职责。偏差感知接口收向量算相似度，干预下发接口推策略包。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

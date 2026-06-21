@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在实时配音变声服务运行评估的质量与延迟监控设计背景下，用户与导师围绕不可存回放音频前提下的链路分段指标、灰度对照口径、异常会话与看板最小集合持续沟通（8轮），其中在监控/告警最小闭环与维度对比部分与SRE运维工程师沟通（5轮），在不可逆质量代理指标与合规边界部分与语音算法负责人沟通（4轮），并形成本周≤10个核心指标、告警阈值与归因切维方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先盯E2E延迟的P50/P95，再加错误码占比。质量就用MOS？还有抖动、丢包这些。我怕没音频，质量不好判。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三段的话，上行就看入站的包间隔、丢包率；推理看模型耗时；下行看出站到客户端的buffer。对比就按tenant_id分组看P95。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 现在要做质量与延迟监控，不能存音频。你给一套最小指标和告警怎么配？还要灰度/对照能比。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这“客户端打点”现在就有吗？我印象里只有服务端时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法负责人 不能存可回放音频的前提下，要监控配音+变声质量。线上能用哪些代理指标？别太学术，能落地打点那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "音色嵌入这种算可逆吗？我怕合规卡我。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我拿到两块建议。SRE那边给了分层延迟和错误告警，还说客户端打点缺就先用服务端近似。算法这边说质量别搞MOS，改成削波率、VAD占比、对齐失败、语速比、音色漂移这些“分桶+聚合”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先放：  \n1) e2e_latency_ms P95  \n2) server_ingress_to_egress_ms P95  \n3) queue_wait_ms P95  \n4) tts_infer_ms P95  \n5) vc_infer_ms P95  \n6) ERR_FRAME_SEQ会话占比  \n7) 401/403各自占比  \n8) ingress_loss_pct  \n9) client_buffer_underrun（如果没打点就先不放？）  \n10) clip_rate"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那最小集合我改成：  \n- 延迟：`e2e_latency_ms` P95；`server_ingress_to_egress_ms` P95；`queue_wait_ms` P95；`tts_infer_ms` P95；`vc_infer_ms` P95  \n- 错误：`ERR_FRAME_SEQ` 会话占比；`ERR_CODEC` 会话占比；`401_rate`、`403_rate`分开  \n- 质量：`clip_rate`；`vad_speech_ratio`（按分桶计数）  \n异常会话：5分钟窗内出现上述任一错误码，或E2E P95>600ms，或`vad_speech_ratio`落在极低桶。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板里每个指标按`route_version`分两条线，窗口5分钟。分位数本身就是按会话样本算，不做租户平均。再加一个top租户列表：按`tenant_id`看`ERR_FRAME_SEQ`和E2E P95，方便看是不是单租户异常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我大概会先看`clip_rate`和`vad_speech_ratio`是不是异常；如果是，可能是输入增益或编码问题？再看`ERR_CODEC`。如果这些都正常，那我就不知道了，可能是模型输出情绪不对，但我没法证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "归因我先按维度切：  \n- `codec/network_type/platform`异常一起涨：偏链路/端侧或编解码  \n- `model_version/role_pack_id`异常：偏模型或角色包  \n- `region`异常：偏线路或机房  \n我先按这些切一遍再找人。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我记三条：  \n1）监控不存音频，质量用不可逆代理：`clip_rate`、`vad_speech_ratio`，后续可加对齐失败/音色漂移但只存分桶聚合。  \n2）延迟分层看：E2E P95 + 服务端链路P95 + 排队/推理P95；错误重点盯`ERR_FRAME_SEQ`，401/403分开。告警阈值沿用上次：P95 400/600ms、`ERR_FRAME_SEQ` 0.01%会话。  \n3）灰度/对照按`route_version`并行对比，维度切`tenant_id/region/codec/platform/model_version`，用这些做可验证归因：哪类维度聚集就往哪段猜瓶颈和提改动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

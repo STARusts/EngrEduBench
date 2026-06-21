@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在视觉算法选型与边缘算力受限背景下，用户与导师围绕出菇状态识别模型选型及算力兼容性持续沟通（4轮），其中在重叠场景选型指标部分与视觉算法研究员沟通（1轮），在NPU算子兼容与替代结构部分与算法部署优化师沟通（1轮），并最终确定YOLO检测头加关键点回归的视觉方案方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我拉了三个备选：传统轮廓提取、YOLOv8n目标检测、还有轻量级语义分割。传统方法在菌柄遮挡时肯定崩；分割网络算力可能超；目前倾向YOLOv8n，先出bbox，再根据面积变化率估成熟度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "菌房里菇体重叠严重，单靠YOLO的bbox面积估采收期抖动太大。如果上实例分割判菌盖开伞比例，精度能提多少？边缘NPU跑得动吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来想试seg极简版，现在看风险太大。是不是得退回检测头？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们视觉想上实例分割判开伞度，但怕NPU不支持上采样算子。当前瑞芯微RV1106这板子，跑seg模型是不是得走CPU兜底？有没有替代结构能避开Deconv，同时还能输出菇盖形态指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳这个方向。后面标注规范得从bbox改成关键点标注了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在防撞流控算法选型与编码验证背景下，用户与导师围绕核心避障算法选型及验证口径持续沟通（3轮），其中在算法解算时延与死锁修补部分与集群防撞策略师沟通（3轮），用户提出MPC方案，咨询工程可行性，分析取舍后确定ORCA加时隙流转惩罚方案及验证重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我建议用非线性MPC。构建二次规划问题，把无人机的动力学约束和安全间隔约束都加进代价函数，理论上能保证全局最优且无震荡。文献里证明过它的渐近稳定性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用非线性MPC做防撞核心，代价函数J包含控制输入惩罚和间距惩罚，理论上避障平滑度最好。在咱们这个系统里解算时延能压下来吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ORCA在高密度并发下容易陷入局部极小值导致死锁！理论上有完备性缺陷，多机围堵时速度交集为空，直接返回None，这怎么防撞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可是ORCA的完备性修补，靠时隙惩罚能严格证明避免死锁吗？我只看到过启发式的提法，没见严格证明。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时隙流转惩罚项的具体形式是什么？是直接在ORCA的半平面约束上加松弛变量吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那按ORCA加流转写吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证时，重点测密集并发下优先级反转和死锁解除时延。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

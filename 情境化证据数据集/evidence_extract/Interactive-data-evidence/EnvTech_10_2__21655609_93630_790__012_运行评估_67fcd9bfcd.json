@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在农业径流营养盐预警与减量闭环系统运行评估的现场部署验收与巡检背景下，用户与导师围绕验收口径、端到端链路抽查点选择、查询方式与验收结论表述持续沟通（9轮），其中在验收用例与判定字段部分与测试与质量工程师沟通（4轮），在巡检指标阈值、最小权限与审计、token过期验证部分与安全与SRE工程师沟通（4轮），并整理形成可执行的现场验收与通过条件清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "农业径流营养盐预警与减量闭环系统现在要做运行评估这块，我被安排去现场部署验收和巡检。我现在有点没概念，到现场先看什么才算验收过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "端到端就是从传感器进来，然后模型出预警，再到大屏上有点亮？我能不能直接用现成的巡检脚本跑一下就算了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "清单…我就写三条？传感器在线、接口200、页面正常？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 现场部署验收怎么测？有没有模板，直接套一下那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时窗一致性那里，我有点懵。是不是只要返回200就行？一致不一致我看不出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那落库字段太多了，能不能只看event_id就算通过？现场网还不稳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我记下。那缺陷单要写很多吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与SRE工程师 现场巡检要看哪些？有没有一键面板，点一下全绿那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小权限我有点搞不懂。我用管理员不是更省事吗？现场要查东西还得申请。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志我是不是看有文件就行？比如有个log表就算有？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那token过期要怎么测？我不太会搞。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。质量那边给了现场用例：看数据新鲜度、同一window_end_ts重放比event_id和feature_run_id、预警要落库带model_version/feature_run_id/window_end_ts、再测工单降级。SRE那边巡检就盯四个指标加设备在线率、补传积压、入库延迟P95，还有最小权限和审计、token过期测401。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就挑最近的吧，或者地图上点几个，看着顺眼的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边界风险我不会挑，是看置信度吗？还是看等级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我可能算不出来，现场没SQL客户端怎么办？能不能用AI插件查库？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这三条我写不出来，SQL我老忘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我到现场就照这个查。还有性能那四个指标要不要每个站点都测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我知道，就是先看feature_run_id有没有变。要是变了我就…找数据平台？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现场网不稳导致P95超800ms，是不是就算不通过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我就按你说的抓字段。最后验收结论怎么说比较安全？我怕说错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通过项：1）三个站点新鲜度延迟都在3分钟内；2）同window_end_ts重放event_id和feature_run_id不变；3）预警事件表里能看到model_version这些；4）工单能生成，工单挂了也能短信；5）看板上四个指标都在阈值内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

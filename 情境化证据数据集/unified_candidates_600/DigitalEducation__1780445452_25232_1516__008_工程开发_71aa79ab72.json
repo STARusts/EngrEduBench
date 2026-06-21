@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在停顿特征提取代码开发背景下，用户与导师围绕停顿识别实现、差分加噪与特征保真平衡、VAE能力缺口补齐及验证口径设计持续沟通（6轮），其中在差分加噪与特征保真实现部分与特征提取极客沟通（1轮），并最终形成VAE隐空间映射、隐空间加噪及对照测试找epsilon拐点的开发任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用滑动窗口算停留时间，超过阈值就判定为停顿。加噪的话，我直接在算出来的时间上减个随机数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口大小我打算先写死5秒，阈值设2秒。拉普拉斯噪声那个公式我记不清了，直接减随机数大概也能起打乱的作用吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在要在停顿时间上加差分噪声，又要保证特征能识别出来，这代码具体该怎么写？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但我没用过VAE，变分自编码器那套KL散度重参数化技巧我写不明白，这超我能力了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚照着PyTorch的VAE官方教程手敲一遍MNIST重参数化，搞懂隐空间采样逻辑，明天试着把停顿序列投影进去。验证的话，我先用之前定的固定固着样本跑个AUC看看效果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是看加了噪声后，识别停顿的准确率降了多少。如果降得不多就算没丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明天的开发任务就是：1. 实现停顿序列的VAE隐空间映射；2. 在隐空间加拉普拉斯噪声；3. 写个对照测试脚本，跑原特征和加噪特征的破壁识别率对比，找epsilon拐点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

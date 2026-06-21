@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发收尾的“压测与对抗调优”背景下，用户与导师围绕端到端链路压测清单、对抗用例与验收口径持续沟通（10轮），其中在压测维度与三段链路拆解上与测试工程师沟通（2轮），在乱序/缺证据处理与对抗样本一致性口径上与机器学习工程师沟通（1轮），在P95延迟与基线目标设定上与后端工程师沟通（1轮），并最终明确三类数据包、100/300/800rps压测方案与一致性/性能/隔离/合规验收要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就用压测工具打一下接口吧，把QPS拉高，看哪里报错。对抗的话，就多发点重复event_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就……ingest事件的接口、评分接口、还有教师那边查分的接口。指标就看延迟和成功率。payload大的也发一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 你给个压测要测哪些维度？我这边有点乱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听起来就是三段都测，100到800 rps，然后看P95。对抗就把缺字段、乱序都塞进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我就把同一个event_id刷一万次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用例1正常事件，期望200。用例2重复event_id同hash，期望返回也200然后写DUPLICATE。用例3重复event_id不同hash，期望拒绝然后写CONFLICT。乱序就是先调用评分再ingest，看看会不会报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@机器学习工程师 乱序、缺过程数据这种，评分这边期望咋定？还有对抗要怎么造？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "意思是乱序就给个“证据不足”的解释，然后分数别乱跳。噪声就是别让事件数越多越高分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性就是同一个submission重复算一样。吞吐就是能到800 rps不挂。拒绝隔离就是RejectEvent别跑到integrity里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 现在这链路大概能撑到啥延迟？P95大概填多少合适？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就照这个写：250、500、60。N就100次？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是防止刷事件把分刷高。+0.02就是别涨太多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用假的就行，随便造点文本和事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一档拒绝5%，一档拒绝30%。事件大小就小中大都来点。文本就用公开的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一件是把三类数据包造出来，正常、高拒绝、对抗。第二件是按100/300/800跑三段压测，然后看P95和一致性、RejectEvent有没有进错code。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在编排引擎交付部署与运行评估背景下，用户与导师围绕部署技术选型、验收标准、A/B Test实验设计、CI/CD维护与可观测性边界持续沟通（7轮），其中在无损验证标准动作与基线指标部分与运维交付工程师沟通（1轮），并最终形成放弃Mesh与eBPF、采用原生滚动更新与A/B Test验证TP99的部署定调及轻量级探针改进计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对于编排引擎的交付部署，我准备引入 Istio Service Mesh 做全流量接管，同时用 eBPF 在内核态注入可观测性，这样能保证部署过程绝对平滑，且全链路无损。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我考虑的是跨链中继的网络延迟抖动。如果用 Mesh 的 Envoy 做流量整形和重试，是不是能掩盖一部分物理网络的劣化？至于开销，只要 Sidecar 资源限配做好，应该可控。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，Mesh 改变不了中继层的物理抖动，反而多了一跳。但我对部署验证的验收标准有点模糊，除了“跑通没报错”，具体该看什么指标、看多久，我心里没谱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对于当前的编排引擎交付部署，标准的无损验证动作应该怎么定？基线对齐看哪些指标？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放弃 Mesh，用原生滚动更新加就绪探针。但在灰度 10% 切流这步，我想做一次严格的 A/B Test，来验证新部署版本的编排延迟相比老版本有没有恶化，而不是只看“没报错”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备这样：把流量按 9:1 分流，老版本对照组 90%，新版本实验组 10%。不取平均数，按 5 分钟一个采样窗口，收集两组的 TP99 样本。然后用双样本 T 检验看两组 TP99 均值差异是否显著。对于跨链中继抖动，我会在采样时打标，如果某窗口内中继重试率超过阈值，该窗口数据作废。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写进 Gitlab CI 就不用管了，Pipeline 跑完就结束，维护成本基本没有。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实习惯在部署期就把大杀器全拉起来，怕出问题没法查。我接下来必须补齐这块：两周内，我会刷完《CloudNative Observability in Practice》第 4-6 章，完成 3 个轻量级探针替代 eBPF 的验证实验，并把结论迁移到流转态势监控的告警规则设计中，不再依赖重度的内核注入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

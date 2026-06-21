@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在首批灰度数据下互动投票链路延迟抖动复盘背景中，用户与导师围绕现象拆解、根因假设、证据口径与改进验收持续沟通（11轮），其中在epoch/重连/去重证据链部分与互动链路架构师沟通（2轮）、在平台资源与队列抖动排查及合规边界部分与SRE运维工程师沟通（2轮）、在网关拦截边界与乱序容忍窗口部分与规则编排工程师沟通（2轮），并形成复盘结论结构、短期止血与长期改造项及责任分配与合规要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先看实时看板里 late_event_total 和 ack_missing 的趋势，再对照 room_id 和玩法类型分组。然后看 timeout/fail 的比例。大概先找是不是某几间房间异常，还是全局。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我猜一个是网关这边 ack_missing 多了导致重传，另一个是规则那边 timeout 变多，可能是规则执行卡。旧 epoch 污染我没太会看，就先放后面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）看 ack_missing 和 late_event_total 同步不同步，如果同步就偏网关；2）看 timeout 规则触发时，规则执行耗时分位是不是升高；3）旧 epoch 就看同一个 uid 在重连后事件的 epoch 有没有回退，回退就有问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@互动链路架构师 21:10-21:25 灰度这波 late_event_total 高、timeout 触发。复盘要怎么用 epoch/重连/去重来判断是不是旧事件污染？要看哪些最少的证据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "dedup_drop_total 我不确定现在有没有埋。reconnect_reason 之前只有弱网重连次数，没有细分原因。那现在复盘是不是只能看 event_epoch < room_epoch 这一条？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定四个检查：  \n- event_epoch < room_epoch 的占比，按 room_id 看是不是集中；  \n- 网关 ack_wait_ms_p95 和 ack_missing 同时段是不是也涨；  \n- timeout 触发时规则执行耗时 p95；  \n- reconnect_total 占比是不是突然高。  \ndedup 和端上 ack rtt 先写成“缺口”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向是重连相关把旧事件带进来，导致 late_event_total 高，然后规则那边处理也被拖慢。就是，我没把握。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 21:10-21:25 互动投票链路 late_event_total、timeout 有一波。想确认是不是平台侧抖动：那段时间网关/规则服务有没有 CPU、GC、网络丢包、队列积压、扩缩容事件？看哪些指标最靠谱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "队列 lag 我不确定我们现在有没有打出来，只记得有个“投递延迟”。发布扩缩容我能在集群事件里看。合规这块我按流程走审批，不碰明文。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试下：  \n1）现象：21:10-21:25 灰度房间 late_event_total 上升，timeout 规则触发上升，投诉量不高。  \n2）影响：互动投票的实时性变差，可能有部分投票结果延后生效。  \n3）假设A：重连导致旧 epoch 事件进入新会话，late_event_total 升高；证据看 event_epoch<room_epoch 占比。  \n4）假设B：平台侧投递或规则执行在那段有抖动；证据看 ack_wait_ms_p95、规则执行耗时 p95、队列投递延迟/lag、CPU throttling。  \n5）改进：补 dedup 命中指标、补端上 ack rtt 或替代、补队列 lag 指标；先把告警阈值按动态阈值调整避免误报。  \n6）验证：下次灰度同玩法对照，重连高峰压测下 event_epoch<room_epoch 应接近 0。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "短期：先在网关加 event_epoch 校验，发现 event_epoch<room_epoch 直接丢并计数；规则侧对超时事件做降级，不再阻塞整条编排。  \n长期：补 dedup 指标、端上 ack rtt、队列 lag；把重连原因维度加上，后面好分组。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就只丢“明确属于旧房间 epoch”的事件，比如 room_epoch 已经推进了，event_epoch 还落后很多。阈值我说不出来，可能先用严格相等判断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则编排工程师 复盘里我们想在网关做旧 epoch 事件拦截，但担心误伤乱序/迟到。你们规则状态机现在对乱序事件的容忍窗口是怎样的？有什么判定边界能给网关用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所以不用搞阈值，直接 epoch 不相等就拦。late 还是照常投递，只是打标。这样我能理解。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分配我按模块说：  \n- 网关：加 epoch_mismatch_total，且对 event_epoch!=room_epoch 的事件拒收并计数；再把 ack_wait_ms_p95 输出到看板。负责人是实时网关工程师。验收：灰度时 epoch_mismatch_total 应接近 0，且拒收不会引起 fail 激增。  \n- 规则：补规则执行耗时分位和 timeout 触发时的上下文维度（玩法/房间）；负责人规则编排工程师。验收：能在看板按玩法看到耗时 p95，timeout 的定位能落到具体规则版本。  \n- 数据：把 event_epoch<room_epoch 的占比（如果被拦就用 epoch_mismatch_total）做成分房间排行；负责人数据工程师。验收：榜单能定位 top 房间且支持版本号筛选。  \n- 运维：补队列投递延迟/lag 监控和发布扩缩容事件关联；负责人 SRE。验收：复盘窗口能一眼看到是否有扩缩容/lag。  \n我这边负责把复盘结构填进去，再把“缺口字段”列成下一迭代。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）排查只用 hash uid，不拉明文；2）明细只保留 72 小时，导出要审批；3）复盘对外只写按 room_id/版本/玩法的聚合，不贴单用户轨迹。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

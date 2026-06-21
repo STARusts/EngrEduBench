@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在构网型变流器控制指令下发背景下，用户与导师围绕指令下发通道方案、时序对齐与底层接口实现持续沟通（7轮），其中在底层发波时序与直写寄存器部分与变流器柔性控指令匠沟通（2轮），在网关透传限制与共享内存方案部分与边缘网关联调专员沟通（2轮），并最终确定DPRAM共享内存旁路及DMA写入方案，去翻查BSP手册寻找DMA配置与中断注册API。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，直接调下发接口呗？我记得有种标准协议栈能直接套，把算好的指令塞进去就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@变流器柔性控指令匠 底层下发用标准协议栈不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直写寄存器？这太底层了吧，有没有那种自动映射的框架能搞定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘网关联调专员 网关那边能直接透传这种直写指令吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "你看，又对不上。能不能搞个中间件，自动把毫秒级和微秒级对齐？我记得之前有项目用过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "硬线通道？这代码怎么写啊？有没有那种硬件抽象层可以直接调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "平时就用C库函数，或者供应商给的BSP包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我去翻翻BSP包看看有没有现成的DMA配置函数。这种一般都有的吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了。就找DMA配置API，然后挂个读中断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

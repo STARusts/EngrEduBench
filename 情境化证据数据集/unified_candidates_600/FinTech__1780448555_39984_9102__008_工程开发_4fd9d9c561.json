@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在敞口反演算法工程化落地背景下，用户与导师围绕架构选型、验证方案与WAL快照实现持续沟通（5轮），其中在流式框架状态隔离部分与流式计算开发工程师沟通（1轮），并最终形成Flink+UDF架构、Keyed State隔离、对照验证及自定义Backend补学定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算引入Ray这种分布式计算框架来重构反演DAG，把所有的气候因子拆解成Actor模型，这样可以实现极致的细粒度调度和弹性伸缩，比粗粒度的流式算子优雅多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Ray的Actor可以天然支持有状态熔断啊，我在Actor里加个熔断门面不就行了。而且细粒度调度能最大化压榨单机资源，我觉得比粗粒度的流式算子更优雅。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现有的流式算子链能不能在不引入动态图的前提下，实现反演算子的独立状态管理和熔断？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Keyed State隔离是能做，但这样反演算子的计算逻辑和执行层就强耦合了。我想在中间加一层图计算的IR中间表达层，把反演的数学逻辑编译成流式算子，这样以后换框架不用重写业务逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "行，放弃IR层，直接UDF。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证这块，反演算法从研究员的白盒模型转成流式UDF，精度肯定有折损。我得设计个对照测试，同一批极端气象栅格数据，同时跑白盒Python脚本和流式UDF，比对敞口演化轨迹的L2范数误差。评价指标主要看尾部风险因子的偏移度，阈值必须卡在5%以内，否则过不了TCFD披露的合规校验。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Flink原生的Checkpoint机制是Barrier对齐的，和我们要的WAL异步日志降级逻辑冲突。我需要实现一个自定义的AsyncWalStateBackend，但我对Flink底层的StateSnapshotContext和CheckpointNotifier的扩展点不熟，之前只用过原生的RocksDB。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这就去翻Flink State Backend的源码，重点看AbstractKeyedStateBackend和SnapshotStrategy的实现。我定个目标，明天前跑通一个最小Demo，把自定义Backend的异步快照逻辑和WAL写入对接上。这块弄通了，前面说的算子级有状态熔断的上下文保存就能无缝衔接，降级时也能保证微批对象不丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 架构选型放弃Ray和IR层，采用Flink原生算子链加UDF直接实现反演逻辑；2. 状态隔离与熔断基于Keyed State划分算子链，熔断时清空对应链路内存；3. 验证方案采用白盒模型与流式UDF的对照测试，L2范数误差阈值5%，关注尾部风险偏移；4. 当前卡点在自定义AsyncWalStateBackend，需补学Flink底层快照扩展点后对接WAL降级逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

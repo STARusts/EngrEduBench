@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在高可用与安全防护设计背景下，与导师围绕防篡改、审计留痕、网络隔离与高可用兜底及验证持续沟通（7轮），其中在防篡改与留痕底线部分与合规审计师沟通（1轮），在边云断网兜底部分与系统架构师沟通（1轮），并最终形成包含加密签名、WORM存储、网闸隔离、边缘缓存兜底及混沌工程验证的安全防护约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高可用的话，我打算把规则引擎和网关都做成无状态的，挂了就重启。Redis和MQ都用集群模式。安全就加个Token鉴权呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防篡改，报文加签名？留痕数据防删改我确实没想过，数据库权限收一收够不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配给指令下发怎么防篡改？网关落盘的审计日志怎么防删改？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规网关挂了全量熔断，那要是车间断网，云端连不上边缘网关，高可用怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近在补IEC62443工业安全标准，里面提到纵深防御和分区隔离，是不是要把配给网段和办公网段物理隔开？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配给服务划到DMZ区？具体划分我不太确定，标准里就写了个逻辑隔离。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "写单元测？不对，这种跨网络的得用混沌工程。用Chaos Mesh注入故障。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如我杀掉合规网关的Pod，看熔断转人工的耗时是不是在3秒内。或者断开边云网络，看边缘网关能不能切到本地缓存，并且5分钟内配给不报错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 指令下行非对称加密签名验签；2. 审计日志入WORM存储防篡改；3. IT与OT网络通过工业网闸单向隔离；4. 边云断网时边缘网关用本地缓存兜底，允许小比例容差配给；5. 用混沌工程验证网关宕机熔断和断网降级逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

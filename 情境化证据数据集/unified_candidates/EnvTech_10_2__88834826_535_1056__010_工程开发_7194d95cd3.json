@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在粉尘/噪声/振动监测的时空融合与告警引擎开发背景下，用户与导师围绕时间对齐、空间聚合、数据质量降权与告警状态机/补传边界持续沟通（6轮），其中在数据模型与窗口策略上与数据工程师沟通（5轮），在规则执行幂等/抑制/分级与告警分类上与后端工程师沟通（4轮），并形成三层数据对象+双窗口+分受众告警的实现思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是“时间对不齐”。还有空间上我就不知道怎么合，靠GPS吗。然后告警别太敏感，不然一直响。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时间就按设备时间戳排序？如果时钟不同步不是有status_mask里bit5嘛，遇到bit5就不算？空间主键……我想用工地里的“点位id”，安装的时候配好。告警敏感就搞个阈值，超过就报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 时空融合这块，我要怎么做窗口和模型？我现在只有设备上来的时序点，还有status_mask、校准版本这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ts_align 你说的“设备偏移估计”我没做过。是不是得搞NTP那套？我们现在只有bit5提示不同步。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "窗口大小你建议多少？我怕太小就乱跳，太大又不及时。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "空间这块你说先用点位id当网格，那如果一个拆除面两个点位，告警算重复吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "dq_score 具体怎么给分？我不太会写很复杂的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 告警引擎这块，规则执行、抑制、幂等你建议怎么写？我现在只有事件类型和哈希链那套。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "推送这块要不要做成消息队列？我看很多人用现成规则引擎……"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "tamper_suspect 这种要参与“超标”融合吗？还是单独告警？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备先做三层：raw_point原样、aligned_point加ts_align和dq_score、再做一个cell按(工地+施工段zone+点位当网格+10s窗口)聚合。ts_align我用ts_ingest-ts_event的滑动中位数当offset来修。dq_score先按mask扣分，bit0直接0，遮挡/过载/饱和这些降到一半，时钟不同步和校准过期也降一点。告警这边：60s窗口做判定，按zone出主告警，点位明细当证据。幂等键用site+zone+rule+window+severity的hash。触发后ACTIVE，靠回落阈值和连续N窗再RESOLVED，还有cooldown避免刷屏。tamper、质量问题单独一类，不混进超标。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "补传我不太确定。我想用window_start固定了就不改？但补传又允许追加。那可能就只能重算窗口？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "aligned_point我觉得会很大。能不能不落aligned_point，只在流里算完直接落cell？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我按这个做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有权限这块，告警要不要也分施工方/监理/园区可见？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕我写规则会写乱，有没有更方便的方式，比如用json配置直接解释执行？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

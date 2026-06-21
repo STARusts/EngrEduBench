@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边云协同架构方案设计背景下，用户与导师围绕微态数据流控、断网续传、碳迹溯配保底及接口防冲防丢持续沟通（7轮），其中在续传洪峰与接口防冲撞部分与数据链路专家沟通（2轮），在碳迹数据存储保底部分与微网架构师沟通（1轮），并最终形成常态流控、续传机制、接口幂等与防冲、双区存储与双Topic优先级的接口规范主干。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先把边端采集的储能和负荷数据格式定下来，然后用MQTT推到云端，云端往下发协控指令用gRPC。流控的话，我加个令牌桶限流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网就存本地SQLite，重连再推。洪峰的话，我调小令牌桶的速率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端如果断网，微态时序数据要存本地，重连后补传怎么防冲垮云端接口？令牌桶好像不够用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口加个幂等键，比如设备ID加时间戳的哈希。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我怎么知道边端SQLite能存多久的微态数据？存满了怎么办？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，碳迹不能断。那断网的时候，是不是得把跟碳因子相关的数据单独存一份，或者压缩一下存？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳迹相关的数据在边端存储里要怎么保底？微态协控数据可以丢，碳迹不能丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "常态用MQTT和gRPC，限流令牌桶。续传用滑动窗口加背压，接口带幂等键。存储分双区，协控循环写，碳迹保底不丢。云端分Topic，碳迹Topic优先消费。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

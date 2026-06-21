@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在直播运营系统工程开发的审核风控规则验证背景下，用户与导师围绕规则输入输出契约、留证判对错、幂等乱序降级与性能验收持续沟通（8轮），其中在规则类型与误伤边界上与风控策略负责人沟通（3轮）、在命中片段存证最小化与访问审计上与合规与版权官沟通（2轮），并收敛为可执行的验证计划与验收清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把验证拆成两类：静态规则正确性和动态链路一致性。  \n静态是用一组标注样本去跑规则引擎，看命中是否符合预期；动态是把弹幕/礼物/投票事件在压测链路里混进“触发风险”的case，检查编排落库的最终决策字段、以及 outbox 下游投递的内容是否一致。  \n误伤这块我想先用“白名单账号+可信房间”的基线集，确保不会被误拦，再逐步加灰度规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我按事件类型分：  \n- 文本类：弹幕文本、用户id、房间id、平台、时间戳、trace_id/event_id、用户风险标签（如果有）。  \n- 行为类：礼物/投票的金额、道具id、频次、来源渠道。  \n输出我希望统一成 decision + reason_codes + action：decision=PASS/BLOCK/REVIEW，reason_codes 是命中的规则ID列表，action 比如“打码/降权/限频/冻结发言”。  \n留证的话，编排落库时把 decision 和 reason_codes 写进事件快照里，并且 outbox 发下游时带上同样字段。  \n幂等我倾向于把“规则执行结果”也绑定 event_id，重复投递直接复用同一结果，不重新计数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态规则我不想用事件到达时间，而用事件自身的产生时间戳做窗口；同时在消费端对同一个 user_id+room_id 做短缓冲排序，允许一个很小的乱序窗口，比如 1~2 秒，超过就按到达时间处理并打一个“乱序降级”标记，避免无限等待。这样至少可解释。  \n不过缓冲会增加延迟，我不确定 P95 还能不能稳住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控策略负责人 我需要你帮我把“镜界AI虚拟偶像直播运营系统”里当前迭代要落地的审核风控规则，按类型讲清楚：哪些是纯匹配、哪些是计数/限频、哪些需要人工复核；以及每条规则输出需要哪些可解释字段，误伤怎么定义边界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "内容安全里命中片段位置，这意味着我们要在日志/存证里存原文片段。合规上允许吗？还是只存 hash？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行为风控的窗口计数，如果乱序/重复会把计数打高。策略侧能接受“按event_time小窗口排序+乱序降级”吗？还是必须严格？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "了解。我回去把验收口径定成：同一事件无论重复/乱序，最终 decision 一致；计数类规则在乱序降级时允许 decision 不同，但必须打标并且不触发最严动作（比如直接 BLOCK），最多 REVIEW/限频。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回流结论我抓四点：  \n1）规则分三类：内容安全（词表/正则）、行为计数（窗口阈值）、账号属性（标签拦截）。  \n2）输出可解释字段要标准化：decision、reason_codes、rule_version 或词表版本、命中片段位置（可脱敏/加密字段）、计数类的 window/threshold/current_count、以及乱序降级标记。  \n3）误伤边界：白名单房间不能 BLOCK；付费礼物不能静默吞；乱序降级时不允许最严动作。  \n4）重复投递必须幂等，避免计数被放大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与版权官 审核风控规则验证这块，我们要做决策留痕和取证留痕。想确认：弹幕/脚本的命中片段位置、命中内容到底能不能存；如果要存，应该怎样做脱敏/保留周期/访问权限和审计字段，才算合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们在事件快照表里放取证字段，会不会扩大访问面？更推荐单独表吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。我回到实现侧就把“取证留痕”改成可选写入，并且写入走独立存储/独立权限。验证时也只用脱敏样本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版验收点草案，你帮我挑缺口：  \n- 字段契约：编排落库与 outbox 事件里必须包含 decision、reason_codes、rule_version、trace_id/event_id；计数类必须包含 window_ms、threshold、current_count；乱序降级必须包含 out_of_order、reorder_window_ms。  \n- 幂等：同 event_id 重复投递，decision 与 reason_codes 必须一致；计数类不得因重复导致 current_count 翻倍。  \n- 白名单保护：白名单房间 decision 不得为 BLOCK；触发风险时只能 REVIEW 并带 reason_codes。  \n- 付费礼物：不得“静默丢弃”；若 REVIEW，outbox 必须投递“待确认状态”而不是直接失败。  \n- 取证留痕：快照表不落原文；取证字段只允许脱敏/密文，且默认关闭；解密查看必须带操作者与工单号（这块我需要安全同学配合）。  \n- 性能：开启规则后，入口到落库 P95 不能比未开启时恶化超过 15%，并且 P99 仍需 <1500ms（沿用压测口径）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "真值我打算用两套：  \n- 人工标注的小集：每条样本给 expected_decision、expected_reason_codes，主要覆盖内容安全词表/正则与白名单、付费礼物路径。  \n- 程序生成的大集：按固定种子生成事件序列，内置规则触发条件（比如每 10 秒第 6 条必触发限频），用同一生成器输出 expected_count 曲线，验证 current_count 与动作是否一致；乱序/重复注入后，只验“不触发最严动作+降级标记存在”。  \n动作保护我会加一层 guard：当 out_of_order=true 时，动作集合自动降级到 {PASS, REVIEW, LIMIT_RATE}，不允许 BLOCK/FREEZE。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

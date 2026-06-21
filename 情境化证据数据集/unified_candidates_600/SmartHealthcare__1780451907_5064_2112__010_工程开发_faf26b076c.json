@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在靶向调控接口集成背景下，用户与导师围绕推演结果安全下发、降级策略及接口报文定义持续沟通（5轮），其中在保底限幅机制部分与闭环控制设计师沟通（1轮），在防重放与审计校验部分与数据安全专员沟通（1轮），并形成包含限幅、防重放及降级反馈的接口字段草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接把推演结果发给调控接口呗，加个CRC校验保证数据没错就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，那就加个if，大于某个数就不执行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演结果直接发给调控层怕模型抽风，这中间的保底机制怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调控指令下发还要做什么安全校验不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "中间加个限幅网关，超限就维持上一拍，还要加时间戳防重放，记日志。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "有个target_flow是目标值，有个limit是上限，有个timestamp是时间戳，还有个status表示成不成功。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "cmd_id，target_value，clamp_max，slew_rate_max，ts，auth_token，反馈带exec_status，degrade_reason，actual_value。我这就去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

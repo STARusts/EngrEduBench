@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发多源设备协议适配与流注接入背景下，与导师围绕接入架构、流注底座选型与验证方案持续沟通（5轮），其中在设备接口现状与插件化适配部分与设备协议适配开发者沟通（2轮），并最终形成插件化适配、NanoMQ流注底座及对照回放验证决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想法是搞一套统一的Protobuf IDL，把所有床旁监护仪、输液泵的数据强类型化，流注直接上gRPC双流推到边端因果推演模块。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我忽略了老旧设备的协议栈限制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@设备协议适配开发者 目前ICU里那些飞利浦、迈瑞的主流监护仪，底层往外吐数据的接口到底什么情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我原本想用Flink做流处理和窗口聚合，方便后面接因果图推演，但这好像跟咱们前序定的“边端自治”架构有冲突？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink太重，JVM那套在边端算力节点根本跑不起来，一旦网络分区，Flink TaskManager挂了，边端退化全量直发就废了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我定个短周期目标：今晚把NanoMQ的边流吞吐和桥接配置过一遍，重点看它在断网情况下的本地持久化和离线消息清理机制。这块搞通了，我就把NanoMQ作为流注底座，替换掉Flink的设想，适配器插件解析完直接Pub到NanoMQ的Topic里，边端推演模块Sub消费。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "医疗数据错一个字段可能就是真危漏报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得建个对照回放验证。从历史重症患例库里抽真实设备的原始报文，一边走适配器插件解析，一边用已知的标准结果做Diff。评价指标就是“语义对齐准确率”必须100%，再测解析时延抖动，P99不能超过5ms，否则跟不上生理参数的采样率。如果出现解析失败，必须能复现原始报文进行Debug。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "本轮设备协议适配与流注研发决策：1.接入架构采用插件化适配器模式，按设备型号隔离解析逻辑，输出统一标准格式；2.流注底座选用边端轻量MQTT(NanoMQ)，摒弃Flink重流处理，保障边端算力可控与断网持久化；3.验证方案基于历史报文回放Diff，核心指标为语义对齐准确率100%及解析时延P99<5ms，失败必复现。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

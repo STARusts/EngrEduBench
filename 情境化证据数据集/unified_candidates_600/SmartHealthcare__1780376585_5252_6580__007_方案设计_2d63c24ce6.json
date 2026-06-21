@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在急诊溶栓低时延高可用评估背景下，用户与导师围绕断网降级、时延压缩、架构隔离与验证方案持续沟通（6轮），其中在断网Fail-safe与状态持久化部分与医疗安全评估师沟通（1轮），在算力预分配与INT8量化时延控制部分与边缘智能架构师沟通（1轮），并最终形成舱壁隔离架构、断网本地规则降级、INT8量化及弱网模拟验证等设计定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算做个高可用集群，多节点部署，网断了就自动重连重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "急诊溶栓这场景，网断了或者节点挂了，系统得怎么防？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延这块怎么压？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加上断网降级，模型做INT8，时延卡200ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级的话，网断了就用本地规则推？INT8精度，应该还行吧，专家没说不行。验证的话，就测一下时间？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天看了舱壁隔离模式。可以把特征抽取和推演引擎隔开，一个崩了不影响另一个。这个可以用在这里，算力预分配正好能用舱壁隔开。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证方案：在联调环境里，模拟丢包率从0到80%递增，看端到端时延和降级触发率。样本量至少跑50次急救车到急诊室的模拟传输。控制变量就是网络抖动。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "舱壁隔离，断网降级本地规则，INT8量化200ms，弱网实验验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农机作业质量闭环计费平台工程开发背景下，用户与导师围绕采集端接入、校时可信、离线补传乱序与幂等计费链路持续沟通（10轮），其中在校时字段与服务端判别部分与物联网接入工程师沟通（3轮），在event_id/错误码/审计日志与409冲突处理部分与后端负责人沟通（3轮），在离线缓存与上报频率以确定乱序窗口部分与边缘软件工程师沟通（1轮），并形成最小闭环实现要点与可执行测试用例清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接入我打算先用 MQTT，设备端发定位、速度、作业状态这些。校时我想直接用 NTP 同步系统时间，然后消息里带个 timestamp，就这样行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 校时这块你们一般怎么搞？我现在想用 NTP，消息里塞 timestamp，但担心设备乱了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解成：不用强依赖 NTP，靠握手算 offset，再加 uptime 来保证顺序。阈值你说 5s，是不是就直接写死 5 秒？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校时握手这块我本来想直接找现成库一把梭，但你这说的 offset、drift 还要自己算，我有点虚。服务端判别那套，是不是得上很复杂的算法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先照你们说的加字段：device_time、gnss_time、uptime、seq、boot_id。然后服务端维护 offset，算出 event_time。时间偏差大就标记不可信。离线补传用 (device_id, boot_id, seq) 去重。失败处理我还没想细。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重放那块我有点混。我现在只想到消息去重，不知道怎么保证计费那边也不重复。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 接入这块我准备加 event_id、seq/boot_id 去重，再做校时打标。你们后端希望我在采集接入做到哪些幂等和错误码？日志要怎么带字段方便查？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "409 这个我之前没想过。意思是同一个 event_id 又来一条，但内容不一样，就不能当正常重试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我接入层是不是要保存原始 payload 才能对比？感觉存很多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按最小闭环说下：  \n- 上报字段：tenant_id、device_id、boot_id、seq、device_time_ms、gnss_time_ms（有就带）、uptime_ms、payload、payload_hash。event_id 用 hash 算。  \n- 校时：连接后做握手取 offset，中位数滤一下，算 event_time_ms。offset 超过阈值就 time_quality=BAD。  \n- 规则：uptime 必须递增、seq 递增；倒退就 400。offset 突变就 BAD。  \n- 去重：按 (tenant_id, event_id) 唯一；已存在且 payload_hash 一样就当重试成功返回 200；不一样返回 409 并写审计。  \n- 离线：设备端缓存按 seq 重传；服务端按 seq 排序处理。  \n测试我还没完全想好，大概用模拟器造几种时间跳变。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "乱序我能不能简单点：只要 seq 比上一次小就 400？这样最省事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕做暂存很麻烦。我选“直接入库但标记 out_of_order”，消费侧用 seq 排序；如果缺口太大就标记 gap。窗口就先 500 条？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘软件工程师 终端离线缓存一般能存多少？上报频率大概多高？我得定乱序窗口和 gap 规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按时间窗口更合理。那我就定 max_reorder_secs=600，rate 按 2 条/秒算，窗口 1200 条。超过就 gap。这样算是有依据了吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "测试用例我试着列：  \n1）正常在线：握手成功，offset 小于阈值，连续 seq 上报，time_quality=GOOD，入库成功。  \n2）时间跳变：设备系统时间突然快 30 秒，服务端判 BAD，但仍入库，标记 time_quality=BAD。  \n3）离线补传乱序：先到 seq=1005 再到 1001，窗口内都接收，标 out_of_order=true，最后消费按 seq 排好。  \n4）重放：同一批数据重传两次，event_id 一样，payload_hash 一样，第二次返回 200 不产生重复事件。  \n5）幂等冲突：同 event_id 但 payload_hash 不同，返回 409，写 audit_log。  \n6）触发限流：某 tenant 超并发，返回 429，并记录 tenant_id 和 result_code。  \n日志脱敏我就是默认不打印 payload，只打 hash 和 event_id。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

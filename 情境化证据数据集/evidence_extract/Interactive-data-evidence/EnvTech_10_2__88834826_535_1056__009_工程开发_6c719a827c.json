@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在建筑拆除粉尘/噪声/振动协同管控系统工程开发背景下，用户与导师围绕传感器接入字段、时间基准、数据质量与校准可追溯闭环持续沟通（8轮），其中在设备侧可提供状态/同步精度与校准分层方法上与嵌入式工程师沟通（3轮），在校准有效期与巡检频次两档策略及审计要求上与合规与标准经理沟通（2轮），并最终明确telemetry/event分流、status bitmask、校准事件证据与两步审批的最小实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想偷懒一点用现成的MQTT SDK接，数据就上报PM、dB、mm/s这几个值行不行？校准我看网上很多就是加个offset，后台存一下就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设备身份我就用设备序列号当deviceId，时间就用设备本地时间戳。同步我还没想，怕做NTP挺麻烦的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式工程师 传感接入我这边要定字段和校准流程。你们设备侧能提供哪些状态？时间同步能做到啥？校准是不是就offset就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校准呢？我这边就想简单点，不想把流程做很复杂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我协议字段要加一堆东西了？我怕前端也跟着改很多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 嵌入式说设备能给raw/value、采样率量程、自检码，还有遮挡/过载/饱和这些状态。时间上建议每条带device_ts、clock_offset、recv_ts。校准分零点bias和对比拟合a,b，详细证据平台留，时序点只带校准版本号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "raw强制我怕流量大。我能不能默认不上报raw，只在异常或者校准的时候上报？status_bits我就用字符串列表行不行，比如[\"overload\",\"blocked\"]。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哈希链这块我记得是分钟摘要+事件记录。那校准事件也算事件记录对吧？我这边接入是不是就要多带一个event_type？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "bitmask我没做过，能不能给个现成的位定义，我照着写？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校准有效期我有点懵，是按天算吗？我怕不同传感器不一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准经理 校准有效期和频次这块，粉尘/噪声/振动一般怎么定比较合理？我们第一版不想给施工方太重的负担，但又要能过审计。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "参考仪证书号也要填？现场不一定有。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边建议校准频次做两档：最低配置启用时做一次（对比优先，不行就零点），之后每30天复核；敏感场景增强是每7天复核，工序切换前后加快速零点检查。参考仪证书号字段可以空但要留。有效期就用valid_until加触发规则。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n1）接入：设备注册接口先做device_id、type、firmware、通道列表、网关id。  \n2）时序上报：按通道发，带device_ts、recv_ts、clock_offset、value、unit、采样率、量程、status_mask、calib_ver。raw默认不发，但我加个debug开关让设备抽样带raw。  \n3）事件：单独上报校准事件和数据中断事件。校准事件里放a/b/bias、窗口统计、valid_until、参考仪sn/证书号可空、发起角色。  \n4）触发：status里如果rtc没同步就置rtc_unsync；校准过期置calib_expired；维护/校准中置maintenance_mode。  \n5）测试我就先用模拟器造三种数据：正常、遮挡/过载、断网补传，看后端能不能解析mask、缺口能不能识别出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要做个“两步校准”？施工方先提交，再让监理点确认？我怕流程做得太重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我照这个写。最后你给我个“本轮定稿”的清单，我照着拆任务，不然我容易漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

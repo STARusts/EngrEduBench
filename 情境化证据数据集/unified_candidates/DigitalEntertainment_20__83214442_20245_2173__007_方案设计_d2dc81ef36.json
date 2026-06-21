@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计收尾的多端播放交互协议定义背景下，用户与导师围绕播放会话对象/动作、同步回传埋点与审核门禁落地持续沟通（10轮），其中在会话一致性、最小接口与错误码分层上与后端工程师沟通（7轮），在端能力声明、弱网节奏点/预加载与离线交互规则上与客户端工程师沟通（4轮），并形成协议契约要点清单供前后端细化字段表。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是同步。手机、H5、PC 不一样。还有互动投票那种，大家点完分支，结果如果延迟就会乱。别的我没想全。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端上就渲染和点选。服务端管剧情图，算出下一段。节奏点我不确定是在端上跑还是服务端推。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 播放交互协议这块，服务端你觉得必须有哪些接口/事件？还有会话一致性怎么搞，别一端点了另一端没跟上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "旁观模式是指别的端只能看不能点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "错误码要怎么分？我怕端上各种弹窗乱套。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端工程师 多端播放交互协议里，客户端需要跟服务端说清哪些能力？弱网、预加载、音画同步这块，协议字段你觉得要留哪些，避免后面补洞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的 drift 是啥？端上算出来跟服务端差多少？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果离线了还能点分支吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先挑我能确定的：一会话一主设备，别的端抢占，用 409。choice 一定要服务端裁决，端上别自己算。tempo_markers 先下发摘要，端上本地触发，heartbeat 做纠偏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SHADOW 就是本人能 open 播放，但不能走 share 入口？TEMP_HOLD 是 open 了只能停封面，choice 直接 423。NEED_HUMAN 就是 open 返回审核中，可能不给 start_node？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "埋点我有点糊：协议里我们是用接口回传，还是 SDK 单独走？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "统一用 session_id + content_id。open 的 entry 区分 open/share。share_attempt 如果 policy 不允许也要打出来，不然误伤率看不见。choice 要带 node_id、choice_id、playhead_ms。然后把 policy_state 也带上，后面分桶分析。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我刚才差点想让客户端回传完整失败 url，方便排查。那就只回 asset_id 和错误类型？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那协议版本怎么弄？我怕多端更新不同步。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能把接口缩到 3 个？heartbeat 看起来很占。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如前台播放 5s 一次，互动节点附近 1s 一次，后台 30s 或停掉。端上用 buffer_ms 低于阈值才加密度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听起来对。我只想确认一点：share_attempt 在 SHADOW 下是直接拦在端上，还是打到服务端再拦？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

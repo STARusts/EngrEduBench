@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在气味指纹病害早诊的特征提取模块工程实现背景下，用户与导师围绕输入粒度、最小可用特征、边云一致性、边缘状态与验收口径持续沟通（9轮），其中在病害信号与干扰项可复核特征定义上与农业病害顾问沟通（3轮），在数据最小化分域落库与审计边界上与合规与数据治理官沟通（2轮），并收敛特征v1维度与分域输出方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我第一反应是搞个“特征流水线框架”，把每个传感器都做成插件，然后配置化拼起来。这样以后加新气体通道也不用改代码。边缘和云都能复用同一套。\n但我也担心过度了：现在可能只需要把一版固定特征先跑通，比如每次sample一组，做归一化+几个统计量就够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入粒度我倾向先按单条(boot_id,sample_seq)做“瞬时特征”，不搞滑窗。\n特征的话，我想先对每个气味通道做：log变换、z-score、再加一阶差分；环境的温湿度、光照也一套。\n一致性我想用同一套特征代码打包成库，边缘和云共用，避免两套实现。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差分我可以定义成“同一boot_id内、sample_seq连续才算”，否则差分置空或置0，并打个feature_mask。\nz-score的均值方差先用训练集离线算，固化成一版参数跟模型一起下发到边缘；在线更新先不做，避免漂移把系统搞复杂。log变换就固定公式。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业病害顾问 我们现在做气味指纹病害早诊，工程开发到特征提取实现。想问两个落地问题：1）早期病害现场复核时，哪些变化更可信（比如持续性、与湿度温度联动）？2）哪些常见干扰会让气味异常但其实不是病害（施肥、农药、灌溉、通风）？我需要把它们变成特征或规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "持续性指标如果不做滑窗，做“相邻两次一致”算不算够？还有“比例/对比”有没有你觉得最能复核的表达方式，比如通道i/通道j，还是总和归一？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心“湿度阈值”要怎么定，会不会又回到研究期没完没了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先压一版，可能有点多，你帮我砍：  \n- 基础：每个气味通道xi做log1p(xi)；再做通道占比pi=xi/sum(x)  \n- 比值：选两对比值rij=xi/(xj+eps)  \n- 环境：温度T、湿度H、光照L原值；再加一个“高湿标志”H>85%  \n- 变化：如果sample_seq连续就算Δpi=pi(t)-pi(t-1)，否则Δ置0且mask=0  \n总维度：假设8个气味通道，log8 + 占比8 + 比值2 + 环境3 + 高湿1 + Δ占比8 + mask1，大概31维，有点超。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "露点差我没现成气压，近似会不会误导？我想直接用“湿度分箱”：H分成<70、70-85、>85三档one-hot，解释也直观。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我做一个FeatureRecord：  \n- keys: (boot_id, sample_seq, recv_ts_ms)沿用；device_ts_ms可选  \n- feature_schema_version=1  \n- features数组固定顺序，float32  \n- feature_mask: bitset，表示哪些特征有效（比如需要前值的）  \n我也想把“原始占比、关键比值、sum_x”都一起落库，方便离线对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 特征提取实现里，我们想落库原始值和特征用于训练复现。哪些属于需要限制访问/留存的经营敏感信息？比如喷药后的挥发峰可能能推断操作。给我一套最小化采集+审计建议，最好能落到字段级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这意思是：我可以在训练库里存原始向量和特征，但运维日志别打出来；对外就给摘要。那我实现上要分开两套写入？我想用统一事件流，靠权限控制读。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收束下我这边要实现的东西：  \n- 特征函数：输入一条RawSample（气味向量x[8]、T/H/L、boot_id、sample_seq），输出FeatureVector v[~17] + mask  \n- 状态：仅保存上一条同boot_id且sample_seq连续的(sum_x、关键比值)用于Δ特征  \n- 缺失：任何通道缺了就标mask并把相关特征置NaN还是0？我倾向NaN，怕模型误学0。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把Δ特征先算出来但不喂给线上模型，只进训练域做对照。线上模型先吃静态17维里不含Δ的部分，大概15维。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收我给三条：  \n1）一致性：同一条RawSample在云端离线和边缘侧（同版本）算出的FeatureVector逐元素误差<1e-6（float32下可能要放宽到1e-5），并且feature_schema_version一致。  \n2）鲁棒：遇到丢包/重启/不连续sample_seq时，Δ相关特征必须置0且mask=0；不影响静态特征计算；不会触发异常退出。  \n3）资源：边缘侧单条样本特征计算耗时<5ms、额外RAM占用<64KB（只存上一条状态+中间变量），不引入新依赖库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

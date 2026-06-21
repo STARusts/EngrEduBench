@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微观动作特征提取实现背景下与导师围绕多视角特征提取的精度与算力冲突、边缘侧分级异步处理折中及核心约束确认持续沟通（5轮），其中在3D网格重建与发力特征提取部分与视觉特征提取工程师沟通（2轮），在边缘算力约束与轻量化延迟部分与边缘智算调度师沟通（2轮），并最终形成分级特征提取与算力熔断的核心约束及验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我计划直接用MediaPipe或者OpenPose跑，流程上比较快，先把关键点拿到就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在要提取微观动作，直接套MediaPipe能行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "80ms有点多。边缘侧能跑3D网格重建吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "他俩说的完全反着来，一个要精度要3D，一个要速度只能2D。我不知道该听谁的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "发力特征肯定不能丢，不然纠偏就没依据了。要不把3D重建放云端跑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开算就是边缘先出2D关键点给渲染用，3D重建和发力特征在边缘后台异步跑，跑完再更新给纠偏模块？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我来对齐，一帧出两种特征包。粗提包走实时流，精算包走异步流。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束：采用分级特征提取，粗提2D关键点延迟上限10ms，精算3D网格与发力特征异步处理，边缘侧设置算力熔断阈值。验证方案：粗提用模拟光场流验证延迟，精算用标注数据集比对发力特征准确率，熔断机制通过压测触发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

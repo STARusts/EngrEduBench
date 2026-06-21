@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在农机作业质量闭环计费平台压测后进入运行评估的灰度上线与回滚预案制定背景下，用户与导师围绕灰度切分策略、验收指标、回滚触发与SOP持续沟通（7轮），其中在回滚一致性与结算单处理上与后端负责人沟通（5轮），在监控告警阈值、回滚演练与RBAC审计上与SRE运维工程师沟通（4轮），并对齐最小可执行灰度/回滚方案与冻结口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我本能想用网关那种“按百分比”开关，一点点放量，出事直接关掉。但我们是多租户，我不知道按百分比会不会把一个大合作社全切进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就先挑两个小租户？比如试点合作社A、B。然后任务比例先5%，没事再20%。过关指标…我就看5xx别涨、P95别爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 灰度上线这块，回滚到底怎么做才不会把扣费搞乱？有没有现成的发布工具流程能套一下？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果灰度期间算出来的单有问题，能不能直接删掉重算？我看有些系统就重放队列。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚触发条件怎么定？比如我看到5xx升了就回滚？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我灰度到底要用什么开关？我就会用我们现成的发布平台，点几下那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂一点。还有个事：我们可观测字段之前加了 price_plan_version、rule_version，那灰度时是不是还要加个“灰度组ID”？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问到的点大概是：回滚分配置和版本两层；结算单要钉版本字段；出错不能删单重算，走冲正补差；灰度路由要按tenant+task哈希稳定命中，还要加rollout_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阶段我先想三段：白名单2个租户；扩大到10个租户；再到全量。指标就…系统类P95/5xx，业务类reconcile_hash一致率、重复扣费。拍板我不敢定，可能后端和SRE一起？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度上线这块，监控和告警要怎么设才够用？还有回滚演练一般怎么做，别搞得太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我只知道0.2%这个是我们压测门槛。reconcile_hash 0.05%这个谁定的？会不会太严，抖一下就回滚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚演练怎么弄？我怕现场按错按钮。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚权限是不是要控？不然谁都能点回滚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE那边给的做法是三组面板：系统/链路/业务；灰度阈值更敏感，但先“冻结扩容”不一定立刻回滚；演练只练配置回滚和版本回滚两条；回滚权限要RBAC+审计。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心的是“冻结灰度租户新出单”这句，具体是把结算状态卡在DRAFT吗，还是直接拒绝？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按 BILLING_FROZEN 这种口径去跟后端对齐，也把面板阈值抄到发布平台的告警里。今晚先走阶段1的2个租户灰度，不扩容，先观察24小时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

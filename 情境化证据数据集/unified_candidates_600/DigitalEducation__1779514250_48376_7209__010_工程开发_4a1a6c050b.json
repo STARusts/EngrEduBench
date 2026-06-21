@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课径断裂检测与重接联调开发背景下，用户与导师围绕接口契约中上下文传递的性能与体验权衡持续沟通（3轮），其中在断裂检测算法输出与性能评估部分与课径图谱设计师沟通（5轮），在重接逻辑依赖与体验指标部分与重接联调工程师沟通（5轮），并最终形成两步异步预取的接口契约方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@课径图谱设计师 @重接联调工程师 你们俩接口对不上了？具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱那边加个字段不就行了？就多传点东西过去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "都别吵了。这进度卡着大家都完不成。图谱回溯耗时具体会增加多少？联调没上下文是不是绝对做不了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "200ms好像也能接受吧？我不太懂这块性能底线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "导师，他俩一个要传上下文，一个说传上下文太慢。现在检测加上下文耗时200ms，不加50ms。但联调那边说没上下文体验不行。这怎么选？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@课径图谱设计师 200ms是多大图规模测的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@重接联调工程师 体验不行是指渲染延迟还是数据不一致？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那就按导师说的，契约加上下文。图谱那边能不能异步预取？就是检测到断裂后，先推事件，再异步补全上下文。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那就这么定。断裂检测输出分两步，先推事件再异步补上下文，重接端监听回调。大家赶紧改代码吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

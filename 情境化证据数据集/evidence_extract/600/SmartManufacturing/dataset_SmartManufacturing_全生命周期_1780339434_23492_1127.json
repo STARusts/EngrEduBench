@@ -1,0 +1,548 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在异构刀轨智控补偿系统需求梳理背景下，用户与导师围绕现场痛点、核心研究假设、能力缺口补充及数据采集合规持续沟通（6轮），其中在痛点梳理部分与智造产品经理沟通（1轮），在数据采集合规部分与合规与安全评估员沟通（1轮），并最终确认包含核心痛点、研究假设和脱敏策略的三条需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "痛点不就是加工精度不够嘛"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就自适应补偿嘛，需求不就这些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多装几个传感器呗，测得准不就能补偿了嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这啥特征？我不懂这个声发射。能不能不搞这么细，大概估一下不行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下周看两篇论文行了吧"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我多装传感器多采数据，总没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我要多采声发射和切削热数据，能随便采吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就只采特征，需求这就定了吧？"
+              }
+            ]
+          },
+          {
+            "microScene": "在刀损补偿业务画像圈定背景下，用户与导师围绕业务范围与交付边界持续沟通（5轮），其中在产品核心价值与闭环范围部分与智造产品经理沟通（2轮），在部署成本与商业变现路径部分与商业闭环架构师沟通（2轮），用户分析算力约束与核心痛点后提出瞬态强控加稳态轻监折中方案，并最终圈定三条交付边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@智造产品经理 画像怎么画？@商业闭环架构师 你们俩谁对听谁的"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现场最烦的就是换刀轨那一下直接废品，光报警有屁用，肯定得控。但商业说的算力撑不住也是个事，全闭环确实跑不通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "切换刀轨的时候强控，稳态切削的时候就只监不控。这样既不是阉割版，也不用全程烧算力。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 核心必须闭环控，不拆不阉割；2. 控制范围只包异构刀轨切换瞬态；3. 稳态切削只给预警和特征值，不下发补偿参量。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多模态传感数据采集合规评估背景下，用户与导师围绕数据合规边界、脱敏规则及逻辑冲突持续沟通（6轮），其中在边缘侧合规红线与脱敏要求部分与合规与安全评估员沟通（1轮），并最终形成传感数据合规底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加密呗，全加密传上来，还能咋地？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "到底有啥红线？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按专家说的呗，边缘脱敏。瞬态强控那边嘛，反正也是本地控，数据不出边，应该就没啥事了吧？授权加个按钮得了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "底线就是：1. 只采必须的；2. 边缘转频域脱敏；3. 采之前过合规拦截。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在需求阶段商业闭环制定背景下与导师围绕补偿系统价值变现、合规与商业冲突权衡、定价验证及维护成本控制持续沟通（7轮），其中在收费模式部分与商业闭环架构师沟通（1轮），在客户接受度与维护成本部分与智造产品经理沟通（1轮），并形成基础订阅加脱敏指标分级加价方案与A/B测试验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么收钱最爽？我们这系统可是能实时补刀损的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "商业那边要回传数据对账，客户能愿意？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原始数据不能出边，那按效计费的对账不就废了？这也不行那也不行，到底选哪个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就基础功能走订阅，保证维护费能回本。补偿效果如果好，我们在边缘端算好脱敏的精度提升指标，只把指标回传！按指标分级加价！数据不出边，也能按效加钱！"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找两台同型号机床，一台开补偿一台不开，跑一周看废品率差值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先只支持市占率最高的两款系统，别的不管！"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我实在搞不懂这种计费模型具体怎么拆分，我得去翻两份工业SaaS定价白皮书，看看别人分级颗粒度怎么定的，不然这需求写不下去。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异构刀轨热畸变补偿智控系统推演架构设计背景下，用户与导师围绕数据流向、算力部署边界、合规约束及残差对照验证持续沟通（7轮），其中在数据不出厂底线与边缘推演可行性部分与合规与安全评估员沟通（1轮）、与孪生系统架构师沟通（1轮），并最终形成边缘核心计算与云端脱敏统计量协同的架构决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全传云端啊，云端算力大，模型跑得准，实时性差点就加点缓存呗，反正得准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先跑通再说嘛，安全的事后面加个加密不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与安全评估员 数据不出厂具体怎么搞？@孪生系统架构师 边缘推演能跑得动热畸变模型吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "合规说只能边缘算，架构也说边缘能跑，那就全放边缘呗，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下看呗，残差小就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用同一批切削数据，一边走边缘算子，一边存下来离线跑云端算子，比一下残差。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不太清，哪些特征留边缘哪些上云我分不清。我去翻一下边缘智能白皮书，今天内把特征拆分原则搞懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心声热力数据边缘计算，脱敏的磨损统计量上云。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在多模态传感时序融合背景下与导师围绕异构时序对齐、特征融合方式及边缘算力约束持续沟通（4轮），并在时序对齐与轻量化融合策略部分与传感融合设计师沟通（2轮），最终形成基于事件触发、1D-CNN特征提取与轻量全连接融合的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接拼一起呗。按时间戳排个序，拼成一个大数组发给模型，多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声热力采样率差太多怎么对齐？有没有现成模块直接调的？我不想手写对齐逻辑，太麻烦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用事件触发，不用对齐时间戳，再搞个注意力融合就行了。就按这个办，挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Query就用力的数据，K和V用声和热，这还不简单？阈值设个经验值不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有轻量点的？锚点判定怎么搞才不误报？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用CNN提特征，力用均值方差，热做插值。锚点加个窗口投票。最后全连接拼起来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微刃磨损推理流设计背景下，用户与导师围绕数据流转、训练策略、脱敏颗粒度与精度衰减约束持续沟通（4轮），其中在云端训练合规风险部分与合规与安全评估员沟通（1轮），在边缘端微调替代方案部分与边缘智控算法师沟通（1轮），并最终形成边缘微调、特征不可逆截断脱敏与精度硬熔断的折中策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接把产线数据全拉上来，丢云端大模型训，精度肯定最高"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全量上传数据到云端训练，有啥合规问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端不让用，边缘端怎么搞推理流？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说不能传原始数据，算法说边缘用基座模型微调。那就边缘微调吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据就是合规不让传啊！精度差点就差点，反正能跑。脱敏就把敏感字段删了呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "特征提取切断可逆映射，精度退化设个熔断阈值。"
+              }
+            ]
+          },
+          {
+            "microScene": "在刀轨参量动态下发链设计背景下，用户与导师围绕下发协议选型、异构适配与断网降级机制持续沟通（5轮），其中在下发协议与异构适配部分与边缘智控算法师沟通（1轮），在断网降级防撞刀部分与高可用架构师沟通（1轮），并最终形成基于OPC UA Pub/Sub、插件化适配层及50ms降级回退的下发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下发还不简单，直接写个接口把数据推过去，HTTP POST一发不就完了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就换UDP，够快了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "下发协议用啥？UDP不行的话。异构接口和断网咋整？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用OPC UA，加个适配层转译，断网就回退本地刀轨。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Pub/Sub吧，适配层就写死几套翻译规则，断网1秒就切回去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "OPC UA Pub/Sub，插件化适配，50ms降级回退。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计边缘控域高可用评估背景下，用户与导师围绕边缘容灾策略与细粒度探针设计持续沟通（6轮），其中在容灾坑位与策略摸底部分与高可用架构师沟通（1轮），并最终形成cgroup隔离、细粒度探针、加压测定阈值与本地缓存回放的核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡死就重启，内存不够加内存，配置拉满不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个看门狗，超时就杀进程。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘容灾还要搞啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "K8s那套啊，有liveness和readiness。我就把推演引擎当成Pod，liveness探针卡了就重启，readiness没准备好就不让发刀轨。把这套搬过来应该能行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设个1秒呗，跑两刀没误杀就完事了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就cgroup隔离，K8s探针思路改的细粒度探针，加压测定阈值，断网本地回放。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在孪生推演算子编码开发背景下，用户与导师围绕热场推演与微刃磨损模型的数值稳定性、求解格式及步长控制持续沟通（7轮），其中在算子工程化数值求解坑与半隐式替代方案部分与孪生算子研发员沟通（2轮），并最终形成半隐式Crank-Nicolson求解、CFL校验与PID步长自适应三条核心编码约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就照着之前给的物理方程，一行行翻译成Python呗，加个循环迭代，能出数就行，管它稳不稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热场和磨损直接套公式写代码有啥坑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "隐式求解多麻烦还得求逆矩阵。我就显式写，步长卡死0.001微秒，多跑几圈不就完了？磨损也固定步长，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没验证过，跑起来没报NaN不就是收敛的嘛。这还用专门验证？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CFL条件是啥玩意？没听说过。我不懂这推导啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺偏微分方程数值解法呗。我这就去扒GitHub上热传导求解的开源项目，看人家步长怎么限的，抄个CFL判断逻辑进来总行了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，半隐式加CFL抄代码，磨损加PID限误差。就这三条，赶紧定下来我去写了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在传感采集与流式联调背景下，与导师围绕多模态异构数据接入、时序对齐、流式管道及背压控制持续沟通（7轮），其中在异构流式对齐部分与传感融合设计师沟通（1轮），在采集频率与带宽合规部分与合规与安全评估员沟通（1轮），在管道背压与窗口机制部分与流式联调工程师沟通（1轮），并最终形成传感流式联调核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接开多线程收呗，声热力三个传感器数据往内存里怼，存到了就发给推演引擎，管它什么时序不对齐的，差个几毫秒又不会死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个时间戳呗，按时间排序不就完了。反正我不懂这些底层细节，赶紧让懂的人来弄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构流式对齐怎么做，赶紧给我个最快能跑通的方案。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "采集频率和带宽有什么限制？别搞太复杂就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是搞个什么水位线，然后数据别传太多，传特征就行，还要留个日志。这不就是让我在边缘先算一把再传吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "窗口就设10毫秒吧，凑个整。特征就在传感器插件里直接抽，省事。管道就按顺序串起来呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "管道背压和窗口怎么配？快点说个配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调的说要用Credit反压，窗口用滑动的加重叠。这样总行了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 水位线对齐；2. 边缘抽特征不上原始数据；3. 留审计日志；4. Credit反压；5. 滑动窗口加重叠。就这些，赶紧过。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在刀轨补偿闭环极值测试背景下与导师围绕测试方法、故障注入方式及验收标准持续沟通（5轮），其中在极值测试打桩与边界条件设定部分与闭环测试专家沟通（1轮），并最终确认超调量、收敛时间及降级输出安全边界三项核心测试约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "随便给几个大值跑一圈不报错就行了呗"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就测最大最小值呗，程序没崩不就说明没问题吗"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@闭环测试专家 极值测试怎么搞"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是造假数据跑一下呗"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就注入空数据呗，跑起来不崩就行啊"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘推理延迟性能优化背景下，用户与导师围绕压降单次推理延迟至50ms以内的软件与模型优化方案持续沟通（5轮），其中在推理链路瓶颈与量化算子融合部分与性能调优工程师沟通（2轮），在微刃磨损模型卷积替换部分与边缘智控算法师沟通（1轮），并最终形成基于TensorRT的INT8量化校准、深度可分离卷积替换及2%误差边界回退的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接换算力强点的工控机不就行了，买最好的显卡，延迟肯定下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推理太慢咋整？老板说不能换硬件，得在代码里改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "听见没，要量化。微刃磨损那块怎么砍？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，量化，砍卷积，替换。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "量化不就是改个数据类型吗？还要校准？我哪知道这么细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查明白了，就是拿一部分真实切削数据当校准集，让量化工具统计分布，这样精度损失小点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一把看看不就知道了，误差大就再改呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就INT8量化加校准，卷积替换，误差卡2%。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在产线边缘部署验证背景下，用户与导师围绕灰度切换、统计检验验证、算力日志可持续性及降级预案持续沟通（7轮），其中在基线对比与统计检验方法部分与精度监控审计员沟通（1轮），并最终确认5%灰度降级预案、7天日志保留及分组对比输出约束，需补齐A/B测试与对比脚本能力。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑一晚上不就知道了，看精度降没降啊，这还用想？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@精度监控审计员 基线对比咋弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听懂了，就是分两拨，一拨开一拨关，看散布差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力不就多吃点CPU嘛，撑死机了重启呗。日志随便记记得了，存不下就覆盖老的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先开5%的机子跑，挂了就切回老逻辑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实搞不懂什么区间效应的，太绕了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周搞懂A/B测试写脚本。"
+              }
+            ]
+          },
+          {
+            "microScene": "在畸变补偿精度动态监测与灰度推进背景下，用户与导师围绕补偿残差毛刺归因、审计日志缺失合规风险及灰度策略持续沟通（4轮），其中在残差数据表现与日志修复部分与精度监控审计员沟通（2轮），并最终确认开启特征向量落盘、锁死灰度比例及提供特征字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑起来没报警就行了呗，说明补偿起效了，赶紧全量推完拉倒。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@精度监控审计员 监测面板上数据咋样？没飘红吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "5微米算个啥，机床本身震动都不止这点。日志没写就没写呗，补上去不就行了，别耽误全量上线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就让审计员把日志补上！毛刺先不管，反正没报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开个开关而已，多大事。你开个单子给我，我马上改。毛刺就先算作正常波动，赶紧放行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认确认，开日志，锁灰度，给清单。清单我一会甩给你。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微刃钝化误判为崩刃触发急停的归因复盘背景下，用户与导师围绕误判根因定位与验证方法持续沟通（5轮），其中在误判迹线特征发散归因部分与异常归因分析师沟通（1轮），并最终确认基于孪生引擎离线对照推演的复盘结论要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误判就改呗，把崩刃的阈值调松点，别动不动就急停，多耽误事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "哪那么容易顶废。加个双重确认延时，报两遍再停不就行了，赶紧放行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么搞最快？我赶着闭环。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "什么特征空间重叠，太玄乎了。不就是说滤波没弄好嘛，那我回去把滤波频段改大点应该就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不然呢，不跑怎么知道。我找两块废料，切一刀看还报不报误判，不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这下能让我去改滤波了吧？"
+              }
+            ]
+          },
+          {
+            "microScene": "在高镍合金磨损模型外推失效复盘背景下，用户与导师围绕模型演进迭代规划持续沟通（4轮），其中在迭代路线排布部分与模型演进规划师沟通（1轮），并最终形成学习日志及确认小样本采集、离线辨识与灰度下发三件演进规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "老模型加个系数凑合用呗，反正切出来的件没报废就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加个材质开关！碰到高镍合金就切到新参数分支，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么搞最快？我只想赶紧加个分支上线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "新模型先切一台机跑着，坏了再切回来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "学习日志：高镍合金老模型不能硬外推，会误判；下次换新料先跑孪生辨识搞小样本集，别瞎加系数。迁移改进：以后钛合金也走这套辨识流程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认！小样本采集、离线辨识、灰度下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

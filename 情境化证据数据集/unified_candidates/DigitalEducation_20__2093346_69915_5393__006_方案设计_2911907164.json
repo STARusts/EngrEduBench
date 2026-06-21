@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在口述作业可信评测方案设计背景下，用户与导师围绕证据链串联与评分模型架构持续沟通（9轮），其中在证据链对象分层、哈希/不可变性与保留策略部分与数据架构师沟通（2轮），在分项评分-汇总规则、置信区间传播与证据引用生成原则部分与评分模型工程师沟通（2轮），并输出包含score_run/score_item主索引、引用片段快照与最小化合规约束的6条架构骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“评分一次 = 一条可复现的推断记录”来想。主链路我觉得是：作业提交 -> 转写 revision -> 分段 -> 每段提取质量指标和过程特征 -> 评分模型对每个子问/能力点出分 -> 汇总到总分，同时把每个分数挂回对应的段或 time-span。证据链就从“题目上下文+音频原始+转写版本+模型输入特征+模型输出”一路串。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不可抵赖我先猜三类：原始音频、转写 revision、评分输出。中间特征可能不一定都存，太重。模型上我倾向分项：先做题目结构化，把口述答案按子问/要点匹配评分维度，再每个维度出分+置信区间，最后汇总。落证据就是：每个维度绑定一组“引用片段”(segment_id 或 segment_id+time-span)、再附上对应的转写文本片段和质量指标摘要。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 证据链这块，哪些实体该怎么分层存？我现在的想法是音频+转写revision+评分输出必须能追溯，但中间特征太大不想全存。哈希/签名、血缘字段、保留策略怎么设计，既能复核又不爆成本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“不可变日志”，是必须上类似区块链的东西吗？我们现在只在方案设计，别把实现搞得太重。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三层拆法，落地到链路里我想这么连：  \n- score_run 作为根节点：包含 submission_id、触发者（学生/教师/系统重跑）、rubric_version、model_version、pipeline_version、输入引用（audio_hash、question_snapshot_hash、transcript_revision_id）。  \n- score_item（子问/能力点）挂在 score_run 下：每个 item 存 raw_score、normalized_score、confidence、evidence_refs（段或段内 time-span）+ rationale 摘要。  \n可复算最小条件：能拿到 audio_object + question_snapshot + transcript_revision（至少是当时用的那一版全文或可重建的摘要不够），再配 pipeline_version 的参数摘要，才能重新分段/对齐/质量指标；模型推断复算要 model_version+prompt_version（如果是LLM）+输入拼接规则。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我之前没把这两块扣起来。我的修正是：score_run 必须持有“评分时引用的转写片段快照”，至少对 evidence_refs 涉及的片段做文本快照（不是全量全文）。这样就算旧 revision 被摘要化，只要 evidence 相关片段还能复核。全文是否需要长期保留按争议等级走，你们之前说“争议可延长”，那在 score_run 里加 dispute_hold_flag 触发延长保留。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@评分模型工程师 我们要做口述作业可信评测：分项出分再汇总，且每个分项能挂证据段/时间片。分项模型怎么组织更稳？置信度/不确定性怎么输出并传到总分？evidence_refs 生成的原则你建议怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "汇总的“区间传播”我听懂了：每项给一个 δ，总分 δ 是权重加权的组合。这里 δ 从哪来？模型自己吐一个不一定可信。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定6条骨架：  \n1）证据链三层：原始证据（audio/question_snapshot/采集元信息）→ 派生证据（transcript_revision、segment、alignment、quality_metrics）→ 决策证据（score_run、score_item、aggregation_rule）。  \n2）score_run 作为根：固定记录 rubric_version/model_version/pipeline_version/aggregation_rule_version + 输入引用hash（audio_hash、question_snapshot_hash、transcript_revision_id）+触发者与时间。  \n3）score_item 分项：按子问/能力点输出 raw_score/normalized_score、confidence、δ、error_flag；必须带 evidence_refs（segment_id 或 segment_id+time-span）和对应片段的转写快照（仅限引用范围）+片段质量摘要。  \n4）评分模型三段：理解层生成 alignment_map（子问→证据片段+覆盖率）→ 评分层按量表锚点出分 → 汇总层按规则版本做加权与区间传播，输出 total_score + total_confidence/总区间，并能解释“哪些分项导致低置信”。  \n5）保留策略与争议：全文转写只保留最近2版，旧版可摘要化；但 score_run 需固化“引用片段快照+hash”，并支持 dispute_hold_flag 触发原始/派生证据延长保留（与90天建议对齐）。  \n6）验收口径（本微场景相关）：证据可追溯性检查（从任一总分追到音频hash与量表版本的链路完整率=100%）、分项证据覆盖率（每个 score_item 至少1条主证据达标率）、低置信解释一致性（总置信度下降能定位到分项/质量指标的占比）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，这里我补一条约束插到第1条里：采集元信息只保留与复核直接相关的最小字段，比如设备档位、无障碍模式开关、网络状态分桶；不存精确地理位置、通讯录这类。证据片段快照只存引用范围，不做全量“答案全文+全过程音频”到处复制；访问上按角色分权，复核才可拉取音频原件，常规教师只看转写片段和解释摘要。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

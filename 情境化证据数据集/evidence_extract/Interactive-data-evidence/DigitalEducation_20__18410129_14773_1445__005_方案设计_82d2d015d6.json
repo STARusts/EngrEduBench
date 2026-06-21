@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在可达性自检替代引擎的方案设计背景下，用户与导师围绕多模态缺陷检测后的统一替代生成链路（输入-中间表示-生成-校验-交付）、片段字段与证据链、两档替代层级及合规降级持续沟通（10轮），其中在多媒体解析与字幕对齐最小方案上与多媒体处理工程师沟通（3轮），在数据最小化、PII脱敏与审计留痕边界上与合规与隐私官沟通（2轮），并形成可评审的流程骨架与字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里就两步：先把东西转成文字，再让模型改写。视频就出字幕，PPT就提取文字。剩下的我不太确定，比如图片替代文本到底要写多长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是PPT、PDF、MP4、MP3、还有互动题。中间表示……可能是抽帧、ASR文本、PPT的结构？生成就是字幕、讲义、alt文本。校验可能是看有没有敏感词？交付就是给教师下载或替换。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "统一粒度我想用“片段”。比如视频按时间片段，PPT按页，PDF按段落。每个片段都有原文、截图或音频区间，然后生成对应替代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "片段ID、来源文件ID、页码或时间戳、原始文本、图片链接、生成结果、生成时间、模型版本？还有个“置信度”之类。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 视频和PPT这块，中间表示怎么定比较稳？我怕抽帧、字幕对齐这块设计歪了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字幕对齐那个 alignment_score 怎么算？我怕被问住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PPT里图片的 bbox、block_id 这些，很多模板很乱，会不会解析不出来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概这样：  \n1）导入资源，按类型走解析：视频/音频出时间片段+ASR，PPT/PDF出页+block。  \n2）片段统一存：有来源定位（页码/时间戳）、原始内容、缺陷类型、解析等级。  \n3）按缺陷类型选生成策略：视频缺字幕就生成字幕；图片无alt就生成alt；文本结构乱就生成讲义；需要简化就出易读版。  \n4）生成后加校验分：字幕覆盖、alt不为空、结构层级、还有对齐粗分。  \n5）输出给教师：每个片段可预览、可采纳；低分的排队复核。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我怕做太多。能不能先每种只出一个？比如alt就一条，讲义就一份。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那策略字段里有 type=alt_text / subtitle / handout / easy_read，再加 level=L1/L2。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 这条替代生成链路里，哪些数据绝对别碰？追溯又要留字段，我有点拿不准边界。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“默认不存音视频”，如果教师要回看定位怎么弄？只靠时间戳？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着补：  \n- 解析后、生成前，对ASR/OCR文本做PII规则扫描，命中就替换占位符，并打一个 desensitized=true。  \n- 生成物都带 model_version、policy_version、segment_id、action=generate。  \n- 教师采纳时 action=adopt，能回滚 action=revert。  \n- 原件不长期存，segment只存定位和hash。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级就是：字幕用本地ASR先出草稿，不做润色；alt用模板+OCR关键词拼一下；讲义就把PPT文本按标题拼成大纲，不做改写。然后这些都标成 level=L1 且 need_review=true。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终我就按这几条说：  \n1）多模态统一成“片段”：时间片段（start/end、asr_text、对齐粗分）+版式片段（page+block、bbox、ocr_text、parse_grade）。  \n2）每个缺陷类型的替代生成分两档：L1最小合规全覆盖，L2可教可用做试点；策略字段里带 type+level。  \n3）生成前做PII脱敏，生成/采纳/回滚全留 action 审计字段；原件不长期保存，只留定位与去重hash。  \n4）云端不可用就走降级：本地ASR草稿字幕、模板alt、大纲式讲义，统一标 need_review 进复核队列。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

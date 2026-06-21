@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在认知负荷感知学习节奏优化系统工程开发接入采集SDK背景下，用户与导师围绕埋点最小闭环、事件契约与联调验收口径持续沟通（9轮），其中在离线队列/重试/丢弃优先级与安全档联动实现上与端侧SDK工程师沟通（4轮），并整理端侧实现清单与链路验收用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这周想把采集SDK接进学习端，把埋点和后端先跑通一条链路。现在卡在“该埋哪些、怎么验收联调算通过”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按学习节奏调整的触发点来：页面进入/退出、视频播放进度、暂停/拖动、题目开始/提交、提示弹窗曝光/点击、还有系统推的“节奏建议”被采纳还是忽略。上报想用批量+定时，网络好就快点，断网就攒着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧我能改SDK。上下文我可以带上 resourceId、contentType、taskId 这些；难度我不确定端上拿不拿得到，可能只有后端有。我怕埋点字段一多就乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@端侧SDK工程师 离线队列上限、丢弃策略、重试退避这些你们通常怎么做？我们还要跟异常闸门联动到“只轻提示/不提示”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值 1min 3次这个是拍脑袋还是有参考？我担心太敏感。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "远程配置我能接，但我对配置下发这块工具链不熟，我们现在只有简单的feature flag。可以先把阈值写死，后面再做可配吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认下：未同意时，除了同意相关事件，学习行为都不进队列是吧？那我们怎么做“未同意人群”的基础漏斗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了端侧：离线队列建议双上限（条数+大小），按P0/P1/P2丢弃，验签失败/干预异常触发安全档后只保留安全档切换事件，未同意只上报同意相关P0。阈值最好可配置，但我可能先留接口先用本地默认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "策略输入快照我能做成一次性的“干预触发事件”里带个summary，比如过去30秒点击次数、暂停次数、答题耗时这种桶。推断输出…如果推断在服务端，那端上只记录“收到的节奏建议ID、建议等级、置信度区间”？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "reason code 我怕产品后面改口径，枚举会频繁变。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问个联调验收口径：我们怎么判定“链路通了”？只看服务端收到了不够，我更想要可回放定位丢事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trace_id 我打算用 session_id + 本地递增序号拼一下，保证端内唯一。跨端就不保证了。服务端能接受吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有点担心事件太多，尤其播放进度这种高频。我们是不是直接不埋？还是抽样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我选“关键动作上报 + 每30s心跳（P2可采样20%）”，这样既能还原大体学习节奏，也不炸量。采样我先写死20%，后面接ConfigProvider。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边端侧要做：  \n1）事件公共字段（user匿名ID/会话session_id/trace_id/client_ts/schema_version/app版本/同意状态/safety_mode）。  \n2）事件优先级P0/P1/P2，离线队列双上限（5000条或5MB），超限丢P2并计数。  \n3）重试退避，4xx不重试，5xx重试；验签失败触发安全档，干预类事件降采样或停发。  \n4）干预闭环事件：建议曝光/点击/忽略 + 建议等级/置信度分桶/reason code。  \n5）播放进度改为关键动作+30s心跳，P2采样20%。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这四条去写联调用例。sdk_health我之前没想到，这个挺实用，我加上。时间上我想先把P0/P1事件通了，再补P2采样，避免一开始就调太多参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

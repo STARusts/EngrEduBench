@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微操信令异步裁决队列设计背景下，与导师围绕队列选型、反压处理、降级阈值计算与测试方法持续沟通（10轮），其中在流式框架选型与有界缓冲队列设计部分与流式架构设计师沟通（3轮），并最终形成基于Flink算子与有界缓冲队列的异步裁决及降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用Redis的lpush和rpop呗，网上都说这个快。开个线程一直pop就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关进来的信令要算时序特征，用Redis还是RabbitMQ排队啊？有没有配置模板？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "SQL算不了模型。那我就在Flink里写个FlatMap，把模型jar包导进去调用？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Arthas可以看线程阻塞。我可以用Arthas的thread命令看哪个消费线程卡住了，然后把卡住的线程杀掉？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加个有界队列，这个我会。ArrayBlockingQueue，给个容量就行了。阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "10万乘50毫秒，是5000？那就定6000？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所以我就先设6000，跑压测看卡不卡。卡了再调大点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Flink，写个FlatMap调模型jar包。前面加个ArrayBlockingQueue缓冲，容量先给6000。用Arthas看线程卡不卡，JMH测一下耗时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

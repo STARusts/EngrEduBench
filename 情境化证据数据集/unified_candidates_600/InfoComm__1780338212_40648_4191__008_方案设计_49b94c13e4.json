@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极端过载下降级策略设计背景下，用户与导师围绕态势数据流降级建模、验证设计与分级权重持续沟通（6轮），其中在态势数据分级降级部分与态势监控分析师沟通（1轮），在防撞安全底线部分与集群防撞策略师沟通（1轮），并形成态势流降级建模与验证方案及5QI映射备选权重方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按卡尔曼滤波的状态向量建，包含位置、速度和协方差。过载就按特征值截断降维。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端过载时态势数据怎么分级降级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刷新率拉长防撞还安全吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是先丢扩展态保核心态，再降频。但降频得保证预测误差不发散，不超过安全间隔。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用仿真。变量控制无人机密度，从100架拉到1000架。看算力占用率和预测误差曲线。对照组设两组，一组全量数据，一组降级数据。看降级组误差是不是还在安全包络里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "每组至少跑50次蒙特卡洛，取95%置信区间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我之前没实操过。这两天看了3GPP里5QI的QoS流优先级定义，想把5QI那套ARP优先级和丢包优先级映射过来。核心态映射ARP为1，扩展态映射ARP为5。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把5QI的ARP改成半静态，跟着拓扑更新周期刷新。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "态势流分核心态和扩展态；过载触发条件算力占用超80%；降级动作先丢扩展态，再降核心态频次；底线是预测误差不越安全包络；验证用密度梯度仿真加蒙特卡洛取置信区间。5QI映射作为备选权重方案。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

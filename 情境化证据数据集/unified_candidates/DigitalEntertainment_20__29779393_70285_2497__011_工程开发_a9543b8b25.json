@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在确权签名链路工程开发收尾的端到端联调压测背景下，用户与导师围绕压测 500/TIMEOUT 根因、数据分层(A/B/C)、四段 step 埋点与日志脱敏、结算事件幂等与验收标准持续沟通（11轮），其中在签名 canonical 字段白名单与类型约束上与后端技术负责人沟通（2轮），在超时定位方法与按 step 统计指标上与QA测试负责人沟通（1轮），并明确清理A数据、补埋点、补传 event_id 后再按 200rps 起逐轮压测复盘。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边是压测一开，接口就一堆 500。我看日志也看不太懂。感觉像是验签那边拒了，但也可能是我参数没配对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有一个是 CANONICALIZE_FAIL。还有个是 REVOKED。然后还有很多是 TIMEOUT。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿了之前测试库里几条内容，然后复制成很多份。撤销那条可能也被我复制进去了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能。我就把撤销那条删掉，然后字段我就不加多余的了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端技术负责人 canonical 输入允许啥字段？我这边压测老是 CANONICALIZE_FAIL。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我之前把 channel_id 也塞进去了，怪不得。那我把这些都移到别的接口？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把 channel_id 去掉，ts 改成毫秒整数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "traceId 我看到有，但我不知道怎么分段。我只会看一行一行的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@QA测试负责人 压测 TIMEOUT 太多了，怎么定位卡在哪个服务？我现在只会看 500。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在没打 step 字段，只有一个总耗时。那我得改代码加日志？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "剧情文本也不能打？我之前为了排查，把 prompt 打出来了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我知道了。我把 prompt 那行删了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没管幂等，我以为压测不会重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端技术负责人 结算事件接口有幂等吗？压测会不会写重复？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我补 event_id。settle_round 我就写 1？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我按 A/B 分开跑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "1k rps 我不确定打得起来，我之前只跑到 200 就超时了。800ms 也不知道能不能到。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就记在群里三行那种可以吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是我签名请求塞了多字段导致 CANONICALIZE_FAIL。另一个是没传 event_id 导致结算重复写，可能拖慢了。TIMEOUT 具体在哪步我得加埋点才知道。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。我先改这三块，然后按 200 rps 重新跑，看 top3 错误码和最慢 step。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳捕集传感数据接入清洗工程开发背景下，用户与导师围绕架构约束（禁用Kafka/Flink）及时间轮底层实现细节持续沟通（4轮），其中在受限环境轻量级清洗实现部分与边缘接入开发工沟通（1轮），最终确定网关内Go协程解析、时间轮对齐、内存滤波、双写保审计、仿真脉冲验证方案，并明确通过研读源码补全时间轮实现缺口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "为了处理多源传感数据的乱序和清洗，我打算在边缘网关后面加一层Kafka做消息缓冲，再接Flink做流式窗口聚合和去噪，这样后续如果反演模型要加特征，扩展性极佳。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果不用Kafka解耦，多路Modbus和OPC UA数据流在网关里直接拼装，锁竞争和时序对齐的代码会极度复杂。Flink的窗口机制能省很多开发量，硬写时序对齐太容易出Bug了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在边缘网关内部做多源传感数据流的时序对齐和降噪清洗，有什么轻量级的工程写法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "滤波参数如果设错了，可能会把溶剂氧化降解的瞬态尖峰信号给抹平了，反演就失效了。我准备构造一组带已知降解脉冲的仿真传感数据，注入网关清洗链路，对比输出RMSE，如果脉冲保留率低于阈值就调参。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对时间轮在超长时间跨度下的Tick漂移修正机制不熟，直接硬写容易出时序对齐的隐患。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚会把Netty的HashedWheelTimer源码扒一遍，重点看它怎么处理Tick Duration和未取消Task的内存泄漏，写个单测跑一下不同轮长下的定时偏差。明天把调优参数和防泄漏机制迁移到我们的网关时间轮实现里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

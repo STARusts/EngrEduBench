@@ -1,0 +1,668 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析与并发风险推演系统立项背景下，用户与导师围绕术后并发盲区痛点定义、量化变量及合规脱敏约束持续沟通（7轮），其中在并发盲区临床内涵拆解部分与临床痛点分析师沟通（2轮），在视频采集合规红线部分与医疗合规审计师沟通（1轮），并最终明确痛点定义与合规红线，制定脱敏知识补充计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我观察过几台胃肠手术，有时候主刀缝合打结动作特别快，或者牵拉组织用力过猛，当时生命体征没波动，但术后容易出血或者漏。就是这种，操作和后果之间有个时间差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "术后并发盲区在临床上的精确定义是什么？我光看到动作快慢和术后结果有关系，但怎么拆解成系统能算的东西？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这个累积窗口的时间跨度一般多大？不同手术差别应该很大吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这项目要高清拍术野，还要分析动作。视频里会有组织特征，这合规上怎么卡？是不是不能拍太清？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我系统设计时，摄像头物理调焦和视野裁剪是硬需求，不能全画幅进去。还有视频不能存原画，得实时脱敏。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前做工业视觉，都是直接原图进模型，医疗这块的脱敏和隐私计算我完全没概念。如果要在保证动作特征的同时脱敏，我连该用什么思路都不知道。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周内看完两篇关于术野视频实时脱敏和边缘计算的论文，重点搞懂“在边缘侧丢弃原图只传特征图”的脱敏思路，然后把可行性结论带回来，看能不能作为我们这个项目视频输入模块的强制约束。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点不是简单的动作快慢，而是微观组织损伤累积在宏观体征上的滞后，我们要抓的是高危动作语义和风险累积窗口。做这个的系统约束是：视野必须物理或算法限定在术野切口内，视频绝对不能落盘原图，必须边缘实时脱敏，而且要有专项知情同意。"
+              }
+            ]
+          },
+          {
+            "microScene": "在术野数据合规与确权评估背景下，用户与导师围绕术野数据权属切分、模型共有权风险及规避策略持续沟通（6轮），其中在确权边界与脱敏粒度设定部分与医疗合规审计师沟通（2轮），并最终形成知情同意分层、术野脱敏解耦与模型边缘侧本地化闭环三条合规约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权益？不就是患者的隐私嘛。只要脱敏做好，知情同意签了，数据肯定归医院啊，我们系统只是拿过来做推演。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我之前确实没细想。我就想着把非术野区域抹掉，器官打码。术者的手也算隐私？那我们动作解析还怎么做，总不能把手也挡住吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "术野视频里既有患者器官又有医生的手，这权属到底怎么算？脱敏要是把医生手也抹了，动作解析就没法做了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只留动作语义向量？就是说不存原图，也不存手部外观，直接输出动作类型和轨迹？那知情同意书是不是也得改，不能一揽子全签了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说数据控制权是医院的，我们只有处理权。脱敏得把身份和动作分开，只留动作语义向量。还有模型权属，医院可能要共有权，这有点麻烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就，不把数据拿出去训？就在医院里面训？模型本地化部署？这样原始数据不出院，训练也在院内闭环，医院是不是就没法说模型是他们独有了？我们只卖引擎和服务。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一条，知情同意必须分层，录像采集和AI推演授权分开签。第二条，术野脱敏必须解耦，系统内只流转动作语义向量，原图和外观特征绝对不落盘。第三条，推演模型必须边缘侧本地化，原始数据和模型训练都在院内闭环，我们只提供算法引擎和更新服务。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘侧闭环与脱敏约束排除云训练的背景下，用户与导师围绕坚守边缘侧的商业模式与推广策略持续沟通（4轮），其中在半云模式合规风险与硬件售卖替代方案部分与商业化架构师沟通（1轮），在医生对预装预警接受度与误报伦理部分与临床痛点分析师沟通（1轮），并最终形成算法引擎订阅制、内镜厂商预装及医生自调阈值的商业策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SaaS肯定好卖啊，按接口收钱多轻松。但刚定完不能上云，这就矛盾了。能不能打个擦边球，只把脱敏后的动作向量传回云端做模型更新？这样还是能按调用量收钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们只卖边缘盒子，科室肯定嫌贵不想买，采购周期也长。要是传向量回云端更新模型，这种半云模式能不能做成按调用量收费？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "预装好像能省事点，不用自己推硬件了。医生会接受预装在我们系统里的预警吗？我怕他们嫌误报烦，最后不用我们就白装了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "所以不能为了好卖就调低阈值刷预警数，也不能传数据回云端。还是得死磕边缘侧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业模式就是算法引擎订阅制，不单独卖硬件盒子。推广上跟内镜厂商合作预装，省掉科室单独采购的麻烦。预警阈值必须让医生自己调，绝不搞默认高频误报来刷存在感。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在需求摸底与画像构建背景下，与导师围绕调研合规、画像分层与配置策略持续沟通（6轮），其中在数据获取合规红线部分与医疗合规审计师沟通（1轮），在机构画像差异与误报容忍度部分与临床痛点分析师沟通（1轮），并最终形成基于模拟器与脱敏视频的调研策略及零配置分层画像原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接去手术室拿个GoPro拍几台不就行了？需求肯定听大三甲的，他们带头用，基层跟着学。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拍视频确实没想过脱敏的事。误报这事，我觉得只要算法够准，基层也不会误报吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "去医院调研拍术野视频，合规上怎么搞才不出事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大三甲和基层医院对风险推演系统的诉求差异具体在哪？误报容忍度怎么平衡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调研不能直接拍，只能用历史脱敏视频或者模拟器。画像得分层，大三甲要高灵敏度，基层要低误报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据源就用历史视频，模拟器太贵了。产品分层，我就在后台加个开关，三甲开高灵敏度，基层开低灵敏度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "视频拿不到的话，只能先跟厂商借模拟器数据了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "开关的事，我确实不太懂怎么让医生好操作。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "调研策略：优先找内镜厂商借脱敏的模拟器视频做基线，同时找一家大三甲要历史脱敏录像做验证。画像分层：基础版默认低误报兜底，零配置；高级版开放阈值调整接口，给三甲用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前对合规和画像差异想得太简单了，得把《医疗器械软件合规调研规范》加到这周的补学清单里，不然后面设计接口肯定还要踩坑。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析系统流式融合架构设计及带宽算力受限背景下，用户与导师围绕架构核心取舍、落地方式及容灾设计持续沟通（4轮），其中在低成本流式切分部分与流计算架构师沟通边缘抽帧与云端流Join方案、召回率验证及降级容灾策略（3轮），并最终确定边缘抽帧加云端流Join架构及降级低分辨率转推容灾方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "20Mbps连一路4K内窥镜都喂不饱。我本来想全量推到流计算集群再做动作分割，T4也跑不动多路深度学习模型推理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "带宽只有20Mbps，T4单卡，多源视频和器械数据怎么融合？全量推肯定炸。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "光流抽帧听着省资源，但动作如果刚好在阈值下面，不就漏了？这漏报率能接受吗？我觉得可能还是得定期发全量帧兜底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "光流法测变动率和Kafka流表Join这块我理论底子太薄，之前只会调API发数据，没管过流控和背压。我得把Kafka流控机制和动态抽帧那几篇论文加到今晚补学清单里，不然这边接口的滑动窗口大小我都定不出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心就是不在边缘做重推理，只做变化检测和过滤。器械数据跟视频关键帧在云端用流表做时间对齐。我准备把边缘侧的采集服务改成带光流检测的，云端加一层Kafka Connect做流式聚合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "挂了肯定不能断流，手术数据断了是医疗事故。降级全量推的话带宽又超了。是不是应该降级成低帧率全量推？比如压到720P再发？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "架构就定边缘抽帧加云端流Join，容灾走降级低分辨率转推。我这就去改接口定义，把光流检测和降级开关加进去。"
+              }
+            ]
+          },
+          {
+            "microScene": "在手术动作语义特征提取与路由规划背景下，用户与导师围绕边缘与云端算力分配及架构与业务红线折中持续沟通（3轮），其中在边缘算力与带宽评估部分与流计算架构师沟通（4轮），在微动作特征丢失风险与轻量化提取部分与语义识别算法师沟通（4轮），并最终确定边缘侧跑ROI检测与特征切片、云端拼全量语义的折中路由方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然架构都定了边缘抽帧，那特征提取肯定全放云端啊。边缘就干点轻活，传上去让云端大模型提不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取全放云端，你这边应该没意见吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端做语义提取能不能搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘跑模型？太折腾了。各种驱动环境、模型转换，后面升级维护简直是灾难。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构红线业务红线，总得有个折中吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微动作特征是不是非得在边缘提？能不能云端用别的算法补？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘真一点算力都挤不出来了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几兆的小网络能提微动作？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "5兆？那好像能接受。部署升级也就是多推一个小模型包上去，运维负担不大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘只跑ROI检测和特征切片，剩下的全丢云端。这样既不占太多边缘算力，也不丢微动作。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘侧负责：抽帧、光流、ROI特征切片；云端负责：全量语义映射。切片流单独走一路推送到云端，路由就按这个画。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在并发并发症风险推演模型设计背景下与导师围绕推演建模方式、计算延迟与推理引擎选型持续沟通（8轮），其中在并发关联建模与数据来源部分与知识图谱工程师沟通（3轮）、在流式推理引擎选型部分与知识图谱工程师沟通（1轮），并最终形成Neo4j管图谱结构与SMILE做贝叶斯概率传播的推演方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就上Neo4j存图谱呗，拿到动作标签直接查图，匹配到高危路径就报警。规则我熟，写几条Cypher查语句就完事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "组合的话，就多写几条规则呗，把A和B绑一起。概率，就统计一下历史数据，定个阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动作并发组合这种，图谱里怎么搞？我不想搞GNN那种黑盒，调参太玄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对，过不了审，医生看不懂就不敢用。贝叶斯加图谱这个，具体怎么跑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "条件概率表这些数据哪来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱那边建议用贝叶斯网络加知识图谱。不用GNN，可解释性过关，也不用我手写一堆Cypher组合规则。概率表可以后面迭代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟的话，刚才切片流不是分出来了吗，云端算力应该够。大不了推演服务多挂几个节点。只要不是GNN那种吃显存的就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不手撸，用现成的，pgmpy或者直接上Pyro？pgmpy纯Python，Pyro底层是PyTorch。我倾向pgmpy，轻量，好调试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "pgmpy做流式并发推理扛得住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SMILE我看过，有Java和Python API，能接Flink。那就定图谱用Neo4j存结构，推理用SMILE引擎算概率传播。这样规则和概率都有了，还能解释。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。Neo4j查拓扑给SMILE初始化网络，流式特征进来触发SMILE算概率，超阈值就推给前端报警。后续新术式只改图谱和CPT，不用动推理代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在术中流计算与高可用架构设计背景下，用户与导师围绕流计算容灾与低延迟的平衡及验证持续沟通（4轮），其中在容灾恢复与状态后端选型部分与流计算架构师沟通（4轮），在低延迟要求与内存计算部分与性能调优攻坚手沟通（4轮），并最终形成Flink Memory状态+Unaligned Checkpoint及边缘降级兜底的高可用架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我原本想用Kafka收流，Flink算特征再调SMILE。但高可用我不敢定。万一Flink主节点挂了，推演断了，手术台上报警就没了，这锅太大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流计算和高可用架构怎么搞？要求推演不能断，延迟还得低。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我这两天刚看了Flink的容灾配置最佳实践，里面有个Unaligned Checkpoint（非对齐检查点），专门对付反压和快照慢的。能不能用这个折中一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们推演状态其实不大，就是当前概率和图拓扑。我之前没想过用非对齐检查点，看了文档才知道这玩意能绕过barrier对齐耗时。要不这样，状态后端用Memory加快照，开启Unaligned Checkpoint？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以设计个对比实验。控制并发推演流算子数量不变，变量是状态后端策略。一组用RocksDB+Aligned Checkpoint，一组用Memory+Unaligned Checkpoint。样本量跑5次，每次压测30分钟。提前定好验收标准：P99延迟低于800ms，恢复耗时低于5秒。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "底线是报警不能断太久，延迟也得起得来。OOM风险有点怕，但全用RocksDB肯定延迟不达标。我选Memory+Unaligned Checkpoint。OOM风险靠降级兜底，一旦监控到内存超80%，边缘侧直接断视频流，只传关键器械数据，让Flink扛住不挂。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析系统工程开发背景下，用户与导师围绕4K视频实时解码与推理加速方案、性能验证及隐私脱敏持续沟通（7轮），其中在4K视频硬解与零拷贝传输部分与视觉算法实现者沟通（2轮），并最终形成FFmpeg硬解加显存池方案、P99延迟对照测试策略及插入脱敏预处理的后续开发动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看大家都用OpenCV VideoCapture抓流，拿帧之后直接丢给TensorRT跑分割模型。这样写最快，我以前也这么干过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "毛刺这块我确实没细想。我只知道能跑通，内存拷贝的开销具体有多大我不清楚。这块原理我不太懂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚把FFmpeg硬件解码和Zero-Copy的文档过一遍，先在本地写个小的解码Demo跑一下看看。然后我再去问问专门搞视觉算法的同事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "4K术野流硬解码之后，怎么零拷贝传给TensorRT？OpenCV那种拷贝方式延迟太大了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "全程显存操作？那显存怎么管理？每帧都申请释放肯定不行吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我写个对照测试脚本。同一份4K视频，分别用OpenCV解码加CPU到GPU传输，和FFmpeg硬解加显存直传，跑个500帧，对比两端到端推理的P99延迟。这样能看出差距。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏我还没做，我想着先跑通分割模型再说。难道要在解码之后、进TR之前加一步人脸检测抹掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接下来三件事：第一，今晚补学FFmpeg硬解和显存池管理，写Demo验证；第二，写对照测试脚本，跑P99延迟对比；第三，在解码和推理中间插上脱敏预处理模块，不脱敏不推理。"
+              }
+            ]
+          },
+          {
+            "microScene": "在动作序列灌入并发关联图谱进行风险推演背景下，用户与导师围绕并发写入Neo4j死锁问题、UNWIND批量更新改造及批次与反压设定持续沟通（6轮），其中在高并发属性更新死锁解决部分与知识图谱工程师沟通（1轮），在批次大小与反压参考部分与图谱联调工程师沟通（1轮），并最终形成逐条改UNWIND、批次定500及加反压控制三项修改点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写不进去。并发一上来Neo4j就卡死，一直报DeadlockDetected。我看了机器资源，CPU和内存都没满，就是锁住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志里全是 `Neo.TransientError.Lock.DeadlockDetected`。我猜是同时更新同一个手术动作节点的属性导致的，但我加了重试也没用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并发往Neo4j写动作节点属性一直死锁，我加了重试还是报错，这怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不能用for循环一条条写，得攒一批一起写。那我就改成UNWIND。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先定个100条一批？感觉应该差不多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UNWIND批次大小定多少合适？我怕设大了还是锁，设小了没效果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，500一批，加反压控制。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三件事：第一，把逐条写入全改成UNWIND批量参数化；第二，批次大小定500；第三，写入端加反压，超2000 QPS就降速。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风险推演微服务与图谱服务联调背景下，用户与导师围绕联调容错防雪崩、降级缓存实现及读写并发一致性持续沟通（8轮），其中在防雪崩与熔断降级策略部分与图谱联调工程师沟通（2轮），在缓存并发一致性与压测重点部分与性能调优攻坚手沟通（1轮），并形成不重试超时熔断、走Redis缓存及并发压测的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接写个pytest脚本，把推演接口和图谱查询串起来跑呗。只要接口能通，返回的并发症概率列表格式对就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时我设个3秒，重试2次应该够了。卡住就等呗，不然推演结果出不来啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演服务调图谱，超时设3秒重试2次行不行？联调这块怎么防卡死？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级？推演服务降级怎么搞？没结果怎么预警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没写过。我加个Redis缓存旧图谱数据吧，熔断用Sentinel。每次查图谱成功就顺便刷一下Redis。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我没想到。读写并发应该很快吧，Redis是单线程的。测试用例我就测正常查、超时熔断这两种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演侧加Redis缓存图谱结果，读写并发会不会卡？延迟毛刺大不大？测试要打哪种场景？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测场景我加上并发读写。缓存失效延迟我也测一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三点：第一，推演调图谱不重试，超时1秒熔断；第二，熔断后走Redis读旧图谱数据，查询成功就同步刷缓存；第三，联调脚本加并发读写压测，验证缓存失效延迟。Sentinel用慢调用比例熔断。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在术中预警推演服务压测P99延迟飙高背景下，与导师围绕延迟根因定位、有界队列参数设定与熔断阈值对齐持续沟通（6轮），其中在偶发延迟毛刺抓取与锁竞争排查部分与性能调优攻坚手沟通（2轮），并最终形成抓火焰图排查根因及按QPS安全水位算队列深度的排查方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99有点高，飙到1.5秒了，触发熔断。平均倒是800毫秒。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了下grafana，就是推演服务那块CPU突然拉满。我猜是图谱查询并发上来以后卡住了，或者模型推理那块没排开。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测并发一高P99就飙到1.5秒，CPU拉满，这种偶发的延迟毛刺怎么抓？我本地跑单测都很快的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那要是连接池打满，我是改大池子还是加排队？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说要挂Profiler抓火焰图，看是不是Malloc锁或者连接池等锁。不能直接加大连接池，得加有界队列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算子不稳定我没看。我只看了接口耗时。如果算子有问题，是不是得找算法那边？队列超时告警，我可以在Sentinel里加个规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先设个100试试？超时设200毫秒。总耗时不超过1秒就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我再去压一下图谱单点，拿到QPS再算队列深度。火焰图我这就去加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两步：第一，压测环境挂Profiler和eBPF抓火焰图，看是不是Malloc锁或者连接池等锁；第二，压测图谱单点拿QPS极限，按安全水位算队列深度，队列超时暂定200毫秒，配合Sentinel打告警。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在术野数据脱敏与接口封装背景下，与导师围绕视频流脱敏合规、实时擦除延迟及接口封装持续沟通（4轮），其中在合规红线部分与医疗合规审计师沟通（1轮），在流式脱敏与接口封装部分与数据脱敏专家沟通（2轮），并形成ROI光流追踪擦除与透明代理接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视频脱敏合规红线具体有哪些？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "人、ID、非术野要挡，器械动作和组织要留。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "怕把帧率拖垮。是不是可以只对检测到的敏感区域做擦除，不用每帧全量跑检测模型？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视频流要实时脱敏，还得保动作语义，延迟不能超10毫秒，有啥方案？另外误抹了器械会不会影响推演？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "光流追踪加间隔检测，这招行，对P99影响小。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接口封装呢？脱敏后数据怎么给推演服务？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "ROI光流追踪擦除，核心区置信度0.95以上保证推演，接口走透明代理和PB。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析与并发风险推演系统上线运行评估背景下，用户与导师围绕核心推演指标基线设定、线上有效性验证及监控策略补充持续沟通（6轮），其中在业务指标基线设定部分与系统运维监测师沟通（1轮），在线上有效性验证部分与临床效果评估员沟通（1轮），并最终补充业务基线指标与分组验证逻辑，制定统计理论补充目标与监控大盘改造计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加了GPU显存、流计算反压率、还有推演接口的P99延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统运维监测师 上线初期的业务指标基线一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能拍脑袋我懂，但依据从哪来？离线测试的ROC曲线能用吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@临床效果评估员 线上推演结论的有效性怎么验证？我手里只有大盘的准确率数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我是不是得在推演服务里加个标记，区分开历史数据和实时推演数据？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我在Prometheus里加两个自定义指标：risk_trigger_total 和 graph_hit_total。然后在Grafana上画大盘。至于分组比较，我在接口层加个 experiment_group 标签，把走推演的流量打上标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "资源类：GPU、反压、P99；业务类：触发率、命中率。验证设计：打上分组标签回流数据，做历史对照。告警阈值先按离线测试的80%设，跑一周再调。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块理论确实差。我定个目标：这周末前把A/B Test和假设检验的基础概念看明白，重点是P值和置信区间的计算逻辑。下周一把Grafana里的分组聚合查询语句改出来，让大盘能直接展示对照组和实验组的差异。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在术中风险预警复核背景下与导师围绕漏报修复与敏感数据获取冲突持续沟通（6轮），其中在漏报后果及文本补图谱可行性部分与临床效果评估员沟通（2轮），在视频合规限制部分与医疗合规审计师沟通（1轮），并形成放弃视频改用文本日志补知识图谱边的折中方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了，主要是罕见并发症的术野动作模型没见过。得把这些失败手术的视频拉出来重训。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "找信息科要呗，脱敏一下抹掉脸就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "漏报这块如果就放着不管，准确率复核能过吗？医生那边啥态度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那我如果只拿视频做特征提取，不存原片，脱敏掉人脸和体表特征，合规上能通吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "视频这条路走不通，医生不配合，合规也要专项知情同意，根本签不完。但漏报不补，复核指标就卡死在这了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬拿肯定不行，出事我兜不住。能不能退一步，不拿视频流了？手术记录单总有吧，主刀医生术后写的并发症分析报告，里面有动作描述和时间点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我不拿视频，只拿术后并发症的文本记录和动作时间线，能把图谱侧的漏报补上吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放弃拿视频，改拿术后文本日志去补知识图谱的边。合规风险小，医生也不抵触，就是预警置信度会低点，但至少不会漏报。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先去改图谱联调的接口，支持文本日志导入。置信度这块我设个低水位基线，单独出个复核分。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估复盘临床反馈背景下，与导师围绕日志采集引发的医生隐私合规盲区及脱敏改造持续沟通（5轮），其中在临床体验与隐私侵权反馈部分与临床效果评估员沟通（2轮），在医生执业数据脱敏标准部分与医疗合规审计师沟通（2轮），并最终形成重构清洗管道、加入医生侧脱敏算子并降低基线接受精度折损的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口联调通了，日志每天都在写进图谱。不漏报应该就没事吧，医生不看视频也不紧张了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "临床那边的反馈出来了没？我这边日志接口都跑顺了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "患者隐私不是脱敏了吗？医生还有隐私？这日志是系统自己读的，又没让人工看。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那现在怎么办？日志不读了？又回视频？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "患者脱敏我懂，医生脱敏怎么搞？直接把医生ID抹了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时长加噪？那图谱里算并发风险的时间边权重全废了啊。不加噪行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规说医生ID得抹，处方得泛化，时长必须加噪。这加噪完，时间特征基本就没了，风险推演的置信度肯定又得掉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去改清洗管道。加个脱敏算子，把时长随机加减个范围。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估长尾预警覆盖率与实时性冲突背景下，用户与导师围绕平衡覆盖率与延迟、设计折中架构持续沟通（5轮），其中在小样本学习引入部分与迭代规划经理沟通（2轮），在微服务延迟影响部分与性能调优攻坚手沟通（2轮），并最终形成主链路规则兜底加旁路特征匹配试水的迭代规划方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "小样本学习我之前没搞过，心里没底。规则兜底写起来快，但覆盖率肯定上不去啊。能不能先加规则顶一阵子？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "小样本学习要怎么加？对现有流计算影响有多大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "他说的这个微服务加进来，延迟会不会爆？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主链路肯定不能加东西。但纯规则覆盖率又太可怜。他们俩说的刚好反着，主链路加模型会爆延迟，不加模型没覆盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则只能覆盖图谱里已有节点的直接衍生，完全没见过的并发症肯定外推不出去。复现的话，只要图谱节点不变，规则结果就能复现。至于不污染主链路，是不是可以搞个旁路？不影响主链路，偷偷跑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没完全看懂，就学会个ProtoNet的皮毛，搞个距离度量应该行。如果我在旁路起个轻量特征匹配服务，拿脱敏后的数据跑，主链路还是规则兜底。这样大盘稳，长尾也能试水。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就这么定：主链路不加微服务，用规则兜底已知变种；旁路我用ProtoNet搞特征匹配试水长尾；旁路结果只记录不报警，等评估指标达标了再切。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "迭代规划要点：1. 主链路保持亚秒级响应，长尾场景上线规则兜底，适用边界限定为图谱已知节点的直接衍生，可复现；2. 部署旁路验证环境，资源与主链路隔离；3. 旁路采用轻量级ProtoNet特征匹配试探未知长尾，报警拦截暂不开放；4. 旁路长尾覆盖率指标回流至监控大盘，达标后再评估主链路切流。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

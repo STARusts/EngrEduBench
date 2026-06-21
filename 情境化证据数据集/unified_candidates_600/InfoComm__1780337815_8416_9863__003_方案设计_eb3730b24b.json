@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在柔性产线边云协同架构设计背景下与导师围绕云边职责切分、ARM算力验证与降级、边缘部署及数据回传安全持续沟通（7轮），其中在职责切分部分与边缘计算架构师沟通（1轮），在回传安全部分与工控安全评估师沟通（1轮），最终形成方案A切分、ARM推理假设与降级策略及脱敏审计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然要秒级出结果，那肯定把替代路由推理全放边缘侧，数据存云端做备份。这样断供时边缘自己就能算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力和带宽都卡得很死，还要保证秒级出结果，这云边职责怎么分比较合适？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来方案A更好，因为断供时网络可能也不稳，方案B断网就废了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实不太熟，以前都是用Python直接跑的。我得去补一下ARM侧的推理框架部署，比如看看瑞芯微的RKNN-Toolkit或者华为的Ascend Lite怎么把ONNX转过去。这两天我先跑通一个Demo。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据回传那边是不是有什么限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构切分选方案A：边缘部署轻量化模型秒级出替代路由，云端做复核和全局寻优。验证假设是ARM单次推理耗时小于500ms，超时降级输出Top3。数据回传要脱敏加密，边缘执行要审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演性能瓶颈调优与测试背景下，用户与导师围绕图推理加速策略、测试用例构造、精度校验标准及算力成本控制持续沟通（6轮），其中在测试用例构造与精度校验部分与联调与测试专员沟通（2轮），在图推理瓶颈分析与分区加速部分与图神经网络极客沟通（2轮），并最终确定流域分区加异步预取方案及测试验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得可以先加个Redis缓存，算过的连通度演进结果直接读缓存。另外图节点太多的话，能不能直接按行政边界切片，分块算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "精度损失这个，跑一下看结果差多少呗。测试的话，我就造一批随机图数据压测一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算造随机图压测，再按行政边界切图加速，你们看行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "流域分区加Overlap，这个能避免切断廊道。那IO阻塞怎么弄？异步预取具体怎么加？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前刚好在补PyG的图分区源码，里面有个`partition_by_domain`的逻辑，我迁移过来改改应该能做流域分区。这样图构建耗时应该能降不少。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑分区和全图对比，看廊道推荐路径重合率？不过全图推理太慢了，跑一次半天。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳流域分区加异步预取。测试用例用长三角极度破碎场景。Overlap区域大小作为可调参数，先设5%，跑Top-K路径重合度，低于85%就扩大Overlap。算力增加的问题，先不管，只要单分片不OOM能跑通就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "单分片内存80%，重合度85%，Overlap 15%封顶。我去改图分区和预取逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

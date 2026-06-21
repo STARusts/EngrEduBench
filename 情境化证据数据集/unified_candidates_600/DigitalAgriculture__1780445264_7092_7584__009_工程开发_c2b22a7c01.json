@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微灌管网指令下发性能调优背景下，用户与导师围绕指令并发控制、时序排序、背压实现、窗口设定及重传降速策略持续沟通（8轮），其中在指令风暴与时序控制、窗口大小与性能边界部分与指令下发优化工程师沟通（2轮），并最终形成滑动窗口加工控背压加重传降速保透的下发逻辑修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发嘛，多开几个线程发就行了，或者加个缓存队列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就限个速，每个指令中间加个sleep。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令下发太多管子会爆，时序也乱，怎么调优？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收到高压就停。我昨天刚看了个Netty的背压文章，加个`channel.isWritable()`判断就行，不Writable就不发。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我改成，监听管网物联安全师那边的压力传感器上报值，超过阈值就置个flag，暂停下发窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设50吧，感觉差不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时效性，那就设个超时放弃？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "滑动窗口，工控背压，重传降速保透。我这就改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

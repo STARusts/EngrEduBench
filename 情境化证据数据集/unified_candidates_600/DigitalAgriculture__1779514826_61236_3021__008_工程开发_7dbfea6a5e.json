@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘端算力受限与小样本背景下，用户与导师围绕授粉靶窗寻优模型选型、泛化能力及域偏移处理持续沟通（3轮），其中在模型轻量化选型与域偏移处理部分与AI模型训练师沟通（2轮），最终敲定大模型蒸馏TCN结合CORAL loss跨域对齐的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力有限的话，是不是直接上轻量级网络？比如MobileNet或者YOLO的nano版？我之前做目标检测用过YOLOv8n，推理帧率很高，应该能塞进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在手里是点云流变特征，要预测授粉靶窗，小样本低算力怎么搞？YOLO用不了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来能省算力，我倾向直接上TCN，蒸馏感觉步骤多容易出错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "域偏移，就是仿真和真实数据分布不一样呗。我之前做图像是加噪声做数据增强，点云流变特征加噪声管用吗？我不太确定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "仿真数据和真实数据域偏移怎么搞？直接给流变特征加随机噪声行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案就是：服务器上训个大教师模型，蒸出TCN学生模型，预训练用仿真数据，微调时加CORAL loss对齐真实数据分布。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去找点云算法工程师对齐特征输出维度，然后先把TCN的骨架代码搭出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在蓝碳蓄积反演模型算法选型背景下与导师围绕模型精度、可解释性、边缘轻量化与排期约束持续沟通（4轮），其中在模型可解释性与训练收敛性部分与算法选型师沟通（3轮），在边缘网关算力与并发稳定性部分与水文生态架构师沟通（2轮），并最终形成边缘侧CENTURY过程模型与云侧PINN协同的算法选型定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然残差驱动采样能保证局部高频特征不丢失，反演模型理应直接上时空图卷积网络结合Transformer。STGCN抓空间拓扑，Transformer捕捉长序依赖，精度天花板最高，R2肯定能拉满。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘侧只做轻量化推理就行。云侧训练好STGCN和Transformer权重，用TensorRT算子裁剪和INT8量化后推送到边缘侧，完全可以压在算力预算内。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用STGCN+Transformer做蓝碳蓄积反演，边缘侧TensorRT INT8量化推理。这个路线在咱们湿地场景下有没有硬伤？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可解释性可以通过物理约束嵌入来解决。把湿地碳循环微分方程作为损失函数的惩罚项加进去，用物理信息神经网络（PINN），既有数据驱动的拟合能力，又保留了机理可解释性。至于边缘侧，PINN的推理图和STGCN一样可以量化裁剪。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "训练慢是云侧的事，云侧算力不是瓶颈。只要PDE方程组能准确约束水力传导率和碳矿化速率的非线性关系，等几周完全值得。R2和可解释性必须同时拿住。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就拆解。边缘侧完全放弃深度学习，跑修正的CENTURY过程模型，碳氮水耦合机理全透明，算力极低，直接响应水位节律调控触发。云侧跑PINN，用边缘回传的稀疏高频残差样本做高精度反演，同时定期校准边缘侧CENTURY的参数初值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反演算法选型确定：边缘侧采用CENTURY机理过程模型，负责本地实时碳蓄积估算与调控指令触发，满足可解释性与轻量化约束；云侧采用PINN模型，融合偏微分方程约束与多源遥感数据，负责高精度蓝碳蓄积反演，并周期性下发参数校准边缘侧过程模型。兼顾了R2、可解释性、边缘算力与合规审查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

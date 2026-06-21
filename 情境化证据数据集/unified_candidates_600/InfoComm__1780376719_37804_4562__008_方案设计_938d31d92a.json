@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在星地跨域抗拥塞交互接口设计背景下，用户与导师围绕长时延下拥塞信令机制、标记承载方式、降级策略及审计留痕持续沟通（5轮），其中在信令时效性与标记方式部分与抗拥塞协议设计师沟通（2轮），在反压接口合规留痕部分与合规与频谱审计师沟通（1轮），并最终形成基于压缩SRv6 SID主动标记、保守降级及含5个审计字段的接口设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按传统TCP的ECN机制，在IP包头设ECE和CWR位，接收端回传ECE，发送端降窗。理论上只要在一个RTT内能反馈回来，拥塞窗口就能收敛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "地面端到端ECN反馈在星地长时延下失效，这种非对称跨域链路，拥塞信令怎么设计能保证时效性？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "congestion_mark的标记位如果复用DSCP域，会不会和原有的QoS流分类冲突？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SRv6开销大，但IP Option不靠谱。我觉得还是SRv6 SID稳一点，大不了压缩SID。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级的话，没收到标记就按默认最大速率发？审计字段我不太确定，是不是要记录频谱占用变更？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星地跨域反压接口在触发频谱资源抢占或降级时，审计字段必须包含哪些信息才能满足合规留痕要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "综合下来，接口设计就是：星上用压缩SRv6 SID做主动标记，地面反压采用保守降级策略回退到基线速率，反压原语带上这5个审计字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

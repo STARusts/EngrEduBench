@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的支架推荐引擎性能压测背景下，用户与导师围绕压测数据构造、链路耗时拆解及P99超标定位持续沟通（7轮），其中在压测数据构造与指标部分与测试工程师沟通（2轮），在链路耗时拆解部分与系统架构师沟通（1轮），并最终形成基于真实日志回放、关注P99与Kafka延迟、Mock与全链路对照实验拆解耗时的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JMeter起并发线程直接调推荐接口，看吞吐量和平均响应时间就行。后端接口我写的，逻辑肯定没问题，主要怕机器扛不住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Mock数据就随机生成个眼动和笔触特征呗。耗时拆解我没想过，反正接口总耗时达标不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测推荐引擎时，多模态特征数据怎么构造才真实？随机造数据行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链路耗时拆解咋搞？我只会看接口总耗时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试工程师说不能用随机数，得用真实特征流回放，看P99延迟。架构师说要把Kafka延迟算进去，还要加Trace拆解耗时。但真实特征流回放我不会弄，JMeter我只写过简单HTTP请求。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚才查了一下，JMeter有个CSV数据集配置可以读外部文件。我打算把之前端侧上报模块打印的日志导出来，清理一下格式塞给JMeter用。这样造出来的数据最接近真实分布，我刚好把之前写的日志解析脚本改改就能用，省得重新写造数据逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超标就加机器呗，或者让算法工程师优化模型。具体是哪块慢，我可能看不出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果P99超标了，怎么拆开看是算法慢还是特征对齐慢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试工程师说要搞对照组，Mock掉模型压一次，全链路压一次，耗时差就是模型耗时。还要分特征稀疏和稠密两种情况压。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "用真实日志回放，做对照组拆耗时，我这就去改JMeter脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

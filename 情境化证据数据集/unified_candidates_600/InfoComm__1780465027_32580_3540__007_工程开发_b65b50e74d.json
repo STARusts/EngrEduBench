@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核心调度器代码落地与验证背景下，用户与导师围绕硬件卸载验证方案、Base Time对齐能力缺口补充、验收阈值确定及硬约束总结持续沟通（6轮），其中在网卡硬件适配与微秒级验证用例构造部分与底层驱动开发工程师沟通（1轮），并最终形成核心调度器落地的3条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个ping看通不通，或者抓包看看有没有丢包就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网卡这边的门控列表具体怎么下发？还有微秒级验证到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Base Time对齐具体怎么算我有点懵，之前都是软件里直接赋值的。验证用硬件时间戳打点这个我之前没碰过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "翻一下网卡的那个DATASHEET，专门看EST引擎那章，今天下班前把Base Time寄存器位图和PTP系统时间的换算关系理出来。验证这块我参考专家说的，写个脚本发冲击流，抓硬件时间戳算偏移。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "之前方案里定的ST流周期是1毫秒，允许抖动1%，算下来就是10微秒。调度器本身的开销得压在2微秒内，这样才能留够余量给链路传输和冗余切换。所以门控偏移阈值我定2微秒。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. GCL下发必须走硬件卸载接口，不能走软件回退；2. Base Time要跟系统PTP时间严格对齐，换算逻辑我今天查手册补上；3. 验证用硬件时间戳测门控偏移，偏移阈值卡在2微秒内，超限直接打回。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

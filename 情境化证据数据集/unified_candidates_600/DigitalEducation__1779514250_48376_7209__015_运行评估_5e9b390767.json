@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上师生阻断异常归因背景下，用户与导师围绕根因定位与消除阻断的迭代方案持续沟通（7轮），其中在图谱重接逻辑部分与课径图谱设计师沟通（1轮），在前端资源抢占部分与端侧渲染工程师沟通（1轮），并最终形成图谱COW快照替换与前端分帧渲染的迭代约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先查接口耗时，再看错误码，按顺序排。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能图谱重接卡住了？或者前端渲染崩了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重接逻辑这边是不是有锁阻塞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "前端这边呢？有没有资源抢占？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱那边写锁阻塞了读请求，前端主线程全量重绘卡死了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱那边把写锁去掉？前端加个防抖？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是用读写分离？重接写快照，读还是读旧的，写完再切？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前端主线程不能全量算，得分片加载？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "迭代约束：1. 图谱重接用COW快照替换，不阻塞读；2. 前端子图重绘走分帧，不卡主线程。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

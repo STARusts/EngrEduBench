@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数据流转细化背景下，用户与导师围绕高频时序数据从产线感知到孪生推演的流转方案持续沟通（5轮），其中在边缘轻量化与降采样方案部分与实时数据流设计师沟通（2轮），在边缘资源与数据最小化部分与边缘联调工程师沟通（1轮），并最终形成边缘eKuiper降采样、特征事件上行、原始数据边缘留存及规则版本审计的数据流转核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上好多物联网项目都是设备数据直接进Kafka，然后Flink算一下，存时序数据库。这套挺成熟的，直接搭应该挺快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘端就放个网关把OPC UA转成MQTT发上来呗？至于维护，这套开源组件资料多，应该还行吧。大家都这么搞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线感知数据到孪生系统，如果用Kafka+Flink这套，边缘端只做协议转换上行，会不会有什么坑？有没有更省事一点的办法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边缘侧做降采样，那云端孪生拿到的就不是全量原始数据了，这推演会不会不准？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但这样云端拿不到全量数据，我怕孪生推演不准。而且eKuiper我不熟，有没有那种不用在边缘写规则的方案？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘网关上跑eKuiper做降采样，资源够不够？还有，如果只传特征数据上来，原始数据在边缘保留多久？这算不算数据最小化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧跑eKuiper做降采样和异常截取，原始数据边缘留7天。只把特征和事件推到云端Kafka，再进孪生。降采样规则要有版本审计。不过eKuiper我得现学一下语法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据流转核心：1.边缘侧用eKuiper做降采样和异常特征提取；2.仅特征与状态变更事件上行至云端Kafka；3.原始波形边缘侧滚动留存7天，按需拉取；4.降采样规则变更需带版本号审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

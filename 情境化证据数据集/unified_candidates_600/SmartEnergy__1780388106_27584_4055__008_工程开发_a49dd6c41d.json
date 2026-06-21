@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在逆变器逆调指令下发与联调测试背景下，与导师围绕指令下发协议、群控并发机制与重试退避策略持续沟通（5轮），其中在Modbus群控并发库选择部分与通信协议专家沟通（1轮），在异步指令联调测试与抓包验证部分与嵌入式联调工程师沟通（1轮），并最终形成异步TCP下发、网关抓包验证与指数退避熔断的指令下发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上很多人搞设备控制都是用MQTT，或者找个现成的Modbus库调一调，应该能直接发下去吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Modbus的话，我就用libmodbus库，写个for循环挨个发指令，反正代码也不长。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几百台逆变器用Modbus下发，有没有那种支持并发或者广播的现成库？我不想从头写底层协议。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步并发啊，libuv我听过，但写起来挺麻烦的，还得处理回调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调的时候，这种异步指令下发怎么测？有没有好用的模拟器工具能直接验证？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超时熔断我就设个重试次数，比如重试3次，应该就够了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大面积超时的话，我直接把重试的线程杀掉行不行？这块我真不太敢定，怕杀错把正常指令也干掉了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指数退避我查了下，就是每次重试等待时间加倍那种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃libmodbus的同步轮询，用libuv包一层异步TCP并发下发；第二，联调不上模拟器，直接在网关上tcpdump抓包，重点看字节序对不对；第三，重试策略用指数退避，比如初始200ms，最多退避3次，如果大面积超时直接熔断不再重试，避免把网关资源打满。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

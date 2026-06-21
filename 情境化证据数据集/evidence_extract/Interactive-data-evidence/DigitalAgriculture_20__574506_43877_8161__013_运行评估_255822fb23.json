@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在盐胁迫自适应营养膜控系统开发压测完成后的运行评估上线验收与回归背景下，用户与导师围绕验收口径、回归范围、可计数证据、否决项与回滚演练持续沟通（7轮），其中在回归用例最小集与dispatch计数口径对齐部分与测试与质量负责人沟通（2轮），并复述确认7条检查清单、三条一票否决与强弱网分组要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验收这块我有点虚，今天先从哪些东西开始看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "口径就是系统能跑起来、看板能看、策略能下发。回归范围就是把主要流程再跑一遍。证明就看下P95不超15秒这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链路点…就是网关上报、后端算一下、下发到网关，然后阀门开关和膜的透湿调整。打勾就是都有消息、有日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量负责人 回归和上线验收这次你这边最关键要验哪些？还有网关dispatch计数到底按啥算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就是7条。dispatch计数按网关“接收下发”算，不按执行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是recv可能多，effective要卡住。弱网队列也要看峰值和回落时间。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我不动字段名。我回去跟导师对一下这7条。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了测试负责人，他给的上线验收最小集是7条：端到端成功率≥99.5%、P95≤15秒P99≤30秒、同policy_id 10分钟内effective dispatch≤1、sqlite锁reject_execute占比≤0.5%且连续不超3、弱网队列峰值≤200且5分钟回落≤20、数据时间戳单调异常≤0.1%且单位抽检50条全对、日志不出farm_name明文并且要有策略参数审计“谁何时改了啥”。dispatch计数要区分recv和effective。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都挺重要的…一票否决就，P95超了吧，端到端不行也不行，还有…日志隐私？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为弱网会慢一点，但只要最后能补上？而且策略不是秒级必须。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那我就按强网、弱网分开看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就对EC、温湿、流量，跟网关原始上报对一对…再看单位。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段名…EC就是ec_value，时间是ts，设备是device_id，流量是flow…温湿是temp、hum？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记住了，就这几个固定字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回滚就是把版本换回去？我配合SRE点一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那回滚也做一次演练，验证这三点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "检查清单7条：端到端成功率按request去重≥99.5%；性能P95≤15秒P99≤30秒，还要把弱网单列；同policy_id 10分钟内gateway_dispatch_effective≤1，recv和effective差值要能解释；sqlite锁reject_execute占比≤0.5%且连续拒执不超3；弱网离线队列峰值≤200，恢复后5分钟回到≤20；数据正确性看device_id、event_ts、metric_code、metric_value、unit_code这些，对网关原始值抽低中高区间，时间戳单调异常≤0.1%，单位抽检50条全对；日志不出farm_name明文，策略参数变更要有审计记录。  \n一票否决是：端到端<99.5%，日志出现farm_name明文，effective dispatch>1。分组是强网弱网分别算性能和队列。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

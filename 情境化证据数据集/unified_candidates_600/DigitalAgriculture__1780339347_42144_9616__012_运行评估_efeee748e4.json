@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估背景下，用户与导师围绕根区微生态演替指标监控的核心指标与阈值设定逻辑持续沟通（5轮），其中在演替监控指标与阈值设定部分与根区环境监控运维沟通（1轮），并最终明确废弃纯温湿度告警、确立Alpha多样性指数与滑动窗口预警逻辑，需补学公式对齐计算口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Grafana配个Dashboard，把传感器传回来的温湿度、EC值画成折线图，超限就发钉钉告警。网上很多现成的JSON模板，导进来改改就能用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微生态演替监控具体盯什么指标？光看温湿度好像看不出群落演替，阈值怎么设？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Shannon指数变化率？Grafana里没现成插件算这个吧？是不是得写代码在Prometheus那边先算好再推过来？滑动窗口我倒是能用PromQL的deriv函数凑合算一下斜率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "公式挺复杂的，我看网上有Python包能直接调。要不我在流式处理那层用Python算完再存进时序库？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那这个Shannon指数具体怎么算的，我得查一下，不然看不懂监控图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，废弃纯温湿度告警，核心盯Alpha多样性指数变化率和优势菌偏移；第二，预警阈值用滑动窗口算下降斜率，不用绝对值；第三，传感离线必须插补防窗口报错；第四，我得补学多样性指数公式，不能只依赖现成插件算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

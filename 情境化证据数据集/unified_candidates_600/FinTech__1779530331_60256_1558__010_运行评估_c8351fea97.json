@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在密态跨域联合投研计算平台部署上线与验收背景下，用户与导师围绕跨域部署验收标准、网络与证书信任链及监控大盘配置持续沟通（5轮），其中在跨域网络与监控配置部分与运维与监控工程师沟通（1轮），在验收基线制定部分与测试与联调专家沟通（1轮），并最终形成包含专线与统一CA、统计基线验收及Prometheus监控打点的跨域部署验收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用K8s的helm chart一把梭部署，然后跑个端到端的联合投研回测任务，只要最终阿尔法因子能算出来，不就说明通了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网络这块我确实没细想。跨域部署网络和监控怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证书签发这个我让各机构自己生成传给我行不行？监控大盘我只会看CPU内存，密态耗时那种直方图我不会配。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域节点验收基线怎么定？只看成功率行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白了，不能只看一次跑通，得看分布和边界。那验收MVP方案就是：我负责K8s部署和跑测试脚本，证书和专线由各机构IT配合，监控大盘我来配。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不懂Prometheus怎么自定义Histogram打点算子耗时。我今晚花2小时把官方文档的Client Library部分看一遍，照着把耗时指标埋进去，明天上午把大盘配出来。这个必须搞定，不然排障没法弄。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，部署依赖跨域专线和统一CA签发证书。第二，验收不看单次成功，看统计基线：握手成功率>99.9%，延迟P99<50ms，耗时方差防侧信道。第三，补齐Prometheus自定义耗时打点和监控大盘。周五前搞定这三个。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

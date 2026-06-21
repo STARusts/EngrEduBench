@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在房颤心音侦测系统端侧固件开发背景下，与导师围绕TFLM可行性、算力约束、定点化重构、特征验证及固件稳定性持续沟通（5轮），其中在内存与算力评估部分与嵌入式固件工程师沟通（1轮），并最终放弃TFLM，确定基于CMSIS-DSP手写定点化特征抽提与防掉电校验的开发方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接用TFLite Micro把之前Python里验证过的梅尔频谱算子转过去，这样出活最快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上好多穿戴设备案例都是用TFLM跑音频特征，比如关键词唤醒。内存如果不够，大不了我把心音的滑动窗口缩短点，或者降采样率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MCU选的STM32L4系列，RAM大概128K。TFLM算子我不太确定全支持，我看文档说可以注册自定义算子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TFLite Micro在STM32L4上跑梅尔频谱抽提，128K RAM够不够？自定义算子写起来麻烦吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "定点化我以前没写过，调起来会不会精度很差？有没有那种自动把浮点转定点的工具可以套一下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我抓一段标准心音，分别在PC上跑浮点和在板子上跑定点，算个总体的均方误差？跑飞的问题，我直接用STM32 HAL库开个独立看门狗不就行了，超时就复位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "看门狗插桩和队列CRC校验我加上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "定点化这块我确实没底，我得去啃CMSIS-DSP的Q15数学库手册，先在仿真器里把浮点FFT改成Q15跑通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周先出Q15 FFT demo和分频段误差日志，固件主体用CMSIS-DSP写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

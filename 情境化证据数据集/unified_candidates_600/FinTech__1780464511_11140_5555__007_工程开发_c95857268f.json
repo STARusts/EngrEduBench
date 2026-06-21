@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在银企信贷联邦融通引擎工程开发背景下，与导师围绕横向联邦聚合与密态通信的落地实现、约束守住及开发基线确认持续沟通（8轮），其中在密态累加实现与验证口径部分与联邦算法架构师沟通（1轮），并最终形成横向聚合与密态通信开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看PySyft和SecretFlow都有现成横向联邦接口，打算基于SecretFlow改。它底层通信用的自研PUA，我直接套它的聚合逻辑，加解密调它的HE库。不过密态梯度累加这块，我怕写出来精度不对，之前没搞过同态加法的大数处理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还没想好验证方法。可能跑几个小数据集试试？结果跟明文聚合差不多就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "横向联邦聚合的密态梯度累加，用SecretFlow的HE库怎么写？怎么验证精度，我不懂大数运算的边界。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听懂了，就是加个缩放因子，跑明文和密文两组对比看L2范数差。缩放因子我找找SecretFlow文档里有没有默认值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不清楚，我就知道大概是个大整数取模。这块确实卡住了，我直接调库没深究过底层模数怎么算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把Paillier算法的数学原理和SecretFlow里`paillier_utils`的源码过一遍，重点看明文空间怎么设的，缩放因子怎么算的。明天把缩放因子的校准代码补上，跑通对照测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "通信我用gRPC，加上TLS。闪断暂存和审计留痕，我准备在gRPC的拦截器里加，暂存用Redis设个30秒TTL。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "横向聚合开发基线：1. 用SecretFlow的Paillier库，必须搞懂缩放因子，按特征维度校准；2. 验证用明文密文对照测试，L2范数差阈值1e-6；3. 通信用gRPC+TLS，拦截器里加Redis暂存（TTL<30s）和审计日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

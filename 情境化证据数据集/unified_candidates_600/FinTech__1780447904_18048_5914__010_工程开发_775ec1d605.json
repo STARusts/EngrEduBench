@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链上并发性能调优背景下，用户与导师围绕并发Gas飙升根因、存储槽争用解决、溢出断言保留、单笔失败隔离及MEV抢跑防范持续沟通（10轮），其中在存储槽争用与降Gas部分与链上架构师沟通（1轮），并最终形成紧凑位运算、unchecked加require、try-catch隔离及入参防MEV的调优定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Gas高肯定是计算太多了，我精简一下代码？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "并发冲突？我加个锁行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "问下并发Gas飙升怎么搞？存储槽争用是啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对哦，那断言就没了。那我不用位运算了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没处理过这种位运算断言。我去查下文档。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "文档里说可以用unchecked包起位运算省Gas，然后在块结尾手动加require做上限检查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "会回滚吧。那改成分开提交？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个_minRate参数，算出来低于它就revert。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在光场渲染架构算力规划背景下，用户与导师围绕NeRF算力拓扑划分、编码方案验证与边缘成本评估持续沟通（5轮），其中在算力拓扑划分部分与图形渲染架构师沟通（1轮），在模型轻量化与编码选择部分与算法工程师沟通（1轮），并最终确认云边端协同拓扑、哈希编码优先验证方案及边缘成本上限基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算按常规切分，云端承担80%重渲染，本地端做20%交互预览。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "NeRF解码的算力拓扑怎么分比较合理？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "NeRF模型轻量化能省多少算力？我们选哪种编码好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得哈希编码显存小，可能更适合端侧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成本这块我确实没底。验证指标我只会看帧率，具体的采样指令开销我不会算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天去看Instant-NGP的源码和算力分析论文，重点学哈希编码的显存带宽计算方法，学完把估算公式套进我们的算力规划表里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现阶段算力规划确认三点：1. 采用云边端协同拓扑，云端生成系数，边缘解码，端侧合成；2. 优先验证哈希编码方案，对照组是八叉树，推翻标准是端侧帧率低于30fps；3. 衡量边缘节点常驻成本，设定单场景渲染算力消耗上限阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

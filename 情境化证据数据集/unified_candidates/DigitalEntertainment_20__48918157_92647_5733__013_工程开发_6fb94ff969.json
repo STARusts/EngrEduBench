@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在沉浸音游开发期性能压测与卡顿定位背景下，用户与导师围绕卡顿指标阈值、触觉可测口径、压测与归因方案及合规字段最小化持续沟通（7轮），其中在压测矩阵与复现/归因策略上与测试负责人沟通（2轮），在端侧最小侵入采样点、对齐键与分级采样策略上与客户端负责人沟通（2轮），并输出压测最小集、埋点最小集、卡顿报告摘要与原因分桶初版。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向先把链路拆成四段：客户端输入到渲染帧、音频回调、触觉SDK调用、网络收发与服务端裁决。压测分两类：服务端并发房间+事件洪峰；客户端侧用录制输入回放模拟高密度谱面。卡顿定位我想用统一的 trace_id 串起来，但我不确定我们现在埋点够不够细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡顿我先按三层口径：\n1）渲染：frame time > 33ms 记为可感卡顿，> 50ms 记为严重；统计 P95/P99 和连续掉帧次数。\n2）音频：audio callback overrun/underrun 次数；以及音频播放位置与 song_tick 偏差的 P99（比如 > 20ms 就算明显漂）。\n3）对战：input_event 到 judge_event 的端到端时延 P95/P99；另外 judge_event 到 UI 呈现的延迟（客户端侧）。\n阈值我先保守点：渲染 P99 < 33ms，音频 overrun=0（至少在高端机），端到端 judge P99 < 120ms。触觉我不确定怎么定义“卡”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我给触觉两组指标：\n- 调用开销：haptic_play(pattern_id) 的调用耗时分布，P99 超过 2ms 就算有风险；同时记录触觉线程队列长度或 backlog。\n- 时序：触觉事件计划时间 t_in_song_ms 与实际触发时间差的分布，P99 超 15ms 记为明显错拍。\n问题是不同设备SDK能力不一样，我怕这些阈值一刀切不合理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 我们要做沉浸音游的性能压测与卡顿定位，你建议的压测矩阵怎么分？怎么保证能稳定复现“偶发卡顿”，以及怎么把问题归到客户端/网络/服务端？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "长跑我赞同。卡顿报告摘要里“服务端裁决队列深度”我们现在没暴露给客户端，是否只在服务端日志里按 room_id 关联？另外弱网怎么做更像真实玩家，单纯限速可能不够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还想加一个：回放录制开关本身会写 replay_chunk，会不会引入 I/O 抖动导致卡？需要在矩阵里对比“录制开/关”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 端侧要做卡顿定位，你觉得最小侵入的采样点放哪里？我们需要把渲染、音频、触觉、网络、回放录制这些线索串起来，最好能定位到具体10秒chunk甚至某个client_seq附近。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们怎么把这些采样跟服务端对齐？靠 room_id + song_tick + client_seq 够吗，还是要额外 trace_id？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有一个担心：我们为定位加的采样点会不会让低端机更卡？尤其是每帧统计。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点我没想透：服务端压测怎么贴近真实？是直接灌 input_event 还是走完整 websocket？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分两阶段：\n- 阶段A（找上限）：用压测工具直接灌 input_event 到房间服务的入口（走同一套解包/验证），按 room_id 分片，测裁决与回推吞吐、队列堆积点，方便定位CPU热点。\n- 阶段B（端到端）：少量真实客户端（或轻量模拟客户端）走 websocket，全链路开TLS、序列化、回推，测 judge_event 延迟分布和抖动。\n我会优先把A跑通，因为现在卡顿多半是端侧，但服务端也要排雷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "服务端我会按两个维度聚合：\n- 全局：CPU、GC、事件处理QPS、平均/峰值队列长度、judge_event 回推延迟（服务端侧写出时间-入队时间）。\n- 房间维度：room_id 的 input_event 入队速率、裁决耗时直方图、广播耗时、以及异常：积压超过阈值时抓取最近N个 client_seq 范围。\n谱面维度我只能间接：用 chart_hash 关联，统计“高密度谱面”的房间更容易积压。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会把卡顿报告字段控制在：\n- 必须：room_id、song_id、chart_hash、client_build_ver、judge_profile_ver、device_profile_ver、haptic_sdk_ver、网络类型（wifi/4g/5g）、发生时间窗（song_tick_ms 起止）、client_seq 起止、关键指标摘要（帧P99、audio overrun、haptic backlog、RTT/丢包估计）。\n- 可选但要脱敏：设备型号用枚举档位或哈希，不直接记录广告ID、手机号、账号名；IP不进报告，只在服务端安全日志保留且权限隔离。\n- 不放：原始输入流全量、触觉pattern内容、任何可回溯个人身份的标识。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测矩阵最小集我定 8 组：\n1）单人本地：高密度谱面×高触觉×低端机（长跑30min）\n2）单人本地：高密度×低触觉×低端机（对照）\n3）多人对战2人：高密度×高触觉×中端机（好网）\n4）多人对战2人：高密度×高触觉×一好网一差网（抖动profile）\n5）多人对战4人：中密度×高触觉×中端机（看广播压力）\n6）多人对战2人+回放录制开：高密度×高触觉×低端机\n7）服务端灌包：目标房间数阶梯（100/500/2000），固定每房事件速率，测队列与回推延迟\n8）端到端ws：少量房间（50/200）但全链路TLS+序列化，测P99抖动"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端侧埋点最小集：1Hz汇总+异常升频，记录 frame_time、连续掉帧段；音频回调耗时+overrun；触觉调用耗时与backlog异常；网络RTT/丢包估计与收发队列；replay_chunk写入耗时。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "卡顿报告摘要我先按一条JSON结构口述给你，字段：{ts_wall, room_id, song_id, chart_hash, build_ver, judge_profile_ver, device_profile_ver, haptic_sdk_ver, net_type, window:{song_tick_ms_start,end, client_seq_start,end}, render:{p95,p99,max, drops_segment_count}, audio:{overrun_cnt, cb_p99_ms, drift_p99_ms}, haptic:{call_p99_ms, backlog_max, drift_p99_ms}, net:{rtt_p95_ms, rtt_p99_ms, loss_pct}, replay:{chunk_write_p99_ms}}。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分桶我先给 8 个原因码：\n- RENDER_JANK（frame_p99超阈值或连续掉帧）\n- AUDIO_OVERRUN（回调overrun/underrun>0）\n- AUDIO_DRIFT（drift_p99超阈值）\n- HAPTIC_BACKLOG（backlog超阈值或触觉漂移）\n- REPLAY_IO（chunk写入p99超阈值）\n- NET_JITTER（rtt抖动/丢包超阈值）\n- SERVER_QUEUE（服务端队列深度超阈值或回推延迟超阈值）\n- UNKNOWN（都没触发但用户报告卡）\n触发逻辑按优先级：音频>渲染>触觉>I/O>网络>服务端>未知，避免多标签乱飞。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

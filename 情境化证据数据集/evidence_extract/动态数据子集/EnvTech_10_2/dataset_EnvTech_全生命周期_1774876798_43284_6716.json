@@ -1,0 +1,983 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“室内空气暴露风险自适应管理系统”立项需求澄清背景下，用户与导师围绕首批场所选择、用户画像、风险口径、自适应边界与合规底线持续沟通（9轮），其中在风险指标与污染物优先级部分与环境与暴露建模工程师沟通（4轮），在占用数据来源与隐私合规边界部分与合规与隐私官沟通（2轮），并形成首批场景+两类用户画像+不做事项的需求边界要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向先做学校或办公楼。主用户我猜是后勤/物业的楼宇管理人员，他们现在要么靠经验开新风，要么等投诉再处理。痛点是：不知道哪个区域风险高、什么时候该加大通风；还有能耗压力，开大了又挨骂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解是把浓度、停留时间、人群敏感性综合一下。比如会议室人多、CO2高就更危险；医院可能要对敏感人群加权。我现在不确定用什么指标表达最合适。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 学校/办公楼/医院这三类里，如果要做“暴露风险自适应管理”，风险指标一般怎么定？优先看哪些污染物，才能既专业又能落地验收？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“相对暴露指数”怎么解释给物业？他们更习惯看“达标/不达标”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "传感器如果不准，会不会把风险算错？比如TVOC漂得厉害。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白。我先不碰医院感染那条线，容易翻车。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那学校和办公楼里，哪些典型场景更适合做第一版？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概理解成：第一版不把“健康风险”讲太满，用CO2、PM2.5为主，输出分级和超标时长，再叠加占用时间做“暴露分钟数”。医院先不做核心目标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "付钱大概率是学校后勤或办公楼物业/园区方；天天用的是值班工程师；否决可能是信息化部门或业主方的节能KPI负责人。租户可能会抱怨噪声或风量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "日常操作者：楼宇值班工程师。目标是少告警、少投诉、别出事故；痛点是点位多看不过来、策略改了怕影响舒适。能理解的指标：红黄绿、哪层哪间、超标分钟。能做的动作：一键执行建议、手动覆盖、查看原因。  \n买单者：后勤负责人/物业经理。目标是健康风险下降同时能耗别飙；痛点是缺少可量化的交付证据，容易被质疑“凭什么开这么大风”。能理解的指标：月度风险暴露时长下降、投诉率、能耗变化。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "北极星我想用“超阈值暴露分钟数降低”，因为它跟人有关，也能解释成“少在差空气里待”。能耗作为约束指标，比如能耗不超过基线+5%之类。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "自适应我想分三种触发：占用变化（人多自动加通风）、室外空气差（切换到净化/回风比例策略）、以及设备约束（能耗上限或设备故障就降级）。但我不确定用户会不会接受自动下发。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "占用我倾向不用摄像头，太敏感。可以用会议室预约、门禁人数、或者CO2反推。门禁也算个人信息吗？我不太确定边界。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 学校/办公楼里要做占用相关的自适应控制，门禁人数、会议室预约、Wi-Fi探针、摄像头这些数据在合规上风险差异大吗？我们第一版想尽量不碰高敏数据，底线怎么画？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果只用CO2反推占用，会不会被质疑不准？以及我们做订阅服务，日志审计要到什么程度？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把占用数据的方案降敏。@导师 我这边倾向：第一版占用不用摄像头/Wi‑Fi，优先“CO2趋势+预约系统的占用状态（不含姓名）”，门禁只拿聚合人数且不存明细。策略下发要有操作留痕和权限。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定的版本是：  \n1）首批场景：学校教室/自习室、办公楼会议室/开放办公区，先不做医院感染防控。  \n2）用户画像两类：值班工程师（看红黄绿+超标分钟，一键执行/手动覆盖）；后勤/物业经理（看月度超阈值暴露分钟数下降，能耗是硬约束）。  \n3）风险口径：对外用分级+超标时长；内部用相对暴露指数，污染物先CO2+PM2.5，TVOC先弱化为趋势。  \n4）自适应边界：默认“建议+一键执行”，自动闭环可配置；触发主要看占用变化、室外空气差、设备约束。  \n5）合规底线：占用不碰摄像头/Wi‑Fi标识，能用CO2推断或预约系统的占用状态；需要权限、审计留痕、尽量只存汇总。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求与战略阶段梳理“暴露风险”痛点背景下，用户与导师围绕学校/办公/医院场景的可测矛盾、替代方案不足、风险表达与痛点优先级持续沟通（9轮），其中在医院/学校的合规边界与禁区表述部分与合规与隐私官沟通（3轮），并形成3条顶层痛点、闭环断点地图与“不做医疗/不做个体追踪”边界结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“谁被问责/谁要出钱/谁要操作”来拆。  \n学校：被问责的是校医院或后勤，家长舆情压力大；操作在保洁/机电；钱在后勤预算。痛点一是出了味道或咳嗽多了才反应，属于被动；二是教室开窗和空调新风冲突，老师为了温度就关窗；三是检测数据一堆但很难解释到“怎么做”。  \n办公楼：物业被投诉，租户要舒适，业主关心能耗。痛点一是投诉碎片化，无法定位楼层/时段/原因；二是新风系统调得太保守就浪费能耗；三是多个品牌设备，动作执行靠人工。  \n医院：感染控制和后勤都在看，科室最敏感。痛点一是病区/候诊高峰时暴露大但通风策略不随人流变；二是净化和压差、噪声、能耗互相打架；三是任何“健康结论”都不敢承诺，所以需要更工程化的风险表述。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "共性我先列三条：  \n1）缺“可解释的暴露指标”：现在多是CO2/PM2.5单指标，不能解释“人群暴露在上升”还是“只是瞬时波动”。例子：会议室PM不高但人多CO2飙，物业只看PM就不动新风，散会后才开导致无效通风。  \n2）控制动作不闭环：监测和设备是两套，告警来了只能发群让人去开新风/换滤网。例子：夜间清洁用消毒剂，TVOC升高，值班人员看见告警但不知道该开哪台风机、开多久，最后选择忽略。  \n3）能耗与舒适的拉扯没有量化：一提通风就担心电费，一提节能就被投诉。例子：冬天为了省能耗把新风调低，白天人多CO2高，投诉上升，但没人能算“额外能耗换来多少风险下降”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "替代方案大概三类：  \nA 手持仪器抽检+月报：优点便宜、合规感强；缺点是抽样偏、抓不到高峰暴露，出了事追溯不了。  \nB 传感器+大屏看数：优点实时；缺点是看数的人不知道该不该动设备，和“绩效”没挂钩。  \nC 直接设定固定新风量/固定净化档位：优点省事；缺点是人流变化、污染源变化时要么过度通风要么不够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "风险表达上，我理解要从“浓度”变成“在场人群在一段时间内的暴露强度/超标概率”。对管理者就是：今天这层楼在9-11点的暴露风险比基线高多少，主要驱动因子是人群密度还是污染源，建议动作是什么，代价是额外能耗多少。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先打“控制不闭环+能耗拉扯”这条。依据：  \n- 影响：办公楼和学校的投诉/舆情直接影响续费；医院影响更高但门槛也更高。  \n- 频率：每天都有，尤其会议室/教室/候诊区。  \n- 可控性：新风、排风、净化器是可动的；相比“源头材料替换”更能快速见效。  \n- 可验证性：可以用“告警次数下降、投诉下降、同等舒适下能耗不增加”来验。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "“可解释指标”我认为是支撑，但第一版别做成科研论文式指标，先做管理者能看懂的分层风险等级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 医院和学校这类场景，我们在“暴露风险”表达和数据采集上，最容易踩哪些线？能给几条具体的禁区和替代说法吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "医院如果要用“人流强度”，只要不做到个人，就可以？那如果用门禁刷卡的汇总人数，算不算触碰个人信息？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警分级的词也有讲究。我之前想用“低/中/高风险”，你说医院不喜欢“高危”。那用“关注/需处置/紧急处置”这种更像运维事件的可以？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解要把“痛”写成工程管理语言：  \n- 他们现在既背投诉也背能耗，还背“误伤风险”（一发布就被当成健康结论）。  \n- 所以需要的是“可解释、可审计、只到区域级”的暴露事件管理，不涉及个人。  \n另外我把医院的门槛具体化：一是措辞和分级要像环境事件；二是数据源要避免个人明细；三是留存和审计要能应对院内质询。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "数据层：  \n1）多源数据不一致：传感器漂移、不同楼控点位命名混乱，导致同一房间数据对不上。  \n2）关键上下文缺失：只有浓度，没有占用/开窗/设备档位，解释不出来。  \n决策层：  \n3）指标不可解释：管理者看不懂单点数值，不知道是否该动作、动作优先级。  \n4）能耗约束无量化：缺“风险下降 vs 额外能耗/舒适影响”的对照。  \n执行层：  \n5）策略不落地：告警只能通知，无法联动到可执行设备或权限不通。  \n6）设备约束冲突：新风、回风、净化、温控互相影响，人工很难同时顾全。  \n验收层：  \n7）效果不可归因：做了调整，投诉下降/能耗变化可能是季节、人流变化导致，没人信。  \n8）审计链不完整：谁看到、谁批准、谁执行、执行后是否回落缺记录，易扯皮。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "三条顶层痛点我这样写：  \n1）暴露高峰抓不住：抽检或单指标看板无法覆盖人群高峰与短时事件，事后不可追溯。  \n2）告警不等于处置：监测与设备脱节、权限链复杂，导致“知道问题但动作不发生或发生太晚”。  \n3）风险-能耗-舒适三方扯不清：缺少可解释的风险分级与代价估算，通风要么过度要么不足，验收也无法归因。  \n为什么现在解决不了：数据上下文缺失+决策表达不可理解+执行链和审计链断裂。  \n边界提醒：输出为环境暴露事件与工程处置建议，不做医疗结论；占用只到区域匿名估计，不做个人识别与追踪。"
+              }
+            ]
+          },
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统的需求与战略阶段，用户与导师围绕“告警→处置→验收/审计”链路的合规与隐私边界持续沟通（9轮），其中在数据最小化的字段/数据源黑白名单、占用与位置粒度、留存期限、告知授权及权限审计口径上与合规与隐私官沟通（2轮），并形成可直接写入PRD的合规与隐私边界条款草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆一下：告警前要有污染物浓度、通风量、设备状态、区域占用估计。处置要下发到楼控或净化设备，验收要能解释“为啥告警、做了啥、效果怎样”。踩红线主要是占用估计、位置关联、还有日志留存太久。我的直觉是：能用区域级别就别到房间内个人；能用短期缓存就别长期存原始轨迹。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三条我先给个粗版：  \n1）占用数据只允许到区域热度/人数区间，不保留可回溯到个体的序列。验收口径：系统内没有任何个人标识字段、也不允许按设备ID还原人。  \n2）告警与处置日志要留，但原始传感器高频数据不全量留存，做降采样或聚合。验收口径：可追溯到“风险分级依据”和“策略下发结果”，但不需要每秒数据。  \n3）权限分层：物业看设备与能耗，校医院/疾控只看风险等级与处置建议，不给原始数据导出。验收口径：按角色能看到的字段清单固定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们做室内空气暴露风险自适应管理系统，链路是告警→处置→验收。想把合规边界落到可验收的需求：1）哪些数据源明确禁止接入（比如Wi-Fi探针/摄像头）？2）占用估计、位置、日志留存分别建议的粒度和期限？3）角色权限和审计要怎么写才不空？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我听下来最关键是“黑名单写死+系统层面不提供接入口”，以及留存分三类。占用那块我之前说“不保留序列”，你这里更具体：不要保存能拼出轨迹的时间序列，只能小时级聚合等级。我有点担心：我们为了验证策略效果，可能需要分钟级变化，小时会不会太粗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向于：  \n- 不可谈判红线：黑名单数据源一律不接；占用只做区域级等级/区间；不允许个人标识、也不允许稳定匿名ID；默认不提供原始数据导出。  \n- 可协商项：占用聚合粒度从小时到分钟，但要审批+短留存；原始高频传感数据留存从7到30天可谈，取决于校准需要和成本。  \n- 对赌审计：事件与处置链路要长留存，至少要能复盘“触发阈值/模型版本/输入摘要/策略版本/设备执行回执/人工介入”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能留的我想是：区域ID、时间窗、污染物的统计值（均值/峰值/超标时长）、风险等级与置信度区间、策略ID和目标（比如新风提升到某档）、设备回执状态、能耗估算区间。不能留的：任何能反推个人移动的序列、任何可识别ID、以及能把环境数据和个人事件对齐的精确时间戳关联键（比如门禁刷卡时间这种）。时间戳本身要留，但只在我们自己的链路里，不引外部对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据主体权利这块我不太熟，我理解在学校/办公楼里，个人可能会问“有没有采到我”。我们承诺是：系统不采个人信息，所以没有“查到某个人”的能力；如果有人投诉，就提供区域级告知说明、以及当时段的风险与处置记录。多租户：不同楼宇/客户数据隔离，第三方（比如节能审计、监管）只能拿脱敏汇总报表，不能拿原始或事件明细，除非客户授权且走审批留痕。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "草案我给10条，偏可验收的：  \n1）数据源黑名单：摄像头/人脸、音频、Wi‑Fi/BLE探针ID、门禁/工牌/手机定位、手机号学号病历号等一律不接入；系统不提供对应接入能力。  \n2）数据源白名单：环境传感器、楼控设备状态、区域ID、区域占用“等级/区间值”。  \n3）占用估计粒度：默认区域级、小时聚合等级；如需更细到分钟，走合规审批+限定区域+短留存。  \n4）禁止个人识别与追踪：不得产生或存储任何个人标识、稳定匿名ID、可回溯个体轨迹的序列。  \n5）留存分层：原始高频环境数据短留存（7-30天可配置）；之后仅保留聚合指标。  \n6）事件与处置审计链长留存（1-2年）：告警、风险分级依据摘要（统计值/阈值/模型版本/置信度）、策略版本、下发与回执、回退、人工确认。  \n7）访问/导出审计：所有查看、导出、审批动作留痕；默认禁止导出原始数据。  \n8）权限分层：物业/运营看设备与能耗；管理层看汇总KPI；合规审计看事件链+访问日志；第三方只看脱敏报表。  \n9）告知机制：受控区域提供采集类型、用途、留存期限、联系人与投诉渠道的告知说明。  \n10）第三方共享与跨租户：不同客户数据隔离；对外共享仅限脱敏汇总，若需更细必须客户授权+审批留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统的合规边界确认后，用户与导师围绕商业模式与定价、对赌与试点转正机制持续沟通（9轮），其中在B端预算池与订阅/对赌落点上与产品负责人沟通（1轮），在交付运维成本结构与合同计价单位上与行业运营经理沟通（1轮），并形成两套定价候选、对赌结算口径与数据合规承诺的对外话术框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直觉上B端就两类：买“合规+健康风险降低”的安心，或者买“省电”。计费口径我想到三个：按点位（传感器/区域）、按建筑面积、按人群规模。按点位最直接，但怕客户觉得我们在卖硬件；按面积好理解，但医院楼层复杂；按人群更贴近暴露风险，但数据取不到，隐私也敏感。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品负责人 订阅+绩效对赌这种，在学校/办公/医院里一般怎么挂到预算上？计价口径用什么客户更容易签？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这里我理解成：主合同还是订阅，绩效对赌优先绑定能耗节省或过程KPI，不直接赌发病率之类。计费口径优先“楼栋/面积/关键场所”。那我还想知道现场交付成本会不会把毛利吃掉，免得我定价拍脑袋。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业运营经理 学校/办公楼/医院这三类，交付和后续运维通常是谁配合？我们按“楼栋/面积/关键场所”签，现场成本大概由哪些项构成、哪种最可控？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听下来，定价最好拆成“实施费一次性+订阅年费”，现场服务另算，避免范围漂。绩效对赌在医院可能也会被院感拉进来，过程KPI比结果KPI更容易落合同。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "两个候选：  \nA）“楼栋/场所订阅”：每楼栋/每重点场所年费，含监测、风险评估、告警闭环、策略建议、月报审计；不含现场施工、第三方设备改造；实施费一次性。ROI用：能耗基线对比（空调/新风电耗）+高风险暴露时长下降。  \nB）“面积分档订阅”：比如按1万平以内/1-5万平/5万平以上分档，适合办公园区。缺点是范围漂，需要明确“纳入管理的区域清单”。ROI类似，但更强调整体能耗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "结算数据尽量用楼宇侧的能耗表计数据（电表/冷热量）+我们输出的策略执行记录。周期按月或按季度。基线我不太确定，是用历史同期，还是用对照楼层。医院可能季节波动很大，历史同期更合理，但会被质疑“天气不一样”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线选项：  \n- 选项1：历史同期（同月/同周）对比，争议是气象差异；规避条款是引入“外气温度区间修正”，或者只对“可比天数”结算。  \n- 选项2：同园区对照楼（未启用策略的楼），争议是可比性；规避条款是仅在用途相近的楼栋使用。  \n过程KPI阈值我只能先给区间：高风险暴露时长下降10%-30%作为可谈判范围，先在试点里校准。依据来源先用行业经验不够硬，得通过试点数据回推。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以把试点做成标准包：比如4-8周，固定范围（1栋楼或3-5个重点场所），固定交付内容（基线报告+KPI建议值+策略清单）。转正后合同用试点结果锁阈值。控制成本靠边界：试点只用已有楼控/表计数据，不承诺新增改造；现场支持限制次数，更多走远程。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "价值锚点用“受控区域的风险KPI+能耗KPI”，而不是点位。报价单里把点位写成“建议配置上限”但不作为计费单位。数据共享这块就强调：跨客户只做脱敏汇总，用于行业基准；更细粒度必须授权且审批留痕。告知机制里也会写清采集类型、用途、留存期限、权利请求入口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对外版本我这样讲：  \n1）定价方案两套：  \n- 方案A：按“楼栋/重点场所”年订阅 + 一次性实施费。订阅含监测、风险评估、告警到处置闭环、策略建议、月报/审计报表；不含施工改造与第三方设备费用，现场高级服务可选加购。  \n- 方案B：按“面积分档”年订阅 + 一次性实施费，适合园区型办公；合同附件明确纳入管理的区域清单，避免范围漂。  \n2）绩效对赌框架：优先绑定“能耗节省”或“过程KPI”（如高风险暴露时长、超标事件闭环时效），按月/季度结算；基线支持“历史同期”或“对照楼”两种，写入可比条件与争议处理条款。  \n3）试点转正机制：4-8周标准试点包，固定范围与交付物，用试点数据锁定后续合同KPI阈值，减少每客定制成本。  \n4）数据与合规承诺三条：客户数据多租户隔离；对外共享仅限脱敏汇总，细粒度需客户授权+审批留痕；受控区域提供清晰告知（采集类型、用途、留存期限、联系人、权利请求入口）。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统方案设计背景下，用户与导师围绕多源感知数据架构的边界、评审点与分层主线持续沟通（6轮），其中在接入与时间同步/重传去重部分与物联网接入工程师沟通（4轮），在主数据建模、分层与质量规则可执行化部分与数据工程师沟通（3轮），在数据分级最小化、留存与写命令审计部分与合规与隐私官沟通（1轮），并收束形成“三层+主数据+双时间戳+准实时窗口+合规审计+容量量级估算”的架构口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我要开始做室内空气暴露风险自适应管理系统的方案设计，先卡在“多源感知数据架构”这块。我想先定一套能跑起来的数据流：传感器和楼控数据进来，统一转成时序数据，后面给风险评估和策略引擎用。你先帮我把这块的设计边界和评审点定一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先抛个粗版方案，可能有坑。  \n数据源我按两类：环境传感器（PM2.5/CO2/TVOC/温湿度）+建筑设备（新风机组风量/阀门开度/风机频率、过滤压差、BMS告警）。接入上我想统一走一个网关上报，采样频率默认1分钟。存储就一个时序库，所有表结构一致：timestamp、device_id、metric、value。后面风险评估服务直接按device_id拉过去算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 多源接入这块，真实场景里传感器和BMS/BA怎么接比较稳？我需要把“时间同步、断连重传、去重”这些放到架构里，但我不确定做到什么程度算够。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等键这块我理解是要每个点位有稳定的point_id，不然去重没法做。那BMS点位命名五花八门，point_id怎么定？靠我们自己编？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "补传标记late_data，会影响风险评估吗？我怕后面回放、重算搞复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问一个：采样频率差异大，平台侧要不要统一重采样成1分钟？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 你帮我把“多源感知数据标准 + 分层 + 质量规则”梳理一下。我现在担心：空间映射、指标口径、以及数据质量怎么做成可执行的规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心主数据会拖慢交付。我们是方案设计阶段，但后面一落地，现场映射肯定最费劲。有没有最小可行的主数据集合？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量分数这块阈值从哪来？比如覆盖率95%是拍脑袋吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备把多源感知数据架构改成“三层+主数据+双时间戳”。实时链路只吃准实时窗口，晚到进离线对账。你看我还漏什么硬约束？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "隐私这块我确实想得少。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在能先定个粗的分类：环境指标和设备运行状态都算非敏感；占用/人流如果接就算敏感，默认不采，只做房间级匿名统计。写命令留审计日志。这样够吗，还是要更细？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 多源感知数据架构里，我准备做数据分级和最小化。你给我一套在楼宇/学校/医院都能通用的最低要求：哪些字段默认不收、怎么留存、审计做到什么粒度。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是：A/B默认开，C默认关且聚合脱敏，D必留。原始层短留存，指标层长留存。写命令审计要带原因链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对我这场景我想把“占用”先排出首版，只留接口位，避免合规卡死。这样算合理取舍吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在把这块架构用口头方式收束成一版，确认你能评审通过：  \n- 数据源：环境传感器（10s~1min可配）、BMS点位（事件/轮询5s~15min），都保留原始频率。  \n- 数据层：ODS保真（ts_device+ts_ingest、external_id、原始单位/状态），DWD做去重/单位换算/质量标记，DWS做房间级与设备级视图（1min/5min对齐、可控状态快照）。  \n- 主数据：最小用entity树+point表，包含room-device-point映射，保留外部标识与内部ID。  \n- 实时窗口：实时服务只用近10分钟准实时数据，late_data进离线对账/回放。  \n- 质量：coverage、值域、断连、同室一致性，输出quality_flag/score不直接删数据。  \n- 合规：C类占用/人流默认不接；ODS短留存、指标长留存；控制写命令必须who/when/where/what/why审计。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还缺一条：容量估算要不要在这里做？"
+              }
+            ]
+          },
+          {
+            "microScene": "在室内多源感知系统方案设计中，用户与导师围绕暴露风险算法路线的指标体系、计算链路、质量/不确定性处理、策略接口与验证闭环持续沟通（7轮），其中在多污染物合成、阈值/权重来源与CO2定位部分与环境与暴露建模工程师沟通（3轮），并形成R/V/O指标划分、conf与data_stale机制及接口字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“输入-计算-输出”拆三层。输入就是污染物浓度、通风/净化状态、占用的代理量，再加质量分。计算层我倾向两条线：一条实时暴露评分，一条短期预测的超标概率。输出层给策略引擎两样：风险等级+建议动作的约束条件。问题是：暴露到底用哪个口径更贴近健康风险，又不至于解释不清。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "核心指标我想用“加权暴露剂量”或“时间加权浓度TWA”，辅助做“超过阈值的累计时长”和“未来30分钟超标概率”。可解释性靠把权重写清楚：污染物不同、敏感人群不同权重。追溯性就是每次输出都带上参与计算的原始数据时间窗、quality_score、以及缺失时的补全方式标记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 多污染物暴露风险在室内场景里，核心指标你建议怎么选？阈值/权重一般用什么来源，怎么在系统里讲得清楚又不容易被质疑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的max和sum两种合成，我理解是：max适合触发控制动作，sum适合做总览KPI。那参考值RV，如果同一污染物有短时和长时两套，就分别对应E_short和E_long？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我还想把CO2当作通风不足的代理项，它不是健康阈值那种，但能驱动通风控制。它能跟PM2.5、TVOC放在同一个合成里吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，我回去把核心指标定成急性风险R，另加通风风险V，并把sum类的运营指标单独列出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "指标我先定三类：  \n1）健康急性风险R：对污染物集合做r_i=TWA_30min/RV_short，R=max(r_i)；  \n2）通风风险V：CO2的TWA_15min/CO2_ref 或者直接用CO2分级；  \n3）运营汇总O：sum(w_i*r_i) 作为日/周报趋势，不进联动闭环。  \n计算链路：清洗后数据进入风险计算服务，先按quality_score算conf，再算各r_i，然后合成R和V，最后输出risk_level（绿黄红）+conf。  \n接口字段我想到：space_id、ts、R、V、dominant_pollutant、conf、quality_flag、window_size、recommended_action_class（通风/净化/复核）。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向分三档：  \n- quality_score高：直接算；  \n- 中等：算但把conf压低，且risk_level不直接到红，除非连续多窗都高；  \n- 很低或断连：不更新R，只输出data_stale并触发“需要巡检/复核”，策略引擎走保守默认，比如维持当前或回退到安全通风档。  \n这里“连续多窗”我没想好取几窗合适。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "RV和目标线都做成租户级配置，但变更要审计，谁改的、何时、改了什么、理由。并且默认模板来自权威标准，用户只能在允许范围内调目标线，标准线不让随意改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输出加两个字段：action_severity_suggested（low/medium/high）和safety_guard_required（true/false）。比如conf低或者空间类型是“手术区/隔离区”，就把guard_required置true，让策略层必须走“设备/区域约束检查+人工确认”才允许高强度动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做两件：  \n1）历史回放：选学校教室和办公会议室各1个点，回放一周数据，看R/V的告警和人工记录的异味/拥挤事件是否对得上，主要看召回与误报趋势；  \n2）对照：同一空间在“只用max合成”和“用sum合成”下，红色触发次数差异，确认max更稳定用于联动。  \n具体评价指标我先用：红色告警每天次数、持续时长、以及conf分布。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把验证指标分三组：稳定性、解释性、业务可用性。回放数据先挑两个典型场景，不做全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第2条里“红不直接红”我想改成：允许红，但必须conf>阈值或连续多窗满足，否则最多黄+提示复核。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "下一步我会把RV模板和空间类型分级先跟产品对齐，免得算法定义了策略用不了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计阶段的楼控联动接口设计背景下，用户与导师围绕将算法风险输出安全可追溯地转为楼控可执行动作、确定网关抽象API与命令/回执/状态/撤销语义及审计降级规则持续沟通（8轮），其中在接口字段与能力分层字典设计上与解决方案架构师沟通（2轮），在安全必需字段、限位/手动优先与回退约束上与控制策略工程师沟通（2轮），并口头形成核心必选与可选扩展的接口契约清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是两层：上层是“策略意图”，下层才是“设备命令”。算法输出risk_level这些先喂给策略引擎，策略引擎再按区域约束生成动作。楼控接口我更想做成“动作单”，包含zone、设备组、目标值和有效期，楼控回执状态。具体到命令粒度我不太确定，担心不同楼控差异太大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "倾向网关抽象API。直接点位太难维护，现场每栋楼都不一样。网关这层可以把设备能力做成能力模型，比如新风机组是风阀/风机频率，VAV是风量设定，净化器是档位。缺点是要先跟网关厂商对齐一套能力字典。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 楼控联动接口你建议走网关抽象API还是直连点位？动作单字段怎么设计更不坑交付？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个担心：capability字典如果太细，会不会还是变成另一种点位？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制策略工程师 楼控联动如果走抽象能力+动作单，你觉得安全必需字段是什么？哪些动作必须强约束或禁止？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想着target+有效期，没把限幅带进去。guard_condition_id也能把“室外污染高禁新风”这种逻辑固化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我怕把这些都塞进命令会让网关太复杂；能不能限幅和guard都在策略侧做完，网关只负责执行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给一版分层：  \n核心必选（所有网关都得支持）：  \n1) Command：command_id、zone_id、capability(L1限定)、target_value+unit、valid_from/valid_to、priority、issuer、reason_code、risk_snapshot里至少risk_level/conf/dominant_pollutant/data_stale、dry_run。  \n2) Safety：allowed_setpoint_band（或min/max）、ramp_rate_limit、override_lock检测（来自State，若true则Ack拒绝）。  \n3) Ack：accepted、reject_reason（枚举）、effective_value、expected_apply_time。  \n4) State：zone_id、capability、current_value、source、override_lock、last_changed_at。  \n可选扩展：baseline_profile_id、guard_condition_id（先引用规则编号）、L2设备类型能力、批量命令batch_id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更倾向单独Cancel：cancel_command_id、reason_code、issuer。网关收到就把该command标记终止并回到baseline或交还BMS。要不然用新命令覆盖，会把审计链搞乱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则我想先简单：同一zone+capability同时只允许一个active命令；priority大者胜出，相同priority按最新生效。手动override_lock为最高优先级，直接让自动命令拒绝。跨capability冲突，比如同时调新风和净化器，我暂时不在网关处理，交给策略侧算好组合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "risk_snapshot只带风险字段，不带原始传感器序列，也不带人数估计这种敏感项。zone_id用内部编码，映射表留在客户侧或私有域。审计我理解要记录issuer、reason_code、命令前后effective_value和override情况，方便追责；但日志留存周期我不确定，得听合规的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基本一致。我想补一条验收口径：联动失败不能卡死，必须能返回reject_reason，而且策略侧看到reject要降级成“只告警不联动”。这条我怕被忽略。"
+              }
+            ]
+          },
+          {
+            "microScene": "在环境联动方案设计收尾的安全与高可用设计背景下，用户与导师围绕故障分类、检测信号-自动处置-人工介入、验收口径与架构隔离限流熔断等持续沟通（9轮），其中在保护机制与降级状态机/数据质量分级定义上与控制策略工程师沟通（2轮），在权限分离、审计字段与留存/个人信息边界上与合规与隐私官沟通（1轮），并最终整理6条可评审的安全与高可用设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆：采集→风险计算→策略决策→联动执行→审计与告警。安全主要是权限、审计、误触发控制；高可用主要是单点、降级、超时和隔离。还有一个我比较在意的是“策略错了”这种逻辑故障，不能靠重启解决。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据侧：传感器断连、漂移、时间戳乱。检测信号：心跳缺失、值域/变化率异常、与邻近点差异过大。自动处置：标记数据质量等级，风险计算用保守替代值或上一次可信值；触发“只告警不联动”。人工介入：校准/更换传感器工单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "计算侧：计算服务挂、延迟飙、模型输出置信度低。检测：超时率、P95延迟、置信度阈值。处置：走降级模型或规则底线；必要时停止自动联动。介入：回滚模型版本、临时调整阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联动侧：楼控拒绝、超时、执行后状态不一致。检测：ack reject_reason、超时、回读状态不一致。处置：按reject/超时降级为只告警，并写审计；不重试到卡死。介入：现场排查楼控权限/设备故障。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "保守替代值我倾向于按空间类型的上界估计：比如在教室/病房，缺数据时风险按更高权重算，直接进入告警态但不联动，避免误开导致能耗爆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "停止自动联动条件：连续N次联动失败（reject/timeout/状态不一致）或模型置信度连续低于阈值M分钟；恢复需要人工点“解除”并且通过一次试联动自检。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "安全上：RBAC分角色，策略编辑和联动授权分开；所有策略变更、联动请求、ack、回读都要审计。留存时间我不太确定，可能6个月？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制策略工程师 保护机制怎么做比较靠谱？我需要能写进方案设计的：触发条件、降级路径、以及怎样避免误触发和漏触发两头都爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态机这套我能用。输入保护里的Q0-Q3我担心评估口径会争议，Q1/Q2怎么划？靠阈值还是统计？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 安全与审计这块，我需要一版“最小合规但能落地”的方案：权限怎么分、日志记录哪些字段、留存多久、以及个人信息边界。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把两边合起来：我们做四层保护+状态机降级，合规上做权限分离和审计字段。一个问题：半自动会影响订阅交付的效果KPI，运营可能会觉得麻烦，怎么在方案里说清楚？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给草案，数值不拍死，留成可配置：  \n- 可用性：风险计算与策略服务月可用性≥99.9%；  \n- 时延：从数据入库到策略输出P95≤30s；联动请求到ack P95≤5s；  \n- 安全KPI：误联动率≤0.1%（定义为联动后经人工判定不应触发）；漏联动率在敏感区不承诺自动，改成“高风险告警检出率≥99%”；  \n- 降级：进入ALARM_ONLY后，策略侧必须标记degraded_reason并可在界面追溯；  \n- 冻结：FROZEN期间禁止任何自动联动，持续Z分钟且可人工解除。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "架构上我想定：联动通道独立于计算通道，联动下发做队列缓冲并限流；策略下发带幂等键（space_id+policy_version+window），重复请求只算一次；对楼控侧每空间做熔断，避免一个楼控异常拖垮全局；多租户隔离上，至少做到租户级配额和故障隔离，避免某租户数据风暴把全局算挂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "六条我这样写：  \n1）全链路可降级：NORMAL/GUARDED/ALARM_ONLY/FROZEN状态机，进入与恢复条件可配置且可审计。  \n2）输入数据质量分级Q0-Q3，降级必须附reason_code；Q0禁止自动联动，Q1限幅限频，Q2正常，Q3允许优化。  \n3）联动执行双确认：必须ack+回读校验；reject/timeout/回读不一致触发冻结窗口，冻结期只告警。  \n4）隔离与自我保护：联动通道与计算通道隔离；空间级/租户级限流与熔断；请求幂等，避免重试风暴。  \n5）权限分离与审计：策略编辑、联动授权、审计只读、现场运维分权；审计字段含who/what/why/when/result/trace_id，安全审计默认留存≥180天且可配置。  \n6）验收指标：可用性≥99.9%；策略输出P95≤30s、联动ack P95≤5s；“超出动作频率/幅度限制的联动请求数=0”；reject/timeout必须回传标准枚举且触发降级与审计。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统工程开发背景下，用户与导师围绕设备接入稳定性、校准/质量控制可测指标与降级验证持续沟通（5轮），其中在接入验收口径与质量标签规则上与物联网接入工程师沟通（3轮），在校准记录、漂移阈值与降权confidence规则上与硬件与校准工程师沟通（2轮），并收束为接入验收、校准质控与risk_status降级三类可测试输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分两类接入：直连传感器走网关协议适配，楼控数据走现成的BACnet/Modbus桥接。校准这块我不想全都做参数拟合，成本太高；先必做“记录与降权”：每个点位维护校准记录、漂移告警，质量差就降低权重或踢出风险计算。少数关键点位再做两点/多点标定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 接入验收我想定成“数据稳定+可追溯”。你给我一版具体口径：时间同步、丢包、重连、幂等、trace_id怎么打，最好能直接变成测试用例。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这组数字里，时间偏差P95 3秒我能理解，但P99 10秒是固定值吗？现场有些是WiFi加4G备链路，波动可能更大。超了就直接降级，会不会把数据全打成degraded，反而算不出风险？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接入错误码这块，你给的auth_failed/forbidden/dup_device、unit_mismatch这些够了。还有一种情况：设备重复发旧数据，平台去重后就没新点了，这个怎么验收？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件与校准工程师 我们准备把校准做成“记录与降权”为主，少量点位做标定。你帮我把：校准记录字段、抽检频次、漂移判定阈值、以及“降权”该怎么和校准结果挂钩，说成能开发实现的规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TVOC阈值你给的0.15mg/m³我有点不确定，传感器品牌差别很大。我们如果写死，会不会误伤很多点位？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我拿到两边口径了，我想把本微场景产出收束成“接入验收+校准与降权规则”两块，确保能写测试。我的取舍是：时间偏差不一刀切，分normal/degraded/invalid；校准侧不强行全量拟合，先做记录与降权，关键点位再做2-point。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定一组可测的：  \n- 接入：设备入网必须注册；reject都回枚举（auth_failed/forbidden/dup_device/field_missing/unit_mismatch/timeout）。  \n- 时间：|device_ts-ingest_ts| P95≤3s；>10s标degraded；>60s invalid。  \n- 连续性：缺失率<0.5%/天；断连重连≤60s；幂等键去重率>99.99%；5分钟只重复旧数据触发stale并degraded。  \n- 可观测：每条消息trace_id；ack延迟P95≤2s。  \n- 校准：记录字段齐全；pass=1/conditional=0.7/fail=0，漂移未处理每7天*0.85，最低0.3；联动必须满足关键污染物至少一个点位confidence≥0.7且quality=normal。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证方面我还没想得很细，我猜用回放一段“漂移/断连”的数据，看策略是不是只出建议不联动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把“质量状态变更也要审计”补进去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还有个边界：如果一个空间全部点位都degraded，风险服务还要给结果吗？我倾向给“置信度低”的风险+不触发联动。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我担心阈值“占比>50%”有点随意，但先用它做默认，后面再用现场数据调。阈值改动要进审计，避免现场随便调导致行为不可追溯。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我按A/B/C拆成三个任务：我负责接入验收用例和risk_status输出，校准字段和漂移阈值我拉硬件同学一起核一下默认值范围。今天先把错误码和质量标签打通，明天开始做回放三组数据流的测试。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风险计算服务工程实现背景下，用户与导师围绕模块拆分、公式与合成规则、status语义、可回放与测试及幂等要求持续沟通（9轮），其中在暴露风险定义与质量标签入公式部分与环境与暴露建模工程师沟通（4轮），在window_key/字段最小集与reason_codes枚举规范部分与后端开发工程师沟通（2轮），并形成本轮实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解风险计算服务先别碰策略下发，先把“风险分+状态”稳定产出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模块上我想拆成：输入归一层（把传感器质量标签、校准 confidence、缺失补齐都收敛）、特征聚合层（分钟/5分钟窗）、风险计算核心（按污染物+人群权重）、输出层（risk_score/risk_status/置信度/原因码）。输入我先按三类：污染物浓度（CO2/PM2.5/TVOC等）、环境与设备（风量/新风阀位/净化器档位）、人群（占用或人数估计，可能先给默认）。输出要跟上一步一致：risk_status=normal/degraded/unknown，再附risk_score。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "公式上我现在有两个备选：1）偏规则：每个污染物算一个子风险，比如用阈值分段或超标比例，再用权重加权成总分。质量标签如果 fail 就把对应子风险标成 unknown 或降低权重。2）偏统计：用一个简单的回归或打分模型吃特征窗输出风险分，再把 confidence 乘进去。对照口径我想先用规则版当 baseline，回放三组数据流，看稳定性和单调性（污染物升高风险不应下降），再把统计版挂在后面做对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 风险计算服务这块，我准备先做规则 baseline。想确认三件事：1）风险分怎么定义更贴近“暴露风险”而不是单纯超标；2）多污染物怎么合成（加权/取max/概率合成）；3）质量标签 pass/conditional/fail 以及校准 confidence 在公式里怎么用，才不会误报或漏报？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量标签这块你说怎么进？我担心 conditional 降权会让风险看起来变低，但其实只是数据不确定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权重建议有现成一版吗？学校/办公/医院差别挺大，我不想把配置写死。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值映射怎么定？比如把均值映射到 0-100，分段点用国家标准还是我们自己的？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把“风险分不被confidence压低、而是用status表达不确定”这个原则落实到接口里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的理解是：risk_score 用规则版先算，质量只影响 conf_total 和 risk_status，不直接把 risk_score 乘下去；多污染物先用加权求和，同时加一个“关键污染物一票抬升”的保护阈值；占用缺失直接让 status=degraded 并给原因码。接口字段我想加上 reason_codes 便于可解释和测试对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1）我倾向加权+保护，办公/学校更平滑，医院可以把保护阈值设得更激进，接近 max 的效果，但不完全一票否决。2）conf_total 我更想用“关键传感器取min，非关键做均值”，不然一个边缘传感器坏了把整体拉爆。关键集合先定 CO2、PM2.5，TVOC 看场景。3）status 阈值我先定两条线：conf_total<0.5 直接 degraded，关键 fail 或连续缺失>窗口长度则 unknown；风险分阈值比如 R>=70 且 conf_total>=0.7 才允许 normal->高风险（但这里高风险不是 status，是 score）。测法：回放数据里人为注入缺失/漂移，验证 status 的翻转符合预期，且“联动门槛”不会被 unknown 绕过去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我刚说岔了。status 只管可信度。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "风险等级我加一个 risk_level=low/med/high，跟 score 映射，便于前端和联动读取；unknown/degraded 时 risk_level 仍可算，但要带上“仅供参考”的 reason_codes。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拆三层测：- 单元测试：给定一段窗口数据（含质量标签、缺失），断言子分、总分、conf_total、reason_codes；重点覆盖边界：全缺失、单传感器fail、窗口跨越、极值钳位。- 组件测试：输入是上一步的标准化事件流（带trace_id、ack口径），跑聚合+计算，检查输出事件幂等（相同window_key重复输入输出一致）。- 回放集成：三组真实回放流，加两组“故障注入流”（缺失/漂移/乱序），看status比例、unknown触发是否符合预期；同时测计算耗时，目标每个空间每分钟计算 <200ms（我不确定这个数是否合理，先当门槛，超了再profile）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 风险计算服务我负责实现计算逻辑和测试，但担心接口字段和幂等口径不统一。想对齐三件事：1）window_key/幂等键怎么设计（空间+时间窗+版本？）；2）输出事件字段最小集合（score/level/status/conf/reason_codes/trace_id等）；3）reason_codes 枚举放哪里、怎么做版本兼容？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "algo_version 进幂等键这个点我之前没想到，这样回放对比也更干净。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "primary_pollutant 我觉得对前端解释挺有用，但会不会跟多污染物加权冲突？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 后端这边给的口径我打算采纳：window_key=tenant+site+space+window_start+window_size+algo_version，避免算法升级覆盖。最小输出字段我认可一套：trace_id、空间与窗信息、risk_score、risk_level、risk_status、conf_total、primary_pollutant、reason_codes。reason_codes 做分层枚举，公共模块共享，策略端只消费子集，遇到未知码忽略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这轮落地目标定三块：1）实现规则 baseline：窗口聚合 -> 子分映射 -> 加权求和 + 关键污染物保护；输出 primary_pollutant。2）质量不压分：risk_score 独立算，conf_total 按关键min+非关键均值；risk_status 仅表达可信度（normal/degraded/unknown），并输出 reason_codes（缺失/fail/low_conf/乱序等）。3）测试：单元覆盖边界+组件幂等（window_key含algo_version）+回放三组真实流和两组故障注入，检查 status 翻转与输出稳定；同时记录 calc_latency_ms 做开发期门槛。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风险计算服务与策略引擎联调验证背景下，用户与导师围绕unknown不误触发联动、接口契约字段可验证性、reason_codes语义稳定与debug排查持续沟通（9轮），其中在unknown/degraded动作矩阵与硬拦reason_codes定义上与控制策略工程师沟通（2轮），在unknown误触发根因定位与字段解析/默认值上与后端开发工程师沟通（2轮），并收敛action_eligible契约与三条联调断言标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把风险计算的输出拆成两路：一路是风险分和主污染物给策略引擎，另一路是可信度状态给一个门禁。门禁规则是 risk_status!=normal 就直接不让下发控制动作。证明的话，我准备做几组输入让它稳定进入 unknown，然后看策略引擎的决策结果是不是空动作或者显式禁止。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "门禁我倾向放在策略引擎侧，因为它决定动作，越靠近动作越安全。接口契约里我会让 risk_status、reason_codes 成为必填字段。联调验证上，我让策略引擎把 decision.explain 里回显 risk_status 和 reason_codes，至少能从响应里看到为什么没动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，这里我不完全确定。我理解 unknown 是硬拦，degraded 可能允许保守动作，比如开到最小新风或者只提示不联动。优先级我目前是：fail/乱序 这种导致 unknown；low_conf 或缺失部分字段可能 degraded。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制策略工程师 联调里 risk_status=unknown/degraded 时，你们动作怎么处理？reason_codes 哪些必须硬拦、哪些允许保守联动？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "degraded 的“关键污染物存在且 risk_score 有值”这条，我现在能保证 primary_pollutant 总会出吗？如果关键污染物都缺失，我会给 unknown 并 reason_codes=missing_key_pollutant。这个跟你说的 no_primary_pollutant 类似，我可以对齐命名。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕字段冗余：risk_status 已经表达了。action_eligible 会不会跟 risk_status 冲突？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我采纳两点：unknown 硬拦任何联动；degraded 允许最小可逆动作但要排除几类 reason。  \n我倾向在风险计算输出里加 action_eligible（默认 false），生成规则：  \n- risk_status=unknown => action_eligible=false  \n- risk_status=normal => true  \n- risk_status=degraded => 只有在 primary_pollutant 非空、risk_score 是有效数值，且 reason_codes 不包含 sensor_fail/window_gap/ts_out_of_order/risk_score_nan/no_primary_pollutant 才 true，否则 false  \n策略引擎联调验证：它只看 action_eligible 决定是否下发控制请求；并在响应里回显 action_eligible、risk_status、reason_codes，便于测试断言。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这边打算输出两个层级：  \n- risk_status：已经折叠了优先级（unknown > degraded > normal）  \n- reason_codes：输出全集，不排序也行，但我会保证包含关键硬拦码时，risk_status 一定是 unknown 或 action_eligible=false。也就是策略引擎不需要读优先级，只要读 action_eligible；reason_codes 主要用于解释和联调用例断言。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选排序，按严重度降序固定顺序：hard_block 类（fail/out_of_order/window_gap/no_primary）在前，soft 类（low_conf/partial_missing）在后。这样响应稳定，测试也好写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并列时我现在是按加权分最高的作为 primary_pollutant，如果权重分一样就按预设优先级（比如 PM2.5 > CO2 > TVOC > HCHO）。我会把这个优先级写死在风险计算侧，保证 deterministic。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第一可能是策略引擎还在用 risk_score 阈值触发，没接 action_eligible。第二是我们接口里 action_eligible 默认 true 或字段缺失被当 true。第三是 risk_status 被我们算成 degraded 但其实应该 unknown，比如 out_of_order 没被识别出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 联调里出现 unknown 还下发联动的情况。你帮我确认三点：action_eligible/risk_status 字段是否稳定传到策略引擎？缺字段时默认值是什么？策略引擎触发条件现在到底看哪个字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回到导师这边：根因定位为策略引擎枚举解析失败导致 unknown 被回退成 normal，从而触发。修复方案有两个：  \nA）策略引擎修解析：支持小写，或严格解析失败就直接 hard block（更安全）。  \nB）风险计算服务先按它的旧枚举输出大写，临时兼容。  \n我倾向 A 为主，B 作为短期止血兼容一周。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我做双向兼容：风险计算输出 risk_status 增加一个字段 risk_status_raw，继续保留小写标准字段，同时加 risk_status_compat=\"UNKNOWN|DEGRADED|NORMAL\" 给策略引擎先用。等他们改解析后删 compat。  \n同时在策略引擎侧加一条安全兜底：只要解析失败或字段缺失，直接当 unknown + 不下发。这样就算我们字段变动也不误触发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，action_eligible 解决了解析大小写问题，策略引擎也不用解析 risk_status。那我把兼容范围收敛成：新增 action_eligible（必填），并要求策略引擎：缺失/非布尔 => false。risk_status 仍用于展示和解释，不参与触发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我不会在 reason_codes 里放原始 ID，只放枚举码。需要定位就用 trace_id 关联日志，但 trace_id 也用随机 UUID，不带业务含义。房间/设备信息留在内部日志里，且只在开发环境开启详细日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条断言：  \n1）当 risk_status=unknown 时，风险计算输出 action_eligible=false；策略引擎响应中必须回显“未下发控制”的原因包含 action_eligible=false，并且不产生任何设备控制请求。  \n2）当 risk_status=degraded 且 reason_codes 不含硬拦码、primary_pollutant 非空、risk_score 有效时，action_eligible=true，策略引擎仅允许最小可逆动作（新风小幅上调/净化器低档），不会出现关新风类动作。  \n3）reason_codes 输出顺序固定且为枚举码，不包含房间号/设备号等标识；策略引擎可按集合包含断言验证 hard_block 码出现时 action_eligible 必为 false。"
+              }
+            ]
+          },
+          {
+            "microScene": "在策略引擎进入压测与故障演练验收口径固化背景下，用户与导师围绕负载定义、门禁阈值、降级触发可控性、日志合规与能耗抖动保护持续沟通（11轮），其中在压测负载模型/指标SLO/故障注入与可观测收敛方法上与SRE运维工程师沟通（8轮），并收束形成分层SLO+正确性门禁+注入点+日志白名单与动作allow/denylist的测试计划要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆三段压：采集写入、风险计算、策略下发。然后故障演练按“数据缺失/乱序、设备接口超时、策略引擎自身抖动”。KPI我想定成：风险计算延迟、策略输出延迟、以及不该下发时的控制请求数为0。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "负载我先用房间数×传感器数估一下，比如1000房间，每房间10个点位，1Hz上报，算10k msg/s。压测轮廓用阶梯上升到2倍峰值再回落。故障注入点：消息队列积压、风险服务返回超时、策略下发HTTP 5xx。量化“不乱下发”就用：unknown必须0下发；degraded只能最小可逆动作占比100%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 压测这块你给我一套可落地的：负载模型、关键指标、门禁阈值怎么定？另外故障注入你建议从哪几处下手，能复现又能收敛定位的那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "门禁阈值你一般怎么给？我怕拍脑袋。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障注入点你会怎么选？我现在只想到超时和5xx。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心一点：压测里怎么稳定造出 unknown/degraded？是靠造数据质量问题，还是加个测试开关？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规层面，trace_id和reason_codes会不会带出房间号设备号？我们之前断言要求不带标识。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把门禁拆成性能+正确性+资源三组，然后把注入点对应到能验收的统计指标上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳四块：  \n1）分层SLO：入口摄取延迟、风险API、策略输出三段；门禁按p95/p99+错误率。  \n2）正确性门禁细化：unknown窗口 control_request_count=0 且原因回显 action_eligible=false；degraded动作必须命中allowlist，denylist为0。  \n3）故障注入四类：数据乱序/丢包、风险服务延迟/不可用、下发429/503、存储慢。  \n4）可观测：trace_id贯穿+reason_codes按分钟聚合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我暂时不做的：1小时稳态2倍峰值我可能先缩到20分钟，因为我们本地环境资源不够，先把趋势看出来；另外“安全审计日志映射”我理解是合规模块的事，压测里先保证默认日志不带标识。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存泄漏替代验证我能想到两个：一是看GC/堆占用的斜率，20分钟内如果持续上升就报警；二是做一次“峰值->空载->再峰值”的循环，看回落是否到基线附近。日志白名单我这边可以把字段定成：trace_id、tenant_id(脱敏)、space_id(脱敏)、risk_status、risk_score、primary_pollutant、reason_codes、action_eligible、action_list，不写device_sn和room_name。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能耗这块我理解是“不要因为抖动导致频繁调档”。我可以加一个门禁：单位时间内同一空间的策略变更次数上限，比如每10分钟最多2次；超过就强制进入保守模式（保持当前档位或回到低档）。另外策略输出里记录estimated_energy_delta的区间，压测时统计不应出现异常尖峰。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "allowlist我先列：  \n- OA_FAN_UP_SMALL（新风小幅上调）  \n- PURIFIER_LOW_ON（净化器低档开启/保持）  \n- RECIRC_ON（内循环保持开启，如果本来就开）  \ndenylist：  \n- OA_FAN_OFF（关闭新风）  \n- OA_FAN_DOWN_LARGE（新风大幅下调）  \n- PURIFIER_OFF（关闭净化器）"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不确定RECIRC_ON算不算我们现有动作码，得和控制策略工程师对一下。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补两点：一是“白盒测试模式”我们要加进演练手段里，保证unknown/degraded能稳定触发做回归，但必须受权限保护且不进生产构建；二是allowlist里RECIRC_ON我先标待确认，避免验收时口径对不上。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统压测与故障演练后上线验收与培训准备背景下，用户与导师围绕验收口径拆分、当场必验与7天观察期、合规证明与培训可验收化持续沟通（10轮），其中在现场非技术卡点、权限/NTP、模拟告警与白盒模式边界、审计留痕字段等部分与现场交付经理沟通（3轮），并形成六条可执行的验收与培训要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 你这边有没有一份旧的验收/培训提纲？我先挑毛病再补齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这份就很“能用就行”的思路，验收口径太粗了。先挑三条硬伤：  \n- “采集全量字段”跟我们压测阶段定的日志字段白名单冲突，还可能把device_sn、room_name这种直标识带进来。  \n- 合规靠授权书不够，我们至少要有审计留痕和数据最小化的验收点。  \n- 运维靠截屏基本等于没可观测性，现场会陷入扯皮。  \n我想把验收拆成：功能/策略效果/稳定性/合规/培训五块，每块给可测口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须当场验证我先列一个粗框：  \n- 功能：多租户权限、空间token映射正确、看板/告警可用；  \n- 策略：策略下发链路通、回退/保护机制可触发；  \n- 稳定性：关键链路延迟、断连重连、告警不丢；  \n- 合规：日志白名单、trace_id不可逆、opaque_space_token不跨租户；  \n- 培训：值班能完成“确认告警-查看解释-执行处置-留痕”闭环。  \n观察期验证：7天内在线率、误报率、策略节能/风险下降趋势。  \n但我对“策略回退当场怎么验”还不够具体，需要控制策略那边给可操作步骤。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@现场交付经理 现场验收与培训你最怕卡在哪里？我想把室内空气暴露风险自适应管理系统的上线验收做成“当场可验证+7天观察”的组合，还要把值班和管理者培训做成SOP，你给我落地版的要点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“处置留痕”我们系统里目前是事件备注+操作人+时间戳，对吧？还有，“模拟告警”你们一般怎么做，直接手动造一条？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现场培训/验收要不要完全避开白盒，还是给交付团队留一个“仅验收环境可用”的入口？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备这样落地：  \n1）验收前置条件（必须达成才能开始）：  \n- 甲方提供两类账号：值班操作账号（可处置但权限受限）、管理只读账号；  \n- 网关出网策略确认（是否允许到我们的服务域名/端口），以及NTP时间同步状态通过（允许偏差阈值我不确定，先写“不得影响分钟级趋势对齐”，需要你定个数）。  \n2）当场验收用例（可复现）：  \n- 告警闭环：用“断连告警”做验收级模拟，要求10分钟内完成确认-查看解释-按推荐处置-恢复-留痕；  \n- 策略下发链路：验证策略建议生成、下发、设备回执、以及失败回退到安全默认（这里我需要控制策略工程师给一条“安全默认”的口径，避免现场争论）；  \n- 合规核查：检查默认日志字段白名单生效、trace_id随机不可逆、空间仅用opaque_space_token且不跨租户复用；禁止出现device_sn/room_name等直标识。  \n3）观察期（7天）指标：在线率、告警漏发率、策略执行率、风险指标趋势与能耗趋势。  \n不采纳点：不把“白盒测试模式”暴露给客户侧流程；只允许在验收环境用于内部回归，且不进生产构建。  \nRECIRC_ON：在验收用例里不把“内循环开启”当作必验动作，只写“如策略包含RECIRC_ON需以最终allowlist为准”，避免口径锁死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规怎么证明我想做“抽样检查”：现场跑一条告警闭环后，我们在审计/日志里随机抽3条事件链路，核对字段只包含白名单项，且空间标识是opaque_space_token；trace_id格式符合不可逆；同时确认没有跨租户复用token的情况。谁来抽：由合规与隐私官或我们交付负责人抽，甲方旁观即可。  \n观察期我建议：第1周每天一次10分钟例会看四个灯：在线率、告警漏发、策略执行率、风险趋势。阈值我先给保守值：在线率<95%或漏发>0 或策略执行率<90%就开问题单。风险/能耗趋势我不敢写死阈值，怕现场变量太多，只写“出现反向变化需做原因归类”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，把观察期问题单触发改成分组口径：  \n- 在线率按“网关维度”和“传感器维度”分别算，先定位是不是网关离线导致一串设备掉线；  \n- 断连时长用P95，避免被少量长尾拖偏；  \n- 告警漏发用“应发-实发”按事件类型分组（断连/超限/策略失败）。  \n阈值我先留成“以首周基线+偏离幅度”方式：首日建立基线，后续偏离超过X%才开单。X%具体数你来拍板更稳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "培训验收我给两个动作：  \n- 值班线：给一条模拟断连告警，让值班在系统里完成四步：确认告警→查看解释→执行推荐处置（或手动处置并选action_code）→填写备注并提交；审计里能看到operator_id和op_time。  \n- 管理线：让管理者在看板上找到三项并能讲清含义：风险趋势、能耗趋势、策略执行率；并能导出本周摘要用于周会。  \n可持续性上：培训材料做成“10分钟值班SOP + 5个常见问题”，现场交付经理负责复训机制；我们只承诺观察期内每周一次远程答疑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这六条我都认。唯一我还担心的是“安全默认”口径，现场如果问到具体是“新风开到多少、净化开到几档”，我们现在没有统一句子。这个我会去拉控制策略工程师给一个“可对外说的默认策略描述”，但不把参数写死到验收条款里，避免设备差异引战。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段制定“健康与能耗指标看板最小可用口径”背景下，用户与导师围绕健康指标定义、能耗归因降级、执行稳定与闭环问题列表持续对齐（8轮），其中在健康主指标与CO2定位及不确定性表达上与环境与暴露建模工程师沟通（2轮），在能耗数据可信度、基线匹配与A/B/C档降级上与数据工程师沟通（2轮），在占用代理的权限留存与审计边界上与合规与隐私官沟通（1轮），并形成第一页布局与数据质量灯+Top问题列表的口径方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会按三条线切：健康风险线、能耗线、执行与稳定性线。健康风险看“暴露风险指数”和超标时长；能耗看HVAC/净化相关增量；执行线看策略命中率、回退次数，再补一个传感器在线率避免数据假好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险指数我理解是把CO2、PM2.5、VOC这些做个加权，再乘以人群权重。分组就按楼栋/楼层/房间类型。展示上用红黄绿和趋势。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 运行评估阶段的看板里，健康主指标你建议用什么口径？CO2这种更像通风代理变量，放在风险里怎么讲不挨骂？另外置信度/不确定性在看板上怎么呈现比较不误导？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果我们不用综合分数，那运营那边可能嫌麻烦。是不是可以保留一个总览，但点进去全是分项？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值怎么定？直接用国标/世卫的值吗，还是我们自己基线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三个：  \n1）健康主指标分结果/过程，不硬塞单一总分。第一页给一个“超标暴露人时（本日/本周）”做总览，点进去按污染物分项拆。  \n2）CO2在总览里不叫风险项，叫“通风充分性”，和风险并列显示，避免被喷。  \n3）加数据质量灯：缺测率、漂移风险、覆盖率，低质量时不显示结论只提示“数据不足”。  \n我有点犹豫的是权重模板，怕物业看不懂，我们可能只对管理端开放权重说明。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想做“增量能耗”对比基线：同类时段、同天气（室外温湿度）下的能耗差，拆成新风机组、空调、净化器。归因就先用策略开启时长×设备额定功率估算，外加从电表读数校正。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 看板里要做能耗与增量能耗评估。现在线上接入的数据里，电表/楼控能耗哪些字段可靠？基线匹配你建议怎么做（按天气/时段/占用）？如果没有分项电表，增量能耗怎么降级呈现才不误导？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "增量能耗的置信度也得做灯？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一页我建议四块：  \n- 健康结果：本日/本周“合规超标暴露人时”，并列显示三项主要污染物（PM2.5、TVOC、CO2只做通风代理不进这一块）。  \n- 通风充分性：CO2>阈值的占用时长占比，外加“运营阈值偏离次数”。  \n- 能耗影响：按数据档位展示：A/B档给“总kWh与增量kWh（基线校正后）”，C档给“策略运行时长+成本区间”。  \n- 执行与稳定：策略命中率、回退次数、设备不可控次数；再给数据质量灯（缺测率/时间对齐/校准状态），灯黄红时，上面三块都打一个“谨慎解读”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "从三类事件来：风险持续超标、能耗异常升高、执行失败/频繁回退。排序我倾向用影响度=持续时长×覆盖人数 或 ×面积，能耗用增量kWh。每条问题点进去看到最近7天趋势、触发的策略、以及是否开过问题单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "占用我打算只用聚合人数或占用率，不展示个人轨迹。门禁如果用，只拿计数，不拉ID。需要审计就记录“数据来源=门禁计数/CO2代理”，不存原始门禁明细在看板层。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们健康与能耗看板想加入“暴露人时”和“占用代理（门禁计数或CO2推断）”，但只做聚合，不展示个人信息。看板层面在权限、留存、审计口径上你会卡哪些点？哪些说法更安全？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把权限分层加进去：值班只看当班+本楼层，管理者看全局聚合，运营看去标识后的跨项目对比。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边推进动作：先拉前端与可视化工程师按这6条做低保真原型，重点是第一页四块+Top问题列表；同时让数据工程师确认我们当前项目点位各自属于A/B/C档，避免原型里承诺过头。原型评审我想请你和产品负责人一起过一遍，确保运营能讲得顺。"
+              }
+            ]
+          },
+          {
+            "microScene": "在线上运行评估的异常溯源与处置闭环背景下，用户与导师围绕异常分类、证据链、工单字段、根因候选、关闭条件与证据包控量持续沟通（9轮），其中在医院溯源页展示占用与门禁引发投诉的合规整改尺度上与合规与隐私官沟通（2轮），在按污染物确定技术关闭观察窗T上与环境与暴露建模工程师沟通（1轮），并收敛出合规改版与闭环模板口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心断在两头：告警太多没人接，以及处置完没法证明有效。还有就是数据质量灯黄红的时候，大家会质疑告警是不是误报，最后就不处理了。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "先按三类：1）健康风险异常，比如暴露风险指数突然升；2）能耗异常，比如单位面积能耗突增；3）执行异常，比如策略下发失败或频繁回退。证据链我想是：告警事件->关联的趋势图->当时的策略执行记录->再看数据质量灯状态，如果黄红要提示“结论抑制”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工单字段我先列个最小集：异常ID、发生时间窗、场景（楼宇/楼层/区域）、异常类型（风险/能耗/执行）、影响度（风险用人时或能耗增量）、数据质量状态（缺测/对齐/漂移/插补比例四灯）、关联传感器清单、关联设备清单、最近一次策略版本号、处置动作、处置人角色、关闭条件、复盘结论。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "占用只能用聚合计数或占用率，不进个人标识。门禁不能进个人标识，但频次算不算个人标识我没把握。医院对细粒度占用更收紧，这次可能就是踩了“太细”的问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 医院说我们展示病区占用人数曲线和门禁进出频次能推断值班规律。异常溯源页面要整改的话，哪些字段必须删除？哪些能保留但要降粒度/加权限/加审计？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这等于门禁相关都不能进溯源证据链了，那我们怎么判断“人多导致CO2升”这类根因？只靠占用率区间会不会太粗，运营不好解释。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳三条硬要求：门禁时序全下线；占用改成楼层/大区+小时粒度+区间；权限分层+审计180天。争取点只有一个：占用率区间是否能在“异常发生时窗”临时显示更高分辨率，比如30分钟。但医院大概率也不会同意，我不硬顶。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按可操作的三类：  \nA 传感器/数据链路问题：证据=数据质量灯黄红、缺测比例飙升、漂移指标异常；处置=切换到插补模式并抑制告警、派单校准/更换、标记该点位降级参与风险计算。  \nB 通风净化设备执行问题：证据=策略执行记录显示下发成功但反馈无变化、设备状态/阀位/风量不跟随、回退频次高；处置=强制回退到安全策略、通知机电检查、暂时改用保守阈值策略并记录版本。  \nC 实际污染源/负荷变化：证据=CO2/PM/TVOC同步上升且设备侧响应正常、上升斜率高、持续时间长；处置=提高新风/净化档位、开启限制性提示（如建议开窗在非医院场景）、并在下一次评估里对比“处置前后风险人时与能耗增量”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以。我加：模板里写“医院禁用开窗、禁用展示门禁/细粒度占用、优先联动新风与净化设备”，学校办公才给开窗建议。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关闭条件我想分两层：  \n1）技术关闭：异常指标回到阈值内并持续T分钟，且数据质量灯为绿或黄但插补比例低于上限；  \n2）业务关闭：影响度（风险人时或能耗增量）不再继续累积，且处置动作记录完整。  \nT我不太确定，可能15或30分钟，看污染物类型不同。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境与暴露建模工程师 异常处置闭环里要定义“技术关闭”的持续观察窗T。不同污染物（CO2、PM2.5、TVOC）一般建议看多长时间的回落/稳定才算处置有效？先给运行评估阶段可用的临时口径。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回去我把工单关闭条件做成按污染物切换的默认值，允许现场交付按场景调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "两级：实时只保留“指纹摘要”，比如峰值、持续时长、斜率、同步性评分、设备响应评分；需要深挖时再从原始时序回拉，但回拉窗口只取异常前后各2小时，医院默认1小时。超过30天只留摘要和工单结论，不留细粒度时序。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四块结论：  \n1）合规整改（医院）：溯源页下线门禁任何频次/时序；占用只到楼层/大区、小时粒度、占用率区间；占用查看/导出分层权限+审计留痕180天；历史明细默认30天滚动，超期仅汇总。  \n2）异常工单最小字段：异常类型+影响度、时间窗与区域、数据质量四灯、关联传感器/设备、策略版本与执行记录、根因候选、处置动作、关闭条件（技术/业务）、场景适用与禁用动作、审计信息。  \n3）根因候选三类：数据链路/漂移；设备执行与回退；污染源或负荷变化（用环境与设备代理证据，医院不靠细粒度占用）。  \n4）关闭口径临时值：CO2 20分钟+斜率恢复；PM2.5 60分钟或室内外比改善；TVOC 90分钟且数据质量绿，否则转“待复核”，并用风险人时增量放缓作为业务关闭参考。"
+              }
+            ]
+          },
+          {
+            "microScene": "在医院场景运行评估收尾的版本迭代与A/B测试背景下，用户与导师围绕A/B测什么、如何分组控干扰、如何写停止/扩量规则与合规护栏持续沟通（8轮），其中在指标口径粒度、分桶配对与显著性/滚动评估方法部分与数据工程师沟通（3轮），并形成可执行的实验设计最小可行集与落地开关条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先把要测的东西分三类：风险效果、能耗代价、告警/工单负担。A/B不碰细粒度占用相关展示和导出，只在策略层对比，比如新版本更激进的通风 vs 更保守的净化组合。判赢我倾向用“风险人时增量下降”作为主指标，能耗是约束指标，工单量做护栏。医院那边分组得按楼层/大区做，不用房间级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分组我想用楼层或大区做cluster，按历史一段时间的基线风险水平做配对，再随机到A/B。干扰因素用室外污染物、温湿度、时间段（工作日/周末、白天/夜间）做分层看。投诉这块我没特别硬的量化，可能用“手动干预次数/回退次数”代理，外加工单关闭时长。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 现在要做策略版本A/B评估，想确认三件事：1）风险人时增量、能耗、工单/回退这些指标现在线上能算到什么粒度（楼层/大区、小时？）2）分组配对你建议怎么做，能不能支持按基线风险分桶随机？3）最小样本量或至少判定显著性的做法，有没有你们常用的简化方案？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线残差那段我有点跟不上，你是说先把室外和温度对R的影响扣掉，再看剩下的风险当作基线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那显著性停止规则里X/Y/Z你们通常怎么定？我们现在没有统一阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我先把可落地的版本带回去，统计方法我倾向差分中的差分+滚动评估，别整太复杂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算这么定：  \n1）分组：医院按楼层/大区为单位，先算近14天同时间窗的R均值；如果数据工程那边能快速出“扣除室外/温湿度后的残差均值”，就用残差做基线。基线分4桶，桶内随机A/B，避免偏置。  \n2）主指标：风险人时增量（用R或P * 占用率区间估计，粒度楼层/大区、小时）。  \n3）约束指标：电量/估算能耗（楼层/大区、小时），上限先按+5%设护栏；工单新增量、回退触发率、待复核占比做负向护栏。  \n4）评估方法：差分中的差分为主（同组上线前后变化，再算A-B差），每48小时滚动看一次，不等到实验结束才发现翻车。  \n5）合规：不引入门禁频次/时序，不展示更细占用；所有导出仍按分层权限+审计留痕；历史明细默认30天滚动，超期仅汇总。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "停止规则我拟三类：  \n- 提前停（负向）：任一楼层/大区连续2个滚动窗口触发：回退率高于对照组20%以上，或待复核占比高于对照组10%绝对值；或者能耗超过对照+5%且风险没改善（改善<2%）。  \n- 宣布胜出（正向）：累计满7天后，风险人时增量相对对照改善≥5%，同时能耗≤+5%，工单新增量不高于对照+10%。  \n- 扩量：胜出后先从20%楼层/大区扩大到50%，再到全量，每一步至少观察72小时，期间一旦触发负向条件就回退旧策略版本并开异常工单走闭环。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "策略下发要带版本号，执行记录按楼层/大区、小时落表；A/B分组名单固定，期间不允许人工临时改策略参数，必须走“临时豁免”并记审计。归因上只统计“版本一致覆盖率”超过90%的时段，低于就当缺失，从分析里剔除或单列。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我估计不会太夸张，但我不确定我们离线资源现在有多少冗余。可以先做“小时聚合后再算”，避免拉原始秒级；另外只对试验楼层/大区跑评估，不做全量。真的资源紧就改成每日一次+出现护栏触发再加密评估。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我去找运营把5%、+5%、回退+20%这些数值确认下，顺便问合同里能耗约束有没有更严的条款。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

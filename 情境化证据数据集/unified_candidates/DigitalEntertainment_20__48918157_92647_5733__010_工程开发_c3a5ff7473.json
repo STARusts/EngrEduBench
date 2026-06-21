@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在音游服务平台进入工程开发、要跑通谱面编辑器原型闭环背景下，用户与导师围绕最小谱面数据模型、tick时间轴防漂、canonical序列化与hash稳定及预览调度验收持续沟通（11轮），其中在触觉pattern集合与强度/时长量纲及设备归一化接口部分与触觉算法工程师沟通（4轮），并最终明确原型交付边界与两项最小验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向三层：音符/判定层、触觉轨道层、元数据层。元数据里放 bpm、offset、pack_id、pack_version、还有 chart_hash。音符层按 lane + time(ms) + type；触觉层按 channel + time + pattern/strength/duration。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "编辑时先不走服务端锁，原型里 hash 只作为导出产物：对“规范化序列化后的谱面JSON”算 sha256。pack_id+pack_version先用本地假值。等后端接口出来再接“服务端下发锁”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "节拍对齐时可能会出现 1/3 拍这种，如果换算成 ms 会有小数。我在想内部用 tick（PPQN，比如 480），显示层再换算 ms。触觉也跟着 tick 走，预览播放时再统一映射到音频时间。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "原型先不做变速，单一 bpm + 全局 offset。这样 tick<->ms 是线性的。后面要做变速再扩展 tempo map。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "谱面顶层：\n- meta：{chart_id?, pack_id, pack_version, song_id, bpm, ppqn, offset_ms, creator_id?, created_at?}\n- notes：[{id, lane, tick, kind, duration_tick?}]\n- haptics：[{id, channel, tick, pattern, strength, duration_tick}]\n- markers：[{tick, label}] 可选\n导出时把 created_at、creator_id 这类不参与 hash 的字段剥离，避免每次导出 hash 变。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。`chart_content` 里就放 bpm/ppqn/offset 这种会影响时间轴解释的也算进来，对吧？否则同一组 tick 不同 bpm 得分不一样。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备做个简单 scheduler：音频开始播放时记录 `t0`，每帧取 `playhead_ms = now - t0`，换算成 tick，再从 notes/haptics 里取 `tick` 落在 [prev_tick, curr_tick] 的事件触发。触觉就调用模拟器接口先打 log。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抖动我先用音频引擎回调给的播放位置，如果拿不到再退化到单调时钟。性能上把事件按 tick 排序，维护一个 cursor 指针，播放只前进不回退时 O(k)。拖动 playhead 就重置 cursor，用二分定位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我做两类测试：\n1）确定性回放：同一个 chart_content，多次预览输出的事件序列（按 tick 排序）应一致；触发时间允许有容差，比如 ±10ms，但 tick 序列不能乱。\n2）编辑往返：导出->再导入->再导出，chart_hash 不变（规范化序列化稳定）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会做 canonical JSON：对象键排序、数组保持原顺序（notes/haptics 按 tick、lane/channel 二级排序），数值只用整数（tick、duration_tick、strength 用 0-100 int），pattern 用枚举字符串。最终序列化不带空字段。这样 hash 能复现。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@触觉算法工程师 原型里触觉轨道我打算先做 pattern+strength+duration_tick。你觉得 pattern 的最小集合应该有哪些？strength 0-100 合理吗，还是需要更细？duration 只用 tick 会不会丢感受？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "pulse_train 需要 rate 参数，我原型想保持字段最少。能不能先把 rate 固定写死在 pattern 语义里，比如 pulse_train_8hz、pulse_train_12hz，当成两个枚举？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备归一化曲线你提到的映射表，原型需要做吗？我现在只有日志模拟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：谱面只存 normalized_strength 0-100；客户端播放有 `DeviceProfile {max_amp, gamma, min_threshold}` 这类参数把 0-100 映射到硬件值。这样同一谱面在手机和手柄上接近同感。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 我问了触觉算法工程师。原型建议 pattern 最小集用可解释枚举：`v1:tap / v1:buzz / v1:ramp_up / v1:ramp_down / v1:pulse_train_8hz / v1:pulse_train_12hz`。strength 0-100 int 做“归一化强度”，真实幅值由播放端 device_profile 映射。duration 用 tick 足够。触觉预览可以单独开关，保证和得分逻辑解耦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我计划三块：\n1）数据层：chart_content / chart_meta 分离；canonical JSON 序列化；hash 计算；导入导出往返不变。\n2）编辑核心：时间轴 tick 编辑（新增/移动/删除 note 和 haptic）；网格吸附（按 1/4、1/8、1/12 拍）。\n3）预览播放：playhead、事件调度（cursor + 二分定位），能输出触发序列；触觉先 mock 接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三连音。虽然我们不做变速，但节奏型还是会用到。ppqn=480 时，1/12 拍是 40 tick，整数好处理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "原型先不做操作埋点，只留本地 debug 日志；而且不扫描本地曲库，只打开用户显式选择的音频文件路径。就算后续要上报，也按最小数据集原则，编辑器侧最多上报崩溃栈和性能摘要，不带音频内容和曲库列表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "hash 只在“导出/保存”时算，不在每个操作算。编辑过程里用 dirty 标记。序列化也只在保存时做一次；预览播放直接用内存结构。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终定稿口头版：\n- 谱面数据切分：`chart_meta`（pack_id、pack_version、song_id 等外部信息）与 `chart_content`（bpm、ppqn、offset_ms、notes、haptics）分离；`chart_hash = sha256(canonical(chart_content))`。\n- 时间表示：编辑内部统一 tick；原型单 bpm + offset，tick<->ms 线性；notes/haptics 按 tick 排序，播放用 cursor 前进，seek 用二分重定位。\n- 触觉表达：haptics 事件字段 `{channel, tick, pattern, strength(0-100), duration_tick}`；pattern 枚举带版本前缀 v1；强度是归一化值，设备侧用 device_profile 映射；触觉预览可开关且不影响得分层。\n- 两个最小验收：导入导出往返 hash 不变；同一 chart_content 多次预览输出的事件 tick 序列一致，触发时间容差 ±10ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

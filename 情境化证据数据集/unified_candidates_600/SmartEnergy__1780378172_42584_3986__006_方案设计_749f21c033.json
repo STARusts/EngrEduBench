@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在广域频差感知与数据流规划背景下，与导师围绕微秒级频差感知协议选型与高并发数据流转架构持续沟通（7轮），其中在频差采集协议选型部分与广域频差感知规约师沟通（1轮），在高并发数据流转架构部分与时序数据流转架构师沟通（1轮），并最终确定感知层走UDP精简帧、流转层用共享内存直通及验证丢包率与微秒时延的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用MQTT发上来呗，或者用Telegraf采完推给InfluxDB，我看网上都这么搭的，挺方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个时间戳，开QoS 1应该差不多了吧？大家都这么用，应该问题不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这频差采集，能用MQTT直接传吗？我想着现成的方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就全改成UDP，我用Netty写个UDP接收器不就结了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高并发UDP包怎么接不丢包？Kafka行不行？我以前用Kafka挺快的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "DPDK？共享内存？这有没有现成的开源组件能直接调的？自己写太麻烦了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能走MQTT和Kafka，得走UDP精简帧。数据流转不能靠Netty和中间件，得用共享内存或者DPDK直通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包得靠无锁队列缓冲。时延口径得压在微秒级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知：UDP精简帧；流转：共享内存直通；验证：丢包率和微秒时延。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

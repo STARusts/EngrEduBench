@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在惯量阻尼适配数据流设计背景下，与导师围绕开源方案取舍、实时性与合规平衡持续沟通（5轮），其中在实时性约束部分与惯量适配策略师沟通（1轮），在合规与底层校验部分与通信规约工程师沟通（2轮），并最终确定放弃开源包，采用底层私有总线直传加硬签名的数据流链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上好多VSG项目直接用开源的控制包，里面自带数据转发模块，调接口就能跑，挺省事的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "惯量调参数据流走通用转发行不行？实时性卡多严？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "私有通道怎么搭？有没有那种轻量级组件能拼一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限校验？加个密码验证不就行了？网上有那种现成的JWT库，套一下很快的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就有点，有点难办了。既要有审计，又不能超时。要不把校验放云端？边端先跑，云端事后补审计记录？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那在边端做校验，怎么才能不超时？我不太懂这块底层怎么搞。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃开源包，不用应用层软校验。数据流走底层总线加硬签名，保证5毫秒内闭环还能防篡改过合规。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

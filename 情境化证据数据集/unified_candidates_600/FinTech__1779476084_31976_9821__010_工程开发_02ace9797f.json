@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端推演性能压测与调优背景下，用户与导师围绕压测方案、图查询CPU瓶颈定位、Cypher索引失效根因及修复验证持续沟通（13轮），其中在压测脚本设计与图数据分布部分与质量保障工程师沟通（1轮），并形成查询条件前置修复方案与100并发性能基线结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用JMeter起并发线程，直接打推演接口。理论上线程数翻倍QPS也应该翻倍，直到碰到系统瓶颈。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "深度分布？我就用固定深度的测试数据。大模型耗时这个我确实没想好，直接打接口的话大模型那边会真的跑一遍推理，这耗时太长了没法压。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测脚本怎么写，还有图查询的瓶颈怎么摸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Mock网关层，造4跳到8跳的图数据。我这就去改脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "完全不符合。并发到100的时候，P99延迟直接飙到5秒以上，图库Neo4j的CPU直接100%了。但看大模型Mock那边基本没流量进来。这不对啊，请求都卡在图库里了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "索引加了的，证券代码和更新时间都有索引。软删除我加了个is_deleted字段。难道是软删除的过滤条件把索引给破坏了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写的是 MATCH (n:Report) WHERE n.code = '000001' WITH n WHERE n.is_deleted = false RETURN n。先按证券代码匹配，再过滤删除状态。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来WITH会打断索引。我昨晚刚补了Neo4j的索引最佳实践，里面提到复合索引和过滤前置，我当时还没当回事。现在看，得把两个条件合并到一个WHERE里，或者建复合索引。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "改成 WHERE n.code = '000001' AND n.is_deleted = false，把过滤前置。或者建一个 (code, is_deleted) 的复合索引。我先把查询语句改了，重新压一次看看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改完了，重新压测。100并发下P99降到了800毫秒，P95是400毫秒，错误率0。图库CPU稳定在60%左右。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "P99高应该是因为有些查询命中了8跳的深度链路，图遍历的锁竞争加剧了。P95大部分是4跳的正常查询。这说明当前图库在处理深链路遍历时还是有瓶颈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能。现在100并发图库CPU就60%了，如果线上流量突增，比如研报批量发布时，并发可能超500，图库肯定扛不住。边界就在图库的单机写入和深链路查询不能混在一起。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这个可能得做读写分离，或者加缓存层。不过这是运维阶段的事了，现在开发阶段至少保证了核心链路在100并发下是通的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心修复点：Cypher查询软删除条件必须前置，避免WITH打断索引。性能基线：100并发下P95 400ms，P99 800ms。深链路遍历存在锁竞争，超100并发需架构扩展。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在云端碳账本写入并发高的开发调优背景下，与导师围绕性能调优方案持续沟通（4轮），其中在写入调优思路及JDBC batch改动细节部分与后端开发工程师沟通（2轮），并最终形成Kafka削峰加JDBC batch写入及连接池调优的明确方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "并发高的话，我看别人都是直接上Kafka削峰，或者就加机器水平扩展，挺省事的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接加Kafka或者扩容，你看行不行？有没有那种开箱即用的配置或者组件能直接顶住的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原生的JDBC batch我写得少，平时都直接调Mybatis-plus的saveBatch接口，它好像也是批量提交吧？时序数据库我听说过InfluxDB，但没实操过，不知道好不好集成，怕踩坑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "JDBC batch改碳账本入库，改动大不大？我如果只在Service层套个循环调用save，算不算批处理？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全氟化合物迁移转化算法开发联调背景下，用户与导师围绕算法架构轻量化、数值求解验证与联调接口持续沟通（5轮），其中在传质方程求解与轻量流式计算部分与迁移算法工程师沟通（1轮），并最终确定轻量数值求解加微批加Protobuf算法栈及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我构思了一个架构：用图神经网络动态建模全厂管网拓扑，再挂上Flink做实时流式特征计算，这样任何工艺节点的扰动都能被图模型捕捉并秒级更新归趋预测。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "GNN能自适应学习拓扑关系啊，万一以后工艺链扩容呢？Flink也是标准流式方案，比微批处理实时性高多了。普通数值求解太土了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传质方程落地你有什么建议？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我对Rosenbrock这种半隐式解法的雅可比矩阵构造不太熟，手写容易翻车。万一步长设错导致发散怎么办？参数校准怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我计划先啃两篇PFAS多介质归趋数值解法的论文，搞懂刚性方程的雅可比矩阵近似处理；然后在开发环境跑个一级反应动力学的解析解，跟我的数值解做对照测试，误差控制在1e-4以内；如果发散就加自适应步长。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "学习记录我会写进工程日志，并把质量守恒约束直接硬编码进求解器做截断保护。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "归趋结果用Protobuf封装，包含各节点PFAS浓度预测和传质通量，推到内存队列，工控联调那边直接读。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

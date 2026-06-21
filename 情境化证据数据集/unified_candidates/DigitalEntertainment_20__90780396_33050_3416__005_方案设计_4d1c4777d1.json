@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在虚拟演出低延迟互动云台的链路架构方案设计背景下，用户与导师围绕延迟口径与预算拆分、链路分层职责、弱网/高并发降级与事件契约持续沟通（7轮），其中在分层与预算拆法、降级触发及顺序幂等边界上与互动链路架构师沟通（4轮），在边缘层最小能力与避免两套逻辑分叉、事件契约版本化上与解决方案架构师沟通（4轮），并形成一版分层+SLO+降级+观测点的架构要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我要开始做虚拟演出低延迟互动云台的方案设计了，先从低延迟链路架构开始。我该先把哪些指标和分层定下来？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是观众点一下，舞台那边特效要立刻变。可能 200ms 以内？但我不确定是不是应该用平均值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先写：上行 P95 100ms、下行 P95 150ms，总共 P95 250ms？P99 我没概念。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@互动链路架构师 低延迟互动这块，端到端链路一般怎么分层？延迟预算怎么拆比较常见？还有弱网/抖动要怎么写降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级兜底是指直接不发特效吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "触发条件是看CPU吗，还是看延迟？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "顺序这块我有点模糊，是要全局有序吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先记住：P95 200ms左右、P99靠降级，另外不要全局有序。还有“轻路径”。我回去跟导师对齐下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘决策我倾向先不做？感觉复杂。轻路径我理解就是投票、应援这种聚合类先走，剧情分支可能得云端裁决。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 边缘层/边缘决策在这种万人互动里，最小放哪些能力比较值？怎么避免逻辑分叉成两套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“轻路径”是不是就等于在边缘算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件契约是指字段固定吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "懂了。我怕把字段定太死后面改起来麻烦。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去整理下给导师：边缘只做聚合/缓存/扇出，不做复杂规则；轻路径可以云或边；事件契约要字段+版本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n- 分层：客户端SDK->实时网关->（边缘聚合可选）->云端编排->下行分发->客户端呈现。  \n- SLO：总P95 200-250ms，总P99 400ms；上行和下行都要算。  \n- 降级：按P95/P99触发，先合并上报/丢低优先级事件，再只下发聚合结果和轻量特效。  \n- 观测点：SDK发出、网关入站、编排入站、下行发送、客户端呈现。  \n我不确定“网关快速ACK”要不要写进去。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "顺序我就写“用户内有序、全局不保证”；幂等是“去重key”。payload上限我写个 1KB？优先级分两档？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "好，那我就按三档。拒绝的话是不是要有错误码？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就按这5条去写后续的方案小节。优先级三档我记住了，轻路径也不再写成“边缘全做”。这块先到这。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

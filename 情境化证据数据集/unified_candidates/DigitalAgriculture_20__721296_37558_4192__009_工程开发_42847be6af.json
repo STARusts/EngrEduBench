@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘端分级模型训练与压缩改造背景下，用户与导师围绕遗留脚本的数据过滤、评估口径与int8量化等级偏高定位及可复现审计约束持续沟通（9轮），其中在蒸馏/量化顺序、指标与最小定位实验设计上与算法负责人沟通（3轮），并形成训练数据口径、评估清单、压缩校验顺序与不做事项的落地清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是把训练流程拆成很多模块：数据入库->特征抽取->训练->蒸馏->量化->评估，每一步都做成独立服务，再加个编排。这样以后扩品类也方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据过滤我想直接用 manifest 里的 error_code，先把丢帧/重复帧/校准缺失/校准过期/称重缺失都过滤掉，然后争议池先不进训练，只拿质检裁决后的。评估指标的话，加 macro-F1 和每一档的召回率，特别是高等级的 precision，要不然会“虚高”。偏高问题我猜是量化误差或者蒸馏让 logits 变得更尖，导致阈值偏移。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 训练到压缩这一段，你们一般用什么顺序？遗留链路是先蒸馏再int8量化，但现在量化后等级整体偏高。还有评估除了 accuracy 你建议固定哪些口径，能快速定位问题？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "评估口径你没说完，我想把 ECE（校准误差）也加上，另外搞一个“加权成本矩阵”，把把低品质判成高品质的代价设大点，这样训练时就不至于偏高。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那蒸馏温度有没有经验范围？遗留写死1，我觉得可以扫 2/4/8，再加个自动搜索。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定三块：  \n1）数据入口：训练集严格按 manifest 过滤 error_code，且只用已裁决的 label，不掺争议池；  \n2）评估：固定输出 macro-F1、每档precision/recall、混淆矩阵，再加“低判高/高判低”分错统计；  \n3）压缩排查：同一批样本对比 FP32 学生 vs int8 的 logit 分布和混淆矩阵，确认是不是 PTQ 校准集覆盖问题或阈值沿用导致偏移。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会让每次训练任务都带 dataset_version、subset task_id，还有过滤后的样本计数（按 reason_code/error_code 的剔除数）。audit_log 里记录谁触发了训练、读了哪个 dataset_version、输出了哪个 model_version。随机种子固定，训练配置写进一次性配置表，不放无限 JSON。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。训练策略枚举我先定比如：CE、CE+LabelSmoothing、CE+Distill；压缩策略枚举：None、DistillOnly、PTQ、QAT。量化方式枚举：int8_per_tensor、int8_per_channel 这类。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小定位路径：  \n- 用同一份评估集（过滤后、分布固定）跑 FP32 学生，记录混淆矩阵；  \n- 同样样本跑 int8 模型，如果混淆矩阵整体上移更明显，基本锁量化；  \n- 如果两者都偏高，那去查阈值/后处理是不是用旧阈值；  \n- 再补一项：对比评估集等级分布和训练集等级分布，差距大就做重采样或 class weight，但这一步先不改训练，只先出报告。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "遗留里我看到是多分类 softmax 出 5 档，但业务侧又做了“高等级必须满足重量下限”的规则，这算二次约束。我担心量化后概率校准变差，触发规则的比例变了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我之前没太管，我以为训练日志无所谓。那我改成：训练日志只落内部 sample_id、site_id hash，导出的评估报表只给聚合统计，不带可识别字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终我按这四点做：  \n- 训练数据口径：只用已裁决标签；按 manifest 剔除 error_code（丢帧/重复帧/校准缺失/校准过期/称重缺失）；争议池不进训练，只做独立 hard-case 评估；训练任务绑定 dataset_version + subset task_id，并记录剔除计数。  \n- 评估口径：macro-F1；每档 precision/recall；混淆矩阵；“低判高/高判低”分错率；边端约束指标记录模型大小、单帧时延、峰值内存。  \n- 压缩顺序与校验：教师FP32->学生蒸馏FP32/FP16（温度扫2/4/8做最小实验）->优先 PTQ（带校准集版本），必要再上 QAT；每一步都在同一评估集上对比 FP32 vs int8 的混淆矩阵和 logit 分布，发现整体上移就优先查量化校准集覆盖和业务二次规则阈值是否需要重标定。  \n- 不做的事：不重写训练平台、不做自动超参搜索系统、不把配置表做成无限 JSON。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨季蓄池相变热弛反演核心算法开发背景下，用户与导师围绕算法选型、理论短板补充、验证方案及合规要求持续沟通（6轮），其中在边缘侧数值解算选型与刚性方程处理部分与算法实现工程师沟通（1轮），并最终形成放弃SciPy重型库、采用显热容法加轻量自适应步长求解器、对标Stefan解析解验证及满足合规约束的开发策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用Python的SciPy库，它里面有solve_ivp，以前我做过常微分方程求解，直接套过来应该挺快的。就是把热传导方程写进去算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "相界面跳变，就，就那种焓值突变嘛。我之前没解过带相变的，不太清楚怎么在solve_ivp里处理这种无穷大比热容。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "相变潜热这种非线性跳变，在边缘侧算力有限的情况下，用SciPy的solve_ivp能跑通吗？怎么处理比热容无穷大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不用SciPy了，太重。显热容法配合自适应步长，自己写轻量求解器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没全懂。就知道把温度换成焓做自变量，能避开比热容无穷大。但我不会推这个焓温关系公式，查表法的表怎么建也没概念。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我找两篇讲显热容法的论文，把里面附带的C代码或者Python代码拉下来。先看懂他们怎么建焓温查表表的。然后我自己写一版，用一维Stefan问题解析解做对照组，跑步长收敛性测试。如果误差能收敛到1%以内，就算过关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只看MIT协议的代码参考，测试造模拟数据，不碰真实负荷曲线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

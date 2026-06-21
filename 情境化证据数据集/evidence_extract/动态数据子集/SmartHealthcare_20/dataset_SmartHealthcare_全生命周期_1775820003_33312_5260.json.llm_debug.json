@@ -1,0 +1,66 @@
+{
+  "input_path": "E:\\DESTTOPLater\\EBGEDUbench\\情境化证据数据集\\context_extract\\SmartHealthcare_20\\dataset_SmartHealthcare_全生命周期_1775820003_33312_5260.json",
+  "output_path": "E:\\DESTTOPLater\\EBGEDUbench\\情境化证据数据集\\evidence_extract\\SmartHealthcare_20\\dataset_SmartHealthcare_全生命周期_1775820003_33312_5260.json",
+  "created_at_utc": "2026-04-13T07:18:25.228029+00:00",
+  "calls": 17,
+  "parsed_ok_calls": 10,
+  "failed_calls": 6,
+  "fatal_error": null,
+  "items": [
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#1",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#2",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#3",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "需求与战略",
+      "microScene": "需求与战略#4",
+      "error": "HTTPSConnectionPool(host='www.dmxapi.cn', port=443): Read timed out. (read timeout=120)",
+      "raw_response_text_head": "",
+      "raw_response_json_head": null
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "工程开发",
+      "microScene": "工程开发#2",
+      "error": "parsed_json_ok_but_no_evidence_list",
+      "raw_response_text_head": "```json\n{\n  \"domain\": \"智慧医疗\",\n  \"stage\": \"工程开发\",\n  \"unitIndex\": \"工程开发#2\",\n  \"microScene\": \"在精准用药系统工程开发需处理测序海量数据的背景下，用户与导师围绕分布式流式计算环境选型与落地持续沟通（4轮），其中在计算框架取舍与一致性保障上与首席架构师沟通（3轮），在运维适配与Kafka/K8s监控问题上与大数据工程师沟通（2轮），并协调敲定以Flink+Kafka+K8s部署及分工的方案。\",\n  \"dataSynopsis\": {\n    \"context\": \"精准用药系统需处理测序仪产生的海量（PB级）无界数据流，要求边测序边解读，强调实时性与数据准确性（临床用药安全）。\",\n    \"keyConflict\": [\n      \"计算框架选型：Flink（强一致与事件时间） vs Spark Streaming（团队熟悉、运维生态现成）\",\n      \"落地阻力：Flink 学习曲线、现有监控插件不兼容、与现有 K8s 配额/调度方式冲突、部署脚本需重写\"\n    ],\n    \"resolutionMechanism\": \"导师要求在一致性与鲁棒性底线下寻求折中：由首席架构师承担部分运维/调度方案，降低大数据工程师顾虑；同时要求 Kafka 吞吐对齐 Flink 处理能力。\"\n  },\n  \"finalArchitectureDecision\": {\n    \"computeFramework\": {\n      \"choice\": \"Apache Flink 1.15+\",\n      \"processingModel\": \"Event-Time 流处理（支持乱序/延迟数据）\",\n      \"consistencyGuarantee\": \"Exactly-once（依赖 C"
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "工程开发",
+      "microScene": "工程开发#3",
+      "error": "parse_model_output_json_failed",
+      "raw_response_text_head": "### 微场景（工程开发#3）data 数组要点提炼与修正清单\n\n#### 1) 现象与定位结论\n- **现象**：临床决策支持面板「精准用药建议」出现**空白**或偶发**乱码**。\n- **定位**：\n  1. **链路并未断**：Kafka/缓冲层正常，前端 Network 能收到响应。\n  2. **乱码根因**：后端（Flink sink 输出）采用 **Avro 二进制序列化**，前端按 JSON/文本方式查看与解析，导致“看起来像乱码”、解析失败。\n  3. **空白/崩溃根因之一**：存在**罕见样本边界值**，药物浓度推荐值可能**超过前端默认整型范围**，触发溢出或解析器崩溃，进而表现为空白。\n\n#### 2) 前端/中间层必须落地的联调修正点（按优先级）\n1. **新增 Avro 反序列化适配层**\n   - 前端请求响应需按二进制读取（例如 `ArrayBuffer`/`Uint8Array`），不要按字符串/JSON 直接 `response.json()`。\n   - 引入 Avro 解析库（如 `avsc` 或等价实现），并**加载后端提供的 Schema**进行反序列化。\n   - 明确 Schema 的获取方式与版本管理（固定文件/接口下发/Schema Registry），避免前后端版本不一致导致“可收到但解析失败”。\n\n2. **处理大数/高精度溢出（罕见病例必须覆盖）**\n   - 按测试专家结论：需要支持**高精度浮点/大数**，至少保证不会崩溃、不会被截断成错误值。\n   - 联调阶段可接受“先显示再计算”的过渡策略，但要留接口：\n     - **短期兜底**：超过安全范围时转为字符串展示，保证 UI 不崩。\n     - **中长期正确方案**：使用高精度数值类型（如 Decimal/BigNumber 类库）或后端改为以字符",
+      "raw_response_json_head": "{'id': 'chatcmpl-19790b08-42d3-4feb-9c69-aebf96957f10', 'object': 'chat.completion', 'created': 1776064577, 'model': 'gpt-5.2', 'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': '### 微场景（工程开发#3）data 数组要点提炼与修正清单\\n\\n#### 1) 现象与定位结论\\n- **现象**：临床决策支持面板「精准用药建议」出现**空白**或偶发**乱码**。\\n- **定位**：\\n  1. **链路并未断**：Kafka/缓冲层正常，前端 Network 能收到响应。\\n  2. **乱码根因**：后端（Flink sink 输出）采用 **Avro 二进制序列化**，前端按 JSON/文本方式查看与解析，导致“看起来像乱码”、解析失败。\\n  3. **空白/崩溃根因之一**：存在**罕见样本边界值**，药物浓度推荐值可能**超过前端默认整型范围**，触发溢出或解析器崩溃，进而表现为空白。\\n\\n#### 2) 前端/中间层必须落地的联调修正点（按优先级）\\n1. **新增 Avro 反序列化适配层**\\n   - 前端请求响应需按二进制读取（例如 `ArrayBuffer`/`Uint8Array`），不要按字符串/JSON 直接 `response.json()`。\\n   - 引入 Avro 解析库（如 `avsc` 或等价实现），并**加载后端提供的 Schema**进行反序列化。\\n   - 明确 Schema 的获取方式与版本管理（固定文件/接口下发/Schema Registry），避免前后端版本不一致导致“可收到但解析失败”。\\n\\"
+    },
+    {
+      "domain": "智慧医疗",
+      "stage": "运行评估",
+      "microScene": "运行评估#1",
+      "error": "parse_model_output_json_failed",
+      "raw_response_text_head": "以下是针对“精准用药基因组学流式数据实时解读系统”在**运行评估阶段**可落地的**临床金标准对照验证方案要点/清单**（对应你们讨论到的：200例、三盲、Kappa、McNemar、P值、覆盖率）。\n\n## 1) 为什么不能“随便找几个对一下”\n- **样本太少**：偶然性极大，无法给出可靠的置信区间，也无法支撑临床准入/上线风险评估。\n- **仅比对医生处方不等于金标准**：处方受经验、院内路径、合并症等影响；更稳健的金标准应来自**多专家共识**的“位点解读/用药分级”结论。\n\n## 2) 金标准与盲法设计（建议按你们定的“三盲对照”细化）\n- **金标准**：3位资深医师/专家对每例样本进行独立人工解读，形成共识结论（例如多数表决或仲裁规则）。\n- **盲法**（核心是避免信息泄露导致偏倚）：\n  - 专家对系统结果盲（不看系统输出）\n  - 系统侧/工程侧对专家结论盲（不参与裁决）\n  - 统计分析侧在锁库前尽量保持分组/来源信息盲（或至少流程隔离、预注册指标）\n\n## 3) 样本量与抽样覆盖\n- **样本量**：你们讨论的“至少200例”属于常见的可操作下限；若目标是验证约95%水平的性能，样本再少会导致统计效能不足、结论不稳。\n- **覆盖要求**：抽样需覆盖不同癌种/罕见病与关键用药场景，避免单病种“刷高分”。\n- **负样本（如“不建议用药”）必须足够**：否则一致性指标会虚高、上线后风险更大。\n\n## 4) 主要评价指标（你们提到的两类）\n### A. 一致性：Kappa 系数\n- 作用：衡量“系统 vs 专家共识”在分类/分级结论上的一致程度，并扣除偶然一致。\n- 常用解释口径（经验阈值，需结合场景预先写入方案）：\n  - **< 0.40**：一致性较差  \n  - **0.40–0.60**：一般  \n  - **0.60–0.75**：较好  \n",
+      "raw_response_json_head": "{'id': 'chatcmpl-24759a4d-bebb-420d-b118-d9758aeb2a00', 'object': 'chat.completion', 'created': 1776064612, 'model': 'gpt-5.2', 'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': '以下是针对“精准用药基因组学流式数据实时解读系统”在**运行评估阶段**可落地的**临床金标准对照验证方案要点/清单**（对应你们讨论到的：200例、三盲、Kappa、McNemar、P值、覆盖率）。\\n\\n## 1) 为什么不能“随便找几个对一下”\\n- **样本太少**：偶然性极大，无法给出可靠的置信区间，也无法支撑临床准入/上线风险评估。\\n- **仅比对医生处方不等于金标准**：处方受经验、院内路径、合并症等影响；更稳健的金标准应来自**多专家共识**的“位点解读/用药分级”结论。\\n\\n## 2) 金标准与盲法设计（建议按你们定的“三盲对照”细化）\\n- **金标准**：3位资深医师/专家对每例样本进行独立人工解读，形成共识结论（例如多数表决或仲裁规则）。\\n- **盲法**（核心是避免信息泄露导致偏倚）：\\n  - 专家对系统结果盲（不看系统输出）\\n  - 系统侧/工程侧对专家结论盲（不参与裁决）\\n  - 统计分析侧在锁库前尽量保持分组/来源信息盲（或至少流程隔离、预注册指标）\\n\\n## 3) 样本量与抽样覆盖\\n- **样本量**：你们讨论的“至少200例”属于常见的可操作下限；若目标是验证约95%水平的性能，样本再少会导致统计效能不足、结论不稳。\\n- **覆盖要求**：抽样需覆盖不同癌种/罕见病与关键用药场景，避免单病种“刷高分”。\\n- **负样本（如“不建议"
+    }
+  ]
+}

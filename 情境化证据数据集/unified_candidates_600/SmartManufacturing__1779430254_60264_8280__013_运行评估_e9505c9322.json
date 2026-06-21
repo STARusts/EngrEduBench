@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在互锁系统极限测试完成并准备产线交付安全验证背景下，用户与导师围绕交付证据的完整性与日常运行安全性持续沟通（5轮），其中在交付审计证据要求部分与安全合规专员沟通（1轮），在灰度期数据稳定性分析方法部分与监控运维分析师沟通（1轮），并最终形成包含极限延迟截图、状态恢复日志及误报率统计检验的三项交付验证清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我Tracealyzer的截图都截好了，40ms延迟上界有硬证据，直接打包交付行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代码里STO互锁逻辑是严格按ISO 15066写的，只要触发就硬急停，这个逻辑不会有错。日常运行的话，系统都在线，应该就没问题了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线交付审计，除了极限延迟截图，还需要什么证据？我们STO逻辑是按标准写的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "急停解除后确实没专门测脏数据清空。频次这块，之前没关注。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期互锁触发频次和误报率，怎么分析才能证明系统稳定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "缺两块。一块是STO急停解除后的状态恢复验证，得确保栅格重锚定没脏数据。另一块是灰度期误报率的假设检验，运维说要用二项分布算p值，还要画控制图。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只会用Tracealyzer抓最坏延迟，假设检验和控制图这套我不会。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周得把统计分析补上。目标是这周五前学完Minitab的假设检验和SPC控制图模块，把灰度期前3天的互锁数据导进去跑一遍，算出p值和置信区间，补到交付证据里。状态恢复那块，我今晚加个测试用例测一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清单就三项：1. 极限工况全链路延迟上界及Tracealyzer截图（已有）；2. STO急停解除后栅格状态恢复测试日志（今晚补测）；3. 灰度期误报率二项检验p值及触发频次SPC控制图（周五补齐）。这三项全绿，就过交付。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

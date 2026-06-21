@@ -1,0 +1,109 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在可信剪辑协作台联调出现回调重复导致风险标注覆盖混乱的背景下，用户与导师围绕版本回滚粒度、冲突判定与后端落地实现持续沟通（10轮），其中在审计与权限红线部分与安全工程师沟通（3轮），在证据链连续性与最低保留要求部分与版权策略经理沟通（2轮），并最终明确回滚不覆盖改为新版本、合规/版权冲突进待仲裁且需审计与reason规则及导出拦截能力。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回到上一个版本？就是工程版本吧。镜头应该也算在里面。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就默认回滚镜头层？冲突就按时间，新的赢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 回滚和冲突解决这块，审计上有什么不能做的？是不是可以直接覆盖？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "待仲裁是指不让继续剪了吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计事件要存全量内容吗？会不会很大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@版权策略经理 回滚会影响证据链吗？我想做成直接恢复旧版本，冲突时用新版本覆盖旧的，可以吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我能不能就把旧的覆盖回来，但在日志里写一句“回滚了”？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一是回滚不做覆盖，做新版本。二是冲突不自动选最新，变成待仲裁。三是要记审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "冲突就…同一镜头同一字段被两个人改了？比如 risk_tag。触发就两个人同时改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是我编辑时拿了v3，提交时库里已经v4了，就冲突。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同意。那剪辑结构是指时间线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚权限要怎么配？我怕搞复杂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "reason 不能为空就行？随便写也能过吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": ">=10 会不会有人骂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就 reason_code + reason>=5。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能…就是多一个接口参数 level？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这有点绕。那我就序列回滚时不动 risk 表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "给个“列出冲突”接口，还有“选择采用哪边”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "禁止导出原因码我写个 403？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我需要加表吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload_ref 是存json吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那冲突的 fields 我就放字符串列表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "默认镜头级回滚；回滚是新版本不覆盖；合规/版权字段冲突不自动合并进待仲裁；仲裁和回滚都要审计，且 reason_code 加 reason>=5，未决合规冲突会拦导出。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

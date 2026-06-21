@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户围绕衰弱级联推演系统算力架构设计与导师持续讨论算力分配选型、对照假设、MVP裁剪与NUMA亲和性（8轮），并在算力异构分配与降级方案评估议题上与级联推演架构师沟通（2轮），最终产出纯CPU NUMA绑核推演与内存水位线快照落盘的MVP架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上云原生流式计算那套，K8s加Flink，扛并发体征流应该没问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要快，全塞GPU里跑肯定最快嘛。药代模型和级联图都在GPU上算，省得数据来回搬。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据就是GPU并行度高啊。对照组，我就拿纯CPU多进程跑推演当对照组呗。假设GPU版本耗时是CPU的1/10，那就选GPU。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩模型跑算力到底咋分合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图规模还没定死，估计初期几百个脏器状态节点吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是几百个节点没必要上GPU图计算了？还有你说的NUMA架构，跨节点内存访问延迟怎么控制？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块真没实操过，以前都是无状态服务随便调度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没考虑到。K8s调度这块我熟，但NUMA绑核和异构切分我没写过。我得去查查K8s里怎么用CPU Manager做静态绑核，还有MPI和CUDA Stream混合编程的案例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重新立假设：假设在百节点级联图规模下，CPU主导（NUMA绑核）+GPU辅助药代加速的异构方案，端到端推演延迟低于纯GPU流式方案。对照组就是纯GPU方案。验证方法就是在试点环境跑两套，测单次级联演进耗时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP就先不上GPU了。几百个节点CPU完全扛得住，先做纯CPU NUMA绑核的推演引擎，GPU药代加速作为后续迭代预留接口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我会在架构里加个基于内存水位线的状态快照落盘机制。那本轮算力架构就定：纯CPU NUMA绑核推演 + 内存水位线快照落盘 + 预留GPU加速接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

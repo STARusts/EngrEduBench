@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在能耗感知调度联调背景下，用户与导师围绕弱电节点掉线原因分析与调度模块能耗感知过滤逻辑修改持续沟通（5轮），其中在路由寻优输入源确认部分与能算路由规划师沟通（2轮），在路由分发前电量Threshold过滤逻辑对齐部分与联邦调度工程师沟通（2轮），并最终形成调度侧增加25%电量门槛过滤的防掉线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑是跑起来了，但弱电节点掉线率特别高，日志里全是心跳超时断连。我怀疑网络模块有bug，丢包太严重了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只管聚合接口拿任务啊，调度那边分给我啥我聚啥。电量这种事不归我管吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "路由寻优输入源里是不是没接电量数据？现在弱电节点全掉线了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那咋整？我聚合侧没法判断节点电量啊，任务已经推下来了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说路由表没拉电量Topic，低电量节点被硬拉去聚合直接宕机了。得在调度侧加个能耗阈值截断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在聚合接口入口加个校验？如果节点电量低于阈值，我就把任务打回去？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "调度模块不是我写的啊，那是@联邦调度工程师 的活。我改聚合接口多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "路由分发前得加个电量Threshold过滤，低于阈值的别往聚合服务推了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "15%不够吧？跑一轮聚合起码掉5%电，15%进去跑完直接变砖了。得留点保底电让节点活命，至少25%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调度侧会加25%电量门槛过滤，低于的摘除。我等他推版再联调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

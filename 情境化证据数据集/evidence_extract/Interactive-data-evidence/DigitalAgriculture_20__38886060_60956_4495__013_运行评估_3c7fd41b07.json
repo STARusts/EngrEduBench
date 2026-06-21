@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在杂草抗性闭环管控系统运行评估背景下，用户与导师围绕田块级效果对比评估的指标、分组、时间窗与偏差控制持续沟通（6轮），其中在可用数据口径与匹配字段/合规取数上与数据工程师沟通（3轮），在处方版本/规则命中/人工改写与灰度审计关联上与处方引擎工程师沟通（3轮），并确定最小可交付评估方案与异常Top规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在有点不确定先从哪些指标和分组开始看。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想按“用了系统处方的田块”和“没用的田块”两组，然后看除草成功率、用药量、还有返工次数？大概是这样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没用的…可能就是同一农场里，没走我们闭环的那批作业记录？控变量我就按同作物、同地块面积范围？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 田块级效果对比评估要做两条主线：同田块前后 + 同期匹配对照。你这边我们现在线上有哪些字段能支撑？尤其是杂草效果、药耗、返工、还有评估时间窗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“除草成功率”就只能用复查任务的“是否复发”来算？如果复查覆盖不全，会不会偏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想做“同期匹配对照”，匹配字段你建议用啥？我怕我选错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边还担心合规：我们做田块级对比，会不会涉及精确坐标和图片问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好。我先把你说的字段记一下：处方-作业-复查三类，主窗口10±4天，匹配用网格/作物/风险分桶等。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 我问完数据工程师了，但我可能没抓到重点，你帮我看看我接下来怎么把“田块级效果对比评估”跑起来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想先做两层：  \n1）全量过程指标：单位面积药耗（有效成分/亩）、处方被改写比例、作业完成率/超时。  \n2）结果指标：有复查的田块看复发率、二次施药率；还有用识别输出当“杂草检出下降幅度”代理。  \n分组：用系统处方 vs 非系统处方；再按同网格+同作物+风险分桶做分层对比。时间窗用执行后10±4天。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我…可能就把有复查的占比也一起报出来？然后结果指标只在有复查子集里算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "禁用规则强制执行这块我不确定能不能取到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@处方引擎工程师 田块级对比评估我需要把每次作业关联到处方版本、规则命中情况、以及人工改写。线上现在有哪些字段？另外rule_version灰度切换的审计事件，评估能用来分段吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我在评估里就可以按rule_version分段看效果？比如v12到v13之后对比。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我可能会搞混“开方日志”和“最终执行”。你说用作业记录反查prescription_id就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我拿到处方引擎那边的字段了：每个处方有rule_version、禁用规则命中ban_rule_hits、override_flag表示人工改写，灰度切换有audit_event含原因枚举。评估上我打算主要按“最终执行的prescription_id”去关联，不用开方日志第一条。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能开跑的是：过程指标、分组、时间窗、复查覆盖率。拿不准的是“识别分下降”这块怎么做成稳定口径，还有异常Top5我怕挑选规则随意。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。我就按你这三条异常规则做Top项，识别分下降先用“均值差”，缺失就算缺失，不硬补。今天这块就先这样定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

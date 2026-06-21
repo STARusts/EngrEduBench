@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在排放反演与质量控制工程开发背景下，用户与导师围绕将输入/输出QC嵌入反演服务、区间与归因计算、口径一致与可审计及一致性校核持续沟通（9轮），其中在性能受限的不确定度实现上与算法工程师沟通（3轮），在下游口径统一与trace落地上与数据工程师沟通（3轮），并形成两级不确定度+单一analysis_value视图+trace与验收测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想拆成两段：先做输入QC，把会影响反演的观测过滤或打分；再做输出QC，对反演排放量给置信度和告警理由。实现上我倾向于“标记不丢数据”，即原始值照收，QC给flag和score，反演侧按配置决定是剔除、降权还是走降级模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先盯三类：1）仪表类：CEMS的SO2/NOx/颗粒物、O2、流速、温压湿；2）烟羽观测类：摄像/红外的烟羽边界、风场；3）工况类：负荷、燃料、启停。  \n一票否决我先放在“物理不可能”和“链路明显坏”：比如O2<0或>25%、温度负值、流速突变到0且持续、摄像时间戳倒退、同一秒多帧重复且元数据异常。  \n可降权更多是噪声：风向快速摆动、烟羽边界置信度低、某传感器短时丢包但有邻近插补。  \n输出QC：面向合规和内部优化两拨人。合规更关心“证据链”和“不确定度区间”，内部关心“哪里异常、可不可以调参”。所以输出我会给：排放率点估计、95%区间、主导不确定度来源top3（风场/边界/流量/工况），以及一个可回放的“反演输入快照索引”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "路径A偏工程：用误差传播+经验规则。每个输入源有一个σ或质量等级映射到σ，反演模型对输入做扰动采样（比如对风速、边界位置、流量做小幅随机扰动），跑K次得输出分布，取分位数当区间。来源top3用方差贡献（单变量扰动的ΔVar）近似。  \n路径B偏算法：直接训练一个“置信度头”，用历史标定/人工复核数据学一个uncertainty predictor，输出区间。  \n我倾向A先落地，B需要标注数据，开发期赶不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你们卡在“扰动采样太慢”具体是什么量级？我们目标是每分钟一条排放率，边缘算力一般。你希望QC/不确定度怎么做才算可用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果用导数近似，δ怎么定？太大就不线性，太小会被数值噪声吞掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "两级策略触发条件你建议用哪些？我怕条件太多维护不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 你说的“flag会导致下游口径混乱”是指哪里？我们现在想做输入QC和反演输出QC，原始数据不丢，只打flag/score。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "analysis_value如果是插补的，会不会被质疑“篡改数据”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "decision_trace落地上你希望是事件表还是嵌在时序点里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我选“两级不确定度 + 单一分析视图”。  \n- 口径：每个输入源生成analysis_value + value_status + qc_score，raw只做保留与回放；反演只读analysis_value。  \n- 不确定度：默认用线性化敏感度（1+2M次推理，M先取3：风速、有效截面积、流量换算），输出粗区间；触发条件（三条最小集合）命中时，区间加宽并可选触发小K采样（K=8或10），但只在异常时跑。  \n- 可审计：反演输出带qc_rule_ver、point_table_hash、model_ver、uncert_method（SENS/SAMPLING）、reason_code列表、decision_trace_id（详细参数进trace表）。  \n测试我想分三层：  \n1）单元：QC规则对边界值、时间戳倒退、缺失窗，输出status/score正确；敏感度计算给定δ时区间单调性正确。  \n2）集成：回放一段混合丢包/风变/低置信度视频，验证触发逻辑只触发一次并写reason_code；反演读取analysis_value而不是raw。  \n3）性能：边缘CPU限定下，正常模式每分钟处理时延<10s，异常模式触发采样时P95<30s，并记录采样触发占比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，我刚才更多在输入。结果一致性我做两个校核器：  \n- 与CEMS的软对齐：同时间窗内比较反演排放率与CEMS排放率，算相对偏差r和相关系数ρ，超阈值就打结果flag，但不直接改值。阈值先用可配置，比如|r|>30%持续5个窗。  \n- 与工况的守恒约束：用负荷/燃料流量估一个“理论上限/下限”，反演落在区间外就判为物理不一致，直接把uncertainty拉大并标记reason_code=PHYS_INCONSIST。  \n我不太确定燃料到CO2的换算因子是不是在这一步就要引入，怕牵扯核算口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trace里我会避免写摄像原帧，只写边界的矢量/面积、置信度、以及统计量；时间戳、设备ID这些保留。工况里如果有班组/操作员ID我不放进反演链路，只保留机组/产线编号。审计需要的更多是规则版本和hash，不是个人信息。这个我拿不准是否够严格。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实现清单我按模块说：  \n1）qc-prep：生成analysis_value/value_status/qc_score（含3类一票否决+可降权），并输出qc_rule_ver。  \n2）inversion-core：只读analysis_value；实现敏感度区间（变量先3个），异常触发后可选小K采样；输出uncert_method与区间。  \n3）consistency-check：实现CEMS偏差校核与工况护栏，产出result_flag与reason_code。  \n4）trace：写decision_trace（规则ID、阈值、δ、触发窗），结果表只存trace_id+版本hash。  \n验收口径：  \n- 正确性：给定构造输入，status/score/flag可预测；一致性校核在偏差注入时必触发且不改原值。  \n- 可追溯：任意一条结果能通过trace_id还原当时δ、阈值、规则版本、点表hash。  \n- 性能：正常P95时延<10s/分钟窗；异常触发采样P95<30s，采样触发率在回放集上<5%（先用现有三组可复现实验再加一组风变场景）。  \n- 资源：磁盘>80%时trace降级只保留reason_code+阈值摘要，仍能定位触发原因。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

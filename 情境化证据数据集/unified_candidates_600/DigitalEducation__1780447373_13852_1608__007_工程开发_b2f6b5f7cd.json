@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在交叠意图流式解析代码开发背景下，与导师围绕算子流转化、验证口径定义及能力缺口补充持续沟通（5轮），其中在算子链拆分与状态后端选择及乱序验证部分与流式计算开发组长沟通（1轮），并最终形成算子拆分、RocksDB状态后端配置及乱序验证口径的开发定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算按事件时间划分滚动窗口，把用户键鼠流和AI生成流在窗口内做Join。只要窗口内特征对齐了，交叠意图的提取应该就准了。框架直接上Flink，毕竟状态管理和容错是现成的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink算子链怎么拆最合理？状态后端选RocksDB还是Memory？验证时怎么测乱序对交叠度的影响？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "RocksDB状态后端调参我完全没底，以前只用过Memory，这块会卡住开发进度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把Flink官方文档里RocksDB状态后端那章过一遍，重点看Incremental Checkpoint和Local Recovery配置。明天上午把状态后端配置写进代码，跑一次局部Checkpoint验证。这应该能解决OOM风险。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发定论：1. 算子链强制拆分，隔离反压；2. 状态后端选RocksDB并开启增量Checkpoint；3. 验证口径：注入乱序和迟到数据，要求交叠度评分P99抖动率<5%；4. 衡量标准：状态大小压测到单TaskManager 2GB不OOM。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

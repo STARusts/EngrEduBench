@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在碎化铸造合约工程开发背景下，与导师围绕拆分逻辑、精度溢出防御与单测验证思路持续沟通（7轮），其中在精度防御、单测断言与权限控制部分与合约开发攻坚手沟通（2轮），并最终形成拒绝套用ERC1155基类、强制精度与权限防御、引入fuzz test的编码定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备先把碎化铸造合约弄出来，直接用OpenZeppelin的ERC1155改改应该挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ERC1155自带批量操作，我继承它加个mint函数就行。单元测试就用Hardhat跑一遍，看coverage到90%就过了，挺方便的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比例计算我就用solidity的除法呗。边界条件，我传个很大的数进去试一下不崩就行吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种自带精度处理的碎化铸造基类？我直接用solidity除法怕截断，有没有更方便的库？单测的话，我怎么断言才算靠谱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "余数校验revert，这我能在mint里加个require。单测构造这种截断用例，我得算好余数才行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用Hardhat的expect revert，如果失败了控制台会打log，我照着log改。覆盖异常的话，我就多写几个不同的数碰碰运气。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会写Foundry的fuzz test，平时就写固定用例。我今晚找篇Foundry的Fuzz测试入门文看下，明天把碎化比例的fuzz加进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，我不套ERC1155的默认mint了。自己写余数校验和权限检查，单测加上截断revert、越权revert和大数溢出，fuzz测试我看完文档补上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

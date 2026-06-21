@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图解析与特征提取代码落地背景下，用户与导师围绕掩码加噪插入环节、对照实验变量解耦及训练数据匮乏问题持续沟通（5轮），其中在掩码加噪实现细节与验证设计部分与语义编译开发主管沟通（1轮），并最终形成查数据集写映射脚本、改写掩码加噪代码及搭对照测试pipeline的三步开发动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "意图解析我准备用轻量级Transformer做微调，特征提取直接上ResNet抽特征图。代码架子我已经搭好了，forward函数都写了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在模型输出之后呗，特征向量拿出来，直接加高斯噪声，掩码就随机把一些维度置零。这样最简单。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用Transformer和ResNet搭的，DP加噪和特征掩码直接加在输出向量上，这样行不行？验证要怎么做？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想着加在输出上，确实没考虑重构端怎么对齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就先固定一个调另一个呗。比如先不加噪，只调掩码比例看PSNR掉多少，然后再反过来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "训练数据我还没想好，可能自己造一点？或者随便找个分类数据集凑合跑跑？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我直接上手写解析逻辑发现缺标注数据，造的假数据根本跑不出真实分布。我今明两天去翻HumanIntent和ARIE数据集的论文和开源代码，把他们的意图分类体系和我们的标签对齐，写个映射脚本再重写解析模块的训练逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，去查HumanIntent和ARIE数据集，把意图标签映射到我们的体系，写映射脚本；第二步，按开发主管说的，在池化前做通道掩码，归一化后做DP加噪，改写代码；第三步，搭四组对照测试的pipeline，跑联合组看交叉影响，定掩码比例和噪声强度的初始值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

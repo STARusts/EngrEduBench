@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段构建“告警→工单→处置→复核”闭环并联动移动端与审计追溯背景下，用户与导师围绕最小状态机、离线一致性、幂等与回归用例持续沟通（7轮），其中在API/去重/状态机与幂等实现上与后端工程师沟通（6轮），在移动端离线队列与交互简化上与前端与移动端工程师沟通（4轮），在权限、审计留痕与附件访问控制上与合规与审计官沟通（2轮），并汇总形成可编码的最小接口与测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成端到端强一致的事件流。告警是事件，工单是事件聚合，移动端只是事件消费者。这样以后加碳效、加监管报送都不用改主链路。代价就是状态机会比较复杂，但工程上更干净。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 告警工单这块你那边准备怎么做？我想要事件溯源，但我怕你们已经写成传统CRUD了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态机你倾向怎么切？我希望别只做“新建-完成”，否则后面SLA和升级很难加。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想告警分级按风险影响做：P1溢流/内涝风险，P2设施能力下降，P3传感器疑似故障。告警和工单我倾向一对一，避免聚合带来解释复杂度；但去重需要把同一事件的重复告警压缩掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端与移动端工程师 移动端你们要怎么做工单处理？我需要知道你们能支持多复杂的状态机和离线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那你们离线冲突怎么处理？比如两个人同时处置同一工单，一个先完成，一个还在处理中。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以。`client_action_id` 我们用UUID。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "行，那先砍掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那告警列表这块，我想做实时推送，WebSocket或系统推送都行，延迟越低越好。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心接口太多，能不能动作统一成一个endpoint，action_type区分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 告警工单+移动端要怎么留痕、怎么控权限？我们会存操作日志和照片附件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我们动作表其实就是审计表的雏形。附件URL有效期我之前没考虑，我觉得直接存永久链接最省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成最小可实现版本：  \n1）工单状态机就用后端那5态，移动端只暴露4个按钮：接单(OPEN→ASSIGNED)、开始(ASSIGNED→IN_PROGRESS)、完成(IN_PROGRESS→RESOLVED)、转派(任意非CLOSED态→ASSIGNED给新的人)。关闭只给主管在Web端做(RESOLVED→CLOSED)。  \n2）动作统一接口：`POST /work-orders/{id}/actions`，字段：`client_action_id`、`action_type`(ACK/START/RESOLVE/TRANSFER)、`action_at`、`note`、`attachments[]`。服务端校验状态转移并返回最新状态。  \n3）离线：移动端outbox队列，按`action_at`提交；失败返回错误码+当前状态，端上提示刷新。幂等：`client_action_id`唯一；重复提交返回同一结果。  \n4）告警与工单关系：先一对一；去重用`dedup_key`按15分钟桶，重复告警只更新`last_seen_at`和`occurrence_count`，不新建工单。  \n5）审计：后端写`work_order_action`为审计主表，记录`operator_id/device_id/ip/before_status/after_status`；通用日志不落敏感字段。附件私有存储，返回短期签名URL。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，端上只做三类映射：  \n- 需要刷新：`409`  \n- 不可操作：`403`  \n- 其他失败：统一提示并保留本地动作待人工处理。  \n另外我还想加“本地动作超48小时自动清理”，避免队列爆掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "清理前先把动作打包成一条“待处理异常”，留在端上一个“未同步”列表里，用户手动重发或删除。实现上就是不进正常队列，但可见、可操作。我不太确定现场人员会不会嫌麻烦，不过至少不悄悄丢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条最小自动化：  \n- 路径A：新告警入库→生成工单→移动端ACK/START/RESOLVE→Web端CLOSE，断言状态序列正确、审计表`before/after`齐全。  \n- 路径B：离线提交两次同一`client_action_id`，服务端幂等，动作表只一条；再模拟`409`冲突返回，端上触发刷新并重新提交。  \n- 路径C：权限：无“处理工单”权限用户提交action返回`403`，且审计表不落动作，只落一次安全审计（谁尝试了、被拒绝）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

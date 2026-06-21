@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "基于YOLOv5的智能分拣系统——面向校园快递集散点",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与开发过程」阶段，本段围绕模型训练实验展开，说明训练参数配置，并记述验证集mAP停滞后通过K-means聚类优化Anchor尺寸以提升性能的实验调优过程。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "模型训练实验基于PyTorch 1.10框架，在单台服务器上进行。我们设定训练轮次为40轮，Batch Size为16，初始学习率为0.01并采用余弦退火策略。"
+              },
+              {
+                "behaviorLabel": "数据分析",
+                "behaviorEvidence": "训练前10轮，Box Loss从0.12快速下降至0.035，但在第25轮时验证集mAP停滞在0.89左右。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "项目组随即对Anchor尺寸进行了K-means聚类优化，重新计算后的先验框更贴合快递面单的长宽比"
+              },
+              {
+                "behaviorLabel": "验证评估",
+                "behaviorEvidence": "最终使测试集mAP@0.5提升至0.963，训练总耗时约4.5小时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

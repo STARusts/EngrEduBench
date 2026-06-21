@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在保真重构率压测与调优背景下，用户与导师围绕压测方案工程化、误差归因及调优动作串联持续沟通（7轮），其中在极端场景注入与崩塌判据部分与极限环境测试工程师沟通（2轮），用户最终形成基于SSIM与等效SNR的崩塌判据、误差归因及压测调优闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "根据率失真理论，重构误差下界由信道容量决定。我打算用互信息做指标，逐步降低信噪比，看重构的KL散度什么时候突破阈值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想好，KL散度要算后验概率，端侧好像没这个算力。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工程上一般怎么造极端误码，又怎么判断语义崩了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SSIM和语义等效SNR，这俩能直接从重构图和特征图里算。那调优呢？崩了之后怎么调？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算子融合和profiling这块，我之前只推过理论上的计算图优化，实际用什么工具抓NPU的耗时分布我不太熟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实缺这块能力。我现在的短板就是端侧异构硬件的性能剖析。我准备这周补学一下TensorRT的nsys profiler和trtexec工具，把NPU算子级的耗时和显存占用跑出来。拿到真实profiling数据后，我就能把之前推的计算图优化理论落地，把耗时最长的特征提取算子做融合，这能直接提升极端信道下的重构时效。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "压测出来的失真曲线，误差来源主要分两块：信道深衰落导致的随机误码失真，和端侧算力截断导致的确定性失真。在信噪比高于-5dB的区间，误差主要来自算力截断；跌破-5dB后，信道误码占主导，曲线会呈断崖式。我们只能保证在置信区间-5dB到5dB内重构率达标，出了这个区间结论就不能外推了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先写信道模拟器脚本，注入深衰落和高误码，跑出SSIM跌落曲线；然后挂上nsys抓NPU瓶颈；如果是算力截断，就做算子融合；如果是误码累积，就调信道编码冗余度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

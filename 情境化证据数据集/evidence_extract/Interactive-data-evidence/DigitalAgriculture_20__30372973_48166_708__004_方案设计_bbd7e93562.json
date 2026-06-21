@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在营养标签规则引擎MVP方案设计背景下，用户与导师围绕规则分层、输入最小集、版本审计回放与diff产物持续沟通（10轮），其中在规则编排、LabelArtifact固化内容与快照策略部分与规则引擎工程师沟通（4轮），并对齐三层规则+三类版本+artifact回放与输出形态的设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是，把配方、检验结果、批次信息这些，算出营养成分表，然后再按法规格式生成标签。规则引擎就是把“怎么算、怎么展示、哪些话不能写”做成可配置。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分类我先按流程想：1）计算规则，比如每100g、每份的数值怎么换算；2）取数优先级，配方算的和检测的冲突用哪个；3）四舍五入、单位转换；4）模板规则，字段顺序、语言；5）合规检查，像不让写“治病”这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本就是…每次改规则都加版本号？然后生成标签时把版本号记进去，后面就能查到当时用的版本。跟lot关系是同一个lot生成的标签用同一套版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则引擎工程师 规则引擎这块，MVP要做规则版本、回放、差异比对，你们一般怎么设计？输入输出怎么定比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入快照是把原始数据都复制一份吗？这会很大吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "差异比对工具MVP要做到什么程度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规规则里“禁用宣称”这块是不是要做很全？怕漏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要是把规则分三层：算数值、做合规校验、再按模板渲染。版本也别只有一个，要分计算/合规/模板三个版本。每次生成标签要产出一个类似LabelArtifact的东西，里面记lot、引用的配方版本ID、检测报告ID，还有规则版本，然后能回放。差异比对先做结构化diff，告诉输入引用、规则版本、结果字段哪些变了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不一定。可以同一lot重算重发，产生多个artifact，各自绑定当时的规则版本。旧的也留着"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "最小集我想要：lot_id；配方版本ID和份量基准；检测报告ID（如果有）；产品属性像净含量、每份克数；还有过敏原信息但这个是不是归别的模块我不确定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向检测优先，没检测就用配方推算。如果两份检测冲突…就取最新？但“最新”我不确定按采样时间还是报告时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接受。那规则引擎就不负责选报告，只负责按给定的report算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "做成参数表？比如能量保留0位，蛋白质保留1位，这样。单位换算就是g/mg的倍率。每100g和每份的换算也做参数。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改应该允许人工覆盖吧，比如检测缺项。留痕就是记录谁改的、改前改后、原因。然后artifact里引用这个覆盖记录ID。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那输出这块，除了渲染后的标签文本，还要给结构化字段对吧？不然电商对接麻烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第5条的“关键中间值摘要”我不太确定要放哪些，怕放多了变大。其余我能跟。中间值先放每100g换算基准、每份换算基准、还有每个字段的来源类型，先别放太细行吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

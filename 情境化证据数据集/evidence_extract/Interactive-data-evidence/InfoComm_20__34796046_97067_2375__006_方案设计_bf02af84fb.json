@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在车联网边缘节点切换下的毫米波切片状态超低时延同步接口设计背景下，用户与导师围绕同步载荷与协议选型及资源一致性约束持续沟通（5轮），其中在零拷贝接口定义部分与系统架构设计师沟通（1轮），并最终列出同步字段与基于UDP的MVP封装方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接走消息队列，把车辆当前的认知参数和缓存索引打包发过去。只要网络带宽够，同步应该很快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构设计师 我们现在的边缘节点之间，如果要同步毫米波切片的特征数据，用什么样的接口定义能避开系统调用开销？我想尽可能压低转发时延。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这种内存映射确实快，那我只定义这四个字段。只要预测矢量传过去，目标节点就能直接接管，不用重新计算了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致性可以用序列号校验。至于算力占用，我还没想那么多。只要数据能准时到，其他的以后再说。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在刚才那四个字段基础上再补一个TTL。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我确认下：1. Slice_ID (uint16)；2. Sync_Timestamp (uint64)；3. Cognition_Vector (float32[8])；4. Mem_Base_Addr (uint64)；5. TTL_Value (uint8)。协议选基于UDP的自定义封装，避开三次握手。就这样定一个MVP版本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

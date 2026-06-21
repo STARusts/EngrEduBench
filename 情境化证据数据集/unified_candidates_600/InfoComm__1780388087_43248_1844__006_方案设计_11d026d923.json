@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在微时隙接口规约与信令设计背景下，用户与导师围绕信令防伪造、鉴权机制及设计基线持续沟通（6轮），其中在控制面信令字段与流转约束部分与微时隙接口规约师沟通（1轮），在鉴权边界划分部分与体制架构师沟通（1轮），并最终形成接口规约设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口格式吧，两边数据结构对齐了才能交互。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防伪造？加个校验位应该就行了吧，保证完整性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制面信令的必备字段和流转约束，还有鉴权机制怎么设计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令里要加时间戳、业务ID、惩罚因子，授权那边给切片ID，还要加双向签名和流水号防越权。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制面和数据面的鉴权边界怎么划？令牌桶校验放哪一层？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "控制面管签发，数据面只比对转发，令牌桶在配调引擎入口做硬匹配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线就是信令带周期戳、业务ID和惩罚因子，流转用双向签名加流水号，鉴权是控制面签发数据面比对，入口硬匹配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

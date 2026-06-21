@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘侧防碰撞模块联调背景下，与导师围绕放弃ROS重框架、轻量化部署策略及验收口径持续沟通（4轮），其中在资源水位评估部分与嵌入式边缘开发沟通（1轮），在模型轻量化转换与INT8量化精度部分与防碰撞算法设计师沟通（2轮），并最终确定INT8量化与NCNN裸跑C++的联调方案及看门狗机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用ROS把防碰撞算法包直接部署到车载工控机上，ROS里面有现成的导航和避障包，联调起来应该比较快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "车载端现在资源水位是个啥情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "剥离ROS包有点麻烦，网上有没有那种轻量级的C++防碰撞库可以直接调的？或者我用ROS把逻辑先跑通，后面再一点点抠性能？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法这边输出的防碰撞模型，能不能直接转成C++的so动态库给我？我不想要Python或者ROS那种重的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "量化成INT8精度会不会掉很多？农机防碰撞这事儿要是撞了可就出大事了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调方案就这么定：不用ROS了，让算法出INT8量化模型和NCNN推理代码，我这边在工控机上裸跑C++进程对接北斗数据流。对照测试我会加上，对比浮点和INT8的距离输出差值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

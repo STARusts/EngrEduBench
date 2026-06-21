@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在效能压测与调优背景下，用户与导师围绕压测工具选择、性能瓶颈定位、寻优发散边界及数据合规持续沟通（8轮），其中在压测工具与指标部分与联调测试工程师沟通（1轮），在极端工况造数据与发散监控部分与核心算法设计师沟通（2轮），并最终形成五条压测与调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用JMeter多线程并发请求，看接口QPS和响应时间，扛不住就加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种共享内存加协程的怎么压测？有没有现成工具直接用的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "收敛步数怎么看？内存水位我之前用Valgrind跑过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚学了gperftools，它有cpu profiler能出图，我想把它编译进网关里，应该能抓协程耗时。比Valgrind轻，压测时开着应该还行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就找最宽的那块呗，占CPU多肯定就是瓶颈吧，别的我不太会看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极端工况边界是啥？压测数据怎么造才有效？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我只会用random函数。误差来源我咋分析，看日志报错吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就把压测请求频率调高点不行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把数据文件名改成test1，test2行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用gperftools抓性能，写C++压测桩打共享内存，数据加高斯噪声，文件名全改假名。看P99延迟、收敛步数、内存泄漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

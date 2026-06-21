@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在分钟窗排放核算引擎与因子管理落地背景下，用户与导师围绕核算口径锁定、方法学防串、性能与权限审计等实现约束持续沟通（8轮），其中在因子字段最小集、版本/生效区间、GWP归属与不确定度表达部分与碳核算策略师沟通（4轮），并最终对calculation_run_id锁版本、factor_set设计、缓存降级与强约束清单达成一致。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把边界说清：核算引擎这块我理解是把反演出来的排放量（带置信度）统一换算到CO2e，并且输出能被审计复算的明细。落地上我想拆两层：计算层只认“只读analysis_value”和标准化单位；口径/因子层走版本化配置，不允许运行时随便改。担心点是：因子一多，分钟窗每条算一遍会不会抖；还有是不同方法学（比如按热值、按含碳量）在一个厂里混用时怎么防错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先按我们链路接得上的来：trace_id、asset_id（烟囱/产线）、window_start/end、pollutant（CO2/CH4/N2O）、mass_rate或mass（优先质量）、uncertainty、以及上游给的reason_code和阈值摘要。输出我想至少有：co2e、使用的因子集合（factor_set_id+版本）、每个气体换算后的明细、以及核算方法学id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "锁版本我偏向：每次计算任务启动时，把“规则版本+因子版本”固定到一个calculation_run_id里，运行过程中不再读“最新”。防错我倾向计算时强校验：同一asset_id在同一窗口只能命中一种方法学路径，否则直接报错，不做隐式fallback。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@碳核算策略师 因子管理这块我需要能直接落到表结构和接口：因子最小字段该有哪些？版本怎么分（语义版本/生效时间）？同一资产多方法学怎么避免串用？不确定度和适用范围你们通常怎么写才算审计能过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“窗口结束时间命中”，如果valid_from/to的粒度是天，但我们算分钟窗，会出现同一天内修订因子需要立刻生效的情况吗？还有constraints_json如果写得很细，计算时每条都要校验会不会慢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "多气体换算这块，CH4/N2O的GWP版本（AR4/AR5/AR6）算不算因子的一部分？还是方法学的一部分？我怕同一工厂不同报送口径导致混。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。我回去把“asset绑定profile+生效区间”和“factor_set包含GWP版本”落进接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个：如果上游反演给了uncertainty，我们核算输出不确定度怎么传播？先做线性合成还是先不做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把策略师的点筛了一下，准备这么落地：  \n- 因子实体最小字段：factor_id、gas、value、unit、reference、region/sector、valid_from/to、version、status；再加uncertainty_type/value、confidence_level、constraints_json+boundary_notes。  \n- 计算不直接跑constraints_json：资产绑定methodology_profile时做适配校验；分钟窗计算只检查profile在有效期、factor_set版本被锁定。  \n- 引入factor_set：把排放因子+GWP表版本一起打包，计算输出里同时落methodology_id与factor_set_id+version，保证复算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太确定的是：我们现有分钟窗链路里，factor_set选择到底是“按窗口结束时间自动命中”，还是“由上游任务把factor_set_id固定传进来”？两种都能做，但接口会不一样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向强路径走“calculation_run_id启动时固定factor_set_id+version”，并且由服务端在启动时用窗口时间+资产profile去解析出具体版本，解析完写进run上下文。这样分钟窗计算就不需要每条查“最新”。兜底是：如果外部明确传factor_set_id+version，我们只校验它和资产profile是否兼容，不兼容就拒绝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存我想两级：  \n- 进程内LRU缓存 factor_set_id+version → 展开后的因子map（按gas+unit索引），TTL短一点；  \n- 数据库侧给factor_set(version, status, valid_from/to)和asset_profile(asset_id, valid_from/to, methodology_id)建组合索引，run启动解析时一次性查齐。  \n回滚：不允许覆盖active版本，只能deprecated旧的再active新版本；回滚就是把旧版本重新标active并记录原因。  \n测试上我能做三类：  \n1）确定性：同一输入+同一run上下文输出完全一致（含trace_id、factor_set_version）；  \n2）边界：valid_to交界点前后两分钟窗命中不同版本；  \n3）性能：run启动解析不超过比如200ms，分钟窗计算不因为因子查库而抖动（统计P95）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没想细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能先做最低限度：因子和factor_set的写接口只给管理员角色，所有变更写audit_log（actor、时间、before/after hash、reason）。读接口给核算服务账号只读。审计留痕能串到trace_id和calculation_run_id上。更细的合规口径我得再问下谁负责。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级我想到两招：  \n- factor_set展开结果只缓存“本厂当日用到的版本”，超过上限就只保留最近N个；  \n- 触发内存水位（比如70%）时，禁用进程内展开缓存，退化为按run启动时把factor_set明细序列化进run上下文（大小可控），分钟窗只读上下文，不再维护大缓存。代价是run记录会变大，但比全量缓存更稳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

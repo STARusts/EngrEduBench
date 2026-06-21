@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农机端控协议对接背景下，用户与导师围绕农机通信链路、二进制组帧实现及异常重传策略持续沟通（4轮），其中在通信链路与安全约束部分与安全与通信设计师沟通（2轮），在田间链路误码与重传限制部分与嵌入式开发工程师沟通（2轮），并形成TCP二进制组帧与有限重传的对接方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我后端起个服务，农机当客户端连上来拿数据，或者我直接用MQTT把处方图JSON推给农机终端？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农机网关那边怎么通信？我想直接MQTT推JSON行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "帧格式具体长啥样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能MQTT，得TCP发二进制，还要CRC16校验和防重放序列号，农机只认大端。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "昨晚我看了一下Python的struct模块，用pack按大端格式组起来，应该比手写位运算快，也不容易拼错字节。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "校验失败就重传呗，重传到对为止。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农机那边误码率很高吗？校验失败我准备无限重传。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这干扰源是线缆太长？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用TCP连网关，Python struct组大端二进制帧，0xAA55开头，带序列号和CRC16，校验失败重试最多3次，报文间隔不能低于50毫秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

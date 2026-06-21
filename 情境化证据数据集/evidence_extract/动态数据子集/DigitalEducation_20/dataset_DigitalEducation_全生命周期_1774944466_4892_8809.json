@@ -1,0 +1,946 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“剧本式学习编排引擎”需求澄清背景下，用户与导师围绕用户画像访谈准备、隐私vs便利两难与验证计划持续沟通（6轮），其中在课堂执行所需数据粒度部分与教学设计师沟通（3轮）、在数据采集底线与退出机制部分与数据治理官沟通（2轮）、在学校决策链与权限边界部分与教务流程代表沟通（1轮），并形成默认聚合展示+管理模式授权的初步决策与访谈招募框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先按中学或高职的混合式课想。目标教师我分两类：一类是信息化积极的，愿意折腾；一类是被要求上公开课、临时抱佛脚的。前三个问题我猜是：环节切换乱、分组协作很难管、资源和任务发下去学生不一定跟上。隐私冲突我现在想到的是：为了让流程顺，要不要实时看每个学生做到哪一步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先做“最小可用”：只要知道小组进度，不要看个人太细。但老师可能会说要点名、要知道谁掉队。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 课堂“剧本编排+执行”里，为了让课顺利跑起来，老师真正需要看到的学生信息到什么粒度？哪些是锦上添花，哪些是没它就跑不动？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师在课堂上要点名、要看谁没交，这算必须吗？还是说可以把点名交给线下，不用系统管？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉我可以把“默认”设成教学模式，管理模式要学校开权限。还有个问题：为了做课后复盘，老师肯定想看个人的过程数据，这会不会被认为是监控？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 在校园场景里，如果我们的系统想让课堂可控又不越界，学生数据采集与展示有什么底线？比如实时进度、未提交名单、课后复盘这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“退出”这块我不太确定，课堂里学生真能退出吗？会不会影响教学秩序？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我从两边拿到的点：教学侧认为任务级聚合进度是刚需，个人轨迹属于锦上添花；数据治理强调最小化、告知、权限审计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现在我有点纠结：为了让老师觉得“好用”，是不是应该默认就给个人未提交名单？不然老师会吐槽看不到谁没做。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选A。理由：这项目第一版目标是降低课堂组织成本，不是做精细化监管；而且一旦默认个人名单，后面很难收回。验证上我想做两件事：一是访谈里直接问老师“你需要知道到个人吗，还是小组够用”，二是试点时看两类指标：老师对节奏掌控的满意度、以及学生端的反感反馈（比如觉得被盯着）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先从三类抓：公开课老师（高压场景）、普通任课老师（常态场景）、班主任/教务兼任的管理向老师（会强烈要名单）。学校类型先选一所信息化基础中等的，不选顶配示范校，免得需求飘。招募上我可能得靠教务那边牵线，不然我自己找基本只找到愿意尝鲜的人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教务流程代表 学校里如果上这种课堂编排系统，通常谁来决定启用和试点？另外，教师/班主任/教务在“看学生未提交、考勤、课后复盘”这些数据上，权限边界一般怎么划？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得我们可以把“旁观者/督导”明确成只读聚合视图，不给个体。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "版本先这样：  \n- 目标用户优先：中学/高职的任课教师（常态课+公开课），次级是年级/教务管理员。  \n- 痛点假设：环节切换与时间控制、分组协作推进、资源/任务投放后执行不可控。  \n- 两难点：是否默认展示个人层进度与未提交名单。  \n- 初步决策：默认只展示小组/班级聚合与匿名掉队人数；个人名单进入“管理模式”，需要学校授权并有审计。  \n- 验证计划：访谈三类老师各3-5人，重点问“课堂中断点”和“需要的数据粒度”；试点评估看教师节奏满意度与学生反感信号。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求与战略阶段梳理“教学脚本需求”背景下，用户与导师围绕脚本最小元素、偏航处理边界、数据驱动词表优先级、事件采集与合规留存、MVP做/不做与试点KPI持续沟通（8轮），其中在脚本语义颗粒度与高频环节词表及偏航数量级部分与教学设计师沟通（1轮），在可采字段最小化、匿名化、留存周期与审计留痕部分与数据治理官沟通（1轮），并形成脚本表达能力边界与试点观测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直觉最小是：环节顺序、每个环节要做啥、参与者（老师/学生/小组）、资源（题、PPT、链接）、还有触发条件，比如时间到或老师点下一步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态我想就按“准备-进行中-已完成”，偏航就给老师一个“跳过/延长/重试”。离线的话学生端先缓存任务，回网再补交。没提交就标记未完成，课后再追。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 你们在真实课堂里，写“教学剧本”一般会写到什么粒度？常用的环节词有哪些？还有最常见的跑偏情况能给点比例或大概数量级吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "偏航里“超时”要纳入剧本的原因是它直接影响后面环节执行，所以“延长/截断/跳转”需要变成剧本允许的控制动作。网络问题就得有离线或补交机制，但这是不是脚本层还是端能力层，我不确定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以用两个维度排优先级：课堂出现频率×对节奏影响。频率就从教案/走查统计，影响可以用“导致后续环节取消/压缩”的比例近似。先做那12个高频环节里影响大的，比如随堂测、分组讨论、展示讲评。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "样本先小：试点学校挑3门课型（讲授型、讨论型、实训型），每门课各观察5节左右，总共15节。采集只用事件：环节开始结束、老师手动干预（跳过/延长/重发）、任务发放与提交状态，不采集学生行为轨迹画像、不做情绪推断。然后统计环节耗时分布、偏航发生点、老师干预次数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 教学脚本执行要做事件统计：环节开始结束、老师干预、任务发放提交。哪些字段在校园里通常算可采？需要做哪些最小化/脱敏？留存周期和审计留痕一般怎么定，才不踩合规？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两条：学生用匿名ID就能跑统计；编排引擎只记录“发生了什么”和“引用了什么资源”，不碰答案内容。留存明细不超过一学期，之后只留聚合。错误原因用枚举码，不搞持续网络采样。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "做的我先压到5条：  \n1）环节顺序与时长计划（允许实际耗时记录）；  \n2）环节类型来自固定词表（先12个）；  \n3）环节内可挂任务/资源引用（发题、投票、分组讨论材料）；  \n4）课堂控制：推进、跳过、延长、重发任务；  \n5）执行事件可观测：环节起止、任务送达/提交、教师干预。  \n不做的：  \n1）情绪/注意力推断；  \n2）学生行为轨迹画像；  \n3）自动判定“谁在划水”的个人标签；  \n4）每节课逐级审批发布；  \n5）跨校共享公开的“教师质量排名”这类东西。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "固定词表能让老师上手快，也方便做跨课型统计；如果全自定义，后面复用不了模板，还要维护一堆同义词，教务和教研也难管理。可以留一个“自定义备注”但不进入统计口径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条：  \n1）课堂节奏一致性：计划环节 vs 实际环节的偏差，比如超时导致的环节被取消率下降；  \n2）教师操作负担：一节课手动干预次数、以及“临时找资源/重发任务”的次数下降；  \n3）执行成功率：任务送达率、提交成功率（含补交窗口内）提升，至少能看出弱网场景下失败原因分布更清晰。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "偏航里“参与不均”先不做自动识别，只留给老师手动处理，避免踩到画像红线；其余按你这套定。"
+              }
+            ]
+          },
+          {
+            "microScene": "在剧本式学习编排引擎需求与战略阶段，用户与导师围绕合规数据边界与合规版MVP能力取舍持续沟通（6轮），其中在数据分级、字段最小化、留存/审计与访问控制底线部分与数据治理官沟通（7轮），并形成“可采/不可采/谨慎采”清单与需求版合规边界声明以映射试点KPI口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先拍个粗的：学生端尽量只留任务提交结果和时间；过程里点了什么按钮、停留多久这些先别采。老师端的发布、修改、开始/暂停课堂这些操作要留日志。至于学生个人信息就只拿学号班级这种教务已有的，手机号邮箱啥的不要。还有分组关系算不算敏感我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分组如果长期留着，可能变成“谁跟谁经常一起”“谁总当组长”这种画像，容易越界。我们现在也说了参与不均不做自动识别，所以我倾向只在课堂当下用，课后就变成聚合，不留到个人。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那是不是要限制任务类型？比如MVP先只支持选择题/投票/打点这种结构化，不收图片语音，避免学生随手写手机号、拍同学脸之类。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 我们做剧本式学习编排引擎，课堂里会有：教务主数据（学号班级）、课堂事件（进入/退出/提交/分组/环节开始结束）、以及任务内容（可能有开放文本，甚至图片语音）。需求阶段想定合规边界：哪些字段能采、哪些坚决不采；留存多久；脱敏怎么做；审计要留哪些。你按校园数据分级给个底线口径行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解下：我们MVP要把“任务内容”控制住，先结构化，开放文本要很克制；事件明细能有，但分析侧尽量聚合；分组关系课后别留个体级；审计日志必须有，但别把学生明文写进去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个问题：我们试点要看“节奏偏差、操作负担、执行成功率”，这些指标需要的事件字段够吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从数据治理官那拿到的底线大概是：主数据用内部ID映射，手机号住址不碰；课堂事件可采事件类型/时间/课次ID/环节ID/终端/执行状态，个人级用内部用户ID但分析尽量聚合；分组关系课后只留聚合，别跨课次追踪；任务内容MVP默认只结构化，开放文本要谨慎，图片音视频先不做；审计要覆盖发布/修改/课堂控制，留操作者、时间、对象、前后摘要，但不写明文学生和任务内容；访问上教师仅看自己课次，跨班只能看脱敏聚合，研发查明细要审批留痕。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试下：\n1）不采与课堂编排无关的个人敏感信息（手机号、住址、证件等）。\n2）课堂运行只采支撑状态机执行的必要事件，避免点击流级行为采集。\n3）任务内容MVP限定结构化类型；开放文本只做字数限制和提醒，不承诺自动识别拦截；图片/音视频不纳入MVP。\n4）分组关系仅用于课堂当次运行与教师复盘，课后默认转聚合，不做跨课次关系追踪。\n5）个人级明细数据留存3-6个月或不超过学期，之后只保聚合脱敏；发布/修改/课堂控制全量审计可追溯。\n6）权限上教师只能访问本人授课课次明细；管理与教研仅能看脱敏聚合；研发访问生产明细需要审批与留痕。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那加一条：系统在配置任务时给教师明确提示“不要采集联系方式/人脸等个人敏感信息”，并在模板里默认不提供此类字段；若教师选择开放文本，也要二次确认并在课后复盘页面提示“内容可能含敏感信息，谨慎分享导出”。但我不确定这算不算足够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计里用内部用户ID和对象ID，必要时只有有权限的人能通过映射表回查到具体人。平时报表和导出都不出现学号姓名。争议场景走审批。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可采：教务主数据的内部ID、课程班级课次；课堂事件（环节开始结束、任务下发、提交、成功失败、超时）、教师端控制操作；KPI用的环节计划时长和实际时长差、执行成功率这类汇总。\n不可采：手机号住址证件、持续的个体画像字段、学生端点击流细节、图片音视频内容（MVP）。\n谨慎采：开放文本（限字数+教师提示+二次确认）、分组关系明细（仅当次课堂+短期留存，课后默认聚合）、个人级提交明细（业务必要但留存受限、访问审批）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在合规边界受限的商业推广路径梳理背景下，用户与导师围绕进校试点、可采数据证据、扩点续费与对外话术持续沟通（6轮），其中在校园采购与指标踩雷校验部分与产品经理沟通（2轮），在模板库可持续机制与成效证据部分与教学设计师沟通（2轮），并形成四步可执行推广路径与“不卖画像/不做排行”的边界表述。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是先从“教务+教研”两条线切进去。教务那边关心课堂执行是否可控、有没有数据能复盘；教研那边关心模板能不能复用。路径上可能先做试点课，再扩到学院或年级。证据就用事件和KPI汇总，不碰学生画像。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我先抛出来：\n\n1）教务线：教务处/信息化中心主导，理由是“课堂过程可观测+出勤与节奏可控”。演示用：环节计划时长vs实际时长差、执行成功率、任务下发/提交/超时的汇总。阻力：他们怕牵涉隐私、怕改流程。\n\n2）教研线：教研室/督导，理由是“剧本模板可复制”。演示用：同一剧本在不同班的执行成功率对比、环节耗时分布（汇总）、教师端控制操作频次（可能偏行为监控？不确定）。阻力：老师抵触被评价。\n\n3）系部线：院系主管或课程负责人，理由是“课堂组织成本下降”。演示用：一次课的中断次数、重试次数、环节超时率下降（都来自事件汇总）。阻力：预算不一定在他们手上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 校园里推这种“剧本式学习编排引擎”，现实的商业路径一般怎么走？谁最可能拍板，试点怎么拿到？还有，哪些演示指标容易被误解成监控？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "离线恢复成功率这点我之前没放进推广证据里，感觉对混合式课堂挺能打。试点拿到这条数据不需要学生信息，就事件链路能算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏向主推“教研示范课→信息化专项”的组合。原因是：教研更愿意先试，周期短；信息化中心需要证据再走采购。教务线太重，流程长。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "离线恢复我放在“试点场景选择”里：挑弱网教室或需要走廊/户外活动的课，让它自然暴露问题。我们用事件汇总给出：离线发生次数、断点续传成功率、恢复后任务状态一致性成功率（用成功/失败事件算），都不需要个人信息。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我容易只盯试点数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "扩点我先想两种：\n\n- 模板资产：由教研室维护“剧本模板库”，我们提供模板审核和版本记录。老师可以复用，不用每次从零写。\n\n- 培训成本：先培训一小撮种子教师，后面让他们带教。我们只做短时上手课，不搞长期驻场。\n\n但维护谁出人，我不太确定学校能不能接得住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 模板库要长期有人用、有人维护，通常得怎么设计机制？推广时，哪些指标能证明模板有效，又不会涉及个人层面的评价？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，模板“异常预案”这个点很适配我们的事件链路，而且能把卖点从“炫功能”变成“降低翻车”。问卷那块我担心开放文本踩到谨慎采集边界，最好用选择题为主。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "四步我这样定：\n\n1）找场景：目标对象是学院教研/课程负责人。承诺价值是“弱网/多环节课堂不翻车、节奏更稳”。证据：既有课堂问题的案例描述+我们能提供的事件级汇总指标清单。合规说法：不采学生个人画像，不采音视频内容。\n\n2）试点2-4周：对象扩到种子教师+信息化对接人。承诺价值：剧本可复用、课堂执行可观测。证据：环节准点率、计划vs实际时长差、执行成功率、异常重试率、离线恢复成功率（全部汇总到班级/课堂）。合规：个人级提交明细如必要只短期留存、访问审批；分组明细仅当次课堂，课后聚合。\n\n3）示范课与复盘会：对象是教研室+信息化中心。承诺价值：可复制推广的模板资产+可审计的数据边界。证据：模板复用次数（院系汇总）、同模板跨班对比的流程健康度、以及教师端简短选择题反馈（不收长文本）。合规：反馈问卷严格限字段，开放文本默认关闭。\n\n4）扩点与采购：对象是信息化中心/教务相关流程人。承诺价值：跨课程/跨学院可控落地，运维与培训负担可控。证据：试点期的汇总报表+培训到能独立用的教师比例（用培训签到/完成情况，不用学生数据）。合规：权限与审计按角色，按最小化采集，提供数据字典与留存周期说明。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对外我会说：我们卖的是课堂流程编排与执行稳定性，只给到环节和班级层级的运行健康度；不提供面向个人的学习画像，也不做教师或学生的排名考核。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在剧本式学习编排引擎方案设计背景下，用户与导师围绕事件驱动架构落地课堂状态机（最小事件集合、状态机边界、顺序幂等与接口契约、合规边界）持续沟通（8轮），其中在runId与排课/合班主数据绑定部分与教务流程代表沟通（3轮），在事件字段分级与留存脱敏策略部分与数据治理官沟通（2轮），并形成课堂运行事件分层与可靠性约束的方案骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我开始做剧本式学习编排引擎的技术方案设计，这一段我想先把“事件驱动架构”怎么落到课堂状态机上弄清楚：事件怎么定、谁发谁收、怎么保证顺序和幂等。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先抛个草案：事件就按“课堂一次运行”当成一个会话，里面有环节切换、资源投放、学生提交、分组变更、超时。状态机我倾向放在编排引擎服务端，端上只做展示+缓存。顺序就按环节序列来，幂等用 eventId 去重。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "唯一键我没想死。直觉是用“runId”，开课时由教师端发起生成。教务那边给我们 lessonId/sectionId 之类的我们就绑定上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教务流程代表 课次这块你们系统里到底怎么标？我得知道 runId 绑什么才靠谱。补课调课、合班这些会不会让一个“班级+节次”不唯一？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那 runId 直接用 scheduleItemId 就行？省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合班时，学生名单是从 teachingClassId 拉，还是行政班？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。那我回到事件上：我们可以把 runId 当聚合根，关联 scheduleItemId。端上离线提交的事件也带 runId。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我先记下：事件要带 source、occurredAt、receivedAt。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了：教务那边稳定的是 teachingClassId + scheduleItemId；runId 要我们自己生成，但要能关联这些，防止同一节次多次开课。合班以 teachingClassId 为准，参与者字段要最小化。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我试着收敛到 6 类：\n1) RunCreated（runId、teachingClassId、scheduleItemId、operator=teacher）\n2) StepActivated（stepId、stepType、expectedDuration）\n3) TaskPublished（taskId、targetGroup）\n4) SubmissionReceived（taskId、countIncrement，别带学生）\n5) StepCompleted（actualDuration、completionReason）\n6) RunEnded（endReason）\n分组变更我没放，怕太细。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就加一个 GroupingUpdated：groupingId、version、groupCount、ruleType（随机/手动/按名单）。任务发布带 groupingVersion。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是：教师端点“开始环节/发布任务”是命令；服务端校验通过后发出事实事件，比如 StepActivated、TaskPublished。学生端提交也是命令，服务端落库后发 SubmissionReceived。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“至少一次投递 + 消费者幂等”。幂等键：\n- 教师命令：commandId（端生成）+ runId\n- 学生提交：submissionClientId（端生成）+ taskId\n顺序：同一 runId 下按 stepSeq 或 serverAssignedSeq 排。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段我先列一个最小版：\n- eventId、eventType、runId、seq、occurredAt、receivedAt、source（teacher/student/system）、actorRole、payload、schemaVersion、traceId\npayload 里每个事件有各自字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "学生侧我就不带 actorId，最多带 role=student；教师侧带 operatorId。这个会不会被质疑“为什么教师能记录、学生不记录”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 事件驱动这块我们会有 runId、teacher 操作、学生提交计数、分组版本之类。你帮我定一下：哪些字段算敏感、怎么分级、留存多久、审计要留哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那事件里 traceId、ip 这类算 P1？我本来想都放，方便排障。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。那我回去跟导师把字段拆成“业务事件”和“审计日志”两条。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据治理给的口径是：学生个人标识不采；教师账号、IP、设备这类算 P1，留存 180 天且访问要审批；runId/环节/计数/耗时/错误码算 P2，可留到 365 天。并且建议业务事件流别带 IP/deviceId，把这些放网关/审计日志里，用 traceId 关联。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定版是：\n- 状态机在服务端，端上只发命令、收状态，离线时缓存命令并补发；\n- 事件分两层：业务事实事件（P2为主）走事件总线；审计/访问日志（含P1）走独立日志域，通过 traceId 关联；\n- 可靠性约束三条：1）同一 runId 服务端分配单调 seq，消费按 seq 驱动状态；2）至少一次投递，所有消费者按 (eventId 或 commandId) 做幂等；3）离线/弱网场景允许重放命令，但服务端用状态机校验拒绝非法跃迁并返回明确错误码（比如 INVALID_STATE）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在教学脚本语言MVP方案设计背景下，用户与导师围绕脚本形态、Step最小字段、条件控制取舍、事件映射、分组语义与合规约束持续沟通（9轮），其中在课堂环节类型与条件刚需上与教学设计师沟通（2轮），在脚本可配置采集边界与审计要求上与数据治理官沟通（2轮），并形成JSON脚本骨架与可观测/合规约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先别搞太重的DSL，先用结构化JSON/YAML，编辑器也好做。MVP先覆盖课堂里最常见的 5-8 种步骤类型，比如讲解、投票、分组讨论、作业提交、展示。后面如果教师要写更复杂逻辑，再考虑更像“语言”的东西。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Step里我觉得至少要：id、type、title、duration（或超时）、resources（投放的素材）、tasks（学生要做的任务）。再加个条件字段，比如依赖前一步完成才激活。还有分组策略引用，比如 groupPolicyId。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加 scriptId、scriptVersion、stepKey（稳定标识，别用顺序号），还有 runId在运行态带上。事件payload里都要带 stepKey 和 stepType。约束上：stepKey在同一scriptVersion里唯一；脚本发布后不可改，只能出新版本。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先不碰太复杂的表达式，容易变成半个编程语言。MVP可以支持很有限的分支：基于事件计数的阈值，比如 SubmissionReceived计数达到N就放行；或者超时就走默认分支。更复杂的先让教师手动控制下一步。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 教学脚本如果先做成结构化配置，不做复杂表达式，你觉得最小必需支持哪些“环节类型”和“条件控制”？尤其是分支/循环到底是不是刚需？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“条件控制”如果要写进脚本，你会希望它长什么样？比如“50%完成就推进”这种，是不是要支持按角色/按组？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：脚本里的资源投放，你们更关心“投了什么”，还是“学生看没看到”？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定MVP：脚本语言用JSON结构。Step类型先做 7 类（导入讲解/测验投票/分组讨论/资料投放/产出提交/展示讲评/总结退出）。条件控制不做自由表达式，做固定结构：triggerType 只能是 TIMEOUT、QUORUM、TEACHER_APPROVE 三种；scope 先支持 CLASS、GROUP；QUORUM里只允许用“提交计数/完成组数”这种可从事件拿到的量。循环不做，临时加练走“运行中插入临时step”以后再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RunCreated：从scriptVersion创建run时发。\nStepActivated：step进入激活态发，payload带stepKey/stepType。\nTaskPublished：step里有tasks字段时，在step激活后发布任务触发。\nGroupingUpdated：step引用groupPolicy或明确要求分组时触发，比如分组讨论开始前。\nSubmissionReceived：学生提交任务就发，只记计数和任务/step维度，不存内容。\nStepCompleted：满足触发器（超时/完成度/教师裁决）就完成。\nRunEnded：总结退出step完成或教师终止。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一个 groupMode 字段？比如 REUSE、REBALANCE、RESET 三种。默认REUSE就不触发GroupingUpdated；REBALANCE/RESET才触发，而且payload里带 groupPolicyId 和 groupRevision。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 教学脚本语言里如果允许配置“采集/记录”开关，哪些字段可以让脚本决定，哪些必须平台固定禁止？我们现在事件里有actorRole、stepKey、任务提交计数这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脚本里如果想做“点名回答”，要不要记个人层面的参与？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "了解。我把“脚本可配置采集项”收敛到聚合层，不让脚本碰个人标识和原始内容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "规则我先写到脚本语言的校验层面：\n1）脚本不允许定义任何PII字段名，脚本schema里压根不出现 studentName/studentNo/deviceId/location/content 这类入口；\n2）可配置的记录项只有四个开关：recordStepDuration、recordTaskStatus、recordGroupId（运行时随机）、recordResourcePublished；\n3）提交事件只允许上报计数和时间戳，不含原始答案内容；\n4）必须记录审计动作：ScriptPublished、RunCreated、StepManualApproved 这类在事件里带 actorRole，actorId走内部脱敏ID。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "骨架我理解是三层：Script、Steps、Step内的Tasks/Controls。大概这样：\n- script: {scriptId, version, title, audience, steps[], policies{groupPolicies[]}}\n- step: {stepKey, type, title, resources[], tasks[], groupMode, groupPolicyId, controls{triggerType, scope, quorumValue, timeoutSec}}\n- task: {taskKey, kind, prompt, submitMode, allowResubmit}\n事件映射要求每个stepKey稳定，taskKey在step内唯一。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课堂教学脚本方案评审前的端边云同步策略设计背景下，用户与导师围绕弱网/断网下事件模型、权威分层、对齐规则与验收口径持续沟通（9轮），其中在权威源划分、三元组对齐与边侧有限持久化部分与解决方案架构师沟通（4轮），在边缓存暂存合规、审计身份标识与TTL证据部分与数据治理官沟通（3轮），并收敛MVP同步策略要点供评审。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“课堂状态机事件流”来想。云上肯定是权威的脚本版本、步骤定义这些；端上要能离线跑，至少要缓存当前step和必要资源；边我理解是校内网关，帮忙做事件汇聚和转发。最小闭环应该是：教师端能推进step、学生端能收到任务并提交“计数类事件”，即使断网也能补发，最后云上能还原每个step的完成度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分两类：控制类事件（比如StepStarted/StepAdvanced）只能教师端发，云/边做仲裁；提交类事件（SubmitCount之类）端可离线积累，恢复网络后补发，云按幂等去重计数。冲突主要在控制类：如果端上收到旧的step指令，应该丢弃，按更高的“epoch/sequence”来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那事件头里加两三个同步字段，但不碰payload内容：比如classRunId（一次课堂运行的ID）、runEpoch（老师每次“重新开始课堂”+1）、ctrlSeq（控制事件递增序号）。提交类事件也带classRunId/runEpoch/stepKey，再带一个clientEventId用于去重，但不带学生内容。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点犹豫。要是强依赖云确认，弱网就卡住。要是端自己进step，可能跟老师不同步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想折中：控制事件以教师端为源，边做快速ack，让教师端UI不卡；学生端收到控制事件后本地进入step，同时把StepAck回传，云最终汇总看哪些端已ack。断网时学生端允许本地进入，但一旦恢复，若发现runEpoch或ctrlSeq落后，就回滚到最新step。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 端边云同步这块，我需要一个能过评审的“权威+对齐”方案：控制事件和提交事件的权威源怎么划分？断网恢复时怎么判定谁覆盖谁？边节点要不要做持久化队列，还是纯转发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边节点持久化队列这块怎么定？我担心边不持久化的话，校内网抖一下控制事件丢了，端就乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那教师端的“我点下一步”到底等谁ack？等云会慢，等边可能和云不一致。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算采纳三元组classRunId/runEpoch/ctrlSeq做对齐；控制流教师端源头、云最终权威、边做临时受理；观测流端离线缓冲、云幂等汇聚且允许late标记。边的有限持久化我也想要，至少能补发控制事件，不然重连全靠云会更慢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我暂时不想把“观测流聚合”放在边做，感觉会把逻辑拆两份，测试也麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边只存控制事件的最小头部：scriptId/version/stepKey/stepType + classRunId/runEpoch/ctrlSeq + 事件类型 + 时间戳；不存学生提交内容，本来提交类也只计数。边的日志留存时间短，比如10分钟或一堂课窗口内，过期即清。所有从边受理的控制事件都写审计事件到云（谁、何时、对哪个classRunId推进了哪个step），但审计字段不带人名，只带teacherRoleId这种？我不确定字段口径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 端边云同步里，边节点准备缓存少量控制事件用于重连补发，不含提交内容。想确认三点：1）边缓存算不算留存，需不需要纳入留存周期管理？2）审计事件里允许用什么身份标识（避免PII），比如roleId/账号哈希？3）控制事件头部这些字段（scriptId/version/stepKey等）在合规上有没有敏感风险？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "TTL上报“删除计数”这个点我之前没想到。那我们边侧就得有可观测指标，不然合规问起来没证据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计身份用teacherSessionId我觉得更简单，跟一次课堂绑定，不用碰真实账号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先试着说：  \n1）统一用classRunId标识一次课堂运行，runEpoch表示重开次数，ctrlSeq是控制流序号；所有事件头都带scriptId/version/stepKey/stepType + 这三个同步字段。  \n2）控制流只能教师端产生，边先Ack受理、云Ack权威；端收到控制事件按(epoch, seq)单调前进，低版本丢弃。  \n3）观测/提交流端可离线队列，恢复后补发；云按clientEventId幂等去重，落后于当前控制点的标late不影响实时进度。  \n4）边节点做短TTL控制事件缓存+按端游标补发，且不存任何提交内容；边侧输出缓存条目数、过期删除计数用于合规证据。  \n验收指标我想：控制事件端到端P95延迟、断网恢复后对齐时间、重复提交去重正确率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回滚改成“跳转+标abandoned”我能接受，比较好解释。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码族我回去跟前端对一下展示文案，避免他们又造一套。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "资源这块我之前想偷懒不写，评审估计会追。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这六条我认。错误码族我记成三类：版本不匹配、epoch过期、seq不合法；端侧不回滚只跳到最新控制点。两天后评审我主讲同步策略这部分，其他我让你和架构师兜底。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育方案设计评审准备背景下，用户与导师围绕安全权限模型的对象范围、数据分层、鉴权分层与审计口径持续沟通（8轮），其中在复盘数据敏感分级与留存/审计字段部分与数据治理官沟通（1轮），在越权威胁面、在线鉴权与发布冻结边界及拒绝码规范部分与安全工程师沟通（1轮），并形成“资源投放双闸门+委派临时授权记录”的权限模型主干。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按角色拆：教师、学生、教务管理员、系统管理员。再加个“试点观察员”这种只读。权限就按功能点给，比如创建剧本、发布、开课、控制节奏、看复盘。粒度我没想很细，怕太复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主轴用“课堂实例”吧，classSessionId。教师在自己的session里有控制权。剧本是模板层面，发布以后绑定到课程或班级。资源也应该跟着session走，不然跨班会乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 复盘这块，哪些数据算敏感、默认谁能看、审计要留哪些字段？还有学生端的提交记录要留多久才不踩线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来就是复盘别一锅端给所有人，按A/B/C层分开。执行链路尽量用内部userId，别带手机号这种。日志里尽量不落作品正文，留摘要。留存期A短、B看课程规则、C跟教务走。审计字段要能串起来授权依据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两个办法：\n方案1：资源库那边先做“可投放白名单”，发布剧本时只允许引用白名单资源。课堂里只能投已绑定到step的resourceId。\n方案2：课堂投放当场校验教师对资源的访问权限，比如教师是否有资源库授权；不通过就提示换资源。\n我倾向1，省得课堂中途卡住，但担心白名单维护成本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 越权主要会从哪里钻？资源投放、强制跳步、导出复盘这些动作，哪些必须在线鉴权？发布时冻结权限能不能覆盖大部分风险？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成两层：配置面在发布时卡住，比如剧本引用资源集合、外部工具清单、复盘字段默认范围；但对象归属和任课关系这种动态的必须在线判。导出这种算数据外带，需要风控+审计，拒绝原因码也要统一。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先试个骨架：\n- 主体：教师、学生、教务管理员、系统管理员、观察员（只读）。\n- 对象：script（剧本模板）、release（发布版本）、session（课堂实例）、resource（资源）、replay（复盘视图/数据）。\n- 动作：创建/编辑/发布/撤回；开课/暂停/跳步/投放资源；提交/协作；查看复盘/导出。\n- 约束：教师只能对“自己任课班级的session”做控制；学生只能对“自己所在session”提交；教务可配置任课关系与委派；观察员只能看A层事件，不看作品正文和成绩。\n- 审计：关键动作都记who/what/which/when/result + 授权依据。\n我不太确定“委派”要不要放进第一版。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "资源我选“发布时冻结 + 课堂在线兜底”。发布时只允许引用资源库里“可课堂投放”的资源集合；课堂执行时仍做一次在线校验，避免教师任课关系变化或资源权限收回导致漏网。这样白名单维护成本在资源库侧承担，我们这边只消费标记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全靠运行时会把资源库鉴权压力压到每次投放上，弱网时体验也会抖，还容易出现“课上突然投不了”。发布时校验一次能把大多数问题提前暴露，课堂只做轻量兜底，整体更稳。代价是发布流程多一步校验，但这比课堂中断好接受。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "六条我能背下来。委派我会说成“临时授权记录”，不往角色里塞。资源双闸门我主讲也没问题，导出风控这块我可能说不细，到时你帮我兜一下边界。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在剧本式学习编排引擎进入工程开发、需落地脚本执行引擎的背景下，用户与导师围绕事件驱动状态机的代码拆分、幂等乱序重试、审计与留存口径持续沟通（7轮），其中在幂等键选择与乱序/并发处理上与后端工程师沟通（3轮），在日志分表、字段最小化与留存/脱敏要求上与数据治理官沟通（1轮），并形成MVP模块边界与验收口径的一页执行规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我准备进入工程开发，先把脚本执行引擎的主流程跑起来。现在卡在“事件驱动 + 状态机”这块，落到代码层怎么拆比较稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在有两种拆法：  \nA）把脚本编译成一个“状态图”，执行时只跑图；事件来了就查当前节点、匹配转移、产出动作。  \nB）不做编译，脚本就是一堆 step 列表，执行时按 stepType 调 handler，handler 里自己决定要不要推进。  \n我倾向 A，感觉可测；但担心实现重，时间不够。B快，但后面容易长出一堆 if。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件我想统一成：eventId、traceId、actor、classSessionId、timestamp、eventType、payload。  \n去重我准备用 eventId 做幂等；但离线补发的话 eventId 是端生成，可能会撞或者重发，我不太确定怎么更稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 幂等和乱序这块你建议怎么搞？事件端上生成 eventId 靠谱吗？重试失败要怎么保证状态机不跑偏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果选“弱顺序”，返回可重试错误，那端要一直重发会不会把服务打爆？我们课堂高峰可能同一节课几十个学生一起点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "串行化我能接受，至少 MVP 稳。那 A 方案“编译状态图”是不是就更值了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问了后端工程师：建议用“双层幂等键”，transportId 去重复包，semanticKey 防重发变包；乱序别硬重排，先做“弱顺序”：状态不满足就临时拒绝，带 retryAfter；永久拒绝走我们定的 scope/role/policy/expired。并发上建议按 classSessionId 串行执行，保证状态一致。执行引擎可以先做轻量编译：把脚本编成 step->transition 表，别一开始就做复杂图优化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想这样：默认按 classSessionId 串行，但实现上不是单线程，是“每个课节一个执行队列/锁”。不同课节并行没问题。  \n审计我会做最小字段集合：who/what/which/when/where/result + 授权依据；正文不落，只落摘要/引用ID。  \n性能担心的话，我先把审计写成异步队列？但这会不会影响“高风险动作必须审计”这个硬口径。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "周期紧，我选 1：高风险动作同步写审计，其他异步。高风险动作就是之前说的跳步/强控、导出复盘、批量拉取作品。同步写审计的量其实不大，主要是老师端触发，不是每个学生都触发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模块我拆四块：  \n1）ScriptCompiler：脚本 -> step/transition 表（带校验，比如不存在的 stepId 直接拒绝）。  \n2）Executor：按 classSessionId 获取锁/队列，读取当前 state，消费 event，跑 transition。  \n3）ActionDispatcher：把“下一步动作”发到终端/资源服务（先只做 stub + 记录）。  \n4）AuditWriter：高风险同步写最小审计字段，其他异步。  \n验收我定三条：  \n- 幂等：同一 semanticKey 重放 10 次，state 不变、动作不重复落库；  \n- 乱序：提前到的事件返回临时拒绝+retryAfter，不会推进到非法状态；  \n- 权限拒绝：scope/role/policy/expired 四类都能打到统一错误码，并且高风险拒绝也要审计 result=deny。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在代码里做两层保护：  \n- 事件日志 payload 做白名单字段映射，只留必要键；  \n- 审计里只存资源ID/摘要hash，不允许存作品正文。留存周期我不太会定，先按产品/治理给的来，代码里做可配置 TTL 和归档开关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 审计日志和执行事件这两类数据，建议留存多久？字段层面哪些要脱敏、哪些必须禁止落库？我们准备做 TTL 可配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 治理官给的底线我记下来了：event/audit 分表；event 只留处理结果和白名单 payload；audit 记录 who/what/which/when/where/result + 授权依据（含委派记录ID）；敏感信息一律内部ID，IP 至少掩码/哈希；留存建议 event 7-30 天、audit 180-365 天，具体听学校；作品正文/音视频原文这些禁止落库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这轮就按这几条定：  \n- 执行模型：脚本先轻量编译成 step/transition 表；事件驱动状态机，合法转移统一校验；  \n- 一致性：按 classSessionId 做队列/锁串行执行，同课节内保证状态不被并发打穿；  \n- 幂等/乱序：transportId + semanticKey 双层幂等；弱顺序策略，前置不满足返回临时拒绝+retryAfter；  \n- 权限与审计：拒绝原因码统一 scope/role/policy/expired；高风险动作（跳步/强控、导出复盘、批量拉取作品）同步写审计，且不落作品正文，只落摘要/资源ID；  \n- 数据留存：event/audit 分表，event 短留存、audit 长留存，TTL 可配置。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课堂终端联调背景下，用户与导师围绕最小链路打通、通道选型、拒绝语义体验、聚合状态与验收用例持续沟通（8轮），其中在省电低打扰的回执/重试/离线队列设计上与移动端工程师沟通（2轮），在强一致回执、幂等与拒绝码边界及过期清队列上与后端工程师沟通（2轮），并形成折中重试口径、三态聚合与3个联调用例及上报字段边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先把链路拆成三块：1）服务端事件下发到终端的通道；2）终端回执事件的幂等/乱序处理；3）教师端的聚合展示。优先打通 1 和 2，因为 3 只是读状态。联调我先用固定脚本样例，只跑一个环节一种动作，减少变量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "通道我倾向先做长连接推送，断线就降级轮询拉取未读事件。临时拒绝就让终端按 retryAfter 重试，永久拒绝就直接提示并停止重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证的话我准备做三类联调用例：乱序到达、重复投递、权限过期。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 终端联调这块：服务端推送任务后，学生端回执/重试/离线队列你建议怎么做？重点是省电、别频繁弹错误，但又要让状态尽快收敛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payloadHash 用来干嘛，校验一致性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 课堂终端联调里，任务下发后的回执你希望做到多强？另外临时拒绝/永久拒绝在 API 层你希望终端怎么配合，才能让状态机收敛快一点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最大重试窗口 3 分钟这个你是拍脑袋还是有课堂数据？我怕太短导致弱网学生一直失败。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我倾向这样定：  \n- 回执拆 delivered / completed，两种都走同一套幂等键（transportId+semanticKey），端侧串行发，避免并发风暴。  \n- 临时拒绝：终端静默按 retryAfter 重试，不弹强提示；但是加一个 maxRetryWindowSec（默认 180s，服务端可下发覆盖）。超窗就把任务标记为 pending，并提示“等待课堂同步”，不继续刷。  \n- 永久拒绝：不重试，按 scope/role/policy/expired 显示一次原因；同时清理本地队列里同 runId 的回执。  \n- 断线策略：长连接优先，断线指数退避重连，上限 30s；同时提供低频轮询兜底拉未读事件。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "聚合我建议先定三态够用：  \n1）delivered：端侧确认收到任务；  \n2）completed：端侧提交完成；  \n3）exception：包含 blocked（永久拒绝）和 pending（临时拒绝超窗/等待前置）。  \n教师端默认看 completed/总人数，点开详情再区分 blocked/pending。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条我这样设计：  \n用例1【乱序+前置不满足】：先下发 Step2 的任务事件，再下发 Step1 的前置事件。期望：Step2 回执第一次返回临时拒绝+retryAfter；端侧不弹错误，按 retryAfter 重试；等 Step1 到达并 confirmed 后，Step2 最终 delivered 成功，教师端聚合里 pending 人数先上升后归零。  \n用例2【重复投递+幂等】：服务端对同一 semanticKey 重发 3 次（模拟网络抖动）。期望：端侧最多产生一次 delivered 回执；服务端事件表里该 semanticKey 只推进一次状态；教师端不出现人数抖动。  \n用例3【runId 结束后回执】：课堂结束立刻切 runId 到 ended，端侧还残留一条 completed 回执未发出。期望：服务端永久拒绝 expired；端侧收到 expired 后清掉该 runId 队列，不再重试；教师端详情里该学生显示 blocked: expired（或映射成“课堂已结束”）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我容易踩坑的是把答题内容顺手打进日志。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我的口径是：event 只带 resourceId、actionType、semanticKey、runId、clientTimestamp、resultCode（临时/永久拒绝的原因码）。audit 只在高风险动作出现时写摘要，比如“教师端强控跳步”这种，终端回执不进 audit。正文内容、学生输入、附件链接都不进日志，只走资源服务存储。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我排个短顺序：先把 delivered/completed 两类回执的端侧队列串行发通，再把临时拒绝 retryAfter+maxRetryWindowSec 接上，最后做断线重连+轮询兜底。教师端聚合先用三态展示，blocked/pending 先做明细再做美化。联调就先跑你确认的三条用例，通过了再扩其他环节类型。"
+              }
+            ]
+          },
+          {
+            "microScene": "在课堂终端联调后进入工程开发压测门禁闭环背景下，用户与导师围绕压测对象、并发口径、阈值/判定、埋点与合规持续沟通（6轮），其中在门禁指标与并发模型设计部分与测试工程师沟通（4轮），在指标可获取性与最小埋点/标签分桶部分与后端工程师沟通（3轮），并形成三接口压测门禁与稳定压/突刺压执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是压事件链路：教师端发“开始环节”到学生端收到，再到回执聚合出三态。证明方向的话，就看端到端延迟、回执成功率、还有 pending 的堆积量。压测不想上来就全量脚本，我倾向先挑最常见的 3 个环节类型，跑一个 60 分钟的稳定压，再做 10 分钟的突刺。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发口径先按“班级人数×同时上课班级数”。我们试点学校是 45 人/班，可能同时 6 个班？那就是 270 学生在线。成功定义……我想是环节开始事件 99% 在 2 秒内到达端，回执 99% 在 5 秒内聚合完成。失败归类就按：超时、错误码、重复回执、还有 pending 超窗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 我们现在要做编排引擎的自动化压测门禁，你给个最小闭环的目标口径：压哪些接口/事件，成功失败怎么判，阈值一般怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这套的 p95/p99 是服务端纯处理时间对吧？那端侧弱网就不算进门禁？我怕到现场又被说“你压得不真实”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "pending 超窗按业务拒绝单独统计这点我能接受。重复回执要计数是因为幂等压力？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那并发模型你给的 10 堂×50 是默认，我担心我们资源不够，跑 30 堂会把数据库打爆，反而定位不出是代码还是环境。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先采纳三件事：  \n1）门禁先卡服务端三类接口：下发、回执写入、聚合查询，p95/p99 做硬指标；端到端延迟先做观察，不阻断。  \n2）并发模型参数化，门禁档先用 10 堂×50 跑 30 分钟稳定压，另加 1500 终端 10 分钟突刺当挑战项。  \n3）pending 超窗先不算系统错误，单独统计占比，超过 2% 就红；重复回执不算错但要计数，看重试/幂等有没有异常。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 压测门禁准备卡三接口的 p95/p99、错误率、回执积压趋势、重复回执占比。我们服务端现在能直接拿到哪些指标？缺的最小埋点你建议加在哪里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们回执处理是“端回执先落库再异步聚合”，聚合查询读的是聚合表+缓存。那 cache 命中/未命中两组你觉得能区分吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 pending 超窗这个“业务拒绝”标签，我们现在错误码是 429+retryAfter，还是 409？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可以，我按“压什么、怎么跑、看什么、怎么判”说一版：\n\n压什么：三条服务端链路——  \nA. 环节下发（教师端触发的下发接口/事件入队）  \nB. 回执写入（delivered/completed + 临时拒绝429）  \nC. 聚合查询（教师端拉取聚合态，区分 cache hit/miss）\n\n怎么跑：  \n- 稳定压：10 堂课×50 终端并发，持续 30 分钟，终端行为用模拟器：收到任务后按比例回 delivered/completed，少量触发 retryAfter。  \n- 突刺压：1500 终端等效并发 10 分钟，只做回执写入+聚合查询，观察缓存 miss 上升时的抖动。\n\n看什么：  \n- A/B/C 各自的 p95/p99（从网关/应用 timer）  \n- 非业务拒绝的错误率 <0.1%  \n- 429 细分 reason 占比：临时拒绝 vs 超窗 pending（先单独统计）  \n- 回执消费积压：consumer lag 或待处理回执数，稳定压期间不能单调上涨  \n- 幂等命中：`idempotent_hit_total / receipt_write_total`，看重复回执比例是否异常\n\n怎么判：  \n- gate：A p99<500ms、B p99<400ms、C p99<800ms（hit/miss分组，hit更严），非业务错误率<0.1%，积压不持续增长  \n- warn：pending 超窗占比>2% 或 幂等命中占比突然飙升（比如>15%）就挂黄灯，要求开缺陷但不阻断合并"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "比例我不敢保证对真实课堂完全像，但可以用最小验证：先从我们联调那三条用例里抽实际回执序列的统计，比如 delivered:completed 的比例、平均间隔。拿不到足够数据就先设一版：90% 正常完成、8% 仅 delivered 不完成（模拟学生挂机/离线）、2% 触发 429 retryAfter。跑完看幂等命中和 pending 占比，如果 pending 高就把重试节奏调稀，不硬顶。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "压测账号用专门的 tenant/课程，userId 用生成的，不用学号；请求里不塞学生姓名。日志里把回执 payload 只打 taskInstanceId、状态、reason，不打资源内容和作答文本。留存周期也别按生产，测试环境的事件表最多保 7 天，方便回归查问题。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在剧本式学习编排引擎进入运行评估的试点部署验收背景下，用户与导师围绕验收口径、检查清单、走查路径、故障判定与回滚门槛持续沟通（5轮），其中在发布形态、两层回退、告警阈值与日志留存合规部分与运维工程师沟通（4轮），并形成10条可执行的试点验收checklist。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想先把“试点上线前必须过哪些检查、哪些算验收通过”的口径定清楚，免得现场被动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先抛个粗清单，你帮我挑刺：1）核心三接口在试点环境稳定；2）监控能看 p95/p99、错误率；3）数据合规别踩雷；4）出问题能回滚到旧流程。然后验收当天按一节课流程跑一遍，算通过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚这块我有点拿不准：是用灰度开关把新引擎关掉，还是直接切回旧的课堂流程？我们现在是“脚本执行链路”独立出来了，但跟课堂控制台还是耦合的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 试点部署验收里，发布和回滚你们通常怎么定？我们这套剧本式学习编排引擎要支持一节课中途出问题也能兜底，想知道你们能给的回滚手段和门槛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "业务开关做到 tenant/课程没问题。课堂中关开关，学生端会不会卡在半执行状态？比如 taskInstance 已生成但回执还没聚合。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那验收里回滚条款可以写“课堂内只允许业务开关回退，版本回滚只在课后窗口做”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚触发门槛你们一般怎么判？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "429 reason 分细这点我们之前压测补埋点了，但我怕试点环境告警阈值设太敏感，课上一点抖动就吵。阈值这块你们建议怎么配？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问个边界：试点环境日志和事件表留存周期你们会按生产走吗？我们测试环境之前是 7 天清理，但试点好像介于测试和生产之间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 运维这边给了“两层回退”：tenant/课程级业务开关 1 分钟内回旧流程；版本回滚 10-15 分钟，课堂中不做。触发条件建议按系统错误率和 p99 持续窗口；降级时允许旧 taskInstance 继续回执写入，但聚合查询要标记“已降级不保证完整”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着列：  \n1）发布：按 tenant/课程开关灰度，只对试点课程生效；  \n2）回退：课堂内只用业务开关，强制回退条件按系统错误率>0.5%持续5分钟或 p99 超阈持续10分钟；  \n3）性能复核：三接口下发/回执写入/聚合查询，按 hit/miss、业务拒绝/系统错误分桶看 p99；门禁阈值还是 A<500ms、B<400ms、C hit<800ms；  \n4）可观测：补齐幂等命中计数、429 reason 细分、consumer lag/待处理数，并能在看板直接看到；  \n5）日志合规：日志只打 taskInstanceId、状态、reason，不落资源内容和作答文本；  \n6）数据留存：事件表按试点 30 天，超过自动清理；  \n7）验收走查：用一节课的关键路径跑：发布剧本→开课→下发→学生提交→回执聚合→课后复盘查询；  \n8）告警：p99/错误率/lag 设持续窗口+最小样本数，避免噪声。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "签字我猜是产品+教务+我们项目组？开关权限应该只给运维和值班，不给一线老师点。我不确定学校会不会要求教务也能操作。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把条款补成：  \n9）权限与审计：业务开关仅运维/值班账号可操作，所有切换记录到审计日志（时间、操作者、tenant/课程、原因）；  \n10）失败判定：课堂关键路径（下发/提交/聚合）出现系统错误或限流导致 >5% 学生无法完成任务，视为需强制回退并登记缺陷；业务拒绝若为配置/权限错误，同样算阻断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在试点课堂运行评估与验收回退约束背景下，用户与导师围绕课堂事件监控的关键路径拆分、指标告警阈值与归因走查清单持续沟通（6轮），其中在最小事件集与链路字段/阈值分层设计上与数据分析师沟通（4轮），在学生标识哈希、字段最小化与留存访问审计边界上与数据治理官沟通（2轮），并形成可执行监控面板、告警分级与合规口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先盯三类：一类是成功率，比如下发到达率、提交成功率；一类是耗时，比如每个环节从开始到收齐的时间；还有就是错误类型分布。问题是事件太多，我不确定哪些算“关键路径”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发段我先用“环节开始”作为起点，然后到“学生端收到任务”算到达；学生动作就是“开始作答/提交”；聚合回收是“教师端看到汇总”。指标就：到达率、提交率、聚合完成率，各自 P95 耗时。告警我想按你上次说的 >5% 卡住就算严重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 课堂事件监控要做关键路径的指标和归因。你这边建议最小事件集怎么定？每个事件需要哪些字段，才能把下发-提交-聚合串起来？另外告警阈值怎么更靠谱点，不想拍脑袋。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这些事件我能理解一半。比如 dispatch_created 和 dispatch_delivered 我怕打不全，因为学生端弱网可能收到了但不上报。那这会让“到达率”看起来很低，误报一堆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果投递成功率很高，但提交验收率掉了，是不是就说明学生端交互或权限问题更多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 teacher_view_loaded 这个是为了监控教师端体验？还是归因用？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先定一版“最小监控面板”：按 run_id 展示三段：下发（created、pushed、delivered）、学生提交（submitted、accepted）、聚合（aggregation_ready、teacher_view_loaded）。指标优先用：提交验收率、聚合完成率、P95 耗时。到达率分成确认/投递两条，不用确认到达率直接触发 S1。\n\n告警我想做三层：  \n- S1：提交验收率或聚合完成率低于基线阈值并持续两个窗口  \n- S2：P95 耗时>基线2倍 或 某 error_code 占比突然升高  \n- S3：只打到看板上做观察，按版本/网络分组对比\n\n归因路径我准备写成“先看 accepted 失败还是 delivered 缺失”，再看 error_code 和分组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "条款里说关键路径系统错误或限流导致 >5% 学生无法完成任务就回退。那我把“无法完成任务”定义成：到 step 结束时，work_submitted 没有形成 submission_accepted。用 accepted 的失败占比+缺失占比来算影响人数。然后把 S1 告警阈值里加一条：影响占比>5% 且 error_code 属于系统/限流类，就触发“回退候选”，同时要求登记原因字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 课堂事件监控里要串 run_id/step_id/user_id 才能算到达率和提交验收率。学生端 user_id 我们想用 hashed_id。你帮我定一下：哪些字段算必要、hash 怎么做才合规、留存多久、看板上要不要做脱敏/聚合，审计里谁能查到个人？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前还想着把设备型号也打上，方便定位兼容问题。现在看可能踩线？那是不是只留 client_version + OS 大类就够了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把合规部分收成：默认只看聚合，个人级只在 S1 排障且有审批审计；原始事件 14 天；hashed_id 用 tenant 内 HMAC。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我给一版可执行的：\n\n1）最小事件闭环：run_started、step_started、dispatch_created、dispatch_pushed（弱证据）、dispatch_delivered（强证据）、work_submitted、submission_accepted、aggregation_ready、teacher_view_loaded。链路主键 run_id+step_id，学生侧再加 hashed_id。  \n2）核心指标优先级：S1 只盯“提交验收率/聚合完成率”，到达率拆成“投递成功率/确认到达率”做诊断不做直接阻断。  \n3）阈值策略：先跑 3-5 节课学习期，按人数/课程分桶取基线；S1=成功率跌破阈值且持续2个窗口，S2=P95>2倍或错误码占比突增，S3=分组差异只上看板。  \n4）回退对齐验收条款：影响占比>5% 且 error_code 属于系统/限流类，标记为“回退候选”，必须带原因并写入审计。配置/权限类同样算阻断但归到“业务拒绝”类。  \n5）归因路径最短 5 分钟：先看 accepted 是否失败/缺失，再看 pushed vs delivered 是否分离，最后用 error_code、client_version、network_type 做分组定位。  \n6）合规：student_id 不入事件；hashed_id=HMAC(student_id, tenant_secret)；原始事件（含 hashed_id）14天自动清理，长期只留无个人标识的聚合指标；个人级查询需审批并落审计，看板默认不展示个人维度。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估中构建教师反馈闭环背景下，用户与导师围绕反馈字段、证据绑定、状态回传、阈值验证与合规治理持续沟通（7轮），其中在最小字段与证据链设计上与数据分析师沟通（3轮），在教师侧入口与状态承诺设计上与产品经理沟通（2轮），在free_text敏感信息检测、权限与留存上与数据治理官沟通（2轮），并形成可落地的闭环MVP口径与缺陷/告警接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按最省事的想法：老师在教师端点“反馈”，填问题类型+一句描述；我们后台按版本、学校、课程聚合一下，出个 Top N，然后每周发给产品和研发。大概就这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我能想到：问题类型（卡顿/学生收不到/资源打不开/流程不顺）、发生环节、严重程度、是否影响教学目标、再加截图。归因就先按问题类型去找对应的监控指标，比如“收不到”就看 delivered 相关。回传机制……在教师端给个“已受理/处理中/已解决”的状态？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 反馈要能和课堂执行对齐，你觉得最小字段集要哪些？还有怎么把“主观吐槽”变成可统计的证据链？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "引用“最近5分钟汇总摘要”这条我有点不确定，会不会太重？我们要实时算吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "symptom_code 你能给个起步枚举吗？别太多，我怕老师选不过来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 教师反馈闭环这块，老师侧要看到处理进度，但又不能太打扰，你建议怎么设计？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态里“无需修复”会不会刺激老师？感觉像被敷衍。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定一个 MVP：  \n- 反馈提交字段：symptom_code（那 8 个起步枚举）、severity(1-3)、free_text（限 200 字）。  \n- 自动带上下文：tenant_id、school_id、class_session_id、script_id/script_version、step_id/step_type、client_version、network_type。  \n- 运行摘要：直接带当前环节卡片上的 expected_cnt/received_cnt/end_reason，再加一个 delivered_rate（如果面板有）。  \n- 内部看板：按 symptom_code、script_version、client_version、network_type 分组看量和占比，并能点进去看到关联的那条环节摘要。  \n- 老师回传：四态：已收到→已定位→已修复待发布→已发布/已解释。每条给响应时限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值我先拍脑袋：同一个 symptom_code 在同一 script_version 上，一周内影响到的 class_session 数超过 5，或者 feedback 数超过 20，就拉进“本周必须处理”。归因规则先用你前面监控那条最短路径：先看 accepted 是否失败/缺失，再看 pushed vs delivered 分离，再用 error_code、client_version、network_type 分组。拍板流程：产品经理定优先级，研发给修复成本，导师你这边做最终取舍？"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "研究动作：两周内把试点学校分两组，按“每节课反馈率”和“重大 severity=3 占比”看分布，先取 P90 做告警阈值候选；再回看这些点对应的运行摘要（比如 end_reason=timeout 占比）是不是也异常，能对上就保留阈值，不对上就调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规上：反馈不带 student_id；class_session_id 也不能反查到学生名单的界面默认不开放；如果需要个人级排查，走审批+审计。老师的身份可以在反馈系统里有，但看板默认不按 teacher 维度展示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 教师反馈闭环里会有 free_text，可能夹带学生姓名等敏感信息。我们怎么做字段分级、脱敏、留存和权限，才符合校园合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "敏感检测这块我担心误杀，老师写“张三”这种会不会都被拦？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我按 6 条讲：  \n1）反馈最小字段：symptom_code(8-10枚举)+severity(1-3)+free_text(≤200)。  \n2）自动上下文：class_session_id、script_id/script_version、step_id/step_type、client_version、network_type、tenant/school。  \n3）证据绑定：随反馈保存当前环节卡片的 expected_cnt/received_cnt/end_reason（可选加 delivered_rate），用于把主观反馈对齐到执行链路。  \n4）老师侧回传：已收到→已定位→已修复待发布→已发布/已解释；每条给响应时限，必要信息（网络/版本）系统自动带出。  \n5）阈值与验证：先用经验阈值触发“必须处理”，两周内用反馈率与 severity3 的分位数（P90）校准，并用运行摘要对照验证。  \n6）合规：不采 student_id；free_text 提示不填个人信息，做高风险模式检测+掩码；聚合看板默认不展示教师/个人维度；原文隔离区 7-14 天清理，反馈掩码版留 180 天，全程审批+审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补上：symptom_code 命中阈值后自动生成缺陷候选，推到产品/研发的缺陷池；如果同时出现 delivered_rate 断崖或 timeout 激增，就同步给运维告警，但只用聚合维度，不带个人信息。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育产品运行评估的版本迭代复盘背景下，用户与导师围绕delivered_rate断崖、timeout激增与缺陷池堆积的归因假设、最小数据切片与复盘议程持续沟通（7轮），其中在指标归因与分桶判定/阈值口径/数据局限部分与数据分析师沟通（5轮），在复盘结论落地为版本计划与灰度回滚/缺陷处理时延指标部分与产品经理沟通（4轮），并形成8条以内可执行复盘提纲与监控留存边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先拍三个：1）delivered_rate 断崖那次，到底是端侧离线还是服务端超时导致；2）timeout 激增是不是跟我们加的脚本校验有关；3）缺陷候选推缺陷池后，产品和研发实际处理时延，别变成堆积。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先看 delivered_rate，因为它最影响课堂体验。分组我想按：学校/机型/网络类型（WiFi/4G）/脚本类型（讨论、测验、资源投放）/环节粒度。证据就用 expected_cnt/received_cnt/end_reason 串起来，看看断在谁那一段。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设A：端侧离线缓存导致收到的事件延迟上报，表现为 end_reason=offline_flush 增多，同时 received_cnt 最终补齐但时序拉长。切片：看同一课堂的事件到达延迟分布+end_reason。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设B：服务端执行编排超时导致环节没下发，表现为 end_reason=server_timeout，expected_cnt 还在增长但 received_cnt 卡住。切片：看 timeout 指标和 end_reason 的共现。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 归因这块怎么做得更靠谱？我现在有 delivered_rate、timeout、expected_cnt/received_cnt/end_reason。担心按维度切太多会把结论切碎，还可能误判端侧问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "桶我能理解。关键事件缺失你指哪几个？我们现在日志里有“task_delivered”“task_ack”“task_submit”这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果端侧没有细日志，我们用 ack 缺失当分发失败，会不会把“学生没点开”算成分发失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块我不太确定，session_active 算个人行为吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认下：这轮复盘输出最好是“主因占比+证据链+数据局限+下一步验证”，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）先用事件链路四个桶，把 delivered_rate 的下降拆到“下发/未确认/回传”等类别，占比用 end_reason+关键事件缺失判。  \n2）分组只优先三维：网络、机型档位、环节类型，学校先不做主结论。  \n3）阈值不拍脑袋，用一周 ack_p95、submit_p95 推窗口，复盘里把规则写清楚。  \n4）端侧触达和未打开目前不可区分，桶命名会保守；后续若治理允许，考虑课堂级匿名活跃计数做验证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 复盘这块你希望输出到什么粒度，才能直接进下个版本迭代？我这边能给出主因占比、证据链和数据局限，但不确定你们怎么消化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果 delivered_rate 的下降主因是“未确认（含未触达/未打开）”，这类问题你会算哪一类？感觉不一定是bug。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 timeout 激增这条，如果和脚本校验相关，但修起来要动不少，会不会先灰度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有缺陷池堆积的问题。你想用什么指标看“处理时延”？我们这边能打通 symptom_code 到缺陷候选。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我大概能组织出来：把复盘结论按“缺陷/体验/不做”三栏落地，再附两档方案和灰度回滚条件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）复盘目标：解释 delivered_rate 下滑与 timeout 激增的主因占比，并给出下一版本动作优先级。  \n2）归因方法：按事件链路四桶（下发失败/分发或未确认/确认未回传/回传超时）用 end_reason+task_delivered/task_ack/task_submit 缺失判定。  \n3）对照策略：同脚本类型下做迭代前后时间切片对照，并按网络、机型档位、环节类型三维分组。  \n4）阈值口径：ack、submit 的窗口用一周数据的 p95*1.5 设定，复盘里明确计算口径。  \n5）数据局限：端侧“未触达 vs 未打开”暂不可区分，相关结论以“未确认（含未触达/未打开）”表述，避免误伤。  \n6）缺陷项（必须修）：列出触发条件、影响范围、回归验证指标（delivered_rate、timeout、end_reason 分布）。  \n7）体验项（可延后）：先加监控与灰度策略，明确回滚条件（delivered_rate 断崖、timeout 激增同时出现）。  \n8）流程项：缺陷候选到受理/关闭时延、误报率作为版本质量指标，给出降噪动作（阈值调优/规则合并）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一句：新增的监控和规则优先用聚合维度、短留存，误报率高的规则不进常驻告警，只进缺陷候选池，避免运维告警疲劳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

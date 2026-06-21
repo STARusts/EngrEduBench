@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态碳效映射与绿信贷定价系统的边缘物联网碳数据接入架构设计背景下，用户与导师围绕弱网断电下的数据断流、时钟漂移风险及架构选型、运维降本持续沟通（6轮），其中在弱网断点续传与时钟同步方案部分与物联网架构师沟通（1轮），并最终推翻设备直连方案，定调边缘网关聚合架构及无状态化、云端统管、固件灰度等约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用MQTT直连云端的方案，设备端跑轻量Agent直接上报，云端消费入库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在设备端加本地缓存，断网时存本地，来了网再传。Agent做个重试逻辑就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工厂弱网环境下的碳数据断点续传怎么搞？本地时钟漂移怎么校准？MQTT重传怕把broker打挂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得A靠谱，时钟漂移和雪崩都能防。但网关成本是不是高了？小微企业可能不愿意掏钱装网关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工厂设备断电几天后，RTC电池耗尽，时钟漂移可能达到几分钟，这绝对推翻B。所以B不可行，必须选A。网关成本可以算进我们信贷服务的初始部署费里。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "边缘时序库我只知道InfluxDB，TDengine边缘版没深入用过。反压算法也只懂基础限流。我这周要补学TDengine的边缘部署文档和Quic协议下的反压机制，目标是能画出边缘侧的数据流转状态机。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关做无状态设计，时序库用易替换的Docker容器，云端统一下发配置。固件走灰度发布，避免大面积拉起失败。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

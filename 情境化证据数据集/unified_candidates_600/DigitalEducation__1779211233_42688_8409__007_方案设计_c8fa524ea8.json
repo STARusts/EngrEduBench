@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多模态算力调度与高可用设计背景下，用户与导师围绕并发优先级调度、降级策略与压测方案持续沟通（7轮），其中在限流与压测方案部分与性能调优工程师沟通（2轮），在动态降级策略部分与渲染引擎核心开发者沟通（1轮），并最终形成基于令牌桶加权限流与动态降级的折中方案及压测验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "扛不住加机器啊！直接云上扩容，不够再买GPU，这有啥好设计的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就限流排着队呗，先到先得。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优工程师 @渲染引擎核心开发者 多模态并发怎么搞才不卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "性能调优工程师说要排队限流，手语权重最高先限。渲染引擎说不能排，排队就卡死了，要降级，把动画砍半或者音频降维。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先降级再排队呗！实在不行就先糊弄一下，总比崩了好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿几台机器压一下呗，看CPU到多少就降级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优工程师 压测方案怎么弄？控制变量、算力配额、延迟和帧丢弃率，三类残障各50个请求。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近看了一篇讲令牌桶算法的博客，是不是可以用这个来控流？把令牌按残障类型分一分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就给视障多发点令牌，听障少点，不够了就降级。具体数我后面跑压测再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "令牌桶分令牌，不够就降级，跑压测定数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

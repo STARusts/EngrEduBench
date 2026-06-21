@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在延迟卡顿与带宽成本监控背景下，与导师围绕边缘出流量超标排查、热点视角缓存穿透与弱网卡顿归因、切片预热与FEC冗余度调整策略持续沟通（6轮），其中在回源率排查与预热容量评估部分与云原生运维工程师沟通（2轮），在卡顿率归因与FEC冗余度测算部分与体验交互分析师沟通（2轮），并最终形成Top2视角预热与FEC动态冗余调整策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大盘我配好了，P99混流延迟在60ms左右波动，Throttle偶发。但带宽成本这块，边缘节点的出流量比我们预期高了快30%，我看不懂为什么会这样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "回源率和缓存命中率的情况，是不是分发没走边缘？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查清楚了，回源率45%，切片缓存没命中，都回中心拉了，运维说是路由没考虑热点视角。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这期间用户卡顿率有没有飙升？弱网分组的情况怎么样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "卡顿率确实飙了，首屏到了3.8%，弱网卡顿翻了三倍，FEC没兜住。请求都在选手第一视角。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预热的话，是不是把选手第一视角的切片提前推到边缘？弱网那边，FEC冗余度我不知道该调多少，之前是固定的20%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘节点存储水位上限大概是多少？我想用来算预热权重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网分组如果要卡顿率压到3%以下，回源链路上FEC冗余度最低得给多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "运维说边缘还有20%容量做预热，体验分析师说FEC得加到35%才能压住卡顿，但带宽会再涨8%。如果预热做好了，回源率降下来，是不是带宽就能省回来？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "预热用20%容量推Top2视角，回源FEC调到35%，常态20%。我去改配置和告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

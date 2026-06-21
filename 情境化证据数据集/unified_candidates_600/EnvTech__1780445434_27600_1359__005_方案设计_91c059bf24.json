@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在推演数据流设计背景下，用户与导师围绕多模数据对齐、断流降级策略、偏差验证与熔断机制持续沟通（7轮），其中在多模对齐算子与断流降级设计部分与数据流设计专家沟通（1轮），并最终确认侧输出分流降频对齐、外推加mask降级、30分钟断流熔断及Protobuf接口四条基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推演数据流我打算在Flink里做宽表Join，用EventTime和水位线处理乱序，输出一个统一的时间窗特征向量给反演引擎。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果微站断流，Join不上，我目前只想到用上一时刻的数据补。但这会不会让代理模型输出偏得厉害？降级这块没想透。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "排口秒级、微站分钟级、气象小时级，这三种模态在Flink里怎么对齐最稳？微站断流时降级补值，代理模型能扛住多大偏差？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "线性外推如果时间长了偏差肯定大，这会不会影响阻控指令的触发？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以做个离线对照实验。拿历史完好数据，人为随机mask掉一部分微站数据，跑代理模型看预测臭氧浓度和真实值的RMSE变化。只要RMSE增幅在5%以内，就认为降级策略可接受。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果微站连续缺失超过30分钟，就算外推也毫无意义。这时候应该触发熔断，暂停该园区的推演流，发告警让人工介入。这样既省算力，又避免发错误的阻控指令。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反演引擎输入接口用Protobuf，包含分钟级特征宽表和mask标志位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这四条作为数据流设计基线确认。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

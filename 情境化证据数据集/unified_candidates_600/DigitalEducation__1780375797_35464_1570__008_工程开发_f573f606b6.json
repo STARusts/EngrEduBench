@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在教具流转调度引擎开发与物流履约系统联调背景下，用户与导师围绕异步状态更新、异常补偿机制、MQ选型及验收指标持续沟通（8轮），其中在长周期异步链路的状态回调和异常补偿部分与调度引擎核心开发者沟通（1轮），并最终形成调度引擎开发确认方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个调度服务呗，收到学程请求就去匹配教具池，匹配到了就调履约系统的发货接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个定时任务，每隔5分钟去查一次履约系统的状态？要是超时没收到，就再发一次请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度引擎要跟履约系统联调，物流状态回传和发货失败这些异常，一般怎么写比较好？我本来想写轮询查状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不够吧，还得把之前绑定的学程请求给解绑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用RocketMQ吧，之前用过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收指标，就是发货成功和失败的状态能正确更新？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "调度引擎开发确认：1. 用RocketMQ接履约系统事件推送，驱动状态机流转；2. 异常用Saga补偿，回滚动作包括释放教具状态、解绑学程、写审计日志、通知算法重匹配；3. 验收指标：状态正确更新、事件消费时延P99、Saga补偿耗时、死信队列监控告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

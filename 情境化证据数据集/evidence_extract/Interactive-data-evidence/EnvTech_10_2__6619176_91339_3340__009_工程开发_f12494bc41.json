@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在MRV时空数据清洗对齐模块落地背景下，用户与导师围绕对齐粒度取舍、乱序补传处理、点位版本化与敏感隔离及验收用例持续沟通（8轮），其中在核证抽查证据粒度/替代证据与审计留痕上与合规与核证负责人沟通（2轮），在设备时钟漂移阈值与校准手段上与物联网工程师沟通（1轮），并形成后端实现清单与导出审批规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向先把“核证所需的最小对齐粒度”定死，然后所有下游都只拿这个粒度的派生数据。原始轨迹、原始高频点位只进受控域。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实现上我想拆两条线：  \n1）时间对齐：以“观测时间 event_time”为主，接入时间 ingest_time 做辅助，用水位线/延迟窗处理乱序；  \n2）空间对齐：点位主数据统一坐标系+版本号，传感器上报位置只当观测值，不直接覆盖主数据。  \n但敏感信息这块，阈值我不太确定，怕卡在核证抽查时解释不清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间粒度我先按分钟级对齐，小时级做汇总视图；核证抽查才允许回到秒级，但只在抽查窗口内、且需要审批。延迟窗我想先用24小时，超过就进“迟到队列”单独处理并打标 late=true。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "空间版本：点位表有 valid_from/valid_to，任何坐标修正都新增版本，不覆盖旧版；观测数据关联 point_version_id，避免回填导致历史漂移。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至于核证方要施工节奏，我的底线是不给人员/车辆轨迹类数据，只给与控制点相关的观测与工艺里程碑的“日级”对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证负责人 核证抽查在“时空对齐”上通常要求到什么粒度？分钟/小时/天分别会不会被认为不够？另外哪些时空信息在你看来属于不该提供的敏感项，能用什么聚合或替代证据满足核证？最后，审批与审计留痕你希望系统记录哪些字段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解下来是：默认对外给小时/日视图，核证证据链内部至少保留分钟级；秒级只在争议或同步异常时走授权；空间上主数据锁点位、轨迹不交付，用“在场证明+校准+片段授权”替代。审计留痕要把用途、范围、脱敏策略写死可追溯。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个担心：异常片段的“前后10分钟”是固定吗？会不会有人说你挑着给？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备这么落：  \nA. 时间对齐策略（实现层）：  \n- 统一字段：event_time（设备时间校正后）、ingest_time（服务器接收）、source_time（原始上报）。  \n- 水位线：按 point_id+metric 维护 watermark=ingest_time-allowed_lateness，allowed_lateness 默认24h可配置；迟到数据进 side_output，写 late=true。  \n- 对齐输出两层：minute_derived（分钟桶：avg/min/max/count/missing_rate/downsampled_ratio），hour_derived（日常看板从这再聚合）。  \nB. 空间对齐策略：  \n- 点位主数据 point_id + version（valid_from/to），观测只引用 point_version_id；  \n- 若上报包含gps，作为 gps_obs 写入，不回写主数据；超出围栏只打 flag=out_of_geofence，供质控与核证解释。  \nC. 敏感隔离与伦理底线落地：  \n- raw域：含秒级、gps_obs等，仅内部最小权限；derived域：默认对外只开放 hour/day，不含gps_obs；  \n- “异常片段”是受控导出：触发规则固定在策略表，导出必须带 request_id 和审批链，生成导出哈希。  \nD. 验收：让测试做三类用例：乱序+补传下分钟桶是否稳定；点位版本切换后历史不漂；未经授权拿不到秒级/gps_obs但能拿到分钟统计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "校正我想用两段式：  \n- 在线：如果设备带NTP状态或采集器能拿到server_time，在接入层算 offset=ingest_time-source_time，超阈值就打 clock_skew=true，并用 ingest_time 替代参与对齐，但保留 source_time。  \n- 离线：每天跑一次按设备统计 offset 分布，若稳定偏移则给出校正参数用于回算 event_time（只在raw域做，不影响已出具的对外派生数据）。  \n阈值我先拍 5min，可能需要你拍板或让物联网工程师给个野外经验值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 野外工况下采集器/传感器时钟漂移和断网补传很常见。你们经验里 source_time 和真实时间偏移通常在什么量级（分钟/小时）？用 ingest_time 替代会不会引入系统性误差？另外你建议的时钟校准手段（NTP/GPS/人工校准）和告警阈值怎么设更靠谱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收到的要点是：一周离线漂到几分钟正常，掉电重启会乱；阈值可以用2min/15min两级；severe_skew 用 ingest_time 对齐并把 skew_level 带入派生统计，校准优先NTP，其次GPS授时，人工兜底要留痕。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向按这个落地：allowed_lateness 仍按24h，但 clock_skew 用两级阈值；minute_derived 里加字段 skew_level、skew_seconds_p95（按桶内估算），这样核证能看到质量标签。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不开放。核证方要的是可验证，不是无限制窥视。我们给“最小披露”的可核证包：hour/day 默认可见；minute_derived 作为证据链可申请；raw秒级和gps_obs只在争议/同步异常抽查触发，且必须带目的、范围、到期和哈希。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "理由三条：  \n1）隐私与商业敏感：施工节奏、作业路径能推断人员与承包商策略；  \n2）数据篡改风险反而更高：raw外放复制扩散后难以控制再加工；  \n3）审计可解释：我们用统一策略生成派生统计与异常片段，留痕可复现，核证关注点被满足。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）清洗对齐输出两层表：minute_derived（avg/min/max/count/missing_rate/downsampled_ratio/skew_level）、hour_derived（从分钟再聚合），都保留 lineage 字段指向 raw 批次范围。  \n2）三时间戳落库：source_time、event_time（校正后）、ingest_time；并实现 allowed_lateness=24h 的水位线，迟到写 late=true。  \n3）点位主数据版本化：point_version_id 绑定观测；gps只入 gps_obs，不回写主数据；越界标 out_of_geofence。  \n4）敏感隔离：raw与gps_obs默认最小权限；对外仅 hour/day；minute/raw 导出走审批，审计字段含 request_id/用途/范围/脱敏策略/导出哈希/到期。  \n5）测试用例：乱序补传稳定性、点位版本不漂移、severe_skew 走 ingest_time 对齐并正确打标、未授权无法读取 raw/gps_obs 但可读派生统计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

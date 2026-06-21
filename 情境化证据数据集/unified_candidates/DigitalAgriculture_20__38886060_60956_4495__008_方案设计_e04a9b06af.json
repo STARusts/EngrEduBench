@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字农业除草风险MVP方案设计收尾背景下，用户与导师围绕处方-作业-覆核的闭环数据流、ID串联、字段边界与降级/复盘口径持续沟通（9轮），其中在主数据与事件表拆分及关键字段设计部分与数据架构师沟通（5轮），在动作包action_bundle结构化与风险映射规则部分与处方引擎工程师沟通（4轮），在合规最小化与审计日志边界部分与合规与风控经理沟通（2轮），并整理评审用的数据流设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按最小可用想。处方单里要有田块ID、作物、杂草类型吧，还有推荐药剂、剂量、用水量、作业方式。再就是风险等级和原因码。复盘得有执行结果，但我不确定是放在处方里还是单独一张作业单。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "唯一ID…处方ID肯定要有，作业也要有作业ID。然后风险那边可能有一次评估ID？我怕太多ID，现场不好用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "田块ID固定。处方ID一条建议一个。作业ID是一次喷施一次。复核…复核单ID？就这四个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 处方和作业这块要串闭环，我现在就知道田块ID、处方ID、作业ID、证据ID这些。主数据和字段上，你觉得最小要怎么设计，才能后面复盘和审计不崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RiskAssessment里已经有field_id了，为啥Prescription还要再放field_id？只靠risk_id串不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那review_queue_id是处方表字段吗？我以为覆核是另外的流程表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_codes是数组存？还是拆表？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "闭环大概是：Evidence产出evidence_id，风险评估用risk_id串evidence_id，输出risk_tier、data_suff、reason_codes。处方用rx_id串risk_id，也冗余field_id，带动作包action_bundle、策略版本rx_version、有效期valid_window，另外有need_review和review_queue_id。作业回传op_id串rx_id，带实际施用as_applied和偏差码deviation_codes，还有proof_refs。覆核是ReviewCase表串rx_id，记录决策。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "动作包…我先想成几类：化学、机械、人工。化学里有药剂、剂量、混配、水量、目标杂草。机械就是中耕次数、深度。人工就是拔除。再加作业参数比如速度、幅宽。差不多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@处方引擎工程师 动作包action_bundle要能给农机执行，也要能复盘。你们一般怎么把处方动作结构化？字段尽量少但别留坑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "preconditions和safety_constraints我有点混。是不是都算约束？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那review_queue_id怎么决定？是risk_tier直接映射吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级处方就是不直接推荐强药？更多给SCOUT采样或者人工确认。作业回流就把实际用药量、覆盖轨迹、执行时间回传，然后算是不是按处方。复盘再给下一次风险模型校准用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "处方侧：task_type如果是SCOUT就有采样参数，没有herbicide_product_id这些；候选有效成分类别可以放在CHEM任务里但product_id为空，改成active_ingredient_class。need_review=true，review_queue_id填。作业侧：as_applied里如果真喷了就必须有product_id和剂量，系统能对比“处方给没给”。偏差率就用deviation_codes统计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 处方-作业-覆核这条链路，哪些字段属于合规红线？我怕为了复盘加太多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志独立存…那处方表还要不要audit_id？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就第3条里target_area用polygon_refs，我不确定田里是不是都能画分区，不会影响MVP吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

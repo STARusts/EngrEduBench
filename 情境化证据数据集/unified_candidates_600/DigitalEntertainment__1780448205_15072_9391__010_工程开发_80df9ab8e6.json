@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在动作驱动联调背景下与导师围绕布料刚体穿透定位、求解器失效根因与修复方案权衡持续沟通（8轮），其中在穿透复现与边界用例构造部分与物理仿真测试员沟通（2轮），在求解器失效分析与约束求解顺序调整部分与求解引擎开发者沟通（3轮），并最终形成调整约束求解顺序加刚度补偿的修复方案及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "常规走动看着还行，但抬手过头顶的时候，腋下那块布直接穿进身体里了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "是刚体穿透，布料穿过Avatar上臂网格了。帧区间我没细看，动作太快一闪就过了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚体穿透怎么抓？抬手过头顶这种动作要怎么设用例才能稳定复现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，跑出来了。确实是在肩关节大角度快变向的时候，帧号卡在240到260之间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "腋下大角度抬手时发生刚体穿透，半隐式欧拉和拓扑缓存这块是不是在这个场景下算漏了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就是步长太大了？理论上加连续碰撞检测CCD可以防穿透吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发者说是因为预测位置跨过去了，缓存也失效了。建议局部子步长或者调XPBD的约束求解顺序。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "调顺序就是改代码里的迭代次序。理论上先解碰撞再解拉伸能保证不穿透，但可能会导致拉伸约束收敛变慢，布料整体看起来会变软？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "只调约束顺序，拉伸刚度会受影响吗？需要补偿吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我需要在拉伸刚度补偿的时候做对照。你那边能加个形变率的监控指标吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "根因是大角度动作下半隐式欧拉预测穿透，且拓扑缓存失效导致碰撞晚一帧。修复方案是调高XPBD碰撞约束求解优先级，先解碰撞再解拉伸，同时微调拉伸刚度补偿因子。验证口径是MaxStretchRatio峰值不超过1.02。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

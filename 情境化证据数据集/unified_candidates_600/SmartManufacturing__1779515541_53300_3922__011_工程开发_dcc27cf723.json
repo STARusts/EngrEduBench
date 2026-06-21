@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在端侧推理性能极致优化背景下，与导师围绕模型量化掉点风险、轻量级网络替换可行性及混合精度配置策略持续沟通（6轮），其中在量化掉点处理与混合精度方案部分与边缘算力优化师沟通（2轮），并最终形成逐层敏感度分析与混合精度配置的优化策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概15ms左右。我看板子算力有点吃紧，CPU占用也快满了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备直接用NPU的量化工具链，一键转成INT8。网上很多案例都说转INT8能提速4倍，这样应该就能压到5ms以内了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这我确实没测过。有没有那种更方便一点的量化方案，或者现成的脚本能自动处理这种分布的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意图识别模型要往端侧NPU上搬，直接INT8量化掉点太严重，有没有方便点的工具或者现成脚本能搞定这事儿？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "混合精度啊，听着好麻烦。工具默认不都是一键全量化吗？我得手动写配置文件去切分层？这工作量有点大吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就把前面几层设成FP16，后面全INT8？或者我干脆换个轻量级网络，比如用MobileNet替换现在的骨干网，这样就算全INT8也不会掉太多吧？网上很多人都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "换网络这条路走不通。那我就写脚本跑敏感度分析，把对力矩敏感的层挑出来保FP16，剩下的INT8，再配合算子融合重排。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

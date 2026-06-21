@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关采集与链上存证背景下，用户与导师围绕网关数据上链方式、链下存储与断网重传持续沟通（5轮），其中在高频数据上链技术坑及断网重传部分与物联感知接入工程师沟通（2轮），在隐私合规、越温告警明文上链及字段取舍部分与链上存证与合规审计员沟通（2轮），并最终形成边缘网关采集与链上存证基线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全量上链呗，保证绝对可信。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频传感数据全推到链上，技术上有什么坑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那隐私合规这边呢？只传摘要或者哈希能过关吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说全量上链不行，得只传哈希，还有越温告警要明文上链。链下还得保证数据不丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "判断逻辑放边缘吧，网关算。链下存数据库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "越温告警明文上链，那具体包含哪些字段？GPS位置要不要明文？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关断网时，数据暂存和重传怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "越温告警明文推，带运力ID、阈值、实测值和时间，不带GPS明文。常规数据推哈希。断网时网关本地落盘，重传时越温告警优先。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基线约束就是：1. 越温告警明文上链（含运力ID、阈值、实测值、时间戳，GPS仅上链模糊哈希）；2. 常规采样数据仅上链根哈希；3. 断网时网关本地落盘并签名，恢复后打包重传；4. 越温告警重传最高优先级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

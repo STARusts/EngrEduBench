@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发中实现能力图谱增量更新服务背景下，用户与导师围绕更新链路字段集、幂等/审计/错误码、接口与本地桩测验收点持续沟通（8轮），其中在最小表结构与幂等一致性校验部分与知识图谱工程师沟通（3轮），在证据字段最小化与白名单/审计合规部分与合规与隐私负责人沟通（2轮），并明确apply接口、证据唯一约束、乱序保护与审计hash落库实现方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道。能力图谱更新是要我写个接口吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是学习事件？有 user_id、event_id 就够了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等就是 event_id 不重复？查到就不写了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@知识图谱工程师 增量更新要怎么拆表？我只知道 event_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "唯一约束会不会直接报错把任务弄失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着挺多的。我要写四张表吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 就是建个 evidence 表，(event_id, ability_id) 唯一。先插 evidence，冲突就当处理过。然后再更新 learner_ability_state。还有个 last_event_at 不要被旧事件覆盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "校验字段不空。写 evidence。冲突就返回。没冲突就 update 状态 mastery+delta。写审计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 evidence_json 我能不能整段存？payload_hash放哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要做个白名单过滤？我怕我搞不对。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "@导师 我就做白名单。evidence_json 只收几个key，多的就报4001。payload_hash 写 evidence 表和审计表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一个是重复 event_id 调两次，第二次不更新。另一个是 evidence 里多了字段就拒绝。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "result_hash 是啥？也要算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕我忘了字段，能不能就都写到审计里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在要做的就是：建 evidence 表唯一键，写 apply 接口，白名单过滤，审计写入，乱序保护。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

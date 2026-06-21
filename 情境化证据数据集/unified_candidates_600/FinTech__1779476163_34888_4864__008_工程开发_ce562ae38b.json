@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在合约条件触发逻辑开发与Gas预算严苛背景下，用户与导师围绕低成本触发实现、链下误判风险与底线校验、接口定义持续沟通（8轮），其中在触发模式选择部分与跨域预言机对接师沟通（1轮），在链上轻量校验与底线校验Gas开销部分与核心合约研发工程师沟通（2轮），并形成链下判定加链上轻量触发方案及触发接口定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "条件触发不就是写if嘛，我看别人合约里都是直接require检查，状态到了就转，这还能怎么省？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我没细算Gas，就想着业务一满足就转呗。直接调外部API应该最快吧，我套一层Chainlink的DataFeed？不过听说每次请求挺贵，我们这量又大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Gas预算不够，不能在合约里主动调外部API了，这条件触发怎么搞？总不能连业务数据都不验吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Push模式的话，我合约里是不是就只留一个类似executeTransfer的入口，加个多重签名校验就行了？那些复杂的金额比例判断、到期日检查都不用写了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链下判断加签名推送触发。业务条件在链下算好，预言机推交易过来，我合约只验签名和幂等。这样Gas是不是就压下来了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，我还没想。专家说验签名，那只要签名对就执行呗？要是链下算错了推过来，我合约好像拦不住，因为业务规则我都挪走了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果预言机推错数据，合约里只做金额非零溢出检查和账户冻结状态检查，这大概吃多少Gas？我怕加多了又超预算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "底线校验就几百Gas，很便宜。那就定这个方案：链下Push触发，合约验签名加底线校验加幂等更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口就一个`triggerCollection(bytes32 bizId, uint256 amount, address to, bytes[] sigs)`。里面验签名，用bizId查幂等，做基础require，然后调内部账本更新。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

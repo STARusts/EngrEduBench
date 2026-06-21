@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧脱敏已定、需规划海量指纹特征流回传的方案设计背景下，用户与导师围绕边缘网关到云端链路的带宽挤占、时延抖动与补传影响持续沟通（6轮），其中在封装协议精简、冷热分层与流量整形要求上与数据链路规划师沟通（2轮），并将Protobuf封装、双链路优先级与断点续传缓存上限等约束整理进接口文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接弄个现成的中间件，比如建个Kafka集群，让网关把数据全灌进去。我看网上说这种海量数据的场景用这个最稳，吞吐量肯定够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这种底层传输的压力，不是靠加服务器和带宽就能解决吗？只要中间件性能好，剩下的交给网络就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据链路规划师 刚才导师说直接用消息队列传数据不行，容易把带宽堵死。针对咱们这种能源设备的指纹流，在链路规划上有什么更省事的优化办法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "非要换成Protobuf吗？那我还得重新定义数据结构。我就在网关上加个Gzip压缩不行吗？现在的库里都有这个开关，勾一下就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听明白了，就是得手动控制流量，还得换个压缩方式。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就在代码里加个限速逻辑，再找找有没有现成的二进制转换插件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家建议挺复杂的，我觉得核心就是减小包的大小。我打算先按他的思路用那个Protobuf，链路也分两条跑。至于流量整形，我就设个固定发送频率，这样最稳，写起来也快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我现在的水平也只能想到这一层了，先跑通看看吧。大不了后面性能不行，我再把那个QoS等级调高一点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我先把这几条记下来，回头看看Protobuf的文档怎么写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

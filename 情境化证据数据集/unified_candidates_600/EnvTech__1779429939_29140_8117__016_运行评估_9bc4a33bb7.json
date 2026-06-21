@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在环保局在线使用熔断逻辑反馈不佳背景下，用户与导师围绕熔断阈值调整与分级熔断逻辑设计持续沟通（8轮），其中在现场痛点与复核积压部分与用户运营反馈师沟通（1轮），在合规底线与变通策略部分与环保合规分析师沟通（1轮），并形成基于潜势与偏差的分级熔断逻辑及修改yaml与PromQL分桶统计的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反馈炸了。他们嫌20%阈值太严，稍微偏点就挂起转人工，复核人员根本看不过来。还有企业打电话投诉，说刚接到限产指令还没十分钟又撤回了，产线来回启停快搞崩溃了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接把yaml里的20改成30或者40？少触发点熔断，他们人工复核量不就下来了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "环保局那边复核积压，企业也闹，现场到底啥情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我把熔断阈值放宽到30%，合规上有问题吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说高潜势强制下发，低潜势才熔断。我懂了，就是按潜势值分个级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "潜势值大于160的，不走熔断直接发；小于160的，偏差超20%挂起。yaml里我就加个if判断潜势字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这过度限产总比违法好，企业多停一会就停一会吧，总比环保局被问责强。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "潜势>160 且 偏差<30%，强制下发；潜势>160 且 偏差>30%，挂起转人工；潜势<160 且 偏差>20%，挂起转人工；其他正常下发？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改yaml里的条件分支，PromQL也加两个label分桶。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

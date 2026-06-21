@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在高盐废水资源化智能管控平台运行评估的上线验收与指标对齐背景下，用户与导师围绕验收口径量化与“核心通过线”选择持续沟通（6轮），其中在合规口径与审计留痕清单上与合规与标准经理沟通（1轮）、在可自动化断言的验收脚本指标口径上与测试负责人沟通（1轮），并最终确认6条验收通过线及用户负责推进回执解析与白名单对齐。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边先干三件事：1）把 targetTag 和 cmdId 生成器给测试用。2）联动权限白名单只放沙箱 tag，压测账号拆开。3）回执解析把 ackCode/actualValue/reasonCode，还有 EXPIRED/INTERLOCK 这些让脚本能断言。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据别丢、延迟别太高、报警别乱报、权限别越权、日志能查到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与标准经理 上线验收这块，合规口径和审计留痕要怎么对齐？给我几条能直接验收的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白了，就是把 COD 那些单位和周期写死，然后审计里必须有 cmdId、ackCode、reasonCode，还不能把 token 写进日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿一天的数据对一下进出？误差小点就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据质量：完整率、延迟。联动：成功率、回执对得上。合规：日志有审计字段、权限不乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 你们上线验收脚本这块，完整率、延迟、联动成功率这些怎么量？给我口径，我好跟导师对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那我就按这套走。完整率按点位分钟算，延迟看 P95，联动看 T 秒内回执，失败要分 INTERLOCK、EXPIRED。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就选完整率、延迟、联动成功率、审计字段、权限、还有资源化产量？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "认。签字就测试负责人、合规与标准经理、还有我们这边项目负责人一起吧。我这边盯联动回执解析和白名单，免得验收时说不清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第3个，回执解析要把 ackCode/actualValue/reasonCode 还有 EXPIRED、INTERLOCK 都吐出来，不然脚本没法判。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

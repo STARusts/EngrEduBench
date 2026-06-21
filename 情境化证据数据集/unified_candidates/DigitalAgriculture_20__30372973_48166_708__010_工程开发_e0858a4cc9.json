@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在渠道接口联调压测背景下，用户与导师围绕多渠道并发下的幂等、限流、对账一致性与日志合规制定可执行压测闭环（8轮），其中在幂等口径/对账校验点/流量模型上与集成工程师沟通（3轮），在对账字段、debug_mode审计与压测脱敏边界上与安全工程师沟通（3轮），并输出接口清单、三段流量、校验项、日志与分工及基线门槛思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测指标我不太确定怎么定，是看QPS还是看端到端延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口我先压“创建批次事件”“生成溯源二维码”“生成营养标签”“渠道查询”。数据形态就用我们测试库里的几种SKU。正确性我想对比返回的标签字段有没有缺。定位我就看trace_id串起来。日志这块我就不打印request body。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@集成工程师 幂等键我们现在各渠道怎么定？还有对账要验哪些点？压测流量模型一般怎么配？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "label_digest是我们服务端算出来给渠道的？还是渠道算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测时如果渠道没法配合重试风暴，我这边自己打并发也行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "幂等这块我采纳：批次事件用tenant+source+batch+event_type再加分钟桶；检测报告用report_no+sample_no+tenant；电商发码按order+sku+tenant。对账我先做qr_code_id分配数、event_count、label_version和label_digest一致。流量模型我照三段跑。做不到的点是“渠道回传摘要”这一步，有些渠道现在只收我们返回不回传。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在我方把每次响应的label_digest记成一条对账表，键用request_id？然后压测后用对账表去比渠道的成功数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 联调压测做对账和排障时，允许落哪些字段？debug_mode下evidence_id怎么走审计？压测数据脱敏有啥硬要求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "qr_code_id会不会被人拿去扫就查到商品信息？算不算敏感？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "debug_mode我理解就是我开个开关就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口压四个：批次事件上报、检测报告回传、营养标签生成、扫码查询。流量按常态+尖峰+重试风暴三段，比例先用查询:生成:上报=2:1:7，尖峰把查询拉到5倍。正确性校验：event_count/latest_version、qr_code_id分配数=成功数（排除幂等命中）、label_version和label_digest一致。日志默认只打trace_id/状态码/错误码/耗时/幂等命中/返回大小/字段存在性位图，不落payload和精确输入值。debug_mode默认关，真要开就用工单+有效期，记录evidence_id走审计通道。分工：我这边盯压测脚本和结果汇总，集成工程师盯渠道回执和字段映射问题，安全工程师盯debug开关和审计留痕。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "过的标准我先定成：P95延迟在我们接口里不超过800ms，错误率<0.5%，幂等重复提交不产生重复写入。错误码我会特别验两类：字段缺失要返回我们约定的缺失错误码；以及手机号类字段在任何响应/日志里都不可检索（我们测试点里提过）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能，我先跑一轮常态流量拿基线P95，再按1.5倍设门槛。渠道目标QPS我这边不确定，我去跟集成工程师要个数，没有就先按每渠道50QPS做MVP假设。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

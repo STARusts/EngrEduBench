@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发背景下，用户与导师围绕聚合网关协议适配中的隐私合规与频响性能权衡、脱敏缓存选型、开发验证方法及SM3集成难点持续沟通（5轮），其中在隐私脱敏性能影响部分与通信安全专家沟通（1轮），在报文结构破坏风险与脱敏方案部分与协议适配开发工程师沟通（1轮），并最终形成协议适配开发与验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前面说不用MQTT，要用SM3签名，我想着直接找个开源库套一下应该就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这隐私的事我确实没多想，我看网上好多网关都是直接透传的，方便调试啊。要不就在网关这层把SN哈希一下？但这样云端怎么对账？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关侧如果做设备指纹脱敏，会不会拖慢报文处理？频响要求秒级触达，网关这块能加脱敏逻辑吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在网关解析私有协议的时候，把敏感字段替换成SM3哈希值，会不会把报文搞坏？云端认不出来怎么办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "安全专家说SM3哈希脱敏计算开销很小，不会卡脖子；开发专家说可以加映射缓存，云端只拿脱敏ID统计。听起来不用在性能和隐私里二选一，加个缓存表就行了。我就用Redis搞个本地缓存？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Redis确实有点重了，用本地Map或者Caffeine可能好点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我写个main方法跑个for循环算算时间？SM3的话，我之前没用过国密库，想着直接Maven引个bouncycastle，照着README调API。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太够，JCE那套Provider机制我老搞混，之前只用过标准库的SHA256。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写个JMH测试用例，验证脱敏查表和SM3签名的P99延迟，把BouncyCastle的Provider注册也跑通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议适配这块：报文解析不改原结构，敏感字段用SM3单向哈希脱敏，网关侧用Caffeine做短周期映射缓存支持本地查表，不用Redis。开发验证：用JMH写微基准测试用例，验证SM3签名和脱敏查表的P99延迟是否达标。集成BouncyCastle的SM3时，先搞清楚JCE Provider注册机制再写代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

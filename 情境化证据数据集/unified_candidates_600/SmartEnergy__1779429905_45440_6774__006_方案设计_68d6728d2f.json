@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在海量柔性负荷意图博弈方案设计背景下，用户与导师围绕多智能体拓扑组织、分层拓扑交互接口与聚合规则持续沟通（6轮），其中在海量Agent拓扑取舍部分与系统架构师沟通（2轮），并最终敲定按负荷类型边缘聚合的分层拓扑及接口字段约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上K8s起一堆Pod当Agent呗，一个充电桩一个Agent，互相发消息博弈。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没细算。几十万是有点多，可能消息总线扛不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几十万Agent全分布式是不是会崩？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那资源上是不是省不少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说不能用全分布式，得用分层。边缘聚合同类负荷变虚拟Agent，云端跟虚拟Agent博弈。说这样省带宽，好维护，就是边缘端得加聚合逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "往上应该传聚合后的可调容量和意愿报价，往下传激励价格信号。接口用gRPC推流吧，比HTTP快，适合这种实时博弈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按地域吧，同小区的放一起，网络延迟低。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回头把边缘端的聚合模块加到架构图里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

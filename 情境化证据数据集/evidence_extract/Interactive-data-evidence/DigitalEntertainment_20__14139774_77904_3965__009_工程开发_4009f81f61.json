@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在关卡图规则引擎执行器开发背景下，用户与导师围绕执行器输入输出、增量patch与可回放审计语义及测试验收持续沟通（11轮），其中在结果结构与幂等/限步等边界设计部分与规则引擎工程师沟通（4轮），并最终确定EngineResult/auditEvents形态与多步tick执行约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "执行器就是按节点走？触发条件满足就执行动作，然后把房间状态改掉。差不多就是个状态机。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "结果…就是返回新 state？再带个日志？我不确定要不要把每一步都记下来，会不会很重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则引擎工程师 结果结构到底怎么设计？我现在只想到返回新 state，再带个 log。还要考虑回放和广播增量，你给个可落地的最小集。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`statePatch` 里 vars/facts/timers 都是 map 的增量？那删除怎么表达。还有 emits 是不是就直接扔给实时消息？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "auditEvents 这么细会不会很大？房间一多就爆。是不是只存最后几条就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概是：执行一次 tick 输出一个 `EngineResult`。里面固定四块：`nextNodeId`、`statePatch`（vars/facts/timers 的 set/unset，可能还有 inc）、`emits`（领域事件，后面给实时层广播）、`auditEvents`（每条带 auditEventId，记录命中规则和读写）。还要加限制器比如 maxSteps、超时，还有 triggerId 去重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全量 state 传来传去会大，广播也不行。patch 更适合实时同步，前端也能做增量渲染。这个我能理解。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把动作都做成纯函数，输入 state 产出 patch；最后统一 apply patch。规则就是遍历当前 node 的 rules，满足条件就收集动作。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能…但我怕有的动作要读到刚写进去的值，比如先 inc 再判断阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂，就是每一步：evaluate -> build patch -> apply -> 记录。那 nextNodeId 在哪一步变？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "triggerId 去重我有点虚。是执行器内部做缓存？还是 state 里存 processedTriggers？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那审计里要写读写 key…我写得出来，但挺琐碎。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在确认一下最终结构。是不是这样：  \n- EngineResult: nextNodeId, statePatch, emits, auditEvents  \n- statePatch 里分 vars/facts/timers，每个有 set/unset/inc  \n- auditEvents: auditEventId + nodeId + ruleId + actions + reads/writes + flags（timeout/stepLimit/duplicate）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会写这俩测试。maxWallTimeMs 这块我不太会测，时间不好控。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我把执行器做成：`execute(graph, runtimeState, triggerContext, options)`，options 里有 maxSteps/deadlineMs。返回 EngineResult。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

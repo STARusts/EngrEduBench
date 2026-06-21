@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在调度策略引擎MVP落地背景下，用户与导师围绕处方生成/解释/回放的代码骨架、输入输出契约、可解释日志与可测试性持续沟通（7轮），其中在MVP启发式与reasonCodes设计上与调度优化工程师沟通（3轮），在必测场景与回放一致性断言上与测试工程师沟通（2轮），在审计留存字段与最小化原则上与合规与审计官沟通（1轮），并明确两段式启发式+稳定decisionId+三类单测与日志留存要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上个“线性规划”模板，把目标写成最小电费+最小碳排，然后把约束丢进去就出结果了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是ET和降雨，还有泵站信息吧。输出就给每块地浇多少水，泵开不开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……zoneId、waterMm、startTime、endTime、pumpId、onOff。差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度优化工程师 处方引擎我想抄个线性规划模板，MVP到底怎么搞？要哪些输入，输出要啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "日志是直接把输入输出都print出来吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按这个写。碳就是expectedCO2=电量*因子？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是先别上求解器，先分两步：先算每块地缺多少水，再按电价排泵。然后每条结果加reasonCodes。大概这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入参：zones[]、pumps[]、price[]、carbonFactor。出参：prescriptions[]、pumpPlan[]、logs[]。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加个“dryRun=true”行不行，还有“maxRuntime”防卡死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就拿一块地，ET=5，算出来浇5mm，然后泵开一小时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 给我3个调度引擎的必测场景，要怎么断言算过？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "回放要一样我能理解，就是不要用随机数。decisionId我就用UUID？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "hash吧，自增我怕并发乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 调度引擎日志要留啥才算能审计？原始数据要全存吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就把ET栅格也塞日志里，省得以后找不到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP就是两段式启发式，不用求解器。我要实现strategyRequest/response那套字段，然后跑3个测试：降级、水权、电价。decisionId用hash。日志留因子版本和reasonCodes，不放栅格。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

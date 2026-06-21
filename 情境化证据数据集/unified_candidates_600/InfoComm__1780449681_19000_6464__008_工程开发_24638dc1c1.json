@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在现网状态采集开发背景下，用户与导师围绕多协议适配、时延抖动、资源防打爆、压测验证及内存泄漏排查持续沟通（6轮），其中在异构协议隔离与资源保护部分与采控插件开发工程师沟通（1轮），并锚定ProtocolAdapter统一接口、协程池与熔断资源隔离及混合协议压测验证基线，更新Backlog。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拆成两层：南向采控层用插件化架构，按厂商和网元型号解耦；上层汇聚层做时序对齐和缓存削峰。时延这块，我准备用gRPC长连接替代传统SNMP轮询，减少建连开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源防打爆我目前只想到加个令牌桶限流。至于老设备兼容，我想让采控插件去包揽，但具体怎么在代码层优雅地隔离异构协议，我还没细想，这块确实卡住了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现网新老设备混杂，我需要同时支持gRPC流式和SNMP轮询。在采控插件这层，适配器的抽象接口怎么设计才能把协议差异屏蔽掉？另外，并发拉满时，插件自身的内存和CPU怎么护住？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "南向用ProtocolAdapter基类统一接口，gRPC走streamState，SNMP走fetchState，上层无感。资源侧加协程池隔离和熔断，防SNMP解析库内存泄漏。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只想到令牌桶，粒度太粗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设计一个压测实验。控制变量是并发拉起的网元连接数，从100到2000递增；观测指标是采集完成时延P99和插件节点CPU/MEM占用率。对照组分两组：一组纯gRPC，一组gRPC与SNMP 7:3混合，看混合模式下时延劣化程度和内存抖动情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我缺经验，之前没深入排查过C库的内存泄漏。现在的卡点是我不知道怎么在Go里面对接cgo做pprof和内存逃逸分析。我今晚补学Go cgo内存诊断和pprof工具链，明天把SNMP解析库的压测用例跑出来，把泄漏点定位逻辑加到插件容错机制里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我马上更新Backlog并启动插件脚手架搭建。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

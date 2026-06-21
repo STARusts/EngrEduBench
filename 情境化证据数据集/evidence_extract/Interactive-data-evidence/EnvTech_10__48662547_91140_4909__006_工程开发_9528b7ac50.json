@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在蓝藻暴发预警平台工程开发的“传感与遥感接入”背景下，用户与导师围绕数据契约、可靠性、质量门禁、可追溯与降级规则持续沟通（6轮），其中在传感事件字段最小集合、时间漂移与鉴权策略上与物联网工程师沟通（4轮），在遥感产品字段/质量与availability及授权元数据上与遥感算法工程师沟通（4轮），并整理出接入事件模型、门禁指标与开发清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我打算先把在线传感器、边缘网关、遥感产品三条数据入口都打通，今天想跟你确认：接入层实现时哪些口径必须一次就钉死，哪些可以先做成可配置。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备分三块并行推进，但我只主抓接入层的“统一事件模型”和服务端校验，协议适配细节让物联网同事兜底。拆法是：\n1）水质传感：先把网关上报统一成 ingestion_event（带 device_id、ts、metrics、qc_flags、seq），服务端做幂等和时间纠偏；\n2）遥感：先接入“藻华覆盖度栅格+置信度+云掩膜”的产品级输出，不直接接卫星原始数据；\n3）共用：做一个 data_availability 状态流，遥感缺测时让上层走“核查优先”的降级。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心的点是时间对齐：设备时间漂移和遥感的成像时刻差比较大，后面融合会踩坑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 传感器接入这块我想把服务端 ingestion_event 的字段固定下来。你看现场常见的网关上报里，哪些字段是必须带的？另外时间漂移、断网缓存、重复上报，你建议怎么做才能服务端好处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的 normalized_ts 我能接受。漂移阈值你会建议多大？我怕设死了现场全是 TIME_SKEW，设松了又没意义。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再问下安全性：网关上报要不要签名？我们试点预算有限，怕做太重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@遥感算法工程师 遥感接入我准备只接你们的产品级输出，不碰原始卫星数据。为了让后续融合和“遥感不可用降级”好做：你建议我在接口里固定哪些字段？质量/置信度、云影响、空间参考这些怎么表达更稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "质量阈值我能先做成配置。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们 bloom_coverage 的空间尺度是整湖一个值，还是分栅格统计出来的？我需要知道融合时怎么对齐传感点位。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心一个合规点：遥感数据和你们模型输出的许可，我们在平台里存栅格和对外展示，会不会踩授权？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到你这边汇报一下我打算落地的取舍：传感侧事件模型我会固定 device_ts/gateway_rx_ts/server_rx_ts 三时间戳，服务端生成 normalized_ts 并记录 offset 估计；幂等键用 device_id+seq，批次用 batch_id。遥感侧我会做“观测记录+栅格资源URI”的入库，带 availability_status、quality_level、cloud_fraction、algorithm_version，还有 license_type 这种元数据；遥感缺测时让 data_availability=UNAVAILABLE，触发上层走核查优先。你看还有哪些坑我没踩到？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "错误码我可以先定义一组基础的，保证可扩展。验收指标我想用三类：完整性、时效性、重复率。你觉得哪些指标能卡住最关键风险，又不会把试点拖死？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能按这套先写单元测试和模拟数据流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块我还缺一点把握：传感数据里有 site_id，算不算敏感？我们需要做到什么程度的审计留痕才算够？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把本轮要落地的东西压成一个开发清单，方便我自己控进度，也方便你下次验收：\n- 统一 ingestion_event：device_id、site_id、sensor_type、metrics、unit、device_ts、gateway_rx_ts、server_rx_ts、normalized_ts、seq、batch_id、qc_flags、calib_id、firmware_version\n- 传感接入策略：device_id+seq 幂等；TIME_SKEW 两级阈值（120s告警/1800s拦截）；offset 估计写入处理记录\n- 遥感观测记录：acquisition_time、product_time、availability_status、latency_hours、bloom_coverage、cloud_fraction、quality_level、reason_codes、mask_uri/ confidence_uri、algorithm_version、data_source、license_type\n- 错误码与门禁指标：按你给的那组先做基础实现，并写测试覆盖“重复/乱序/未来时间/质量C拒收/鉴权失败”\n如果你觉得这组够用，我就按这个开干，下一次我们再切到“数据接口与同步策略”的细节。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

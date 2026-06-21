@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在水下拾音器固件驱动开发背景下与导师围绕I2S与DMA定制化方案、驱动验证方法及核心约束持续沟通（9轮），其中在I2S时钟与DMA双缓冲实现及方波注入丢帧率统计与CRC校验逻辑部分与嵌入式固件开发沟通（3轮），并最终总结出时钟配置、双缓冲及验证三大核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先搞水下拾音器的固件驱动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接用STM32CubeMX生成I2S的初始化代码，它自带DMA配置，网上很多人都是这么搞的，应该挺方便的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算法那边我还没细问，反正就按标准PCM格式往外扔数据呗？要是CubeMX的不行，有没有更方便一点的办法，比如有没有专门针对水下采样的现成驱动库能直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想问下咱们水下拾音器的I2S驱动，如果不用CubeMX默认配置，时钟和DMA具体要怎么改？算法那边对数据帧长有什么要求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "手写RCC配置我有点虚，怕把其他外设时钟搞乱。双缓冲听着有道理，但中断里怎么拼帧头我还没搞明白。有没有相关的参考例程我改改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我回去看看HAL库的源码，把双缓冲那段扣出来试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我就接个示波器看看波形正不正？或者抓一段数据在电脑上放一下听有没有杂音？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照测试？我还没想到这块。是不是要搞个信号源注入？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我拿标准方波注入，固件里怎么统计丢帧率？CRC校验是硬件自动算还是我要自己写？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是用序号连续性抓丢帧，用方波边沿抖动算时钟偏差。这部分逻辑我加到中断服务函数里。不过硬件CRC配置我以前没调过，这算是个卡点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把Reference Manual里CRC那章啃一下，然后在开发板上先单独跑个CRC的单元测试，试通再合进来。我会把测试的输入输出和配置参数记在日志里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. I2S时钟必须挂HSE手写RCC配置降抖动；2. DMA用Circular模式做双缓冲，Half和Full中断里拼帧头和时序；3. 验证方法是用方波注入看边沿抖动算采样率偏差，帧序号连续性抓丢帧，CRC用硬件外设算。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在茶园感知接入与流控代码开发背景下，用户与导师围绕网关流控、断网续传、数据脱敏及测试验证持续沟通（7轮），其中在边端断网缓存与流控降级部分与边缘端开发工程师沟通（1轮），在数据特征对齐与位置脱敏部分与数据工程师沟通（1轮），并最终形成5分钟滑动窗口聚合、增量续传、哈希脱敏的代码方向及具体补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上物联网网关一般都用 EMQ X 加个插件，流控直接套个 Sentinel 限流规则，把数据往 Kafka 一扔就行了，挺方便的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网的话，网关本地存个 SQLite 缓存一下，网好了再传呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端网关资源很少，如果断网了，怎么缓存才能保证时序不错乱？还有流控怎么保住关键数据？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据特征和脱敏怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端不能只做透传，得在网关上跑5分钟滑动窗口聚合，算方差这种特征。断网用本地时序库存增量，重连按时间戳对齐。位置数据得脱敏，只留地块哈希ID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏我就写个工具类把经纬度字段置空。特征聚合用 Python 脚本跑。测试的话，我拔下网线看看能不能自动重连传数据？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哈希映射我得找现成的加密库。对照测试我不会设计，时序数据偏移的验证方法我也不懂。我记一下，今晚得去查时序数据库断网续传的一致性协议，还有怎么写断网模拟的自动化测试用例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去翻 TDengine 边端的 C++ 连接器文档，学它的时间戳对齐 API。测试那边我找找 Jepsen 相关的时序一致性测试文章，照着写个简化版脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

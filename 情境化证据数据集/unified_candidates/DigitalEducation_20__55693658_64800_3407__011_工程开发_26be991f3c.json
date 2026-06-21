@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的安全审计与修复背景下，用户与导师围绕学习证据相关接口的越权风险、审计口径与可回归验收持续沟通（8轮），其中在BOLA/IDOR对象级授权与审计字段规范上与安全工程师沟通（5轮），在批量接口全失败策略与用例覆盖/一致性检查上与测试工程师沟通（4轮），并最终明确修复项A/B/D的责任认领与验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最担心“学习证据”这条，因为我们到处都在查 evidenceId、submissionId。还有生成反馈那块，怕 prompt 里混进别人的证据引用。还有审计日志，我想做成全量不可篡改，但会不会拖性能。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据详情 `/evidence/{id}`，作业提交 `/submission/{id}`，反馈历史 `/feedback/{id}`，还有教师工作台里有个批量 `/evidence/batch?ids=`。我现在是按角色+学校校验，但我承认很多地方是“先查库再判断”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 越权这块你帮我过一下：我们有 `/evidence/{id}`、`/submission/{id}`、`/feedback/{id}` 这种按 ID 取数据的接口。服务端最低限度必须校验什么，才不算被 ID 猜测打穿？审计日志又要记到什么粒度才够用？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对象级授权我大概懂，就是 evidenceId 不够，得连 schoolId/classId 一起卡死。可我们有些 evidence 是“课堂互动”生成的，不一定绑定 submission。关系表会很杂，强行 join 会很慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计里记 deny 也要记？我还以为只记成功访问。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "间接越权是指我虽然没给他 `/evidence/{id}`，但他通过生成反馈把别人的 evidence 摘出来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 安全那边给了三条硬要求：对象级授权要在查询时就带上（actor 对 object 的关系，避免先查到再判断）；不存在和无权限要统一拒绝口径防枚举；审计要记 actor/action/object/tenant/allow-deny/reason/requestId/ip/ua，批量 ids 只记数量和截断或 hash。还有一点是生成反馈引用证据也算“间接对象访问”，生成前后都得过滤/校验引用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想优先把所有 GET by id 都改成“带 schoolId/classId 条件的查询”，再把返回码统一成 404。然后把审计做成 append-only 表，加签名，保证不可篡改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我能列：`/evidence/{id}`、`/submission/{id}`、`/feedback/{id}`、`/evidence/batch`。测试我想写成：同 school 不同班的 teacher 不能访问；同班不同学生的家长也不能访问；管理员可以。验收就是这些 case 都过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向全失败，返回一个泛化错误。部分返回会暴露哪些 id 存在。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 批量 `/evidence/batch?ids=` 我准备做“只要有一个 id 无权限/不存在就整批失败”，防止枚举和泄露。你帮我想下测试怎么覆盖：既验证不泄露（响应一致、时间差别小），又保证正常批量操作不会被误伤。还要加哪些回归点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "响应时延阈值 <10ms 这我没底，我们查询时 join 了 class 权限表，可能抖很大。我能不能只做响应体一致，不做时间一致？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "idsHash 你建议怎么搞？直接 sha256(ids join)？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试建议：批量接口全失败策略要覆盖权限矩阵；错误响应体固定不暴露具体 id；时延差异至少别出现明显分层，阈值用我们环境基线定；前端拿到 reasonCode 只能提示“包含不可访问项”别指出具体；边界加 ids 上限+格式校验；审计整批失败也落，记 idsCount+idsHash（排序去重后 sha256）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我认 A 和 B，还有 D 里的后端落审计字段。我不太想碰 C，生成那块我只知道接口怎么调，里面的证据池过滤我怕改坏效果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在碳汇核算精度监控背景下，用户与导师围绕监控维度拆解、残差计算及数据流改造持续沟通（6轮），其中在精度监控维度与残差阈值部分与农业碳汇分析师沟通（1轮），在Flink增加残差字段与滑动窗口配置部分与数据流设计专家沟通（2轮），并最终形成分组监控与P0告警改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "精度不就是看算出来的值和真值的差距吗？我可以在Prometheus里配个告警，算出来的碳汇量和标准模型差太多就报警。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过。我只配了全局的P99。水稻田崩了可能被平均掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳汇核算精度监控这块，除了看全局误差，还得按哪些维度拆开看？哪些维度塌了会出大事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "残差这个字段咱们数据流里有吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我好像没看到Flink作业里有输出残差的逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在Flink作业里没这字段，我要怎么加？改动大不大？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "滑动窗口选多大合适？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，不能只看全局P99；第二，必须按作物类型、土壤质地和轮作周期分组；第三，核心看N2O和CH4的拟合残差均值，阈值是10%；第四，Flink里要加Group By和1小时滑动窗口算残差，推给Prometheus。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

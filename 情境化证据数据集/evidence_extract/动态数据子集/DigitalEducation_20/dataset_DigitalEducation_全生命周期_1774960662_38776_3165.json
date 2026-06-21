@@ -1,0 +1,880 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“学习材料版权合规与引用溯源平台”需求梳理背景下，用户与导师围绕内容侵权风险画像的对象拆分、分级口径、最小字段与最小验证动作持续沟通（10轮），其中在红线/合理使用边界与证据链字段部分与法务合规负责人沟通（2轮），在举报下架流程与分级如何贴合运营SLA部分与内容运营负责人沟通（1轮），并回流形成v0风险卡片与抽样评审验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在卡在第一步：怎么把“内容侵权风险画像”说清楚，是不是用现成的扫描工具跑一遍就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事故的话，我看到运营那边经常说“某套课件被举报用了网图”“题目解析像是抄了别家”，然后就下架。痛点应该是运营和老师吧。触发动作……可能就是自动提示换图、或者先别发布？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如老师备课，从网上找了张图放进PPT，再上传到资源库，然后运营推到公开课专区。这个组合应该风险挺高的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险因子：来源不明、授权过期、引用没标、改编幅度太小算抄、还有就是公开分发比内部用更危险。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 我们做“内容侵权风险画像”，哪些情况算红线？比如老师从网上找图放课件，这种到底怎么判？有没有比较省事的分级办法？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“公共领域/CC协议”这种，平台能直接认吗？我感觉如果能自动抓取链接就能省很多事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容运营负责人 运营这边一般怎么处理侵权举报和下架？我们如果做风险画像，分级要怎么贴你们流程，别变成摆设。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来就是别想着“一跑工具全解决”，主要是先定义分级口径和证据字段。大概分三级：高风险拦截，中风险复核，低风险放行但留痕。证据字段包括来源、授权范围、引用信息、操作人时间。对外分发是很关键的风险加权点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段我先拍个：内容类型、使用场景（内部/公开）、来源类型（自有/购买/网上/合作）、授权状态（有/无/不全）、引用标注是否齐、相似度风险（有/无）、责任人、最后就是建议动作（放行/拦截/补证据）。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "范围这个我之前确实没加。那验证这套分级怎么做？我是不是找点历史下架案例喂给工具，看命中率？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那要抽多少？我不太会定数量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我有点担心字段越多大家越不填。能不能就靠自动抓取链接、自动识别图片来源这种，把填表压到最少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那画像的输出形式是不是类似一个风险卡片？给运营和教研看，一眼知道要不要改。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "执行上卡点可能是“引用标注是否齐”大家会随便填，还有“授权状态”老师看不懂。还有个问题：合理使用我一直以为能直接放行，你刚说要中风险复核，会不会拖慢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我这边就把“内部/公开”当主要开关，公开必须证据齐，否则就拦或走复核。"
+              }
+            ]
+          },
+          {
+            "microScene": "在需求阶段制定“内部快速过闸、公开需证据且可追溯”的引用策略背景下，用户与导师围绕教师引用材料的来源/去向、证据补交节点与调研问题设计持续沟通（11轮），其中在备课与分发真实行为及证据可得性上与教研代表沟通（2轮），在深访+小问卷样本与口径上与数据分析师沟通（2轮），并形成以“最近一次案例”为锚的6条调研要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就复制粘贴吧，百度一下图片拖进PPT。还有从资源库下载课件改一改。再就是题库里截题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "课堂内展示算内部，群里和LMS算公开吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "发问卷？用现成的问卷工具，题目就选项化，快点出结论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）他们引用时有没有标来源；2）他们知不知道版权；3）他们愿不愿意补材料证明。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就问：他们平时会不会留链接、截图、购买记录。还有他们用的编辑器是PPT还是在线课件，能不能顺手填。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教研代表 你们平时引用素材，最常见是怎么搞的？比如图片、题目、课件这种，通常会不会写来源？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那如果平台弹窗让你补证据，比如授权书、链接、截图，你们会配合吗？有更省事的办法吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们怎么判断“只在课堂放”和“发给学生”区别大吗？我担心大家觉得都算教学就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解是：不能问“你重不重视版权”这种。要问他们具体拿素材的入口、能拿到什么证据。然后流程上要允许先用后补，不然会被讨厌。证据类型要按材料类别给快捷选项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试一下：  \n1）引用来源分布：问最近一次做课件用了哪些来源（选项+可多选），再让他选“占比最高的一个”。真假就看是否能说出具体平台名。  \n2）去向/分发范围：问是只课堂展示、发班级群、发LMS、公开发布。真假就用“最近一次”具体例子追问。  \n3）可提供的证据类型：给证据清单让他勾，另外加“你现在手上能立刻拿出来的是哪些”。  \n4）补证据时机接受度：让他选“引用当下/课后/学期末/被提醒才补”。  \n5）对拦截的容忍度：给情景题，比如“公开发布但没证据时，是接受先内部可见还是必须卡住”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计接受度是指怕被领导看到自己用了啥吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我加一条：可见范围偏好。比如“引用记录只自己可见/教研组可见/管理员可见/法务可见”。再问他们最担心哪一种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 教师引用行为这块，如果先做小样本，你觉得访谈/问卷怎么搭配比较不翻车？样本大概多少才够用来定需求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“最近一次”为锚，就是每个问题都围绕同一个案例问？会不会太费时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我按你们说的压一下：  \n1）用“最近一次典型材料”做锚（课件/练习单/公开分享三选一），避免泛泛而谈。  \n2）记录引用路径：来源类型里要包含“同事转发/组内共享”这种断点，不只平台名。  \n3）分发范围按“可访问范围”问清：课堂展示、班级群/LMS、公开发布，并追问是否可被转发。  \n4）证据可得性拆成“现在立刻能拿到”和“理论上能补”，按材料类型给选项（URL截图、ISBN版权页、订单号等）。  \n5）补证据时机与打断容忍度：接受“先内部可见后补”的比例，以及公开无证据时能否接受拦截/复核。  \n6）审计与可见范围偏好：引用记录对谁可见、最担心的风险点，用匿名/区间问法降低防御。"
+              }
+            ]
+          },
+          {
+            "microScene": "在教育内容平台需求阶段梳理版权合规背景下，用户与导师围绕材料风险分级、放行/复核/拦截规则、证据字段与可见范围持续沟通（10轮），其中在红线/豁免边界与最小举证字段定义上与法务合规负责人沟通（5轮），并形成三态决策树、证据字段分级可见与审计留痕的需求共识。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "红线我大概理解是“没授权别用”。豁免就是“合理使用”？但我不太会分哪些能放行，怕做太严影响备课。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "音视频整段截取应该最高。然后是整本书PDF。再是图片、试题。课件PPT可能还行？网页文章我感觉最乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明确授权：整段视频放进课程、整本教材扫描上传。豁免：课堂上引用一两张图做讲解？还有引用一小段文字当例子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 教育内容平台这块，绝对红线一般有哪些？豁免能用到什么程度？以及平台最少要留哪些证据字段，才算站得住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "平台最小证据字段这块，有没有一份“最少必填”？不然大家会填得很随意。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一是“整本/整段”这种要直接拦，不然风险太大。第二是录播回放这种会变成传播，要进复核。第三是开放许可不能光写来源，要把许可类型和署名填上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先看材料类型和量级：整本、整段音视频、成套题库就拦截。不是这类的再看分发范围：公开就更严，校内可能放一点。最后看来源证据：有授权/开放许可就放行，没有就复核或先内部可见。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "允许的：短引用、课堂讲解用图文，先在班级里可见，然后比如一周内补URL截图或ISBN页。不能允许的：整书PDF、完整视频、题库打包，这种不补也不让发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉教师不想给别人看。默认只有法务或运营能看？教研组长也许要看一点点，但别看到发票抬头这种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两级可以：普通字段（标题、URL、许可类型、引用片段描述）课程团队可见。敏感字段（订单号、合同编号、发票）只有法务合规和内容运营可见，教师自己也能看自己的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第3条里“公共领域”这块，很多人会把公众号文章当公共领域，这会不会坑？"
+              }
+            ]
+          },
+          {
+            "microScene": "在教育内容版权合规平台的需求与战略阶段，用户与导师围绕买单方拆分、MVP可售价值、试点与签约路径及定价锚点持续沟通（7轮），其中在MVP包装与计费锚点部分与产品经理沟通（2轮），在存量治理推进、整改SLA与误拦截申诉口径部分与内容运营负责人沟通（2轮），并形成商业模式与落地路径的口头结论与边界声明。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "付钱的可能是学校或教育机构吧，或者内容平台。原因就是怕侵权下架、被投诉。现在买单…可能是最近版权案子多，大家心里慌。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一类是学校教研部门，他们现在靠老师自己标注，出事再找法务补；第二类是K12或职教的内容平台，资源库大，靠运营抽查；第三类是出版社/资源商，可能要证明授权链条给客户看。省的就是人工审核时间，还有下架损失。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直觉是先做个插件，接到他们用的编辑器里，做引用标注和风险提示。这样看起来比较快。付费就按账号数或者按资源量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 MVP要怎么包装成能卖的东西？我现在只想到接编辑器做提示，但怕太虚。试点一般怎么谈，谁拍板？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那定价怎么说会比较像样？我怕一开口按账号对方嫌贵。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我感觉“引用溯源凭证”得有，不然法务用不上；“素材入库准入”也得有，不然一堆来源不明还是进来。存量风险盘点可能比较大，怕第一期做不动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容运营负责人 存量资源这块，试点一般怎么推得动？还有整改SLA怎么定才现实？我怕我们说得太满。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果扫描只覆盖一部分，会不会被吐槽“你这平台不准”？我有点怕对方拿误判说事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n1）先选一个资源库或一个学科试点，不上来全校全平台；  \n2）先交付“入库准入+引用凭证”，存量只做高风险清单和派单，不承诺全量自动判定；  \n3）流程上要有复核和申诉，误拦截不硬扛；  \n4）参与人是教研、运营、法务、信息化一起，拍板可能是教研负责人+法务；  \n5）收费先按模块或按资源库规模分档，再加服务包做存量清查和培训。  \n差不多这样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就：  \n- 风险降低：把“来源不明”在入库就卡住，至少不再扩散；  \n- 整改时长：高风险48小时内要有处置动作，通过派单和进度看板盯；  \n- 审计可用性：导出引用清单和授权摘要，遇到投诉能直接拿证据，不用临时翻聊天记录。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不做全自动侵权认定，不保证所有网络素材都能判断清楚；对来源不明默认走复核/补证据，不给“可自由使用”的误导结论。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在学习材料版权合规与引用溯源平台方案设计背景下，用户与导师围绕授权规则与策略引擎的边界定位、规则分层、输入输出字段与MVP分级动作持续沟通（8轮），其中在授权要素拆解与高风险/合理使用边界上与法务合规负责人沟通（3轮），在使用场景字段口径与MVP裁剪方案上与数据治理经理沟通（2轮），并收束为可审计可配置的策略引擎设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我要开始设计学习材料版权合规与引用溯源平台的技术方案了，这一段我卡在“授权规则与策略引擎”怎么设计比较像样，能先帮我定个方向吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我脑子里比较偷懒的想法是直接上个现成规则引擎，然后把各种“允许/不允许”写进去。这样会不会太粗糙？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按边界声明，是风险提示，不做自动侵权裁决。输出主要给教研和运营，法务是裁定争议的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "输入字段我能想到“来源URL、作者、授权文件”。但感觉一上来要字段好多，教研估计会嫌烦。有没有更省事的方式，比如先让系统从网络自动抓信息？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据应该是合同/授权书/采购发票这种可证明的。线索就是网页截图、来源链接、平台声明之类的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 授权规则这块，最小要素你们一般要哪些？还有哪些情况一看就高风险？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是：高风险主要是“没证据”或者“范围对不上”。那如果是老师自己做的PPT里用了几张网上图，但他写了“图片来自某某网站”，算啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“合理使用”是不是可以当成低风险直接放？比如课堂教学引用一点点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从法务那边听到的就是：授权要素分三层，范围不匹配和没证据就是高风险；合理使用只能提示不能自动放行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着搞个可视化规则配置，拖拽那种。网上很多规则引擎都支持。我们直接用它的DSL是不是就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三类……可能是：字段校验类（缺啥证据）、范围匹配类（期限地域渠道）、还有风险评分类（综合算分）？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那评分这块，我能不能直接用一套现成风险打分模板？比如命中一个高危就直接高风险，不用算分。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我倾向用“命中即判”的方式：只要触发某些高危就高风险；没触发高危但缺证据就中风险；都齐了就低风险。分数看着挺玄。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说：  \n- 高：范围明确不匹配（比如渠道不允许）或来源不明且要对外分发，就阻断入库/下架，48小时内必须处理；  \n- 中：范围还没发现冲突但证据缺失，允许暂存不发布，派单7天补证据或替换；  \n- 低：证据齐且范围匹配，允许发布，但后面版本治理再抽查；  \n- 复核：遇到合理使用、改编权这种难判的就交法务。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "上游是资源库和编辑器。我猜可以让他们在接口里传个scene字段，比如“站内课程”“公开页面”。我不太确定字段怎么定义才不乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 使用场景这块，策略引擎要用来校验授权范围。场景字段怎么设计才不至于各系统填崩？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我有点担心接口一下子要传这么多维度，上游会拖进度。能不能先只传channel和公开/非公开两个？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 场景字段建议拆维度，不要一个scene字符串。MVP先要三项：channel、access_mode、delivery_action；缺的维度就走复核并打reason code。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第4条里“来源不明且将发布/公开分发”判高风险我同意，这样不会把老师备课素材都卡死。第5条我担心上游还是会乱传access_mode，但先按未知复核也能兜住。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育平台方案设计的引用链路与审计建模背景下，用户与导师围绕引用链路最小节点、证据留存与隐私最小化取舍持续沟通（6轮），其中在实体/关系与证据分级建模上与数据治理经理沟通（2轮），在“推断引用”可用于提醒/拦截/举证边界上与法务合规负责人沟通（2轮），并形成声明/推断区分、证据分级与事件快照的可执行决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是用现成的血缘工具那种图，节点边一画就行。只是这里的“引用”是不是要分好多类型，我不太确定要细到哪里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点我猜是“素材”吧，比如一张图、一段文字、一个课件文件。证据…可能就是来源链接、上传人、时间？再加个授权截图之类的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 引用链路数据模型一般怎么拆？我担心要是记太细，会不会把老师的编辑过程也全暴露了；记太粗又不好追溯。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：平时只存“谁引用了啥+当时规则判定”，真要扯皮再用工单去翻更细的证据，对吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那Fragment就是只在部分场景开，不然会无限膨胀。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "取舍上，默认不做片段级和编辑过程日志，主要留P0那套：来源ID、时间、谁干的、授权状态快照、规则版本。遇到视频截取、截图这种再开Fragment+P1证据。P2只在工单里给管理员看，还要留审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点想偷懒…用相似度检测自动打点，直接给出“疑似来自XX”，然后链路就算有了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那数据模型里要加一个字段区分？比如 citation_type=declared / inferred？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 推断出来的“疑似引用”，在合规上能用到什么程度？能直接拦截分发吗，还是只能提示补充来源？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "所以推断最多就是“推你一把”，不能当锤子。那我之前想的“自动补全链路”不成立。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "关系表里加：relation_kind=derivation/citation；relation_source=declared/inferred；confidence（只有inferred有）；evidence_level=P0/P1/P2；再挂rule_version_id。实体这边 Asset有source_id、source_type、access_mode（从上个微场景来的）、license_status_snapshot；Content有visibility（内部/班级/公开）和owner_party_id。Party只放用户ID和组织ID，不放手机号邮箱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "在关系上加created_at就够？或者加一个valid_from/valid_to？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点怕这会变很重。事件多了存储会爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们最后的选择是：默认不采P2，不强制每次粘贴填来源；用推断做提示，在“公开分发+来源空+高置信”时触发复核甚至阻断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）引用链路模型：Asset/Content/Party为核心，Fragment只对高风险媒体截取启用；关系分Derivation和Citation。  \n2）证据分级与访问：P0必留并可审计；P1按风险；P2默认不采，若在争议工单采集也要权限+审计。  \n3）声明与推断并存：relation_source区分declared/inferred，推断只能做提示与触发复核，不能当作侵权事实直接举证；公开分发场景可更严格。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计需打通编辑器与资源库并嵌入引用链路与证据留存的背景下，用户与导师围绕接入点、版本绑定、最小事件集与校验降级持续沟通（8轮），其中在接入形态与接口边界上与解决方案架构师沟通（3轮），在编辑器嵌入可行性与快照采集上与前端负责人沟通（3轮），并形成混合接入、事件/接口与发布强校验的方案口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是做个编辑器插件，嵌进去就行。资源库那边就走API。只是不确定插件要做到多重，网上很多都是直接加个“引用来源”表单就结束了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "编辑器事件……可能是插入图片/音频/视频、粘贴文字、导出发布。资源库能力是查素材元数据、拿授权信息、还有回写引用记录？我不太确定回写是不是必须。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我以为跟最终发布走就够了，不然每次保存都记一条会很爆炸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 接编辑器和资源库，一般怎么切？我想要最省事的方式，但也得能把引用链路写回去。接口边界怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“接入层”，是不是就相当于搞个网关？我们现在不想引入太多新东西，有没有更轻一点的方案？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那资源库“引用回写”，会不会把资源库搞得很重？它要存很多content引用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 编辑器嵌入这块，插件能抓到哪些事件？有没有办法不用改太多编辑器代码，还能拿到插入素材、发布这种动作？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "位置信息是指片段Fragment吗？上次我们说Fragment只对高风险媒体截取启用，我怕前端这边搞得很复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果老师是复制粘贴来的图片，不是从资源面板选的，是不是就没asset_id了？那我们是不是得强制走上传，自动变成asset？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我大概懂了，就是别在编辑时把老师卡死，把硬拦截放到发布。只是我担心大家会吐槽“发布前一次性报错太多”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“混合型”：能用资源库链接就用链接，复制粘贴的就引导上传变asset。事件集就抓四个：attach/detach、save带version、publish、还有前端说的snapshot。降级上，校验挂了草稿能保存但打个“待校验”，发布必须拦住。\n取舍理由就是：纯链接最干净但老师很多素材不是库里的；纯上传又会让资源库压力大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是存储吧，音视频会很大。还有后续要不要指纹、证据P0之类的，也会多存一份。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入库：老师本地上传的图片/音视频必须入库生成asset_id；从资源库选的就不重复存。只存引用：外链URL的先允许草稿，但发布不允许外链？这块我不太确定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "快照只上传“资源清单+asset_id+引用声明字段+必要的位置信息”，不上传正文内容；如果必须传正文片段，只在高风险媒体的证据P0里传，而且要权限+审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行。用hash我能理解，就是对齐版本，不传内容。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终版：  \n1）接入方式：编辑器侧“资源面板链接为主+本地粘贴引导上传入库”为辅；公开分发禁外链直出。  \n2）事件/接口：编辑器调统一接入API，最小事件是asset_attach、asset_detach、content_save(version_id)、content_publish；发布前发content_snapshot（资源清单、asset_id、声明字段、位置索引、content_hash）。资源库提供Asset查询、授权校验、可分发URL；引用关系权威存平台引用服务，资源库可选存被引用索引。  \n3）校验与降级：草稿期校验失败可保存但标“待校验”；发布必须强校验+P0证据落库成功才放行；证据采集遵循P0/P1/P2分级，文本不采片段，争议工单再按权限采集。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育平台方案设计的审计留痕与权限体系、且预算受限背景下，用户与导师围绕必留痕事件分级、P0字段、最小角色权限与导出规则及验收口径持续沟通（7轮），其中在防篡改与审计隔离、留存期限与导出分级部分与安全工程师沟通（6轮），并最终确认P0/P1/P2留痕、双日志分离、追加写哈希链与三条验收标准。",
+            "evidence": []
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在学习材料版权合规与引用溯源平台工程开发背景下，用户与导师围绕不稳定的素材指纹去重老实现的重构范围、接口契约、可解释输出与验收指标持续沟通（12轮），其中在指纹分层/阈值策略/轻量解释信号部分与算法工程师沟通（6轮），在用例组织与回归门槛部分与测试负责人沟通（4轮），并最终形成图片去重P0落地清单与审计留痕要求。",
+            "evidence": []
+          },
+          {
+            "microScene": "在编辑器/资源库接入授权校验API联调背景下，用户与导师围绕签名方式、必接字段、错误码到前端提示/重试/打标策略及审计留痕验收持续沟通（11轮），其中在HMAC签名、错误码分层、evidence_refs与409冲突处理、降级suggested_action与隐私最小化存储部分与后端负责人沟通（3轮），并形成联调兜底映射与用例验收清单。",
+            "evidence": []
+          },
+          {
+            "microScene": "在编辑器“引用标注组件开发”背景下，用户与导师围绕引用标注的数据结构、交互方式、草稿/发布校验策略与审计字段提交持续沟通（9轮），其中在标注随复制粘贴/拆分稳定性与字段分层设计上与前端负责人沟通（7轮），在degraded+risk_level下PASS/BLOCK/NEED_REVIEW判定与提示文案边界上与法务合规负责人沟通（3轮），并收口为基于mark存citation信息+保存时提交citations摘要与状态回显的实现要求。",
+            "evidence": []
+          },
+          {
+            "microScene": "在数字教育内容合规的审计日志与证据导出设计背景下，用户与导师围绕审计事件类型、关联ID（request_trace_id/decision_id）、两档导出与异步任务折中方案持续沟通（10轮），其中在字段口径/不可变快照/留存脱敏与manifest部分与数据治理经理沟通（1轮），在decision_id幂等、snapshot防篡改与导出任务实现部分与后端负责人沟通（1轮），在403/409/DEGRADED可复现验收用例与幂等链路部分与测试负责人沟通（1轮），并口头列出event/snapshot/export_task字段与接口状态分支及TTL/大小限制。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着就用现成的审计中间件打点，存 user_hash、action、time、resource_id。证据导出就把 citations 摘要塞进去，再加个结果 status。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件类型…大概是：\n1) content.save\n2) content.publish\n3) compliance.block\n4) compliance.override？\n5) content.takedown\n6) appeal.submit\n差不多这些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想直接用 trace_id，框架里自带，不用自己造。submission_id 我怕要改一堆接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 审计日志和证据导出这块，字段口径一般怎么定？哪些要做不可变快照，留存和脱敏怎么弄？我们现在有 citations 摘要和 hash 传参的约束。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是要分 event 和 snapshot 两张，event 可查，snapshot 锁一次 decision。citations 摘要最好不直接全量明文，至少 hash 一份。导出时带一个 manifest，能用 snapshot_hash 校验没被改。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是就两档导出？普通人只给 hash+引用位置，法务权限再带原文片段？我怕实现复杂…能不能就统一导出都带原文，省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 decision_id / 证据快照 / 导出这块怎么落？我想尽量复用现成的 tracing 和导出库，但导师要我加不可变快照、两档导出。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步任务这块我本能想直接上现成的队列组件，但我们现在环境里好像还没配齐。要不先做同步导出，限制包大小？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用数据库表当任务表？轮询跑一个 worker？就是…我怕不稳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我做个 export_task 表：task_id、evidence_id、mode(standard/legal)、status(PENDING/RUNNING/DONE/FAIL)、created_at、updated_at、expire_at、error_code。worker 就是我们服务里起个定时任务扫 PENDING，锁一条跑，生成包上传对象存储，DONE 后写 download_url。幂等靠 (evidence_id, mode) 唯一索引，重复点导出就返回旧 task。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "DEGRADED 我理解是附件拉不到，比如对象存储超时，就只生成 manifest，不带附件，然后 status 写 DEGRADED？测试就把对象存储地址配错…或者用 mock？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 审计日志+证据导出这块，你能给我一套可复现的用例吗？重点是 403/409/DEGRADED，还有引用标注那套 citations 摘要要能串到 evidence_snapshot。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住了：409 的时候 decision_id 可能空，导出 403 要写 export.denied 事件，DEGRADED 用开关强制失败附件拉取。还有重试幂等：快照一条，event 两条允许。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我按我能写的范围说一版：  \n1）审计 event：event_id、occurred_at、actor_hash、actor_role、object_type+object_id、action、request_trace_id、result、error_code、decision_id（可空）、client+client_version。  \n2）证据快照 snapshot：evidence_id、decision_id（唯一）、decision_time、decision_outcome、rules_hit(带版本)、license_refs(带版本)、citations_digest（先存结构化摘要+再算 hash，明文片段不进标准包）、evidence_refs、content_version、snapshot_hash、supersedes_id（可空）。只插入不更新。  \n3）导出：POST /evidence/{evidence_id}/export?mode=standard|legal -> 返回 task_id。创建时做权限，legal 需要更高权限还要写 reason。GET /export/task/{task_id} 查状态，GET /export/download/{task_id} 再校验权限。  \n4）状态：403 权限不够；409 evidence 不存在或 superseded；DEGRADED 附件拉取失败只出 manifest，manifest 里写 attachments_included=false，同时 task 的 result=DEGRADED。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "导出包我给个 expire_at，比如 7 天删；包大小上限先 100MB，超过就直接 FAIL 并提示走线下取证？event 里写 export.failed + error_code=PAYLOAD_TOO_LARGE。"
+              }
+            ]
+          },
+          {
+            "microScene": "在审计导出、授权校验与快照幂等链路的灰度发布和回滚演练背景下，用户与导师围绕灰度编排、观测打点、数据一致性与合规要求持续沟通（7轮），其中在发布路由/回滚是否回库及指标设计上与DevOps工程师沟通（6轮），在演练用例三层断言、触发回滚条件与异步任务处理上与测试负责人沟通（5轮），并最终定版按租户路由的灰度+软硬回滚、必备指标与6步可重复演练脚本落地项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先走最省事的，按环境变量开关灰度。就是新版本只给一小部分组织用。验证的话，就跑一遍我们那几个 403/409/DEGRADED 的分支，然后再把开关关掉，应该就算回滚了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 灰度发布这块你给我个可照着做的流程行不行？还有回滚到底要不要回数据库。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是就用现成的灰度发布工具，配个按租户路由就行？我怕我自己写规则写崩。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "观测这块我没太有概念，我们现在 Prometheus 有，但我就会看 CPU、内存。你说的授权校验错误码分布，是要我在接口里打点吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚后数据不脏怎么证明？我听起来像要对账，但我不会做那种很复杂的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个小问题：回滚要不要把新版本容器都停了？我怕有人还在用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问了 DevOps，那边说数据库一般不回滚，主要是前向兼容然后路由切回旧逻辑。灰度最好按租户ID，不要随机百分比。观测要加授权校验的错误码分布、DEGRADED 次数、延迟，还有导出 manifest 构建失败这种。回滚分软回滚切路由和硬回滚下线新版本，尤其异步任务要管住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能先用现成的指标库加几个 counter 吗？就是你说的 auth_check_total 这种。我不太确定标签怎么定，怕爆炸。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "演练步骤的话，就选 2 个租户，跑素材引入、引用标注、触发一次 403/409，再做导出，然后开灰度，重复一次，再切回。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "reason_code 我现在记得的就：NO_LICENSE、SCOPE_MISMATCH、FINGERPRINT_CONFLICT、RULE_ENGINE_TIMEOUT？可能还有别的。我先按这些写死？再多的我不清楚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "6 步我试试写：1）灰度前全量旧版本，租户A做一次素材引入并引用标注，拿到 decision_id；2）重复提交同一 decision_id，看不会多写 snapshot；3）导出证据，看 manifest 构建成功；4）开灰度只给租户A走新版本；5）租户A再跑一次，触发一次 DEGRADED（用开关复现），看 UI 分支和后端 reason_code；6）回滚路由到旧版本，再导出一次，确认还能导出、字段不空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 灰度发布+回滚演练，怎么写用例和断言比较靠谱？我主要怕回滚后导出证据链有洞，但我不会断言。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "quote_graph_hash 我们还没做哈希吧？我印象里只有引用关系列表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值呢？DevOps说要看 DEGRAGED 次数、错误码分布，但我不知道到什么程度要回滚。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步任务这块我更不懂了，我们有个批量扫描会补指纹。回滚时要停掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，测试那边给了三层断言：接口层重放 decision_id 不新增快照；数据层快照表只有 insert；导出层 manifest 字段要齐（decision_id、material_id、source_uri、license_id、license_scope、quote_graph_hash、时间戳、操作者原因）。quote_graph_hash 我们可以先把引用关系列表稳定序列化做 hash，用来比对回滚前后是否一致。触发回滚条件先用演练触发：manifest_build_fail 出现就软回滚；超时或 P99 超基线两倍持续 5 分钟也回；如果旧版本导出读不到新写入直接硬回滚并停批量扫描任务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "租户我想用内部测试组织，不用真实学校。素材就用我们自带的示例素材库？或者用公共领域的图片。审计数据留存我不太确定，感觉跟正常一样留就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记下来了。那今天收口是不是就是把演练脚本和指标清单定下来？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在学习材料版权合规与引用溯源平台运行评估背景下，用户与导师围绕“合规拦截命中分析”的指标口径、分层维度、误拦截判定、抽样与留存/成本及告警阈值持续沟通（7轮），其中在事件流与可落地指标字段对齐上与数据分析师沟通（2轮），在误拦截审计口径与最小证据留存集上与法务合规负责人沟通（2轮），并收敛出可执行的看板与触发排查闭环。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先想偷个懒，直接用现成看板看拦截总量和命中率就算了，这样能过吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分母就…内容发布请求数？我看网关都有日志，拦截就是返回403的次数。然后命中率=403/总请求。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就按我们事件埋点的 action_type 来算？我记得有 BLOCK / WARN / PASS 之类的枚举。我可以用 Kibana 直接按字段聚合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误拦截就看申诉量？用户点“申诉”就算误拦截。没有申诉就当对的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 命中分析这块你能给我一套能落地的指标口径吗？我现在就知道 action_type、reason_code 这些字段，怕算出来没意义。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "label 这块是不是就先用“申诉通过”顶着？我怕复核推翻的数据要等很久。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还有个小问题：我想直接在 Superset 里拖拽字段做看板，能直接出这些吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。大概就是用 compliance_decision 事件，不用网关403。指标分三层：覆盖量（decision_id去重）、命中结构（BLOCK/WARN/DEGRADED、reason_code、rule_id/version贡献）、效果近似（误拦截两口径+整改耗时）。还要按 policy_version 把灰度新旧切开做对照。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "抽样我就把被 BLOCK 的内容都保存下来，留着复核？或者存原文片段方便看？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 误拦截这块你们怎么认定？还有我们为了复核需要留什么证据才够，用不着存原文吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“24小时内补齐授权后放行”算误拦截吗？我感觉很多是用户本来就没传字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 法务说误拦截必须有复核结论或申诉通过记录号，纯投诉不算。补证后放行不归误拦截，单列 evidence_missing_resolved。留存只要 decision_id、规则版本、授权要素快照、quote_graph_hash+条目数、脱敏来源标识；BLOCK审计记录至少180天，PASS/WARN采样更短。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标清单我先照抄三层：量、结构、效果。维度就 tenant、content_type、channel、reason_code、rule_id/version、policy_version。对照就是灰度 tenant A 新旧 policy_version。阈值我不太敢定，能不能先用默认的，比如误拦截率>5%就回滚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源成本…我只想到把 PASS 的事件采样 1%，BLOCK 全量留。查询就按天分区。要是还大，就再降采样？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能接受。就是“规则贡献度回钻”我怕没法看内容细节，只看 rule_id 会不会定位不出来？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按你这5条去做。看板我先做 action_rate、reason_top、rule_contrib 三块，policy_version 默认当筛选项。告警先上相对阈值那三条，PASS采样按 tenant 分层我再让数据那边配。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段误拦截申诉闭环设计背景下，用户与导师围绕按decision_id可追溯、可审计留痕的状态机、指标口径与回流改进持续沟通（7轮），其中在判定依据与最小证据集及临时放行护栏部分与法务合规负责人沟通（5轮），在漏斗/时效/回流质量指标及看板字段口径部分与数据分析师沟通（4轮），并形成6状态闭环必填项、自动预判分流与权限留存约束的落地口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "闭环是不是就做个申诉入口，然后人工审核，通过就放行？我怕流程细起来会很重，有没有省事点的通用模板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我猜就是：用户点申诉→填理由→系统把 decision_id 带上→法务看一下→改成放行或维持拦截。回流的话……就给规则打个标签？我不太确定要哪些字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态至少要有：已提交、处理中、已结论。再细一点就加个待补材料？不然经常来回问。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 误拦截申诉这块，审核时到底要看啥才算够？能不能给个最小证据集，不然每次都要翻原文我怕扛不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果用户说“课堂合理使用”，我们能不能直接给过？很多老师会这么说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，最小集里我听懂的就是“别看全文，看快照+hash+原因码”。但我不太会把“临时放行”做成不出事的样子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 申诉闭环要怎么量？我怕大家各算各的。你给我一套指标口径和需要埋哪些字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段埋点要到多细？我担心每个环节都加字段会很累。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概能复述给你：看板就按漏斗、时效、回流三块。对照组那块我有点虚，7天变化是不是太武断？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须做的我选三件：1）申诉表单带 decision_id；2）状态流转和时间戳齐，能算 SLA；3）结论要有 root_cause_code，不然回流不了。对照组我想先不做，先用“动作后同原因码的再申诉率下降没下降”替代，后面再补严谨对照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自动预判就按证据缺失那类吧：比如 evidence_snapshot_present=否 或 source_connector_present=否，就直接打成“疑似系统问题”，优先给后端队列？规则过严和合理使用就还是人工。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我只能说个粗的：证明文件只让法务看，其他人看不到原件。数据分析那边只拿校验结果。留存时间……按公司合规要求？我不确定具体天数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限就两行：教研/运营只能看到申诉状态、结论码、缺失项，不见原件；法务能看原件和签章页，且每次查看都记审计日志。原件默认留 180 天，之后只保摘要哈希和审计号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "状态我给 6 个：已提交→待补材料→已受理→审核中→已结论→已回流。必填项我可能漏，你帮我看：已提交要 decision_id、申诉理由码；待补材料要缺失项清单；已受理要 assignee_role；审核中要证据最小集检查结果；已结论要 root_cause_code、是否放行、放行类型；已回流要 action_type、override_ttl。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的证据链完整性巡检设计背景下，用户与导师围绕巡检需落到字段口径、断链分级、看板指标与抽样复核闭环持续沟通（8轮），其中在巡检检查项与P0/P1/P2断链判定部分与数据治理经理沟通（4轮），在争议/审计可用证据最低要求与原件索引边界部分与法务合规负责人沟通（3轮），并汇总形成可对齐产品/数据/法务的巡检口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是能从内容一路追到授权和引用吧。链路大概是素材进来→算指纹→引用标注→触发规则→拦截/放行→审计。只要这些都有记录就算完整？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就……content_id、source_id、license_id、quote_graph_hash、decision_id、reason_code、snapshot_id、operator、timestamp、workorder_id？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 证据链完整性巡检这块，你建议检查哪些项？能不能给个比较清晰的检查清单和断链怎么判？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "断链分级怎么搞？我怕一上来就全红，大家会说巡检没用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边还有个问题，quote_graph_hash 只要有就行吗？快照内容很大，存全量会很占。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想就做个“断链率”大盘，然后按 P0/P1/P2 分桶，再按链路段分，比如授权快照缺失、引用图缺失、规则版本缺失。然后按业务线/租户排一下Top。法务可能关心 P0 和 scope 不一致这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抽样复核是不是随机抽一些 decision_id，然后让人去点开看证据？闭环就……出工单给数据/研发修字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 证据链巡检里，哪些证据缺失会让你们觉得“无法用于争议/审计”？最好按优先级说下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们说的“原件由谁保管”这个我有点慌。是不是就要把合同PDF都塞进平台里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说，但可能不全：  \n- 检查项：每条 decision_event 必须能连到 content_version/hash、license_snapshot（即使无授权也要有状态快照）、quote_graph_hash/快照、rule_version、reason_code、decision_type。  \n- 分级：P0 缺快照/版本导致不可复现；P1 有但不一致比如 scope 和 channel 不匹配、rule_version 查不到；P2 是 trace_id/operator_role/retention 这种审计字段缺失。  \n- 指标：断链率=断链decision数/总decision数，分P0/P1/P2；按断链类型Top；按租户/渠道/规则版本Top。  \n- 闭环：P0/P1 进风险事件池并开工单，P2 周期性修复。  \n我说的“抽样复核”不太会写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把“5分钟内能导出摘要”当成复核SLA？N 取多少我不知道，能不能先用固定 50？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：quote_graph 快照太大时，只留hash+节点边计数，法务会不会不认？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按这几条去和产品、数据对齐口径。抽样那条我会说清楚是“能不能快速拿到摘要”，不是让大家去翻原件。"
+              }
+            ]
+          },
+          {
+            "microScene": "在规则版本迭代与更新的运行评估背景下，用户与导师围绕新旧规则效果评估口径、灰度发布、回滚触发与对外解释留痕持续沟通（9轮），其中在指标拆解与影子评估/差异矩阵方法上与数据分析师沟通（2轮），在红线类/提示类规则分层与审计点要求上与法务合规负责人沟通（1轮），并形成门禁指标+分层发布+回滚留痕的执行要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕改规则以后拦截突然变多，然后大家来问为啥。还有就是旧内容之前没事，更新后被打回，运营会炸。有没有那种一键对比新旧规则效果的办法，最好平台自己给结论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拦截命中率？然后申诉量。还有整改时长。可能还要看P0断链是不是变少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 规则版本更新时，怎么评估新旧规则效果？我想要能直接对比的指标，别太复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "影子评估就是新规则先别真拦，只打标记对吧？差异矩阵是指新拦旧不拦这种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "门禁我想放三块：申诉通过率别飙、潜在误伤那格别太大、还有证据摘要5分钟导出要达标。拦截率变化就先当观察项，不当门槛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 规则版本更新时，哪些能灰度快一点，哪些必须很谨慎？还有对外解释要留什么审计点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所以红线类就别乱动，提示类就算改多点也行，但不能把提示变拦截。审计点要把规则版本和证据快照串起来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能全都先影子一周，看着没问题再全量？这样安全点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就红线类先影子跑，提示类直接灰度？侵权高发的渠道比如外部分发先上新规则？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "硬条件：申诉通过率比基线高很多就回滚；还有潜在误伤那格超过某个比例回滚。软条件：拦截率涨但是申诉没涨就先看；证据摘要导出达标率小幅波动先观察。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬条件就写：申诉通过率相对基线翻倍，或者新拦旧放占比超过基线的两倍，就触发回滚。软条件：拦截率变化在±20%内先不动，证据摘要5分钟达标率低于目标但没跌破90%就先修数据字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "核心渠道阈值收紧一半，比如拦截率变化±10%内先观察；外部分发还是±20%。回滚复盘就按rule_version把命中样本拉出来，抽样看四格里误伤的证据链是不是P0/P1，然后把责任归到规则还是数据快照缺失。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "判定角色就法务+内容运营+我这边产品一起看？留痕字段就是把每个回滚事件记录：触发指标、rule_version、影响渠道、抽样ID、复核结论、处理人角色。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我负责把差异样本和四格矩阵整理给他们，拍板还是运营+法务。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要点我记成这样：  \n1）发布分层：红线类规则先影子评估至少一周；提示/规范类可先灰度。核心教学渠道更保守，外部分发可更激进。  \n2）评估看四格差异矩阵，重点盯“新拦旧放/新放旧拦”，配合申诉率、申诉通过率、人工复核占比；证据摘要5分钟导出达标率当硬指标之一。  \n3）回滚触发：申诉通过率相对基线翻倍，或新拦旧放占比相对基线翻倍，直接回滚；拦截率小幅波动按渠道阈值先观察。  \n4）回滚留痕：记录触发指标、rule_version、生效时间窗、影响渠道/租户、抽样ID、复核结论、处理人角色，方便对外解释和审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

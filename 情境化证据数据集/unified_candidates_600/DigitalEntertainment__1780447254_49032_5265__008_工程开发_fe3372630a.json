@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在推演并发性能调优与除错背景下，用户与导师围绕并发瓶颈、锁竞争与背压机制持续沟通（7轮），其中在图谱并发更新死锁除错部分与图谱开发工程师沟通（1轮），在MQ积压与gRPC背压除错部分与后端架构师沟通（2轮），并最终形成图谱乐观锁、MQ并发度降级与gRPC背压窗口自适应三条核心约束写入接口规范补充文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "性能拉胯就加节点呗，或者给图谱加个缓存，读快了应该就不堵了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱并发更新有锁竞争，怎么除错啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "临界点，就是并发特别高的时候呗。超时的话，不是有静默阻尼降级吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱重试多的话，MQ积压和gRPC背压怎么除错？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "背压机制我之前看 Reactive Streams 规范时学过，就是通过 request(n) 控制上游发射速率。我把它迁移到 gRPC 这边，就是调整流控窗口的 prefetch 大小，这样能防止客户端被压垮，延迟也能稳住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据，依据客户端的处理能力吧，处理得快就开大点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1是乐观锁，2是MQ降级，3是gRPC背压。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "写进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

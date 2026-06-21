@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在差分隐私注入与抗后门联调背景下，与导师围绕DP参数设定、抗后门策略、AUC与隐私预算权衡及联调步骤持续沟通（7轮），其中在DP参数与抗后门测试部分与模型安全审计员沟通（1轮），在AUC影响与自适应裁剪部分与联邦算法架构师沟通（1轮），并形成包含epsilon调整、异常梯度裁剪与隐私预算追踪的联调步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接跑一遍呗，把高斯噪声加进去，看AUC掉多少。掉得少就加点，掉得多就减点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "epsilon我用的Opacus库默认的1.0。后门攻击我还没测，不过加了DP应该就防了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@模型安全审计员 DP注入参数怎么定，还有抗后门联调怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "epsilon得压到0.5，还得加异常梯度裁剪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联邦算法架构师 这么搞AUC会不会崩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "审计员说epsilon得0.5，还得加异常梯度裁剪防触发词。架构师说0.5会让AUC掉2个点，建议自适应裁剪。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那epsilon稍微放大点？0.8？自适应裁剪我可以用FedDyn的实现套一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我查一下FedDyn的默认参数，先跑一轮对齐基线看看方差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 先把epsilon设0.8，跑一轮看AUC；2. 加异常梯度裁剪，阈值按中位数算；3. 跑触发词投毒测试，看方差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

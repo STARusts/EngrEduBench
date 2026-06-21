@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光帧智能舞台灯控编排系统工程开发落地“时序编排核心”背景下，用户与导师围绕时间基准、调度结构取舍、回放一致性与降级边界持续沟通（9轮），其中在lookahead/lead/抖动补偿与云失联冻结策略参数化部分与实时系统工程师沟通（3轮），并收敛出模块接口、默认参数与三条实现红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想把引擎做成事件溯源+可回放的状态机，再上一个微秒级时间轮调度，顺便把每条指令都走统一的审计request_id链路。这样够“稳”，但我担心实现爆炸。@导师 你帮我把开发阶段第一刀切在哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "问题是时间基准：用本地单调时钟+NTP校正，还是全链路PTP？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现场观感上，我希望“灯光变化点”跟音乐beat偏差不超过20ms，最差不超过50ms。链路上我可以让边缘做最终对齐：云只发编排，边缘按本地时钟执行。PTP我觉得能把误差压到亚毫秒，挺诱人。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "粗算：一首5分钟，假设每100ms有一次事件点就是3000点；每个点可能涉及10个灯具组，那就是3万条下发计划。边缘内存没压力。最小堆log(3万)也就15左右，CPU完全够。我更担心时间轮tick带来的常驻扫描开销和实现bug。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时系统工程师 我在做光帧智能舞台灯控编排系统的时序核心：边缘按本地单调时钟调度，调度结构可能用最小堆。你给我一套能直接写进代码的：lookahead窗口、提前发送、抖动补偿、以及云失联时边缘回放与“演出窗口冻结配置”怎么配合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "200ms lookahead我本来想搞成自适应（根据近期网络抖动动态调大），但看起来先固定更稳。lead_ms分协议也合理。一个点：你说“早发但不早执行”，设备侧不一定支持execute_at，那我在dispatcher做发送时间=execute_at-lead的调度就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "晚到>20ms丢弃这条我有点不舍，我怕灯光师觉得“少了动作”。能不能做补偿，比如把晚到的fade压缩到剩余时间？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂，我回去给事件类型加个`lateness_policy`：DROP、COMPRESS、MERGE_NEXT三种。先默认DROP，fade用COMPRESS。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳：边缘单调时钟+慢速offset校正；调度结构先用最小堆；scheduler每10ms tick，lookahead固定200ms；按协议配置lead_ms；晚到容忍20ms，超过按事件类型策略处理；演出窗口只认最后成功发布hash，新包拒绝并告警；实时线程只写摘要到环形buffer，异步落盘。\n我暂时不做：PTP、lookahead自适应、全量事件溯源重放（只做确定性回放，不做通用event sourcing）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算三块：\n1）`TimelineEngine`：输入`CompiledShow`（已按版本hash冻结），提供`play/pause/seek/set_rate`；维护`playhead_mono`与`playhead_timecode`映射。\n2）`Scheduler`：持有一个最小堆，元素是`(fire_timecode, priority, seq, event_ref)`；每10ms把`timecode <= playhead + lookahead`的事件转成`DispatchItem{request_id,event_id, execute_at_mono, payload_ref, lateness_policy}`推给dispatcher队列。\n3）`Dispatcher`：按`protocol+universe+fixture_group`聚合，计算`send_at_mono=execute_at_mono-lead_ms`，小堆定时发送；发送结果写摘要日志（success/timeout/skip/late_ms）。\n线程：engine+schedule在一个实时线程；dispatcher单独线程（或每协议一线程，先单线程）；日志异步线程。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会给每次transport变更一个`transport_epoch`自增。DispatchItem带epoch，dispatcher处理前比对当前epoch，不一致直接丢。seek时scheduler重建堆指针：不全量重建，先用索引定位到timecode起点，把堆清空再批量推入后续窗口内事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CompiledShow里我会把每条轨道事件按timecode存数组，并建一个`timecode -> start_index`的稀疏索引，比如每1秒一个bucket，seek到t时先落到bucket再线性扫到精确位置。这样不用复杂B树。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以在dispatcher加背压：如果待发送堆长度超过阈值（比如5000），就触发“合并策略”：对同一fixture同一属性只保留最新值，丢弃中间帧；同时把late/skip计数上报。还有一个“安全阈值”：当调度线程循环耗时>5ms连续N次，就把lookahead固定降低到100ms避免一次性搬太多事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，我把降级改成“帧化输出”：进入degraded_mode后，dispatcher按25ms一帧刷新，把属性取最近一次目标值。lookahead仍200ms，只是输出更粗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实现要点：`TimelineEngine+Scheduler`实时线程用单调时钟驱动，最小堆按(timecode,priority,seq)出队；`Dispatcher`按协议聚合二次调度到`send_at`并执行，transport_epoch防止seek/pause残留事件。\n默认参数：tick=10ms，lookahead=200ms，late_tolerance=20ms，lead_ms按协议30~120ms，degraded_mode帧化25ms。\n红线：边缘日志不进实时线程（只摘要环形buffer）；演出窗口冻结配置只认最后成功发布hash；权限矩阵不按能力粒度细分（我不会在时序核心里塞花哨授权点）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

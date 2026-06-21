@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在品控算法接入需确定多源异构数据融合接口规约背景下，用户与导师围绕协议适配、脏数据清洗、时间同步机制及其对存证的影响持续沟通（7轮），其中在脏数据清洗与时间对齐部分与接口与数据流设计师沟通（2轮），在边缘弱网时间同步方案部分与物联溯源架构师沟通（1轮），并最终形成包含接入层、清洗层、归一化和保障的四条接口核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以用MQTT统一接入，然后数据格式全转成JSON，再丢给算法就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在网关写解析脚本呗。每个设备配一个驱动，把华氏度转摄氏度，再打包成JSON发上去。至于清洗，把空值过滤掉应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "冷链车断网重连后时间戳乱跳，还有各种杂牌设备报文，这种脏数据在接口层一般怎么洗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "单位归一化就是写死转换公式吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳乱的话，Merkle树构建的顺序也会乱，上链的哈希对不上，存证就失效了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网关本地时钟走久了会有偏差，得跟云端对时。用NTP协议？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "冷链车这种弱网环境，边缘网关跟云端做时间同步，用NTP行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 接入层：边缘侧用协议适配器插件化解析私有协议，转统一物模型JSON。2. 清洗层：断网期用本地单调递增时钟打标，网络恢复后用PTP或HTTP校准偏移。3. 归一化：温度统一摄氏度，超限截断不上报。4. 保障：时序错乱会导致Merkle树构建失败，时间对齐是强前置条件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

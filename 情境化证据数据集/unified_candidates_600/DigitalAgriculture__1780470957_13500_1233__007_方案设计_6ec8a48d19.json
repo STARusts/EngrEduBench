@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在绿金对接接口规范设计背景下与导师围绕无预算下的对接方式、限流幂等要求及验证设计持续沟通（7轮），其中在银行侧必传字段与限流阈值部分与绿色金融产品经理沟通（1轮），在轻量级限流熔断实现方案部分与系统架构师沟通（1轮），并最终形成绿金对接接口底线规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接用Spring Boot写几个Controller，HTTP直连银行，加个Filter校验Token，反正数据量也不大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等性加个唯一请求ID就行了吧。限流我不太确定，银行那边具体什么要求我也不清楚，直接写容易出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "银行那边的绿金信评接口，必须要传哪些字段？限流卡在多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "没钱买商业网关，还得实现50QPS限流和防重放，Spring Boot里面怎么搞最省事？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天刚好在看Spring Cloud Gateway的源码，它的Predicate机制正好能用来做LCC码的格式校验，我准备把这套用上，不写硬编码Filter了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写完代码跑一下JMeter压测呗，并发打高一点看看有没有报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JMeter起100个线程并发发请求，持续10秒。重试的话，我手动把银行接口Mock成超时，然后看数据库里同一TraceID的信评记录是不是只有一条。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

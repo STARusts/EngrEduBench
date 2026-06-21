@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在产注协配调度引擎代码落地背景下与导师围绕规则引擎选型、动态安全红线注入、合规审计留痕及验证方式持续沟通（7轮），其中在流式计算动态基线与审计逻辑部分与调度引擎工程师沟通（1轮），并最终确定自研轻量规则树、Kafka落库带签名审计及边界单测验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Flink接产注两端的实时数据流，直接算差值，差值超限就触发规则下发调度指令。代码架子我已经搭了一半，就是规则匹配这块有点卡。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Drools呗？之前项目用过，把安全阈值写死在drl文件里，满足条件就发指令，挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计就打日志呗？Drools我也只是会写基础规则，动态红线怎么注入我不太懂，审计留痕除了日志还能咋弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩在代码层面怎么串起来？Drools能搞动态参数吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Calcite我没用过，自己写规则树感觉容易出bug。Drools我熟啊，能不能还是用Drools，我把规则预编译好放内存里？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我自己写规则树吧，这样热更新就是替换实例，不会卡主流程。虽然测试用例我得写全点，但性能我能把控。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "操作人签名是机器自动发的指令，签什么？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个单测，用pytest造几组超限的产注差值数据，把动态红线通过接口传进去，看规则树能不能正确触发指令并拿到Kafka的落库回执。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

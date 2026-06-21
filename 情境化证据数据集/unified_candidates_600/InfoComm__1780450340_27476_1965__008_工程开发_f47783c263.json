@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在核心网微服务负载推演算法实现背景下，与导师围绕算法选型、在线推演实现、衰减因子校准及K8s交互持续沟通（5轮），其中在算子选择与降级策略、FTRL裸实现与衰减因子校准部分与弹性调度算法工程师沟通（2轮），并最终形成基于Go裸写FTRL、指数衰减校准、超时切静态规则及K8s Scale API防抖的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想用Python的scikit-learn套个时间序列模型，比如ARIMA或者Prophet，把采集来的QPS和CPU利用率丢进去预测。这样比较快，网上例子多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "核心网这种突发场景，时间序列预测不管用，该用什么模型？滑动窗口多大合适？算力不够时怎么降级？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得FTRL我可以用TensorFlow的TF Estimator API包一下，这样比较省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "衰减因子我就设0.9或者0.95？网上一般这么设。如果TF不行，那我用啥？难道自己手写矩阵运算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减因子怎么校准？FTRL裸实现怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能拉大框架，得自己写Go维护权重向量。衰减因子得跑实验，用不同半衰期对历史数据做回放，看扩缩容滞后。我准备用Go写FTRL核心，然后造几组不同半衰期的实验跑回放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放数据就用上一步eBPF采集存下来的RINGBUF数据。和K8s交互，我输出一个扩缩容期望副本数，通过K8s client-go调Scale API。不过如果短时间内频繁扩缩，会不会造成Pod抖动？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

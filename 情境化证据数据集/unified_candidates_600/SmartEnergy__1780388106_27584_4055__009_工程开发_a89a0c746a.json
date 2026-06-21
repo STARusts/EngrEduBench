@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关算法落地背景下，用户与导师围绕ONNX Runtime C++技术栈选型、封装细节及验收基线持续沟通（6轮），其中在模型导出固定Shape及补零掩码机制部分与算法设计师沟通（2轮），在C++并发封装与预分配内存池预热部分与后端开发主管沟通（2轮），并形成功率微调算法工程化封装五条验收基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上好多人直接上Triton Inference Server，或者最不济用FastAPI包个微服务，HTTP调一下，多省事啊，何必重复造轮子。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Triton确实太重了。那，转成ONNX格式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我C++写得半生不熟，调ONNX Runtime的API怕搞出内存泄漏或者死锁。有没有那种封装好的一键部署库啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱那云团轨迹预测模型能直接导ONNX吗？我之前查资料说动态Shape导出特别容易出Bug，运行时也慢，能不能强制固定Shape啊？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "补零和掩码啊听起来好麻烦。精度会掉很多吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "C++里跑ONNX Runtime，如果瞬间来了一堆推理请求，怎么搞并发？我不想每次请求都new一段内存出来，太容易崩了，有没有成熟的封装模式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预热是说启动时先跑一遍假数据对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法那边说可以固定Shape，就是切块要补零，还得传个掩码进去；后端主管说用ONNX Runtime C++包一层，搞个内存池存输入输出Tensor，启动时预热。听起来逻辑挺顺的，我就按这个套路写封装层？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "掩码放外面吧，让调用方算好了传进来，封装层只管跑模型，这样职责单一？内存大小的话，我给推理分个1G？感觉应该够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存池大小就是 MaxBatch * (输入字节数 + 掩码字节数 + 输出字节数) 再加点余量对吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那硬限怎么卡？ONNX Runtime有这个接口吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "功率微调算法工程化封装验收基线：第一，技术栈选ONNX Runtime C++，模型导出为固定Shape；第二，封装层对外只接收原始图块指针和尺寸，内部自行处理补零和掩码生成；第三，采用预分配内存池管理输入输出Tensor，禁止运行时动态new；第四，服务启动时必须用假数据完成Session初始化和预热；第五，外部实现请求排队与超限丢弃机制，防止推理内存越界。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

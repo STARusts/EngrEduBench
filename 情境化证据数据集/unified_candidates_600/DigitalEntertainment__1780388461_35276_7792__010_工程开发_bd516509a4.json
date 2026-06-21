@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微裂变核心逻辑技术栈选型背景下，用户与导师围绕资产存储与流转方案的落地成本及排期持续沟通（6轮），其中在排期评估部分与裂变流转后端开发沟通（1轮），在多父节点重组模型设计部分与微裂变协议设计师沟通（1轮），并最终放弃Neo4j与Event Sourcing，确定采用PG、ltree、映射边表及乐观锁方案，修订接口定义。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "裂变协议天然是图结构。原生资产派生出一堆衍生资产，还有跨节点重组。用Neo4j存资产图谱，配合Event Sourcing做状态流转，任何一次微裂变都是事件驱动，溯源直接回放Event，不可篡改，完美。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "关系库处理多层级继承查询太拉胯了，递归CTE写到后面根本维护不了。Event Sourcing也是业界最佳实践，状态机全在事件里，不用担心并发写覆盖。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边裂变核心想上Neo4j加Event Sourcing，用事件回放做溯源，你们后端评估下两周能出活吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ltree只能处理树，处理不了图。如果有A资产同时重组了B和C，ltree就废了。边表查多层继承要JOIN好几次，性能不就崩了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多父节点重组如果不用图库，关系模型怎么设计能不丢失语义？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "限制3层的话，JOIN确实可以接受。但Event Sourcing这块，如果不做全套，并发状态更新怎么保证一致性？靠锁太丑陋了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "排期确实有点紧，全套CQRS测试构造太费时间了。如果用流水表代替Event Store，查询性能可能差一点，但开发速度能提上来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "放弃Neo4j和全套Event Sourcing。存储用PG，单线继承用ltree，多源重组用映射边表。流转基于MQ事件驱动，状态更新用乐观锁，溯源查异步流水表。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改接口定义。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

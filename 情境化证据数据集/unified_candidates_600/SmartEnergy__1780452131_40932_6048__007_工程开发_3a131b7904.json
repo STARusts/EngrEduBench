@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在掺氢管输氢蚀演进反演系统边缘AE数据采集接入开发背景下，用户与导师围绕采集粒度折中、触发阈值确定、断线重连验证及日志权限管控持续沟通（6轮），其中在波形完整性与时间同步部分与多维感知系统设计师沟通（2轮），在边端算力带宽限制与触发窗口部分与边缘计算开发工程师沟通（2轮），并最终形成双通道采集、PTP同步、断线重连验证及审计日志与ACL等开发规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用EdgeX Foundry做设备接入，数据洗完丢进内部的Kafka流。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多维感知系统设计师 采集粒度有什么说法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算开发工程师 200kHz全量传，边端扛得住吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "200kHz肯定炸，只传1kHz万一漏了微裂纹信号，这锅我不背。能不能折中一下？平时就传特征值，AE事件触发的时候传一段原始波形？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "常态低频特征流走Kafka，超阈值触发的原始波形帧打包走另一个高优Topic。但我不太确定AE事件触发的阈值怎么定，这涉及氢脆机理，我这块理论不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚找两篇管材氢脆AE特征提取的文献扫一眼，明天再找感知设计师把特征字段的物理含义和阈值范围对齐一下，记到我的学习日志里。现在先假定触发阈值可配。双通道逻辑我先写起来，触发窗口多大合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "传事件前后各50ms的窗口吧，100ms一段。这样算下来带宽峰值也能控住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时间同步我用PTP协议打边端时钟。但万一断线重连，缓存数据乱序怎么搞？我得写个验证测一测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个测试脚本，模拟网络闪断30秒，看重连后Kafka的offset提交和边端本地SQLite缓存的条数能不能对上。如果数据丢了或者反序，就是大bug，必须修。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "所有采集接入的配置变更和异常断连都要写审计日志，打到ES里。Kafka的Topic加ACL，边端容器只读自己分区的数据，禁止越权。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

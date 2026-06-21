@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在雨洪微塑料拦截系统工程开发、预算受限需先跑通传感接入与边缘网关的背景下，用户与导师围绕协议选型、离线缓存、幂等重传、时钟对齐与可审计留痕持续沟通（7轮），其中在上行协议组合与幂等键设计上与物联接入工程师沟通（3轮），在弱网下微批量发送、分级队列与校时偏差记录上与边缘计算工程师沟通（4轮），并最终明确网关最小闭环实现约束与验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这周要把传感接入和边缘网关先跑起来，但预算卡得紧，我不知道怎么取舍。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我能不能就直接用HTTP推JSON？传感器都往网关打POST，省得搞复杂协议。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "离线队列我想用SQLite存一下，重传就按时间戳覆盖？时间戳我感觉用网关的就行，NTP对一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联接入工程师 现在预算很紧，排口点位弱网还可能断电。传感器到网关这段，你建议用啥协议组合？重传幂等键怎么定才不乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "boot_id是每次重启随机一个？那设备不支持怎么办。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "淘汰策略是不是就把最老的删掉？但前面审计说有些原始不能丢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 物联那边建议传感器到网关用RS485/Modbus，网关到云用MQTT。幂等键别用时间戳，用device_id+seq，再加boot_id更稳。网关离线缓存可以先SQLite，但要分级队列：不可丢可延迟和可丢两类，满了处理不一样。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边大概是：  \n1）Modbus采集驱动，按寄存器表去读；  \n2）把数据打包成MQTT消息；  \n3）SQLite存一下队列；  \n4）断线就重连重发。  \n就这些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向一条一条，简单。批量会不会丢更多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关很小还弱网。MQTT上云时消息是一条一条还是批量更合适？批量怎么做才不爆内存、也不影响审计要求的“不可丢可延迟”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "topic分开是为了云端好区分？那payload里还要再标吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校时偏差记录要到什么粒度？我只在论文里看过时钟漂移，实际没做过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 边缘那边建议微批量：1秒或20条凑一包发MQTT，减少流量。不可丢和可丢分队列/分topic；不可丢满了要报警并触发降级，比如降低可丢的采样频率或降采样。时钟要定期NTP校时，还要记录offset，不同步就标记。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选：传感器到网关Modbus，网关到云MQTT；本地先SQLite做队列；消息微批量；分不可丢和可丢两类；时间戳双写。约束我不太会写得很严。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第3条里“保全模式”我有点怕写炸。能不能就直接停掉noncritical采集？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，那我就按这套写。topic命名我先用`site/{siteId}/device/{deviceId}/critical`这种，后面再说细分。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在漂绿特征图谱架构设计背景下与导师围绕Schema设计、推理算法选择及图膨胀控制持续沟通（7轮），其中在时序微态Schema与准实时推理部分与图谱算法专家沟通（1轮），并形成时序状态与对比边Schema、规则加轻量GNN混合推理及双周期截断归档方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图谱架构的话，主流是用属性图模型。存储选Neo4j或者Nebula Graph，推理用图神经网络，比如GraphSAGE，做节点分类，判断漂绿概率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "隐蔽性，就是数据不一致嘛。节点设发债主体、绿色项目、资金账户。边设资金流向、项目归属。不一致的话，可以加个属性标记差异度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序微态特征的图谱Schema怎么设计？还有准实时约束下，图推理算法选什么合适？GraphSAGE是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Schema不能只建实体，要加时序状态节点，比如声明和实际行为，用对比边连起来，边上带分数。推理的话，用规则加轻量GNN混合。规则抓确定模式，GNN抓未知。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全上规则可能抓不到新的隐蔽漂绿模式。GNN能做聚类。不过GNN延迟高，所以只用轻量嵌入，配合规则保底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "粒度，按季度截断？或者设置TTL过期？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Schema定属性图加时序状态节点和声明-实证对比边；推理定规则加轻量GNN；图膨胀用双周期截断归档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

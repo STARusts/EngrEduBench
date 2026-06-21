@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在瞬清流算架构设计背景下，用户与导师围绕流算选型、Checkpoint机制盲区与流图接口对齐持续沟通（6轮），其中在流算选型验证假设部分与流式计算架构师沟通（1轮），并最终确认Flink连续流选型、容错补学计划及接口对齐分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看业内一般都用Flink做流式计算。打算就用Flink接流水，做窗口聚合和清分。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设就是Flink吞吐量大，延迟低。对照组的话，Spark Streaming微批处理是不是也能比？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微额高频场景，我假设Flink吞吐量够大延迟低，Spark微批做对照，这假设怎么验证？要看什么变量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说只能选Flink连续流，假设是连续流延迟低于200ms，对照组看P99延迟和背压。状态访问这块，专家提到状态后端用RocksDB。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Checkpoint机制我有点吃不准，大状态毛刺这块原理没摸透。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去翻Flink官网的状态管理文档，重点看Checkpoint Barrier对齐那块。今晚之前把这块原理搞明白，明天把状态容错方案补上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流算结果要送到图算做异动溯源。接口对齐这块，我负责拉通，流式计算架构师定流算侧输出格式，图网络算法专家定图算侧输入和冷热分离加载格式，我跟进对齐进度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

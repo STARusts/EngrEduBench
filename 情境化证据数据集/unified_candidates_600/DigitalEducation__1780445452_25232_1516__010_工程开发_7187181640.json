@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路压测调优背景下，与导师围绕并发压测模型、长尾指标观测、背压监控及并发上限判断持续沟通（7轮），其中在复合压测模型与长尾指标部分与全链路压测官沟通（2轮），并最终形成基于脉冲流量的压测方案、P99与队列水位监控策略及并发上限拐点判断规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JMeter压一下接口吧。看响应时间超不超时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源抢占我不太懂怎么模拟。指标一般就看QPS和平均耗时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@全链路压测官 我现在只会用JMeter单接口压。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脉冲流量，Wrk加Lua脚本，P99延迟，背压。背压这个我没监控过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工具用Wrk。我昨天查Wrk用法的时候，发现它有个`--latency`参数能直接输出延迟分布细节，不用自己算P99了，这个能省不少事，看长尾问题更准。观测点的话，就在信令推送出口和轨迹写入入口加探针？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "背压，是看数据库连接池有没有耗尽吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跑出来数据怎么判断？比如P99到多少算不合格？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是找P99飙升的拐点。超过这拐点系统就不可用了，不能外推。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用Wrk加Lua脚本造脉冲流量，开`--latency`看P99；第二，监控消息队列堆积水位；第三，找出P99飙升的拐点，定为并发上限。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

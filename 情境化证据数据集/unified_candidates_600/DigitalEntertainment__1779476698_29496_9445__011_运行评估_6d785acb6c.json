@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在生成式数字潮玩引擎上线运行评估背景下，用户与导师围绕铸造峰值监控指标定位与扩容策略验证口径持续沟通（8轮），其中在压测瓶颈排查部分与质量与效能保障工程师沟通（1轮），在链上交易排队监控部分与链上运维监控专家沟通（1轮），并最终确认四项核心监控指标及采集点与分组对照验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "打算套个Prometheus模板看QPS，超了就加机器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前看网上高并发方案都是这么搞的，加个自动伸缩。如果是排队，我可以在Grafana加个报警规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测的时候，铸造排队主要卡在哪？我想找个现成的监控面板套一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链上交易排队有现成的Exporter能抓吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白了，不是加机器。我得看算法队列深度、签名等待、Pending Tx深度和Gas波动。我还是想用Grafana画这几条线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看图表上P99是不是降下来了，降了就说明有效吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我只会看平均数。那我能不能就在报警规则里加个判断，如果实验组P99比对照组低20%就算有效？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对链上并发监控和统计分析确实不熟，只会看服务器基础指标。我接下来得补这块。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这周五前，把链上监控SDK的Pending Tx采集逻辑看明白，自己写个脚本把数据接到Prometheus里，跑通本地测试。统计方法我再查查怎么算置信区间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法调度队列深度看调度微服务的PendingCount字段；签名等待P99看签名服务的latency_p99；Pending Tx深度得调链上节点接口getPendingTransactions；Gas Price波动率看gasOracle的最近10分钟方差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

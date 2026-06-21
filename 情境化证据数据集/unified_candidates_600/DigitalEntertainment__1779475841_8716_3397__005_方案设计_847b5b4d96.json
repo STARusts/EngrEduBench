@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在弹幕语义抽取与图谱落库方案设计背景下，用户与导师围绕模型选型、实时性保障、图库存储与分片策略持续沟通（6轮），其中在短文本归并与实体抽取部分与语义算法工程师沟通（1轮），在图库选型与分片瓶颈部分与图存储研发工程师沟通（1轮），并最终形成基于轻量模型与增量NER的抽取方案及Nebula分片与缓存查询策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上大模型抽实体关系，然后存Neo4j。现在大模型效果最好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弹幕抽实体用大模型太慢，短文本归并怎么做？实时性怎么保？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Neo4j单机扛不住写入，弹幕图谱该用什么存？分片怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们说用轻量模型和增量NER，指代消解看上下文。图库用Nebula，分片要考虑跨房间查询。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "模型用TinyBERT吧，NER更新，就几分钟更新一次？分片键，就按房间ID，跨房查就多存一份？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型用TinyBERT，NER秒级推。图库Nebula按房间ID分片，跨房引流走缓存不扫图库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上下文窗口，就最近50条弹幕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽取用TinyBERT加秒级增量NER，指代消解用5分钟时间窗口。图库Nebula按房间分片，跨房引流走缓存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

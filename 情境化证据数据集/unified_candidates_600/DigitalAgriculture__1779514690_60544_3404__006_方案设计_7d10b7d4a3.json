@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在增氧对冲控制接口设计背景下，与导师围绕指令防重、调频控制及断网兜底策略持续沟通（7轮），其中在防重与接口协议定义及心跳断连兜底策略部分与控制接口定义专家沟通（2轮），并最终形成增氧对冲控制接口字段与安全约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发MQTT开或者关呗，预测要增氧就开，平息了就关。简单直接。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关给增氧机发控制指令，怎么防重复执行？怎么保证指令真落地了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前没想过调频，都是继电器开关。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一直开确实也会死鱼，过饱和气泡病。一直关更不行。这种网断的情况，设备自己又不知道溶氧多少，怎么搞？是不是得加个硬件看门狗强制关机？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心跳断连后，增氧机一直开或一直关都要出事，本地安全兜底怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "断网就降频跑半小时保命，然后停机。还有硬件急停兜底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口字段得有：递增SeqId、目标功率档位、执行超时时间。安全约束：双向心跳保活，断网进Fail-Safe降频跑半小时后停机，现场留硬件急停。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

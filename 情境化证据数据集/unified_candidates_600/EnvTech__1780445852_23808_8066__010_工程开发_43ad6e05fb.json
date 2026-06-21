@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流向演进图计算引擎落地选型背景下，用户与导师围绕图数据库选型、架构复杂度与持久化方案持续沟通（5轮），其中在图拓扑特征与规模判断部分与图计算核心研发沟通（2轮），并最终放弃JanusGraph与Neo4j，形成基于TDengine与内存图索引及RocksDB快照的轻量方案基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "千万级拆解物料的时空轨迹回溯，我觉得必须上分布式图数据库。我打算用 JanusGraph 加 Cassandra 做底层存储，再用 Spark GraphX 做离线图计算，这样以后不管图怎么扩展都不怕，还能顺便把物料知识图谱也揉进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复杂度是未来的上限嘛，万一以后要加跨批次合并节点、做图神经网络推理呢。而且 JanusGraph 支持千亿节点，图遍历性能有保证，我不想以后重构。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这个流向演进图的拓扑特征和规模，真的撑不起 JanusGraph 吗？我觉得分布式图库是刚需。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "但内存图断电不就丢了？我觉得还是得有个图库做持久化兜底。要不折中一下，核心计算走内存，但我加个单机 Neo4j 做拓扑持久化和可视化？这样架构看起来也完整。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重建索引的时间成本呢？千万级边重建可能要几分钟，这几分钟系统不可用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RocksDB 快照加内存图索引确实比维护双写靠谱，省了组件间的数据同步逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "图查询接口这块，我准备用 gRPC 暴露拓扑遍历和路径回溯方法，直接让寻优算法那边调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

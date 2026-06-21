@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在衰变推演模型接口设计背景下与导师围绕输入输出特征、多品类封装及缺特征降级计算持续沟通（6轮），其中在品类输入差异与输出含义部分与衰变机理建模师沟通（1轮），在多品类接口封装策略部分与算法工程化工程师沟通（1轮），并最终形成支持全量与降级输入、统一输出RSL/温区/置信度及OneOf路由的接口边界约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "输入就温湿度呗，输出就返回个好坏状态，微调那边看状态不对再降温呗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "品类太多太乱了吧，我哪知道每种果子要啥。接口我就全传JSON，里面塞个品类ID，让他们服务端自己解析去。输出的话，返回个0到1的浮点数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "品类输入差在哪？输出到底要啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "品类这么多，接口怎么封装不乱？全塞JSON行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师说输入得加乙烯和CO2，输出是RSL和衰变速率。算法工程说用OneOf定义输入，按品类路由。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不边缘网关再补个采集？或者没气体的时候，模型就只用温湿度算个大概的RSL？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入必须支持温湿压气，缺气体就降级。输出就RSL和推荐温区，置信度也得带上。品类路由走OneOf。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

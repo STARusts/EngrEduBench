@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估需监控“核验成功率”并可解释下跌原因背景下，用户与导师围绕指标口径拆分、看板维度、去重与告警规则持续沟通（7轮），其中在监控拆维与阈值基线设置上与数据分析师沟通（3轮），在最小错误码集合与字段标注规范上与后端技术负责人沟通（2轮），并最终确定三项指标、最小拆维与两级告警及三步定位顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接上个现成看板，成功率就是 200 的比例。再配个告警，比如低于 99% 就叫。是不是够了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核验接口返回 success=true 就算成功。失败就是 false 或 4xx/5xx。感觉就这样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "业务成功率是用户拿到权益？技术成功率是接口 200？我有点分不清。要不我按网关状态码先做？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 核验成功率你们一般怎么拆？我现在只会算 200 占比，怕不准。阈值要怎么定才不乱叫？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "基线要算标准差我就头大了。能不能直接用 Prometheus 的预测函数，或者用现成异常检测？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我能偷个懒，用“结果类型+错误码”的饼图顶一下解释？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先落地三张图：技术成功率、业务通过率、可解释率。然后错误码 TopN 按 app_id 分组。重试去重我可能先不搞，太费劲，我就先看请求维度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想用现成的 trace 聚合，按 trace_id 做 distinct 统计。要是数据量大就用 ClickHouse 的近似去重函数？我不确定会不会不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "错误码现在挺乱的，有的写 msg，有的直接 500。要不我让后端先统一？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端技术负责人 核验成功率要做监控，错误码现在不统一。能不能给一版最小集合，先保证看板能按类拆？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记一下：12 个错误码+step+retried。那“核验不通过”算 NOT_OWNED/RIGHTS_NOT_MATCH 这类 REJECT，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这样说：技术成功率 = 1 - (ERROR+TIMEOUT)/总核验请求；业务通过率 = PASS/(PASS+REJECT)；可解释率 = 失败里带 error_code 的占比。  \n分组维度：app_id、channel、step、error_code。  \n告警：技术成功率 <98.5% 立刻叫；还有基线跌幅 >1% 预警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TIMEOUT 单独算一类，跟 ERROR 一起算技术失败。总请求过滤演练账号和压测流量，只进演练面板，不进生产大盘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先看按 app_id 的技术成功率谁掉；再看它的 error_code TopN；最后看 step 分布，确认卡在 AUTH 还是 EVIDENCE 这种。定位不到再找后端查 trace_id。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构频谱态势感知系统开发背景下，用户与导师围绕特征提取算子、降级方案、数据落盘与验证指标持续沟通（6轮），其中在特征提取与降级脱敏部分与信号处理研发沟通（2轮），在图谱存储架构部分与数据流架构师沟通（1轮），并最终形成STFT算子、滑窗降级、TSDB落盘与特征保真测试四条推进方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时频联合？太慢了。FFT跑得快，先跑通再说，细节后面调。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@信号处理研发 特征提取用FFT行不行？非要搞时频联合，多麻烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不存IQ存啥？STFT多慢啊，怎么降级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 图谱存哪？直接塞Redis呗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "异步批处理？又加复杂度。TSDB就TSDB吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就用STFT，降级调步长。图谱存TSDB，不存IQ脱敏。验证我就跑一把看图对不对。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没弄过STFT调参，这玩意儿公式一堆。我这两天看看STFT的文档，写个脚本对比下降级前后的特征余弦相似度，这下总行了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在危废入库API接口开发背景下，用户与导师围绕接口规范、错误码定制、并发性能及核心技术口径持续沟通（5轮），其中在响应格式与鉴权规范部分与数据接口开发员沟通（2轮），在并发性能与压测基准部分与质量保证工程师沟通（1轮），并最终形成入库API接口文档草案思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接按咱们之前讨论的UUID、重量、地址这些字段写个POST请求，让后台服务直接接收就行，这样实现起来最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这个危废全生命周期平台，在编写入库API接口的时候，响应格式和鉴权有什么具体的统一要求吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我原本想就用200表示成功，500表示失败，这样逻辑比较简单。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我会按照Restful规范来写，把UUID重复和重量异常这些错误码都独立出来，鉴权用JWT。我现在就去写具体的Controller实现代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这个入库API的并发要求高吗？我怕逻辑写太复杂了，到时候性能跑不上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "50TPS应该不难，我多开几个异步线程处理存证的部分。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，响应必须统一封装，带上JWT鉴权；第二，要针对UUID重复、重量异常等场景定制具体的业务错误码；第三，性能上要支撑50TPS，响应控制在300ms内，存证逻辑得异步化，防止阻塞主接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

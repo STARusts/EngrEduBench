@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在EvolveGCN-H空间阻力算子封装面临2GB显存与50ms延迟限制背景下，用户与导师围绕显存约束下的稀疏化降级与K值设定持续沟通（3轮），其中在算子封装与稀疏图构建部分与空间计算开发员沟通（1轮），在KNN建图K值设定部分与阻力模型构建师沟通（1轮），并最终形成K=10的Warp级稀疏图封装方案及显存验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阻力计算不就是大矩阵相乘嘛，直接写个CUDA Kernel硬推，50ms应该随便压下来吧？2GB显存够不够啊？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但阻力面是连续的，硬稀疏了生态廊道断掉怎么办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这阻力算子咋封装才不爆？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "KNN建图只连K个邻居，那远一点的踏脚石不就断了？连通度预判不准吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "KNN建图的话，K取多少能保证核心迁徙廊道不断？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "8到12，那就取中间值10。显存应该能卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本用cudaMemGetInfo跑一下前向传播就知道了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "K=10，Warp算子，稀疏图封装，这就去改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

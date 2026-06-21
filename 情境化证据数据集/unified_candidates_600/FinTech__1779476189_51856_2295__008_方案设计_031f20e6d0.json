@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在多方质权登记接口设计背景下，与导师围绕互操作性、防重入幂等性及并发验证持续沟通（5轮），其中在防重复质押与数据隔离部分与质权合规审查师沟通（1轮），在防一物多押技术实现与并发压测部分与核心业务开发沟通（2轮），并最终形成基于Redisson分布式锁、状态机与压测验证的接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我按角色拆了三个登记接口。资金方发起，仓储方确认，监管方备案。幂等的话，我准备在业务流水号上加唯一索引，重复请求直接报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多方登记时，合规上对防重复质押和数据查看有什么硬性要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚说的防一物多押，用数据库唯一索引够吗？还是要加锁？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得分布式锁太复杂了，直接用数据库悲观锁 select for update 行不行？按步骤走比较稳。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "既然数据库扛不住，我就把刚学的 RLock 迁移过来，用质物批次 ID 做锁的 key，替代 select for update。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防重入的并发验证具体怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实验设计定下来了。就是用 JMeter 模拟 100 并发抢同一批次，只留 1 条成功记录，其余返回重复质押错误码。接口方案最终就是：Redisson 分布式锁加状态机幂等，配合数据隔离与审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

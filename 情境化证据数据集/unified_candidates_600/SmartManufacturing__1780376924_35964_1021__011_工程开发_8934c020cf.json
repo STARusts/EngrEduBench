@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在驻波畸变消抑与精度调优且FPGA资源受限背景下，用户与导师围绕消抑方案、工况漂移误差边界、细粉兜底及定点溢出监控持续沟通（8轮），其中在省资源消抑办法部分与换能驱动攻城狮沟通（1轮），在离线查表误差影响部分与叠构算法调优师沟通（1轮），并最终形成查表加前馈、细粉加插值及探针防溢出的方案与约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接把滤波器阶数砍一半？或者把浮点全改成定点，省点资源？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "直接砍阶数行不行？有没有省资源的消抑办法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查表加前馈，只要加法器，这听着靠谱。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "工况漂移，就，查表不准了吧。误差来源我不太清楚，得问算法那边。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种离线查表，工况变了会不会崩？误差对铺粉精度影响多大？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只要粒径大于50微米就能用查表法，偏移小于2微米。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规格书里好像有批超细粉，30微米的。超界兜底，我还没想好。定点溢出，我就直接截断了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可以加个在线探针监控前馈补偿值的数据位宽，要是最高位有进位跳变就是溢出了。我把这个探针逻辑加进去，跑的时候盯着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "探针占RAM不多，应该能塞进去。轻量插值，就是相邻两个查表值做个线性插值？这比全阶LMS省多了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案是：查表法加前馈消畸变，细粉工况加线性插值。约束：粒径50微米以上直接查表，30微米以下开插值。用ChipScope加探针防定点溢出。DSP占用控制在8%左右。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

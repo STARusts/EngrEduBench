@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在风险推演微服务与图谱服务联调背景下，用户与导师围绕联调容错防雪崩、降级缓存实现及读写并发一致性持续沟通（8轮），其中在防雪崩与熔断降级策略部分与图谱联调工程师沟通（2轮），在缓存并发一致性与压测重点部分与性能调优攻坚手沟通（1轮），并形成不重试超时熔断、走Redis缓存及并发压测的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接写个pytest脚本，把推演接口和图谱查询串起来跑呗。只要接口能通，返回的并发症概率列表格式对就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时我设个3秒，重试2次应该够了。卡住就等呗，不然推演结果出不来啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演服务调图谱，超时设3秒重试2次行不行？联调这块怎么防卡死？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级？推演服务降级怎么搞？没结果怎么预警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没写过。我加个Redis缓存旧图谱数据吧，熔断用Sentinel。每次查图谱成功就顺便刷一下Redis。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我没想到。读写并发应该很快吧，Redis是单线程的。测试用例我就测正常查、超时熔断这两种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演侧加Redis缓存图谱结果，读写并发会不会卡？延迟毛刺大不大？测试要打哪种场景？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测场景我加上并发读写。缓存失效延迟我也测一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三点：第一，推演调图谱不重试，超时1秒熔断；第二，熔断后走Redis读旧图谱数据，查询成功就同步刷缓存；第三，联调脚本加并发读写压测，验证缓存失效延迟。Sentinel用慢调用比例熔断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

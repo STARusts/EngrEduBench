@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在解耦模块与产程推演模块联调背景下，用户与导师围绕跨语言特征数据传输方式、缺帧处理与接口定义持续沟通（6轮），其中在传输方式与资源限制部分与嵌入式软开工程师沟通（1轮），在输入格式与缺帧标识部分与产程态势推演师沟通（2轮），并最终确定protobuf序列化与gRPC传输、1秒1帧及缺帧前向填充且置信度标0的联调接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解耦这边出来的是胎心基线和宫缩峰的数组，推演那边要时间序列。格式不一样。我打算在内存里转成DataFrame对齐时间戳再传过去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨语言，对哦。我之前看论文里说进程间通信可以用共享内存，理论上是零拷贝，时延最低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "解耦特征要给推演模块，用共享内存传行不行？端侧内存还剩多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你那边输入格式要求是啥？gRPC传过来你能接吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "嵌入式说共享内存不行，让用gRPC传protobuf。推演那边要求1秒1帧，缺帧得补占位符。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解耦有时候计算慢会掉帧。补占位符，我填0进去行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "填0不行。那填上一帧的值？前向填充。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我缺帧的话补上一帧的值，但缺久了怕你误判。能不能在特征里加个标志？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加置信度字段，缺帧置0。这样推演那边自己降权就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

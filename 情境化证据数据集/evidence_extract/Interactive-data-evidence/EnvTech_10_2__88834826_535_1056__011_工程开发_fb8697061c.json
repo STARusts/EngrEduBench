@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发联调“联动控制与工单闭环”背景下，用户与导师围绕告警触发设备动作、工单状态机、与dedupe_key/cooldown/T分钟边界对齐及测试用例持续沟通（8轮），其中在闭环状态机与动作/工单解耦上与业务架构师沟通（3轮），在指令幂等action_key、回执重试与离线/超时处理上与后端工程师沟通（2轮），在去重、T分钟更新、回执乱序与验收关闭等最小用例集上与测试工程师沟通（1轮），并确定最小闭环实现口径与错误码草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做个事件总线，把告警投进去，然后订阅者做两件事：一条发控制指令给喷淋/雾炮/围挡屏，另一条创建工单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是用现成的工作流引擎会更省事？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等我想着用 dedupe_key 当唯一键？控制动作就只发一次。工单状态就开单、处理中、已完成。窗口延迟闭合T分钟…我有点不确定，是不是T分钟内就别重复开工单？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@业务架构师 工单闭环这块你给个最小可用的状态机吧？还有告警触发联动动作，到底是跟工单绑死，还是分开走？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "状态挺多的。我实现里是不是就先做 OPEN→IN_PROGRESS→CLOSED，别搞派单验收？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "联动动作记录要哪些字段？我怕做多了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 控制指令和工单闭环联动这块，幂等键怎么搞？设备不回执/离线要怎么在系统里表现，才不把工单搞乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "action_key 里的 strategy_window 我有点拿不准，是固定60秒还是跟窗口N窗有关？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我实现上就：告警事件进来，先查有没有关联工单；没有就开 OPEN。然后生成 command 记录，靠 action_key 去重。设备回执更新 command，工单状态还是靠人点到 WAIT_VERIFY/CLOSED？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "单测…我用 Postman 跑一下接口算吗？再加点 mock？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 工单闭环+联动控制这块，最小要测哪些？我现在怕漏边界，尤其是去重和T分钟更新。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "错误码要我定吗？我不太会取名。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先写：E_TICKET_CLOSE_DENIED、E_PERMISSION、E_COMMAND_DUP、E_COMMAND_EXPIRED 这种？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向一对一，写起来简单。升级就新开一张？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，那我就按 alarm_id 维持一个主工单，severity 变了就写 escalation_log，不新建 ticket。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就照这6条去做。strategy_window 先用60s写死，后面再参数化。单测我按测试那7条先补齐，不够再加。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

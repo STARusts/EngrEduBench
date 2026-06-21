@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在通感信号解析性能优化背景下，用户与导师围绕解析耗时根因与算法逻辑优化持续沟通（6轮），其中在全维矩阵求逆复杂度与稀疏降维部分与智面相控核心实现者沟通（2轮），在数据结构SoA改造与访存优化部分与算力性能榨取师沟通（2轮），并最终形成稀疏子空间重构、SoA改造及线程绑核的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查了，CPU打满了。我加了几个日志打点，发现是parseSensingSignal这个函数里头卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没看到锁。我猜是内存拷贝太多了？里面有个大数组在频繁new。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "parseSensingSignal耗时200ms，是不是里面数组拷贝太频繁了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "代码里直接调的矩阵库的逆运算接口，没管稀疏性。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么降维？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我要重写求逆那块逻辑？还有内存池怎么改？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "通感解析这块Cache命中太低，怎么改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没绑核。SoA改起来有点麻烦，结构体到处都在用。绑核我会，用taskset就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我先把数据结构改成SoA，再把线程绑到大核上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把全量矩阵求逆换成稀疏子空间运算。但具体怎么提取稀疏特征，我得找现成的库，自己写不出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 数据结构从AoS改SoA加SIMD；2. 线程绑大核；3. 矩阵求逆换成稀疏子空间重构，支撑集周期更新。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

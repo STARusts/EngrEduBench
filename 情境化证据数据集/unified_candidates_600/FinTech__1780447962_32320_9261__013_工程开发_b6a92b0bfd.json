@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端赎回压力测试排障背景下，用户与导师围绕合约防重入、状态回滚、熔断后交易处理及压测工具短板持续沟通（6轮），其中在防重入与状态回滚测试部分与测试攻坚手沟通（1轮），在熔断后交易处理部分与金融风控专家沟通（1轮），并最终敲定攻击合约模拟回调与模拟交易池拥堵验证熔断丢弃逻辑两个排障重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就写压测脚本，多线程并发调赎回接口，肯定能测出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个锁就行了。状态回滚我也测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合约防重入和状态回滚怎么测？熔断触发后已上链交易咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "防重入看余额和代币一致，熔断看Mempool丢弃。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "构造恶意回调，我就写个攻击合约。Mempool，本地好像不好模拟。我之前没用过模拟Mempool的工具。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去查Hardhat模拟Mempool的方法。Gas Profile我也看，能找出哪里耗Gas，这样压测结果就有解释依据了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

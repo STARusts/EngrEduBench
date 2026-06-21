@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在“叙事律动共创引擎”方案设计的内容审核与溯源链背景下，用户与导师围绕预览放行与发布/导出强审核、与restriction_tag/allowed_actions对齐及接口最小字段持续沟通（10轮），其中在审核分级与处置状态/动作枚举上与合规经理沟通（7轮），在溯源证据链字段与事件hash链存证方案上与版权运营沟通（4轮），并收敛审核策略、返回字段与最小验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕卡在两头都要：一边要快出预览，一边审核又要拦。还有溯源链我只会想到存个记录，但到底记录啥我不确定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预览先放行，然后后台跑审核？但我不知道这样会不会被人钻空子，比如直接把预览链接传播。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规经理 我们这个“叙事律动共创引擎”在方案设计阶段，审核这块想做分级：预览不拦，发布/导出拦。你觉得分级怎么定，处置状态要怎么分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "处置状态我有点乱。是不是就三个：通过、拒绝、待审？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "高风险直接阻断生成，这会不会把创作者体验搞崩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@版权运营 溯源链这块要能打侵权投诉。我现在只想到存 trace_id、作者ID、时间。你觉得证据链字段要怎么设计才够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "prev_event_hash 是不是就区块链那套？我们要上链吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "prompt 不能存明文我懂点，但我们还想复现生成。那复现不了怎么办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先用一套分级：预览私域放行但加水印+限分享，发布/导出必须先审。状态我记住 PENDING/IN_REVIEW/PASS/REJECT/NEED_HUMAN/TAKEDOWN/APPEALING。溯源链我想采纳“事件链 hash”，不上公链，先内部链再做批次锚定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跟 allowed_actions 的关系：审核 PASS 才能把 publish/export/remix 打开；unknown 授权默认只能 preview。restriction_tag 继续打在 artifact 上，审核没过就带着限制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口返回……我猜要有 moderation_status、risk_level、reason_code？还有 allowed_actions。再加 trace_id 和 restriction_tag。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "reason_code 我怕后面越长越乱，前端要展示文案也麻烦。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个压测？不对，这不是扩散。可能统计预览链接被访问次数？超过阈值就锁？我不确定阈值咋定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就记“先保守，灰度调”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个问题：事件链签名是不是安全那边才懂，我怕我讲不清。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这版我能照着讲。就一点：SHADOW 是啥，我怕前端理解成成功发布。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

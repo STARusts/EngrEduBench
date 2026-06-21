@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核心灾模引擎与敞口流式计算联调背景下，用户与导师围绕流式管道衔接、反压处理、乱序对齐与数据无损传输持续沟通（6轮），其中在流式管道衔接约束与水位线处理部分与数据拓扑设计师沟通（1轮），在显存数据低延迟传输部分与并行计算优化师沟通（1轮），并明确锁页内存异步传输、水位线乱序容许与反压联动GPU暂停等硬点，准备定义联调接口协议。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Python那边起个Socket或者用个Thrift，把C++算出来的数组扔回来，Python接着算呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "队列满了就丢呗，或者让前面等会。乱序加个时间戳排个序不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "不就是数据传不过去吗，加个缓冲区不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就加个时间窗口，超时的不要了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "暂停步进怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "直接Memcpy行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就加个cudaHostAlloc参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

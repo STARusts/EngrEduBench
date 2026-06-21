@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在互动剧情产品方案设计背景下，用户与导师围绕触发规则与播放状态机（定位/选择触发、防重复、断网恢复、拒绝定位虚拟漫游、容量限流与priority策略）持续沟通（6轮），其中在状态机/幂等/冲突与限流处理上与后端负责人沟通（3轮），在位置事件最小化、授权分流与日志留存上与隐私与安全工程师沟通（3轮），并形成可用于后续拆接口的事件/状态/冲突要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发就监听定位呗，到了点就播剧情。拒绝定位就给个默认点。限流就提示人多，别让进就完了。能不能就这样定了，我想往接口走。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一次就一次吧，重复会乱。断网回来就从上一个节点继续播。多个规则就随便挑个最先的。虚拟漫游就造个坐标，反正也是点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 你给个简单状态机吧：节点怎么触发、怎么防重复、断网回来怎么算，还有人多限流的时候怎么处理。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的幂等键里有region_id和time_bucket，那我是不是就只要这俩？session_id感觉也可以不要？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "限流只挡新会话那还行。那节点重复触发就用COOLDOWN挡一下就好了对吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与安全工程师 定位这块我想省事：拒绝定位就给虚拟坐标。你说行不行？还有日志到底存啥，别搞太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把虚拟漫游当成region_id=0行不行？省字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "年龄分层也要进状态机？我以为那是内容侧的事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我大概听到了：别传坐标，传region_id；拒绝定位就用虚拟锚点ID；限流别踢老用户。剩下是不是就能拆接口了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件就：进地图、位置变了、点了选择、买了东西、退出。状态就你说那几个。冲突就按priority。可以了吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，我就按你这个拆。priority我默认都给1，创作者自己别乱写就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

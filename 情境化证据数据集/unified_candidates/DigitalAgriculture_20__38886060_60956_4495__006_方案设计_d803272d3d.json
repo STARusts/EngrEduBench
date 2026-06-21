@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段的杂草识别不确定性处理背景下，用户与导师围绕识别不靠谱时的可控链路、输出包字段、action分档、闭环回流与抗性高风险入口持续沟通（7轮），其中在不确定性量化与原因码/动作提示定义部分与算法负责人沟通（4轮），并形成识别输出包+原因码集合+action_hint四档+risk_flag及处方侧使用与最小闭环口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想的是给个置信度，低于阈值就不出处方，或者直接让人重拍。阈值可能 0.8 之类？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看不清就是图糊了、逆光、杂草太小？像但不确定就是模型分数接近吧，top1和top2差不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段…作物类型？田块ID？杂草类别top3？每个的分数。然后质量分。原因码。还有定位。大概这些。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "建议动作就是“重拍”“人工复核”“可以开药”。三种？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 不确定性这块，你们一般怎么输出？我这边需要能落到接口字段上。另外原因码怎么搞，别太学术那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "M02 分布外这块是不是就等于识别不出来？那处方就不生成了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 uncertainty_score 用一个数就行？还是要分模型和质量两个？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心原因码会不会很难准，比如遮挡判断错了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳两个分：quality_score 和 uncertainty_score；再给 topK 类别+概率；原因码用 Q01-Q04、M01-M02、C01 这种；action_hint 四档 A1-A4。处方引擎用 action_hint 决定是正常处方、保守处方、还是补拍/人工复核，然后后面复盘再看这些码和结果的关系。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回流…把识别输出包、最终处方版本、还有作业结果（成不成功）绑一起？然后统计在 M01、M02 这些情况下成功率，调阈值？再就是把 A3 补拍前后差异拿来改拍摄引导。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是把抗性相关的类别，阈值设更严？或者直接都走人工复核？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，加个 risk_flag（true/false）就行？risk_score 我怕复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "产品上就显示“疑似/不确定”，别只给个杂草名。审计里把 uncertainty_score、原因码、action_hint 记录下来，后面能追。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "risk_flag 这块我怕和处方禁用规则衔接说错。我就按你说的，先留口子，禁用细则不在这轮讲。其他我能复述。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

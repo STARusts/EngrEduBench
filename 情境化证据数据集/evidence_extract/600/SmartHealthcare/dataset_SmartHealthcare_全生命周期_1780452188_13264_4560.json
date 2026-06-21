@@ -1,0 +1,624 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在老年共病多药互作系统需求梳理背景下，用户与导师围绕业务痛点、核心研究假设与药代知识补学持续沟通（6轮），其中在业务痛点挖掘部分与银龄需求分析师沟通（1轮），并最终锁定隐匿性药源性衰弱级联与依从性偏差痛点、明确因果关联研究假设及反驳标准、确定短期补学任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "痛点就是老人吃药太多，肝肾代谢跟不上，药毒性叠加，身体越来越差。我想用体征数据结合药代模型来算，算出来有风险就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "映射机理我就知道大概，具体的药代公式我不熟，平时都是直接调包。验证的话，跑跑历史数据看指标有没有变好呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老年人多重用药这块，家属和护工平时最难受的点在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以我这个推演系统得能捕捉这种缓慢的衰弱轨迹，不能只看单点数据。依从性乱的话，还得把漏服补服也算进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设是，如果调整用药方案后，衰弱指标斜率变平缓了，就说明之前是药源性的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我只会调包，里面的参数含义我不懂。接下来两周我补一下非房室模型的分析和基本参数估计，目标是能看懂药代动效建模师写的公式，自己能配对参数，不至于连参数都传错。"
+              }
+            ]
+          },
+          {
+            "microScene": "在系统干预用药与介护方案需厘清合规边界背景下，用户与导师围绕医疗行为红线与系统定位持续沟通（7轮），其中在免责声明与停药建议合规性部分与医疗合规审计师沟通（2轮），并最终形成系统定性为CDSS、阻截动作不自动执行、介护调整推工单的三条合规边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规不就是数据别泄露吗？接口加鉴权，存的时候脱敏，基本就这些吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们就加个“仅供参考”呗？最终让家属或者患者自己定。我看外面那些健康App都这么干，免责声明一贴就完事了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们系统推演出来药有问题，给个停药建议，加个免责声明让家属自己定，这合规吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我们费劲推演半天，啥建议都不能给？只能做个看数据的看板？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们肯定想给具体结论啊，不然推演白做了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "只能是把推演结果和阻截建议推给医生看？系统自己不能自动执行停药操作？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "介护那边，系统也不能直接改老人的看护等级，只能生成一个“建议提升介护强度”的工单，推给评估师去复核？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规边界就是：1. 系统定性为CDSS，走器械注册；2. 阻截动作不自动执行，只推预警和建议给医生；3. 介护方案调整也是推工单给评估师，不直接生效。"
+              }
+            ]
+          },
+          {
+            "microScene": "在长护险要求出评估等级引发需求变更背景下，用户与导师围绕商业闭环与合规边界冲突及折中方案持续沟通（4轮），其中在长护险支付路径与变更影响部分与商业模式架构师沟通（2轮），并最终形成包含定位扩展、报告生成、评估师确认及接口对接的变更方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "长护险给钱是关键。但要直接出等级，是不是跟刚才定的不自动生效冲突了？评估等级直接给经办系统，不就等于替评估师做决定了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才定好是CDSS只推预警，现在长护险那边说要直接出评估等级才给钱。这变更影响大吗？要改啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那合规风险咋办？等级直接推过去，评估师不就失业了，也不合规。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "长护险只认评估工具，必须出等级。但他给个折中方案，系统出等级，评估师点确认，再推经办。这样合规边界没破。就是要多加报告模块和对接接口，多两周活。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "变更方案：1. 定位扩展为CDSS加长护险评估辅助；2. 新增评估报告生成；3. 增加评估师确认环节，守住不自动执行红线；4. 对接长护险经办接口打通支付。成本加两周联调。"
+              }
+            ]
+          },
+          {
+            "microScene": "在长护险体征数据互通破壁背景下，用户与导师围绕破壁策略、最小验证动作设计及数据最小化与推演精度权衡持续沟通（4轮），其中在居家体征采集阻力部分与银龄需求分析师沟通（1轮），在数据接入授权边界部分与医疗合规审计师沟通（1轮），并形成优先打通核心体征源、单社区试点及分项明示授权的需求结论与补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就对接医院HIS和居家设备接口呗，把数据拉过来汇总。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "居家体征数据拿过来最大的卡点是什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先拿院内电子病历加居家血压计数据？就在一个社区做试点，看血压波动能不能触发推演。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们想拉院内病历和居家血压数据，授权怎么做才不踩线？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我真没细想过，一直以为只要用户点个同意就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推演精度要的数据多，最小化又限制拿，这确实矛盾。我得去查查个保法在医疗数据最小化上的判例，看看怎么在授权书里把级联推演的必要性写清楚，不能只写个空泛的“改善服务”。我记在阅读笔记里，回头改授权流程设计。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户围绕衰弱级联推演系统算力架构设计与导师持续讨论算力分配选型、对照假设、MVP裁剪与NUMA亲和性（8轮），并在算力异构分配与降级方案评估议题上与级联推演架构师沟通（2轮），最终产出纯CPU NUMA绑核推演与内存水位线快照落盘的MVP架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上云原生流式计算那套，K8s加Flink，扛并发体征流应该没问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要快，全塞GPU里跑肯定最快嘛。药代模型和级联图都在GPU上算，省得数据来回搬。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据就是GPU并行度高啊。对照组，我就拿纯CPU多进程跑推演当对照组呗。假设GPU版本耗时是CPU的1/10，那就选GPU。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这俩模型跑算力到底咋分合适？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图规模还没定死，估计初期几百个脏器状态节点吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是几百个节点没必要上GPU图计算了？还有你说的NUMA架构，跨节点内存访问延迟怎么控制？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块真没实操过，以前都是无状态服务随便调度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实没考虑到。K8s调度这块我熟，但NUMA绑核和异构切分我没写过。我得去查查K8s里怎么用CPU Manager做静态绑核，还有MPI和CUDA Stream混合编程的案例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重新立假设：假设在百节点级联图规模下，CPU主导（NUMA绑核）+GPU辅助药代加速的异构方案，端到端推演延迟低于纯GPU流式方案。对照组就是纯GPU方案。验证方法就是在试点环境跑两套，测单次级联演进耗时。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP就先不上GPU了。几百个节点CPU完全扛得住，先做纯CPU NUMA绑核的推演引擎，GPU药代加速作为后续迭代预留接口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我会在架构里加个基于内存水位线的状态快照落盘机制。那本轮算力架构就定：纯CPU NUMA绑核推演 + 内存水位线快照落盘 + 预留GPU加速接口。"
+              }
+            ]
+          },
+          {
+            "microScene": "在推演引擎PK/PD数据流耦联设计背景下，用户与导师围绕耦联流架构、脏器代偿反馈处理及代偿曲线插值逻辑持续沟通（7轮），其中在脏器代偿反馈与耦联流设计部分与药代动效建模师沟通（2轮），并最终形成DAG主通路加共享脏器状态回传加三次样条代偿曲线插值的耦联流定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把每种药的浓度数据算完发出来，然后算药效的模块接收一下？中间用个消息队列削峰填谷，解耦一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多药互作的PK/PD数据流怎么搞？我本来想用消息队列直接接。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "共享状态回传？那就是要有反馈环。那数据流不就成网状了？网状流在引擎里跑容易死循环啊，不好实现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基础流要用DAG，脏器状态要共享回传，不能单向。还要加个代偿反馈边，带阻尼系数控制收敛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步长之前算力架构里定了，ODE求解器可以动态调步长。反馈边触发时机，就按建模师说的，脏器状态超阈值就触发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我确实不知道具体阈值怎么定。要不就先留个配置接口，让临床那边填？默认值我先随便给一个？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "药动效耦联流采用DAG拓扑，单向主通路跑浓度数据；脏器状态向量共享，通过带阻尼的反馈边回传给药动节点；代偿阈值做成可插拔配置，不同脏器走不同的代偿曲线插值，默认值从临床文献查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "样条平滑点吧，线性折线太硬了，状态切换容易震荡误判。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在互作阻截规则引擎设计背景下与导师围绕多药互作阻断逻辑及性能合规折中持续沟通（4轮），其中在Rete算法落地与轻量级审计部分与互作阻截策略师沟通（2轮），在规则白盒可解释性部分与医疗合规审计师沟通（1轮），并最终形成Rete算法核心加监听器与审计事件流输出的引擎定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "写If-Else分支？或者用决策树？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模糊推理引擎搞多药互作，工程上怎么落地？是不是特别难调？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规这边，规则引擎必须全白盒吗？Rete算法这种算黑盒不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略师说Rete能处理级联传导，好实现；合规说要能查推理路径，否则违规。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来想搞个加权决策树，两边都应付一下，但决策树好像搞不定脏器级联传导。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "全量落盘肯定扛不住，数据量太大。那只记触发结果和规则ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Rete引擎能不能在规则匹配成功时，只把触发的规则ID和输入事实快照推出来？不要全量推理过程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就用Rete算法做核心引擎，加上监听器输出审计事件流。合规这边用事件流做回溯，应该能过审。性能也不受影响。"
+              }
+            ]
+          },
+          {
+            "microScene": "在老年居家网关算力极弱且无加密芯片的边缘感知可信防护背景下，用户与导师围绕加密算法选择、脱敏方式、物理窃取风险及防窃取策略持续沟通（5轮），其中在轻量级防篡改与隐私保护实现部分与边缘感知安全官沟通（2轮），并最终形成基于CMAC防篡改、脱敏前置、按需拉取与软绑定防窃取的边缘可信防护及MQTT接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这破环境怎么做可信防护？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "只传哈希摘要，那推演引擎要真实数据时怎么办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "CMAC我能找到C库直接调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用CMAC做防篡改，网关侧把ID和体征拆开，平时只发哈希摘要，引擎要数据再推。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "总不能给网关加个防拆壳吧，没钱啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把Key跟网关的MAC地址和CPU ID混起来生成。就算拿走Flash也用不了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口用MQTT，Topic按摘要、全量、请求分开。CMAC校验放连接层。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在介护处方动态适配背景下与导师围绕多目标冲突寻优算法选择、处方验证实验设计及防抖限频约束持续沟通（7轮），其中在寻优算法与约束构建部分与介护适配算法师沟通（1轮），在算法部署资源消耗部分与模型联调工程师沟通（1轮），并最终形成帕累托混合寻优、依从性硬约束、防抖限频及留一交叉验证的介护适配方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接查表吧？推演结果对应一个处方库，查出来直接发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冲突就按优先级排个序呗。依从性确实没想过，老人不配合咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演结果怎么喂给寻优算法？多目标冲突咋建约束？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听着挺复杂，能不能直接写if-else？不过他提到依从性上限做硬约束，这个我得加进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就找几个病例跑一下呗，看结果对不对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制年龄和病种？基线用历史处方。样本量就跑个几十个先看看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了个规范文档，里面提到要用留一交叉验证防止过拟合。我是不是能把留一交叉验证套进来？这样不用分太多组数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻优用帕累托，验证用留一法。接口的话，输入是状态向量和阻截信号，输出是调整后的用药剂量向量和介护等级。我加个防抖约束，推演结果波动太频不能老改处方，得加个时间窗口限频。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帕累托寻优部署起来吃内存吗？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在药代耦联模型开发与严苛资源约束背景下，用户与导师围绕求解器选型、精度与性能取舍及理论短板补救持续沟通（7轮），其中在非线性项保留与求解器选型部分与药代动效建模师沟通（1轮），在内存与延迟约束及差分替代方案部分与模型联调工程师沟通（1轮），并形成差分近似加步长自适应截断的折中方案与先推演后编码的验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接用Python的SciPy库，把方程组翻译过去，用odeint包跑应该就行吧"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用SciPy的odeint跑药代耦联模型，你看行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "建模师建议用RK45，但这能满足2G内存和500ms延迟吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查表法多药组合参数空间太大，肯定爆内存。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我数值分析基础不行。我今晚得把偏微分方程离散化的部分补一下，重点看步长和截断误差的关系，写几个一维的对流扩散方程差分格式跑一跑对比，把误差曲线记下来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把建模师的非线性项用差分展开，步长先取0.01试跑，如果截断误差大就缩小步长，但最小步长不能低于0.001，不然肯定超延迟。我先写个差分方程的demo，单测验证一下2G内存和500ms的边界。"
+              }
+            ]
+          },
+          {
+            "microScene": "在级联推演联调测试背景下，用户与导师围绕药代与推演引擎的联调方案、时序对齐、背压机制与结果校验持续沟通（6轮），其中在时序同步与内存开销部分与级联推演架构师沟通（1轮），并最终确定滑动窗口对齐、拉取式背压及基准病例校验的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个主函数把两个模块new出来，直接调推演接口把药代结果传过去，控制台能打出衰弱评分就算通了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间对齐它们自己内部应该处理了吧，接口定义里没提这个。内存我本地跑了一下没崩，应该没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "药代和推演的时间怎么对齐？内存占用会不会有坑？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改代码，在调用推演前加个窗口，入口加个限流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证结果，我跑一遍看没报错，衰弱评分没变成负数就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "滑动窗口和拉取背压我来改代码。基准病例我去找合规审计师要脱敏数据。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在互作阻截性能调优背景下与导师围绕规则匹配低延迟优化及规则热更新并发处理持续沟通（4轮），其中在计算密集型低延迟方案部分与性能调优极客沟通（2轮），在规则拓扑与矩阵导出部分与互作阻截策略师沟通（1轮），并最终确定位图预编译加AtomicReference双缓冲方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了火焰图，时间全耗在规则树遍历上了。我想把规则全塞Redis里做匹配，或者直接换Drools引擎把现在的硬编码if-else替换掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则树遍历太慢，Redis和Drools能上吗？内存和GC会不会炸？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着是快，但脏器互作关系那么复杂，怎么编译成BitSet我不太会弄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脏器互作依赖关系能导出成矩阵吗？我要做位图预编译。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "矩阵和向量能拿到。那就用位图方案吧。我写个脚本把矩阵转BitSet。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果线上规则库更新了，内存里的BitSet怎么替换？直接改引用会不会把正在匹配的请求搞出并发问题？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，就位图预编译加AtomicReference双缓冲。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写矩阵转BitSet的脚本，匹配逻辑改成位运算。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘网关联调适配背景下，用户与导师围绕网关RST重置包排查与协议适配持续沟通（5轮），其中在网关协议特征与排障切入点部分与边缘感知安全官沟通（1轮），并最终形成修改模拟器适配CoAP协议栈及使用eBPF追踪内核丢包的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关一直给我甩 RST 重置包，我本地模拟器跑得顺得很，完全不知道哪里没对上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就知道它收体征数据，底层用的啥完全没概念。我只看了 Java 报的 Connection Reset 异常，再往下就黑盒了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本地模拟器是 HTTP 直连的，线上到底走什么协议？这 RST 怎么查？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我模拟器完全没写这块。那 Wireshark 抓包还得解密 DTLS 吧？我上哪去拿密钥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以写个脚本追踪 udp_recvmsg 的返回值，看是不是网关内核缓冲区溢出直接把包扔了，根本没走到 CoAP 解析层。这比去搞密钥抓包解密快多了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把模拟器的 HTTP 接口改成 CoAP，然后写个 bpftrace 脚本挂上去看 UDP 丢包情况。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在推演集群线上部署验证背景下，与导师围绕流式计算稳定性与推演结论统计有效性持续沟通（7轮），其中在集群监控指标与熔断机制部分与运行保障工程师沟通（2轮），在有效性统计验证方法部分与临床疗效评估员沟通（1轮），并最终形成包含积压率、发散率熔断及效应量校正的部署验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "稳定性我打算看CPU和内存，用压测工具打点体征数据进去，看延迟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "统计有效性是啥？看推演出来的阻截建议准不准吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就打算对比一下推演建议和医生实际处方，看一致率。置信区间这些我上学学过但早忘了，得查查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演集群部署上去后，除了CPU内存，还要盯哪些指标？我主要是怕体征数据流进来后推演服务扛不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "发散率高了是不是要熔断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演结论的有效性怎么算？导师说要算置信区间和效应量，我只会算一致率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署时重点盯推演任务积压率和模型发散率，发散了就熔断重置。有效性验证得拉历史对照组，算衰弱指数下降的95%置信区间和Cohen's d效应量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会算效应量，只会调包算p值。这次得补上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天用Python的scipy包把历史对照数据重跑一遍，写个函数算Cohen's d，周五前加到评估脚本里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署验证就按这三点来：1. 积压率低于5%；2. 发散率低于1%超限熔断；3. 有效性用历史对照加t检验加效应量验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "在线上级联预警指标运行评估背景下，用户与导师围绕脏器代偿超载预警高频触发排查与告警收敛方案持续沟通（4轮），其中在阈值临床依据与抖动处理部分与互作阻截策略师沟通（2轮），在高频告警资源消耗部分与运行保障工程师沟通（1轮），最终确定采用3分钟时间窗收敛告警并设定CPU峰值目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在主要盯积压率、发散率，还有脏器代偿超载预警。但代偿超载这个指标跳得太厉害，几分钟就触发一次，我不确定是系统问题还是真有那么多高危情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用的默认值0.75。当时没细想，就觉得防漏报越严越好。现在触发这么频繁，我怕是阈值太低，但不敢随便改，万一改了漏掉真风险怎么办。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "默认阈值0.75是不是太松了？临床上有啥依据没？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那这种抖动怎么处理？直接改阈值吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在告警一天几百条，对推演集群有影响没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略师说0.75是防漏报的临界点，跳得频繁是因为体征噪声让评分抖动，建议加时间窗或者做平滑。运维说高频告警让重评估反复跑，CPU飙到85%，正常推演会被挤占，必须收敛。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加时间窗应该能大幅减少瞬态抖动触发的重评估，CPU肯定能降下来。做平滑得改推演输入链路，我怕改出问题。我打算先加个3分钟时间窗，3分钟内持续超0.75才算真预警。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段阻截假阳性率过高背景下，用户与导师围绕假阳性根因归因与修正方案持续沟通（5轮），其中在误报数据分布与生理波动区分部分与临床疗效评估员沟通（1轮），在规则库代偿期特征缺失及推演引擎接口确认部分与互作阻截策略师沟通（2轮），并最终形成特征混淆归因结论与代偿负荷率前置过滤修正方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看日志里好多报警都是单次指标冲高触发的。既然加了3分钟时间窗还是多，是不是把阈值再调高0.1就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "主要是哪块误报最多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则库这边呢？是不是没把代偿期单独拎出来？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想调高阈值确实不行，会把代偿期波动也挡掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在阻截规则前加一层代偿期判定？如果在代偿期，就不算真互作？但这判定怎么做，我只会写if-else。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我要在规则前加代偿期判定，推演引擎那边有代偿状态输出吗？我直接拿来当前置条件？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "负荷率0.8做分界。这个好加，我就当个前置过滤条件写进去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因结论：1. 假阳性集中在ACEI+利尿剂的肌酐波动；2. 根因是规则没区分生理波动和代偿期。修正：在阻截规则前加代偿负荷率<0.8的前置过滤，代偿期内不触发强阻截，只记录。"
+              }
+            ]
+          },
+          {
+            "microScene": "在介护反馈迭代规划背景下，用户与导师围绕漏报风险权衡、规则外推边界及动态基线校准迁移持续沟通（7轮），其中在漏报风险与阈值逻辑修改部分与临床疗效评估员沟通（3轮），在体征维度扩展与迭代优先级部分与迭代规划经理沟通（3轮），并形成引入动态基线校准替代固定阈值的迭代方案及复现条件限定。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "报警少了，介护护士工作量降了，我觉得可以先稳一稳，不用急着大改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@临床疗效评估员 报警少了还有啥问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@迭代规划经理 调低点？比如0.7？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要调逻辑，一个要加数据。加数据太慢了，我写接口得搞半个月。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "推不到，别的药代偿机制不一样。我就先管ACEI这块的。风险的话，要不先加斜率？代码好改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不太懂怎么定。我就看跑出来的数据对不对。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前两天看了个日志，隔壁组做血压预警的，用了动态基线校准。我当时记了一下，要不试试把那个搬过来？拿患者前几天数据当基线，比斜率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按他们日志写的，先取7天均值当基线，斜率超2倍标准差就报警。先在ACEI这块试，别的药不动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按这个改。基线算7天，超2倍就报。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

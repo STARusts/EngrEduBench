@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在随动聚调引擎排障收尾准备灰度部署背景下，用户与导师围绕流量切分维度、验证核心指标及严谨性持续沟通（7轮），其中在灰度切流维度部分与运维部署工程师沟通（1轮），在灰度效果量化对比验证部分与运行监控分析师沟通（1轮），并最终敲定按聚合池切流策略及A/B对比验证标准，形成补齐统计检验短板的计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思先按网关切5%的流量上去，观察一两个小时，只要没出Error日志，没触发告警，就可以全量推了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没考虑到。设备拆散了指令执行肯定乱套。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维部署工程师 灰度切流的时候怎么保证聚合池不被拆散？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "运维说按聚合池切，选两个非核心工业园区，大概5%的量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看随动指令执行成功率呗，成功率不掉就说明没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行监控分析师 灰度版本跑起来后，效果怎么和老版本做量化对比？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控说要搞什么t检验，还要算置信区间和效应量。平时上线我就看个成功率平均值，这套统计方法我完全没实操过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "核心逻辑听懂了，就是不能只看平均值，得对比P99和达标率，还得排除随机波动，证明改进是真实的。但t检验和Cohen's d怎么算我真不会，我统计这块短板太明显了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚查查Python怎么做假设检验和算效应量。我定个目标，明天下班前，我用scipy写一个验证脚本出来，输入两组时延或达标率数据，直接输出p值和Cohen's d。写完就集成到咱们后天的灰度复盘流程里，以后所有灰度验证都用它出结论。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

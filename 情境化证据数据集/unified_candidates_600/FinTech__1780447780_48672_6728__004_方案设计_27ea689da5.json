@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在链属担保反演系统方案设计背景下，用户与导师围绕跨域资金图谱的图库选型、数据同步与架构约束持续沟通（5轮），其中在图库选型与分片部分与分布式图库选型师沟通（1轮），在数据管道与时序对齐部分与资金穿透数据规划师沟通（1轮），最终确认Nebula与Flink CDC架构及核心约束，并制定补齐短板计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨域资金图谱这块，我想直接上Neo4j，后端Spring Boot接图库，这架构应该挺稳的吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Neo4j不是有集群版吗？我写Cypher快啊，开发效率高。数据同步就写个定时批处理，从核心账务系统拉数据增量更新到图里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设就是：Neo4j开发快能快速出活，Nebula这种分布式图库学习成本高。变量就是开发周期和查询延迟。如果亿级边查询延迟超3秒我就换Nebula？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域资金图谱如果边数过亿，还要实时写入，Neo4j和Nebula到底差在哪？分片逻辑怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域资金流水如果不用批处理，怎么保证图里节点状态的时序一致？万一乱序了，反演出来的风险路径不就错了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Flink和Nebula这俩我都没实操过深度分布式的，Neo4j那套行不通了。图库得换Nebula，按核心企业ID分片；数据同步得用Flink CDC做水位线对齐，不能批处理。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我后端写CRUD没问题，但Flink流式处理和图分片这块确实缺。我这周末先照着资金规划师说的，跑通一个Flink CDC接MySQL的demo，把水位线逻辑搞懂；图分片我先看Nebula的Partition文档，按企业ID建space。明天下午前，我争取在本地把单机版的数据流跑通，验证一下写入延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

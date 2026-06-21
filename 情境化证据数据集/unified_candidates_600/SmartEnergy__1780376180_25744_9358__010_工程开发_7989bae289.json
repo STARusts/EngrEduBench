@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧异质能流数据接入背景下，用户与导师围绕高频压变传感器边缘适配、时序对齐测试及合规风险持续沟通（7轮），其中在高频压变接入与时序对齐部分与端侧感知对接工程师沟通（2轮），并最终形成时序对齐必须锁硬件时钟及防范碳排审计合规失效的策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压变传感器我不熟，是不是也走串口轮询？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我没写过边缘侧的FIFO逻辑，这种硬件级的操作我不太会。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压变传感器高频脉冲怎么接进来？时序对齐怎么做？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去改采集线程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跑挂了！路由端疯狂报错，Timestamp out of window，全反序丢弃了。DMA数据是进来了，但时间戳全乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时间戳全乱套了，报Timestamp out of window。我开了DMA，PTP也加了，怎么还是反序？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没锁PHC，怪不得。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把phc2sys加上，devclk也配上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这回没报错，数据时序对齐了，路由端正常入库。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "软件打点不可靠，必须锁PHC。审计那边我留意，不乱打时间戳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

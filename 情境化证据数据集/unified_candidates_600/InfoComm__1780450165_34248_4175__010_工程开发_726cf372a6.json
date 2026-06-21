@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在浅海多径衰落抵消算法开发背景下，与导师围绕LMS算法收敛失败、算力约束及变步长方案持续沟通（6轮），其中在LMS不收敛与NLMS替换部分与均衡算法工程师沟通（1轮），在定点DSP除法限制与无除法变步长方案部分与均衡算法工程师沟通（1轮），并最终形成采用SVSLMS算法及调整抽头与训练序列的开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "均衡器收敛特别慢，抵消完信噪比反而降了。我用的LMS，步长调了好几个都不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看LMS简单，算力小。步长设小了不收敛，设大了直接发散，卡住了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LMS跑不通，步长怎么调都不对，时延扩展大怎么办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抽头数我按单径设的，就16个。训练序列用的短帧头。换NLMS是吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "板子DSP算力挺紧张的。抽头加到64可能勉强能跑，但NLMS每次要算归一化除法，定点DSP除法太慢了，周期根本不够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DSP除法太慢，NLMS跑不动，有没有不要除法的变步长？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SVSLMS，加减移位就行。抽头先64，训练序列加长。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

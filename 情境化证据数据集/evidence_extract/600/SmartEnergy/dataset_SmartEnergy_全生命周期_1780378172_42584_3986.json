@@ -1,0 +1,661 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在构网型微源惯量合成系统痛点剖析背景下，与导师围绕低惯量频稳崩溃痛点、合成惯量核心假设及补学目标持续沟通（7轮），其中在频率安全底线部分与电网安规合规审视官沟通（1轮），并最终形成频稳痛点结论、聚合时延验证假设与单机时延仿真计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "其实我觉得核心问题是那些储能响应太慢，跟不上频率突变。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频率崩盘的红线在哪？有没有什么现成的合规检查清单我直接对着打勾？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只要不跌破49.5Hz就行了对吧？我能不能写个脚本死盯这个数，超了就强制切机？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我假设多并几个储能就能顶上去？反正容量够了总归能顶住吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道怎么算时延和惯量的关系。我只会用现成的仿真平台搭模块，底层时序没搞过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下周我找两篇讲构网型VSG时延的论文，照着里头的公式在Matlab里跑个单机仿真，看能不能把时延算出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点就是储能响应慢跟不上频跌，导致频率跌破49.5Hz。我们要验证聚合时延小于100毫秒能不能顶住频降率0.5Hz/s。我下周去复现论文的时延仿真。"
+              }
+            ]
+          },
+          {
+            "microScene": "在构网型微源并网安规合规审视背景下，用户与导师围绕合规红线与支撑策略持续沟通（5轮），其中在频压红线与电流限幅部分与电网安规合规审视官沟通（2轮），并最终确立故障穿越降额支撑与阻尼不恶化证明两条硬约束红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是过个认证就行了，我看网上有那种自动生成认证报告的工具，跑一下出个PDF应该就完事了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反正就并上去呗，大不了跳闸。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并网安规怎么过？有没有什么快速通关的配置文件或者一键检查脚本？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "短路电流超标？加个熔断器不就完了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他说的我大概懂了，就是别烧设备，别振荡，别被调度踢出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我加个过流保护和低频闭锁是不是就搞定了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不加闭锁，又怕烧了。这也不行那也不行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有这种证明的现成模板可以套？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在柔性负荷聚合价值核算背景下，与导师围绕构网型微源调频收益核算口径与电池折损刚性成本持续沟通（6轮），其中在收益核算维度与参数取值依据部分与储能聚合价值测算师沟通（2轮），并最终明确惯量补偿、频阻双轨制与电池折损参数，形成净收益为正的价值核算底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "算账的话，网上有些开源的电力市场算收益的包，我直接套一下参数跑个结果行不行？或者看看别人类似项目怎么算的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就常见的柔性负荷呗。空调负荷大，响应慢点；储能响应快。具体怎么分档，我想着找个分类模板套一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这种构网型微源提供虚拟惯量和频阻，调频市场收益怎么算？有没有那种算收益的现成公式或者工具？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "电池占比挺大的。寿命折损这块，是不是有那种电池寿命损耗计算模型可以直接调？我主要想知道最后能赚多少钱，别亏本就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径就是，收益等于惯量溢价加上频阻调节收益，减去电池损耗成本。这样可以吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "惯量溢价的定价依据是什么？频阻收益按容量算还是里程算？电池损耗系数怎么取？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "惯量溢价按各省指导价，频阻双轨制容量加里程，电池折损0.5元每度电。算收益就这三块拼起来减一下。"
+              }
+            ]
+          },
+          {
+            "microScene": "在自适应惯量商业模式推演背景下，用户与导师围绕微源系统动态结算、报价策略与风险敞口持续沟通（8轮），其中在电网侧采购虚拟惯量结算约束部分与商业模式沙盘推演官沟通（1轮），并最终形成基于性能考核动态竞价的四条商业模式推演约束条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接做个分账合约呗？我看网上很多分布式项目都是弄个智能合约，按比例自动分钱，拿过来改改参数应该就能用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我还没细看。反正只要能自动算钱就行吧？考核的话，加个扣款条件不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电网买虚拟惯量，结算是怎么搞的？有没有现成的分润模板能套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "K值这东西，有没有开源的计算组件？我直接调包算一下，省得自己写公式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "风险敞口？这词我听过，但具体咋定没概念。是不是就设个止损线，亏到多少就不参与了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "动态竞价，就是每次调频前先报个价？这代码不好写啊，有没有那种竞价策略的框架推荐？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "根据电池状态看能不能接单，能接就报个高价，怕被罚就报低价或者不报？大概这意思？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "约束1：结算看K值，不是按容量一口价；约束2：方向反了或者太慢要扣钱；约束3：不能随便退出，退出会出大事；约束4：报价得看自己状态，不能瞎报。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在频阻合成并网战略可行性规划背景下，与导师围绕战略风险、合规验证与硬约束兜底持续沟通（5轮），其中在并网安规死线部分与电网安规合规审视官沟通（1轮），在边缘算力与维护成本部分与构网型微源统筹架构师沟通（1轮），并最终形成四条战略可行性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "风险就是怕算得不对呗。我看网上有那种现成的惯量测算包，直接套一下应该就不会出事吧？只要结果别差太多就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频阻合成并网有啥死规定？有没有现成的检查清单能套用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力能撑住吗？有没有现成的算力评估模板？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审视官说阻尼比得大于0.05，不能超限，响应得快。架构师说20ms内得算完，算力不能超。我觉得风险就是怕包不好用，算慢了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个仿真看看？随便弄点数据测一下？如果不行我就换个包。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "看来我根本不懂动态阻尼匹配的合规边界。我得去把GB/T 19963里关于阻尼比和惯量响应的条款重新看一遍，记在我的学习日志里，之前看的都太浅了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，能不能先拿历史录波数据里的切机波形做样本？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "约束1：阻尼比必须大于0.05，不能碰安规红线；约束2：边缘20ms内算完，算力有上限；约束3：验证得用切机波形做样本，不能随便造数据。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在构网型微源频阻合成系统全局架构设计背景下，用户与导师围绕云边端控制边界划分、开源物联网平台可行性排除、边缘底座选型对照验证及补学目标持续沟通（7轮），其中在云边端解耦切分与选型验证指标部分与构网型微源统筹架构师沟通（2轮），并最终确认云端策略下发加边缘就地频阻合成的架构方向，明确KubeEdge与RTOS时延对照验证方法及补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上那种开源的物联网平台挺多的，能不能直接拿一个来改改？比如套个ThingsBoard，把储能设备接上去，应该很快就能跑起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能加机器解决吗？或者我换一个更快的消息中间件，把Kafka换成Pulsar？我看很多人这么干，说吞吐量能上去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用开源物联网平台套一下，20ms能行不？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不能上云啊。那边缘算用什么框架？有没有那种现成的高性能边缘计算框架能直接调的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，都跑一下试试呗？看看哪个快。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那KubeEdge和RTOS我不太熟，这俩在工业控制里到底差多少？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这周找两篇对比文章看看，搞清楚它们时延差在哪。那架构大方向就先定云端编排加边缘实时算，不用物联网平台了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方向：云边协同，边缘重算；排除：开源物联网平台直接套用；验证：KubeEdge对比RTOS端到端时延；补学：KubeEdge与RTOS时延差异。就这些。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在广域频差感知与数据流规划背景下，与导师围绕微秒级频差感知协议选型与高并发数据流转架构持续沟通（7轮），其中在频差采集协议选型部分与广域频差感知规约师沟通（1轮），在高并发数据流转架构部分与时序数据流转架构师沟通（1轮），并最终确定感知层走UDP精简帧、流转层用共享内存直通及验证丢包率与微秒时延的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用MQTT发上来呗，或者用Telegraf采完推给InfluxDB，我看网上都这么搭的，挺方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个时间戳，开QoS 1应该差不多了吧？大家都这么用，应该问题不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这频差采集，能用MQTT直接传吗？我想着现成的方便。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就全改成UDP，我用Netty写个UDP接收器不就结了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高并发UDP包怎么接不丢包？Kafka行不行？我以前用Kafka挺快的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "DPDK？共享内存？这有没有现成的开源组件能直接调的？自己写太麻烦了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能走MQTT和Kafka，得走UDP精简帧。数据流转不能靠Netty和中间件，得用共享内存或者DPDK直通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包得靠无锁队列缓冲。时延口径得压在微秒级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "感知：UDP精简帧；流转：共享内存直通；验证：丢包率和微秒时延。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在自适应惯量分配算法选型背景下与导师围绕微秒级边缘算力约束与算法形态持续沟通（4轮），其中在DRL可行性及替代方案部分与虚拟惯量算法主程沟通（2轮），最终敲定弃用DRL，采用RoCoF与频差联合驱动的显式方程及算力约束规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "自适应嘛，现在网上都是用强化学习搞。直接调RLlib那种包，离线训练好推到边缘侧，多省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现在不是有轻量化网络嘛，剪枝量化一下应该能跑。如果实在不行，就，就换个更小的包呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级算惯量分配，能上强化学习吗？有没有那种轻量级的推理框架能兜住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有封装好的这种VSG自适应库？直接调函数那种，我不想从头推公式。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能用AI模型，太慢。只能用那种VSG公式，加减乘除那种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RoCoF吧。前面感知层不是已经有频差数据了嘛，差分一下就是RoCoF，直接拿来用，不用再找别的变量了，多方便。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。弃用DRL；用RoCoF和频差的显式公式；算力红线是无除法无超越函数，加一阶滤波。"
+              }
+            ]
+          },
+          {
+            "microScene": "在构网指令安全与高可用评估背景下，用户与导师围绕指令下发高可用方案、降级控制逻辑及验证动作持续沟通（5轮），其中在指令安全原则与重试可行性部分与变流器柔性控指令匠沟通（2轮），在合规要求部分与电网安规合规审视官沟通（1轮），并最终形成弃用MQ重试、断网切本地及3ms中断下RoCoF验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上云原生那套嘛，K8s自带健康检查，挂了自动拉起。指令走MQ削峰填谷，保证不丢，这套路网上多的是，很成熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用MQ做指令中继，节点挂了就重试，这样总能保证高可用吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "反的啊。那MQ废了。那就，加个看门狗？超时就切本地？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看了个标题，大概意思是失效了要给个默认值。那我就默认输出50Hz呗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，跑个仿真呗，把网线拔了看看频差大不大？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听着好麻烦，行吧，那就按这个测。我回去配个自动化脚本跑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。不用MQ和重试；断网切本地；验证是3ms中断RoCoF小于0.5。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在构网型微源合成系统开发背景下，与导师围绕频差提取算法、时序对齐与验证标准持续沟通（7轮），其中在特征提取规约部分与广域频差感知规约师沟通（1轮），在时标补偿部分与边缘网关联调专员沟通（1轮），并最终确定短窗DFT与三阶插值测频、PTP同步与时标补偿、及RoCoF误差带与时序抖动验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把频差特征提取和微源侧联调这块搞起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网上有好多开源的FFT库，直接调包算频差应该挺快的。联调我就写个REST接口，用Postman发指令过去，看返回值对不对就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频差特征提取有没有那种开箱即用的库？我不想从头写那些复杂的计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为三阶更准吧？差分好像太简单了。反正精度高肯定没错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时序对齐，我就给数据加个时间戳，到了微源侧按时间排个序不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调的时候时间对不上怎么办？有没有什么工具能自动把时间对齐的？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "PTP协议，时标补偿。这我都没弄过啊。我平时就只写过业务接口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我回去查查PTP协议的资料，然后把网关那边的时间同步代码拉下来看看怎么算时延的。我今晚先看个大概。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个脚本注入一个固定的频差信号，看算出来的值是不是一样。时标的话，我就多测几次，看时间差不差太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征提取用短窗递推DFT和三阶插值测频。联调核心抓PTP时钟同步和时标补偿。验证的话，要测RoCoF误差带和时序抖动。"
+              }
+            ]
+          },
+          {
+            "microScene": "在惯量测算与阻尼合成开发背景下，用户与导师围绕自适应算法实现与算力分配持续沟通（6轮），其中在自适应惯量与阻尼算法及算力评估部分与虚拟惯量算法主程沟通（2轮），在插值下放与指令格式部分与变流器柔性控指令匠沟通（1轮），并最终形成离线建表、网关查表、变流器插值及条件触发校准的四步实现方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就调包呗？我看过有算虚拟惯量的库，直接把频差丢进去应该就能出结果。阻尼就给个系数乘一下？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我我我不太懂怎么变。有没有那种，自动调参的工具？丢进去它自己找最佳系数那种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算惯量有现成的轻量级库不？自适应阻尼怎么搞最省事？我这板子算力不太行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "查表法？这个好像简单点。工况跑全，怎么跑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "离线存表，在线修。算力要留20%。那插值下放是怎么回事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "变流器那边能算不？指令格式怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就，先离线跑全工况存表。然后网关这边，收到频差，查表算H和D的基值？不对，网关算力不够，网关就查表找索引和斜率，打包发给变流器。变流器自己插值算。然后，留点算力做在线扰动校准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "工况切换的时候？或者，或者误差大了的时候？"
+              }
+            ]
+          },
+          {
+            "microScene": "在构网型变流器控制指令下发背景下，用户与导师围绕指令下发通道方案、时序对齐与底层接口实现持续沟通（7轮），其中在底层发波时序与直写寄存器部分与变流器柔性控指令匠沟通（2轮），在网关透传限制与共享内存方案部分与边缘网关联调专员沟通（2轮），并最终确定DPRAM共享内存旁路及DMA写入方案，去翻查BSP手册寻找DMA配置与中断注册API。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，直接调下发接口呗？我记得有种标准协议栈能直接套，把算好的指令塞进去就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@变流器柔性控指令匠 底层下发用标准协议栈不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直写寄存器？这太底层了吧，有没有那种自动映射的框架能搞定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘网关联调专员 网关那边能直接透传这种直写指令吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "你看，又对不上。能不能搞个中间件，自动把毫秒级和微秒级对齐？我记得之前有项目用过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "硬线通道？这代码怎么写啊？有没有那种硬件抽象层可以直接调？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "平时就用C库函数，或者供应商给的BSP包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我去翻翻BSP包看看有没有现成的DMA配置函数。这种一般都有的吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "知道了。就找DMA配置API，然后挂个读中断。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发极端工况频稳仿真与压测背景下，用户与导师围绕构网型微源频稳压测方案、算法临界行为及核心压测用例持续沟通（6轮），其中在极限施压场景搭建与频稳红线部分与极端频稳仿真压测员沟通（2轮），并明确频稳红线与三个核心压测用例，准备搭建模型拓扑。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "极限施压怎么搭？还有频稳红线是啥？我看直接用自带的benchmark跑一遍不就完了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这Simulink跑起来不得卡死啊？有没有算得快点的工具？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测员说要用三相短路和切机来测，还得用RTDS跑。红线是频率变化率2Hz/s，最低点49Hz。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失效了就切机呗？算法里加个限幅？我看网上好多代码都是直接加个saturation模块。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "曲线我可以用scope抓出来。这回不用自己写脚本吧？"
+              }
+            ]
+          },
+          {
+            "microScene": "在多微源时延补偿与逻辑调优背景下，用户与导师围绕时延补偿方案与调优边界持续沟通（7轮），其中在通信时延分布与时标对齐部分与边缘网关联调专员沟通（1轮），在时延破坏边界与低阶近似适用边界部分与虚拟惯量算法主程沟通（2轮），并最终形成按最慢节点时标对齐、采用低阶超前近似补偿及明确频带与截止频率限制的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接加个延迟模块模拟一下？Simulink里有Transport Delay，套上去调调参数就行吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有现成的时延补偿包？直接调包行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关这边的时延分布是啥样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延破坏边界是啥？加个Smith预估器能不能搞定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "专员说要按最慢节点对齐，主程说时延超0.3倍就振荡，不能用Smith。那我写个Python脚本把数据对齐，算法里加个超前环节？网上有超前校正代码，我改改？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型不准的话，可以用个低阶的近似代替？不用精确模型，就算时延抖动，也不会马上崩。算力也能省点，网关跑不动太复杂的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按最慢节点做时标对齐，算法里不用Smith，用低阶超前近似补偿。补偿频带不超自然振荡频率0.2倍，截止频率低于采样率五分之一。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在构网型微源系统灰度部署背景下，与导师围绕灰度切流规则、回滚红线与策略有效性验证持续沟通（8轮），其中在灰度切流与回滚规则部分与构网策略灰度发布控沟通（2轮），在阻尼贡献度统计验证部分与阻尼贡献度计量师沟通（2轮），并最终确认灰度规则与验证指标，计划配置黑名单及跑通统计Demo。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没定，我想着先用工具切5%的节点看看，不出错再加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电力系统的灰度发布是不是不能按比例切？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看曲线平不平嘛"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "新旧策略对比，是不是看阻尼大就是好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是分两组比，有个什么P值要小于0.05，效应量要大于0.5。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺统计那块的知识，那些图我看不懂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周五前，跑通一个双样本T检验的demo，用假数据测，输出P值和置信区间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，我这就去配黑名单。"
+              }
+            ]
+          },
+          {
+            "microScene": "在灰度上线后频稳与阻尼度监控背景下，用户与导师围绕监控指标选取、方差超限根因及报警溯源联动逻辑持续沟通（7轮），其中在阻尼特征量采集与核心指标计算部分与阻尼贡献度计量师沟通（2轮），并最终确定等效惯量、阻尼比与贡献度方差三项监控指标及0.1溯源阈值。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征量怎么采？有没有那种直接能算出占比的现成插件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算出来的值放哪？直接存时序库吗？数据量会不会太大，机器扛不住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "方差大就，就报警呗。然后回滚？灰度规则不是写了时延超2ms回滚嘛。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是某个节点挂了？或者网络卡了？我不太确定，感觉都挺有可能。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。等效惯量，阻尼比，方差超0.1溯源。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在报警规则里加个webhook，触发后自动调溯源接口？"
+              }
+            ]
+          },
+          {
+            "microScene": "在次同步振荡异常运行评估背景下，用户与导师围绕异常根因定位、参数调整消除负阻尼及验证观察方法持续沟通（5轮），其中在频域特征窗拆解与谐振根因分析部分与振荡溯源诊断猎手沟通（3轮），并形成调大阻尼系数验证并监控频域能量占比的处置策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看grafana面板上波形在抖。直接用FFT工具跑一下频谱图行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看谁抖得最厉害？有没有一键定位的脚本？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这振荡波形怎么查是哪个微源的问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用工具导出CSV发你。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "3号有问题？我把它切了行吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "改它配置文件里的惯量系数？改小点？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有自动寻优工具能直接算出最佳参数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看监控面板上方差报警消没消失。"
+              }
+            ]
+          },
+          {
+            "microScene": "在惯量支撑效能复盘与迭代背景下，用户与导师围绕惯量实际贡献、外推边界及算法迭代方向持续沟通（5轮），其中在微源占比与支撑边界部分与阻尼贡献度计量师沟通（1轮），在频差超限算法退化与补偿逻辑部分与虚拟惯量算法主程沟通（1轮），并最终明确柔性负荷0.5Hz外推边界、变增益补偿迭代方向及验证手段。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "监控大盘上惯量响应曲线都绿了，我直接截个图放复盘报告里行不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控软件里有这图吗？我导出来贴报告行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我报告里加一句“频差大于0.5Hz无效”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "超过0.5Hz频差，算法是不是就不管用了？有没有现成脚本我跑一下看看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有脚本就行，我拿脚本跑一遍。跑通了就说明迭代好了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺底层逻辑吧。我平时就看面板，脚本也就是调包跑一下。我准备把主程给的脚本存我笔记里，下次遇到频差超限直接套。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

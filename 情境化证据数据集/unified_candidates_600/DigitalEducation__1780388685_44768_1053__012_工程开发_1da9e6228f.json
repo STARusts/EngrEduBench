@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在多租户隔离与性能压测开发背景下与导师围绕隔离层级、限流选型、压测指标及脱敏数据准备持续沟通（7轮），其中在隔离层级部分与安全信任机制研究员沟通（1轮），在压测指标与限流选型部分与性能优化攻坚手沟通（2轮），并最终确定三层隔离方案、压测核心指标及造数防撞库策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个schoolId呗，查的时候带上条件，不就隔开了。压测就JMeter一把梭。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "隔离就加个ID不够吗？还要搞啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测怎么看降级水位？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听着好乱。就是说我不能光加ID，还得搞令牌和配额。压测也不是看总QPS，得看互相抢的时候会不会卡到别人。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配额那块肯定没做，现在大家都能随便抢。令牌我好像在网关加过，存数据的时候好像没管Schema，都在一张表里。我得去把表拆了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "令牌桶吧，感觉高级点。限流嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流转任务限流用令牌桶行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就用Semaphore。压测脚本我多搞几个线程组，带上不同的token去抢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "造假数据呗，随机生成名字和学号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "隔离三层：请求头令牌、数据库RLS、并发信号量。压测看干扰度和配额拒绝率，造数据加前缀防撞库。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

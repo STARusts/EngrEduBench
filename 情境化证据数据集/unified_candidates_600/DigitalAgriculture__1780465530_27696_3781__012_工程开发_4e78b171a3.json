@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在遥感数据清洗联调与测试背景下，用户与导师围绕真实数据异常处理策略及联调顺序持续沟通（3轮），其中在测试用例构造与真实数据异常分布部分与联调与测试工程师沟通（3轮），并最终明确联调重点与顺序，准备修改边缘清洗代码补充插值降级与黑名单逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算分两步迭代，先用模拟的标准NDVI序列跑通边缘到云端的Protobuf解析，确认MinMax归一化逻辑不崩。然后再往里注入随机负数和超大值，测截断逻辑和容错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "真实数据的坑具体有哪些？云掩膜漏检怎么测？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "网格偏移这个确实没考虑到，时序错位推演结果就全废了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对于云漏检导致的突降，清洗模块是直接丢弃还是插值？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "插值补齐加置信度降级，这逻辑我加到边缘C++里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始遥感切片里有些网格可能涉及测绘敏感区，清洗时需要做合规剥离吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调重点明确了：1. 边缘清洗流增加云漏检插值与置信度降级逻辑；2. 几何偏移切片的时序对齐验证；3. 敏感网格Drop与云端拒收联调；4. Protobuf反序列化失败的边缘缓存重传。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先跑纯净基准打通Protobuf主干；然后注入敏感网格验证合规拦截，这个不通后面不能测；接着测云漏检插值和几何偏移；最后才是网络异常的重传缓存。一步步来，出问题好定位。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

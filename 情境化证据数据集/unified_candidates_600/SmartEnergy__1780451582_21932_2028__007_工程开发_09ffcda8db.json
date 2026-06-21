@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在构网型储能阻抗在线辨识算法开发背景下，用户与导师围绕PRBS注入时序、轻量化计算及验证口径持续沟通（5轮），其中在算力评估与注入同步部分与嵌入式开发主管沟通（2轮），并最终确定载波同步注入与单点DFT方案及2%误差验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上很多人都是用PRBS伪随机序列注入，然后直接调DSP的FFT库算出来。有现成的数学库，应该挺快的吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用现成的PRBS生成函数和FFT库来做阻抗辨识，这样开发快一点。你看咱们主控的算力能直接跑通用库吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ePWM联动触发PRBS，这个我没写过，之前都是用定时器中断搞的。有没有那种已经封装好的载波同步注入组件？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去看看TI的controlsuite里有没有ePWM触发ADC和DAC的例程，照着改可能行。计算这块，能不能不做全FFT，只算注入频率那一点的DFT？这样应该快很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先花一两天把TI的例程啃一下，把PRBS同步注入的时序画出来。验证的话，我先在代码里埋个GPIO翻转，看PRBS更新点是不是刚好在载波峰值处，然后再算个单点DFT，对比一下用通用FFT库的结果，误差在5%以内就算行吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "开发日志我建个md文件把链接和思路贴进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

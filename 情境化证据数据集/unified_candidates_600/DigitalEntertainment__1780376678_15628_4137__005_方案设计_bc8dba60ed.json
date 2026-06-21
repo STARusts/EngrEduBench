@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在群智协同调度与流控设计背景下，用户与导师围绕并发推演的流控机制持续沟通（4轮），其中在削峰实时性、并发需求与旁支降级部分与群智协同算法工程师沟通（4轮），在状态机并发极限、扇出控制与配额指标部分与数据流控架构师沟通（3轮），并最终形成基于图活跃度与写深度的动态配额推送机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种并发流控，网上很多现成方案吧？是不是直接套个Sentinel或者Resilience4j，给接口加个限流注解就完事了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "如果不加锁，直接用消息队列削峰呢？Kafka总能兜住吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用Kafka削峰你这边能接受吗？把推演请求扔队列里排队。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不削峰，内存状态机到底能扛多少并发写？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "50并发必崩。那算法这边要多少？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "30要崩，50必崩，这中间的缝隙很小啊。硬限流不行，全队列也不行。能不能搞个分级？比如主干剧情走实时推演，旁支剧情降级？或者把算法的并发数压一压？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "扇出系数受控具体指啥？是限制每个节点的出度吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这个听着像是个弹性限流，不是硬堵。这种弹性配额你能接受吗？负载高的时候可能会卡一下你的旁支推演。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就定这个方向？流控层基于内存图负载算动态配额，推下去；算法层根据配额调整推演并发度。不搞全局硬限流，也不搞全量削峰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上类似自适应限流的，一般用CPU和RT做指标。但这儿是图状态机，可能锁等待时长更准？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流控设计就按：先行指标算配额，推送配额给算法层，算法层自适应降采样。这样既保了状态机不崩，也保了主干实时性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

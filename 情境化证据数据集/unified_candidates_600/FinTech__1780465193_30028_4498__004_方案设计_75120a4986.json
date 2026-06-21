@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在汇损动态感知与期汇自适应对冲引擎方案设计背景下，与导师围绕行情接入架构选型、降级兜底与缓存机制持续沟通（7轮），其中在推拉模式对比与性能假设部分与行情流式计算设计师沟通（2轮），并最终形成推主拉辅降级架构、滑动窗口缓存策略及延迟验证假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "先弄行情接入，直接调银行API轮询拉数据行不行？快得很。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就1秒轮一次？封了就换IP呗。成本能有多少。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拉模式和推模式哪个简单？我倾向1秒拉一次，写个定时任务就完事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听不懂什么微秒级。推模式是不是要维护长连接？断线重连多麻烦。拉模式断了自己再拉就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太清楚。反正就是Socket那一套呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我去看WebSocket文档，搞懂心跳和重连逻辑，明天看完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。推为主，拉兜底，超限降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存？就报错呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接入用推模式，挂了降级拉模式，再挂了用滑动窗口缓存报价。验证看延迟超不超50ms。我去看WebSocket补课。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

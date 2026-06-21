@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在算力池负载异常与沙箱存活报警混杂背景下，用户与导师围绕监控报警拆分与线上止血保活持续沟通（6轮），其中在监控聚合规则拆分部分与运维交付工程师沟通（1轮），在调度参数止血保活部分与调度策略工程师沟通（1轮），并形成补加PromQL拆分监控与调参关抢占保高优的止血方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "大盘还是红的一片，CPU利用率都飙到85%了，沙箱那边重启了四五个。我不确定是算力切分不够，还是网络抖导致的心跳断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想去把探针采样率再调调，看能不能抓到细一点的数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘上算力负载和沙箱存活混一块了，是不是Prometheus那缺规则？现在根本分不清谁报的警。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "线上现在还在重启沙箱，加规则还得等生效，中间这会儿咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级？我不太会写降级逻辑，这得改调度器代码吧，现在发版肯定来不及。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力负载85%多，沙箱在重启，怎么调参挡低优学程保高优？来不及改代码了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这俩参数我知道在哪配。调度说关抢占、提高优权重，先保高优存活，低优先排着。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改PromQL和那俩调度参数。改完我盯着大盘确认高优心跳恢复，低优排队情况。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我重点看分配比和心跳状态这两条线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

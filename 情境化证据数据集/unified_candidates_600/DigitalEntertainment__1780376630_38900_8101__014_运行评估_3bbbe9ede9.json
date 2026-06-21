@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在跨链网关上线运行评估背景下，用户与导师围绕吞吐与延迟的观测指标、口径及告警阈值持续沟通（7轮），其中在指标与口径定义部分与链上吞吐观测员沟通（1轮），并最终确定上链TPS与P99延迟的观测口径、存储策略及告警阈值方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就默认的avg。P99我没配。十几秒那种卡顿倒是有，不过我就没管。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨链网关这边的TPS和延迟，到底该盯哪个指标？口径怎么算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "存7天够吗？万一要查一个月前的呢？不过全量存确实太费磁盘了，昨天Prometheus那台盘就快满了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就盯上链TPS，还有跨链P99确认延迟。原始明细留7天，分钟聚合长期存。告警的话，P99超过5秒就报警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跌零就是上链TPS等于0呗。持续一分钟TPS为0就告警，怕偶尔抖动误报。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改配置快，半小时就上线。跌零检测我用rate算一下就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,725 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在多维感知智联网关协同计算保障平台立项前的需求澄清背景下，用户与导师围绕物联网业务时延痛点定位与目标场景定义持续沟通（10轮），其中在工业视觉/车路协同时延硬指标部分与需求分析师沟通（1轮），在主流网关竞争短板与战略机会部分与市场战略顾问沟通（1轮），并共同明确需解决多任务并发下资源调度致时延抖动与超时的痛点目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做一个多维感知智联网关协同计算保障平台，打算从这个项目开始做。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉现在的设备反应都特别迟钝，经常卡顿，想让它们运行得快一些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前试着测了一下手头的几个网关，发现数据传得乱七八糟的，中间耽误的时间特别长。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@需求分析师 工业和交通那些场景，如果网关反应慢了会怎么样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把时延都降到20毫秒以下，只要比这个数低，肯定就没问题了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@市场战略顾问 现在的网关是不是都没法满足20毫秒的要求？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是要解决工业和交通里那些反应慢、不稳定的问题，把时延控制住。"
+              }
+            ]
+          },
+          {
+            "microScene": "在智联协同项目需求与战略背景下，用户与导师围绕边缘侧网关处理多维感知数据的硬件资源摸底与环境约束持续沟通（5轮），其中在多任务推理与容器化部署算力/内存/IOPS底座上与边缘计算研究员沟通（1轮），在感知层传输协议栈开销与并发连接压力上与通信协议专家沟通（1轮），并形成边缘资源初步需求基准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把市面上主流的网关参数都看一遍，看看大家平时都用什么样的配置，这样比较稳妥。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算研究员 咱们这个网关要是跑好几个识别任务，内存和芯片主频得多少才够用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "懂了。@通信协议专家 那感知层的数据传输对这块有啥硬性指标吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，预留20%给通信，剩下的跑模型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "散热确实是个事，工业现场可能没风扇。那就选功耗低一点的芯片吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一是AI算力要够8TOPS，第二是内存得有4GB以上支持多任务，第三是CPU要留出空间处理协议数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我把IOPS读写和连接数压力也加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在的基准是：AI算力≥8TOPS，内存≥4G且支持虚拟化隔离，存储IOPS需满足多路视频高频读写需求，CPU预留20%余量应对200个以上并发连接。"
+              }
+            ]
+          },
+          {
+            "microScene": "在智联网关协同计算业务可行性评估背景下，用户与导师围绕工业/电力场景的时延、安全、合规与投入产出持续沟通（5轮），其中在市场需求与协同指标部分与市场战略顾问沟通（1轮），在跨网关感知数据流转法律边界部分与合规性审查官沟通（1轮），并据此明确业务场景、协同延时、脱敏最小化与算力切片稳定性等边界约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然算力都够8TOPS了，直接把协同算法跑起来，业务肯定没问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规这块我还没细想，就是觉得大家都在搞边缘计算，咱们跟着做应该挺保险。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，我这就去问。@市场战略顾问 这个多维感知网关在外面跑得怎么样？客户真的愿意为了这个协同功能掏钱吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "20ms这么快？行吧，只要咱们算法牛，应该能压下去。那维护这块我后面再看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规性审查官 老师让我问问，网关之间传来传去的那些感知数据，会不会有法律麻烦？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白了，反正就是不能传原始图，只传点指令就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回导师，我问完了。市场那边说只要速度快过20ms就好卖，维护的事以后再说。合规这边说不能传原图，加密或者只传指令就没风险了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得还是可以做的。反正市场有需求，合规那边咱们不传敏感的东西就行。技术上，咱们堆算力把时延压到20ms。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多维感知智联网关平台需求与战略规划背景下，用户与导师围绕商业模式选择、运维与合规成本及目标行业取舍持续沟通（5轮），其中在边缘计算收费与算力切片变现部分与市场战略顾问沟通（1轮），在政务/金融准入门槛与认证成本部分与合规性审查官沟通（1轮），并确定“算力底座销售+算法动态租赁”与高门槛行业路径草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得都可以。反正咱们东西好，卖硬件肯定有人要，订阅的话，每个月收点钱也挺稳的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@市场战略顾问 边缘计算现在怎么收钱比较快？算力切片怎么变现？我看了一些竞品分析工具，好像大家都在说订阅，咱们怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "噢，就是按相机的个数收钱对吧？那挺简单的。只要他们相机多，我们就多收钱，这种方式行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规性审查官 这种特征交互模式，去政务那边用是不是很贵？准入成本高吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "老师，专家说认证费很贵，那我们是不是干脆别做政务了，专心做工地或者普通仓库监控得了，那边估计没人管这个准入。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就走高门槛吧，反正咱们技术牛。理由就是刚才说的，咱们有脱敏协议，收年费比较稳。我想想，大概就是硬件成本加两成卖，然后算法一年收几千块。就这样行吗？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多维感知智联网关协同计算保障平台技术方案设计背景下，用户与导师围绕配合算法租赁的总体架构分层、解耦与可维护性持续沟通（7轮），其中在架构分层方式上与首席架构师沟通（1轮），在特征提取层必要性上与边缘计算研究员沟通（1轮），并形成三大核心模块的逻辑架构方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "听您的，就按租赁那个路子走。架构上我想着就是把传感器数据接进来，网关直接算就行了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全塞进去确实容易卡死，要不就谁的数据急就先给谁算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@首席架构师 网关压力大的话，架构层面上怎么分才能让感知和计算不互相干扰？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听明白了。就是分三层，底层管协议，中间管数据提取，顶层管切片。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我还没想太深。既然专家说要提取，那肯定是为了省事吧，这样网关算起来快一点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算研究员 也就是为了给内存减负，把数据变小了再给容器算，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我觉得架构就按架构师说的分三层。第一层搞定各种传感器的连接；第二层把数据弄成向量，就是研究员说的那个意思；第三层就搞容器切片，谁租了算法就把向量给谁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "老师，新加东西的话，就在第一层再写个接口不就行了？后面两层应该不用动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "反正架构定了，我接下来就按这三块去细化接口。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多维感知平台方案设计背景下，用户与导师围绕感知层到网关通信协议选型与算力切片调度策略持续沟通（6轮），其中在异构终端轻量化接入与网关代理转换上与通信协议专家沟通（2轮），在K3s容器化资源配额与抢占触发指标权衡上与边缘计算研究员沟通（2轮），并据此记录双栈协议、双因子加权调度与高负载抽帧的设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用最通用的那个，不对，我是说直接用MQTT吧。我看大家做物联网都是用这个，接口也好写，直接连上就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然这样，那就听您的，换个更厉害的协议。或者咱们把网关的带宽限制调高一点，不让它们互相挡路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@通信协议专家 导师让我来问问。咱们这项目传感器种类多，环境也乱。我想省事点，有没有哪种协议能一下子把低功耗和高带宽的数据都传了，还得保证网关能听懂？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反正就是小的传感器用MQTT-SN，大的用标准的，中间加个翻译的，对吧？这个听起来不难。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行吧，这个我记下了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算研究员 刚才专家说协议分开了，那到你这儿的算力分片怎么弄？我就想知道，如果视频数据突然变多，怎么能不把别的任务卡死？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那还是选简单的吧，按CPU定。反正大家能看明白。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我问完了。专家说协议就搞两套，小的用SN，大的用标准的。算力那边就按CPU占用率来分，谁急了就抢别人的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我倒没想。那要不就别抢占了？就还是各跑各的，谁先占上谁就用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那……那我就再回去问问？或者您直接告诉我用哪个指标，我这就去改方案。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，协议双栈、双因子调度、还有那个抽帧，我记下了。这就按这几条去写接下来的东西。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构网关硬件适配方案设计背景下，用户与导师围绕感知逻辑如何跨海思/瑞芯微/x86落地与资源配额管理持续沟通（6轮），其中在驱动与采集统一封装部分与嵌入式软件工程师沟通（1轮），在容器化选型与异构资源隔离部分与边缘计算研究员沟通（1轮），并最终明确HAL+Wrapper、K3s+Device Plugin及高/中/低配额模版的方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不就把代码多拷几份？每个芯片对应改一个版本出来发下去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式软件工程师 老师让我问你怎么弄硬件适配。现在手头这些芯片乱七八糟的，能不能弄成一套东西直接用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定是C++。内核那种东西我可搞不动，太深了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就在代码里加个限制？或者设个上限什么的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算研究员 现在要解决异构芯片的资源隔离，还得能跑那套感知算法，你有啥现成的招儿没？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听着挺省事的，那就用这个。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就把老设备上那些不重要的功能都关掉。或者像之前说的，直接把感知频率调低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "底层用HAL和那个Wrapper封装驱动，中间层用K3s管容器。具体的参数我回头照着他们的手册填。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，HAL、K3s，还有三个模版。我记下了，这就去对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "在嵌入式边缘网关端到端安全防御机制设计背景下，用户与导师围绕加密算法选型、双向认证、物理拆卸风险与审计合规持续沟通（5轮），其中在资源受限加解密与容器mTLS方案上与安全系统专家沟通（1轮），在感知数据脱敏、硬件可信根与审计日志留存要求上与合规性审查官沟通（1轮），并明确硬件加速SM4、mTLS、可信根存储与轻量审计日志的核心产出。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，把所有传的数据都加个密？然后在网关里装一套杀毒软件，防止别人黑进来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法选大家都在用的。双向认证是不是网关和那些终端互相认一下就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全系统专家 网关资源不够，加解密这块咋整能省点劲？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白了。他意思是用硬件扛，不占咱们主程序的算力。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设备被偷了？这我可没招。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规性审查官 数据在网关里存着，合规上有什么风险？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还得搞硬件可信根，还得脱敏。日志留半年，存储肯定不够用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "咱们就用板子上的硬件安全区存密钥，传数全走SM4。至于占地方的日志，我就缩减一下内容，只记最核心的动作。"
+              }
+            ]
+          },
+          {
+            "microScene": "在智联网关上线前性能仿真与动态负载建模的方案设计背景下，用户与导师围绕仿真环境、负载模型参数与工具选型持续沟通（4轮），其中在业务流并发建模与指标采样上与性能监控分析师沟通（2轮），在算力切片/虚拟化开销与离散事件调度设置上与边缘计算研究员沟通（2轮），并最终明确采用非齐次泊松+离散事件仿真平台及关键指标与10ms调度约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上压力测试呗，多找几台电脑模拟一下发数据包不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 既然导师说要搞模型，我们这网关测性能的时候，是不是随便弄点随机数模拟一下连接就行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，照你说的这个泊松算法设计。指标就是吞吐率对吧？我记下了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算研究员 刚那位老师说模拟的时候要看算力切片，这玩意儿怎么加到模型里？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行，10毫秒。还有呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "参数就是那个，就是吞吐率，还有10毫秒的那个调度周期，再加上优先级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "逻辑就是照专家说的泊松分布弄。工具的话，就用Python写个简单的脚本跑跑。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关核心内核进入开发、需满足10ms调度实时性背景下，用户与导师围绕并发模型与技术栈选型持续沟通（4轮），其中在内核事件驱动与零拷贝优化部分与嵌入式软件工程师沟通（1轮），在动态调度配合与抢占式优先级队列接口部分与调度算法工程师沟通（1轮），并确定用C+Libuv事件驱动框架、线程池与可抢占优先级队列及日志脱敏方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备开始写边缘网关核心内核的代码了，打算直接用C语言撸到底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用最简单的多线程跑，给每个感知任务开一个线程，简单好使，性能肯定没问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "确实是，并发高了可能有点卡，那我把线程数调大点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式软件工程师 导师让我问问，网关内核这块怎么搞能快点，还要省资源。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度算法工程师 你那边那个调度引擎，对内核代码有什么硬性要求吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "问完了。专家说要用那种事件驱动的办法，还要搞个优先级队列，配合调度算法。反正就是让内核跑得更灵活一点，别被任务堵死了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看Libuv或者Boost.Asio都行，既然是嵌入式，Libuv可能更轻量。我就选Libuv配合线程池，优先级队列我用堆结构自己写一个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "内核开发这块先定下：第一，用C语言配合Libuv做事件驱动框架；第二，实现一个带抢占功能的优先级队列；第三，对接零拷贝技术减少开销。日志审计这块我也记住了，敏感数据脱敏处理后再进内核环形缓冲区。"
+              }
+            ]
+          },
+          {
+            "microScene": "在基于Libuv实现调度引擎的工程开发背景下，用户与导师围绕大计算任务与小流量传感器连接任务的公平调度、合规日志边界与测试验证持续沟通（6轮），其中在公平调度权重设计上与调度算法工程师沟通（1轮）、在调度日志脱敏与敏感标识处理上与合规性审查官沟通（1轮），并整理出老化抢占、元数据哈希化与二级排序等落地规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接按任务包大小排队不就行了，大的计算任务先处理，带宽和 CPU 跑满才划算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度算法工程师 专家，我想问一下，如果不按大小排队，要怎么写才能让小设备不掉线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规性审查官 审计这块，我在调度引擎里存任务 ID 和设备类型没风险吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "哈希处理我也在行，我直接给所有 ID 都跑一遍摘要算法。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算这么办：第一，给任务队列增加一个等待计数，时间长了就强行处理；第二，调度日志里我保证不出现明文设备信息，全部换成哈希值；第三，把地理位置这些标签从调度权重里删掉，只看算力需求。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这就没想到了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我估计发生的概率不大，不行就让它们随机选一个先跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接用之前那个现成的压测工具跑一下，看能不能连上就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "等会我就把这几个函数加进去，先把代码跑通。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多模态数据通信模块真机联调背景下，用户与导师围绕视频流与红外等感知数据并发互不干扰的验证方案持续沟通（6轮），其中在私有协议分片与MTU对齐及抓包验序列号部分与通信协议专家沟通（2轮），在监控探头埋点与时延抖动标准差阈值量化部分与性能监控分析师沟通（1轮），并明确MTU适配、抖动<15ms与优先级字段不被篡改三项硬指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我已经把网关和服务器连上了，Ping包也是通的，应该没啥大问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了一下，就那几个 ID 和长度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@通信协议专家 专家，联调的时候，数据包封装是不是得改改？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "懂了，就是把网关的 MTU 改一下就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我等会就去抓。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 我们现在联调，要在哪儿加监控？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在脚本里先发视频再发红外，然后用工具看丢没丢包。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是调下 MTU，看那个标准差别太大，还有抓包看看序列号乱没乱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一是 MTU 跟协议分片要对上，第二是视频和红外一起跑的时候时延抖动得小于 15 毫秒，最后是抓包确认报文头里的优先级字段没被改掉。"
+              }
+            ]
+          },
+          {
+            "microScene": "在网关多维感知高频并发的HAL驱动适配测试背景下，用户与导师围绕从应用层时延下沉到驱动层、明确DMA并发风险与测试脚本关键项持续沟通（6轮），其中在DMA缓存一致性/内存屏障与中断嵌套压测观察要点上与嵌入式软件工程师沟通（1轮），并梳理出含数据比对/CRC与中断高负载丢包观察的三项测试动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好的，那我直接把所有驱动都跑一遍试试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是看它会不会断掉？只要数据一直出就行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式软件工程师 这块儿驱动适配测试，我要重点盯着啥？导师说DMA容易出事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就直接开着调试串口看日志，看有没有报错信息。"
+              },
+              {
+                "behaviorLabel": "终身学习",
+                "behaviorEvidence": "好的好的，那我再去查查那个校验怎么写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一个是连着跑红外和视频，看CPU会不会直接卡死。第二个是拿工具检查一下中断是不是太多了。还有就是对比一下数据对不对。"
+              }
+            ]
+          },
+          {
+            "microScene": "在智联网关开发收尾联调背景下，用户与导师围绕多业务并发下CPU资源竞争、压测与调度优化指标持续沟通（6轮），其中在并发压测环境搭建与QoS延迟观测上与自动化测试工程师沟通（1轮），在动态资源切片、CPU亲和性与内存限制策略上与调度算法工程师沟通（1轮），并据此确定并发与延迟阈值及参数写入配置实施优化。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全部一起跑就行，反正咱们这个网关硬件配置挺高的，应该没事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿之前用过的压测工具跑一下。多开几个进程同时发数据，看它什么时候挂掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@自动化测试工程师 专家，我们要给网关做压测。你那边有没有现成的脚本能直接让CPU跑满？我想看网关能撑多久。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度算法工程师 专家，测试那边说要看延迟。如果延迟太高，我是不是直接在后台把其他不重要的进程全杀掉就行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就照专家说的，先把那个压测工具装好。然后代码里给视频处理分多一点CPU，其他的少分点。内存我也设个死数，不让它乱占。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按常规的来，1000并发吧。延迟要是超过200毫秒，就先把一部分传感器数据丢掉，保视频。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我这就去按这几个指标改。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在多维感知智联网关协同计算保障平台生产环境部署上线背景下，用户与导师围绕连接验证手段、关键指标与脚本判定逻辑持续沟通（7轮），其中在自动化部署验证脚本与健康报告字段确认部分与运维保障经理沟通（1轮），在连接稳定性阈值（时延/解析错误率/CPU）确定部分与性能监控分析师沟通（1轮），并形成部署验证动作与收束标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接跑一下那个安装包。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，我待会儿核对一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看一眼屏幕上的状态灯绿不绿。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维保障经理 部署完之后要怎么看连没连上？导师让我问问脚本的事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看能不能连上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 我们现在测连接，要看哪些数才算稳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那就是看时延和错误率，我明白了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我听他们的，就是看那个连接状态是不是绿的，然后盯着时延别太高就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "哦，对，还有这两个，我也一起看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就照着专家说的数填进去，应该就没问题了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "首先跑自动化脚本看连接状态。然后测10%的节点，看时延是不是在50毫秒里。还有就是看错误率别太高，CPU也别太高。"
+              }
+            ]
+          },
+          {
+            "microScene": "在协同计算平台运行评估中，用户与导师围绕网关网络吞吐与时延的实时监测、工具选型与资源开销权衡持续沟通（5轮），其中在采集窗口与告警阈值设定上与性能监控分析师沟通（2轮），在嵌入式网关Exporter裁剪与抓取间隔配置上与运维保障经理沟通（1轮），并记录并回传统一的采样步长、看板对比与分级告警参数。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就打算实时盯着看，看数据传得快不快，有没有卡顿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按正常的频率来吧。数据多的话就多采点。异常的话，我看数值变红了应该就是有问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 刚才说指标采集，你觉得怎么弄比较好？导师让我问问时延和吞吐怎么算异常。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，那就按你说的，5秒看一次，80毫秒就报警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "汇报一下，专家说5秒采一次样，时延80毫秒就报警。还要把两条线放在一个图上看，这样就能看出来是哪里坏了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Prometheus吧，这个我听过，大家都用这个。配置起来应该挺快的，能直接画图。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维保障经理 老师说用Prometheus，但怕占网关资源。咱们怎么弄能省点劲儿，别让监控把网关跑死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "经理说用个轻量的东西，15秒看一次，别让网关存东西就行，这样就不占地方了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "哎呀，对，这俩数不一样。那我就还是听经理的，15秒保险一点，省得网关出事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，记下了。10秒一次，80毫秒和150毫秒报警，还要画双轴图。我现在就去跟他们说。"
+              }
+            ]
+          },
+          {
+            "microScene": "在网关CPU占用过高影响协同计算任务分配的运行评估背景下，用户与导师围绕定位高耗资源进程及将分析落地到监控大盘持续沟通（4轮），其中在区分业务峰值与异常/非法负载的指标关联分析部分与性能监控分析师沟通（2轮），并整理需给运维配置的监控图表、清单与预警阈值要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看那个，不是，我就看系统后台的百分比，谁高就关掉谁。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 老师让我来问问，现在网关CPU老是占满，影响干活了。怎么才能看出来它是正常的业务压力，还是出了什么异常？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就是看QPS、成功率，还有那个切换次数对吧？我记下了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "没问题，加个离散度的字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了，专家说要看QPS和什么切换次数，还要搞一个离散度的预警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "离散度爆了，CPU低了？那应该是坏了吧，或者是网关停机了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就把专家说的离散度、上下文切换次数，还有任务成功率这几个数都摆上去，设个红灯。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好的，记下来了。比值趋势图，Top 5清单，还有5万次和95%这两个数。我现在就去跟他们对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，我再去问问他们。"
+              }
+            ]
+          },
+          {
+            "microScene": "在网关平台生产运行后的迭代演进规划背景下，用户与导师围绕运行评估如何驱动调度适应性改进持续沟通（6轮），其中在用户反馈与参数配置痛点上与用户体验专家沟通（2轮），在性能瓶颈与调度优化方向上与性能监控分析师沟通（1轮），并据此整理出负载预测插件、参数动态推荐闭环与批量灰度下发的版本任务关联。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反正现在整体跑得还行，我觉得就照着现在的路子继续往下做，把现有的功能再弄稳当点就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该是够的吧。我看那些网关都在正常传数据，没接到什么报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@用户体验专家 老师让我问问，最近用咱们网关平台的那帮人反馈怎么样？有没有什么想加的功能或者觉得不好用的地方？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是嫌手动调参数太麻烦，想弄个省事的自动推荐，对吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能监控分析师 刚才那边说要搞参数推荐，你这边的监控数据能支持这种功能吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优先级啊。我觉得先听专家的，把那个推荐界面做了，毕竟用户催得紧。理由就是大家都不想手动调了。至于那个预测模型，既然分析师说有性能波动，我们也顺便弄一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "也是。那要不就先搞模型，再搞界面？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好的，记下来了。预测算法插件、参数推荐模块、还有批量灰度下发。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我现在就去拉项目组开会。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，我回去再看一眼刚才专家说的那些数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

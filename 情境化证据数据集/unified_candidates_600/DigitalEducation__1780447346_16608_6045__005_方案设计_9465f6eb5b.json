@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在评卷漂移感知模型选型背景下，用户与导师围绕模型选型、残差补偿、特征接口对齐与融合输出方式持续沟通（7轮），其中在漂移反演选型与推理约束部分与漂移感知算法师沟通（1轮），并最终形成主反演用SSM变体、残差用轻量Transformer、加权融合及特征拆分适配的四条底线结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得直接上LSTM就行吧，时序预测嘛，处理漂移肯定也没问题，大家都用这个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对哦，延迟可能不够。那，那就换个轻量级的？CNN加LSTM？或者把网络层数砍一砍？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "漂移感知选型怎么做？在线推理有延迟要求。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，专家说用卡尔曼滤波，不用深度学习，因为要解释。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "残差就随便弄个简单的MLP吧。特征刚才不是提了嘛，带版本号推过来直接接上就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我我再想想。残差用个轻量Transformer？然后特征进来先拆分，一份给SSM做状态初始化，一份给Transformer。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主模型就SSM，残差用轻量Transformer，融合就是加起来。风险可能就是Transformer还是有点慢？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

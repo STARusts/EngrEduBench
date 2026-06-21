@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在票据图谱穿透验真系统方案设计受哈希脱敏约束背景下，用户与导师围绕图谱架构承接、图模型选择与方案验证持续沟通（5轮），其中在哈希特征落子与图模型设计部分与图谱架构设计师沟通（1轮），在边关系保真部分与隐私计算工程师沟通（1轮），并形成属性图模型、哈希一致性建边、优先A方案复合索引并LDBC压测验证的初步架构结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前面定下来只能用特征哈希脱敏，不留原始凭证，这图谱架构怎么承接这个约束？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看Neo4j挺火的，网上案例多，直接把脱敏后的哈希值当节点属性存进去，查的时候用Cypher语句匹配就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键把关系库数据转成图模型的插件？这样比较省事。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对图库底层怎么处理这种定长哈希属性的索引真不太懂，之前都是直接调包没深究过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去翻翻Neo4j的官方文档，看看有没有针对定长字符串的索引优化案例，今晚把这块硬骨头啃下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在只能存哈希，用Neo4j的话，架构上怎么搞？有没有现成的图模型能套？我看网上都是直接存明文建图的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那边关系呢？不留存原始凭证，我怎么知道这条边连的是不是真的票据流转？总不能靠猜吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得加映射层太麻烦了，还要管状态同步，能不能就用A方案？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我假设A方案在百万级节点下穿透查询延迟不超过500ms，如果不满足再考虑B方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用LDBC的数据集生成工具造一批带哈希属性的图数据，在测试环境跑几个典型的3跳穿透查询，看响应时间是不是真的崩掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱构建架构初步结论：图模型选属性图，节点只存特征哈希，边关系靠哈希一致性构建；索引优先试A方案复合索引，拿LDBC数据集压测验证；加映射层的B方案作为后备。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,538 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在涉诈资金混洗图径剥离系统需求梳理背景下，用户与导师围绕业务痛点、技术选型执念、研究假设与合规约束持续沟通（7轮），其中在洗钱链路演化复杂度部分与金融犯罪分析师沟通（1轮），在跨行数据合规限制部分与反诈合规架构师沟通（1轮），并最终形成多层嵌套混洗痛点、毫秒级剥离假设及隐私计算合规约束的基线结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在的洗钱手法太隐蔽了，传统规则引擎根本拦不住。我看网上好多人用图数据库做风控，Neo4j或者TigerGraph好像挺方便的，直接把转账记录导进去，写几句查询语句应该就能把资金链路剥离出来吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查询慢是一方面，主要是规则太死板。资金一拆分，比如分几百笔转出去，规则就匹配不上了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在的洗钱链路演化到什么地步了？有没有比较典型的模式？我主要想看看有没有通用的图算法能直接套上去解。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时序图寻优如果没有现成包，是不是得自己写遍历逻辑？那开发量就大了。有没有那种半成品的图计算框架，我只要配置一下规则就能跑的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "追踪跨行资金链路的话，合规上有什么限制？我能不能直接把别的银行的流水拉过来建图？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "数据可用不可见？这怎么建图啊？图节点都不全，怎么遍历？这比我想象的复杂多了。我之前看网上分享的风控图库方案，好像都没提这个，都是默认在自己行内数据搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想验证一下，如果资金被拆分超过3层，是不是传统方法就彻底失效了，图方法还能不能找回路径。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想靠现成图库直接查的思路，在跨行隐私这块行不通。"
+              }
+            ]
+          },
+          {
+            "microScene": "在划定监管合规边界与业务动作定调背景下，用户与导师围绕反诈合规红线、误杀责任及阻断与预警的取舍持续沟通（5轮），其中在合规达标与误杀审查部分与反诈合规架构师沟通（1轮），在阻断与预警商业付费意愿部分与商业模式规划师沟通（1轮），并最终确定高置信强阻断加低置信预警的业务基调及决策溯源、秒级解冻、最小求交的合规红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看有些开源项目直接套个通用脱敏组件，或者用那种现成的隐私计算联邦框架，能不能我们也直接拿来套上？这样应该就算合规了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误伤这块，是不是加个白名单规则就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监管对资金阻断的具体要求是什么？误杀的话合规怎么过？有没有那种方便点的合规达标方案？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能把阻断做成预警？预警的话误杀责任就小多了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "银行对阻断和预警的付费意愿差很多吗？如果误杀风险高，他们还愿意买阻断吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看来必须得做阻断。那业务基调就是高置信度强阻断，低置信度预警？合规那边，我估计得把溯源快照和申诉接口都做成强制的，跨行数据严格只求交。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "业务基调定在“高置信强阻断+低置信预警”，合规红线是阻断必带决策溯源、支持秒级解冻申诉，跨行仅限最小必要求交。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在反诈阻断系统商业闭环验证背景下，与导师围绕止损计费逻辑、资损测算口径与分层抽样验证持续沟通（6轮），其中在采购逻辑与回放测算部分与商业模式规划师沟通（2轮），并最终明确止损驱动的验证口径与补学清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是直接按接口调用次数收费就行？我看好多风控SaaS平台都是按调用量包年的，方便也简单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "挽回资损肯定比误伤大吧，不然这系统就没意义了。验证的话，是不是找个现成的风控回放框架跑一下历史数据就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反诈阻断系统的商业闭环怎么验证？按调用量收费行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原来不是按调用量算。那回放验证的数据，我直接拉几个月的涉案账户跑一遍就行了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这是止损驱动，不是按调用量算。得用历史涉案数据做回放，算挽回资损和误伤成本。样本还得按金额分层抽，不然算不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据只能找银行业务方要，口径的话，我估计就看阻断冻结金额和最终确认涉案金额？规模的话，跑个几千条数据应该能出结果吧？我看有些开源风控测试集也就这么大。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实是，我对资损挽回的测算口径和分层抽样没什么概念，之前只看过简单的接口计费模式。我回去得补一下金融风控系统ROI测算的案例，还有历史涉案数据的采样规范，把之前只看调用量的想法改掉。验证集规模可能得找业务方要至少半年的全量涉案数据做基线才行。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在涉诈资金混洗图径剥离与阻截系统方案设计背景下，与导师围绕流式图计算架构选型与假设验证持续沟通（5轮），其中在图存储写放大与内存图对照组设计部分与图数据架构师沟通（1轮），并最终形成包含写延迟、遍历延迟与故障恢复时间的架构选型验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接用 Flink 消费 Kafka 接数据，然后写进 Neo4j，这套东西网上的现成案例多，应该比较快吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块具体原理我确实没深究过，我就看它API好用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我的假设是，Flink加Neo4j 的组合能扛住每秒万笔转账的边插入和属性更新。关键变量是写入延迟。如果延迟爆了，就说明这套不行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我真不太懂底层怎么判断，我这就去补学图存储的写放大机制，今天必须搞懂 Neo4j 和 RocksDB 在写路径上的差别，不然没法评估。我去问问图数据架构师吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在设想用 Flink加Neo4j 做流式图计算，假设它能抗住万TPS写入，反驳标准是写入P99延迟超50ms。但我怕写放大把延迟拖垮，有没有更方便一点的办法？或者怎么验证这个假设？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得 Raphtory 听起来更方便，直接内存操作肯定快，但断电丢数据怎么办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我调整一下假设和验证方案：假设 Raphtory 内存图能通过增量快照实现秒级恢复。验证动作是：压测万TPS写入，对比 Neo4j 和 Raphtory 的写延迟P99，并且强制杀进程，测恢复到可用状态的时间。如果恢复时间超过5秒，就推翻 Raphtory 可用的假设。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我今晚先去啃 Raphtory 的快照机制源码，把这块补上。"
+              }
+            ]
+          },
+          {
+            "microScene": "在涉诈资金混洗图径剥离算法与接口设计背景下，用户与导师围绕算法选型、时序约束、资金守恒校验阈值及验证方案持续沟通（4轮），其中在时序游走实现与校验阈值设定部分与图算法工程师沟通（3轮），并最终形成自定义时序游走加资金守恒校验的算法方案及仿真图验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "剥离算法我寻思直接用图计算库里的现成算子不就行了？像Neo4j GDS里的PageRank或者弱关联分量，调一下包，把高分节点捞出来作为涉诈链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时序确实是个事。但自己写游走太麻烦了，有没有那种专门处理时序图的库？直接调接口出结果那种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图算法这块有没有好用的轮子能直接解决带时序的资金混洗剥离？我不想从零写游走逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资金守恒校验具体怎么算？有没有开源项目参考？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我还是想找找有没有类似的开源能改改，自己写太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资金守恒校验的阈值一般怎么定？怎么验证我写的游走逻辑对不对？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法方案就定自定义时序游走加资金守恒校验，阈值先定0.95。接口入参是子图时序特征，出参是剥离路径加汇聚发散比。验证动作就是造个仿真图跑一遍看路径扣得准不准。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在实时阻断高可用与跨行追踪隐私设计背景下，与导师围绕图计算防雪崩与轻量级隐私求交的方案选型及性能与安全的取舍持续沟通（7轮），其中在图特征阻断防雪崩部分与决策引擎开发沟通（1轮），在跨行求交轻量级方案部分与隐私计算工程师沟通（1轮），并形成特征级熔断、图拓扑降级、轻量级PSI与脱敏留痕的平衡设计方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "高可用我打算直接套Sentinel做限流降级，隐私这块我看网上很多人用联邦学习框架，是不是直接套进来就行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "图节点挂了普通限流可能拦不住。联邦学习好像也挺慢的。我我不太确定图计算这块怎么搞高可用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图计算阻断的高可用怎么搞？Sentinel够用吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "控制故障节点比例和连通度做实验，这办法行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨行追踪的隐私怎么搞？联邦学习行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前对PSI在流式图里的应用完全没概念，联邦那套确实不适用。我今晚得去翻两篇流式PSI的论文补补课，把原来想套联邦框架的方案换掉，改成PSI求交加脱敏。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把特征熔断的阈值调得特别严，PSI也加双重加密，保证绝对安全不出事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就特征级熔断阈值先放宽松点，保证阻断率，PSI用基础的哈希求交先跑通。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在涉诈资金图构建与流式摄入联调背景下，用户与导师围绕Flink摄入方案、Exactly-once与图事务原子性保障、自定义Sink开发及验证设计持续沟通（5轮），其中在Flink写图库事务与时序对齐部分与数据流开发沟通（1轮），并形成自定义Sink（两阶段提交与Watermark对齐）及异常注入验证的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想直接用Flink CDC把Binlog拉过来，再配上图库自带的Sink Connector，这样写起来最快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink CDC不是自带Exactly-once吗？网上很多教程都是这么配的，直接拉Binlog写下游。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink写图库的事务和时序怎么搞，有没有现成支持两阶段提交的Connector？我不想自己写Sink，太容易出问题了，有没有封装好的包能直接用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自己写Sink好麻烦，有没有那种轻量点的框架，或者半成品的包能凑合用？实在不行我再去看看怎么写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没写过Flink的TwoPhaseCommitSinkFunction，平时都是用自带的。我今晚查一下Flink官方文档和图库的事务API，把两阶段提交的逻辑理一遍，照着官方示例改一版。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会写个单测，造几条乱序的转账流，对比一下用原版Connector和我自己写的Sink，看图库里的边和节点数对不对得上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就在commit阶段加个sleep模拟超时，看看能不能回滚干净。那我现在的联调方案就是：自己写Flink Sink，用两阶段提交保证顶点边原子写入，Watermark对齐乱序；验证就搞异常注入看图一致性。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在混洗图径剥离算法编码与调优背景下与导师围绕算法选型与验证调优方案持续沟通（5轮），其中在图计算框架选型与状态机实现部分与图算法工程师沟通（1轮），在异常图拓扑构造与流式压测部分与测试与性能专家沟通（1轮），并最终确定手写KeyedProcessFunction状态机结合RocksDB的开发与测试计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着是不是可以直接用Neo4j的GDS插件？它里面现成的中心性算法和路径查找挺多的，调调参数应该就能跑出剥离结果吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那如果用Flink Gelly呢？它也是图计算框架，跟咱们现在的摄入流同源，是不是集成起来更顺？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用Flink Gelly来跑混洗图径的剥离，但导师说可能表达不了时序子图匹配。咱们这种高频拆分、多层嵌套的场景，是用Gelly的API好，还是自己写遍历状态机好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我听着是觉得手写状态机可控一点，但状态管理是不是太复杂了？我怕写崩了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能的话，我可以用JMeter压测一下？准确性我就在图里造几条典型的碎单洗钱数据，看能不能剥离出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我平时只写过单元测试，这种图拓扑的异常注入和压测该怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的开发计划就是：手写KeyedProcessFunction实现时序遍历状态机，出入度存RocksDB；然后用DataGen构造环状和嵌套洗钱拓扑测准确性；压测看背压。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在阻截决策引擎规则熔载开发背景下，与导师围绕规则求值选型、增量分发合并及防雪崩限流持续沟通（6轮），其中在规则熔载与限流实现部分与决策引擎开发沟通（2轮），在增量合并冲突与快照存储部分与决策引擎开发沟通（1轮），并最终形成Aviator求值、Broadcast增量合并、内部限流与快照落盘的开发重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看老代码是直接全量替换内存里的Map。我想着能不能直接上Drools，网上说它支持规则热更新，把算子吐出来的图特征丢进去匹配就行，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不让用Drools，这规则熔载我得自己写？有没有更方便点的方法，比如Flink CEP？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要做规则热加载，吞吐很高，Drools扛不住，Flink CEP也不对路。这块规则熔载怎么搞比较稳？还有防雪崩咋弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那限流器是不是直接用Sentinel或者Resilience4j配一下就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "增量Delta、Aviator求值、内部滑动窗口限流、版本化回滚。记下了。导师，专家说用Aviator做求值，规则更新只推增量，限流在引擎内部做。我觉得Aviator比Drools轻，应该可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "是不是可以广播流？我看Flink有BroadcastProcessFunction，把规则流广播出去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "增量的话，就在状态里把旧规则拿出来，加上新规则，再放回去？合并失败就回滚，这好像挺麻烦的。能不能还是全量广播，但是只发变化的那几条？不对，那还是增量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用增量广播，规则状态里合并增量时，如果有优先级冲突或者互斥怎么办？还有规则快照怎么存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "带时间戳合并，优先级覆盖，异常丢弃。快照定期深拷贝。导师，增量合并得按时间戳和优先级来，不能直接加。快照就定期把全量规则存一份。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，Aviator求值、Broadcast增量合并、内部限流、快照落盘。我这就去改。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在端到端压测与图库性能调优背景下与导师围绕压测数据构造、图库缓存配置折中及突发流量应对持续沟通（5轮），其中在压测数据构造部分与测试与性能专家沟通（1轮），在超级节点深链遍历调优部分与图数据架构师沟通（1轮），并最终形成基于图生成器的异构拓扑构造、堆内外分层缓存与LRU策略及压测验收指标方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用JMeter写个脚本，并发发转账流请求，再跑一下图库自带的性能测试工具，看看TPS上限在哪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测数据这块，如果不用JMeter直接发，该怎么构造真实的洗钱图拓扑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种带超级节点的深链遍历，图库这边调优有什么要注意的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想着能不能把图库的缓存调小点，先保证压测时不崩，延迟高一点就高一点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "调大崩内存，调小延迟高。要不我配个分层缓存？超级节点这种热数据放堆内，普通节点放堆外或者SSD。压测前先跑一轮预热把热数据加载进来。我看很多图库都有这种分层插件，直接配上应该能兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "突发新增的，可以用LRU淘汰策略自动换出。压测时我就盯着缓存命中率指标，命中率掉下来就加节点。这样不用改太多代码，调调图库配置文件就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在涉诈交易剥离系统异常注入防重与边界测试背景下，用户与导师围绕图状态防重、环状拓扑与乱序时间戳的异常注入及验收标准持续沟通（4轮），其中在异常数据构造与验收标准部分与测试与性能专家沟通（2轮），并最终形成基于图库乐观锁防重、遍历深度限制与Watermark容忍度的异常注入方案及验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重复推送的话，Kafka和Flink应该能挡住吧？我开Flink的Exactly-once语义，处理出错的丢死信队列，这样不用改图计算逻辑。环状拓扑我还没想过，实在不行用Chaos Mesh停掉图遍历的Pod看看会不会雪崩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涉诈资金流的异常注入，具体要造哪些特殊的图数据？我本来想直接用混沌工程工具搞点网络延迟和宕机。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "防重的话，我在写入图库前加个Redis Set判断一下行不行？这种现成方案比较快，网上很多人都是这么搞的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实只懂流处理那块的去重，图库并发这块没细看。刚去翻了翻JanusGraph的官方文档，里面提到用乐观锁处理并发边更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备写个多线程并发脚本，对同一个节点同时狂插重复边，看图状态是不是只增加了一次，这样比加Redis靠谱点，也符合咱们对图库底层特性的验证要求。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "乱序的话，我用Flink的Watermark允许一定延迟，测的时候把时间戳打乱看看图构建会不会错。环状链路就造一个A转B转C转A的环，看遍历会不会卡死。验收标准就是没报错，跑完就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，写多线程并发脚本注入重复边，测JanusGraph乐观锁防重，验收阻截指令幂等率100%；第二，构造环状拓扑，测遍历深度限制，验收不卡死且指令不重发；第三，打乱交易时间戳注入，测Watermark容忍度，验收时序拓扑一致率。不用Chaos Mesh和Redis了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在涉诈资金混洗图径剥离与阻截系统上线部署验证背景下，用户与导师围绕图库集群状态、数据分片对齐、跨区同步延迟及一致性证明持续沟通（7轮），其中在数据一致性配置部分与运维与交付专家沟通（1轮），在分片倾斜风险部分与图数据架构师沟通（1轮），并最终承诺整理包含QUORUM配置、压测倾斜方差验证和跨区延迟p99报警阈值的生产配置项清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着要是出问题，加个Redis缓存兜底也行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生产JanusGraph集群部署完，怎么确认图数据没丢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图分片那边呢？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不会算。我就用JMeter压测工具打打看，延迟高就调调。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不懂Cassandra底层调优。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我下周把JanusGraph加Cassandra的一致性文档看一遍，整理个生产配置项清单出来，把QUORUM和分片策略都写清楚。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行期核心指标监控背景下，与导师围绕阻截率与误杀率的业务口径、合规红线及熔断降级逻辑持续沟通（5轮），其中在业务口径定义部分与业务运营分析师沟通（1轮），在误杀率合规红线与降级处置部分与反诈合规架构师沟通（1轮），并最终形成监控口径、告警阈值及降级留痕规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Grafana拉大盘呗。阻截率就是阻断数除以总交易量，误杀率就是申诉通过数除以阻断数。我看网上好多人都是这么配的，PromQL套一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务口径咋定？阻截率和误杀率直接拿总数除行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分母得换，实时算误杀不行。那我PromQL里分母改成命中数，误杀率加个时间窗口偏移？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误杀率超多少算违规？需要设熔断吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "千分之五，还得降级。所以Grafana大盘得加个AlertManager告警，超0.5%就触发降级熔断。分母用命中图径账户数，误杀率用T+1滑动窗口算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阻截率分母用命中图径账户数，误杀率用T+1滑动窗口算，告警阈值0.5%。超阈值系统降级只预警不阻断，误杀记录要审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估期洗钱手法变异反馈闭环构建背景下，与导师围绕变异捕获、误杀回流、模式定性及灰度验证口径持续沟通（7轮），其中在黑产绕行手法及图上表现部分与金融犯罪分析师沟通（1轮），在误杀样本结构化回流管道部分与业务运营分析师沟通（1轮），并最终形成业务定性、脱敏回流、灰度验证三步闭环链路及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用图库自带的社区发现算法，定时扫全图，扫出新簇就丢给规则引擎去匹配。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那，是不是先看误杀样本？我看网上很多人用LOF异常检测包，套上去能自动出离群点，省得自己写规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在跑分平台最常换的绕行手法是啥？我们图上能看出来不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻截率降了或者误杀多了，样本怎么回流给算法组？有没有现成的管道能直接推？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "黑产现在搞虚拟币中转和对公户碎单，图上路径变长，边权重变离散。运营这边说没现成管道，得先切误杀子图脱敏，打上版本号再推给特征库。我就觉得直接用异常检测包方便，但分析师说必须结合属性做人工定性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "LOF包肯定不能直接用了，没带节点属性。人工定性就是看新子图里的边权重和节点属性组合，提炼新图模式。灰度验证，是不是先放小流量跑A/B测试？用Flink的侧输出流分流？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿历史正常样本跑一遍回归？如果误杀率不升就推全量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏得找隐私计算组件，这块我只能调接口。回流管道我可以用Flink写，但脱敏算子得加进去，不然合规过不了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，从大盘告警切出误杀子图，必须脱敏并打上规则版本号推到特征库；第二步，结合节点属性和边权重离散特征做人工模式定性，不靠无监督聚类；第三步，灰度验证用Flink侧输出分流，跑历史样本回归，同时卡误杀率不升和图计算耗时两个指标。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的隐私合规审计与迭代规划背景下，用户与导师围绕反诈阻断系统的合规审计方式持续沟通（4轮），其中在审计口径制定部分与审计与风控专员沟通（1轮），并最终放弃离线对账，决定修改阻截引擎输出结构以实现规则快照与求交字段的实时落盘审计。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用合规扫描工具跑一遍接口，之前项目都是这么干的，工具没报红就说明没越界吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有现成的合规扫描规则或者脚本？我直接套一下，看看我们阻断接口有没有踩红线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得这个好办，我写个离线对账脚本，每天凌晨跑一次，把日志和规则库拉出来比一比就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想过。我对这种实时审计复现挺懵的，平时只懂用离线跑批工具。合规审计这块确实是我的短板。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能不能把这种状态回放机制迁移过来？把每次阻断时的规则快照和求交范围直接写在日志里，这样投诉时就能直接复现了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改阻截引擎的输出结构，加上 `rule_snapshot_id` 和 `pi_fields_scope` 两个审计字段，不再搞离线对账了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场平台运行评估的违规拦截与申诉复盘背景下，用户与导师围绕拦截证据最小留痕、复盘指标口径与误伤降低持续沟通（9轮），其中在留痕边界与申诉SLA部分与合规与内容安全官沟通（2轮），在留痕库审计权限、保留周期与成本部分与SRE稳定性工程师沟通（3轮），并产出最小字段清单与申诉复盘四步法草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一种是说被误判吧，正常剧情被打断。另一种可能是说拦截太慢，观感很差？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "语音和生成的剧情吧。弹幕短一点，应该好控点。语音转文字会错，然后就拦了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "记录…拦截时间、用户ID、房间ID、触发的规则ID？还有命中的关键词？上下文片段可能要一点，但不确定合不合规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 拦截/申诉复盘这块，线上我们到底该留哪些证据字段？哪些绝对不能留？另外申诉人工复核一般要什么SLA？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ASR片段只存一小段，我能理解。prompt摘要这块我有点虚，摘要怎么保证能复核？摘要错了又要吵。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先挑三个：申诉通过率高就说明误伤高？然后复核耗时看SLA。还有…拦截后dropoff是不是会涨。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就拆：block和soft_block各自的触发量、申诉量、申诉通过量。再加“人工抽检撤销率”。还有“同规则的复核一致率”，看复核人是不是也乱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "留痕越界更怕。我容易一激动就想把上下文存全，省得查。然后被说隐私不合规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE稳定性工程师 违规拦截与申诉复盘这块，留痕、审计、权限、保留周期一般怎么搞比较稳？还有存这些证据会不会很贵？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "content_fingerprint是hash意思？那复核看不到全文，会不会不够？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "字段清单我先说我记得住的：\n- 基本：event_id、room_id、user_id、content_type、decision、decision_ts、policy_version、rule_id或model_id\n- 证据：命中片段（前后N token）、ASR片段和置信度分桶、生成剧情的prompt摘要和输出摘要、content_fingerprint\n- 处置：reason_code、是否申诉、复核结果、复核耗时、纠正动作\n四步法：先看触发量和规则；再抽样复核误伤；再看对体验的影响比如dropoff；最后改策略再观察。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个点不确定：actor_id哈希这块，算不算还是个人信息？我们之前不是也有user_id吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白。那我这边后端只要保证能把这些字段都打出来就行，对吧？证据附表写入失败可以先只写主表的completeness_flag。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

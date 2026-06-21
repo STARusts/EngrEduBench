@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估期灰度放量背景下，用户与导师围绕流转链路耗能异常的根因验证与监控降级策略持续沟通（6轮），其中在看板能力与超时根因部分与运维监控工程师沟通（1轮），在Payload超限的监控与自动降级方案部分与性能优化攻城狮沟通（1轮），并最终确认异常根因、确定监控策略升级为链下预执行拦截及明确工具盲区补齐方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了初期的PromQL数据，发现版权流转合约调用的P99耗时比预想高很多，而且IPFS网关的Pin操作偶尔有积压。我怀疑是大课件拆解后，特征向量或者子片段上链的Payload太大，拖慢了共识，甚至触发了限制。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算取课件体积超过50M的流转记录，对比它们和10M以下课件的Gas消耗方差。如果大课件的Gas波动极大且伴随超时，就能印证假设。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在的监控看板能细化到单次合约调用的Gas消耗吗？另外灰度期出现的流转超时告警，你那边有根因线索没？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多片段打包转移触发了出块GasLimit。那要解决这个问题，是不是得从合约执行层面做拆包或者降级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "针对`batchTransfer`因为Payload过大导致的出块超时，从监控和自动降级角度，有什么成熟方案？我目前只知道在业务层做超时熔断，但这体验太差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态通道的预执行过程，在现有的Prometheus体系下怎么加自定义Counter？这块我不太熟，之前只做过基础HTTP接口的埋点，链下事件这块没抓过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我本周得花时间把链下预执行的事件订阅机制搞懂，参考Web3j的监听模式写个Exporter。先定个小目标：周五前跑通预执行失败率的采集，替换掉现在的粗粒度熔断，把限流阈值也调出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论三点：1. 异常根因确认是大课件多片段打包导致Payload超限触发Revert；2. 监控策略从业务层熔断升级为链下预执行拦截，核心指标变为预执行失败率；3. 落地缺口在预执行埋点工具链，本周补齐Web3事件监听Exporter，并基于此调准限流阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

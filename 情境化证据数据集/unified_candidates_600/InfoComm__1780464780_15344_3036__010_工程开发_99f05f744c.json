@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在频轨感知与抢占联调背景下，与导师围绕抢占失败根因及修复方案持续沟通（7轮），其中在频偏补偿滞后调校部分与链路衰变补偿调校师沟通（1轮），并最终形成感知触发改为RIS刷新事件驱动并加异步队列防阻塞的修复方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知窗口出来的频偏数据大得离谱，一去抢占直接被拒。日志里全是Doppler补偿溢出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用的默认配置，感知采样率和RIS刷新率都是分开配的。日志里显示感知数据拿到手的时候，波束已经偏了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知采样和RIS刷新不同步，导致频偏补偿滞后，抢占一直失败，这玩意怎么调？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "绑定到前馈时序的更新步长？就是把感知采样触发条件改成跟RIS刷新一样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还没完全搞透，但我知道更新步长是采样周期的两倍。那我直接把感知触发改成半个更新步长？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就在感知任务里加个事件监听，RIS发刷新信号的时候，立刻触发一次感知采样，算完直接喂给补偿模块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没评估。感知计算也就几毫秒，应该不会卡住吧？不行我再加个异步队列。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "频轨感知抢占失败根因是感知采样与RIS刷新时序脱节；修复方案是把感知触发改成RIS刷新事件驱动，中间加异步队列防阻塞。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

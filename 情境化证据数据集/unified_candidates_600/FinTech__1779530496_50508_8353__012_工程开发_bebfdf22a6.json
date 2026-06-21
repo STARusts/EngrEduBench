@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在确权上链压测与异常调试背景下，用户与导师围绕链上压测方案、变量控制、置信区间与异常兜底闭环持续沟通（8轮），其中在压测变量控制与异常注入部分与质量与测试工程师沟通（1轮），并形成基于独立钱包与动态Gas的并发控制、Fuzz与Invariant测试及死信队列兜底的闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用JMeter配几百个线程并发请求上链接口，看TPS掉不掉，报错了就去改合约代码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还没想好怎么控制变量，可能得写脚本按顺序发？或者调大Gas？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链上确权压测怎么控制Nonce和Gas？异常边界怎么注入？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "其实我最近在看Foundry的文档，发现可以用Invariant测试来检验状态机，不管怎么流转，资产总量必须守恒。这个比单测某个函数更靠谱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Gas低超时回滚，这个算上链失败。丢到死信队列？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "闭环就是：压测用独立钱包和动态Gas控制并发，Foundry跑Fuzz和Invariant测逻辑和状态不变量，如果上链因为Gas或超时回滚，链下监听回滚事件扔到死信队列补偿。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

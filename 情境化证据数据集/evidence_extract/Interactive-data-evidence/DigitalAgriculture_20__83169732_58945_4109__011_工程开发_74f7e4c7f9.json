@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在风控模型无GPU且线上不可加机器的上线验证背景下，用户与导师围绕低成本离线回放、指标口径、三档风险动作、阈值反推、灰度回滚与漂移监控持续沟通（11轮），其中在弱标注小样本与阈值分级策略上与算法工程师沟通（2轮），在灰度/回滚开关与PSI/分位点监控落地上与DevOps工程师沟通（1轮），并明确以规则基线+轻量模型对照的可回滚灰度方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据就拿最近的流转事件。指标就AUC？停的话就看报警多不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "正样本就是被查出来有问题的批次，负样本就正常的。阈值就0.5？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在我们没GPU，标注也少，风控模型怎么验证上线？阈值怎么定，分级怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是先规则再轻量模型，阈值按每周核查量来卡。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 大概就先上规则+轻量模型，别搞重的。验证用最近4到8周回放，指标看PR-AUC和TopK命中。风险分三档，高风险进核查队列，中风险提示，低风险不管。阈值按每周最多核查N单来定。灰度10%，不行就回滚成只提示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "动作就是高风险拦截？中风险提醒？低风险放行。取证就高风险才开票。对照就是…随机抽查一点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高风险不拦截，强提示+队列；中风险弱提示；低风险不提示。`evidenceExceptionTicket`只给队列里、确实要原图或精确点位的单子，用网关+时间窗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 现在要风控模型灰度上线，但不能加新大组件。怎么做灰度开关、回滚开关、还有分数漂移监控（PSI/分位点）这些？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是配置中心控制mode，指标用分位点和桶计数来算PSI，切开关写审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小保存就是每天的分数桶计数、p50/p90，还有高风险命中率、队列数量。还有开关审计。业务数据不存原图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "离线就用批次事件表里的批次ID、事件类型、时间、主体ID、地区，然后工单表里有批次ID和是否确认。join后按时间切分训练和验证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…`SIGN_INVALID`单独出现不算高风险，得和nonce重放或者证书异常一起？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边就把离线回放和对照跑起来，还有把mode开关接上。核查上限N我去找农业运营经理问他们一周能看多少单，然后按这个设阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

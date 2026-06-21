@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在液冷微舱接口规约设计背景下，用户与导师围绕上下行数据流分离、异构时序对齐、序列化格式选型及维护权衡持续沟通（5轮），其中在时序对齐与格式选型部分与微舱物联规约师沟通（1轮），在边缘算力约束与解码耗时部分与感知驱动研发者沟通（1轮），并最终形成上行定制TLV与下行Protobuf的双轨制规约及核心要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规约上，我倾向于把上行感知报文和下行寻优控制信令彻底分开。上行主打紧凑和实时，下行主打结构完整和可校验。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "舱级解析需要高频数据，但簇级BFGS是周期性触发的。在规约层面，怎么设计数据结构和对齐机制，才能既不丢感知精度，又保证寻优输入的状态一致性？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "FlatBuffers零拷贝确实适合高频感知流。但下行控制流用Protobuf，边端解码会有额外耗时。我们整个链路的延迟红线很严，要不要统一用FlatBuffers，省去编解码差异？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "长期维护确实是个坑，FlatBuffers的Schema演进不如Protobuf灵活，跨厂商对接成本高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我需要确认边端算力到底能不能扛住Protobuf的解码开销。@感知驱动研发者 液冷微舱边缘侧主控目前算力余量如何？如果下行控制信令用Protobuf解码，会不会突破控制周期的底线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘侧算力是硬约束。综合两位的意见，规约定双轨制：上行感知流用定制TLV原生结构体，网关侧转换；下行控制流用Protobuf。时序对齐靠网关侧的滑动窗口插值生成状态快照。这样既保了边缘实时性，又兼顾了云端寻优的结构化和Schema演进。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心规约要点：\n1. 上行感知流（微舱至网关）：定制TLV，T为微舱ID与传感类型，L为字节数，V为原始温压值加微秒级时间戳。\n2. 时序对齐（网关侧）：基于BFGS周期T_bfgs，网关对上行TLV做滑动窗口聚合，窗口大小T_bfgs，采用一阶滞后插值生成簇级状态快照。\n3. 下行控制流（云端至微舱）：Protobuf，核心字段包含目标微舱ID集、流量分配比序列、泵压调节步长、控制生效时间戳。\n4. Schema演进：控制流Protobuf预留reserved字段，支持后续气蚀预警参数下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在全氟污染去除智能验真平台方案设计背景下，用户与导师围绕光谱指纹数据从现场到平台的链路边界、时间对齐、质量标记与取证可追溯持续沟通（5轮），其中在采集/对时/断网缓存与补传约束上与物联网架构师沟通（3轮），在平台落库分层、血缘追溯、存证hash与查询接口边界上与数据工程师沟通（3轮），并收敛为可写入方案的链路分段与6条要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "想确认下从现场到平台的链路边界要画到多细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概就是：仪器出光谱→网关采集→传到云→存起来→前端能查。交付件就…点位清单、数据表、接口？差不多这样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 光谱指纹链路里，现场采集这段你建议怎么定？我主要想知道点位、时间同步、断网怎么处理。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间误差允许多少这种要写吗？我怕写错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "断网缓存你说“先事件后摘要再原始”，摘要是啥？是把光谱变短吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 光谱指纹数据链路在平台侧要怎么落库和做血缘？我需要能让人查、还能验真，字段口径怎么定比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "hash链是每条都算吗？会不会很重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那查询接口要怎么写？我就写“能查”会不会太虚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了两边。采集侧建议分三类源：光谱仪原始谱+状态+校准，工艺在线点位，还有事件（旁路、反洗、维护）。时间统一网关对时，每条打ts_acq/ts_gw/ts_ingest，对齐默认1秒容差，异常就标time_anomaly。断网网关本地缓存，补传优先级是事件>摘要>原始，缓存满会产数据缺口事件。平台落库分Raw(可选)、Std、FP、Join四层，每层带link id和版本，qc_flag做枚举。存证用包hash+批次hash，逐条校验按需做。接口就按时间取fp、按事件取证回溯、查漂移结果，Raw要单独权限和审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1秒…就是大家都用这个级别吧。验收就看对齐有没有乱。摘要应该就是把光谱变成一串特征，后面检索用，应该也能当证据？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就写：指纹用于检索，证据用Std/Raw。选配才开Raw长期。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就写：默认只保Std和FP，Raw按选配开，断网时先保摘要，Raw补传失败就至少留缺口事件，避免硬顶存储。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，就按这6条写进方案里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

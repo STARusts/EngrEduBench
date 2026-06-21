@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声纹match结果需落可审计剧情状态变更并驱动渲染的开发背景下，用户与导师围绕事件定义、状态机输入输出契约、失败CONTINUE_STORY规则及缓存实现持续沟通（12轮），其中在渲染指令粒度与可回放要求上与前端负责人沟通（2轮），在score/threshold使用与reason_code处理上与语音算法工程师沟通（1轮），并明确以panel_variant_id为MVP输出与审计落库字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "链路…就是，匹配到了就换剧情。没匹配就不换？反正就继续看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入…就request_id？还有那个persona_tag。输出给渲染就是一张图？失败就别管，继续下一页。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件…VOICE_MATCH？然后带tag。就这样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端负责人 渲染这边你们要啥？我这边就是声纹匹配完了要给你们信号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就只给variant_id行了？overlay我不太会弄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就三个事件：MATCH_OK、MATCH_FAIL、AUDIO_BAD？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就怕字段太多。我就记不住。能不能就一个reason？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "persona_tag对应某条剧情线？比如A就走A线。没就默认线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 score和threshold我咋用？我就按matched走行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以我啥也别算，就看matched。reason_code就记下来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入：event_type、request_id、tag、score。输出：panel_variant_id。审计：reason_code…就这些？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "current_state我没有啊，我读漫画就是第几页。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那状态机就像个表？panel_id + event -> next panel?"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我平时喜欢print。那我就不打印score？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缓存？放内存里。反正章节不多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "LRU我不会写。我能用现成的吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是：match服务给matched和reason。状态机这边别自己算阈值，就看matched。matched就用persona_tag去走分支，没matched就默认分支继续。输出给前端就是panel_variant_id，别给音频啥的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

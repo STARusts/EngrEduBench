@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在推演数据流设计背景下，用户与导师围绕流速场数据传输格式、同步机制与传输量持续沟通（4轮），其中在流速场切片与对齐部分与水动力模型架构师沟通（1轮），在算子数据接收与内存控制部分与时空推演算法工程师沟通（1轮），并最终确立按需切片降维、二进制Buffer流与背压机制三条核心设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这还不简单，写个REST接口，水动力那边算完把流速场打包成JSON发过来，生态这边接收解析呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那换Protobuf呗，快。步长乱了就加锁等一下，稳当。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "水动力流速场数据怎么给生态模型？我本来想用JSON一传就完事了，非说不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降维？就是少传点数据呗。时间戳对齐，就是加个时间字段。懂了，没多大事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算力不够加机器，硬盘不够加硬盘，现在存储多便宜。插值就随便选个快的呗，双线性吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生态算子那边能接啥数据？导师非不让用JSON，也不让全量传，麻烦死了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "二进制流啊，背压啊，听着就头大。行吧，就按你们说的，切片传二进制，背压我也加上。反正就是调接口嘛。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

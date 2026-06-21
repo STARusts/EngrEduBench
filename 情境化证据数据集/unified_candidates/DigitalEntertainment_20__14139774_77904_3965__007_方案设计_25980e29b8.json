@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在共玩解谜平台方案设计收尾的安全反作弊与审计背景下，用户与导师围绕信任边界/事件注入鉴权、检测处置链路与审计证据链持续沟通（11轮），其中在审计分层、字段清单、误伤控制与隐私最小化上与安全与反作弊工程师沟通（6轮），在运营强操作合规边界、审计与复核流程上与法务与合规经理沟通（4轮），并对齐6条可落地的审计与反作弊口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，客户端改包、脚本刷题，还有房主乱改规则？我不知道共玩的作弊点是不是跟游戏差不多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户端就是伪造解题结果。房间消息就是抢答、刷票。规则执行可能被人写规则绕过校验。后台管理就是有人拿权限改房间数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计证据链我不太会。感觉就是全量日志，但全量会很大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与反作弊工程师 需要留哪些审计事件才算够用？字段要到什么粒度，保留期怎么定？还有误伤控制咋弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "误伤控制呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与反作弊工程师 ip、deviceId这些能存吗？保留期默认怎么设，怎么做最小化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了，就是分三类审计，然后字段是hash+引用，不存正文。保留期也分级。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "注入就是客户端发submit之类。还可以是运营发“强制跳关”？我不确定要不要给运营这种能力。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务与合规经理 运营或管理后台能不能做强制跳关、改进度、注入事件这种动作？合规上怎么要求审计、复核？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "歧视性门槛也算吗？我们是解谜，不是招聘。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A感觉简单，但遇到活动事故就没法救。B又怕被滥用。那就B吧，但默认关掉？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一，权限要分级，普通运营没这权限。第二，要写审计。第三，要双人审核？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "客户端：submitAnswer、chooseOption、requestHint、useItem、chatMessage？后台：forceAdvanceLevel、rollbackRoom、grantItem、kickPlayer、banPlayer。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则思路就是频率限制、同设备多号、答案秒出这种。验证动作…可以做压测？还有回放一些作弊脚本？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如“提交间隔”。正常人提交答案间隔大于1秒，脚本可能100ms。阈值设200ms以下就判定。误报就是网卡导致重发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "记住了，就是先模拟再抽样复核，不直接拍阈值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）审计分操作、运行、处置三类。2）运行审计不存全量消息，存关键事件+hash+引用，带roomSeq和版本。3）强制变更默认禁，用强操作通道，双人复核+审计。4）反作弊阈值要先做模拟和抽样复核。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

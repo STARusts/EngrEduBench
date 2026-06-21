@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在数字藏品权益活动转化漏斗复盘背景下，用户与导师围绕漏斗事件口径、分层维度与可执行改进项持续沟通（8轮），其中在异常步骤与error_code定位上与数据分析师沟通（2轮），在核验加实名/增强校验的合规边界与留痕审计上与法务合规官沟通（1轮），并形成铸造与核验两段处置方向及监控看板补齐要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是曝光、点进来、下单、支付、铸造，然后到权益核验页？差不多这样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标就转化率吧。每一步算个 CVR。我一般用现成的漏斗图工具跑一下，就能看到哪一步最低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件名我记不全，就记得有个 mint_success，还有 verify_result 之类的。其他可能得去看埋点字典。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先串：\n1 触达（push_open 或者 banner_click）\n2 活动页到达（activity_page_view）\n3 点击购买（buy_click）\n4 支付成功（pay_success）\n5 铸造成功（mint_success）\n6 打开权益页（benefit_page_view）\n7 发起核验（verify_request）\n8 核验通过（verify_pass）\n9 解锁成功（unlock_success）\n大概这样。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按渠道切一切？比如站内 banner、站外投放。再按新老用户？我怕维度太多就乱了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 这次权益活动的漏斗里，哪两步掉得最明显？能按渠道、新老、端版本分一下吗？还有 verify 相关 error_code 排名前几是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Android 8.1.x 铸造掉得多，主要是 timeout、429、签名过期。核验那块站外更差，风险拒绝更多，还有权益不匹配、token 找不到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我懂了。验证动作就是再做对照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "体验链路就是铸造不稳，Android 8.1.x 更差；风控链路是站外核验被拒绝多；产品运营动作是渠道质量可能有问题，站外来的更不靠谱？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "证据是 REJECT_RISK 占比在站外高。那动作…先把站外渠道的人先分组灰度？比如加一道二次确认，或者让他们先完成实名再核验？验证指标就是核验通过率回升。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规官 核验前如果要加实名或者更强的身份校验，用来降低 REJECT_RISK 误伤或黑产，这种做法在合规上要注意什么？哪些点不能碰？需要怎么留痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是不能上来就实名，得有理由，最好分级。还要写清楚，能审计，能申诉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "A：Android 8.1.x 铸造失败多，先把 mint 的超时和 RPC 429 的问题压下去。方向就是调高重试和超时？再观察 mint_success 率回到上周水平。\nB：站外核验 REJECT_RISK 高，就做分级校验，不是全量实名；再把 REJECT_RISK 触发原因做成几类给客服看，用户能申诉。指标是 verify_pass 提升。\nC：看板加两段：pay_success→mint_success 的成功率按端版本；verify_request→verify_pass 按渠道；再加 Top error_code 的占比趋势。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重试多了 RPC 压力更大，可能更 429。那就设个上限，比如最多 2 次？然后看链路耗时 p95 别爆掉。值不值就看铸造成功率提升多少，和平均耗时上涨多少做对比。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先讲铸造这条，因为它更靠近支付后，损失更直观；再讲核验这条，带上站外分层和分级校验的合规边界；最后讲监控补齐，顺手把“持续10分钟、两者满足”再提一下，免得大家又想拍脑袋。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

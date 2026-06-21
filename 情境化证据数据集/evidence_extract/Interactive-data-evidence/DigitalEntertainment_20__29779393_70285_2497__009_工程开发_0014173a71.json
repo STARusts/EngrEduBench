@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在“叙境”生成链路工程开发背景下，用户与导师围绕生成工作流拆分、约束器结构、门禁与snapshot/version挂钩及落库审计持续沟通（9轮），其中在工作流节点与constraint_report设计上与AI工程负责人沟通（4轮），在违规证据最小化存储与访问审计上与法务与合规经理沟通（2轮），并确定MVP节点/错误码/字段与单测覆盖方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是给模型加规则吧，别乱写。然后生成完能过审核就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就是开头生成大纲，中间写章节，最后出成品。失败就报错。写进版本库…就存一下日志？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就：输入需求、生成剧情、生成对白、敏感词检查、格式检查、输出。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI工程负责人 生成工作流一般怎么拆节点？要怎么做可回放？约束器输出要长什么样？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "约束输出结构你能给个样子吗？我怕我乱写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "门禁里 VERSION_MISSING 还是那个字符串吧？我别动它？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。那 “不存原文” 是不是就不方便查问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 他那边说工作流分 5、6 步，先载入上下文，再计划，再生成，再校验，再修复循环，最后落库。约束要出一个 report，有 violations 和 gates。version 空就直接 VERSION_MISSING，不往下走。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬拦截：敏感词、rights_ref 无效。告警：格式不好、角色性格有点不一致？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间线字段合法是指日期格式？还是剧情节点顺序？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就按结构一致性写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "修复回路 N 次你想设多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我忘了把 report 落库关联到版本。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason 我填啥？我这边生成也要 reason？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住：version 永远不能空。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我单测就测三种 reason？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务与合规经理 约束器要存证据。我们想默认存 hash+触发违规的片段，全文要权限才能看。这样合规吗？有没有必须字段或必须避开的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我是不是干脆不存片段，只存 hash？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 就是别把外部检索到的原文塞进库里，存个来源 id 的脱敏。违规片段也别太长，还要能打码。看全文得有权限+reason，还得记审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "收到。我就按这 5 条做。`SNAPSHOT_REQUIRED` 我加成新码，旧的 `VERSION_MISSING/RIGHTS_REF_INVALID` 不碰。单测我就照你说的四组去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

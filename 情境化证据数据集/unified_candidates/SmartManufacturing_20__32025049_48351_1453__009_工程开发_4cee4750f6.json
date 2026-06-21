@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在将预测模型落地到离散制造现场、实现云端指令下发与边缘网关状态回传的跨平台设备管理接口背景下，用户与导师围绕通信逻辑的兼容性、安全性与字段规范持续沟通（6轮），其中在南向多协议适配与MQTT抽象、重连和离线缓存部分与嵌入式软件专家沟通（2轮），在北向设备模型规范、鉴权Token与错误码字段部分与后端开发工程师沟通（2轮），并据此整理基础接口字段清单并计划跑通上报与指令确认Demo。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想直接写个脚本，让网关每隔几秒钟往云端后台发一个数据包，只要地址对上应该就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前只做过这种简单的。要是换了协议，我可能得重新改代码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式软件专家 你那边不同厂家的机器是怎么把数据传给我的？我需要写好几种解析代码吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MQTT是啥？我以前没怎么弄过这个，是不是跟发邮件差不多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 你们云端那边接收数据有什么要求吗？我直接把设备ID和状态传过去行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还要搞令牌？这也太复杂了。我就想能不能先把数据传上去看看，这些安全的东西以后再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就是接口里必须有设备UID，还有专家说的那个时间戳。状态我就用0和1表示，0是正常，1是故障。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "权限那个，我就先加个固定的字符串当密钥行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就先按这几个写：设备UID用工厂出厂编号，时间戳用13位的，状态码就是刚才说的，再加上一个错误码字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我再加一个预留的扩展字段吧，以后有新东西就往里塞，这样就不用动原来的结构了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "重连那个我得查查资料怎么写，以前没弄过这种自动连的东西。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把字段这块的逻辑写到代码里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在去改之前的脚本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

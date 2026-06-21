@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发学习轨迹采集端“离线缓存+可回放”链路背景下，用户与导师围绕本地事件落库、缓存上限清理、同步幂等与审计字段持续沟通（7轮），其中在多端离线事件模型与合并/排序规则上与数据架构师沟通（4轮），在批量事件同步接口ACK映射与重试口径上与后端工程师沟通（3轮），并形成MVP落地清单与可配置缓存上限方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备开始动手做轨迹采集端，重点先把“离线缓存+可回放”的链路跑通。我担心一离线就会丢证据、时间线乱掉，想先把本地数据结构和同步策略敲死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成事件溯源那种，所有操作都append-only：开始录音、暂停、上传片段、打标签、加批注，全是event。然后本地只要保证event有单调序号就行。同步就是把event流推上去，服务端按序重放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主键我倾向用ULID，带时间排序，端上生成。幂等就是服务端按event_id去重。序的话用ULID的时间部分排序，基本够了。分叉我觉得先不支持多端同时离线，登录设备限制一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 事件模型我准备ULID做event_id，端上append-only存SQLite。多端离线时怎么合并更靠谱？我不想把冲突解决搞成分布式论文。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以核心是服务端给一个server_seq当权威时间线，本地先凑合，等同步完再重排。那我端上是不是要保存“未确认事件”和“已确认事件”两段？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "离线缓存上限我想做得很激进：音视频全量离线、全分辨率，等连网再传，体验无敌。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哈希与元数据留着，是为了证据链可追溯？但原始删了不就没证据了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。我回去跟导师对齐下：端侧离线优先保证事件不丢，媒体可以降级存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "MVP我想定成三块：  \n1）端上事件表：event_id、stream_id、actor_id、device_id、local_seq、event_type、payload、created_at、本地状态（PENDING/ACKED/FAILED）  \n2）同步：批量POST事件，服务端按event_id去重，返回server_seq映射；端上收到就把PENDING变ACKED并写ack_server_seq  \n3）缓存：媒体三层我不一定全做，先做“原始+缩略图”，空间紧张时删原始但保留缩略图和哈希；事件不自动清"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志我一般会把请求体打出来方便排查，我可以关掉。加密我本来想端上全盘透明加密，密钥走硬件安全区，做到极致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我定个硬规则：  \n- 客户端日志只记：event_id、stream_id、状态码、重试次数、耗时、网络类型；不记payload正文、不记媒体URL、不记识别文本。  \n- 端上缓存：SQLite数据库用应用沙盒+数据库级加密；媒体文件用文件级加密，密钥按用户会话派生，登出就丢弃。硬件安全区我先不强依赖，后面再做增强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 事件同步接口我准备做批量上传，服务端对event_id唯一去重，然后返回每条event对应的server_seq给端上ACK。接口怎么设计更稳？还有失败重试怎么给端上明确口径？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "`EVENT_ID_CONFLICT`挺狠，但有用。我担心批量里一条REJECTED把整批拖死。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "媒体我也想事件化：先`MEDIA_CAPTURED`，再`MEDIA_UPLOADED`，最后`MEDIA_LINKED_TO_NODE`。这样离线时至少能回放“有一段录音占位”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那端上只缓存短期upload token，过期就重取。感觉又多一堆状态机，但我能写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清单我按实现优先级排：  \n1）本地事件存储：append-only事件表，字段含`event_id/stream_id/actor_id/device_id/local_seq/event_type/payload/client_ts/status/ack_server_seq`；PENDING与ACKED共存，离线回放先ACKED按server_seq，再拼PENDING按local_seq并标记未同步。  \n2）同步协议：批量上送事件；服务端返回每条的`ACKED/DUPLICATE/REJECTED`和`server_seq`；端上幂等重试只对网络失败和可重试码；发现`EVENT_ID_CONFLICT`直接打点报警但不落正文。  \n3）媒体离线缓存：先做原始+缩略图；空间压力下优先删“已ACKED且较久未访问”的原始层；保留缩略图与哈希用于一致性校验；媒体相关信息用`local_media_id`引用，不把路径/URL写进事件或日志。  \n4）安全底线：端上日志只记最小字段，不记payload正文/识别文本/媒体链接；本地DB与媒体做加密，密钥按会话派生，登出失效。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会做成可配置项，先用1GB+按层清理。极致体验先忍一下，后面再把三层媒体做全。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

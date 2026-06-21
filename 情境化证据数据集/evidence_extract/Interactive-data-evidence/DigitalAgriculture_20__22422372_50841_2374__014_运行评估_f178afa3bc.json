@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的争议工单分析与回溯背景下，用户与导师围绕争议分型、证据链字段、指标口径与合规展示规则持续沟通（10轮），其中在现有reason_code与可串联证据源梳理上与数据架构师沟通（3轮），在一线常见争议类型、判定证据与“可预防”定义上与农业运营顾问沟通（2轮），并形成5类最小分型+状态码、指标清单与6步回溯闭环流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是有人说没干成也算钱，或者干了但平台显示没干。还有外包队说签到失败，想补签。大概这几类。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段我想有：工单id、任务id、工序、基地、人员类型（自有/外包）、发起人、发起时间、争议原因、附件、处理结果、处理人、处理时间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据源…签到记录、核验记录、还有IoT数据？然后天气。证明就是他到没到、有没有干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 现在争议工单这块，原因码/分类我们已有啥？还有能回溯的证据链字段有哪些？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据架构师说现在 reason_code 其实有7类在用，但不规范。能用的证据是 task_event 那串（ASSIGN/ACCEPT/签到/核验/同步），有 event_time 和 receive_time，还有 device 的离线标记；再有签到点的经纬度、核验照片hash和EXIF时间、改派日志、天气标签。缺的是工单里没直接记录引用哪些事件id，只能按 task_id 反查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分型我就按那7类来。判定证据：\n- 签到异常：看 ARRIVE 事件有没有、位置偏差、还有 accept 到 arrive 的时间。判不了就标记待人工。\n- 核验异常：看 VERIFY 事件和照片hash、表单完整性。\n- 同步异常：看 SYNC_FAIL、event/receive差值超阈值。\n- 改派争议：看 reassign_log。\n- SLA争议：看工序SLA和天气标签。\n- 计费口径：看工价版本…这个我不确定在哪。\n- 身份争议：看账号绑定记录…我也不清楚。\n指标：占比、处理时长、支持率。可预防率…我理解是看是不是系统原因？比如同步异常算可预防。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业运营顾问 争议工单线下最常见的类型是什么？你们一般拿什么证据判？还有“可预防”在运营侧通常怎么定义？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 运营顾问说最常见是三大类：干了没算、没干算了、钱不对。判定主要看时间地点工序匹配：时间是否在排班窗口内（离线要看 event/receive差值和同设备集中堆积），地点看地块外扩30-80米缓冲区，工序看互斥工序冲突。可预防分三层：培训制度、产品提示、不可预防（天气路况GPS差）。计费很多是工价表版本没对齐导致月底爆发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5类我试下：\n1 干了没算：需要 VERIFY 事件、照片hash、SYNC_SUCCESS；如果有 VERIFY 但没 SYNC_SUCCESS 就偏同步；如果啥都没有就判不了。状态码就“证据不足”。\n2 没干算了：需要 ARRIVE+VERIFY 都有，还要地点在缓冲区内；如果地点偏太多就疑似代签。判不了就“位置不可信”。\n3 签到/到场争议：看 ARRIVE 的 event_time、receive_time，还有GPS accuracy。判不了“设备时间可疑”。\n4 改派/责任：看 reassign_log、accept人和核验人不一致。判不了“责任链缺失”。\n5 计费口径：看工价版本和计量单位…我还是不知道从哪里取。判不了“工价版本未知”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "展示就别展示姓名，用人员编号。只有基地管理员能点开看是谁。然后所有查看都记审计日志？还有客户成功只能看汇总。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三条：\n1 看板层面只出分型数量、支持率、处理时长，不出个人明细。\n2 个人明细仅基地管理员+指定处理人可见，且访问留痕。\n3 照片和定位这种证据保留时间短点，比如只保留到结算后N天，过期就打码或删掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标口径我列：\n- 争议率：工单数 / 已完成任务数（分基地、工序、人员类型）\n- 分型占比：5类各自占比\n- 平均处理时长：close_time-create_time 的均值和P90\n- 支持率：decision=支持/部分支持 的比例\n- 证据完整率：每单是否能关联到ARRIVE/VERIFY/SYNC等关键事件，缺一个算不完整\n- 可预防层级填报率：关闭时有没有填三层之一"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补：\n- 离线可疑占比：争议单里 client_offline_flag=1 或 event/receive差值超阈值 的比例\n- 改派相关：按改派次数(0/1/2+)分桶，看争议率和支持率变化"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流程：\n1 争议发起：基地管理员/队长发起，必须选分型+任务id。\n2 系统拉取证据：按 task_id 聚合事件链、签到点、照片hash、改派、天气。\n3 初判：按规则打状态码（可判/证据不足/时钟可疑/位置不可信）。\n4 人工复核：基地管理员看明细，必要时找外包队补材料。\n5 结论：填 decision、调整金额、填根因归类和可预防层级。\n6 月度复盘：客户成功看汇总指标，基地侧看分组和改进点。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

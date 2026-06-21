@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在非标债权重组中枢工程开发背景下，用户与导师围绕债权图谱图计算落地选型、对照测试设计及Rust技术栈取舍持续沟通（8轮），其中在图存储与计算选型可行性部分与资产图谱设计师沟通（1轮），并最终形成Java+JGraphT为主栈、Rust降级备选的图谱实现基线及验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想用Rust重写核心的穿透逻辑，抛弃原本的Java单机遍历，这样在深链寻路时性能能翻倍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们组没人写过生产级Rust。但我查了资料，Rust的图遍历性能比Java高出一个量级，为了重组中枢的实时性，这代价必须付。至于绑定，我可以自己封装一层JNI。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用Rust重写图遍历逻辑配合Memgraph，你从图建模和工程联调角度看，风险点在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果子图很大，跨语言传数据确实慢。那退一步，我不全量重写，核心寻路用Java的JGraphT框架，存储还是Memgraph。这样风控校验全在JVM内完成，省了跨语言IO。但我得验证JGraphT在超大规模图下的表现，我准备设计个对照测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设JGraphT在内存中构建10万节点、50万条边的非标债权关联图，执行3跳内的担保圈穿透，耗时能控制在50ms以内。对照组是直接发Cypher给Memgraph算。如果JGraphT内存图优于或者接近Cypher查询，就定JGraphT。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "均质随机图无法模拟担保圈的幂律分布。我需要基于真实脱敏数据抽样，然后用度优先依附模型生成无标度图，这样才贴近真实坏账穿透场景。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不放弃，但降级。Rust的图计算范式我目前只懂皮毛，真要写生产代码肯定会卡壳。我列个补学清单：1. 精读《Rust in Action》的并发和内存章节；2. 跑通Petgraph库的官方例子；3. 尝试写一个JNI调用的HelloWorld。先把JNI通道打通，如果JGraphT压测不达标，立刻切Rust重写寻路核心，Java层只做风控。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱实现基线确认为：1. 主栈选Java+JGraphT+Memgraph，风控与寻路同在JVM减少IO；2. 验证基准是生成无标度图（10万节点/50万边），3跳穿透KPI<50ms；3. Rust作为高优备选，需完成JNI接口预研；4. 我的Rust补学计划本周启动，目标打通JNI通道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

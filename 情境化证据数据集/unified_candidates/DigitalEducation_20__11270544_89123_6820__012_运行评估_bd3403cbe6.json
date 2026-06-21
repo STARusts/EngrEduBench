@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在课堂对话智能助教编排系统运行评估的灰度发布与回滚演练背景下，用户与导师围绕放量门槛、指标口径统一与演练清单持续沟通（6轮），其中在发布分层/监控阈值/回滚闭环上与运维与SRE沟通（4轮），在灰度验证用例与演练脚本设计上与测试工程师沟通（3轮），在演练合规红线与数据留存访问边界上与合规与隐私官沟通（1轮），并汇总形成可执行的灰度策略、阈值、口径与合规护栏清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重点我盯两件事：采样提到10%后，结构化落字段有没有丢；以及编排结束汇总事件里 node_count_expected/actual、trace_truncated 的口径能不能对齐。@导师 你帮我把灰度验收要点和回滚演练步骤定个“能执行”的版本行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们准备的信号主要是：治理请求采样10%后，日志不落原文，只落 hit_rules、reason_codes_final、mask_stats、content_fingerprint、fingerprint_key_version、node_count_expected/actual；还有后端加了“编排结束汇总事件”带 trace_truncated。我的担心是灰度时如果字段丢了，反而更难定位；还有对象池那块 A/B 没跑完，怕灰度把不稳定带进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 灰度发布和回滚演练你们一般怎么设计？我现在有编排结束汇总事件、trace_truncated、以及结构化字段完整率这几类信号，想知道放量节奏、监控阈值、以及回滚的“触发条件”该怎么写得够明确。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值你能给个建议范围吗？我怕写太宽松，灰度就失控；写太严又天天停。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚验证怎么做才算“演练真的有效”？我不想只回滚一次就说完成了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们日志现在不落原文，靠 content_fingerprint 来关联问题。回滚排查时会不会定位效率变差？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 灰度发布这块，我想把“灰度验证用例+回滚演练脚本”写得能执行。我们关键信号是字段缺失率、node_count 对齐率、trace_truncated，还有对象池 A/B 的风险。你建议用什么用例集、怎么分层验证？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对象池 A/B 还没完全坐实根因。灰度时要不要先把对象池开关固定住？我倾向于先保守点，但又怕错过真实流量证据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段缺失率你说>0.5%暂停、>1%回滚这种阈值，测试侧能接受吗？我担心我们的埋点偶发丢，导致老是卡住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能做的就是把统计口径写清：缺失率是“字段不存在”还是“空字符串/空数组”也算缺失；node_count 对齐率是按请求还是按会话聚合。我怕大家各算各的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "口径我先提一版，不确定的你纠：  \n- 汇总事件上报率 = 有编排请求的 trace_id 中，能找到对应编排结束汇总事件的比例；  \n- 字段缺失：字段不存在算缺失；存在但为空我也算缺失（比如 hit_rules=[]、reason_codes_final=[] 这种要不要算缺失我拿不准）；  \n- node_count 对齐率：按请求级别算，expected==actual 算对齐；  \n- trace_truncated：按请求级别统计占比，灰度组对比基线组看倍数变化。  \n我纠结的是 hit_rules/reason_codes_final 空数组到底是“正常无命中”还是“丢字段”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那回滚触发里“字段缺失率”我们用 presence 缺失率，不把空数组算进去。validity 先报表观察。对象池二期 A/B 我也赞同先小流量。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有合规这块：我们演练时会不会不小心把真实对话打到压测/回放里？我知道有“压测用合成/授权、日志不落原文、隔离环境7天”这些，但演练也算吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 灰度发布与回滚演练里，我们可能会做“触发异常—报警—回滚—对比”闭环。日志侧已不落原文，只落结构化字段和 content_fingerprint。演练过程中哪些动作是红线？数据留存/访问上有没有额外要求？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，fingerprint 不能和用户标识拼出“准唯一键”，我们就拿 trace_id + 时间窗做定位，不把 user_id 参与分析。临时权限这块我之前没写进演练步骤，得补上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成一页清单：  \n1）灰度路径：先金丝雀实例（极少实例）-> 白名单学校/班级或 header 标记引流 -> 1%/5%/20% 放量；功能开关分离：新编排链路、对象池开关、采样比例。  \n2）统一口径：  \n- 汇总事件上报率=请求trace_id中能匹配到编排结束汇总事件比例；  \n- 字段缺失率看 presence（key存在且类型正确），不把 hit_rules/reason_codes_final 空数组当缺失；validity 单独观察；  \n- node_count 对齐率按请求级 expected==actual；  \n- trace_truncated 看灰度组相对基线倍数变化。  \n3）暂停/回滚阈值（先用起步版，后续按基线校准）：错误率、p95、事件上报率、presence缺失率、node_count不一致率、trace_truncated倍增。  \n4）演练脚本：人为触发一次可控异常->确认告警命中->先做配置回滚（关开关/降采样/回旧路由）->5分钟内复核指标回落->再演练一次版本回滚->锁住放量开关防止继续推进。  \n5）合规护栏：演练也不许落原文/落body；fingerprint只关联不和个人标识拼接；用合成/授权语料；临时权限最小化、到期回收、审计留痕；隔离环境留存<=7天。  \n我还缺的是：mask_stats 的 validity 具体必填子字段列表，要问后端。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

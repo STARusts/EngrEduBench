@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在量测数据流与模型分发链路设计背景下，用户与导师围绕高并发入口解耦、上下行通道拆分及边缘上报机制持续沟通（6轮），其中在云端入口解耦部分与系统架构师沟通（1轮），在边缘网关收发协调与上报机制部分与边缘算力规划师沟通（2轮），并最终形成Kafka削峰、流块通道拆分与事件触发上报的链路定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，电表采了数据，直接发给云端训练呗，训完再发回来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那加个队列排队？这我不太懂，得问搞架构的吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几万个节点同时发数据，云端入口怎么搞？边缘那边收发会不会打架？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说前面加Kafka，数据走流式，模型走块式，上下行拆开。边缘那边说不能死循环推，得按事件触发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "固定频率好控制吧，事件触发万一漏了数据，预测不准咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "云端入口用Kafka削峰，量测数据走流式通道，模型下发走块式通道，上下行解耦。边缘侧按5%波动阈值事件触发上报，不搞死循环。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这块开发是谁来牵头？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

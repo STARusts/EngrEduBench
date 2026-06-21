@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在旁路核验与撮合核心代码开发背景下，用户与导师围绕旁路拦截逻辑、流控协议取舍、RDMA补学验证及核验测试方案持续沟通（9轮），其中在嵌套队列性能与流控机制部分与内核开发工程师沟通（2轮），并最终形成单层rte_ring拦截、RDMA同步与同核交替测试的实现定论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想在DPDK收包侧直接挂一个轻量级推理引擎，用BPF指令集做JIT，先做一轮意图初筛，把可疑单推到一个多层嵌套的无锁队列里，再由撮合核拉取。队列我打算用DPDK的rte_ring套一层自己写的MESI优化环，保证多核不争用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果不做初筛，抢跑单混进撮合核，公平序配的开销不就大了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这方案用rte_ring套一层MESI环，在100G网卡下会不会有锁争用或者false sharing？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "单环的话，如果消费端撮合核稍微卡一下，旁路不就反压丢包了？我得加背压机制，得写一套流控协议。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "RDMA的ibv_post_send那些参数组合我确实没全跑过，之前只看了概念。流控协议我其实也不太会写滑动窗口的汇编优化。我这周得把RDMA内核例程跑一遍，重点看内存池注册和MR生命周期，流控就不自己造了，用现成的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天把libibverbs的源码拉下来，重点看qp建连和rkey交换，写个pingpong测试把延迟打出来，如果单次写延迟在2微秒以内，就算过关。流控直接用rte_ring的出队返回值判满，不自己造轮子了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用模拟器发十万级单子，分两组。一组走旁路核验，一组不走。对比两组的成交时序，看被拦截的单是不是都在时序倒挂窗口里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以加个硬件时间戳，在网卡收到包的时候就打上。然后用PTP对齐时间源。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "PTP偏移在微秒级，可能掩盖抢跑的纳秒级差异。我需要把对照测试的口径卡严，只在同一个核上交替跑两组逻辑，消除跨核调度误差。如果误伤率超过万分之一，就说明阈值设错了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "旁路拦截用单层rte_ring，不做意图初筛；同步走RDMA写远端内存，不造流控协议；验证用同核交替测试，硬件时间戳加PTP对齐，误伤率阈值万分之一。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在体征多源融合与脓毒症推演系统上线旁路验证背景下，与导师围绕旁路验证指标、统计方法、验证周期及验收点持续沟通（9轮），其中在影子流量切分与指标采集部分与运维监控工程师沟通（1轮），在临床误报漏报容忍边界与统计对齐部分与重症临床顾问沟通（1轮），并最终明确旁路验证5条验收点与流量切分策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "影子流量咋切啊？是不是就复制一份包发过去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误报漏报咋算？医生能容忍多少错？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "运维说要镜像包，看P99和时间差。临床说漏报零容忍，误报20%以内，还要跟SOFA评分对，用Cox模型算风险率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这Cox听着就头大，能不能就算个准确率？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺这个统计验证的，还有旁路流量的操作。我都不知道咋配这影子流量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周末前我把K8s的流量镜像配置文档看一遍，写个旁路切分脚本跑通，再找个Python库把Cox模型试跑一下。这样下周一就能开始采数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先切10%的流量过去，跑24小时看看P99和误报率，没问题再慢慢加到50%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 影子流量先切10%跑24小时。2. 推理耗时P99不能超200ms。3. 漏报必须0，误报率要在20%以内。4. 预警点和SOFA评分对齐，用Cox模型算风险比。5. 时间差要在5分钟内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

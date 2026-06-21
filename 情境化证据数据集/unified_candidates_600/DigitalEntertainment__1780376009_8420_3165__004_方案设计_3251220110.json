@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在云边协同交互叙事引擎架构设计背景下，与导师围绕叙事状态云边流转、弱网容错及架构基调持续沟通（5轮），其中在弱网状态同步容错部分与交互叙事架构师沟通（1轮），用户提出Event-Sourcing设想，分析CRDTs与快照补偿取舍，规划POC补盲，最终确定云端Event-Sourcing为主、边缘CRDTs限用于意图缓冲防抖的架构基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步设想用 Event-Sourcing 模式。云端维护全局叙事图，边缘不存全量，只缓存当前分支的局部视图和玩家交互上下文。云端推演完产生新剧情节点后，下发事件增量给边缘侧更新。不过我担心弱网下事件乱序，会导致边缘侧状态和云端撕裂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "主干想用 Event-Sourcing 下发增量。但在弱网下事件乱序会导致边缘状态撕裂，对于叙事状态同步的容错，有什么更好的做法吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这其实是个方案对照：假设在叙事分支选择这种高频操作上，CRDTs 的合并开销和延迟小于重放 Event；对照组是传统快照+ACK。反驳标准是：如果在模拟 30% 丢包率下，CRDTs 合并导致剧情逻辑矛盾率大于 5%，假设就不成立。不过说实话，我对 CRDTs 在复杂图结构上的应用拿不准，只知道在协同文本编辑里的用法，不确定它怎么处理剧情图的拓扑冲突。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我对 CRDTs 在 DAG 上的合并机制确实不够熟。这周我会去补两篇 CRDTs 在非文本图结构应用的论文，同时在本地跑一个基于 Automerge 的图合并 POC，专门测拓扑冲突时的合并行为，把结果带回来修正架构决策。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主干还是定 Event-Sourcing。因为叙事的因果律极强，比如“A杀B”和“B反杀A”不能同时成立，CRDTs 的最终一致性可能会破坏剧情逻辑的排他性。CRDTs 先限定在边缘侧的玩家操作意图合并缓冲区里用，解决高频交互的防抖问题，不碰核心剧情状态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构基调确认为：云端采用 Event-Sourcing 维持叙事因果唯一性，边缘侧放弃核心状态的 CRDTs 合并，仅在交互意图缓冲区引入 CRDTs 降冲突防抖。弱网容错的快照补偿策略，后续结合 Automerge POC 数据再做细化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

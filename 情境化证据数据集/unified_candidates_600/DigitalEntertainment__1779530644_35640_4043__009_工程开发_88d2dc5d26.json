@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端云帧同步与异步拼装联调背景下，用户与导师围绕切片对齐、乱序丢帧及缓冲阈值策略持续沟通（5轮），其中在抗抖动部分与信令与同步设计师沟通（1轮），在状态机修改部分与视效拼装全栈开发沟通（1轮），在阈值权衡部分与性能优化极客沟通（1轮），并形成增加Jitter Buffer、Buffering态及硬编码100ms阈值的MVP联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "帧同步这块我不太熟，就按时间戳对齐一下行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢帧的话，我就跳过继续拼下一个？但这样流形肯定断，画面会撕裂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片流乱序和抖动，端侧帧同步一般怎么处理？直接按时间戳重排吗？我现在的拼装逻辑是来一帧拼一帧，要加什么状态来缓存乱序的包？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那缓冲区要多大？等太久端侧就卡住了，不等又容易拼碎。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Jitter Buffer的窗口大小一般定多少？延迟和拼装成功率怎么权衡？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就先硬编码100ms，留个配置接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

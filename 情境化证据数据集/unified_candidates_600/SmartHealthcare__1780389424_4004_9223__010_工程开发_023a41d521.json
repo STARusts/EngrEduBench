@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云侧抗凝药效随动模型开发背景下，用户与导师围绕模型技术路线取舍与底座验证方案持续沟通（5轮），其中在机理约束与混合模型选型、概率编程框架选型部分与算法工程师沟通（2轮），并最终确定Numpyro+JAX贝叶斯混合模型路线及单次给药参数还原demo验证目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接套现成的时序预测框架。网上有挺多LSTM或者Transformer的开源库，把心音特征和INR值拼在一起丢进去，调调参应该就能出药效预测结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "但我对药代动力学真不熟，有没有哪种机器学习库是自带这种医学机理的？或者我能不能用AutoML搜出一个符合要求的模型？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "机理模型？那不是要手推微分方程？我高数底子薄，自己写ODE肯定翻车。有没有封装好的PK/PD计算包可以直接调用的？就像调Sklearn那种感觉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混合模型吧，毕竟安全底线在那。但我还是不想从零写微积分代码。我看网上有人用概率编程库做医学预测，比如PyMC，能不能用这种框架把方程糊进去？它好歹有现成的采样算法。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Numpyro？我查过，这玩意儿语法挺绕的。不过既然能接ODE又能在GPU跑，好像也没别的更好选了。用JAX的odeint我就不用自己手写欧拉法积分了，这点倒是省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我先造一个最简单的单次给药数据，用Numpyro写个一室模型ODE，看看采样能不能把预设的清除率参数还原出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周先出Numpyro的单次给药参数还原demo，JAX的纯函数写法我边写边查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

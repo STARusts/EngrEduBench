@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在跨链锚定异常与滑点畸变背景下，与导师围绕数据穿透、时序对齐脚本设计及异常交易处置持续沟通（8轮），其中在资金穿透、时序对齐及轻量级阻断部分与异常溯源分析员沟通（3轮），并形成时序映射对齐、滑点容差校验阻断及refund退回的异常溯源执行策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我直接上链上浏览器搜那笔异常交易的哈希？或者用Grafana的Explore面板按时间过滤日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种一般怎么查啊？有没有那种自动对账的插件能直接跑出结果？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "判断被夹是不是看同一区块里的买卖排序？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "提证明对时间，然后看池子深度和gas。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按源链的区块高度做主键，然后去目标链找时间戳最接近的事件？如果找不到就算锚定丢失？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果是攻击，直接回滚交易？或者把资产冻住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨链的夹子攻击有啥轻量级阻断办法吗？回滚肯定不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "网关层校验滑点容差，这个好实现。退回源链也就是走个refund接口，不用改合约逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，按源链区块高度提两边链的事件，做时间窗口映射对齐，找不到的进待查库；第二步，关联异常窗口的TVL和gas价格，判断是深度问题还是夹子；第三步，如果偏离超阈值，网关层直接阻断并调refund退回。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

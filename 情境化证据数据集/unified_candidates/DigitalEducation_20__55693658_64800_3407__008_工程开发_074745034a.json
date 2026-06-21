@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在作业反馈模型接入的工程开发背景下，用户与导师围绕旧/新SDK三类问题的最小复现与回归验收口径、端到端用例及失败用例计数暴露持续沟通（9轮），其中在事件判重与重试幂等口径上与架构师沟通（3轮），在生成接口契约、证据引用表达与隐私最小化上与算法工程师沟通（3轮），并形成6条可回归测试交付要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想先做个本地mock上报端，旧SDK跑三条case，抓到payload和次数。判定标准：1）事件字段不统一能导致服务端解析出错；2）敏感字段原文被带上去；3）同一nonce的事件重复出现。新SDK再跑一次，应该变成：schema统一、payload不出现在日志和上报里、重复被去掉或被服务端拒绝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "两种事件同名不同结构？比如同是“homework_submit”，A端传score是string，B端传score是number；还有timestamp单位混乱，秒和毫秒混。最小复现就是同一接口连续发两条不同schema的同名事件，让服务端聚合/校验炸掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用假的字段名模拟，像 student_name、id_card、free_text_answer，值用占位符。重点是旧SDK会把free_text_answer原文带上报文，甚至debug日志会打印整个json。新SDK要只传digest，比如answer_sha256，还有schema校验失败只打印错误码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试重复：mock服务端先回429，再回200。旧SDK如果不做幂等就会两次入库。业务侧多次触发：同一点击事件在页面onResume又发一次，旧SDK没聚合/采样，会两条都出去。新SDK用nonce+timestamp，客户端也做dedupe窗口，比如5秒内同key只留一条。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@架构师 模型接入这段，事件判重你们希望靠什么？nonce+timestamp是只防重放，还是也当幂等key？服务端会返回什么让客户端停止重试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那客户端遇到429/5xx重试，服务端如果已经收到了第一次，第二次会200+dedup=true？客户端要不要识别dedup？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "模型侧的“作业反馈生成请求”也走同一套幂等吗？比如同一份作业请求两次生成反馈。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "架构师说客户端别搞5秒窗口，只做flush内去重，服务端接入层按(nonce, client_id)幂等，重复返回200 dedup=true，不重复写证据库。那我的重复上报用例验收点改成：旧SDK在服务端会出现两条证据写入/两次计数；新SDK即使重试两次，服务端只落一次，并且客户端队列最终清空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在接入作业反馈生成模型，最小接口契约你们怎么定？我关心三块：请求里怎么带证据引用（不带原文还是可带摘要）、返回里怎么标注引用、以及需要哪些审计字段方便追溯。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "excerpt可选这块我担心会被业务方滥用，把整段答案塞进来。能不能完全禁掉？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先走特征化输入，彻底不碰原文，最稳。质量差点我再加引用链路和可解释增强。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我懂，但我还是想先把“合规底线”和“可测”打牢。摘要这块要做脱敏、审核、审计，工期会炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端到端我先做两条：\nA）客观题：evidence_refs里放“选择题得分=0/1、错因标签=概念混淆”。期望：模型返回feedback_text包含错因提示和下一步练习建议；citations能指回对应evidence_id。验证：审计里有model_version、evidence_id列表、hash(output)。\nB）步骤题：放“步骤完成度0-100、缺失步骤编号列表”。期望：反馈按量表维度分段（比如“准确性/完整性/表达”），并引用对应证据。\n我先不测主观题原文。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）evidence_refs缺digest：服务端返回400，客户端按4xx丢弃并计数；日志只打印schema错误码不打印payload。\n2）rubric_version不存在：422或400，依然4xx丢弃并计数。\n3）class_id和teacher权限不匹配：403，丢弃并计数。\n4）模型服务429：客户端退避重试，最终成功；服务端幂等保证不重复生成task。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试耗尽：429连续N次，触发最大重试后出队到dead-letter计数？我们SDK里只有丢弃并计数的机制，我可以把“重试耗尽”也归到丢弃计数里，加一个reason=retry_exhausted。计数暴露：SDK维护按错误码分桶的counter，周期性上报一个轻量metrics事件，只带错误码、次数、sdk_version，不带业务payload。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）旧SDK三类最小复现：同名事件不同schema（score类型/时间单位）、敏感字段原文进上报或debug日志、429重试导致服务端重复写入。\n2）新SDK跑同用例：schema校验失败只出错误码；敏感payload不上报且日志不打印原文，只允许digest；429/5xx按退避重试，4xx丢弃并计数。\n3）判重口径：客户端不做时间窗口去重，只做flush内去重；服务端接入层按(nonce或event_id, client_id)幂等，重复200 dedup=true，不重复落库。\n4）作业反馈生成MVP接口：请求带submission_id、rubric_version、evidence_refs(含evidence_id/type/digest/created_at)、idempotency_key；返回feedback_text+citation(evidence_id+span_range)+审计hash与版本信息。\n5）MVP先禁excerpt自由文本，走特征化证据输入；预留字段但服务端拒绝携带原文。\n6）最小失败用例：缺digest/量表版本错/权限403/429重试耗尽；都要有分桶计数并以轻量metrics事件上报。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,499 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在场外衍生品确认书智能解析与履约追踪系统需求定义背景下，用户与导师围绕运营痛点拆解、业务优先级判断、能力短板补充及合规约束持续沟通（9轮），其中在运营痛点具体化与解析要素合规留痕要求部分与衡生品业务架构师沟通（2轮），并形成以非标确认书要素提取为首要痛点、附带审计留痕映射链路为核心约束的阶段性结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "场外衍生品运营现在的痛点具体有哪些？确认书和现金流到底卡在哪？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得两个都很痛。不过既然确认书是源头，是不是应该先做解析？把要素抽准了，后面追踪才有依据。而且我们团队对文档OCR比较熟，做起来快。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对敲出观察日、票息支付这些触发逻辑不太熟。我之前只做过普通期权的结算，复杂结构没碰过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周会去补这块知识。我打算找业务部门拿几份真实的雪球和ACCR确认书看，自己梳理一遍事件触发逻辑，弄懂敲出和票息的先后顺序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我补到能独立画出雪球产品从起息到敲出的完整状态流转图，并且能说清楚每个节点产生的现金流方向。我会把画好的图给业务专家评审，他们点头算我过关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "解析出来的要素，监管对留痕有什么要求？是不是要保存抽取的位置和置信度？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "首要痛点是场外非标确认书的要素提取，因为它是源头且非标严重。核心约束是解析结果必须附带原文坐标和映射链路，满足审计留痕要求。履约追踪也很痛，但我能力不足，放后面做。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在非标确认书智能解析可行性论证背景下，与导师围绕准确率底线、坐标映射约束、合规与工程冲突及兜底策略持续沟通（7轮），其中在业务底线确认部分与衡生品业务架构师沟通（1轮），在技术可行性评估部分与文档解析算法工程师沟通（1轮），并最终形成可行性论证前提共识。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "关键就是得把要素提取出来，只要模型能跑通，能抽出字段，这事儿就算可行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务上对解析可行性的最低要求是啥？是不是只要能抽出要素就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务那边说准确率得95%以上，还得带原文坐标映射，技术上能行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可是业务说没坐标合规不签字啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能砍合规吧，没坐标上不了线。那就只能让算法带坐标一起做，慢点就慢点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就，就崩了先放人工处理？总不能因为怕崩就不做吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿一批历史确认书跑一下看看对不对？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "可行性论证前提：准确率底线95%，坐标映射是必须的，哪怕牺牲初期解析速度。解析不出坐标或置信度低的进人工复核队列。验证准确率得用包含长尾样本的历史数据集跑。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在履约事件追踪合规要求梳理背景下，与导师围绕合规约束与需求落地方式持续沟通（4轮），其中在监管报送与审计要求部分与合规监管分析师沟通（1轮），在状态流转与中间状态边界部分与衍生品业务架构师沟通（1轮），并最终形成追踪模块需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规监管分析师 履约事件追踪这块，监管的硬性要求有哪些？我们要做合规。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@衍生品业务架构师 业务上呢？状态流转有什么不能漏的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "卡死流转规则吧？毕竟漏了就出事。但非功能需求也得写？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一，状态机流转内嵌业务前置校验，不满足不能流转；第二，审计轨迹独立存储且防篡改，包含触发源和依据条款；第三，状态变更与监管报送必须原子性，保证T+1时效；第四，履约中间状态不可跳跃，必须完整记录。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在目标客群与业务量画像及系统容量规划背景下，与导师围绕非标占比、长尾特征、容量冗余及验证口径持续沟通（7轮），其中在客群与业务量量化部分与运营降本策略师沟通（1轮），并最终明确非标为主与长尾兜底特征，确定4倍弹性冗余与基于历史样本的压测验证需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们目标客群和业务量画像的具体情况，要有量化数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "留，留个三倍冗余够不够？峰值不是三倍嘛。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "客群锁定非标和长尾，容量按4倍冗余算，长尾单独设准确率卡点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以做压测？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "要拿历史样本分布来测。我把它加到需求里。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在立项经济账与降本增效商业闭环量化论证背景下，与导师围绕成本构成、基线数据口径及闭环成立条件持续沟通（9轮），其中在量化口径与基线数据要求部分与运营降本策略师沟通（2轮），最终确立基线用长尾P95、收益含操作风险调降、最小降本覆盖开发投入的三条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接算现在多少人干这活，系统上了省多少人力费，ROI就出来了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降本增效的量化口径怎么定？我要算风险成本和人力成本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线数据，我找运营要一份报表就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要算FTE、操作风险调降和资金周转率。基线数据要拿P95耗时，不能只看平均数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证降本效果啊，看省了多少时间。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我理解反了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我多看看以前的类似项目。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就这周，我去找运营要近三个月的确认书处理耗时明细，自己跑一下分布图，看看P95在哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿P95的耗时乘以单价，算出最差情况下的降本额。如果这额能覆盖系统开发成本，闭环就成立了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在衍生品确认书智能解析系统方案设计背景下，用户与导师围绕异构确认书解析架构选型、降级策略及对照组验证假设持续沟通（5轮），其中在解析架构设计与降级热更新部分与系统架构设计师沟通（2轮），并最终确定混合架构方向、验证指标及推翻标准，承诺落实降级预案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用大模型直接读呗？现在大模型这么火，丢进去出JSON不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构确认书解析架构怎么设计比较好？大模型直接抽行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "降级策略我不太懂，这块我确实没搞过。我这就去补一下大模型服务降级和重试容错的设计模式，看看FinBERT那边的金融解析案例，今天下班前把降级预案的思路理出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一批历史确认书？看哪个快？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95耗时没降，或者Token超了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在衍生品交易长周期履约方案设计背景下，用户与导师围绕状态机设计与数据流防膨胀、长周期上下文存储及幂等防重方案持续沟通（5轮），其中在状态机抽象与防膨胀部分与数据流建模工程师沟通（2轮），在业务原语与跨期依赖部分与衡生品业务架构师沟通（1轮），并形成状态机按事件原语抽象、上下文持久化及基于DB唯一约束幂等的三条技术红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按常规的状态机画呗，生息、付息、到期，几个节点一连，数据顺着流转就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "状态机该怎么设计？数据流怎么防状态膨胀？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按事件原语抽象行不行？业务上有什么要注意的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用事件原语抽象，不用平铺状态。还有要保证幂等，加上违约事件，跨期依赖要把上下文传透。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原语就是敲出、敲入、付息、违约。幂等就加个去重表查一下。上下文就放内存里，流转快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "十年存续期上下文放哪？去重表并发怎么防穿透？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上下文要持久化到EventStore，幂等靠数据库唯一键抛错来拦截。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在现金流对账容灾设计背景下，与导师围绕对账容灾机制与预案验证持续沟通（4轮），其中在双边对账容灾机制与验证基准部分与系统架构设计师沟通（2轮），并最终形成包含断点续传、补偿对账及故障注入验证的容灾方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "想过，就是加个重试次数，如果主库挂了就切到备库读。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构设计师 这种双边对账的容灾一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这，确实不好验证。我最近在看混沌工程的资料，但还没看太明白，感觉可以用来测这个？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在测试环境模拟机房断网，看对账任务是不是真的能续上，有没有丢状态。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在方案里加上故障注入的验证接口，专门测断点续传和补偿对账，用基准数据做对照。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在确认书智能解析系统开发背景下，用户与导师围绕版面拆解与要素抽取方案、模型微调泛化、测试集构建及数据脱敏合规持续沟通（8轮），其中在工业界技术方案与验证指标部分与文档解析算法工程师沟通（1轮），并形成模块开发约束及对照测试要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开源OCR扫一遍，然后写正则匹配呗，确认书格式再变，关键字总有的吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨页确实麻烦。那我把跨页的表格先拼起来，然后再跑正则？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "确认书版面拆解和要素抽取现在怎么搞？验证指标有哪些？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "微调这块我确实没搞过，之前只调过Bert做分类。预训练权重我也没找过。泛化能力就只能多找几个样例看看了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚找几篇LayoutLM微调的博客看一遍，然后在咱们标注平台标两百份跨页表格的样本，先跑个baseline出来，看看指标能不能过及格线。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个脚本把金额和人名替换掉再丢进去训练。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "版面拆解用LayoutLM不能硬切，要素抽取用NER不能光靠正则，测试集要五百份覆盖主流品类，训练数据必须走脱敏流水线，指标重点看跨页表格的F1和召回。"
+              }
+            ]
+          },
+          {
+            "microScene": "在履约触发器编码与单测及CI资源受限背景下，用户与导师围绕低成本替代方案、时序保障与依赖隔离持续沟通（6轮），其中在受限环境触发器实现部分与事件驱动开发专家沟通（1轮），并最终确定纯函数编码与单测断言策略，确认幂等与覆盖约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就写快点，单测少写点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时序就加时间戳呗。单测的话我就跑主流程，边缘的先跳过，两分钟肯定够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "单测资源卡死，不能连真实中间件，还得保时序和覆盖率，咋弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "核心就是快。隔离就是拿本地队列替换Kafka？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发器写成纯函数，单测只断言状态变没变。不连中间件，跑得快。"
+              }
+            ]
+          },
+          {
+            "microScene": "在结算对账脚本重构背景下，用户与导师围绕断点续传、单边挂账处理、批次隔离及重构约束持续沟通（7轮），其中在断点续传与单边挂账处理部分与资金结算开发工程师沟通（1轮），并最终形成四条重构约束准备重构代码。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全量重跑肯定不行，太慢了。加上断点续传就好了，把跑到哪存起来，下次接着跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单边挂账就跳过呗，继续往下对。反正最后看没对平的就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "结算对账这块，网络断了重跑太慢，断点续传该怎么搞？单边挂账的怎么处理？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全局变量改成按批次存就行了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 加批次状态，不记行号；2. 单边挂账进池子，续传优先捞；3. 对账动作包个事务，断了就回滚匹配；4. 批次ID隔离，全局变量全干掉，换成上下文。"
+              }
+            ]
+          },
+          {
+            "microScene": "在解析性能调优与长尾排障且算力受限背景下，用户与导师围绕长尾延迟压降、熔断阈值设定及链路追踪短板持续沟通（7轮），其中在零算力长尾压降方案部分与质量与性能调优师沟通（1轮），在耗时分布与阈值设定部分与质量与性能调优师沟通（1轮），并最终形成3秒熔断与双栏切分方案及补充Jaeger的计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "好，我看看能不能把并发数调大点。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看日志，找哪个环节慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志里都有时间戳，我排个序就能看出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在解析单份卡十几秒，怎么低成本把长尾压下去？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "熔断就设2秒吧，切分就拆双栏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "当前解析耗时分布什么样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，那就3秒熔断，先切双栏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没，之前都没接触过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改熔断和切分逻辑。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在衍生品解析系统灰度上线背景下与导师围绕切流维度、验收标准、统计检验补充及回退预案持续沟通（8轮），其中在切流维度部分与站点可靠性工程师沟通（1轮），在验收统计口径部分与业务监控运营师沟通（1轮），最终确定按品种白名单切流及回退条件并制定统计学习计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@站点可靠性工程师 灰度切流怎么分比较好？@业务监控运营师 业务指标的统计口径和置信区间怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我本周五前看完监控给的A/B测试文档，能配出灰度对照组和实验组，然后在测试环境跑一次验证脚本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按IRS品种白名单，5%起切。如果解析准确率95%置信区间下界跌破基线组，或者P99耗时超3秒就回退。"
+              }
+            ]
+          },
+          {
+            "microScene": "在5%灰度运行评估背景下，用户与导师围绕解析准确率、长尾延迟风险及扩量策略持续沟通（8轮），其中在准确率下界与异常分布部分与业务监控运营师沟通（1轮），在耗时拆解部分与质量与性能调优师沟通（1轮），并最终形成暂缓扩量、补充协议失败走人工复核及OCR超时走人工录入兜底的降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "麻烦拉一下解析准确率的95%置信区间下界，还有异常case的分布情况。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮忙拆解一下P99耗时，看看长尾延迟卡在哪了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "下界96.2%，有几份补充协议没解析出来要人工复核。P99没问题，但P99.9超3秒了，卡在OCR重试上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补充协议应该不影响核心要素吧？重试占比我不太清楚，失败了估计就报错吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先不扩量了？把这几个case修一下再扩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发条件是解析出补充协议失败，还有OCR重试超时。这两种情况都不走自动入账，转人工处理。灰度比例暂时停在5%不动。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异常确认书拦截归因与复核分析背景下，用户与导师围绕拦截根因拆解与非标条款泛化方案持续沟通（4轮），其中在拦截特征分布部分与业务监控运营师沟通（1轮），在非标条款泛化提取部分与文档解析算法工程师沟通（1轮），并形成聚类补充Few-shot与前置图像增强的改进结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可能是模型没见过的模板吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看报错日志呗。看看是OCR报错多，还是抽取字段报错多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上拦下来的确认书，都是啥情况？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图片烂的也没办法，只能转人工吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加规则快啊，写几个正则匹配上就行，总比转人工强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "非标条款抽不出来，除了加正则，还有啥招没？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导出样本聚类找Top3补Prompt，画质差的前置加图像增强。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估与衍生品新品类接入迭代规划背景下，与导师围绕排期依据、优化结论外推边界验证及标注工具短板补充持续沟通（4轮），其中在排期数据反馈部分与敏捷迭代规划师沟通（1轮），在外推条件与限制部分与文档解析算法工程师沟通（1轮），并明确排期数据依据、外推边界条件及工具学习计划，形成迭代规划硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接入新品类嘛，就是多加几个解析模板，把新确认书的格式套进去就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "新品类接入怎么排？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我回去查通过率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前补的Prompt和图像增强，用到新品类上还能生效吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "标注工具我确实不太熟，只会手动拉框。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个学习日志，今天下班去把半自动校验的文档看一遍。学完之后，我可以用这个功能来加速奇异期权的样本标注，提升跑验证集的速度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

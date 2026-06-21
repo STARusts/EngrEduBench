@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在传感联调与动作纠偏背景下，用户与导师围绕感知与控制模块联调方法、时序抖动定位及动作纠偏策略持续沟通（7轮），其中在端到端联调首步与时序查错工具部分与联调测试工程师沟通（1轮），在感知时间戳不稳时DMP的适配处理部分与感知算法工程师沟通（1轮），并形成基于rosbag录包与DMP输入时间戳校验的纠偏策略，着手编写录包脚本与校验逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把摄像头和力传感器的数据接进来，直接跑主程序，看机器人动不动呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看终端报错？或者加点print看看哪卡了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联调测试工程师 联调第一步测啥？用啥工具查？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把感知断开，给DMP输个固定轨迹试试。固定轨迹不抖，就是感知的问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@感知算法工程师 感知输出时间戳不稳，DMP那边会卡，咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "策略就是：先录包看延迟和抖动。如果抖动大，在DMP输入接口加个校验，超时帧丢弃，用上一帧保持。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定50毫秒吧？超过50毫秒就丢弃。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "阈值我再看看感知耗时定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我去写录包脚本和校验逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

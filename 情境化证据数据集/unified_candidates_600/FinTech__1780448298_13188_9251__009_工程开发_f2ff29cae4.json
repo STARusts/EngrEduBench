@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在动态定价风险演进模型训练架构设计背景下与导师围绕架构选型、精度与延迟及可解释性取舍持续沟通（5轮），其中在推理延迟与算力评估部分与算法工程师沟通（2轮），在可解释性与算力成本约束部分与保险精算师沟通（1轮），并最终形成LightGBM主模型加轻量TCN残差修正的融合架构定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上时序Transformer，把过去30天的轨迹点全拉进去做自注意力，端到端预测风险演进趋势。这种长序列建模能力是传统树模型比不了的，拟合上限极高。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用Transformer做风险演进主模型，输入是30天全量轨迹，自注意力捕捉长周期依赖。训练集群用A100卡，你觉得资源排期怎么申请比较快？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推理可以加KV Cache，或者用蒸馏压缩。精度肯定不能妥协。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法那边说Transformer推理超时。但我坚持认为长序列建模对捕捉风险演进拐点至关重要。精算侧对模型结构有硬性要求吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可解释性我可以加SHAP值事后算。算力成本是短期投入，模型精度上去后赔付率下降能覆盖成本的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果必须满足50毫秒延迟和先验可解释，Transformer确实走不通。但我还是不想退回到纯GLM，那样演进拐点完全抓不到。折中一下：主模型用LightGBM保证特征交叉和可解释性，残差部分用一个轻量的TCN网络拟合时序拐点。TCN因果卷积是并行的，推理比RNN快，参数量也能控住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TCN参数量大概在5万以内，用V100单卡就能训，一小时一轮。LightGBM增量更新可以做到天级。整体算力成本能压到现在的20%以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模型架构定调：主定价框架采用LightGBM，输出基础风险评分，满足可解释与监管要求；残差修正模块采用轻量TCN，捕捉时序演进拐点，输出修正系数。训练预算单卡V100，日级更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在去重构特征输入Pipe和Trainer的对接逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

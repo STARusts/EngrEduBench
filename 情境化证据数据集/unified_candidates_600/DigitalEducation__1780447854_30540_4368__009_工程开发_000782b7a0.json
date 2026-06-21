@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发背景下，用户与导师围绕端侧受限特征获取、Web API支持度、兜底测速方案、带宽验证及画像特征字段设计持续沟通（7轮），其中在Web API真实支持率及兜底测速手段部分与包容性前端开发专家沟通（2轮），并最终形成以Resource Timing和帧率检测为主、Web API为辅的侦测方案，明确画像需结合行为特征及验证采用基线资源对照测试的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上浏览器提供了不少Web API。比如Network Information API可以直接拿下行带宽，Media Capabilities API能测算力是否够解码。视听障碍特征可以从用户系统设置里读prefers-reduced-motion或者prefers-contrast。把这些数据拼起来就是画像了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我没实测过。W3C规范里说这些API是暴露给JS的，主流浏览器应该都支持吧？如果真不行，就只能让用户手动选降级模式，但那体验太差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我查了规范，Network Information API和Media Capabilities API能拿带宽和算力，但实际上这些在端侧好使吗？要是拿不到怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原来Safari不支持啊。那Resource Timing算带宽误差会不会很大？用户网络波动的时候。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不能光靠静态API。那我现在思路得改，Resource Timing做带宽兜底，帧率检测做算力兜底，交互行为补充画像。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设计个对照实验：页面上放一个已知大小的微型测试资源，比如10KB的空白图片，强制不缓存。用Resource Timing算它的时间，再跟真实网速对比。如果误差超过20%，就认为当前侦测不可信，直接走最低降级保送。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "其实我只知道有responseEnd和requestStart，具体怎么排除重定向时间、怎么处理跨域资源我还不太清楚。我今晚得把MDN上Resource Timing的条目重新看一遍，自己先写个单测脚本跑一下打点数据，确保算出来的RT是对的，然后再把这套逻辑搬进侦测模块里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "画像特征就分三类：通道类（带宽估值、丢帧率）、感官类（是否开启高对比度、是否停用动画）、行为类（连续停留时长、焦点移动轨迹）。把这些打包成JSON推给后端。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

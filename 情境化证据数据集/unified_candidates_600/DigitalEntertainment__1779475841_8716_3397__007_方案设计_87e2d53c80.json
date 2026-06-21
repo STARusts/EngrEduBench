@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计的高可用与降级容灾背景下，用户与导师围绕引流引擎降级容灾、合规兜底约束、阶梯降级方案及混沌工程验证持续沟通（6轮），其中在降级状态红线确认部分与合规与风控专员沟通（1轮），在阶梯降级设计部分与SRE运维工程师沟通（1轮），并最终形成包含合规硬约束的三级降级方案与混沌验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个熔断降级开关，挂了就停掉引流，弹幕直接放行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，审核不能停。那就只停引流，弹幕还是正常过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控专员 请问系统降级的时候，弹幕审核这块有什么硬性要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说敏感词和黑名单必须留着，NLP挂了就走人工，不能透传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 降级要分阶梯，还要保留合规过滤，这怎么设计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "L1保图谱只读，L2切语义只过正则，L3限流加白名单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本压测一下，把流量打大，然后手动关掉NLP服务，看弹幕是不是只过正则。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我最近在看Chaos Engineering的资料，里面提到故障注入。我可以不手动关服务，而是用混沌工具在压测时随机杀掉NLP节点，同时用线上历史峰值流量回放，保证数据分布真实。然后观测降级触发耗时和审核拦截率，看是不是符合预期。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

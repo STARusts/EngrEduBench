@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在比对服务工程开发收尾的压测与误判调优背景下，用户与导师围绕压测门槛、门禁与降级对照定位持续沟通（6轮），其中在阈值与评测集口径及日志中间量字段部分与算法负责人沟通（4轮），在压测环境隔离与性能/误判门禁配置部分与测试负责人沟通（3轮），并确认需交付验收口径与必要日志字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "崩…我不知道。就感觉一压就会卡。可能是数据库？或者检索？我分不清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没看。JMeter 跑过一次，数字一堆我没记。反正红了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在跑比对服务这块。就是返回 decision 那个。别的我不太碰。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法负责人 现在压测要调误判，阈值是咋定的？我这边一压就乱，MATCH/NO_MATCH 不稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双阈值我懂点。那 match_th 具体填多少？0.8？我随便写行不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没评测集啊。就一堆素材。还要分近似负样本，我不知道啥叫近似。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行。那压测里怎么搞？我用 JMeter 直接打 compare 就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 算法那边说别把压测和误判混着算。误判要固定评测集，阈值用双阈值，match_th 选在近似负样本 P99 上面。压测只看 P95、错误率，然后日志要加 extract_ms、search_ms、cand_cnt、top1_score、fallback_reason 这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测…就打 /trace/compare。然后看监控？别的我不会。打死别人这事我也不知道怎么避免。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测环境隔离咋弄的，我怕把共享的服务打挂。还有误判回归怎么做门禁？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "门禁的 POSSIBLE 上限要多少？我填 50% 行不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5% 感觉很低，我怕过不了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试说压测只能打 staging-perf，用专用 tenant_id，依赖要指到 perf 资源池。门禁要两类：性能门禁（P95/错误率这些）+ 误判门禁（固定评测集：正样本 top1 命中、负样本 MATCH=0、POSSIBLE ≤5%）。接口至少得回 decision/top1_asset_id/top1_score，日志要 req_id tenant_id raw_sha256。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就…加个日志字段？fallback_reason。然后压的时候看它是不是变多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能吧。就是存一下结果。存哪？我不知道。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "fallback_rate 10% 就算有问题。可以。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采样 1%…我记不住，反正别全打。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不打 URL。只打 sha。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能做…加字段和采样。做不了…评测集我自己搞不来，得别人给素材。还有压测环境我不知道咋进。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

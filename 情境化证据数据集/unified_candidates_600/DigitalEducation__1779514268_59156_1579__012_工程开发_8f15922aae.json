@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发推理延迟优化与缺陷修复背景下，用户与导师围绕受限于DDL与算力不换底座下的优化方案持续沟通（6轮），其中在延迟优化部分与算法工程师沟通（1轮），在误判修复部分与后端开发工程师沟通（1轮），并最终形成特征滑动窗口修复误判、投机采样加速及INT8量化兜底的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟飙高肯定是KV cache管理有问题，我打算把推理引擎换成vLLM，用PagedAttention彻底解决显存碎片。误判的话，我怀疑是7B模型容量不够，撑不住复杂语境，得换175B的微调模型，重写生成逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可如果不彻底重构，上线后遇到真实流量肯定崩。我们得保证推理的完美吞吐量，不换底座后面技术债更大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在长上下文推理TTFT太长，在不换vLLM和175B模型的情况下，怎么优化KV cache和Prefill？意图识别长会话连续误判，是特征拼接丢了上下文还是模型泛化不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "INT8量化我之前一直怕掉精度破坏思辨脚手架质量，没敢用。投机采样我前两天刚看了论文，用小模型做Draft，大模型做Verify，理论上能加速。但我没实操过，不确定在咱这7B模型上收益多大，而且小模型怎么选也是个问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果迁移过来，我们可以用1.5B的微调模型做Draft。适用边界是：Draft模型的分布必须和7B验证模型尽量对齐，否则Acceptance Rate很低，反而更慢。误差来源主要是Draft模型拒真，导致原本该生成的思辨脚手架被小模型提前截断，也就是False Negative增加，这会直接影响思辨助推的连贯性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以在测试集上跑个离线验证，对比1.5B Draft和7B直接生成的Token分布KL散度，如果散度小于0.2，Acceptance Rate应该能过60%。同时统计脚手架生成的误截断率，只要低于5%就能接受，超过就说明1.5B不能用，直接回退到INT8量化保底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先去改特征截断逻辑，然后搭个投机采样的验证脚本跑KL散度。INT8量化作为保底方案最后上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

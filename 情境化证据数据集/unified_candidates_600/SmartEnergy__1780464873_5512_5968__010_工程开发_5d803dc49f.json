@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在态射融合模块开发背景下，用户与导师围绕架构设计、时延保证、失真验证及对象池调优持续沟通（5轮），其中在同态抽象映射与失真验证部分与微源态射设计师沟通（1轮），在高并发对象创建与时延优化部分与核心开发主管沟通（1轮），并最终明确开发基线与对象池补学验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着用抽象工厂模式，把光伏、储能、柔性负荷这些包一层，对外就暴露统一的charge和discharge方法。之前规约不是定了MQTT嘛，我就从消息头里解析设备类型，然后丢给对应的工厂类去实例化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单测我肯定会写，mock一下设备数据跑一遍流程就行。时延这块，工厂模式实例化对象也就是微秒级吧，应该没多大事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "同态抽象的映射规则，还有怎么验证融合态射没失真。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高并发下对象创建时延怎么优化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "设计师说要把爬坡率、死区这些映射成算子，验证得用录波数据回放算误差。主管说不能用反射，得用ProtoBuf加对象池，还要在CI里加回放门禁。我准备按这套改。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "ProtoBuf我只用过现成的API，对象池调优确实没搞过，之前写业务代码都是让GC自动回收的，没管过池化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去查ProtoBuf的编解码零拷贝原理，还有Netty的Recycler对象池机制。今晚先写个高并发创建对象的Demo，验证池化前后GC停顿的差距，搞懂参数怎么配，然后再把这套池化机制套到态射工厂的构建里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

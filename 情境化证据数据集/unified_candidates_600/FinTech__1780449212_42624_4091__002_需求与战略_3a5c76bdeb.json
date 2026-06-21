@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在套利链路图谱建模背景下，用户与导师围绕回转套利的节点与边抽象及业务语义对齐持续沟通（7轮），其中在资金与券流转图式部分与量化策略分析师沟通（1轮），并最终形成图谱建模结论（节点、边域及环路判定标准）。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用图数据库呗？Neo4j或者啥的，把账户当节点，转账当边，导进去一跑，环路不就出来了嘛。现成图算法一堆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回转就是倒腾嘛，账户A倒给B，B倒给C，C又回A。时序就加个时间字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们这回转套利，到底怎么画图啊？我就知道账户和转账。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点加个合约，边加个券流。时序就当属性存着呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就查的时候带上时间过滤呗？比如查最近1秒的。Flink Graph是不是能做这种带时间的图计算？我看网上有人用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边上得标明是买还是卖，还得带时间，然后在几秒内连成一个圈。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节点三个，边两个带语义，环路带时序窗口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

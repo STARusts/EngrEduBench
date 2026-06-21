@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在电竞异构信令接入与清洗架构设计背景下，用户与导师围绕应对Schema演进、容错反压及序列化开销持续沟通（5轮），其中在防反序列化崩溃与反压雪崩部分与信令接入架构师沟通（1轮），并最终形成引入Schema Registry与死信队列的架构约束及压测补齐计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步打算用Kafka接原始信令，Flink做实时流清洗和特征提取，这样能兼顾吞吐和低延时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我假设用Flink的CEPL或者动态侧输出流来处理规则变更，对照组就是硬编码解析逻辑。如果规则变更上线，CEPL能热加载不重启任务，硬编码就得重启。验证标准主要看规则切换时的处理延时毛刺。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多源异构信令如果频繁随游戏版本变更结构，Flink清洗侧怎么防反序列化崩溃和反压雪崩？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是短板。我对Confluent Schema Registry在Flink里的Exactly-once语义配合细节拿不准，Avro和Protobuf在极高并发下的CPU耗时也没有实际基准数据，之前只凭直觉觉得二进制格式比JSON快。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我本周内会把Confluent官方文档里关于Schema演进策略和Flink SQL Connector的容错配置啃一遍。另外我会在本地搭个单节点Flink，写个Benchmark压测Avro和Protobuf在1万QPS下的反序列化P99耗时，把数据补进选型对比表里，看损耗是否在引擎可容忍的50ms增量内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，底座维持Kafka接入+Flink清洗；第二，必须引入Schema Registry做异构信令结构演进兼容层，隔离上下游；第三，不可解析或超前版本信令走死信队列旁路输出，严禁打断主清洗流；第四，前序确定的个人敏感信息硬过滤必须在Kafka接入层前置执行，不让脏数据进Flink。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动剧场编排平台接入内容风控链路的工程开发背景下，用户与导师围绕生成/发布/播放链路的审核接入点、同步调用超时降级、留痕字段与压测验证持续沟通（9轮），其中在必须同步拦截范围、超时分级策略、脱敏留痕与播放端轻量复核方案上与合规与内容安全官沟通（4轮），并落定/risk/check与/risk/precheck接口、场景化降级配置与对照压测计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先从生成那条切。因为生成出来的文本、音频脚本，风险最大。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实现上我想做成一个风控服务的 client，生成服务在出结果前 call 一下，返回 pass 或 block。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接入点在“剧情片段生成完成”之后、“写入缓存/落库”之前。同步吧，不然放出去再拦就晚了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超时就给默认通过？不然卡住用户。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 同步拦截要覆盖哪些内容？风控服务超时了默认放行还是拦截？留痕最少要记哪些字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "risk_codes 这种是风控那边给的枚举吧？我这边要自己定义一套吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "超时分级我有点拿不准，怎么判断高危低危？我生成服务还没拿到 risk_codes。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我做一个 riskClient。生成服务在产出 segment 之后先调用 /risk/check，传 request_id、content_id、scene=generate、actor=system，还有 content_hash。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超时我先设 120ms？超时就按 scene 决定：播放实时的就拦，草稿就放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "日志加 decision、risk_codes、latency_ms、degrade_flag。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我参考风控一般也就几十毫秒吧。也可能不准。我可以先设 80ms，然后压测看 p95。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。我就用我们压测脚本跑两轮，记录 p95。risk_server_ms 得让对方 header 带，我不确定他们有没有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 风控那边能不能回 risk_server_ms 这种耗时字段？还有播放链路需要再做一遍审核吗，还是生成/发布通过就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "轻量复核是不是就查一个“blocklist”就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一个是“生成/发布”走全量 /risk/check，同步；一个是“播放前”走轻量复核：校验 risk_version、查 blocklist，再对观众输入做快速过滤。缓存命中也得看 risk_version，不一致就重新 check 或直接拦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就只在版本差很多的时候才重审？比如差 1 就不管，差 2 才查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以。轻量复核我做成 /risk/precheck，返回 pass/block/need_fullcheck。need_fullcheck 才调用 /risk/check。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就都存 hash。需要人工复核就把原文丢到审计系统？但我不负责那套。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那我接口里加 evidence_ref 字段，风控返回啥我就存啥。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以做个 map 配置，从配置中心拉。场景我先做 generate_draft、generate_live、publish、play_precheck 这几个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。我先把两条接口接进去，再把场景降级表配上。压测我按你说的两档跑，日志字段我照这套加。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

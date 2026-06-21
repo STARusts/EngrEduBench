@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在基因适配作物处方平台进入运行评估背景下，用户与导师围绕灰度发布切流回滚、可放量观测指标、故意失败用例与日志合规验收条款持续对齐并收束成6条结论（8轮），其中在切流回滚与最小观测面板部分与SRE运维工程师沟通（3轮），在日志红线与脱敏/哈希及审计域要求部分与合规与数据治理官沟通（2轮）。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在的想法是：灰度先按客户维度+地块维度做白名单，流量从 1% 到 10% 到 30% 分三档，关键门槛是 P95 延迟、降级占比、以及处方生成成功率。失败用例我会固定一个缺失 zone 的请求，让它走“无 zone 画像 -> 降级策略”，并且核对日志字段只出现 request_id/zone_id/degrade_flags/strategy_code/latency/error_code。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率我倾向用业务 success 字段；HTTP 200 可能也代表降级成功返回。降级占比我按 degrade_flags 非空计数 / 总请求数。缺失 zone 我准备用 zone_id 为空但 request_id 合规的请求，服务端会走默认 zone 分支…不对，我们前面说过“正常 zone 不被连坐降级”，所以这里应该是“zone 缺失触发降级”，不能走默认填充。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布这块你们建议怎么切流和回滚？以及验收时最小要盯哪些线上指标，才能支持从 1% 放到 10% 再到 30%？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "观测面板最小集合我给你一套线上常用的：  \n1）服务层：QPS、错误率（按 error_code 分桶）、P50/P95/P99 延迟；  \n2）链路层：request_id 级 trace 成功率（至少能串起 画像拉取->策略->处方落库/下发）；  \n3）业务层：处方生成“业务成功率”、以及“降级率”（degrade_flags 非空占比）和“降级原因TopN”；  \n4）资源层：CPU、内存、实例重启次数、连接池耗尽类告警。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "租户白名单我认同，按 zone 做路由确实会把验收口径搅乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "trace 成功率这条我需要确认：我们日志里是埋了 request_id，但全链路 trace 现在覆盖到画像服务了吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "成本这点我之前没仔细算，采样率提高会拉高日志量。那我可以只对灰度租户+失败用例的 request_id 做规则采样，其他保持默认。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我拟三条门槛，先以 1%->10% 放量为例：  \n- 性能：灰度租户处方生成接口 P95 延迟 ≤ 450ms，且较基线版本增幅 < 10%；  \n- 稳定：灰度租户 error_code 非 0 占比 ≤ 0.5%，且无“画像拉取失败”类 error_code 连续 5 分钟超阈；  \n- 业务：业务 success 占比 ≥ 99%，同时 degrade_flags 非空占比 ≤ 3%，并且降级原因 Top1 必须是“缺失 zone/画像不可用”这类预期项，不出现“未知异常”占比 > 0.2%。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线版本我取当前稳定版本在同一灰度租户上的过去 7 天同小时段分位数；如果没有 7 天数据，就取放量前 30 分钟的对照窗口。失败用例的验收条款我现在想这么写：请求刻意缺失 zone_id，预期 HTTP 200 但业务 success=false，error_code 返回明确的 ZONE_MISSING（或我们定义的等价码），同时 degrade_flags 标记“zone_fallback”并记录 strategy_code=SAFE_RULES。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "失败用例只在验收租户里触发，且请求里加一个 header 标记只在验收环境放行；真实租户仍然是 zone 缺失直接拦截或返回可解释的 4xx？我有点拿不准：我们之前让它走降级，是为了看降级路径和日志，那如果改 4xx 就看不到降级了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，那失败用例验收我按“验收租户特权放行”。我还想再确认日志合规：我们现在日志字段里不会出现基因型特征字段名、也不会出现土壤原始值字段名，只留下 strategy_code 等枚举字段。这个需要合规再确认一下边界。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 灰度验收里我要核对日志合规：目前日志包含 request_id/zone_id/degrade_flags/strategy_code/latency/error_code。想确认两点：1）哪些字段名属于红线绝对不能出现；2）像 strategy_code 这种枚举是否允许，以及 zone_id、request_id 是否需要做脱敏或哈希？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们 request_id 是 UUIDv4，不拼业务信息；zone_id 目前是内部自增ID，能关联地块表拿到地块名称和经纬度，但日志里没打地块名和经纬度。按你说的，zone_id 仍可能被“拿日志的人”去 join 内部库反查，那就要区分“对外可见日志”和“审计域”日志？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能接受 zone_id 哈希化，但会影响我串联排障。折中做法是：运行日志写 zone_id_hash + request_id；审计域额外写 zone_id_raw，且两边都有 request_id。这样排障要反查就走审计流程。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "收束我给一版，看看有没有漏：  \n1）灰度切流：按租户ID白名单，1%→10%→30% 分档；每档观察峰值窗口，支持一键清空白名单回滚；  \n2）放量门槛（可判定）：P95≤450ms且较基线<10%增幅；error_code非0≤0.5%且画像失败不连续超阈；业务success≥99%、降级率≤3%、未知降级≤0.2%；  \n3）失败用例范围：仅验收租户允许“缺失 zone_id”进入服务触发降级，真实租户缺失 zone 走 4xx；  \n4）失败用例预期：返回包含明确 error_code=ZONE_MISSING（或等价），degrade_flags 含 zone_fallback，strategy_code=SAFE_RULES；  \n5）日志字段与合规：运行日志仅 request_id、zone_id_hash、degrade_flags、strategy_code、latency、error_code；不出现任何基因型/表型/地块位置等敏感字段名；  \n6）审计可追溯：如需反查 zone_id_raw，仅在审计域记录并受RBAC与访问留痕约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

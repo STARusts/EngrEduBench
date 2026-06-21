@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在循环水质孪生模型工程开发的训练与历史回放验证背景下，用户与导师围绕回放如何切分数据、重建阈值/工况上下文、定义验收与接口输出持续沟通（6轮），其中在避免数据泄漏与事件级评估对齐上与算法工程师沟通（3轮），在证据链字段、权限最小暴露与审计留痕上与合规与审计官沟通（2轮），并确定回放离线任务入参出参与最小指标/原因码要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放就是把历史数据再喂一遍模型吧。我就用现成的 time series loader，直接把数据从库里拉出来跑预测。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标就…准确率？或者 loss 低就行。上下文我感觉不需要吧，数据都在。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 回放验证到底要怎么搞？我就把历史喂进去不行吗？还有数据泄漏是啥意思？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "泄漏就是用到未来数据？那我用 pandas 把全量拉出来 rolling 一下，就算泄漏？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把 scaler 存下来，用训练段 fit 一次，回放只 transform。这样就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我就记住三条：按时间切；scaler 不能全量 fit；回放要按时间戳顺序。还有要带 model_version。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 回放验证要留啥证据？是不是把预测结果存表里就完了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把原始包都存起来，省得以后查不到。反正存储便宜吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口我不太会写很细。是不是就一个 replay(job_id) 然后吐结果？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间窗 start/end。还有…device_id？点位？然后模型版本。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能吧。dry_run 是不落库？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记住了。那评估指标我就用漏报率、误报率？提前量也算一个。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原因码我直接抄你这四个就行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，我就加这个。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

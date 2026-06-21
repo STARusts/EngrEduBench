@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在混洗图径剥离算法编码与调优背景下与导师围绕算法选型与验证调优方案持续沟通（5轮），其中在图计算框架选型与状态机实现部分与图算法工程师沟通（1轮），在异常图拓扑构造与流式压测部分与测试与性能专家沟通（1轮），并最终确定手写KeyedProcessFunction状态机结合RocksDB的开发与测试计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着是不是可以直接用Neo4j的GDS插件？它里面现成的中心性算法和路径查找挺多的，调调参数应该就能跑出剥离结果吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那如果用Flink Gelly呢？它也是图计算框架，跟咱们现在的摄入流同源，是不是集成起来更顺？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想用Flink Gelly来跑混洗图径的剥离，但导师说可能表达不了时序子图匹配。咱们这种高频拆分、多层嵌套的场景，是用Gelly的API好，还是自己写遍历状态机好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我听着是觉得手写状态机可控一点，但状态管理是不是太复杂了？我怕写崩了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能的话，我可以用JMeter压测一下？准确性我就在图里造几条典型的碎单洗钱数据，看能不能剥离出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我平时只写过单元测试，这种图拓扑的异常注入和压测该怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的开发计划就是：手写KeyedProcessFunction实现时序遍历状态机，出入度存RocksDB；然后用DataGen构造环状和嵌套洗钱拓扑测准确性；压测看背压。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

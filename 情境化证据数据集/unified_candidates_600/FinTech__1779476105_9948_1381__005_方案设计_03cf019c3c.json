@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在图谱与流式接口设计背景下与导师围绕接口暴露方式、延迟约束及核心参数持续沟通（5轮），其中在图查询接口性能部分与图谱研发工程师沟通（2轮），在流式特征对齐部分与数据流设计师沟通（2轮），并最终确定图查询3跳子图抽取与流式3秒Watermark窗口对齐的核心契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图就给个查询API，流就接MQ，最简单那种，赶紧推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就gRPC呗，快。时间戳错位就等一等呗，能有多大事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图查询接口怎么搞才快？流式对齐咋弄？快点说，我赶时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图接口就限制跳数加缓存，流式加水印窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2跳！窗口1秒！"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "3跳3秒！定死了！"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图查询用子图抽取接口，3跳，属性剪枝，加热点缓存。流式用Kafka加Watermark，3秒窗口对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

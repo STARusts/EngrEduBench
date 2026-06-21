@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在演替推演模型接口与数据流转设计背景下，用户与导师围绕接口规范、流转机制及容错降级策略持续沟通（6轮），其中在接口定长对齐部分与微生物组学架构师沟通（1轮），在流转约束与算力降级部分与边缘智能设计师沟通（1轮），在残缺图谱容错底线部分与算法联调工程师沟通（1轮），并最终形成特征定长对齐、异步发布订阅及算力降级截断的约束规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就按图嵌入输出的维度直接接进来呗，做个格式转换应该就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，时序不能断层，流转也得稳。加个缓存队列缓冲一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上游图嵌入降维后的特征向量，喂给推演模型时接口规范怎么定？时序滑动怎么处理？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演模型出结果后，边缘侧怎么流转？有什么坑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说接口要定长对齐，时序靠步长传参；边缘设计师说要用发布订阅解耦，算力不够就截断。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "截断阈值就设个平均值吧？延迟的话，配方那边等一等或者用上一次的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演图谱如果残缺或者延迟，配方生成接口怎么容错？底线是什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "残缺就走预置基线，不能硬算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "定长对齐补零截断带标记、异步订阅加fallback降级、算力降级打残缺标记。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

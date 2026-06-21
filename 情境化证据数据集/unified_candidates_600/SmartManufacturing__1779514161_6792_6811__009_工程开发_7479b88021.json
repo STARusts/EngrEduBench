@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在意图推演模型训练联调背景下，用户与导师围绕算力约束下的算法选型、抗滞后机制、Sim2Real域偏移解决及验收标准持续沟通（5轮），其中在算法选型与抗滞后机制部分与意图推演算法专家沟通（3轮），并最终形成意图推演模块联调基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向用TCN或者轻量GRU这种轻量级时序网络，坚决不上重 Transformer，避免边缘侧2TOPS算力炸裂。时间预算上，我打算给推演模块分配10ms，剩下5ms留给后面的阻隔引擎计算包络面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "目前感知侧输入是骨骼关键点加视线向量，边缘算力2TOPS，推演链路预算10ms。如果用纯RNN类怕时序滞后，用Transformer怕超算力，这块选型和解滞后你怎么看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "视线置信度门控融合？是指视线数据漂移或者遮挡时，自动降权视线分支吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "训练数据构造上，滑动窗口截取多长合适？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法专家建议用ST-GCN加TCN，视线作为Context且加置信度门控降权。我觉得这套架构在算力和先行性上是个不错的折中。训练窗口定500ms，预测300ms后的意图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前期只能靠仿真引擎生成带物理碰撞标签的数据集，等沙箱部署阶段再混入少量真实脱敏数据微调。这是目前最常见的冷启动方式。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算在仿真阶段加入域随机化，比如光照、纹理、工人穿衣颜色随机化，缩小视觉域差异。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "推演模块的验收标准里，除了延迟小于10ms，还得加上：在真实沙箱小样本下，漏报率必须为0，误报率小于5%。如果误报太多影响节拍，就调低判定阈值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总结下本模块基线：1. 架构ST-GCN加TCN，视线Context门控注入；2. 算力约束2TOPS内，延迟小于10ms；3. 训练窗口500ms，预测300ms意图；4. 数据用域随机化仿真集冷启动；5. 验收口径：漏报率0，误报率小于5%待产线确认。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

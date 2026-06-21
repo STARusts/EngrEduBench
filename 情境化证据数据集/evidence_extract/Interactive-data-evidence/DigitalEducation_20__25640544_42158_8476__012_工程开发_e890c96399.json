@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发的练习包生成与去重背景下，用户与导师围绕硬/软去重边界、指纹与模板桶键设计、可验证指标、降级策略、合规日志与幂等作业机制对齐实现靶子（7轮），其中在题库字段稳定性与富文本/图片/公式归一化规则部分与数据架构师沟通（3轮），并形成fingerprint_key与template_bucket_key及测试验收用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向放在练习包生成服务里做两段：候选池先按知识点/题型/难度抽一批，再做去重。去重键我先想用“题目指纹”，比如stem+options+answer解析后hash；然后再加“题型+知识点+难度层+模板特征”的软去重，避免同模板只换数。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主轴按知识点分层练，cause用来定讲解路径和出题偏好。硬重复我觉得是“同一道题或仅ID不同内容一致”；相似重复是“同模板同结构、数字替换”。相似重复允许保留但要控比例，比如每层最多20%同模板题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "量化我想两类指标：1）硬重复率=去重后仍然出现相同fingerprint的比例，期望为0；2）相似度覆盖：同一模板簇占比不超过阈值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算先做“规范化”：去掉空白、统一latex、图片用asset_id占位，不把url直接算进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 题库里我们现在能稳定拿到哪些字段？我想做题目fingerprint和模板签名，用来练习包去重/控相似度。富文本、图片、公式这块字段有什么规范或坑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "模板签名如果不看analysis，那就主要靠stem结构。有没有推荐的“归一化”规则，不然不同录入源空格、标点、img标签都会变？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "kp_version我之前没考虑，看来得把练习包和去重也带版本，不然知识点变了会复现不了。还有difficulty映射表我得找教研确认。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备这样定：  \n- fingerprint_key（硬重复）：`hash(normalize_html(stem_rich with <img:asset_id> + options_rich) + answer_struct + subject + question_type)`；公式一律`<formula>`占位。目标：包内fingerprint唯一。  \n- template_bucket_key（相似桶）：对stem做结构token化：数字->`<num>`，变量->`<var>`，img->`<img>`，公式->`<formula>`，其余词做归一后取前K个token，`hash(tokens + question_type + grade_band)`。目标：每个桶在同一层级最多N题。  \n存储：练习包明细表里每题记录fingerprint_key/template_bucket_key，包头记录kp_version、cause_taxonomy_version、dedup_algo_version。  \n降级：如果某层去重后不足目标题数，按优先级放宽：先提高template桶上限N（最多翻倍），再允许跨相邻difficulty层取题，最后才允许同桶重复但加“变式”标记给前端展示为“同模板训练”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配置化我放到rule_config表里，按subject+grade_band维度。难度相邻我先按映射后的1-5等级，相邻就是±1。置信度阈值我不想随便拍，我建议先用推断输出里的cause_confidence>=0.75才允许跨层；0.6-0.75只放宽桶上限，不跨层；低于0.6不做分层，只推“基础巩固包”。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "目前是经验值。为了不空谈，我想做个最小验证：抽20个样本attempt，跑规则引擎输出confidence，人工看cause是否靠谱；看0.75以上的precision大概能不能到80%。如果达不到就上调阈值，宁可不跨层。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "练习生成服务日志只记录item_id、fingerprint_key前8位、template_bucket_key前8位、dedup决策原因码（比如HARD_DUP/SOFT_CAP/RELAX_BUCKET/RELAX_DIFFICULTY），不记录stem_rich/options_rich/answer_struct原文。需要复盘时走受控的题库查询权限。审计上，dedup_algo_version和rule_config_version要入包头，方便追溯当时用的规则。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "幂等我想沿用前面的job思路：练习包生成也建`practice_job/practice_job_run`，key用(subscription_id + learner_id + kp_version + time_window + top_cause_ids)。同key只允许一个running，其余返回同一个job_id。包内容由候选池+seed决定，seed取job_id hash，保证同输入同输出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先定24小时，避免学生一天内反复刷导致包抖动。老师手动点“换一套”可以带force=true，时间窗口失效但仍记录在job_run里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "测试我补三类可复现用例：  \n1）构造候选集中有同内容不同item_id的题，验证fingerprint去重后只剩一题；  \n2）构造同template_bucket_key大量题，验证每层截断到N，并在不足时触发RELAX_BUCKET或RELAX_DIFFICULTY的原因码；  \n3）同一job_key重复触发两次，验证返回同job_id且包内item序列一致（seed确定性）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

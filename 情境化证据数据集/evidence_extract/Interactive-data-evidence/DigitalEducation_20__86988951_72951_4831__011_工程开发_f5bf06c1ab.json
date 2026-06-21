@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实训设备接入后孪生状态不更新、预约端全 OFFLINE 的排障与协议适配背景下，用户与导师围绕异常入口梳理、协议兼容、状态拆分与回放调试持续沟通（7轮），其中在两批设备封装差异、鉴权签名、断线重传与心跳主题确认上与物联网工程师沟通（4轮），并形成适配改造与验收计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是网关没把数据推上来，或者我们解析失败了。现在我只看到后端日志里一直是“device offline by snapshot”。是不是消息队列没消费到？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关那边我没登进去看过。我在本地起的适配服务里，订阅主题是 `telemetry/#`，然后打印到的 payload 基本是空的，偶尔有一条，但 JSON 解析报错。我就想是不是他们发的不是 JSON，或者编码不对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 现在网关转发上来的 telemetry 我这边经常解析失败，想确认两批设备到底怎么上报的？网关发的是 JSON 吗，主题/字段是啥，还有有没有签名之类的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边 MQTT 解析报错是因为我把 base64 那段当成业务 JSON 了？我以为都统一 JSON。那是不是直接让网关统一成我们想要的格式更省事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始报文落库会不会很重？我怕磁盘爆了。有没有简单点，比如直接用 Wireshark 抓？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "HTTP 的 HMAC 我这边没做，我之前用 Postman 打通了接口就算过了。那签名校验失败的话，网关会重试，然后我们一直丢？难怪一直 OFFLINE。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 两批设备不一样：A 批是 MQTT，但 payload 其实是 JSON 外壳里塞 base64 的二进制，我这边不能直接当业务 JSON；B 批走 HTTP `/ingest/opcua`，还带 HMAC 签名。我准备先把 MQTT 解析改成：先 parse 外壳，再 base64 decode，再按寄存器映射转成统一孪生事件。HTTP 这块补签名校验，然后把同一设备同一时间戳的点位合并一下再入库。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "映射表他们说有。我想先放到配置文件里，或者直接用一套现成的 modbus 解析库，它好像能自动按模板解。这样我不用手写太多。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想在孪生这边加一个“last_seen_ts”，只要网关还有心跳就算 ONLINE？但这会不会把坏数据也当正常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能吧，就是要多写点字段。心跳我现在没处理，我以为只有 telemetry 才算在线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网工程师 MQTT 这边有没有单独心跳主题？还是只能靠 telemetry 的 ts 判断在线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用 heartbeat 更新 conn_state。data_state 就看最近一次 telemetry 解析是否成功。这样预约就不会因为解析失败全变 OFFLINE。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想按“协议适配器”拆：`MqttEnvelopeParser` 先拆外壳；`ModbusDecoder` 负责 base64->寄存器；`TwinEventMapper` 把寄存器值映射成统一字段。HTTP 的话就是 `OpcuaIngestController` 做验签和合并，然后也走 `TwinEventMapper`。最后统一往 `twin_event` 这个 topic 发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "存原始报文。我能在解析失败时，把 topic、ts、devSn、payload 存到一个小表里，按设备只留 50 条。然后做个内部接口按 id 回放到解析器里跑一遍。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以。我之前没想到回放接口还要鉴权审计，这块我得找安全同事看下我们现成的鉴权中间件能不能复用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "修复计划我总结下：  \n1）MQTT：按外壳 JSON 解析字段 `ts/devSn/proto/data`，对 `data` 做 base64 decode，再用寄存器映射解码，转成统一孪生事件发到 `twin_event`。  \n2）HTTP `/ingest/opcua`：实现 HMAC 校验，失败返回 401；成功后按 deviceId+ts 合并点位，再映射成孪生事件。  \n3）状态：用 `gw/<id>/heartbeat` 更新 `conn_state`，telemetry 解析结果维护 `data_state`，两者分离。  \n4）调试：仅在解析失败时采样存原始报文（每设备最多 50 条，TTL 清理），提供管理员可回放接口并记审计。  \n验收点：A 批来一条 mqtt 报文能落到孪生并把 conn_state 置 ONLINE；B 批 HTTP 能通过验签且不重复写；故意发一条坏 payload 会让 data_state=ERROR 但 conn_state 仍 ONLINE。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

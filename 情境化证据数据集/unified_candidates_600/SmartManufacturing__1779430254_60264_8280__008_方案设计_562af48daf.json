@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在端云数据流拆分与互锁低延迟保障背景下，用户与导师围绕数据流拆分、感知融合位置、时序同步、延迟验证及算力降级机制持续沟通（7轮），其中在互锁指令数据流边界部分与实时通信设计师沟通（1轮），在端侧算力与感知融合部分与边缘推理优化师沟通（1轮），并最终形成端侧融合急停、云侧重规划、TSN时序保障及算力降级通道的数据流架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上5G专网全上云呗，5G带宽大延迟低，云上算力足，把端侧点云全传上去，出结果再发指令下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "互锁指令的数据流边界在哪？我本来想全丢云上的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "急停必须在端侧。那我就在端侧放个判断逻辑，其他走云。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧算力能做感知融合吗？要是做融合的话，模型太大跑不动吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前光想着传数据快，没管时序对齐。现在得在数据帧头上加全局时间戳，不然端云状态不同步，互锁时序窗口全乱套。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑仿真测一下呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用网络损伤仪注入固定抖动和丢包率，跑两组对照，一组走普通5G，一组走TSN切片，看急停指令响应时间分布和超时率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三年后算力不够就换新设备呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端云数据流就定这几条：端侧做融合和急停闭环，云侧做重规划，中间用TSN保障时序，加上算力降级通道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

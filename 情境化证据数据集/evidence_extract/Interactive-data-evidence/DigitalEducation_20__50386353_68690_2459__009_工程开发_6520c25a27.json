@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在实时事件总线联调的工程开发背景下，用户与导师围绕多模态事件/策略编排/审计事件的跑通、可回放与可排障验收口径持续沟通（6轮），其中在事件envelope、幂等键与TTL清理审计字段规范上与数据治理负责人沟通（3轮），在回放重放去重与消费确认日志定位丢消息上与后端工程师沟通（3轮），并形成联调用例序列与质量门禁清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕两边对不上。比如事件名、字段，还有顺序。还有就是丢了消息我不知道咋定位，是端没发还是总线没收。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "课堂会话我理解成 session start/end。普通推理就是音频要点、板书变化、互动答题。降级就是 L3 静默或调试触发那种状态事件。TTL清理审计…就是到点删缓存，发个 audit event。顺序我不确定要不要强制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 事件总线联调这块，envelope 要统一成啥字段？幂等键怎么取？还有 TTL 清理的审计事件要带哪些字段才算可追溯？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是所有事件都套一层 envelope，然后 payload 里放业务字段。幂等键不是 event_id，是 session_id 加序号。TTL 清理要带 purge_reason、ttl_seconds、范围、数量、有没有打到2小时上限，再加 trace 关联。这样对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有 event_type 枚举我怕大家各写各的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我回去问导师命名规则要不要现在定死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用例大概是：  \n1）`class.session.started`，幂等键就是 session_id + started。trace_id 新建一个。  \n2）`inference.audio.keypoints`，幂等键 session_id + audio + source_seq，比如 15。trace_id 沿用。  \n3）`system.degraded`，幂等键 session_id + state + state_seq，比如 state=protected，seq=1。trace 也沿用。  \n4）`class.session.ended`，幂等键 session_id + ended。  \n5）`cache.ttl.purged`，purge_reason=ttl_expired 或 session_ended，ttl_seconds 写到 payload。trace_id 我不确定是沿用 session 的还是单独开。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我是不是要两个ID？我怕大家嫌麻烦不填。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心端侧那边时间不准，occurred_at 漂了会不会导致乱序？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那丢消息呢？我现在只能看有没有收到，没收到就不知道哪里丢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 联调实时事件总线时，回放/重放怎么做才不把数据写重复？消费确认和幂等命中要打哪些日志，才能定位丢消息在哪一段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "重放靠 idempotency_key 去重，不是 event_id。回放要能按 session 拉完整事件流，再喂给策略编排。日志分 recv/dedup_hit/persist。还要有 emitted_at 的延迟指标。这样我就能说清楚丢在哪里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着列：  \n1）每条事件 envelope 必填字段缺一个就算失败。  \n2）同一 session 的推理事件必须带 source_seq，不带就拒收。  \n3）重放同一段事件流，后端不能产生重复写入，要看到 dedup_hit。  \n4）TTL 清理必须产生 `cache.ttl.purged`，里面有 ttl_seconds、purge_reason、retention_cap_hit。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就：  \n1）envelope 必填齐。  \n2）inference 事件必须提供可推导幂等键的序列字段：音频用 source_seq，答题用 attempt_id 之类。  \n3）重放时同幂等键只落一次，日志能看到 dedup_hit。  \n4）降级状态事件要能看到 state_seq 连续，恢复也要发，不能只降不升。  \n5）TTL 清理审计事件字段齐全，且 session_ended 后 2 小时内一定能看到 purge（不管原因是 ttl_expired 还是 session_ended）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计只写类别和数量估算，不写内容，也不放人名。这个我容易漏，我记住了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

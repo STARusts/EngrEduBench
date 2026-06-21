@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在声热流固耦合总体架构设计背景下，用户与导师围绕ROS2速率失配问题、接口时序防抖理论短板、补学目标及架构确认持续沟通（4轮），其中在多场耦合速率失配拆分及FPGA与DSP对比假设部分与场控架构师沟通（2轮），并最终确认分层异构架构与补学PTP误差模型目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想直接用ROS2把声场、热场、流场的数据全包进去，通信走DDS，这样开发快，现成工具多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ROS2做声热流固总体架构会有速率失配问题吗？我该怎么拆？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得拆成硬实时和软实时两层。底层声场单独跑，上层用总线统筹。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不太懂多场耦合的底层逻辑，以前都是调现成库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺多场异构数据的时钟同步和对齐算法。我只会调API，底层时钟漂移补偿机制没弄透。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这周去啃PTP协议的时钟补偿机制，把误差模型推导补上，回来重算接口防抖窗口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我假设用FPGA做声场底层，对比DSP方案，FPGA在并行换能器通道处理上延迟更确定，DSP可能受中断干扰。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照就是看温控超调和声场偏移这两个变量。那总体架构就定分层异构，底层FPGA声场，上层DSP热流统筹，中间走双口RAM做时序隔离。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

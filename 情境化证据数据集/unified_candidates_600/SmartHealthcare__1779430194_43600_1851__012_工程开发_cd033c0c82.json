@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在器官转运轨迹追踪微服务拆分背景下，用户与导师围绕服务边界划分、通信机制选型及数据时序性持续沟通（5轮），其中在轨迹高频写入与通信选型部分与微服务后端研发沟通（1轮），在轨迹时序性要求部分与时空数据建模师沟通（1轮），并最终形成基于MQ异步解耦与Kafka分区保序的微服务拆分方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按领域驱动设计理论，配型计算和轨迹追踪属于不同限界上下文，肯定得拆开。但转运途中器官状态变更特别快，拆开以后跨服务的数据一致性怎么保证？用Saga模式还是事件溯源？我拿不准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着把轨迹服务独立出来，配型服务通过RPC调轨迹服务拿最新位置。但书上写RPC在高频写入下容易把提供方打挂，我不确定咱们这写入量算不算高频。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "轨迹传感数据写入频率很高，配型服务要拿轨迹，这俩微服务之间用RPC还是MQ通信？边界怎么划比较好？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "MQ异步解耦，拆成接收、聚合、配型三个微服务。但MQ如果有消息积压或者丢消息呢？器官位置丢了配型就不准了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们转运轨迹数据对时序性要求有多严？乱序会怎样？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "必须按器官ID保序。那用Kafka的话，只能把器官ID作为分区键，同一个器官发同一个Partition保证局部有序。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边界划清楚了，通信用MQ异步加分区保序，不用纠结分布式事务了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

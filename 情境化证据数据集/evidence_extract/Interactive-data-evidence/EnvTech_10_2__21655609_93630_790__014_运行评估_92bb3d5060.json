@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的“减量效果核算与审计”背景下，用户与导师围绕事件级减量的可复核口径、样本筛选与最小审计字段清单持续沟通（10轮），其中在核算方法与基线分箱口径上与环境治理策略师沟通（3轮）、在证据链留痕与合规审计必填字段上与合规与核证官沟通（2轮），并确认以负荷减量、雨量分箱基线与baseline_query_id等字段形成可审计输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就是看TN、TP下降了多少吧。大屏上不是有趋势图吗，直接截图给他们行不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线就是之前的均值？干预就是我们推的处方。差值就是执行后监测值减去基线值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境治理策略师 事件级减量这块咋算才像样？我这边就想用执行前后TN/TP差值，行不行？还要考虑雨型吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分箱是不是要很复杂？我能不能就按降雨量大中小三档？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那我就记住用负荷。对照组就先不搞太多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证官 审计这块他们一般要啥证据？我这边能从系统里导出日志就可以吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "他们会看得这么细吗？我们这周就是内部评估也要搞这么全？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我听到的就是：别用浓度，用负荷；基线用历史同雨档的中位数；然后报表要带版本号、查询ID、处方执行证据。差不多就这些。我本周就把站点B那三条漏报相关的事件也算一下减量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就选有工单状态是“已完成”的事件？从工单表里筛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "筛选就是：工单完成、在事件窗口内有水质数据、还有降雨数据。流量没有就用固定系数估算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以。那没流量的就先不放审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件ID、站点ID、处方ID、工单状态、事件开始结束时间、TN/TP、降雨量、calc版本号？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "字段有点多，我怕他们嫌烦。能不能先只放版本号，query_id先空着？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我跟他说：按雨量分三档，找历史同档事件的负荷中位数当基线，然后每个事件都保留一个查询ID，计算版本号也带上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "给个上下限？比如P25到P75？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "bin_confidence 我能理解成缺关键特征就low。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "确认。就按这个来。我先去催运营分析师把baseline_query_id都吐出来，算不出来的先别放审计里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

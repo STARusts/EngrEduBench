@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在雨洪微塑料拦截与再生调度系统上线验收与基线校准背景下，用户与导师围绕系统基线口径、现场可核项与验收清单压缩持续沟通（10轮），其中在证据链留痕、字段最小化、抽样方法与基线冻结可审计写法上与合规与审计官沟通（3轮），并形成可现场执行的10条验收检查表与抽样分层方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "雨洪微塑料拦截与再生调度系统现在要走运行评估里的上线验收和基线校准，我有点不确定验收当场到底先盯哪些东西，怕一上来就被问住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想的基线就是拦截量吧，比如每天拦了多少微塑料。然后跟上线后对比。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "监测侧可能是事件数？识别侧是模型准确率？调度侧是工单响应时间。结果是拦截量和泄漏率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验收现场能核的，就是系统里有没有这些数据字段，还有看板能不能查到一条事件的链路。泄漏率现场估计算不了，只能用推算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "摘要泄露是指云端不能出现detail字段，对吧。重复工单就是恢复后把积压投递完不能重复创建。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 上线验收这块，证据链要留哪些？还有基线校准要怎么“冻结”才算可审计？另外云端不能有detail这条怎么证明？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抽检N条是多大N？还有“能回放”是不是要留原始请求？但我们不是只留10天detail吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "confidence_bin是把置信度分段，不存具体数值？这样也行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规那边说验收证据分三类：版本和配置要有快照写进审计；云端要做字段白名单抽检，不能出现detail；重试幂等要能追到request_id、retry_count、error_code、幂等键和回执。基线冻结要写死窗口和冻结内容，改动就走变更单重新开基线期。还有建议摘要带 rule_id、threshold_version、device_health、confidence_bin 这种“决策原因”字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按排口分组抽？每个排口抽几条，再按白天晚上各抽一点。然后事件类型也分一下，比如“高置信拦截”“低置信不拦截”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1 云端事件记录不含detail字段；2 边缘detail只留10天且审计里有retention_days=10；3 5xx持续30秒时边缘重试不丢请求；4 retry_count递增且error_code落审计；5 恢复后积压投递完且不重复工单；6 云端只保摘要且摘要字段符合白名单；7 能查到每条工单的幂等键；8 版本号和配置哈希有记录；9 基线窗口写死；10 基线冻结内容四项写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是不用现场把云端打挂，只要看日志和审计抽样就行。可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边缘磁盘使用率？设个上限比如80%报警。然后检查最近一天的增长率…我不太会算增长率阈值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我这10条里挪一条出来加这个。基线窗口和冻结内容其实能合并。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第7条用非授权账号去试，会不会太“挑衅”运维？我怕他们说现场不给弄。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "confidence那里我倾向分箱，别存太细，免得以后有人拿去做别的推断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

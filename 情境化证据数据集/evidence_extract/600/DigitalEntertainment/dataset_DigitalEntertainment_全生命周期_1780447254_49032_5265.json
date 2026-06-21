@@ -1,0 +1,432 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在游境叙轨防崩系统立项背景下与导师围绕叙事崩坏痛点拆解、可检验假设构建及商业闭环风险持续沟通（7轮），其中在玩家崩坏敏感度与验证方法部分与文娱产品经理沟通（1轮），在实时推演SaaS收费ROI风险部分与商业分析师沟通（1轮），并形成跨因果域交互痛点假设、干预阈值商业红线及算力成本测算补全计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是NPC失忆和剧情矛盾吧。比如刚杀了村长，NPC还在夸村长好。这种得防。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "玩家对哪种崩坏最敏感？怎么验证这个痛点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种实时反演推演的防崩引擎，SaaS收费ROI风险大不大？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有点模糊，阈值和成本的关系我算不明白。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周找两篇AIGC引擎算力成本测算的文章看看，自己拿Excel拉个表，算一下干预频次和成本的关系，画出图来给导师看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点锁定为高频跨因果域交互的矛盾，假设是跨域>3次崩坏率超60%，验证用A/B测心流中断。商业上算力会倒挂，必须设干预阈值只推演高风险行为。我接下来补算力成本测算。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在因果约束可行性及合规评估背景下，与导师围绕动态干预合规风险、图谱重路由与涌现矛盾及算力红线持续沟通（9轮），其中在动态干预与版号审核冲突部分与合规法务专家沟通（1轮），并最终形成以图谱内路由与安全回拉为主的可行性结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规肯定得做，大模型生成内容容易出事，我们加个过滤词表就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该就是不能生成违规内容吧？我们在推演的时候避开敏感节点就好了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们系统会动态改写剧情拉回玩家，这跟版号审核冲突吗？怎么合规？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "好像是有点矛盾。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就先做个折中？大部分重路由，极少数外扩？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在算力阈值内，只对高风险行为推演，推演结果如果超出预设图谱，就不做外扩生成，只做图谱内最接近的安全路由。这样既不违背审核，又省算力。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 反演推演只做图谱内路由，不外扩生成新文本。2. 遇到超图谱情况走安全回拉。3. 合规优先，算力次之。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在叙轨防崩引擎商业模式规划背景下，与导师围绕收费模式、ROI证明、轻量化部署与MVP验证持续沟通（5轮），其中在算力弹性与分层计费部分与商业分析师沟通（1轮），并最终形成分层订阅加算力弹性及轻量化降级选项的商业模式定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "想过，就搞SaaS呗，按月收订阅费，或者按调用量收钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业分析师 你给掌掌眼，这收费模式咋定能赚钱？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对商业测算和轻量化部署这块没概念。我记下来，去找几个独立游戏接入AIGC工具的案例看看，看人家怎么做灰度测转化率的，顺便看看能不能把咱们的回拉逻辑做成可配置的降级模块，给小团队个低配版选择。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在游境叙轨因果反演系统方案设计背景下，与导师围绕图谱范式选型与推演架构的轻量化约束及可证伪验证持续沟通（6轮），其中在图谱形态部分与叙事架构师沟通DAG与超图取舍（1轮），在推演架构部分与AI算法工程师沟通异步协同机制（1轮），并锚定异步驱动DAG剪枝加大模型补全架构及召回率对照验证方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得图就用Neo4j存，大模型每次推演直接调图数据库查路径就行。这样最直接。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天去翻一下RDF图库和属性图在流计算场景下的白皮书，再看看异步事件驱动的架构案例，把并发读写和部署包大小的对比梳理出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "叙轨因果图谱用DAG还是有向超图更合适？我们要求轻量化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大模型和图谱双驱动这块，推演架构怎么设计能避免延迟爆炸？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说DAG简单轻量，超图保真但复杂。推演架构要异步协同，图谱先剪枝，大模型再补全。我觉得都挺有道理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设DAG能覆盖我们MVP里80%的剧情节点。对照组就是用超图跑同样的剧情。看DAG是不是真的够用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用历史测试剧本跑两套图谱的推演，对比崩坏事件的召回率和延迟。如果DAG召回率掉太多，就说明轻量化代价太大，得换超图。"
+              }
+            ]
+          },
+          {
+            "microScene": "在行为反演流与阻控接口设计背景下，用户与导师围绕反演流数据范围、阻控接口干预强度及脱敏规则持续沟通（6轮），其中在反演流边界部分与叙事架构师沟通（1轮），在生成式强干预合规风险部分与合规法务专家沟通（2轮），并形成反演流仅推因果锚点状态码、阻控接口弱干预且留痕审计的约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把玩家操作全拿过来反推呗。接口就做个拦截，发现崩坏直接调大模型重写一段塞回去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@叙事架构师 反演流是不是把玩家操作全拿过来推？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口还是直接重写。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规法务专家 阻控接口直接调大模型重写剧情，这合规吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不行，红线了。数据不能全拿，重写也不行，得软提示。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "反演流脱敏是啥意思？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口就查风险和推提示。反演流只传状态码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加审计字段，记了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在高并发剧情推演高可用评估背景下，用户与导师围绕算力雪崩应对、降级安全性验证、压测数据来源及降级阈值判定持续沟通（8轮），其中在推演容灾架构部分与后端架构师沟通（1轮），在压测指标部分与测试工程师沟通（1轮），并最终形成削峰降级容灾架构、沙箱混沌压测方案及动态降级阈值判定策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "扛不住就加机器呗，再不行就限流，肯定不能让系统崩了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就稍微限流一下，别全丢，留一半。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端架构师 推演算力雪崩怎么防？@测试工程师 这种推演压测看什么指标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级时间很短，应该不会那么巧崩坏吧。压测数据就让测试造点假数据呗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们可以用历史日志回放，同时故意关掉几个推演节点，看降级是不是真能兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在沙箱回放日志，变量是推演节点的存活数，看P99延迟和阻控失败率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定80%？"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在因果图谱构建与检索代码实现背景下，用户与导师围绕图库选型、高并发写入、反向检索算法与OOM防范、基准测试设计持续沟通（9轮），其中在图库选型与高并发写入约束部分与图谱开发工程师沟通（1轮），并最终形成Nebula选型、强Schema批量写入、显式反向边防OOM及按图密度分层测试的开发守则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Neo4j呗，然后节点就是剧情事件，边就是因果关系，直接加节点加边就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个时间戳字段，写的时候加事务锁应该就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图库选型和高并发写入，边属性怎么存比较好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "建反向边，加索引，查的时候顺着反向边找。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确实没写过太深的，我就用过简单的match语句。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我缺Nebula的nGQL语法和图上的反向遍历算法。我今晚看nGQL手册，明天写个反向遍历的Demo跑一下，如果延迟低于50ms就用在反演接口里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测QPS和延迟，变量就是并发数呗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我测的时候分三组，稀疏图、中等密度图和高密度图，每组跑不同并发。"
+              }
+            ]
+          },
+          {
+            "microScene": "在反演接口与判定模块及大模型推理服务联调背景下，用户与导师围绕链路时序对齐、协议选择、回拉指令保序及超时降级策略持续沟通（7轮），其中在流式异步接法与回拉保序部分与推理联调工程师沟通（1轮），在推理超时降级策略部分与AI算法工程师沟通（1轮），并最终形成包含MQ解耦、gRPC流式、traceId保序留痕及静默阻尼降级的联调接口规范编写方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先把接口全调通，跑一把看报不报错。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "HTTP不行吗？之前测接口都是这么调的，加个超时时间呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@推理联调工程师 图谱反演和大模型推理连起来，用HTTP调会卡死，这流式异步该怎么接？回拉指令怎么保序？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超时就，就重试？或者给个默认提示让玩家继续？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@AI算法工程师 大模型推理超时的话，判定模块能不能绕过它，直接用图谱的兜底策略？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去写字段。"
+              }
+            ]
+          },
+          {
+            "microScene": "在推演并发性能调优与除错背景下，用户与导师围绕并发瓶颈、锁竞争与背压机制持续沟通（7轮），其中在图谱并发更新死锁除错部分与图谱开发工程师沟通（1轮），在MQ积压与gRPC背压除错部分与后端架构师沟通（2轮），并最终形成图谱乐观锁、MQ并发度降级与gRPC背压窗口自适应三条核心约束写入接口规范补充文档。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "性能拉胯就加节点呗，或者给图谱加个缓存，读快了应该就不堵了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱并发更新有锁竞争，怎么除错啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "临界点，就是并发特别高的时候呗。超时的话，不是有静默阻尼降级吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱重试多的话，MQ积压和gRPC背压怎么除错？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "背压机制我之前看 Reactive Streams 规范时学过，就是通过 request(n) 控制上游发射速率。我把它迁移到 gRPC 这边，就是调整流控窗口的 prefetch 大小，这样能防止客户端被压垮，延迟也能稳住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "依据，依据客户端的处理能力吧，处理得快就开大点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1是乐观锁，2是MQ降级，3是gRPC背压。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "写进去。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在叙轨阻控引擎沙箱部署验证背景下，与导师围绕核心约束指标有效性验证标准、统计显著性落地及补学计划持续沟通（7轮），其中在沙箱环境可用性与成本控制部分与运维工程师沟通（1轮），在崩坏率指标有效性判定与显著性检验标准部分与数据分析师沟通（1轮），并最终形成沙箱验证敏捷冲刺MVP方案与显著性验证补学交付计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "部署上去跑一圈看一眼不就完了嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看曲线平不平吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 沙箱环境现在能用了不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 崩坏率那些指标咋看才算有效？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分两组跑，看显著性。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分两组跑数据，看p值小于0.05就算成功呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "懂一点，不多。这块确实有点虚。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这两天把假设检验和A/B测试的资料看一遍，写个Python脚本算沙箱数据的p值和效应量，周五前跑通。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "拿沙箱跑出来的样本，用scipy.stats写个卡方检验脚本，输出卡方值、p值和Cramer's V效应量，对比分析师给的95%置信区间，周五下班前发个显著性验证报告。"
+              }
+            ]
+          },
+          {
+            "microScene": "在沙箱压测收工引擎上线监控期背景下，用户与导师围绕崩坏率和阻控成功率的监控口径、报警根因链路及基线漂移处理逻辑持续沟通（8轮），其中在指标口径定义与报警基线逻辑部分与数据分析师沟通（1轮），并最终形成区分主线权重的口径认知及报警查推演耗时、基线漂移找叙事确认的监控闭环原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 咱这崩坏率和阻控成功率，具体口径是啥？还有报警线怎么划的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查日志？看是不是大模型卡了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线漂移那就调报警线呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "还得确认剧情啊。报警了我先看推演耗时，再看剧情偏移。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在基线漂移脱轨潮异常复盘背景下，与导师围绕脱轨根因定位、流程漏洞复盘与架构约束修复持续沟通（5轮），其中在脱轨分布数据拉取部分与数据分析师沟通（1轮），在黑市销赃支线脱轨根因定位部分与叙事架构师沟通（1轮），并最终形成支线动态接入实时环路检测与推演超限熔断兜底的复盘结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看日志呗，找报错堆栈。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮忙拉一下这波脱轨事件的分布数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耗时太长了，难怪崩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "黑市销赃支线怎么老脱轨？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查清楚了，是图谱环路死锁导致推演超时崩坏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个检测？不让环路进来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超限就报错回滚。"
+              }
+            ]
+          },
+          {
+            "microScene": "在图谱扩充与推演迭代规划背景下，用户与导师围绕图谱扩充原则、推演验证方案及外推边界持续沟通（6轮），其中在图谱扩充原则部分与叙事架构师沟通（1轮），在推演验证方案与外推边界部分与AI算法工程师沟通（1轮），并最终形成基于因果核心度剪枝扩充、A/B分流影子图谱比对验证及长链路单独测试的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然兜底逻辑通了，那我们就把支线全接上，图谱多加点节点，推演多跑几轮，应该就能覆盖全了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱扩充该按什么原则搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现条件就是把数据再跑一遍呗，外推应该都能用吧，反正是扩充了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演迭代的验证方案怎么搞？外推边界在哪？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我图论确实没搞明白，我去看架构师之前提交的剪枝代码记录，还有算法这边的A/B分流配置，记在日志里，下次迭代我试着自己配一个浅层支线的影子图谱。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

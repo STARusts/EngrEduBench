@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在高可用与数据防丢设计背景下与导师围绕推演防丢与指令防丢机制持续沟通（8轮），其中在状态恢复与事务保障部分与架构统筹师沟通（1轮），在指令锁存与硬拦截逻辑部分与边缘计算工程师沟通（1轮），并敲定WAL重放、双通道确认、NVRAM锁存拦截清零、增量对齐及审计留痕防线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "挂了就重启呗，加个备份应该就行了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就存数据库，发指令前先确认收到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演节点挂了数据怎么防丢？下发指令怎么保证不出错？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用WAL和检查点，重启后重放。发指令要锁存，还要等回执确认。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "拦截吧？超时就拦住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关怎么锁存指令？超时没确认是不是直接拦截不让写入机床？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "双通道确认，超时就清零。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "增量吧，全量太慢了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前面说刀补修改带审计留痕，这里硬拦截清零也得记下来吧，不然出问题了不知道是系统拦的还是人拦的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

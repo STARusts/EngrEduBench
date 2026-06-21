@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发的负担评分引擎实现背景下，用户与导师围绕IR输入输出契约、默认规则算法、确定性/异常降级、缓存复用与验收点持续沟通（10轮），其中在阈值区间与解释口径部分与教育场景研究员沟通（1轮），在规则引擎形态、配置hash与测试口径部分与算法工程师沟通（1轮），并收敛出最小可交付接口/规则清单、枚举与合规输出约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它做成可插拔的评分管线：先做特征抽取层，再接规则+模型融合层，最后出分数和解释。我甚至想加个策略DSL，让后续编排规则能热更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入就用上一步的IR：slides数组、每页元素列表（text/image/audio/video/interaction），再加解析器输出的warning和fallback_used。输出我想是每页page_score和course_score，还要有按模态拆分：visual/auditory/interaction三个子分，另带top_k原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "默认先全规则。比如视觉负担：文本密度=字符数/有效面积，图片数量、颜色对比度异常、动画数量；听觉负担：音频时长占比、并行音轨；交互负担：每分钟交互次数、强制输入。最后加权求和再映射0-100。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 阈值和权重你们有没有可执行的建议？我们要把感官负担分成视觉/听觉/交互子分，并能解释每项扣分原因。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这些阈值挺硬的。我担心不同年级差异很大，要不要把年级、学科都做成配置维度？再加个贝叶斯校准，按历史课堂数据自适应更新权重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "所有计算只用IR和明确配置；配置有score_config_version；浮点统一用decimal或固定小数位；排序top_k原因按impact desc，再按reason_code稳定排序。并且输出一个score_trace_hash，把IR_summary_hash+config_hash+engine_version拼起来算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把异常分三类：输入不合法、特征缺失、计算异常。输入不合法直接E_SCORE_INPUT_INVALID；特征缺失给W_SCORE_FEATURE_MISSING然后跳过该特征并标记degraded=true；计算异常比如除零给E_SCORE_COMPUTE_ERROR但仍输出course_score=null、page_score数组保留长度和page_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以在评分服务里加个result_cache表，key用tenant_id+course_id+IR_summary_hash+engine_version+config_hash。命中就直接返回，并把cache_hit=true写进输出。存储就存score_json和trace_hash，避免存全量中间特征。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那解释结构我定成这样：\n- reason_code（如 R_VIS_TEXT_DENSITY_HIGH）\n- modality（visual/auditory/interaction）\n- metric_key（text_density）\n- current_value、threshold、direction（gt/lt）\n- impact（对分数的扣分）\n每页top5，课程汇总再聚合count和max_impact。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "扣分点数，满分100，从0到100越高越重载，impact为正数加到负担分上。每个子分先0-100再加权到总分。课程分用页面分的加权平均，权重用页面时长，没有就按1。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 规则评分引擎你建议怎么实现？我们需要确定性、可配置阈值/权重、可解释输出和可复现测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：把规则当成插件函数集，按顺序跑；cfg先规范化再hash。权重默认给一版，校准先离线出cfg版本。金样本测试要断言causes排序和集合。性能目标是100页<200ms。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小集合我定：\n1）接口：`POST /score` 输入IR_summary+pages，输出course_score、page_scores、causes_top5、warnings、engine_version、config_hash、trace_hash、cache_hit、degraded。\n2）规则先做10条：文本密度、文本层级复杂度、注意力转移点、图片数量、低对比度标记（如果IR有）、有声占比、双音轨、同屏长文+有声、交互频率、不可跳过输入。\n3）降级：缺duration统一1并W_；缺有效面积E_SCORE_AREA_ZERO但仍输出结构；缺音轨信息W_SCORE_AUDIO_META_MISSING。\n4）确定性：cfg规范化json再hash；规则固定顺序；top_k稳定排序。\n5）测试：金样本3套（轻/中/重），失败用例断言E_/W_，性能测试跑100页合成IR。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规这点我差点忽略。causes里只放数值和计数，不放文本内容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那枚举我补：\n- E_SCORE_INPUT_INVALID：IR缺pages或page_id重复\n- E_SCORE_AREA_ZERO：有效面积为0导致密度不可算\n- E_SCORE_NUMERIC_OVERFLOW：出现NaN/Inf\n- W_SCORE_DURATION_MISSING：缺时长统一1\n- W_SCORE_AUDIO_META_MISSING：缺音轨/有声段信息，听觉规则跳过\n- W_SCORE_CONTRAST_UNKNOWN：对比度特征缺失，相关规则跳过\n- W_SCORE_FALLBACK_UPSTREAM：上游fallback_used=true，提示分数可信度下降但仍算"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收点我按可测的来：\n- 同一份 `tenant_id+course_id+IR_summary_hash+engine_version+config_hash` 重复请求，trace_hash不变且cache_hit=true。\n- 金样本：总分、子分、前5个cause的reason_code顺序完全一致。\n- 任何缺字段不导致500，最多E_/W_并返回最少结构（page_id列表、course_score可能为null）。\n- 输出不包含原文/URL等内容字段。\n- 性能：本地单核100页IR评分<200ms（规则10条）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

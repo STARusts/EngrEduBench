@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链下网关与合约异步交互及重试策略制定背景下，用户与导师围绕重试风险、幂等校验与并发防重持续沟通（7轮），其中在重试机制与状态流转部分与后端联调工程师沟通（2轮），并最终形成请求级防重表、资产维度操作锁与死信队列半自动补偿三条约束及执行顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重试嘛，就写个Job，抓取状态失败的记录，再调一遍合约接口就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，重复分润肯定不行。那我加个判断，重试前先查一下链上这笔交易有没有成功？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关跟合约交互的重试机制怎么搞，我之前想的定时重试好像会出问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那要是事件一直没监听到呢？卡在Pending？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查实际状态再决定补发还是重发，这样就不会重复了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这时候新请求应该被防重表拦住吧？业务流水号没变的话。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "业务级防重得在合约里卡吧？合约那块我们之前写了防重入的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "资产操作锁，加上这个就稳了。防重表拦请求级，资产锁拦业务级，死信队列做补偿。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "先拿锁再查防重表，记住了。我这就去改网关代码逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在清结高可用与容灾方案设计背景下，与导师围绕微流瞬结状态一致性、图算脑裂处理、容灾降级策略及故障验证持续沟通（6轮），其中在流算状态快照与容灾验证部分与流式计算架构师沟通（3轮），在图算脑裂置信度部分与图网络算法专家沟通（1轮），并最终确认包含Exact-once快照、Quorum写降级、异步缓冲及故障注入验证的容灾方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "高可用嘛，就是主备机房。主挂了切备，图算集群也搞主备。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "瞬结引擎主备切换，中间的清算状态怎么保不丢不重？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存快照，多久存一次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图算集群脑裂，洗钱链路置信度怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说做增量快照，10秒一次，能保不丢。图专家说用Quorum，过半写，脑裂不写。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近看了Paxos的资料，只记住了过半数确认。抖动的话，加个心跳续约？如果机房不通，就冻结写操作。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证？就把主节点停了，看备节点能不能切过去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "故障类型分三种，范围分单节点和半数，要在高峰期测，看瞬结失败率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流算Exact-once加10秒快照，图算Quorum加心跳冻结，降级走异步缓冲，上线前做故障注入实验比对基线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

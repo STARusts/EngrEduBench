@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在认知衰退研判模型实现背景下，用户与导师围绕模型架构、异步时序对齐、微小特征提取、端侧算力及验证口径持续沟通（8轮），其中在微观特征提取与模型搭建部分与认知模型训练师沟通（1轮），在端侧算力与实时推理部分与边缘推理架构师沟通（1轮），并最终形成Soft-DTW加多尺度卷积的实现路线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上Transformer呗，多模态特征concat一下扔进去，自注意力自己就学出来了"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "短的就补零对齐啊。微小特征多加几层MLP放大一下不就行了"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这研判模型怎么搞？我觉得直接Transformer加MLP就行了，你们是不是搞复杂了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那用卷积呗，卷积我熟"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就多试几个尺度呗，大不了1x1, 3x3, 5x5全加上。对齐那个DTW我晚点看个博客学一下"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用多尺度时序卷积加DTW做研判模型，端侧跑得动吧？跑不动我就砍点通道"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算了，就3个尺度，DTW我换成你说的那个Soft的。通道我砍一半，肯定能跑"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个测试呗，看AUC掉没掉就行，不掉就没砍没呗"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "路线就是：先用Soft-DTW对齐，然后上3个尺度的时序卷积提特征，通道数先不砍，跑不动再说。验证就看AUC和召回率"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Soft-DTW加多尺度卷积，我这就去写"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发收尾背景下与导师围绕全链路压测验收与模型推理优化持续沟通（8轮），其中在压测瓶颈判断部分与测试与性能工程师沟通（1轮），在模型量化与精度边界部分与算法工程化工程师沟通（2轮），并最终形成P99卡200ms、部分量化及偏离不超5%的优化策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个JMeter脚本压一下接口，看看并发能不能抗住。推理优化如果太慢，就加机器或者换好点的GPU。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推理优化就是让模型跑得更快吧？具体怎么做我没实操过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路压测要关注哪些东西？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优模型推理慢怎么解决？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99就卡200ms。INT8边界我不太清楚。我之前没做过模型量化，昨天看了个ONNX Runtime的入门博客，好像可以用它替代PyTorch推理，我打算下午就把导出脚本写出来试试，应该能快不少。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "说明网络不好？那就加带宽呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测看P99延迟，卡200ms。模型用ONNX导出，做部分量化，交叉层留FP16。寻优结果偏离不超过5%。如果压测瓶颈在上行带宽，就去优化图像压缩。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

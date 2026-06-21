@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧微模异构演进工程开发背景下，用户与导师围绕微模剪裁与端侧适配的剪枝方案、量化策略、验证口径及知识蒸馏温度系数校准持续沟通（4轮），其中在端侧适配暗坑与量化策略部分与微模开发工程师沟通（1轮），在对照测试设计与收敛验证部分与联调测试工程师沟通（1轮），并最终形成结构化剪枝+知识蒸馏+混合精度量化的适配基线、三组对照验证口径及温度参数实验校准计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我主推结构化剪枝，按通道比例砍，砍完直接INT8量化。这样NPU跑起来最快。验证就看精度掉不掉过2个点呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "结构化剪枝加INT8，在端侧各类芯片上跑，有没有啥暗坑？我怕写完逻辑部署上去反而变慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "混合精度得加设备类型判断逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "验证这块，剪枝前后和蒸馏后，我得怎么设计对照测试？特别是怎么确认收敛了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结构化剪枝配知识蒸馏，量化搞混合精度。验证就按三组对照来，卡延迟和能耗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我现在卡在知识蒸馏的Loss实现上了，温度系数这玩意儿我怎么调感觉收敛都有点飘，这块原理我没吃透。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这就去把Hinton那篇Distilling Knowledge的代码扒下来，跑几组不同温度系数的对照实验，记录Loss和精度，先从实验现象反推参数敏感区间。今晚把实验日志和参数曲线整理出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

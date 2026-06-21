@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在无障碍口述作业系统运行评估的转写评分质量监控背景下，用户与导师围绕指标拆解、分桶基线、告警/看板划分、阈值与复盘口径持续沟通（7轮），其中在可观测性落地与告警分级/采样标签部分与SRE运维工程师沟通（2轮），在ASR质量proxy选择与异常定义/误伤场景部分与语音算法工程师沟通（3轮），并汇总形成两周最小可运行监控清单与仅用元数据审计的复盘证据链。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会先把链路拆开看：ASR 转写质量、评分输入质量、评分输出稳定性。监控上我想做三层：\n1）转写侧：WER 类指标没法线上全量算，但能做 proxy，比如空转写率、断句异常、置信度分布漂移、疑似噪声占比。\n2）评分侧：评分置信区间、分数分布漂移、reason_code 分桶占比（特别是 policy_denied、signature_invalid、asr_low_conf 等）。\n3）端到端：同一题同一班级的均分/方差突变，和申诉率、人工复核推翻率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我倾向先做分群基线：按年级段、设备档位、网络质量、题型（朗读/问答/计算口述）、以及是否触发降噪模式分桶。每个桶看转写 proxy 的分位数和评分分布，先稳定组跑两周形成基线，再对灰度组做相对漂移检测。\n区分多样性 vs 退化，我会把“用户侧变量”先控制住，比如同设备档位、同题型里看置信度 P50/P10 是否整体下移；如果只是某些学校/某时段，可能是环境问题或活动导致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 监控这块我想把转写-评分链路拆成几层指标，你建议哪些做告警、哪些做报表？另外我们现在有 canary/stable 分组，怎么设计标签和采样，避免把全量指标带偏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TopK 异常学校列表我想问下：触发条件用“相对基线的 z-score”还是“分位数阈值”更稳？还有一点，policy_denied 上次说要稳定组基线后再定阈值，你建议监控系统里怎么落？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法工程师 我们要在运行评估阶段做转写评分质量监控，线上没法算全量 WER。你觉得哪些 proxy 能反映转写质量？哪些容易被口述作业的停顿/自我修正误伤？以及你会怎么给出“异常”的定义口径？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心一个点：学生自我修正很多，比如“答案是 12，不对，是 21”，这种会让低置信度上升，但评分可能仍对。我们如果把 asr_low_conf 当 P1 告警，会不会造成噪声？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异常定义你会怎么给？我不想把阈值写死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算这样定第一版（两周观测期）：\n告警（P0/P1）只放“可操作、硬失败”：\n- P0：评分失败率、评分延迟P95、转写队列积压、signature_invalid、policy_denied 异常抬升。\n- P1：空转写率；音频时长长但字数过少占比；reason_code 的 unknown/others 突增；NOT_COLLECTED 比例异常升高（这条偏合规链路）。\n看板观察：平均置信度、低置信度 token 占比、分段段数/段长、SNR/回声/重叠语音概率、分数分布漂移和评分置信区间分布。\n分桶维度：release_group、题型、device_tier、network_tier，再加 school_id 只做 TopK 异常列表。\n阈值：用 stable 组同时间窗对照 + ratio/置信区间方式；policy_denied 用 7天滚动基线的 P99 + 最小样本量门槛；题型相关的 proxy 先不告警，等和人工推翻率做相关性验证后再升级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "证据链我补一层“只用元数据与审计，不碰音频内容”：\n- 转写队列积压/延迟：看任务创建到完成的分位数、重试次数、失败 reason_code（infra_timeout / asr_service_unavailable）。\n- 空转写/字数过少：看音频时长、端侧采集状态码、VAD 统计（静音占比）、以及是否 NOT_COLLECTED；如果 NOT_COLLECTED 也出现字数过少，说明不是存储导致。\n- signature_invalid：查审计记录里的 manifest 链校验结果与版本号分布，定位是否单一客户端版本。\n- policy_denied：看触发规则版本、触发字段（脱敏后的命中项），以及是否集中在某学校/某题型。\n- reason_code unknown/others：优先查版本回退/字段缺失，避免监控口径自己坏掉。\n评分侧如果出现分数漂移：对照评分置信区间变宽、输入 token 数变化、以及题型分桶的差异，先判是不是转写输入变短导致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我建议两条约束：\n1）school_id 只用不可逆哈希做短期关联，且只在异常窗口里展示 TopK，不提供全量查询。\n2）看板默认按题型、设备档等低敏维度聚合；需要钻到 school 级别必须走权限审批，并且查询会落审计。这个我可能要和安全与合规官再对一下，但先按 SRE 的建议把维度控制住。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这版我认同。唯一我想加一句：unknown/others 突增要优先排查“reason_code 口径变更或漏映射”，不然会把真实问题埋掉。其余按这个清单推进就行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

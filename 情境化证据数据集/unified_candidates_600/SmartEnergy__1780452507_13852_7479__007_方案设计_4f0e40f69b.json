@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在高并发协同容灾评估背景下，用户与导师围绕边缘侧降级运行策略与混沌工程验证方案持续沟通（6轮），其中在云端失联时边缘侧业务兜底部分与负荷聚合架构师沟通（1轮），并最终确定本地基线快照粗调自治降级策略与混沌工程网络分区注入验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种并发，是不是靠K8s的HPA自动扩缩容，加上Kafka削峰填谷就能扛住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "拒载肯定不行，调峰指令下不去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种现成的边缘自治框架，断网了能自动接管？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果云端反演服务挂了或者超时，边缘侧算力又不够跑反演模型，怎么搞业务兜底？有没有比较轻量的开源方案能直接套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种粗调误差会不会很大？怎么知道它靠不靠谱？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天刚好在看Chaos Mesh混沌工程的文档，里面有网络分区注入的实验。我是不是可以借用这个工具，在测试环境把云边网络切断，看看边缘侧粗调的负荷波动率？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制变量就是断连的时长，比如切5分钟、10分钟。观察指标就是边缘侧下发指令的成功率和负荷实际响应的偏差值。如果偏差值在判定窗口3分钟内没发散，就算容灾通过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

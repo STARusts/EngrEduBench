@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在教师指令台前端开发需跑通“提示下发”事件展示、可回放与可定位链路背景下，用户与导师围绕字段需求、乱序窗口排序去重、状态闭环与调试权限持续沟通（10轮），其中在事件类型/最小字段/排序键幂等键与审计链定位上与后端工程师沟通（3轮），在2秒乱序缓冲与弱网补发实现方式上与前端工程师沟通（1轮），并明确前端接入清单与关键字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前端就订阅事件流，然后渲染一条卡片？但“可回放、可定位”我没把握，是不是要做个会话ID的关联。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "event_id肯定要。还有session_id？课堂一节课一个。还有occurred_at时间戳。然后提示内容…不过内容不能带原始音视频和姓名，这个我记得。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就用ingest_at？或者server_seq这种递增号？我不确定后端有没有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 提示下发事件给前端展示用：event_type叫什么？payload最小包含哪些字段？排序键/幂等键怎么给？回放时前端需要哪些字段才能不重复、还能定位到审计链？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "`dispatch_seq`是后端生成的？端侧不用管？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TTL审计那条 `cache.ttl.purged` 怎么和这个提示下发对上？前端要展示吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 后端给的提示下发事件是 `teacher.prompt.dispatched`。关键字段：event_id去重；class_session_id；dispatch_seq做排序和回放一致；trace_id串链路；audit_chain_id对TTL审计；还有template_id、severity、render_hint、payload(title/summary/actions)。前端别用dispatched_at做定责排序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必填校验我可以做：事件缺event_id、dispatch_seq就不渲染并打错误日志。重放不重复就是event_id去重。状态翻转闭环…我有点懵，是指提示从未读到已处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "可以，但我怕action params设计乱。后端payload里有actions[]，我按里面的action_id回传就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回传事件比如 `teacher.prompt.actioned`？字段带：event_id（原提示的）、action_id、class_session_id、client_time。幂等…用(原event_id+action_id)？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我…只想到本地缓存一下待发送的action事件，恢复就补发。但缓存会不会踩合规？里面只有event_id和action_id，不含敏感内容，应该还好。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按钮点一次就置灰？然后本地记一个sent标记。要翻转就提供“撤销”动作…这是不是又复杂了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以做一个调试抽屉：展示最近N条 `teacher.prompt.dispatched`，每条显示dispatch_seq、template_id、severity。点开详情显示event_id、trace_id、audit_chain_id，给复制按钮。回放就按dispatch_seq重新渲染列表，event_id去重。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限这块我不太会接现有鉴权，只能先用后端返回的role判断？我怕被绕过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我这轮要落地的点就是：订阅事件->按dispatch_seq排序->event_id去重->渲染卡片->点action回传->调试抽屉可复制trace/audit_chain。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以在前端先收集2秒再排序展示？但这会让提示延迟两秒。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "能写，但我怕我写错计时逻辑。我可以先做简单版：按dispatch_seq插入排序，不等缺口；如果后来的更小seq到来就重排一下。这样会抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端工程师 指令台这边提示流要处理2秒乱序窗口：我想做“发现dispatch_seq缺口就等最多2秒再稳定排序”，避免提示列表抖动。你一般怎么写这类缓冲/重排？还有event_id去重、弱网下action补发，你看有什么坑？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂，就是别一直sort整个数组，只把flush出来的append。gap_skipped只给测试看。pending queue在localStorage里只放几个字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 前端工程师建议：内存Map做event_id去重；按dispatch_seq进buffer，有expected_seq；遇到缺口开2秒gapTimer，齐了就按序flush，超时就flush当前最小seq并记gap_skipped（调试可见）；渲染层只追加flush结果避免抖动。action用localStorage存pending队列（event_id/action_id/session），发送成功删；点击置灰防重。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）接收 `teacher.prompt.dispatched`，必填校验：event_id、class_session_id、dispatch_seq、trace_id、audit_chain_id缺就不展示。  \n2）去重：Map按event_id。  \n3）乱序处理：按dispatch_seq + 2秒缺口缓冲flush，避免抖动，gap_skipped仅调试可见。  \n4）展示：卡片显示template_id/severity/title/summary，详情能复制trace_id和audit_chain_id用于定位审计链。  \n5）闭环：点击actions回传 `teacher.prompt.actioned`（原event_id+action_id+class_session_id），本地pending队列弱网补发，按钮置灰防重复。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

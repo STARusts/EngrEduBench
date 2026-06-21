@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在室内空气暴露风险自适应管理系统工程开发背景下，用户与导师围绕设备接入稳定性、校准/质量控制可测指标与降级验证持续沟通（5轮），其中在接入验收口径与质量标签规则上与物联网接入工程师沟通（3轮），在校准记录、漂移阈值与降权confidence规则上与硬件与校准工程师沟通（2轮），并收束为接入验收、校准质控与risk_status降级三类可测试输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分两类接入：直连传感器走网关协议适配，楼控数据走现成的BACnet/Modbus桥接。校准这块我不想全都做参数拟合，成本太高；先必做“记录与降权”：每个点位维护校准记录、漂移告警，质量差就降低权重或踢出风险计算。少数关键点位再做两点/多点标定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网接入工程师 接入验收我想定成“数据稳定+可追溯”。你给我一版具体口径：时间同步、丢包、重连、幂等、trace_id怎么打，最好能直接变成测试用例。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你这组数字里，时间偏差P95 3秒我能理解，但P99 10秒是固定值吗？现场有些是WiFi加4G备链路，波动可能更大。超了就直接降级，会不会把数据全打成degraded，反而算不出风险？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接入错误码这块，你给的auth_failed/forbidden/dup_device、unit_mismatch这些够了。还有一种情况：设备重复发旧数据，平台去重后就没新点了，这个怎么验收？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件与校准工程师 我们准备把校准做成“记录与降权”为主，少量点位做标定。你帮我把：校准记录字段、抽检频次、漂移判定阈值、以及“降权”该怎么和校准结果挂钩，说成能开发实现的规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TVOC阈值你给的0.15mg/m³我有点不确定，传感器品牌差别很大。我们如果写死，会不会误伤很多点位？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我拿到两边口径了，我想把本微场景产出收束成“接入验收+校准与降权规则”两块，确保能写测试。我的取舍是：时间偏差不一刀切，分normal/degraded/invalid；校准侧不强行全量拟合，先做记录与降权，关键点位再做2-point。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定一组可测的：  \n- 接入：设备入网必须注册；reject都回枚举（auth_failed/forbidden/dup_device/field_missing/unit_mismatch/timeout）。  \n- 时间：|device_ts-ingest_ts| P95≤3s；>10s标degraded；>60s invalid。  \n- 连续性：缺失率<0.5%/天；断连重连≤60s；幂等键去重率>99.99%；5分钟只重复旧数据触发stale并degraded。  \n- 可观测：每条消息trace_id；ack延迟P95≤2s。  \n- 校准：记录字段齐全；pass=1/conditional=0.7/fail=0，漂移未处理每7天*0.85，最低0.3；联动必须满足关键污染物至少一个点位confidence≥0.7且quality=normal。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证方面我还没想得很细，我猜用回放一段“漂移/断连”的数据，看策略是不是只出建议不联动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把“质量状态变更也要审计”补进去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还有个边界：如果一个空间全部点位都degraded，风险服务还要给结果吗？我倾向给“置信度低”的风险+不触发联动。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我担心阈值“占比>50%”有点随意，但先用它做默认，后面再用现场数据调。阈值改动要进审计，避免现场随便调导致行为不可追溯。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我按A/B/C拆成三个任务：我负责接入验收用例和risk_status输出，校准字段和漂移阈值我拉硬件同学一起核一下默认值范围。今天先把错误码和质量标签打通，明天开始做回放三组数据流的测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

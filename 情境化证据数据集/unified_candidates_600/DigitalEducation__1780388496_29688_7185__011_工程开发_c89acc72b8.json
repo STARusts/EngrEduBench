@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在认知推演闭环测试与调优背景下，用户与导师围绕几何题微诊引擎误诊超时排查与鲁棒性修复持续沟通（5轮），其中在测试结果反馈与TraceID提供及回归验证部分与联调测试工程师沟通（4轮），在残缺输入排查与前置校验模块添加部分与微诊引擎开发者沟通（2轮），并形成引擎加前置校验抛异常、端侧接异常走降级的修复方案及更新准入条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按测试用例跑全链路，看微诊命中率和端侧延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几何题闭环测完没？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "两边日志对不上啊。QA样本是脱敏合成的，引擎单测也过了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我用TraceID去串端侧切图和云端引擎入口日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "发我三条超时的几何题TraceID。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你查下这三条ID在引擎入口收到的图，是不是缺角了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就是传输有损。但引擎对残缺输入也不能死循环吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "引擎加个输入校验，图不完整直接拒诊。拒诊走降级逻辑，切通用包。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "QA等改完重跑回归。数据流丢帧我另外找数据流工程师查。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "以前得手动对时间戳，现在直接ID一拉，端侧切图、传输、引擎入口全串起来了，定位这种跨端云bug特别准。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

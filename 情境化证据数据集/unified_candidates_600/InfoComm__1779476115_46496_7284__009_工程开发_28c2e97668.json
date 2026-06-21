@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发重构历史LLDP脚本实现跨域资源感知背景下，用户与导师围绕重构方案选型、补学RFC 7752及验证方案设计持续沟通（5轮），其中在跨域拓扑发现与资源注入方案选型部分与软件定义网络工程师沟通（1轮），并最终确定自研BGP-LS+Telemetry解析、补学出原型及对照测试验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全是局域网那套逻辑，LLDP报文只能发现直连邻居，跨域根本穿透不了。更致命的是，它只管链路UP/DOWN，完全没有时延和带宽余量的感知。用这种瞎子拓扑去做保态迁移，业务肯定飞到拥塞路径上炸掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然要跨域还要加资源感知，我打算引入OpenDaylightTopology Manager插件，它自带南向适配，我再套一层gRPC去各域拉取资源态，应该能很快顶上旧代码的坑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "ODL插件的事件订阅机制太重，跨域拓扑同步延迟动辄秒级，保态迁移根本等不起。而且它的资源模型是静态的，不适合我们这种时空敏感动态注入。我对它底层的MD-SAL数据存储机制调优也不熟，硬上估计会卡死在性能瓶颈上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域拓扑发现和资源感知模块重构，如果不用ODL原生插件，工程上一般怎么搞？旧代码是纯LLDP泛洪的，现在要能感知跨域时延和带宽。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "BGP-LS收集拓扑骨架，Telemetry做血液实时注入资源态。自研轻量级解析模块替换旧LLDP。但我对BGP-LS的NLRI扩展属性解析不太熟，之前没写过这块解码逻辑，特别是Link NLRI里那些扩展TLV怎么剥离。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备今晚过一遍RFC 7752里关于Link NLRI的定义，重点搞懂IGP Metric和Unidirectional Delay的解析，先写个最小可用原型跑通解码，明天下午合入主分支替换旧代码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证设计我打算做对照测试。左边跑旧LLDP，右边跑BGP-LS+Telemetry。往跨域链路注入100ms基础时延加上10ms微突发抖动。旧模块肯定感知不到这些动态变化，新模块看Telemetry注入的时延值与注入真值的误差。评价指标锁定两个：拓扑收敛时间必须从秒级压到百毫秒级，时延感知误差率不超过5%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微秒级抖动压测与调优背景下，用户与导师围绕压测工具选择、误差边界分析与压测方案制定持续沟通（6轮），其中在微秒级打流与时戳采集方法部分与微秒抖动压测极客沟通（1轮），并最终确认放弃软件工具、采用XDP旁路加硬件时戳方案及20微秒抖动基线的压测约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我装个iperf3，调大包长，跑个十分钟抓个抖动分布图，应该就能看出来了吧？网上很多压测脚本也是这么干的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有更方便一点办法，不用改底层驱动的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级压测怎么搞？软件打流误差大，有没有现成工具或者框架直接测微秒抖动？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差就是，软中断太慢？极客提了PHC频偏和中断延迟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这种底层代码有没有封装好库可以直接调？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以试试把极客说收包逻辑换成XDP？这样不用改内核模块，可能方便点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用XDP旁路抓包，解析硬件时间戳算时延。发包用专业测试仪。这样误差就卡在PHC频偏上，对吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

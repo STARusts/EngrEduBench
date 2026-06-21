@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在申诉复核规则落地到端云接口与字段的方案设计背景下，用户与导师围绕接口边界、权限审计、证据取回与改分受控持续沟通（9轮），其中在证据链数据分级与指针哈希追溯部分与数据架构师沟通（2轮），在未成年人合规、双人审批与第三方ASR出域边界部分与安全与合规官沟通（2轮），并收敛形成接口清单与字段/审计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“最小暴露+可审计”来拆：端侧提交作业只给必要元数据；转写、评分、申诉、审计四条链路的读写权限分开。卡点我猜两个：一是申诉要取证据片段，但审计要求“不含内容本体”；二是改分只能重跑/有限档位调整，接口得防“手填分”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口我粗分六类：  \n1) 作业提交：学生端->提交音频与题目信息引用；  \n2) 转写查询：教师端/学生端只拿转写文本的“可见版”；  \n3) 评分查询：教师端拿score与解释；  \n4) 申诉提交：教师端/家长端提交申诉理由与附件；  \n5) 复核操作：申诉员触发重跑或档位调整；  \n6) 审计查询：二线/合规只看事件流和指针哈希。  \n认证我倾向统一OIDC一类，授权走RBAC加上资源级约束（班级/学校/作业ID）。字段范围需要更细的分级表，我想找数据架构师把字段分类定下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 证据链这块我需要落到字段级：音频、转写、过程特征、片段ID、哈希指针这些分别怎么分级？审计要求“不存内容本体”时，审计事件里应该放哪些字段才够追溯又不越界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据指针具体长什么样？如果审计里只有pointer_id，联调时别人会问“我怎么拿到证据”。是不是要再设计一个“证据取回”接口？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与合规官 在方案设计里我想把“权限与数据治理”落到接口：哪些角色能取回证据、怎么做双人审批、审计字段放到什么粒度才合规？另外我们可能会接第三方ASR，数据出域怎么控？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "第三方ASR如果只能“可见版转写”出域行不行？也就是端侧先做VAD切段+简单脱敏再发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两位的点合起来，想回到接口字段层做决策：  \n- 审计事件只存pointer_id+hash+reason_code，不存文本；  \n- 证据取回接口分“受限预览”和“原件解锁”，后者双人审批；  \n- RBAC+ABAC再加purpose；  \n- 第三方ASR先按“域内优先”，出域作为备选并加合同与链路约束。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还不确定的是：teacher端看评分解释时，解释里可能引用转写片段，算不算把P3内容泄露？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向解释分层：  \n- 面向教师/学生的解释只引用“可见版转写片段”(P2)和评分维度证据（比如关键词匹配、逻辑结构标签），不展示逐字原文；  \n- 面向申诉员的解释可以再多给片段对齐时间戳，但仍是P2；  \n- 原始逐字转写(P3)只在二线合规解锁时可见。  \n字段上可以把explain对象拆成explain_public与explain_sensitive两个子结构，默认只返回public。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "允许动作三种，接口也按动作而不是“改分值”：  \n1) 重跑评分：POST /score-runs，body里是assignment_id、rubric_version、evidence_pointer_set_id、reason_code；返回new score_run_id。  \n2) 量表档位有限调整：POST /score-adjustments，body里是score_run_id、dimension_id、from_band、to_band、allowed_range_check、reason_code、evidence_fragment_ids；不允许传最终分，只传档位变更。  \n3) 证据不足触发重测：POST /retests，body是assignment_id、trigger_type=insufficient_evidence、reason_code；返回retest_task_id。  \n所有这些写入都要求actor_role在申诉员或二线，并且purpose=appeal_review。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "卡点1：前端要展示“证据片段”，但我们不给真实key。解决：前端只拿preview_token（一次性、短时）+片段元数据（起止时间、脱敏策略版本），再去GET /evidence/preview用token换内容，避免把pointer解析逻辑暴露给端。  \n卡点2：审计事件跨服务一致性。比如重跑评分涉及转写服务、评分服务、对象存储。解决：统一audit_trace_id贯穿调用链；每个服务只记自己动作，最后在审计查询聚合；并要求幂等键（idempotency_key）避免重复写审计造成误报。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能想到三条偏设计面的：  \n- 音频分层存储：热数据只保近N天，过期转冷存或只留hash+pointer，符合保留策略的同时减成本；  \n- 证据预览默认低码率/低清，只有合规解锁才给原件，减少带宽；  \n- 审计日志不存内容，只存指针与哈希，天然压容量。  \n具体冷存选型我不展开，方案里先把“分层+到期不可访问”写进治理规则和接口响应错误码。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我们定：数据按P0-P3分级，音频原件与原始转写归P3，展示用可见版转写P2；审计事件不含内容，仅含actor/role/action/resource_id/score_run_id/evidence_pointer_id/hash/reason_code/审批链路id等。权限走RBAC+ABAC并加purpose约束；证据访问分受限预览与原件解锁两条接口，解锁触发双人审批并全链路留痕。改分接口按允许动作建模（重跑score_run、有限档位调整、证据不足重测），禁止手填分值字段。第三方ASR默认域内，出域仅作为备选且要求加密专线、不落盘、可审计与删除证明，并在告知同意里声明用途。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

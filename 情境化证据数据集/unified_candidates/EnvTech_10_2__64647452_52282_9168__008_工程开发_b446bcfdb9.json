@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在网关北向payload与measurement_id已确定的开发背景下，用户与导师围绕时序数据存储分层、去重乱序治理与可追溯审计落地持续沟通（7轮），其中在分层表设计与幂等键/水位线窗口部分与数据架构师沟通（4轮），在证据链留存、冷归档与权限审计部分与合规与审计官沟通（2轮），在幂等/乱序/追溯三条验收用例构造与断言部分与测试工程师沟通（2轮），并复述确定ODS/DWD/DWS三层与最小闭环验收要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就扫了一眼。就是一张表存全部，按ts查。应该能用吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "value用varchar也能转。缺字段就加列呗。raw_json留着就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "去重就按主键吧。追溯就查raw_json？反正都在。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 最小集要啥？我就想知道表怎么建，照着做。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写三份数据？这不就翻倍了。直接一份不行吗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "measurement_id就是唯一的？那我直接用它当主键好了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "窗口我就写死10分钟？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就照三层来。value我存double。raw_json我就不存了，省事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就把raw_json塞到ODS一列，查的时候再看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 证据链要留啥？我怕留太多又说不合规。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我ODS就不放raw_json了，放hash就行。冷存储我随便找个盘存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "把时序数据存得能查、还能审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就写个脚本跑一下？从ODS读出来插到DWD，再聚合到DWS。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "自动化我不太会。就先手测三次行不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 幂等、乱序、追溯这三条咋测？我不想写很多测试代码。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "lineage字段也要加？我以为聚合就avg就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按三层：ODS、DWD、DWS。2）ODS存measurement_id这些字段，加ingest_time。3）DWD做去重乱序，窗口先1小时。4）DWS做分钟小时聚合，加点lineage。5）raw包不进热库，用hash去冷存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

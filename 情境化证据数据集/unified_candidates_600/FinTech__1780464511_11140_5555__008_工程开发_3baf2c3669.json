@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在纵向联邦对齐开发背景下与导师围绕隐私求交协议选择、密态分箱实现及合规风险持续沟通（6轮），其中在PSI协议与密态分箱实现部分与跨域特征对齐师沟通（1轮），在直方图交互与频次过滤合规底线部分与金融合规官沟通（1轮），并最终形成纵向对齐开发基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接上SecretFlow的PSI组件做求交呗。分箱的话，就按特征算下分位点，切成等频的桶，这不就是常规操作吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分布泄露？分位点不就是几个数字嘛，这能泄露啥。协议我看着KKRT速度挺快的，就用它了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "纵向对齐的PSI协议选哪个好？还有分箱，导师说不能明文算分位点，密态下等频分箱到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "ECDH求交，密态直方图算分位点，桶里样本量得过滤。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值我随便设个5？合规这块我不太懂啊，应该没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域传直方图算分箱，每个桶样本量低于5的过滤掉，合规能过不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "k至少10，直方图要加DP噪声，特征还得精简只传入模的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "纵向对齐开发基线：1. PSI用ECDH协议；2. 等频分箱先密态求直方图，再解密出分位点；3. 桶频次过滤阈值k>=10；4. 直方图交互加DP噪声；5. 只交互入模特征的分箱结果。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

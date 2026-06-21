@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发极端工况压测与性能调优背景下，用户与导师围绕压测方案设计、长尾延迟降级标准及压测日志合规持续沟通（6轮），其中在破坏性压测设计与长尾指标部分与测试调优专家沟通（2轮），并最终形成包含混沌注入、长尾延迟降级触发与脱敏合规监控的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用JMeter并发注入大量异常报文和时序数据，看频调算法在高压下会不会崩溃或者死锁。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这系统边缘节点资源受限，极端工况下的破坏性压测该怎么设计？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Chaos Mesh注入网络延迟和CPU压力，比写死在测试脚本里真实多了，能直接观测频调指令在资源扰动下的真实延迟分布，比JMeter那种干并发有效得多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设计指标是频调指令P99延迟不超过100ms。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，平均数和P99容易掩盖极值。那压测指标改成重点抓长尾延迟，如果P99超过200ms就触发降级。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测会产生海量日志，之前改的报文脱敏规则在高压下会不会拖慢性能？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这次压测方案定为：第一，用Chaos Mesh做CPU和网络延迟注入，模拟边缘雪崩；第二，核心指标看频调指令长尾延迟，P99超200ms触发降级；第三，同步监控脱敏模块耗时，并校验压测日志里有没有明文SN和坐标泄露。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

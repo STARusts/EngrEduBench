@@ -1,0 +1,534 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在轮作寻优引擎需求梳理背景下，用户与导师围绕痛点理解、业务约束与验证假设持续沟通（9轮），其中在养分淋溶与模型定制部分与农业生态规划师沟通（1轮），在农场主采纳意愿与综合降本约束部分与农企降本增效分析师沟通（1轮），并最终形成带补贴与农机费约束的修正版需求假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "网上有类似开源项目没？我直接拿过来改改接口就能用吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "痛点不就是化肥用多了嘛，土壤板结。我找个算化肥用量的公式套进去不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种通用的轮作模板？我直接把农场数据导进去就能出结果那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "淋溶？这词我听过，但具体怎么算不知道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这周去查查论文，把\"土壤淋溶损失\"和\"本底值测算\"这俩概念看明白，起码知道公式里要输入啥参数。周五前我找几篇讲玉米大豆轮作的看完。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就假设用了咱们的引擎，化肥能少用20%，产量不掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "省化肥不就省钱吗？农场主肯定愿意啊。这账怎么算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还要算补贴和农机费。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "修正成：在保证拿满休耕补贴、农机调度费不涨的条件下，针对玉米大豆轮作，寻优引擎能把化肥淋溶损失降下来，总投入减少。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在合规性评估背景下与导师围绕化肥减量与地力养护的合规边界及寻优前置约束持续沟通（5轮），其中在面源污染与地力养护合规边界部分与合规与政策审查员沟通（2轮），在养分失衡临界值与指标约束部分与农业生态规划师沟通（1轮），并最终确认合规需基于地块动态计算、不跌破临界值且具备可审计留痕。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规不就是别超标，找个国标限值套进去呗。有没有通用的合规检查表直接套？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就按最严的套，或者看隔壁项目怎么搞的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这有通用模板没？直接套最快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以不能只看化肥减量，还得保证地力不降？那我把地力设个最低下限不就结了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加个地力下限和日志功能行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法自己算的啊。要不把所有化肥都设个下限？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "钾肥那些养分临界值怎么定？不想算太细，直接给个固定数行不？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就加个收支计算？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在轮作降本增效商业模式推演背景下与导师围绕收费依据、增效分成比例及补贴收费方式持续沟通（6轮），其中在农企认账逻辑部分与农企降本增效分析师沟通（1轮），在补贴收费合规部分与合规与政策审查员沟通（1轮），并最终形成基础年费加降本抽成及补贴代办引流的商业模式。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按SaaS卖呗，一亩地收几十块年费，别人家农业软件都这么干的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "化肥少用了多少就量化多少呗。这有啥难算的，直接乘一下单价就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农企买这种引擎看重啥？化肥省点钱他们就会掏钱吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就搞分成！我看过别的软件抽成10%，咱们也抽10%，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "补帖这事儿怎么搞成咱们的收费点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就全加上！年费也收，增效也抽成，补贴代办费也收，多赚点不好吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，就基础费加抽成。代办白送就白送吧，当拉客了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在产品战略规划背景下，用户与导师围绕寻优引擎MVP切分与产品演进路线持续沟通（6轮），其中在农业SaaS切入逻辑与MVP功能切分部分与产品迭代规划师沟通（2轮），在V1商业化卖点与客户决策阻力分析部分与农企降本增效分析师沟通（1轮），并最终形成V1至V3产品演进路线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全做完呗，轮作、施肥、遥感全加上，抄个智慧农业大厂的方案改改不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MVP？就先做个能跑的呗，把功能都堆上去能跑就行啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这寻优引擎MVP咋做？直接全上不行吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就只做玉米施肥？其他不管了？轮作不才是咱核心吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "为啥先做化肥降本好卖？轮作听着高级多了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前都是直接照着完整系统抄，没想过先切一小块卖。我记一下，得去看看人家SaaS怎么分版本的，不能上来就抄大而全的。我把这块补上，先照着当季见效这个思路改改我的计划。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "V1就搞单作物化肥降本和合规留痕，抽成收费，手工录数据也行。V2再加茬口轮作，V3才是全盘寻优。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在轮作体系养分流转时空拓扑架构设计背景下，用户与导师围绕通用模板适用性、业务语义表达与架构取舍持续沟通（8轮），其中在拓扑节点与边的抽取部分与架构设计师沟通（1轮），并最终放弃通用模板，形成基于业务语义的三元组拓扑方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我找了网上一套开源的智慧农业通用拓扑模板，直接套进来应该就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模板里都有时间戳和经纬度，Kafka加Neo4j，标准流批一体嘛，肯定能跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个时间字段关联一下呗。大不了多写几个查询。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这有个Kafka加Neo4j的通用时空拓扑模板，直接套进轮作体系养分收支动态寻优引擎行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说不能套Neo4j模板，得搞什么“地块-茬口-养分池”三元组。听着好像就是换个名字建节点嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我不懂怎么把三元组映射到物理表啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "通用模板肯定得改Schema，因为全是弱类型。三元组可能加个节点就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用通用模板了，按业务语义搞三元组拓扑。节点必须有地块、茬口、养分池，边得带物理语义。"
+              }
+            ]
+          },
+          {
+            "microScene": "在轮作体系多约束寻优算法路线设计背景下，用户与导师围绕算法路线选择与硬约束兜底方案持续沟通（6轮），其中在开源GA模板与硬约束处理可行性部分与约束寻优算法专家沟通（2轮），在突破地力红线的业务容忍度部分与农业生态规划师沟通（1轮），并最终确认MILP保底硬约束、启发式优化软目标的混合算法路线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用遗传算法呗，GitHub上一搜一大把，拿过来改改参数就能跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "非法的扔掉不就行了？加个if判断。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就想套个开源GA代码，那些地力红线啥的，我写个过滤函数行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MILP是啥？听着就复杂。带修复的算法是不是还得我自己写修复逻辑？没有现成的吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这也太费劲了，就没有哪怕稍微改改就能用的开源项目吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法算出来如果不满足地力红线，能凑合用不？大不了少拿点补贴。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以GA真不行了？那我到底用啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用MILP保底，再用启发式优化。那我去找找Gurobi的文档抄抄看。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计阶段敲定跨域敏感数据流转背景下，用户与导师围绕数据脱敏机制、流转拓扑与验证设计持续沟通（8轮），其中在地理数据脱敏与效用权衡部分与数据安全合规师沟通（2轮），并形成沙箱内网格泛化与加噪的流转拓扑及对照实验验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跨域？加个HTTPS不就行了？我看网上都这么写，弄个网关转发一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想套DataSandbox行不行？地块坐标怎么脱敏？有没有模板直接抄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加噪了算不准咋办？不能就传明文然后内部系统自己保证安全吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想找个现成的隐私计算开源库直接调接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据在沙箱里脱敏？然后传给寻优引擎？但我不知道网格泛化代码怎么写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕脱敏了算出来结果不对，怎么验证？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "样本量？多跑几次呗。加噪幅度随便设个小点的不就行了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流转就是：农场原始数据先进沙箱隔离，在里面做空间网格泛化经纬度变1km网格和差分加噪，然后才跨域传给寻优引擎。验证就是跑对照实验，明文和脱敏比偏差。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在轮作体系养分收支动态寻优引擎核心模块开发背景下，用户与导师围绕求解器性能瓶颈、Cython热点改造与对照验证指标持续沟通（6轮），其中在OR-Tools框架适配部分与求解器开发工程师沟通（1轮），并确定Cython改造计算热点及0.1%误差与60%耗时下降的验证硬指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接把Google的OR-Tools拿过来套一下，它不是能解混合整数规划嘛，把我们的约束喂进去应该就能跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "OR-Tools直接套进来跑不动的话，要怎么改？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "C++或者Cython？这也太麻烦了吧。Python里调OR-Tools不行吗？我只会Python啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没写过Cython。那我今晚去看看Cython的官方教程，照着把热点函数改写成`.pyx`文件试试，应该能套用教程里的静态类型声明模板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "应该是算养分收支差额的那块循环吧，每次迭代都要算一遍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下不报错就行了呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误差阈值，就卡1%吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "0.1%误差，耗时降60%。行，我这就去写Cython包装，然后搞两组对照跑一下。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在耕地遥感时序数据接入求解器联调背景下，与导师围绕云遮挡空洞处理、时序插值方法及物候期动态提取持续沟通（6轮），其中在云遮挡缺值插值部分与遥感数据集成工程师沟通（1轮），并最终明确S-G滤波去云、拐点动态提取物候期及插值率日志校验的联调硬条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Pandas读呗。我之前有个ETL脚本，直接套过来读CSV，转成数组丢给求解器就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "填0不就行了。或者填个均值，我看网上都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云遮挡缺数据怎么插值啊？有现成包直接调吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "S-G滤波Scipy里有，我调一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "物候期分段咋分？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写死几个日期呗。5月1号到8月1号是抽穗期，其他随便。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拐点提取又要写一堆代码。那我先调S-G滤波把数据弄平滑，物候期提取我先放着，回头再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "S-G滤波调Scipy，拐点提取我再找找有没有现成函数。日志插值率我加上。"
+              }
+            ]
+          },
+          {
+            "microScene": "在求解器端到端耗时过长优化背景下，用户与导师围绕性能瓶颈与优化方案持续沟通（4轮），其中在性能热点定位部分与性能优化工程师沟通（1轮），在求解逻辑冗余与剪枝部分与求解器开发工程师沟通（1轮），并最终明确换高性能库、改原地更新与加前置剪枝的三点改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "测了，跑了快半小时。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能直接上Redis缓存或者多开几个进程？网上说加并发就能提速。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么加速？直接加进程行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我直接找个C++写的矩阵运算库替换掉Python的，网上有现成包装好的包，一换肯定快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备换个C++矩阵库，你那边代码要不要也加个缓存什么的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前置剪枝？这代码网上有模板吗？我找个图剪枝的库套上去应该就行了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我找找有没有原地更新的数组写法直接抄过来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端农情寻优鲁棒测试背景下，用户与导师围绕退化用例构造、死循环防范及兜底策略持续沟通（5轮），其中在退化用例构造部分与测试与鲁棒性验证师沟通（1轮），在寻优算法退化边界分析部分与约束寻优算法专家沟通（1轮），并形成套用断路器防崩与返回上一轮合法调度结果兜底的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得造什么拓扑断链，看会不会死循环。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "约束冲突无解的时候，寻优算法会怎么退化？边界在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "可行域空了会震荡。我前两天看前端的熔断降级课，刚学了断路器模式，一超时直接阻断。我能不能直接在寻优循环外面套个断路器，震荡超时直接跳出？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，套断路器，断了就返回上一轮结果。我这就去改代码。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在寻优引擎上线部署与合规验证背景下，用户与导师围绕部署合规性、拦截逻辑及验证方案持续沟通（7轮），其中在调度输出违规风险部分与合规与政策审查员沟通（1轮），在灰度下发施肥量分布部分与农情异常溯源分析师沟通（1轮），并最终形成修改下发链路加拦截层及写脚本对比超国标率的验证目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接拿之前那个项目组的K8s部署模板套一下，应该就能跑。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "之前断路器都加上了，兜底结果也有了，直接上就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我直接部署寻优结果出去会不会违规？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能先上线，超标的让农户自己少撒点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑个自动化测试，看看加了拦截后有没有返回空，不报错应该就没事了吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我得学学怎么看这种分布数据，还有怎么算超标率下降了多少。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这周内我要搞懂怎么算P99分位数，写个Python脚本把拦截前后的超国标率跑出来对比。就用这个脚本验证拦截效果。"
+              }
+            ]
+          },
+          {
+            "microScene": "在寻优引擎上线运行评估背景下，用户与导师围绕算力与养分监控看板设计、数据源对齐及实现逻辑持续沟通（6轮），其中在算力成本核算与峰谷监控部分与部署运维工程师沟通（1轮），在养分异常链路追溯部分与农情异常溯源分析师沟通（1轮），并明确看板核心模块与数据来源，但被要求补齐网关TraceID透传与计费标签后方可上线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接套个开源看板呗，Grafana模板一堆，找个好看的改改颜色就能用了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要分任务算钱，还要能点进去查原因"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把模板改改，加几个下拉框不就行了"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心模块是算力成本核算和养分异常下钻。数据来源是云计费API和链路TraceID。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标签就按任务ID打"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估出现施肥量负数异常背景下，与导师围绕异常归因与排查策略持续沟通（7轮），其中在调度异常链路拆解部分与农情异常溯源分析师沟通（1轮），并形成先查约束配置冲突、再查输入脏数据、最后查求解器状态的三步排查定序策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "负数？写个脚本把负数过滤掉改成0不就行了，或者在前端加个if判断拦截下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算出负数不就是算法写烂了嘛，网上说这种寻优算法经常不收敛。我找个稳定的开源求解器包替换一下应该就好了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度出负数怎么拆？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查输入、查算法、查配置。就这三步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定是算法提前中断，刚才我都说了算法容易崩，兜底值算错了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还要拉快照对比，直接把这块地配置删了重写一份不行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是看输入、求解器和约束三块，这次重点看约束配置对吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估寻优算法调优与迭代规划背景下，用户与导师围绕极端旱涝农情下算法边界退化与迭代策略持续沟通（7轮），其中在算法失效边界与复现步骤部分与约束寻优算法专家沟通（1轮），在边界退化产品迭代处理部分与产品迭代规划师沟通（1轮），并最终确定遥感降权与粗排模式的迭代方向及误差注入复现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看大盘数据都挺正常的，产量预期都达标了。就按现在这套参数继续跑呗，不用调了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法在极端天气下是不是会失效？怎么复现？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我直接加个下雨天就不跑寻优的开关，省得算错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法下雨天不准，我打算直接关了寻优功能，行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降权听着也麻烦。就加个开关多简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就按规划师说的，加个降权吧。算法复现我写进日志里，后面有空再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "迭代方向就是加遥感降权和粗排模式。复现约束是，注入啥高斯噪声来看会不会算错。日志里我会记上怎么圈出失效域。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

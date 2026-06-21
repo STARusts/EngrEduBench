@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在院感气溶胶系统物联接入与流场解析开发背景下，用户与导师围绕边缘网关架构选型、Rust重写风险及C++主线开发与边界确定持续沟通（6轮），其中在边缘网关算力与部署可行性部分与物联接入开发沟通（1轮），并最终确定主线采用C++实现解析及明确输入输出边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我考虑过算力，但现在传感器采样率很高，如果不在边缘做第一道特征提取，全量传到云端CFD解析延迟会大。Flink可以平滑处理乱序数据，对动态风场建模很有帮助。或者我可以用WebRTC把原始点云传上来做云端解析？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们的边缘网关能部署Kafka和Flink吗？我想在网关上做流特征提取。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看来Java系确实太重了。那我有个想法，既然C++性能好，我想用Rust重写流场解析模块，它的内存安全和并发模型正好适合高频流数据解析。不过我对Rust调用C的FFI还不太熟，而且Rust的CFD库生态我不确定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没怎么写过Rust的FFI，这是我的短板。我计划这周末突击看一下Rust的bindgen用法，然后做个小实验：把现有的C++压差解析算子包一层Rust接口，跑一下benchmark，看看性能和开发效率的折中。如果Rust生态里没有合适的轻量级CFD库，我就放弃这个方案。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主线我先用C++实现物联接入和流场轻量化解析，直接对接MQTT。周末的Rust实验我单独起个分支跑，如果benchmark证明Rust确实在并发和内存上有显著优势，且FFI成本可控，我后面再提MR合入。现在先把C++版本的流场解析框架搭起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入MQTT JSON，输出结构化的流场边界Struct。我只做时序对齐和异常值剔除，比如传感器掉线传0值就直接丢掉，不做深层降噪。验证方案就是用录制的传感器历史数据回放，测ARM网关上的CPU和延迟。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

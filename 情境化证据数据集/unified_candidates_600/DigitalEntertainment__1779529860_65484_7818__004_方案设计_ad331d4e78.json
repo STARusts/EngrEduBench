@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在玩家心智流解析与难度弹性演化中枢的实时数流与架构设计背景下，用户与导师围绕行为流聚合、状态存储选型、容错延迟及架构验证假设持续沟通（9轮），其中在行为流特征提取架构及状态一致性与降级容灾部分与实时计算架构师沟通（1轮），并最终确认数流架构约束及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Kafka收日志，然后Flink算，算完发下去。延迟肯定够。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态存Redis呗，下线再上就从Redis读。但具体怎么保证Flink算的时候Redis不丢数据，我我我不太确定。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "流式状态管理和容错这块我拿不准。我得去补一下Flink的Checkpoint机制和RocksDB状态后端的调优文档，看看大状态下的GC和容错延迟，今天下班前把这块的阅读笔记补上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重点看状态一致性和降级。我们MVP只用行为数据。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设用RocksDB状态后端，延迟在200ms内。对照组是全内存计算，延迟更低但容易丢状态。变量是状态大小和吞吐量。验证就是压测，看RocksDB方案在状态变大时，延迟是不是还能在200ms内，如果超过500ms就说明这方案不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RocksDB对Heap，P99延迟200ms是目标，超500ms推翻。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

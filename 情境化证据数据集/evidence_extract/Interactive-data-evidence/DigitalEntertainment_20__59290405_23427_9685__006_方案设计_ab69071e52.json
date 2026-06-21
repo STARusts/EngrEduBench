@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在UGC关卡上线的审核发布流程方案设计背景下，用户与导师围绕审核对象/风险拆分、门槛分层流程、状态机与分发可见性、版本与回滚留痕持续沟通（9轮），其中在分级与未成年人可见性及申诉审计落地上与合规与内容安全经理沟通（2轮），在静态审核指标与接口字段/留痕设计上与服务端工程师沟通（1轮），并形成状态/分发分离与审核动作集合的方案稿要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向做成全自动：用户上传关卡包，云端跑一套静态分析+模拟回放，过了就直接发布。最好再加个模型审核文本和图片。这样效率最高，也能保证一致性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "资产类型大概：谱面事件、音频、空间音频参数、触觉轨道、叙事文本/图片、还有道具配置。风险类型我想分成：安全（强度、频率）、合规（涉政涉黄暴恐、未成年）、版权（音频素材）、还有作弊（谱面刷分）。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "主干我先拟四段：1) 端侧打包校验：格式、资源引用完整、触觉轨不超过强度上限；2) 上传后服务端做静态扫描：事件密度、时长、异常参数、文本图片模型审；3) 低风险自动过，高风险进人工；4) 发布后做抽检，出问题下架。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "状态机我想：草稿（本地）-> 已上传待审 -> 审核通过 -> 已发布；审核拒绝就打回修改；出事就是下架。可见性先简单点：通过才全量公开。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全经理 UGC关卡发布，哪些必须人工审？未成年人模式下哪些状态能看？申诉和下架需要哪些留痕？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这里我理解是：公开=必须有分级标签+审核通过；未成年人只能看全年龄且审核过的。然后真人照片、外链二维码、长文本、版权高置信都要人工或抽检。留痕要有规则命中和操作者。对吧？"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我试一下：\n状态：Draft(本地) / Uploaded(待审) / Playable(可试玩) / Listed(可公开检索) / Removed(下架) / Rejected(拒绝)\n可见性：Self、Room邀请码、灰度频道、公开频道。未成年人：只能看到Listed且分级全年龄。\n但我不确定Playble到哪个范围合适，我想直接给灰度频道，方便测。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "那就拆成两条：内容状态（审核/下架）和分发状态（曝光范围）。内容状态决定是否允许曝光上限。分发状态可以从Room逐步升到灰度再到公开。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我想加一个“竞技资格判定”：如果谱面事件密度、BPM变化、触觉轨复杂度超出阈值，标记为NonRanked，只能娱乐。通过更严格的校验才Ranked。这样也能给创作者引导。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@服务端工程师 UGC关卡包想做静态审核，你建议哪些可计算指标？还有状态/版本/分发需要哪些核心字段，才能支持灰度、回滚、申诉留痕？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我抓重点：用content_id+revision_id分开，发布只认revision_id；指标上算密度、BPM波动、触觉强度峰值、再加外链/二维码/真人图flag。审核输出risk_level和actions，分发用exposure_scope和searchable。还要review_log和appeal。音频违规要指纹/ASR抽样，防资源替换靠manifest全hash+禁外链。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我先串一个“发布主路径+两条分支”：\n- 端侧：生成manifest_hash，跑预检（格式/引用/触觉强度硬裁剪、外链检测），不通过就本地提示。\n- 上传：拿到content_id，生成revision_id，服务端提取静态指标，给risk_level+actions。\n- 若actions包含allow_room：状态到Playable，默认exposure_scope=room，searchable=false；创作者可邀请房间试玩。\n- 若allow_gray：可提升到灰度频道但仍searchable=false或只在灰度页；\n- 若allow_public且min_age_rating齐全：Listed，exposure_scope=public，searchable=true。\n分支A：require_manual -> 待人工，人工给结论再走上面。\n分支B：reject -> Rejected，返回reason_codes让创作者改。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更想严格：新revision提交后旧的就不能玩，避免分叉版本混乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能。就是content_id上有active_revision_id，检索和下载默认给active。旧revision保留给创作者回退用，但对外只给active。重大违规才封content_id。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）状态机：revision维度有Uploaded/Playable/Listed/Rejected/Removed；分发用exposure_scope分层，灰度回滚只改scope不改内容状态，public必须Listed。\n2）审核动作：服务端静态指标出risk_level和actions，最低放行到room试玩；真人/外链/长文本/版权高置信走人工或抽检；竞技资格另标NonRanked避免刷榜。\n3）留痕与未成年人：review_log记录操作者角色、时间、原因码、状态迁移；申诉走appeal队列；未成年人只能看全年龄+Listed的内容，未审内容不允许分享给未成年人。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

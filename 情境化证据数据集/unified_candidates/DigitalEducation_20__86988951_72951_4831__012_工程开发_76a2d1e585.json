@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关状态上报接入完成后进入全链路测试与压测背景下，用户与导师围绕“预约-审批-实训RUNNING-设备MQTT上报-孪生状态可验证”的E2E拆解、断言口径与压测交付持续沟通（8轮），其中在数据隔离、MQTT校验轮询与压测指标门槛部分与测试负责人沟通（3轮），并明确两条E2E正/负例与API/MQTT分层压测口径及CI一键运行边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "全链路的话，我能想到用 Postman 或 JMeter 直接跑接口。就是模拟老师创建预约、审核、到开始实训，然后网关上报占用状态？我不太确定怎么把 MQTT 那段也塞进自动化里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5 步我试试：  \n1）创建设备台账+孪生初始化；校验设备有 twin_id。  \n2）教师发起预约；校验返回 reservation_id。  \n3）管理员审批；校验状态变 APPROVED。  \n4）到开始时间调用“开始实训”；校验设备状态变成 IN_USE。  \n5）网关发 MQTT 状态；校验孪生里 conn_state=ONLINE，然后设备 use_state 还是 IN_USE。  \n但第 4、5 步的边界我说不清，比如到底谁改 use_state。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 E2E 要怎么组织比较稳？我现在想用 JMeter/pytest 把“预约-审批-开始-设备上报-孪生状态”串起来，但 MQTT 那段不确定怎么校验。压测这块你们通常怎么定指标，数据怎么隔离不把日志撑爆？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "轮询孪生 API 这个我能做。压测日志开关这块，我们现在好像没有做成配置项，我怕临时改代码会影响主干。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "指标上你们一般给到啥程度？比如预约创建 QPS 多少才算过，我没概念。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "MQTT 这块我用 mosquitto 起个 broker，再用脚本发消息就行。轮询孪生 API 断言 data_state 和占用字段。负例就发坏 base64，看 data_state=ERROR，conn_state 还 ONLINE。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "采纳：  \n- E2E 用 tenant 隔离、设备打 test tag；  \n- MQTT 发完轮询孪生 API 最多 3 秒；  \n- 把负例放进 E2E：坏 telemetry 只打 data_state，不动 conn_state；  \n- 压测分 API 层和 MQTT 层，先按 200/500 并发门槛跑。  \n先不做：日志采样开关我先走路 B，压测先不触发解析失败，免得我改配置中心又踩坑。  \n“开始实训”我测试里只检查预约状态变 RUNNING，不断言设备 use_state；设备占用我靠 telemetry 去触发，然后断言孪生的 use_state/占用字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我加个小用例：对同一设备发 200 条坏 payload，预期“原始报文缓存”最多保留 50 条，超过的被丢弃；再等 TTL（比如 10 分钟）后查询回放接口，应该清空。只是 TTL 时间我不想等 10 分钟跑一次测试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，我今天不碰回放接口。那坏 payload 的断言就只查孪生：data_state=ERROR，并且 conn_state 仍 ONLINE；再加缓存计数接口？现在没接口能查计数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那今天的 E2E 我做两条：  \n- 正例：预约->审批->RUNNING->发合法 telemetry->轮询孪生断言 conn_state=ONLINE、data_state=OK、占用字段=1；  \n- 负例：同样流程但发坏 base64->轮询孪生断言 conn_state 还是 ONLINE、data_state=ERROR。  \n压测我先用 JMeter 跑预约创建/查询两组场景，MQTT 用脚本发到 broker，统计端到端延迟我用轮询接口时间差粗算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“发出时间到孪生可见”，因为我现在更容易拿到。说明里写成：publish 时刻 t0，到孪生 API 查询到 message_id 更新时刻 t1，t1-t0。后面如果加 server_ts 再升级口径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "交付点三条：  \n1）E2E 自动化：两条用例（合法 telemetry、坏 base64 telemetry），都通过；断言预约状态流转、孪生 conn_state/data_state、占用字段。  \n2）压测脚本：API 层两组场景（创建/查询），并发与目标先按测试负责人给的门槛；输出 P95、错误率。  \n3）MQTT 压测雏形：按固定速率发消息，采集“发出到孪生可见”的延迟分布，先给 P95<1s 的结果或定位瓶颈的日志线索。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

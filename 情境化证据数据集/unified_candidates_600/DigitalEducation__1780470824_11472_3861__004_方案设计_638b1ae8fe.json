@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课谱伴学导引系统方案设计背景下，用户与导师围绕图谱约束大模型防幻觉及架构基线持续沟通（6轮），其中在图谱侧约束接口与对照实验设计部分与知识图谱架构师沟通（2轮），在Prompt分层吸收图谱约束部分与大模型提示工程师沟通（1轮），并形成图谱状态机校验、Prompt三层及流式越界截断的架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱把知识点和前置关系理出来，大模型生成的时候，咱拿图谱做比对，不在图谱里的就扔掉，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "schema就按教材目录建树呗。至于怎么在生成前卡死，我有点没概念，大模型那套生成逻辑我不熟，不知道怎么让它必须按图谱走。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我对生成空间裁剪没概念。LangChain那套我也只跑过demo，Guardrails具体怎么串我没细看。我今晚回去把那块源码过一遍，重点看怎么把业务规则塞进生成流，明天前理出个思路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱这边能给出什么接口来约束它？我想直接搞个白名单，只许生成图谱里有的知识点，这样最稳。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "假设状态机这招，能在不误杀的情况下把幻觉压下去？如果测出来状态机导学成功率比白名单高，幻觉也没涨，就说明白名单太死板了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱给了状态机接口，prompt这边怎么吃进去？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "越界中断这块，是不是得流式交互那边配合？不过现在先定架构。那就是：图谱侧建带状态机的schema，暴露校验接口；Prompt侧分三层，System吃硬边界，Few-shot吃软样例；生成时流式校验，越界就截断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

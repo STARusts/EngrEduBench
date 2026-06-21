@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在动觉转译推流与规则匹配设计背景下，与导师围绕推流架构选型、背压控制及批处理约束持续沟通（6轮），其中在推流架构与背压机制部分与轉译规则引擎开发沟通（1轮），在批处理窗口延迟与内存及引擎对比部分与轉译规则引擎开发沟通（1轮），最终形成动觉转译推流闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得直接把特征推过去就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件驱动吧，比较快。背压控制我不太熟，应该有现成的组件吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时空对齐特征流进来后，转译规则引擎的推流架构怎么选？复杂事件处理和背压怎么配合？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink比较快？批处理就是攒一波再写？具体阈值我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱批处理窗口设大了延迟多少？边缘侧内存能扛住吗？还有为啥不用Drools？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "输入是时空对齐特征流，引擎选Flink CEP，推流用gRPC，图谱更新做5秒异步批处理，边缘侧预留150MB内存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

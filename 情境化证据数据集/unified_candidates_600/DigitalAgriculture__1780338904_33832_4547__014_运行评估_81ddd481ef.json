@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段边缘端监控打点与防碰撞算力冲突背景下，用户与导师围绕监控开销与算力保障的平衡方案持续沟通（5轮），其中在APM工具与采样抓尖刺可行性部分与运维监控分析员沟通（2轮），在推数据影响及全量抓风险部分与防碰撞算法设计师沟通（2轮），并最终形成eBPF内核态旁路监控加自适应采样及降级非实时上报的方案思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能直接上现成的APM工具？比如SkyWalking或者Prometheus，不用自己写打点逻辑，应该开销小点吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用Prometheus这种现成工具去拉边缘端延迟数据，能行吗？不想手写打点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推数据也占带宽啊。如果推数据，防碰撞周期会受影响吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只抓一部分呢？比如采样，一百包里面抓一包，我看很多高并发监控都是这么干的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "采样的话，延迟尖刺能抓到吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不抢用户态算力。我记得有个工具叫eBPF，可以在内核态直接抓包和统计耗时，不用改应用代码。用eBPF挂载到网络和调度内核函数上，这样防碰撞算法感觉不到打点开销。触发全量抓的时候，顺便把一些非实时的状态上报停了，给监控腾点带宽。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

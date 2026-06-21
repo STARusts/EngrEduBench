@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在田间气味指纹病害早诊协作网工程开发联调背景下，用户与导师围绕节点固件采集链路最小闭环、payload口径对齐、验收与定位手段持续沟通（7轮），其中在无RTC时间语义与序列策略上与嵌入式固件工程师沟通（3轮），在网关解析严格性与时间异常规则上与后端工程师沟通（2轮），并形成TLV+schema_version+crc16与联调验收口径及日志开关方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这周想把节点固件的采集链路和网关先联调通。现在卡在两件事：采样时序跟上报包格式老对不上，还有功耗预算我想做得很极致，怕越做越复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点这边我想做成：气味传感阵列+温湿度，1Hz采样，先在MCU上做滑窗+压缩，然后走LoRa到网关，网关再转MQTT上云。对不上的点是：网关侧期待的payload有设备时间戳+序列号，但节点这边没有RTC，我用上电后的tick当时间，网关就判我“时间异常”丢包。还有包里字段顺序我调整过两次，还是会被解析成null。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@嵌入式固件工程师 无RTC的节点，时间戳你们一般怎么处理？我现在用tick，网关直接判异常。还有序列号是每条包递增还是每次上电重置？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "boot_id要掉电保存的话我得上FRAM/Flash写？我还想做很细的功耗统计，频繁写Flash会不会把寿命打爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我先用随机boot_id，后面再换boot_counter。payload里我就放boot_id、uptime_ms、sample_seq、传感数组。那网关那边的“时间异常”逻辑是不是也要改？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 网关解析现在是强校验吗？字段顺序/缺字段会直接丢？以及你们的“时间异常”到底检查哪个字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "TLV我本来想后面再做，但听起来能省掉字段顺序问题。就是MCU上做TLV会不会太重？我还想搞一个Protobuf压缩，感觉更“正规”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回去把v0固定数组干掉，换v1 TLV；时间字段改成device_uptime_ms，不再填device_ts_ms。crc16我也加上，至少定位更快。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先收敛一下：  \n- 节点payload统一走schema_version=1的TLV；包头带schema_version、总长度、crc16。  \n- TLV字段我先放：boot_id(随机32bit)、device_uptime_ms(uint32)、sample_seq(uint32)、sensor_bitmap、values（气味阵列+温湿度）。不发device_ts_ms，避免网关时间异常规则。  \n- 网关侧让它用TLV解析，不靠字段顺序；入库时间用recv_ts_ms。  \n验收我想定成：连续跑2小时，丢包率<1%，解析错误=0，sample_seq单调递增（允许重启但必须boot_id变化）。可以吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包我按节点侧发出的sample_seq计数 vs 网关侧成功入库的sample_seq计数，不做重传的话就是“收到/发出”。但如果网关去重，就得按唯一键(boot_id, sample_seq)算入库数。解析错误我想分两类：  \n1）链路错误：crc16不通过；  \n2）协议错误：TLV结构不合法或缺必填字段。  \n两类都要为0，至少在实验室联调阶段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点这边我能打三条：每包打印boot_id、sample_seq、crc16（或计算结果）和payload_len；遇到发送失败就打错误码。网关侧需要：解析到的schema_version、是否crc通过、缺字段列表、以及把(boot_id,sample_seq)打进一条结构化日志，方便对齐。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做三档：release关日志；debug只留关键三条；trace才开每次采样的原始值。但我担心切换麻烦，想做成运行时动态开关，还能远程下发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就：编译期宏控制三档，默认debug档；串口输入指令切换到trace，断电恢复默认。远程下发我先不碰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

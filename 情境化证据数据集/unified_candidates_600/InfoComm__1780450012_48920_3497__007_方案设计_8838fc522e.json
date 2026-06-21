@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在单星算力安全与高可用设计背景下，用户与导师围绕寻优推演容错机制、对照实验变量控制及RAFT机制迁移持续沟通（6轮），其中在轻量级容错与接续推演部分与星载软件架构师沟通（2轮），并最终形成增量检查点加差分重放、控制验证变量、参考RAFT压缩去选举及在轨自适应调频四条高可用约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "双机热备呗，星上不都这么搞吗？主节点挂了，备机直接接管。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "也是，矩阵一更新数据量就炸。不同步中间状态，备机起来接着算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "寻优推演挂了怎么快速接续？热备开销太大搞不了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "增量快照，重放差分。那恢复要多久？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "快照加差分重放，测一下找拐点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，改检查点频率呗，看恢复多快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还得固定算力负载，模拟内存碎片。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我最近在看边缘侧RAFT的裁剪实现，它做日志同步的机制，是不是能拿来当差分重放的容错验证？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，它选举超时太长。那就只借它日志压缩那块，不管选举。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按在轨时间自适应调频率。好，就这四条。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

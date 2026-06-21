@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课堂教学脚本方案评审前的端边云同步策略设计背景下，用户与导师围绕弱网/断网下事件模型、权威分层、对齐规则与验收口径持续沟通（9轮），其中在权威源划分、三元组对齐与边侧有限持久化部分与解决方案架构师沟通（4轮），在边缓存暂存合规、审计身份标识与TTL证据部分与数据治理官沟通（3轮），并收敛MVP同步策略要点供评审。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“课堂状态机事件流”来想。云上肯定是权威的脚本版本、步骤定义这些；端上要能离线跑，至少要缓存当前step和必要资源；边我理解是校内网关，帮忙做事件汇聚和转发。最小闭环应该是：教师端能推进step、学生端能收到任务并提交“计数类事件”，即使断网也能补发，最后云上能还原每个step的完成度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向分两类：控制类事件（比如StepStarted/StepAdvanced）只能教师端发，云/边做仲裁；提交类事件（SubmitCount之类）端可离线积累，恢复网络后补发，云按幂等去重计数。冲突主要在控制类：如果端上收到旧的step指令，应该丢弃，按更高的“epoch/sequence”来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那事件头里加两三个同步字段，但不碰payload内容：比如classRunId（一次课堂运行的ID）、runEpoch（老师每次“重新开始课堂”+1）、ctrlSeq（控制事件递增序号）。提交类事件也带classRunId/runEpoch/stepKey，再带一个clientEventId用于去重，但不带学生内容。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点犹豫。要是强依赖云确认，弱网就卡住。要是端自己进step，可能跟老师不同步。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想折中：控制事件以教师端为源，边做快速ack，让教师端UI不卡；学生端收到控制事件后本地进入step，同时把StepAck回传，云最终汇总看哪些端已ack。断网时学生端允许本地进入，但一旦恢复，若发现runEpoch或ctrlSeq落后，就回滚到最新step。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 端边云同步这块，我需要一个能过评审的“权威+对齐”方案：控制事件和提交事件的权威源怎么划分？断网恢复时怎么判定谁覆盖谁？边节点要不要做持久化队列，还是纯转发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边节点持久化队列这块怎么定？我担心边不持久化的话，校内网抖一下控制事件丢了，端就乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那教师端的“我点下一步”到底等谁ack？等云会慢，等边可能和云不一致。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算采纳三元组classRunId/runEpoch/ctrlSeq做对齐；控制流教师端源头、云最终权威、边做临时受理；观测流端离线缓冲、云幂等汇聚且允许late标记。边的有限持久化我也想要，至少能补发控制事件，不然重连全靠云会更慢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我暂时不想把“观测流聚合”放在边做，感觉会把逻辑拆两份，测试也麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边只存控制事件的最小头部：scriptId/version/stepKey/stepType + classRunId/runEpoch/ctrlSeq + 事件类型 + 时间戳；不存学生提交内容，本来提交类也只计数。边的日志留存时间短，比如10分钟或一堂课窗口内，过期即清。所有从边受理的控制事件都写审计事件到云（谁、何时、对哪个classRunId推进了哪个step），但审计字段不带人名，只带teacherRoleId这种？我不确定字段口径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 端边云同步里，边节点准备缓存少量控制事件用于重连补发，不含提交内容。想确认三点：1）边缓存算不算留存，需不需要纳入留存周期管理？2）审计事件里允许用什么身份标识（避免PII），比如roleId/账号哈希？3）控制事件头部这些字段（scriptId/version/stepKey等）在合规上有没有敏感风险？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "TTL上报“删除计数”这个点我之前没想到。那我们边侧就得有可观测指标，不然合规问起来没证据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计身份用teacherSessionId我觉得更简单，跟一次课堂绑定，不用碰真实账号。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先试着说：  \n1）统一用classRunId标识一次课堂运行，runEpoch表示重开次数，ctrlSeq是控制流序号；所有事件头都带scriptId/version/stepKey/stepType + 这三个同步字段。  \n2）控制流只能教师端产生，边先Ack受理、云Ack权威；端收到控制事件按(epoch, seq)单调前进，低版本丢弃。  \n3）观测/提交流端可离线队列，恢复后补发；云按clientEventId幂等去重，落后于当前控制点的标late不影响实时进度。  \n4）边节点做短TTL控制事件缓存+按端游标补发，且不存任何提交内容；边侧输出缓存条目数、过期删除计数用于合规证据。  \n验收指标我想：控制事件端到端P95延迟、断网恢复后对齐时间、重复提交去重正确率。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回滚改成“跳转+标abandoned”我能接受，比较好解释。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码族我回去跟前端对一下展示文案，避免他们又造一套。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "资源这块我之前想偷懒不写，评审估计会追。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这六条我认。错误码族我记成三类：版本不匹配、epoch过期、seq不合法；端侧不回滚只跳到最新控制点。两天后评审我主讲同步策略这部分，其他我让你和架构师兜底。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

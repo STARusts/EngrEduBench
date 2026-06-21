@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在隐式水印锚定引擎方案设计背景下，用户与导师围绕多模态暗纹织入架构设计持续沟通（8轮），其中在AIGC抗降噪架构设计部分与隐式特征算法专家沟通（1轮），在双轨编解码吞吐与加速部分与暗纹编解码工程师沟通（1轮），并最终形成双轨织入Pipeline分流及底层加速架构大框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我本来想直接调FFmpeg和OpenCV的库套个壳，图片压个盲水印，音频加个高频段，跑通就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "AIGC出来的图，后置盲水印一降噪就没了，这架构咋设计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一条路是生成完再塞水印，快但怕降噪；另一条路是生成的时候就让水印长在图里，抗造但提取得对暗号。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我连扩散模型怎么加噪都没实操过，这方案我写不下去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这两天把Diffusers的源码过一遍，专门看Scheduler怎么hook噪声偏置，再跑个Lora微调试试水。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图库量大、不是AIGC的，走频域后置，快；UGC走生成时锚定，精。搞个双轨Pipeline分流？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频域后置和生成时锚定双轨，编解码这块吞吐和加速咋弄？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异步Offload显存交换会不会卡IO？我之前写CUDA memcpy老死锁，这得把锁粒度控到多细才行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "特征向量对齐那块我再补个映射层。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

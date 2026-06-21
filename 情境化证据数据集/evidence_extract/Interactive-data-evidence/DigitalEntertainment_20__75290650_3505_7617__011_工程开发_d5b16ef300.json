@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在解锁链路联调风控引擎背景下，用户与导师围绕将风控决策接入/content/unlock状态机、处理超时/复用/降级与日志追踪持续沟通（9轮），其中在决策枚举与CHALLENGE映射部分与风控负责人沟通（3轮），在trace_id透传与最小化日志合规部分与安全工程师沟通（2轮），并形成API字段映射、缓存复用、观测与用例验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先在 unlock 的 handler 里加一步调用风控接口。风控如果拒绝，就直接 FAILED；如果通过就照旧走 job。trace_id 我就透传 header 过去再打日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "超时…我想先当成拒绝，不然怕放过去出事。重复触发我可以靠 redis 锁一下？降级我没考虑到，我以为就 pass 或 reject。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控负责人 你们风控接口联调这块，返回到底有哪些决策？我现在只按 pass/reject 写会不会漏？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "CHALLENGE 这块你说“不返回可播放资源”，那我现在 READY 才给 asset_url，本来就不在 POST 里给。是不是就等于我啥也不用做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在接口里只有 PENDING/READY/FAILED，改状态会影响前端。有没有省事点的做法，比如 CHALLENGE 我就当 DENY，提示用户稍后再试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TTL 复用我可以本地 cache 一下决策。`hit_rules` 你们要我落日志吗？会不会有隐私问题？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。我回去跟导师确认下返回体是不是能加个 detail 字段，不然前端那边没法区分“排队中”还是“被降级”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "风控返回有 `decision=ALLOW/CHALLENGE/DENY`，还有 `risk_level`、`reason_code`、`hit_rules`、`action_ttl_sec`。超时他们不希望我直接 DENY，默认走 CHALLENGE。还有同一 user+content+设备指纹在 TTL 内别重复请求，可以做本地缓存复用。日志上打 risk_level/reason_code/hit_rules(截断) + trace_id，不打原始指纹。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想：  \n- POST `/content/unlock`：如果 DENY 直接返回 FAILED + `error_code=RISK_DENY`；ALLOW 就 PENDING 走原流程；CHALLENGE 就也返回 PENDING，但加个 `unlock_hint=RISK_CHALLENGE` 让前端知道不是纯排队。  \n- GET `/content/unlock/{id}`：如果风控是 CHALLENGE，就一直不转 READY，最多给 PENDING + 更大的 `poll_after_ms`。  \n但 `unlock_hint` 这个字段我不确定能不能加。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就以“创建 unlock 时的风控结果”为准，后面不再变？只要 unlock 记录里保存 decision。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DENY：`RISK_DENY`。CHALLENGE：`RISK_CHALLENGE`，但它不算失败，所以可能放在 hint 里。超时：`RISK_TIMEOUT`？但风控说默认当 CHALLENGE，那就也走 `RISK_CHALLENGE`，只是 reason_code 不一样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我有点想用他们那边提供的客户端库，感觉省事，不用自己做签名重试啥的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我需要跟安全那边确认签名和 header 透传吗？我怕我只会照着库默认配置抄。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 我们解锁链路要联调风控，日志和透传这块有什么硬限制？我现在计划打 trace_id + reason_code/hit_rules(截断)。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "受控审计日志我们这边还没分出来，我现在只有业务日志。那我就先不打 IP/UA，只打 decision 这些。hit_rules 只打前 3 个规则 ID。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这版准备这样落地：  \n1）POST `/content/unlock` 创建 unlock 时先调风控，按 `user_id+content_id+device_fingerprint` 查缓存，TTL 内复用 `decision/reason_code`；没命中才请求风控。  \n2）mapping：  \n- `ALLOW`：返回 `unlock_id` + `unlock_status=PENDING` + `poll_after_ms`，并入库 `risk_decision=ALLOW`  \n- `DENY`：返回 `unlock_status=FAILED` + `error_code=RISK_DENY` + 通用 message，并入库 `risk_decision=DENY`  \n- `CHALLENGE` 或 风控超时/失败：返回 `unlock_status=PENDING`，但额外加 `unlock_hint=RISK_CHALLENGE`（如果你同意加字段），并入库 `risk_decision=CHALLENGE`  \n3）GET `/content/unlock/{unlock_id}`：按 unlock 记录里的 `risk_decision` 决定是否允许转 READY；CHALLENGE 永远不返回 `asset_url`，只给 PENDING + `poll_after_ms` 拉长。  \n4）日志：业务日志只打 trace_id、decision、risk_level、reason_code、hit_rules(最多3个ID)，不打指纹/IP/UA，不打印风控请求头。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

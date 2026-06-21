@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在信令与数据交互设计背景下，用户与导师围绕硬实时信令下发与状态回传方案持续沟通（6轮），其中在轻量级信令框架选择部分与全局时隙编排架构师沟通（1轮），在YANG模型标准适用性部分与标准合规专员沟通（1轮），并最终确定信令下发与回传采用定长二进制、回传走带外通道、YANG仅用于离线校验的交互方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用NETCONF下发YANG模型呗，网上一堆开源工具，导进去就能生成代码，回传也方便。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那有没有什么轻量级的现成框架？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想找个轻量级的信令框架，不用自己从头写解析的那种，有没有推荐？NETCONF太重了不能用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Qcc标准里是不是规定了怎么配？有没有现成工具能直接把Qcc的YANG转成二进制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "他俩都说YANG不能直接下，太重。架构师说用二进制或者TLV。那我用Protobuf吧，序列化快，也有工具直接生成代码，比XML好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "芯片不支持？那就跑在控制核上呗。防风暴，限流就行了啊，工具库里都有令牌桶组件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定长二进制没工具生成啊。那就只能手写了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令下发和回传都用定长二进制，不用YANG和XML。回传走带外通道，不让它影响数据面。YANG模型留着只做离线校验。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

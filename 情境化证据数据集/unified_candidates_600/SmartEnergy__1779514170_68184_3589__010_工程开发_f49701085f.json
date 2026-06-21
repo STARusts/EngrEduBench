@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在极端热失控压测且算力资源受限背景下，用户与导师围绕降级压测方案设计、步长对齐、误差边界及数据脱敏合规持续沟通（6轮），其中在省算力压测方案与结论边界部分与测试与仿真攻坚手沟通（2轮），在MPC恢复时间与加速比设定部分与算热统筹算法工程师沟通（1轮），并最终形成Chaos Mesh故障注入加2倍速历史数据回放的压测及脱敏验收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着直接用Locust多起几个worker狂发调度请求，把CPU打满不就压到位了？热失控不就是算力高发热大嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与仿真攻坚手 咱没资源搞全量孪生，这热失控压测咋弄？有没有省点算力的招？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天正好看了Chaos Mesh的文档，它原生支持搞网络延迟和CPU压力，那我就用它来模拟算力突增和通信抖动，这俩凑一起应该能凑合测。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算热统筹算法工程师 MPC在热失控工况下，容许的最大恢复时间大概是多少？我好设回放加速比。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "10分钟恢复，加速比不超3倍。那我就定2倍速回放，加上Chaos Mesh故障注入。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误差肯定有，就大概看个趋势吧。外推肯定不能完全信。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我平时就打原始JSON，没想过这茬。那我把测点ID哈希一下？审计留痕就是打点时间戳？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测方案就这：Chaos Mesh注入故障+2倍速历史数据回放。测点ID哈希，业务数据加偏移。验收就看MPC能不能在10分钟内拉回温度，逻辑不死锁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

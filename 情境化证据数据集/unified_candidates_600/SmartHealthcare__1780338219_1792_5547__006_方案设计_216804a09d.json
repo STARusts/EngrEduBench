@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在产程演进图谱与时序建模背景下，与导师围绕图谱节点与边的临床映射、网络选型及偏移报警策略持续沟通（5轮），其中在节点映射与网络选型部分与产程态势推演师沟通（1轮），在偏移边触发条件部分与产程态势推演师沟通（1轮），并形成基于Friedman分期的图谱结构与防误报触发逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设想用动态异构图来承载。节点是当前态势，边带时间衰减权重。时序建模上，STGCN（时空图卷积网络）理论上最适合捕捉这种时空依赖，能同时建模空间图结构和时间序列。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "节点我原本想用态势向量直接做embedding，边用转移概率。但产程分期确实不好硬套，间歇期概率会断，我也没想好怎么处理非平稳态。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原想用STGCN，但节点和边在临床映射上卡住了，间歇期状态转移也不好定，这块怎么破？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推演师说节点按Friedman分期加胎心变异，边分生理和病理，间歇期算稳态维持边。网络的话，不建议STGCN，说太重，用GAT+GRU。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "报警逻辑这个我确实没细想，图里出现偏移边就推给助产士看？是不是得设个置信度阈值？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "病理性偏移边的触发，怎么避免单次偶发误报？导师说要带时序持续性。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明确了：1. 节点为Friedman分期+胎心变异；2. 边分生理演进与病理偏移，偏移边激活需连续3周期确认防误报；3. 时序建模用GAT+GRU，满足80ms延迟；4. 间歇期为稳态维持边。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

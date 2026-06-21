@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工业烟羽碳监测与减排闭环系统工程开发的边缘采集与设备接入背景下，用户与导师围绕最小链路交付、点表与协议选择、字段与模块分层、幂等补传测试及权限审计持续沟通（9轮），其中在现场接入坑点与调试定位、时间戳/单位/字节序与点表版本管理部分与硬件接入工程师沟通（3轮），并形成本周8条验收点与验证实验清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把边缘侧做成可跑通的最小链路：仪表/网关接入→采集→本地缓存→上送，后面再接事件链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两类我倾向先选：CEMS烟道侧（SO2/NOx/颗粒物/流速/温压湿）加一个DCS工况（风机频率、负荷、燃料流量）。点表管理我有两个想法：\nA）把点表写成YAML/JSON随边缘包发版，缺点是改点要发版；\nB）点表从云端下发，边缘只做校验和热更新，缺点是现场断网初装要有默认。\n我更偏B，但怕做复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现场看起来多数是以太网，少量老仪表走RS485。采集形态主要是边缘做主站去轮询（拉），CEMS有的能推但先不指望。协议我预计优先Modbus TCP/RTU，OPC UA先放后面，不想一开始就加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件接入工程师 工业烟羽碳监测与减排闭环系统要做边缘采集接入。我先上Modbus TCP/RTU轮询两类设备（CEMS+DCS）。你帮我列下现场最常踩的坑：时间戳、点表、单位/量程、通信稳定性、还有怎么快速判断问题在仪表还是在我们采集端。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的time_source我觉得关键。我之前只想存一个ts。那“分钟均值”的对齐是不是要单独存一个period_end？不然核算窗口会乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点表版本号我能做。还有一个：DCS工况点很多，先接哪几个能支撑后面事件链路？我想要最小集合，避免现场改造量太大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基于这些，我想把边缘上送的采样记录扩成：ts、ingest_ts、time_source、agg_window/window_end、unit+basis、quality、raw_payload_ref（可选）。你看这些字段边界会不会侵入到云端数据模型？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按四层拆：\n- adapter层：Modbus RTU/TCP驱动，输出“寄存器原始值+通信元数据（耗时/超时/重试）”；\n- parser层：按点表把原始值转成工程值，处理字节序、拼float，输出value+unit+basis+quality；\n- buffer层：本地持久化队列，按topic/设备分区，存ts/ingest_ts等；\n- uplink层：批量上送，支持断点续传和幂等。\n我不确定的是：幂等键用什么组合最稳，ts会重复（分钟均值同一个window_end）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算做三个最小验证：\n1）断网补传：拉掉uplink网络10分钟，采集仍写buffer；恢复后按批次补齐，检查云端缺口为0，且重复率<0.1%；\n2）重启一致性：采集进程重启3次，seq不回退；云端按幂等键去重后数量与本地一致；\n3）字节序回归：用模拟器固定输出两组寄存器（同一物理量不同字节序），点表切换版本后解析值落在期望范围。\n指标我还在想：重复率怎么算更严谨。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想做两档：\n- 正常档：按“最近7天或最大20GB”保留；\n- 轻量档：只保留关键点（CEMS+最小工况集合）最近24小时，其他点丢弃但要记drop计数。\n触发条件：磁盘占用>80%进入轻量档，<60%回正常。这样能兜底。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我不太有把握。我直觉是：点表和采集参数算“配置资产”，需要云端签名下发，边缘校验签名；边缘本地也要能导入一份应急默认，但应急导入要在日志里留操作人和时间。操作人怎么做我还没想清，只能先做API token？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着收一下，可能不完整：\n1）先支持Modbus TCP/RTU轮询，优先接CEMS关键点+DCS最小工况点；\n2）采样记录字段：ts、ingest_ts、time_source、agg_window、window_end_ts、unit、basis、quality；\n3）点表云端下发+默认点表兜底，点表必须version化；\n4）解析层要处理寄存器类型、拼float、字节序；异常码映射quality；\n5）本地buffer持久化队列，断网不断数，恢复补传；\n6）幂等键：device_id+point_id+window_end_ts/ts+持久化seq；\n7）可调试：保留最近N次原始寄存器读数与通信元数据，做链路/协议/点位分层自检；\n8）磁盘>80%进入轻量档（24h+关键点），记录drop审计信息。\n权限审计我只能先做点表包签名验签和本地导入留hash日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

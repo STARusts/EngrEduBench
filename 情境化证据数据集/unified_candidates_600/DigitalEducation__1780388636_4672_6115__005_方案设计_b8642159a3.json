@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多模态特征融合架构设计背景下，用户与导师围绕架构选型、时间对齐、端侧算力、降级策略及精度验证持续沟通（9轮），其中在融合对齐与算力瓶颈部分与多模融合架构师沟通（1轮），在缺失模态处理与线性注意力精度权衡部分与算法选型评估师沟通（1轮），并最终形成早期融合架构、可学习占位符降级策略及F1下降<2%的验证推翻标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备选个技术栈把视频和音频特征合在一起。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接把特征向量拼起来，丢给下游分类器，这样最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "早期融合和晚期融合在咱们这种流式数据下，哪个对齐容易点？端侧算力吃得消哪个？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "早期融合省算力，晚期融合超时。得用Attention对齐。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级的话，没视频就全用音频？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级策略我加上：缺失模态用零向量补位。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果分层授权导致视频特征缺失，早期融合里直接填零向量行不行？会不会把注意力带偏？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用可学习占位符"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑个对比测试？拿线性注意力和标准注意力比一比F1掉多少，掉得不多就用线性。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "假设是：线性注意力在50帧窗口内，F1下降不超过2%。如果下降超过2%，就推翻，改用标准注意力加降帧率处理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构选型定早期融合，用线性注意力机制做时间对齐，算力约束2T NPU；分层授权降级策略用可学习占位符替代缺失模态；验证指标是F1下降<2%，否则回退标准注意力加降帧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在田间气味指纹病害早诊协作网上线运行评估背景下，用户与导师围绕上线验收口径与回归范围收束最小可执行清单并明确基线/注入回归与合规抽查（11轮），其中在固定红线阈值定义上与产品经理沟通（1轮），在合规可核对检查项上与合规与数据治理官沟通（1轮），并形成不超过10条的验收与回归验证清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想把运行评估阶段的上线验收和回归验证跑一遍，但我担心我把验收搞得太“架构化”了。你帮我定个验收抓手，别让我发散。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在脑子里冒出来的方案有点多。一个是搞全量分布式追踪把每条事件全链路都串起来；另一个是只看关键指标P95和死信；再一个是做数字孪生回放，把昨天的流量录下来明天回放对比。感觉越想越大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段是 eventTime、createdAt、sentAt，可选 ackAt。指标看创建/通知时延P50/P95/P99、死信占比、幂等命中率、重复推送率、缓存溢出计数和 dataLossFlag。阈值是固定红线+基线1.5倍。我理解上线验收至少要把这些都跑一遍。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "基线我想取24小时，但又怕农田有昼夜变化，24小时够不够。要不取72小时，再按小时分桶看P95曲线和溢出计数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回归覆盖四条改动的话：环形队列缓存上限与丢弃规则、高低风险双通道发送、指数退避+inflight限制、eventId=deviceKey+bootId+counter和风险TTL。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规检查项就是 deviceKey不可逆、日志不记地块名和个人信息、digestId仅引用、环境隔离+保留<=30天。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "P95阈值我有点纠结。固定红线我们当时没写死具体值，只说“红线+基线1.5倍”。那上线验收是不是要先跑基线再拿基线算阈值？这样就变成动态阈值，验收会不会被说不严谨。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 田间气味指纹病害早诊协作网准备做上线验收。现在卡在“固定红线”的具体数值：通知时延P95/P99、死信占比、重复推送率、工单/告警触达时效这块，你那边验收标准能给个可落地的数吗？别太理想化，农田弱网很现实。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这些数我能用。弱网无ack比例单列这点挺关键，我之前想把ack当硬条件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回归验证我想用“录制回放”，把昨天基线流量录下来今天回放对比指标分布，这样比较科学。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那注入回归怎么定义比较合适？我想做更系统的混沌工程，比如随机断网、随机延迟、随机丢包，再看P99。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "eventId那里我还有个小执念：deviceKey+bootId+counter，如果counter回绕或者bootId读错，会不会造成碰撞导致误去重？我想加个UUID兜底。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我把它当成回归用例。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那合规验收这块，我怕自己漏项。除了不记地块名/个人信息、deviceId改deviceKey、digestId引用、保留<=30天，还有什么需要在上线验收里“可验证”？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 上线验收想把合规也做成可验证项。我们已经做了：deviceId改不可逆deviceKey、不记地块名和个人信息、digestId只引用、日志和追踪ID按环境隔离且保留不超30天。还需要补哪些验收检查点？最好是能一条条勾的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我听下来核心是“跨环境key空间”和“审计日志不可篡改”这俩，我之前只盯着字段脱敏。第4条按createdAt起算也跟我们的观测字段一致。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着收一下，可能还会有点啰嗦：  \n1）生产环境跑24小时基线，按小时分桶出 createdAt->sentAt P95/P99 曲线，高风险P95≤8秒、P99≤20秒，低风险P95≤30秒。  \n2）若有ackAt：sentAt->ackAt 高风险P95≤60秒；无ack比例单列，不作为硬失败，但超过阈值就拉警报（阈值先用基线1.5倍）。  \n3）死信占比：24小时≤0.3%，任意1小时≤1%。  \n4）重复推送率≤0.5%，幂等命中率要在基线附近（不低于基线/1.5倍的跌幅？这句我不太会写）。  \n5）缓存溢出计数在断网注入时可上升，但 dataLossFlag 不能连续出现（比如连续3次就算失败）。  \n6）断网/弱网注入：验证环形队列丢弃规则按“低风险先丢”，高风险仍能在恢复后30分钟内送达。  \n7）重试风暴注入：inflight限制生效，createdAt->sentAt P99不爆炸，死信不升过1小时1%。  \n8）重启/重复上报注入：bootId变化时eventId不冲突，counter回绕用例幂等仍能挡住重复推送。  \n9）合规抽查：上报与日志无地块名/个人信息，deviceKey不可逆且跨环境隔离，保留期按createdAt≤30天，超期数据不可查。  \n10）审计抽查：权限变更与导出行为有审计记录，且审计与业务日志分离。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白，我把“基线必须为0”记住了。还有个点：我原本想加“全链路分布式追踪覆盖率≥99%”这种指标，看来不该放进验收主线里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我接下来就按“三类注入+24小时基线+合规抽查”跑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "要是出现“P95正常但死信升高”，我优先去看重试风暴和inflight限制有没有失效，对吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

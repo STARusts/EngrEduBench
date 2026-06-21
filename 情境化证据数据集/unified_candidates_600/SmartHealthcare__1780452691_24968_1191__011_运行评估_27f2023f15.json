@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在拦截引擎灰度上线验证背景下，用户与导师围绕灰度分组策略、放量方式、有效性验证及能力短板持续沟通（7轮），其中在假阳性分布规律部分与拦截归因标注员沟通（1轮），在平滑过渡与分层放量方案部分与灰度发布管控沟通（2轮），并最终形成科室白名单分层放量、分组比较验证及补齐动态路由脚本能力的SMART目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用K8s发布平台的默认灰度规则，按流量百分比切就行了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看平台文档里，可以按HTTP Header或者Cookie切流量，把特定请求导到新版本。用这个功能应该能避开风险吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱里跑出来的假阳性预警，分布是不是有啥规律？我想按Header做灰度隔离。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把肿瘤科的请求全屏蔽掉？只放其他科室进来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "肿瘤科假阳性太高不能随便切，但还得保安全，灰度放量这块有没有现成的平滑过渡方案？最好配置简单点的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "发布平台自带的UI界面配不了这种多层级的吧，有没有类似Arms那种流量打标插件能直接搞定的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得太麻烦了，能不能先按5%随机权重跑一小部分，出问题再全量回滚？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看发布平台的监控大盘呗，有没有4xx错误或者接口超时，一眼就看出来了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就对比骨科和其他科室的拦截率，算一下置信区间看看重叠度。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太会写这种根据业务指标动态调整路由的脚本，平时都是用平台UI点一点，碰到这种要写逻辑的就抓瞎。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这周五前，学完网关自定义路由脚本的写法，跑通一个按科室Header动态放量的demo，能根据监控大盘的拦截率自动调权重。学完直接把脚本用到咱们系统的灰度配置里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

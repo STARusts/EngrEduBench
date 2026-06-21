@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方引擎进入联调压测与灰度发布收尾背景下，用户与导师围绕主链路成功口径、压测指标与分阶段压测、灰度切流与回滚及合规边界持续沟通（6轮），其中在用例拆分与压测口径上与测试负责人沟通（4轮），在灰度策略/监控告警与回滚上与SRE运维工程师沟通（3轮），在压测数据与日志合规及权限审计上与合规与风控经理沟通（2轮），并形成8条可测试的联调压测与灰度执行清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕的是链路里有一段慢，然后全都堆住。还有就是字段对不上。压测我没太做过，我只知道要打并发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主链路就是：手机端传图，然后识别出杂草，处方引擎给推荐，最后作业端执行。复盘就是算效果。我觉得处方返回得算成功，后面的复盘可以慢点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 联调和压测你这边一般怎么拆？我需要先准备哪些口径？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "同步链路5秒内，这个是硬要求吗？我担心识别会超。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等我有点怕，我们现在好像只有trace_id。那我是不是要加request_id？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度发布这块我需要怎么配合？我们要按什么切流量，出问题怎么回滚？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计失败>0就拦截？这会不会太严了，我们压测可能偶发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我这边要准备的是告警阈值和看板字段？我不太会配看板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调这块，我先盯同步链路：上传-识别-处方-下发。成功口径不是只看200，要有rule_version、audit_hash、explain_codes，还有禁忌校验的结果码。\n压测这块测P95、错误率，还有队列积压；再加一个并发下重复请求要幂等，不能出两张处方。\n灰度这块是两层：服务版本按用户或田块哈希切1%到100%；rule_version也能只对灰度人群生效，出问题可以切回老版本。告警上5xx和P95超5秒就停，审计失败要拦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收动作就是……用同一个request_id连打两次，看是不是返回同一个prescription_id。然后audit_hash也一样。要是rule_version变了，就不一样。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "压测影像我们现在拿的是试点地块的，里面可能有定位信息。我之前没想过这点。那就是换成内部样例库？或者把GPS去掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 联调压测和灰度期，测试数据和日志这块有什么硬边界？哪些字段不能进压测数据集或日志？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因枚举我们现在没有，我以为写个文本就行。那我是不是要加一个固定字段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先说我能记住的：\n1）联调同步链路成功口径：处方返回里必须带 prescription_id、rule_version、audit_hash、explain_codes、禁忌校验结果码。\n2）并发下幂等：同一request_id重复请求只能生成一条处方主记录，返回同一prescription_id与audit_hash。\n3）重试风暴：压测时抽10%请求做两次重放，审计记录不重复计数。\n4）压测指标：接口P95、5xx/4xx比例、识别/复盘队列积压时间与长度。\n5）灰度两层：服务版本按user_id/田块ID哈希切1%→5%→20%→100%；rule_version开关只对灰度人群生效，可快速切回稳定版本。\n6）告警阈值：5xx>0.5%或P95>5s持续5分钟暂停放量并回滚；审计写入失败>0直接阻断发布。\n7）压测数据合规：不用真实农户原图与精确坐标，坐标网格化≥1km并去EXIF设备标识；日志不落手机号等直接标识。\n8）rule_version切换权限：仅灰度管理员可操作；每次切换必须落审计事件，含原因枚举PERFORMANCE/SAFETY/CONFIG_ERROR。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

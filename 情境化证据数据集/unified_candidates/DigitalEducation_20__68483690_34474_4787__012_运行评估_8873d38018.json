@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在过程作业溯源与诚信评估系统试点学校上线验收背景下，用户与导师围绕验收口径修订、code隔离/不改分、合成数据合规与压测门槛持续沟通（8轮），其中在事件与code口径/审计字段/抽查方法上与数据治理经理沟通（2轮），在链路性能阈值与失败处理上与测试工程师沟通（1轮），并明确用户现场负责code隔离抽查与性能三指标对照。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一件是把三类数据包造出来，正常、高拒绝、对抗。第二件是按100/300/800跑三段压测，然后看P95和一致性、RejectEvent有没有进错code。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1不对吧，RejectEvent不是要算到quality吗。2我不太确定。3感觉也不太好。4我觉得800ms挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为RejectEvent是拒绝的，不算诚信问题？就放质量那边统计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致就是重复…DUPLICATE_EVENT？不一致是CONFLICT_EVENT？评分我记得是要降？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规不让用真实学生过程数据。只能用合成的和脱敏的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 试点学校上线验收这块，事件口径和code要怎么验？我就想知道怎么查不出错。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "A就是RejectEvent别跑去integrity，重复的也别降分。B就是字段要全。C就是别用真数据，还要可配置留存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据治理经理说三块：RejectEvent只能进quality，重复event要分hash一致/不一致，两种都不改分；然后事件要有tenant_id、course_id、assignment_id、submission_id、actor_role、event_time、event_id、event_hash、source、trace_id这些字段；验收只用合成+脱敏，还要留存可配、有审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…查integrity_codes里有没有RejectEvent？如果有就不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就一个查事件明细里RejectEvent的code字段，确认它标的是quality。另一个查聚合结果里integrity_codes数组里不包含RejectEvent。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 试点上线验收的压测怎么判通过？就P95那些，还有失败怎么算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是分四条看，不是一个P95。还有三种直接不过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 测试工程师说评分API P95要小于600ms还要看5xx和超时；入站要零丢弃、队列压完5分钟回落；同一批事件重放两次分数和integrity_codes要一致；trace_id要能串全链路。然后RejectEvent进integrity、用真数据、质量码改分这三种直接不过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我抓②和④吧。就是看RejectEvent别进去，然后跑一下看P95。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95，5xx比例，还有超时比例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接说不过，停掉，重新来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

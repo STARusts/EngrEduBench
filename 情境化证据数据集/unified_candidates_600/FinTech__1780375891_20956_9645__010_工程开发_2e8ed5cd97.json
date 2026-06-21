@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微额密集并发性能调优背景下，与导师围绕ZKP与流计算混合部署的瓶颈定位、池化隔离、背压协同及调优硬约束持续沟通（7轮），其中在瓶颈定位部分与性能调优专家沟通（1轮），在背压协同部分与流计算架构师沟通（1轮），并形成包含池化隔离、动态窗口与微批处理的调优硬约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，那我就加几台机器，把线程池调大点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能调优专家 微额密集并发下，ZKP和流计算混合部署的瓶颈怎么定位？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就分成两个池子。保护的话，流量大就排队？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流计算架构师 微对冲流的背压机制怎么和ZKP证明速率协同？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天看了一篇讲Reactor模型的博文，好像也能用在这，异步非阻塞嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着ZKP生成证明的时候，不阻塞流计算的线程。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那看来Reactor只能用在流计算的IO等待上，ZKP这块还得靠池化隔离和动态窗口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测结果怎么看？TPS跑到多少算调好了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，ZKP和流计算线程池物理隔离；第二，流计算侧用动态滑动窗口做背压，看ZKP积压量；第三，压测要把非线性延迟拐点推到TPS 5万以后；第四，流计算IO等待那块用Reactor非阻塞。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

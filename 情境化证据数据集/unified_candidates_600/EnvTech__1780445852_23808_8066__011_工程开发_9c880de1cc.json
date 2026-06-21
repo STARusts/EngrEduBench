@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在联调与阈值自测环节背景下，用户与导师围绕协调埋点冲突、打通阈值自测闭环及确定核心指标持续沟通（3轮），其中在埋点方案冲突部分与寻优算法工程师沟通（1轮）、与联调测试工程师沟通（2轮），在配方数据脱敏合规部分与环规合规审计师沟通（1轮），并最终形成基于Prometheus暴露中间状态、PromQL断言及数据哈希混淆的联调与阈值自测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得直接上 OpenTelemetry 全链路追踪，Jaeger 做可视化，再用 Kafka 把 Span 数据异步落盘。这样谁都不用改太多代码，全链路可观测，测试也能看到所有细节，一劳永逸。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那用 Sidecar 模式，Envoy 拦截你们的 gRPC 调用，自动注入 TraceID。算法代码一行不改，测试也能抓到调用拓扑和耗时，完美解耦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心指标是每轮迭代的富集得率预测值和浸出剂用量约束违反度。测试需要这俩值来写断言，判断是否收敛到安全阈值内。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "好吧，Sidecar 确实多此一举。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测试环境的配方数据脱敏，这块合规具体怎么卡？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就这么定：算法侧不加 OTel 也不加 Sidecar，在迭代回调里用 Prometheus SDK 暴露两个 Gauge 指标：预测得率和约束违反度。浓度数据做哈希混淆。测试侧直接用 PromQL 拉指标做自动化断言。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调基线：图计算 gRPC 输出物料流作为寻优输入，寻优算法通过 Prometheus Gauge 暴露迭代中间状态（预测得率、约束违反度）。阈值自测：测试侧基于 PromQL 拉取指标，判定收敛性与安全阈界。数据合规：测试配方浓度哈希混淆，日志禁止明文。放弃全链路追踪方案。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

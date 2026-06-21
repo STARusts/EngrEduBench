@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在院感气溶胶孪生网络总体架构设计背景下，用户与导师围绕纯流式架构局限、虚实同步与数据同化、轨迹合规脱敏、验证标准及分层梳理持续沟通（7轮），其中在孪生映射与双轨架构部分与流体数字孪生设计师沟通（1轮），在轨迹边缘脱敏与数据最小化部分与隐私合规风控官沟通（1轮），并形成双轨同化加边缘脱敏架构方向及分层框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我初步想全上流式计算，Kafka接轨迹和传感器数据，Flink做实时风险算子，直接出结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "虚实同步不就是数据延迟低点吗？Flink窗口开小点不就同步了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "孪生映射这块架构怎么搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个CFD引擎，算力吃得消吗？门诊高峰期并发一上来，CFD不得卡死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "轨迹数据我们做脱敏就行了，后端处理前脱个ID。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果在后端脱敏有什么风险？架构上怎么改？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这架构比我原来想的重多了。我对CFD同化机制和边缘k-匿名具体实现不太熟，得赶紧补一下。这两天我把CFD数据同化的开源案例和边缘隐私计算规范扫一遍，看怎么把Flink和CFD引擎的交互接口定下来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "验证假设就是：在HVAC变风量扰动下，纯流式架构的风险计算延迟可能低，但精度（误差率）会随时间发散；双轨架构因为同化修正，精度能收敛。我可以设计个对照实验，用历史数据回放，看风险值和金标准的偏离度。如果双轨架构在误差率上比纯流式低20%以上，算力增加就值得。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最底层是边缘采集与脱敏层（UWB网关做k-匿名）；中间是双轨同化层（实测流走Kafka+Flink，仿真流走CFD引擎，两边做数据同化）；最上层是风险计算与阻抑联动层。脱敏日志异步落盘供模型迭代。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

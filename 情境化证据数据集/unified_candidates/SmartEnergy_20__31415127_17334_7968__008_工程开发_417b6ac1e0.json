@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在海上风电群组预警平台进入代码开发的高并发接入背景下，用户与导师围绕MQTT接入可靠性、关键数据优先级与吞吐取舍持续沟通（6轮），其中在边缘网关50Hz采样与Protobuf性能约束上与硬件工程师沟通（1轮），在Kafka削峰、acks与分区写入策略上与后端开发沟通（1轮），并形成“Protobuf+Kafka+自适应采样”接入方案及Locust压测验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "目前最头疼的是传感器数据的高并发接入，海面上几百台风机同时传回振动、应力、载荷这些数据，我打算先在边缘侧跑一个原生的MQTT Broker来做初步的报文接收。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我原计划就是用默认的Topic分发，没想过优先级。难道要在代码里手动写逻辑去过滤吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件工程师 我们现在用的ARM边缘网关，如果我把传感器的采样频率从1Hz拉到50Hz，网关本地做Protobuf序列化会有性能瓶颈吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "明白，就是平时发精简包，异常时发完整包。@后端开发 硬件这边如果配合我做了动态降频，后端在接收高并发流数据时，用什么中间件来做流量削峰比较稳？我之前只用过内存队列。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我其实对Kafka的acks参数和分区平衡策略只停留在听过的阶段。我看文档说acks=1也可能丢数据，这在安全预警里是被允许的吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回导师，我梳理了一下，目前的实现方案准备做如下调整：\n1. 通信协议：依然用MQTT，但消息负载改用Protobuf二进制格式，减少报文体积。\n2. 逻辑分流：在代码里增加一个“触发式采样控制”模块，由应力阈值决定发送频率。\n3. 缓冲架构：接入层直接对接Kafka，利用其分区并行写入来扛住50Hz的并发洪流。\n至于具体怎么选分区和调优acks，我承认这块是我的短板，我目前的理解还支撑不了这么细的参数配置。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我发现自己对分布式消息系统的底层原理掌握得确实不够，导致我在做技术取舍时底气不足。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算利用接下来的两天，重点研读Kafka官方关于生产者调优的文档，并利用现有的开发服务器搭建一个最小化的对比实验。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我会测试在不同acks配置和batch.size下，10万次并发写入的平均延迟和丢包情况，把测试数据带回到我们的开发周报里。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我准备用Locust写一个压测脚本，模拟50台风机同时处于“Alert Mode”。实验分为三组：第一组是原始的JSON格式直接写库；第二组是Protobuf序列化后经过Kafka缓冲；第三组则是加入刚才说的自适应采样逻辑。我重点观察P99延迟和接入层的CPU抖动。如果第三组能把延迟控制在200ms以内且不丢包，就说明方案达标了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好的，我总结一下现在的产出结论：\n1. 确立“Protobuf + Kafka”的异步接入架构，放弃直接入库。\n2. 明确开发任务：编写自适应采样控制逻辑，优先保障塔筒震动数据的QoS。\n3. 验证方案：设计包含Normal/Alert两种模式的压测实验，以P99延迟<200ms为验收标准。\n4. 学习计划：完成Kafka生产者参数性能比对实验，形成选型依据记录。\n我现在就去写第一版的接入Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

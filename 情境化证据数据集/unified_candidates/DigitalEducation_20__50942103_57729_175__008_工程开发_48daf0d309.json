@@ -1,0 +1,105 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在认知护栏自适应测评平台进入RAG服务开发背景下，用户与导师围绕RAG最小链路、接口字段、可核验引用、结构化风险提示与审计留痕持续沟通（9轮），其中在引用拼装与检索过滤阈值部分与NLP工程师沟通（5轮），在审计合规与授课关系校验落点部分与安全工程师沟通（2轮），并明确按6条实现要点落地与三条红线的代码规避动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是用户问问题，然后检索一下，然后让大模型回答，再把引用放上去。接口就一个吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不做每次都弹验证；不做直接把讲评全关；不把学生原文到处存着。对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入参就question，然后可能带个userId。再带课程id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把检索出来的前几个文档标题贴上去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@NLP工程师 引用要怎么做才算能核验？我现在就想把检索到的东西塞给模型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就只存chunkId，不存内容。模型就按chunkId吐出来。行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "也行，加个hash。rerank我先不做，top6就行吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "知道了，我就每个doc最多两个。阈值先写死0.2？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我回去弄个配置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我用chunkId+docId+hash当引用。每个doc最多两个chunk。阈值做成可配置。rerank先不做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就返回一个message字段，告诉他不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "type就…比如EVIDENCE_LOW，action就是“换个问法”。eta就0？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就让他等一会儿，或者换网络。再不行联系管理员。eta写60秒？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "存userId、课程、时间。再存query吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能吧，就多几个字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就最后写一次，写结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 审计要怎么记才算合规？还有授课关系校验我放哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我懂了，就是网关先拦一下，我这边只看token里有没有课的权限。审计就写一份append-only。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我就不开。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 校验token课权限；2 去向量库搜top6；3 拼prompt让模型答；4 把chunkId当引用回给前端；5 如果没搜到就返回风险；6 写审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我就按这6条做。displaySnippet我就截100字，hash也加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不做每次都弹验证：我不返回“去验证”，只给等待/换网/联系管理员。\n不做直接把讲评全关：就算risk也只返回提示，不把整页禁用。\n不把学生原文到处存着：审计里存指纹，不存query原文。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

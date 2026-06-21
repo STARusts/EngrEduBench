@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨介网关接口规范设计背景下与导师围绕网关分层抽象、并发防冲突与规范基线持续沟通（6轮），其中在接口分层模型部分与融合架构师沟通（1轮），在跨介状态切换防冲突部分与嵌入式开发主程沟通（1轮），并最终形成包含三层模型、切换原语、位域状态机与事件中断的网关接口规范基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口嘛，就把声磁光的线统一定义一下，数据包弄成一样的格式发过去就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就包头加点字段区分，载荷不管了，反正包能传过去就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关接口是不是就分两层，包头一层，数据一层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "三层啊。我记一下，适配、汇聚、服务。轻量就是不搞复杂格式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发？那就是同时发呗，先到先得？或者加个锁，等一个发完再发下一个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨介切换加锁太重会卡死，有没有轻点的锁？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不用锁，用位域和中断。位域就是几个bit表示状态对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分三层，适配汇聚服务。服务接口给路由用，不用锁，用位域和中断防冲突。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估期阀控指令下发滞后背景下，用户与导师围绕滞后溯源、超时降级止损策略及日志留痕持续沟通（6轮），其中在指令链路卡顿定位部分与异常溯源专员沟通（1轮），并最终形成500ms降级阈值、上一轮有效指令保底及审计日志字段方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看面板上延迟偶尔飙到800毫秒。是不是网络抖？加个消息队列缓冲一下行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@异常溯源专员 帮忙看下指令链路呗，到底是网络卡还是算力卡？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型推理卡了？这就难办了。那要不换个小点的模型？或者加个Redis缓存推理结果？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "止损的话，那就限制推理时间？超时就别算了，直接发个默认指令？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "保底指令就发上一轮的有效指令吧，反正土壤含水率变化没那么快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志留痕我就把超时时间、降级标志和实际下发值打出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果不彻底修好推理慢的问题，后续一直降级也不是事啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阈值设500ms，超过就降级。审计日志加上`is_degraded`和`fallback_cmd_id`。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

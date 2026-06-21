@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在碳迹溯配引擎开发背景下，与导师围绕结算链路防卡死与折中方案持续沟通（5轮），其中在碳因子与审计留痕解耦部分与碳引擎开发工程师沟通（3轮），在设备熔断同步要求部分与协控开发主管沟通（2轮），并最终形成碳因子本地缓存同步读、熔断同步下发、日志异步落盘的折中方案及验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "碳迹结算同步执行，我在协控主循环里直接加个同步调用，try-catch包起来，异常就触发熔断冻结设备。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "结算同步，失败就熔断，审计日志同步写。这样写代码能跑通不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "碳引擎这边说会卡死！"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一边要同步保安全，一边要解耦防崩溃防丢日志，这代码没法写了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "熔断信号还是同步发出去冻结设备，但日志写本地队列，碳因子拉取也放异步？这样协控那边不卡，日志也不会丢？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "准又不想卡死，那碳因子能不能用本地缓存？结算的时候直接读本地缓存，后台开个线程定时去云端拉最新因子刷缓存。这样结算还是同步的，但不走网络IO了！"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "熔断信号同步发，结算读本地缓存因子，日志走Disruptor异步写。我去改代码结构。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存设置5分钟过期，强制拉一次。SQLite写入我就用本地压测工具打一下并发写入TPS，看会不会丢数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

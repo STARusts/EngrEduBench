@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在数控接口与补偿协议设计背景下，与导师围绕推演注入数控系统的延迟与合规冲突破局、OPC UA over TSN选型及验证方案持续沟通（5轮），其中在协议性能与适配部分与数控协议对接师沟通（2轮），在私有协议合规与扩展规范部分与合规与标准专员沟通（1轮），并最终形成基于OPC UA over TSN的补偿注入架构与验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这确实是个架构解耦点。我倾向于在推演引擎和数控系统之间加一层“补偿指令网关”，做协议转换和流量控制。推演侧输出标准的内部中间态，网关负责翻译成具体机床的方言。这样核心算法不用跟着机床型号走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现有的多轴数控系统，要满足5毫秒补偿周期，走标准协议来得及吗？还是必须用厂商私有高速通道？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "私有接口这条路，合规视角怎么看？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直以为OPC UA走以太网抖动控不住。最近刚好在补学TSN（时间敏感网络）的调度机制，发现TSN通过时间感知整形器可以预留时隙，提供确定性调度。如果把OPC UA跑在TSN上，是不是既能满足标准合规，又能卡死抖动？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我需要证明OPC UA over TSN在满载情况下也能把端到端延迟压在2毫秒以内，给推演留3毫秒。但我不太确定怎么设计这个验证实验才能让两边都信服。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们用OPC UA over TSN，你能在边缘侧配合做协议适配吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构上：推演引擎输出特征到边缘补偿指令网关，网关作为OPC UA over TSN Client，经TSN交换机打到机床侧协议转换板，最后写CNC寄存器。这样既没绑定私有协议，又用TSN保住了确定性延迟，长期维护代价也低。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

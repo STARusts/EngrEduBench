@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在遥感反演与特征流水线工程开发背景下，用户与导师围绕最小可交付链路、字段口径、版本血缘、幂等重跑、验收与审计事件持续沟通（7轮），其中在云掩膜阈值、田块聚合统计与质量/不确定性标记上与遥感算法工程师沟通（4轮），在审计字段敏感性与留存期上与合规与数据治理官沟通（1轮），并对齐可实现的实现口径与测试验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向先把流水线拆成三段：影像预处理（云/阴影/大气校正按已有工具链）、特征计算（NDVI/EVI/NDWI之类先齐）、再把栅格按田块边界聚合成时序特征写回孪生状态。开发上先追求可重复和可追溯：每次产出的特征都能定位到输入影像、处理参数和代码版本。风险是云导致时序断裂，后面要插补或不确定性标记。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最小可交付我建议定成一条从“影像批次”到“田块-日期特征表”的链路：\n1）输入：按卫星/日期切片的一组栅格（带元数据、云掩膜）。\n2）输出：每个田块每天一条记录，字段先做：ndvi_mean、ndvi_p10/p90、valid_pixel_ratio、cloud_ratio。\n3）幂等：用(aoI_id, sensor, acq_date, pipeline_version)做upsert键，保证重复跑不叠加。\n4）重跑：允许按日期范围重算，写入时带run_id，旧结果软失效。\n传感对照先不进主链路，只在测试里用传感器LAI/株高做相关性 sanity check。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@遥感算法工程师 我们在做遥感反演与特征流水线的最小版本。想确认三件事：1）cloud/valid像元的判定口径和阈值建议；2）田块聚合统计除了mean还建议哪些分位或稳健统计；3）云导致断档时，不确定性/质量标记你建议哪些字段，便于后端和测试做验收。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "云概率阈值你说60保守，我能接受。可疑区间40-60先当云，会导致可用率低，业务可能抱怨。我们是不是需要给业务留个开关？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "田块很小的情况，像元数少，valid_pixel_ratio意义会不会也不稳？比如一块地就10个像元。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不确定性用`1-valid_pixel_ratio`加上`p90-p10`的离散度，我担心尺度不同，不好融合。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三点：\n1）像元有效性定义固定成：valid = 非fill且非cloud；云概率阈值先锁`>=60`为云，可疑40-60也按云处理，减少漏云。\n2）田块聚合输出字段在mean之外加median、p10/p90，并补`valid_pixel_count`、`pixel_count_total`，避免小田块解释不清。\n3）质量标记做成`qflag`枚举（OK/LOW_VALID/ALL_CLOUD/SUSPECT），不插补进主表，缺测就缺测；不确定性先拆成`uncert_valid`和`uncert_disp`两列，不合成总分。\n暂不做buffer扩边，先接受小田块波动靠qflag解释。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想用两层版本：\n- `code_version`来自Git提交hash（CI注入环境变量），保证代码可追溯；\n- `pipeline_version`是我们手工维护的语义化版本，比如rsfeat_v0.2.0，只有当参数口径或输出字段变更才升。\n每次run生成`run_id`（时间+随机），产物表里带`pipeline_version、code_version、run_id、input_scene_ids摘要`。血缘上从输入影像元数据表能查到scene_id列表，输出记录只存hash摘要避免字段爆炸。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以把明细放到旁路表：`feature_lineage(run_id, aoi_id, acq_date, scene_id)`，主表只保留scene_id_count和一个hash。排障时按run_id查旁路表。这样主表轻，血缘可查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "主表用(aoI_id, sensor, acq_date, pipeline_version)唯一键做upsert，默认只保最新一次run的结果。历史保留在`feature_history`里，写入时追加一条，带is_current标记；更新current时把旧的is_current置false。失败重跑只要run_id不同也能追溯。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收点我提三条：\n1）可回放：给定run_id，能查到输出的所有(aoi_id, acq_date)记录，以及对应scene_id明细和参数（cloud阈值等）。\n2）可重跑幂等：同一pipeline_version同一日期范围重复触发两次，主表记录数不增长（按唯一键不重复），但history表run_id增加，且is_current只有一条为true。\n3）可解释：当valid_pixel_ratio=0时，qflag必须为ALL_CLOUD或等价状态，uncert_valid=1；当valid_pixel_ratio<0.2时qflag=LOW_VALID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值建议配置化但有默认值，测试用默认值锁死：`low_valid_threshold=0.2`，规则是`<0.2`算LOW_VALID，`>=0.2`不算。配置变更必须触发pipeline_version升级，否则回归对不上。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "流水线我也做事件化审计：每个run发三类事件到审计表：`RS_RUN_STARTED`、`RS_RUN_SCENE_FAILED`、`RS_RUN_FINISHED`。失败事件里最小字段：run_id、scene_id、错误码、阶段(preprocess/feature/aggregate)、时间、输入摘要（scene元数据hash）。不把整块栅格路径或敏感客户信息塞进去，避免泄露。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 遥感特征流水线会记录审计事件（run_id、scene_id、错误码、阶段、时间、输入摘要）。想确认三点：1）aoi_id/田块ID是否属于敏感或需要脱敏；2）scene_id能否明文存审计；3）这类流水线审计事件留存期有没有通用建议，避免后面整改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "理解下来就是：aoi_id可以存但不要带坐标等可识别信息；scene_id多源时要考虑供应商限制，最好引入内部scene_uid；留存期按默认12-18个月做可配置。审计里的输入摘要要不可逆。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "第4条的history维护is_current我担心并发会出坑，但我先把接口验收写清，具体事务由后端定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第5条我会把aoi_id只当内部ID，审计里不出现任何可定位字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课堂对话智能助教编排引擎核心实现背景下，用户与导师围绕执行骨架、路由边规则、上下文传递、token预算降级、隔离与审计验收持续沟通（7轮），其中在错误模型/重试/隔离与审计队列实现上与后端工程师沟通（2轮），在全局与节点预算、token预估与裁剪及L1/L2降级策略上与算法工程师沟通（2轮），并收敛MVP数据结构与单测重点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这周要把编排引擎的核心跑起来：节点怎么执行、怎么传上下文、怎么控token预算、怎么做降级。@导师 你帮我把实现边界和验收点再钉一下，免得我一头扎进细节里走偏。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做两层：\n- 编排定义层：Workflow(版本号)+Node(类型、配置、入参映射、出参映射)+Edge(条件)。\n- 执行层：ExecutionContext里放租户ID、课堂ID、会话ID、token剩余额度、traceId。跑的时候按拓扑顺序执行节点。\n节点接口我倾向：`Run(ctx, input)->(output, meta, err)`，meta里带token消耗和风险标签。\n降级我现在有两种：A）全局预算不够就直接切换到“规则答复/短答”；B）按节点级别预算，某个节点超就跳过它走替代节点。我拿不准哪种更好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "失败我想分三类：\n1）可重试：网络/连接器超时，按节点配置重试2次；\n2）不可重试：参数校验、模板缺字段，直接失败；\n3）可降级：模型调用报错或预算不足，走降级分支。\n状态机大概是：PENDING->RUNNING->SUCCEEDED/FAILED/SKIPPED。\n我担心的是条件边+降级边一起存在时会很绕"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 节点执行器这块，你建议用什么骨架？我想要：条件边、失败/降级边、重试、以及租户/课堂隔离。错误码和重试策略怎么落地比较顺？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个疑问：如果节点FAIL了但也同时预算超了（比如返回usage晚到），按你说BUDGET优先，那会把真实失败原因盖掉？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想把connector client做成带租户配置的单例缓存，确实容易串。那我改成“client无租户态，租户密钥在每次调用时从ctx取”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 token预算硬阈值这块，你更建议全局预算还是节点预算？上下文裁剪怎么做才不会把课堂对话搞崩？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预估那块我有点担心准不准。不同模型tokenizer不一样，我如果用一个粗估函数，误差大就会频繁误触发降级，课堂体验会差。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我从两边拿到的点是：路由优先级要固定，BUDGET>FAIL>CONDITION>SUCCESS；错误模型要枚举化；预算要有全局硬阈值+节点上限，且要做预估触发，降级分L1/L2。\n我倾向的折中实现：引擎层做路由，节点只产出结果；预算判断先用预估，执行后再用实际usage修正ctx剩余额度。你觉得这套会不会太重？我怕第一版写不完。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不可缺：\n1）Node接口+状态机；\n2）边的优先级和路由（至少SUCCESS/FAIL/BUDGET三类）；\n3）全局预算硬阈值+预估；\n4）执行隔离key（tenant+class+workflowVersion）；\n5）审计事件异步，不阻塞主链路。\n我想先砍：复杂条件表达式（先只支持简单布尔/比较），还有补偿/回滚（节点失败就走失败边，不做反向操作）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我设想的数据结构是：\n- `WorkflowDef{ id, version, entryNodeId, nodes:Map, edges:List }`\n- `NodeDef{ id, type, config, budgetCap?, retry{max, backoffMs} }`\n- `Edge{ from, to, kind: SUCCESS|FAIL|BUDGET|CONDITION, expr? , priority }` priority我就按固定规则，不让配置改。\n- `ExecCtx{ tenantId, classId, sessionId, traceId, remainingBudget, variables:Map, attempt:Map(nodeId->n) }`\n- `NodeResult{ status, output, usage{prompt,completion,total}, err? }`\n路由：每次拿到result后，先判预算触发（预估触发的在调用前就走BUDGET边），再看FAIL，再看CONDITION，最后SUCCESS默认边。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "白名单我可以按节点输出映射来做：`NodeDef.outputMapping`只允许写入指定key，写入前做大小限制（比如字符串长度、列表条数）。超了直接截断并打tag。\n审计事件我先定义最小字段：`eventType(start/end/node_start/node_end/budget_trigger/error)`、tenantId、classId、sessionId、workflowId+version、nodeId、timestamp、traceId、status、errorCode、usageTotal、degradeLevel(L0/L1/L2)。非关键事件比如prompt片段我先不记录，或者只记录hash。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前还想把最近一轮对话文本直接写审计方便回放，现在看来先别碰这条线。默认只落结构化字段+hash，真要回放走单独通道再说。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第3条里“预估触发”的实现我怕一开始就绑死tokenizer库，后面换模型麻烦。我先做接口：`TokenEstimator`可插拔，默认用主模型的估算，系数k先写死1.2。其余几条我都能开干。路由优先级我会优先写测试卡住，免得以后改出事故。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

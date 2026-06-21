@@ -1,0 +1,607 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在新高考选科推演系统需求梳理背景下，用户与导师围绕痛点拆解、合规红线和研究假设构建持续沟通（8轮），其中在痛点拆解部分与产品经理沟通真实痛点（1轮），在未成年人数据使用部分与隐私合规架构师沟通合规边界（1轮），并最终明确核心痛点、合规约束，形成基于专业覆盖率的研究假设与基线测算计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做一个学科潜能锚测与生涯路网演进系统。新高考选科不是难嘛，学生不知道自己适合啥，我想搞个系统，把他们的成绩和职业数据弄一块，推演一下选科路径。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 新高考选科这块，学生乱选科，我们想做推演，你觉得痛点具体在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "懂了，就是数据不够新，信息没对齐。那我多弄点实时数据进去应该就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私合规架构师 我要拿学生成绩和测评数据做选科推演，这些数据能用吗？有什么限制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行，我记下了，得加个授权模块，数据要脱敏。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设？我就假设用了我们系统，学生选科后悔率低？这个怎么测啊，我也不能让他们选两次。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设：使用本系统推演选科组合的学生，在志愿填报时专业可选范围覆盖率，显著高于未使用系统的学生。变量就是是否使用系统，反驳标准是覆盖率没有显著提升。但我现在不知道怎么算覆盖率，这块我得补补课。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我得搞清楚新高考志愿填报的专业选科要求逻辑，还有覆盖率怎么算。我找几份招录数据写个脚本跑一下基线数据，两周后给个初步的基线值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点是信息差和动态博弈，不只是乱选。约束是未成年数据要明示授权、最小化收集和脱敏。研究假设是系统能提升专业覆盖率。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在家长画像设计背景下与导师围绕画像维度、计算方式及合规边界持续沟通（6轮），其中在业务标签定义部分与产品经理沟通（1轮），在埋点数据收集红线部分与隐私合规架构师沟通（1轮），并最终形成基于脱敏会话行为推导干预与焦虑倾向、仅供选科调参严禁营销的画像方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "画像就是打标签。后端建个宽表，把家长的学历、职业、收入往里塞，再跑几个规则，比如高知家庭标个“自主型”，其他的标“盲从型”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不能拿身份信息。那就让他们自己填问卷？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 家长画像这块，业务上需要哪些标签？我后端这边想尽量少存点东西，免得出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私合规架构师 这种埋点数据收集，上一轮说的最小化收集，具体怎么卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "维度不搞身份资产了，只做行为推导的“干预倾向”和“焦虑度”。边界就是埋点数据脱敏，不能和学生实名关联，标签不能用于营销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得设个阈值。比如同一天查看同一专业详情超5次，算高频干预。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先拍个经验值，后面再调嘛。"
+              }
+            ]
+          },
+          {
+            "microScene": "在推演生涯路网需使用招录数据背景下，用户与导师围绕数据合规红线、脱敏方式及精度损失代价持续沟通（5轮），其中在合规要求与留存期限部分与隐私合规架构师沟通（2轮），在数据字段与脱敏丢弃部分与招录数据分析师沟通（2轮），并最终形成招录数据入模的脱敏、泛化与加噪规则写入需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "招录数据不都是公开的吗？考试院网站都能查到，直接拉下来用应该没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "招录数据如果用来做推演模型特征，合规上有什么硬性要求？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假名化我知道，就是哈希掉身份证号和考生号。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "留存期限怎么算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规说宏观统计随便用，微观轨迹要假名化，而且超3年的要聚合泛化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在能拿到的招录明细，具体有哪些字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "考生号肯定要哈希。选科组合和投档分能留吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "考生号哈希脱敏，选科和分数留，但样本太少的要加噪。超3年的只留分布。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "精度掉一点就掉一点吧，合规不过关啥也干不了。模型那边大不了再多调调参。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "脱敏、泛化、加噪，需求里写死。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在生涯服务商业闭环与验证口径定义背景下，与导师围绕低频重决策服务的商业分层逻辑与最小化验证口径持续沟通（7轮），其中在C端分层转化设计部分与产品经理沟通（1轮），并最终敲定商业分层与验证指标，落实转化节点埋点接口需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做成SaaS呗，按调用量收费，或者直接卖给学校包年。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "低频确实麻烦。我后端能把并发撑起来，但用户不常来我也没辙。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 这种选科和生涯规划的东西，用户高三用完就不用了，怎么搞商业闭环？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "免费引流，报告收钱，专家抽佣。三层漏斗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这，加点埋点看看日活？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就知道写接口，样本这东西我确实没概念。是不是找几个学校跑一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "商业验证这块我太弱了，晚上得找几篇B2B2C SaaS漏斗指标的文章补补。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需求里得把这几个转化节点的埋点接口先留出来，不然上线没数据看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能，转化漏斗这几个关键页面的接口我全加上上报字段。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在学科潜能锚测系统方案设计背景下，用户与导师围绕潜能解构模型选型及对照验证方案持续沟通（5轮），其中在测量学指标与选型约束部分与教育测量专家沟通（1轮），并最终确定SEM与IRT为候选模型、因子分析为基线，明确基于拟合指标的反驳标准及SEM补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思直接上个因子分析或者搞个DNN跑分不就完了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "因子分析和深度学习，做学科潜能解构哪个更合适？我觉得DNN拟合能力强，算出来得分肯定准。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "SEM这玩意儿我得从头学，这周得找几篇用lavaan包的教程啃一下，看看能不能把现在的线性回归逻辑换成SEM的路径系数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一批历史数据，看哪个模型算出来的AUC高，或者准确率高，就选哪个呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果SEM超了0.08，就说明它连因子分析都不如？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选型候选就是SEM和IRT，因子分析当基线对照。不用深度学习。验证就看RMSEA和CFI，SEM的RMSEA要是大于0.08，假设就不成立，就选IRT。另外我得花两三天看看SEM的文档，试试把路径系数接到接口里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计阶段确定生涯演进图谱骨架架构背景下，用户与导师围绕图数据库选型、Schema设计与时序性体现持续沟通（4轮），其中在图库选型与Schema设计部分与知识图谱工程师沟通（3轮），并最终确定图库选NebulaGraph、核心边挂载概率与年份区间等属性、学生节点脱敏入图的Schema底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接上Neo4j，Cypher写起来顺手，后端接Spring Data Neo4j也熟，开发快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本来想用Neo4j，说单机怕扛不住多跳查询，大图这块有啥推荐？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Schema就建几个核心节点呗，学生、科目、专业、职业，然后互相连起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边带权重我懂，就加个property。伪ID也行，反正查的时候映射一下。NebulaGraph我回去查查文档，接口怎么封装。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱说NebulaGraph好，分布式不怕大图。然后边得加权重属性，学生节点必须脱敏用伪ID。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "给边加个时间戳？还是搞版本图？版本图太麻烦了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "后端先跑通再说，部署的事后面看。就定NebulaGraph了，边加年份区间和概率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把Nebula的图空间建出来，按这个约束写Schema。"
+              }
+            ]
+          },
+          {
+            "microScene": "在招录数据入图管道设计且预算受限背景下，用户与导师围绕技术选型、管道关键节点及回滚机制持续沟通（6轮），其中在轻量级技术选型部分与后端开发工程师沟通（1轮），在脱敏映射边界部分与招录数据分析师沟通（1轮），并最终确定轻量级调度加五步批处理管道及入图重试策略方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "招录数据量也不小吧，我想着上Kafka接Flink，增量实时入图，查询延迟最低。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "招录数据入图有没有省钱的法子？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点就是先拉原始数据，然后跑清洗脚本，再换伪ID，最后写Nebula。失败回滚我还没想好，批处理好像可以断点重跑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "批处理管道里，招录数据清洗完直接入图行吗？脱敏伪ID怎么加？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以是五步：拉取、清洗、脱敏映射、组装、入图。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "批处理任务失败就重跑？或者入图前先做备份？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "轻量调度加五步批处理，脱敏单独一步，入图失败配重试策略。"
+              }
+            ]
+          },
+          {
+            "microScene": "在动态推演能力开放与接口规范制定背景下，用户与导师围绕推演接口异步设计、算力消耗与降级策略及误伤风险提示持续沟通（6轮），其中在推演耗时与算力限制部分与推演算法工程师沟通（1轮），在异步接口路径与降级风险字段设计部分与后端开发工程师沟通（1轮），并最终形成推演接口异步规范基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就定义几个API呗，比如算组合概率的，算专业匹配的，直接把参数传过去返回结果不就行了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步？用消息队列？我后端发个任务，算法那边消费？但算力控制我不太懂怎么在接口层做。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@推演算法工程师 算组合概率和路径推演，跑一次大概要多久？算力吃得消吗？有没有啥限制？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法那边说全量推演要3到5秒，轻量的200毫秒。算力有限，要分级，打满了得降级查缓存。所以接口肯定得异步，然后得把降级状态返回去？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误伤风险？加字段能防误伤吗？我不太懂这块怎么设计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 异步推演接口，提交任务返回taskId，然后轮询状态，这套路怎么设计比较好？还有降级状态和误伤风险提示怎么放返回体里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "后端说提交用POST返回taskId，轮询用GET。返回结果里加个meta，放置信度、是否降级、还有缓存过期时间。降级在算法那边触发，接口透传。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "推演接口全走异步，POST提交推演任务，GET轮询结果。返回体必须带meta字段，包含confidence、is_degraded和cache_expire_at。网关层加并发限流保护算力。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在方案设计隐私计算安全架构背景下，与导师围绕未成年人数据合规、TEE与FL架构取舍及对照验证持续沟通（5轮），其中在数据可用不可见实现部分与隐私合规架构师沟通（2轮），并最终确认以TEE为主、PSI对齐、预留FL接口及全链路审计的架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就HTTPS传输加密，数据库里敏感字段AES加密，查的时候再解密。接口层做个脱敏，身份证号带星号返回就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法那边要全量数据跑模型，我总不能给他造假数据吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演算法要跑全量特征交叉，怎么做到数据可用不可见？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "FL要改算法训练逻辑，TEE是不是对我后端侵入小点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我刚才查了下TEE，感觉就像个安全沙箱，我后端服务不用大改，包一层就行。FL要算法那边配合重写训练逻辑，太折腾了。我想选TEE，加上PSI做特征对齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么验证？我总不能真去搞个侧信道攻击试试吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照实验，同数据集，比耗时和AUC还有审计覆盖率。那我就按TEE先设计，跑基准测试。FL留个接口。审计全链路打标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。隐私计算主架构TEE，特征对齐PSI，预留FL接口。审计日志含调用方、特征集、时间戳、用途。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发背景下，用户与导师围绕测评微服务拆分、跨语言实现及验证方式持续沟通（5轮），其中在测评核心计算逻辑部分与教育测量专家沟通（1轮），并最终形成重计算与查询分离的跨语言拆分方案及历史数据回放验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "测评这块我想按业务拆，潜能计算、量表解析、报告生成，直接用Spring Cloud那套搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PSI我打算在网关层做拦截调接口。潜能计算不就是查分加权算总分吗，这我熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测评核心计算逻辑到底有啥？我就知道算总分，还有啥必须写进服务的？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "IRT和Cronbach's alpha我都没写过，公式太复杂。我得查查这俩的开源实现，不然接口都定义不出来。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把IRT参数估计单独抽一个计算微服务，跟查分服务分开。用Python写IRT，Java写查询，gRPC通信。我今晚先跑通Python的`psychometrics`包写个demo，明天把接口定义搞出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写单元测试，跑通不报错就行呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "微服务拆分就定：测评查询服务、IRT计算服务、报告聚合服务。验证就用历史数据回放跑AUC。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在招录引擎与测评微服务联调背景下，与导师围绕查询性能、缓存穿透、数据脱敏及快照库版本校验持续沟通（7轮），其中在缓存穿透与联调架构部分与后端开发工程师沟通（1轮），在脱敏样本与回放验证部分与招录数据分析师沟通（1轮），并形成含布隆过滤器、二级缓存、租户隔离及带版本校验脱敏快照库的联调优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "查询慢就加索引呗。要是还慢，我就把录取分数线这些数据塞Redis缓存里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "穿透的话，返空值缓存？脱敏，我随便造点假数据行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "招录引擎查录取数据，缓存穿透怎么防？还有微服务联调架构怎么搭比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那脱敏的事呢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调环境要用录取数据，不能明文，样本怎么出才不影响回放验证的AUC？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "招录查询防穿透用布隆过滤器，缓存用Caffeine加Redis二级，服务间Feign加租户头。数据用分析师给的静态脱敏快照库，不连生产。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我没想过。定时刷？"
+              }
+            ]
+          },
+          {
+            "microScene": "在端侧渲染与埋点测试背景下，用户与导师围绕图谱渲染卡顿和埋点漏报的定位、解决方案及工程边界持续沟通（6轮），其中在主线程阻塞与sendBeacon限制部分与前端开发工程师沟通（2轮），在埋点丢失原因与Worker验证部分与测试工程师沟通（2轮），并最终形成力导向计算拆至Worker及埋点改用sendBeacon的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱节点好几千个，肯定是数据量太大渲染压力顶不住了。埋点漏报，是不是请求发得太快被网关限流了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱渲染卡死，主线程是哪里堵了？埋点漏报，网络请求有啥异常？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "处理页面卸载时的请求可以用 `navigator.sendBeacon`，这个能保证请求异步发出去。还有 Web Worker，把计算挪出去主线程就不卡了。这么改应该能行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "sendBeacon 好像有大小限制，不能发太大的包。Worker 通信如果是结构化克隆也耗时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "埋点改用 sendBeacon 发 POST，接收端配合改。图谱渲染拆 Worker，测试用 TBT 指标卡。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改代码，把力导向计算逻辑抽离到 Worker，埋点发送换成 sendBeacon。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在生产环境全链路验证背景下，用户与导师围绕监控重构、基线分桶、对照实验设计与体感对齐持续沟通（6轮），其中在监控重构与分桶策略部分与运维工程师沟通（1轮），在体感反馈对齐与灰度效应量部分与体验研究员沟通（1轮），并最终形成包含监控分桶重构、历史数据回放对照及灰度效应量归因的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "弱网和机型确实没想过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老流水线接不住sendBeacon埋点，弱网到达率也没区分，这监控怎么重构？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "具体怎么定弱网的阈值和分档边界，我拿不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿几所高中的真实历史数据回放？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂怎么做A/B对照和显著性检验，之前都只看大盘平均值。我得补一下线上实验的统计方法，这两天把A/B测试的置信区间和p值怎么看搞明白，然后加到部署流水线里当卡口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路验证除了看服务端指标，用户侧的体感反馈怎么对齐？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我现在的全链路验证方案就是：1. 监控重构为分桶聚合；2. 用历史数据回放做对照；3. 小批灰度看效应量和投诉归因。"
+              }
+            ]
+          },
+          {
+            "microScene": "在灰度验证方案落定背景下，用户与导师围绕推演效能监控看板的指标选择、模块划分与报警阈值策略持续沟通（5轮），其中在算法侧指标拆分部分与推演算法工程师沟通（1轮），在报警阈值与动态基线配置部分与运维工程师沟通（1轮），并最终形成看板三区域划分与动态基线报警策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看板的话，我就打算把刚才说的TBT和到达率放上去。推演引擎的延迟，后端接口本来就有响应时间监控，直接套过来应该就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演效能看板需要加哪些指标？我目前只想到接口RT。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图谱寻路耗时和特征计算耗时我能理解，就是拆得更细的耗时。仿真收敛轮次是什么意思？资源水位也要放看板吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想按模块分：基础资源区、接口耗时区、算法耗时区。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但是仿真收敛轮次这种指标，报警阈值怎么定？我没啥经验。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法那些指标，特别是仿真收敛轮次，报警阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不过动态基线会不会不够稳？万一灰度期间流量本身就有毛刺，基线就偏了。要不要加个人工确认环节？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把这三个区域的指标字段理出来。"
+              }
+            ]
+          },
+          {
+            "microScene": "在B区选科偏差异常报警的运行评估背景下，用户与导师围绕业务效果归因、验证方法与误伤补救策略持续沟通（5轮），其中在异常原因排查部分与体验研究员沟通（2轮），在量表偏移验证方法部分与教育测量专家沟通（1轮），并最终形成归因初判、相关系数验证动作及合规补救通道原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "B区数据管道延迟了？还是推演接口挂了？我查一下报错日志，看看是不是数据没刷出来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "选偏了？可能没看懂路网吧。前端渲染图谱是不是又卡了，学生等不及就乱选了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用户是不是没看懂图？你那边有反馈没？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "停留短就是没看懂呗。物理分数低还选物理，这不反常识吗？是不是后端给的分算反了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以是题出问题了？那我找后端把旧题换回来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么确认是题偏了不是人偏了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算相关系数，这得跑个离线任务。行，我去拉真实成绩数据算一下。算出来如果跌了，就换题对吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "发个弹窗提醒他们重新测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因初判两点：一是新量表未校准导致物理潜能低估，二是家长干预跳过推荐。验证动作：算B区物理锚测分与大考成绩的相关系数，跌了就是偏移。如果确认偏移，上线重测补救通道，允许重出报告，全程审计留痕。"
+              }
+            ]
+          },
+          {
+            "microScene": "在模型衰减迭代规划背景下，用户与导师围绕推演模型特征漂移监控、重训数据切片与外推边界持续沟通（7轮），其中在特征漂移指标与迭代路线图部分与迭代规划师沟通（1轮），并形成优先升级校准管道接入Evidently监控、限定理科重训与外推边界的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接拿新校准数据重训一把推演模型不就完了？反正数据都留痕了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "全区肯定不行吧，B区是重理区。衰减阈值我确实没数，看曲线跌了就知道该修了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演模型衰减指标现在啥情况？AUC跌了多少？后续迭代咋排的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "本来下版要重构图谱，现在得先改校准管道。我觉得就按他说的先改管道吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现条件就按B区那批学生的ID切片跑脚本吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我其实不太懂特征漂移监控怎么工程化落地，这块我短板挺明显的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "昨天同组的后端同学评审我代码时提了一嘴用Evidently库做数据漂移检测，我打算把这块迁移过来，加到补救通道的校验环节里，一旦漂移超阈值就自动触发重训。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不能外推。文科组合的潜能锚测受主观题评分标差影响大，跟理科的客观锚测机制完全不一样，直接推肯定失真，得单独收集数据验证。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "优先级P0是升级校准管道接入漂移监控，P1是理科锚测模型重训。复现条件锁定为B区理科生ID切片及对应大考成绩数据集，外推边界明确仅限理科组合，严禁向文科组合外推。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

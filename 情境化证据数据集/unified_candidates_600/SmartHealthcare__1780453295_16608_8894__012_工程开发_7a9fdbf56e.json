@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在异构ICU设备数据容错除错背景下，与导师围绕丢包补全、时间戳乱序对齐及降级策略持续沟通（8轮），其中在高频波形丢包补全与插值失效边界部分与生理信号处理专家沟通（2轮），在多源时间戳对齐部分与后端开发工程师沟通（1轮），并最终形成基于PTP同步、缓冲窗口、样条插值及脏数据降级的容错基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高频波形丢了一个点补0怎么了？不就差一个数嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多源设备时间戳对齐怎么搞才快？排序太慢了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚查了下PTP边界时钟机制，其实就是在网关硬件上做同步。那我就在网关加个缓冲窗口，比如20ms的窗口，等迟到数据到了再排，这样乱序应该能解决，也不至于太慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "样条插值啥时候会变垃圾？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就15%以内用样条插值，超过15%直接把这段数据标脏，不推了呗，总比出假预警强。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据不可信就不做精细推演，直接退回安全默认值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关用PTP边界时钟同步，开缓冲窗口解决乱序；丢包率<15%用样条插值补全，>=15%标记脏数据触发轻量降级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

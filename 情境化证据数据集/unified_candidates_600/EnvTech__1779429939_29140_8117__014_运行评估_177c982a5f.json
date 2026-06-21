@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估监控部署背景下，用户与导师围绕调度成功率采集口径、告警阈值与临时策略持续沟通（4轮），其中在成功率全链路口径定义与工况匹配部分与监控指标分析师沟通（2轮），并最终形成三级口径定义、异步关联逻辑及临时告警配置策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率不就是用下发没报错的数量除以总下发数吗？我直接count一下就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度成功率的口径定义。我现在只算下发没报错的，好像太粗糙了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "下发和回执我懂怎么写，但第三级执行生效，工况数据怎么匹配？这好像挺麻烦的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流式关联，时间窗口5分钟。我大概懂了，就是不在主链路卡着，在Grafana或者ClickHouse那边做join计算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发成功率低于99%告警，回执低于95%告警，执行低于90%告警？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "宽进严出，先用临时阈值。可临时阈值我该定多少？总不能全填0吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径分三级：下发（count请求成功）、回执（count DCS ack）、执行（异步关联工况变化，5分钟窗口）。临时告警：下发和回执挂宽松值，执行只记录不告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

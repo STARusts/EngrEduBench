@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在PHE算力卸载与调度背景下，用户与导师围绕异构算力组织、调度策略调整、维护成本与验证实验持续沟通（6轮），其中在DRL动态调度与FPGA重构可行性部分与算力调度专家沟通（2轮），在PHE算子静态卸载FPGA瓶颈部分与密算性能优化师沟通（1轮），并最终形成FPGA静态固化加GPU弹性溢出的调度策略及对照验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然要极致性能，我建议构建一套基于深度强化学习的全局异构算力调度网格。用DRL Agent实时感知各机构PHE计算的算力需求，动态把任务切片分发到GPU和FPGA上，FPGA支持运行时动态可重构，这样能保证算力永远贴着需求走。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我设计了DRL动态调度加FPGA运行时重构的方案，用来解决PHE并发算力瓶颈，你看可行度如何？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果不重构，FPGA不就成了静态逻辑了？遇到突发流量峰值怎么办，算力不就枯竭了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "静态绑定确实能解决基座算子性能，但GPU池扩容有启动延迟。我担心排队溢出会触发级联延迟。PHE的标量乘法如果全部静态卸载到FPGA，寻址和位宽会不会成为新瓶颈？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "去掉DRL和FPGA动态重构。基座PHE算子静态固化到FPGA，走PCIe批量交互；GPU作为弹性溢出池，处理非标量的复杂逻辑。调度策略改为基于优先级的静态分区绑定，加上轻量级启发式溢出。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维护成本这块我确实没细算。FPGA静态逻辑维护成本低，但GPU弹性池如果常驻，闲置功耗很高。我设想是GPU池无请求时缩容到零，靠预热的冷启动容器承接。至于饿死问题，低优先级任务可以降级走明文穿透路径，之前架构已经留了这个口子。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我设计一个对照实验：控制组是纯CPU计算PHE，实验组是FPGA静态卸载加GPU溢出。注入相同流量的跨域资金流，观测P99延迟和GPU资源利用率。如果P99在50ms内且GPU利用率峰值不超过80%，就认为调度策略成立。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

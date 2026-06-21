@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把数据多拷贝几份，放在不同的服务器上，坏了一个另一个还能用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分几个机房放，然后中间加个防火墙。至于流量大的时候，就多开几个云服务器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 咱们这系统数据量这么大，备份怎么弄才不卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规官 专家说要分三层，合规上还有啥要注意的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "刚才问了一圈，大概明白了。就是把数据按重要程度分三块放。最核心的博弈信号要在两个机房同时跑，万一挂了一个，另一个能秒级接管。然后那些不常用的原始报文就找个便宜的磁盘存着。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计就直接调公司的日志接口吧，按流程走。地域这个，我就在方案里标注一下，所有的备份节点都选在国内的金融云机房。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "频率的话，跟模型推理同步行吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "逻辑错误那个我确实没想过，要不加一个延迟备份的校验环节？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我整理下。1. 核心博弈信号做同城双活，RPO要求接近于0；2. 原始报文存放在物理隔离的离线节点，每周做一次全量备份；3. 所有的实时数据链路强制开启AES-256加密，审计日志留存六个月；4. 所有数据存储节点物理位置必须在国内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

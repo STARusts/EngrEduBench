@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多模态学习轨迹方案设计中，用户与导师围绕“证据包生成与溯源链路”讨论触发边界、最小字段、溯源闭环与留存分级并收敛可执行规则（8轮），其中在存储最小化、prompt留存、互评可见性与删除合规部分与合规与隐私官沟通（3轮），并形成EvidencePackage/EvidenceEntry最小结构与input_digest等审计策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成可复现的。证据包里不仅有原始 Artifact，还要有“为什么选它”的理由，最好带计算图一样的依赖链。生成方式我倾向事件驱动：每次学习轨迹事件发生，就把它可能成为证据的候选记下来，最后汇总成包。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "触发点我想全覆盖：提交、互评、导师批注都生成一版，版本化。理由我想存：选取规则、特征、相似度阈值、摘要prompt、模型版本。越全越好，这样以后出问题能回放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 证据包如果要可复现，我打算把原始轨迹、生成规则、模型版本、阈值、prompt、以及互评内容都打包。哪些能存？哪些碰红线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我把音视频都做片段化引用就行？我想存 prompt 细节来复现摘要，合规上有问题吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这边我先说我的理解：证据包不存一堆副本，更多是引用链+审计指纹。prompt 不存明文，存模板ID和参数hash。对吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我给最小：EvidencePackage：package_id、owner_type/id（学生或小组）、scope（一次作业/一次讨论）、generated_at、generated_by（人或AI）、retention_policy_id、status。  \n里面包含 entries：每条 entry 关联一个或多个 EvidenceLink，指向原始事件；然后 entry 有 summary（摘要文本）和 rationale（规则ID、阈值、模型版本、置信度）。  \n再加一个 provenance：把用到的 Artifact checksum 列表化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "锚点我不想重复存，entry 只引用 EvidenceLink 的 link_id（我们之前没显式说 link_id，但可以加个主键），再通过 link 里的 span_anchor 去定位片段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "中间步骤我想全记录：模型输入、输出、logits、token概率……"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能接受，但我想把“输入集合”做成不可变集合：例如 entry_inputs 是 EvidenceLink 列表，排序固定，然后算一个 input_digest。这样至少能证明没被偷换证据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "路径是：EvidencePackage -> entry -> EvidenceLink -> from/to_event_id -> event 里的 Artifact 引用 -> storage_uri + checksum；  \n审计上：每个对象都有 created_by/at；逻辑删除字段能标记删除；如果摘要是AI生成，entry 里记录 model_version、prompt_template_id、confidence、input_digest。导师点开就能看到链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就把 retention_policy 绑定在 package 上，强制其引用的 Artifact retention 不短于 package；或者生成包时把关键片段做一份受控的衍生物 Artifact，继承更长留存。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我担心 L2 会被滥用。能不能加个触发条件：只有当 Feedback 标记了“需举证”或者出现申诉时，才允许生成 L2。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想加一条：input_digest 的计算规则要固定，不然审计没意义。比如对 primary+supporting link ids 做字典序排序再hash。还有 output_artifact 既然是 Artifact，就沿用 checksum/retention/encrypt_flag，别开新路子。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

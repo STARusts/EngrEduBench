@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在TSN多流汇聚门控设计背景下与导师围绕GCL时隙切分、动态流重配开销与冗余时隙预留持续沟通（6轮），其中在时隙冲突避免与周期对齐部分与时空流控设计师沟通（3轮），并最终形成GCL大周期5ms对齐、ST与CQF时隙物理隔离及预留20%空白时隙的门控约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "门控不就是配优先级嘛，ST最高，CQF次之，Best Effort垫底，按这个排时间片。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "周期不是整数倍的话，硬切可能会让CQF的帧卡在ST保护带里出不去，会抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "GCL这块怎么设计才能不让CQF堵死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知流周期有1ms的，也有5ms的，控制指令基本都是1ms。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算力开销这块，交换机芯片扛得住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说大周期定5ms，切5个1ms，ST占20%剩下给CQF。但GCL条目有硬件限制，算力开销大，得用启发式算法离线算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "动态增减的话，重配GCL肯定影响正在跑的流，难道要全量重刷？那不是要断网？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "留个10%吧？够不够？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "GCL按5ms循环，内部切分，ST和CQF时隙物理隔离，留20%空白应对动态变更，避免动不动就重算全量GCL。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

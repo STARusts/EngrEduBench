@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多谱边智驱微气候干预系统固件开发背景下，用户与导师围绕RTOS选型的资源约束、时序验证与方案调整持续沟通（5轮），其中在底层重构与驱动生态部分与嵌入式固件开发工程师沟通（2轮），并最终形成双RTOS选型方案与验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算全盘上Zephyr RTOS，它的设备树和驱动模型能完美统一多谱传感器的采集接口，比FreeRTOS那种全靠裸机堆砌的野路子强太多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我主张用Zephyr重构底层，统一多谱采集和微雾控制接口。FreeRTOS那套加HAL库的方式太散乱了，后续维护成本极高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "重写驱动是前期投入，换来的设备树解耦和跨节点复用是长期收益。M0节点可以裁剪Zephyr，关掉不用的子系统。而且多谱采集对时序同步要求极严，FreeRTOS的裸机中断套中断很容易出时序抖动，Zephyr的线程模型更好控制优先级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设计对照测试：在相同MCU上，分别跑Zephyr和FreeRTOS，用逻辑分析仪抓GPIO翻转时间戳。模拟多谱采集触发，测量从外部中断触发到ADC启动的延迟，以及从推理完成到PWM输出拉高的抖动方差。设定阈值：抖动超过50us就判定为不可用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只看过官方文档的基准数据，G070上没亲自裁过。这块确实是我的盲区。我今晚基于Zephyr v3.4拉一个最小defconfig，只开ADC和PWM节点，编译测一下实际的Flash和SRAM占用。把这块数据补齐，再决定M0节点的去留。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "G070上Zephyr最小系统占了大概40KB Flash，8KB RAM，留给业务逻辑的空间确实太局促了。FreeRTOS最小系统只要6KB Flash，2KB RAM。Zephyr在极资源受限节点上不可行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我调整方案：算力较强的网关和M4采集主节点用Zephyr，保证多谱时序同步和复杂驱动模型；M0末端执行器节点保留FreeRTOS+HAL，只做简单PWM控制。两者通过自定义的轻量IPC协议交互。这样兼顾了架构解耦和资源约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

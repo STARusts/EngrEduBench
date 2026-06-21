@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在遗留因果控制模型训练脚本重构背景下，用户与导师围绕反穿越检查、BACKFILL隔离、原谱触发特征与训练管道清单持续沟通（11轮），其中在treatment/outcome/confounders字段落地与禁入adjustment变量上与因果推断科学家沟通（1轮），在负对照/安慰剂干预选择与多L滞后敏感性上与控制系统工程师沟通（1轮），并形成按事件对齐样本与自动化测试及关键字段口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "center=True就改成False。label就往后挪一段时间。random split就换成按时间切。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "BACKFILL就过滤掉，或者权重调低点。反穿越检查我就加个单测，检查特征时间戳都小于label时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则一，所有特征用的窗口都写成[t-lookback, t]，不许出现[t, t+?]。规则二，做个label置乱，AUC还很高就报警。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就只用指纹特征，不用全量原谱。原谱就只拿触发窗口的，做校准集。线上特征就跟指纹一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@因果推断科学家 因果控制训练里，treatment/outcome/confounders 这三块怎么在我们平台的数据里落字段？哪些变量不能拿来做调整？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是按“干预事件”拼表，别按分钟硬回归。adjustment里别塞干预后才会变的量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "L就先写死60分钟，后面再改成范围。负对照就用温度吧，然后看效果是不是0。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@控制系统工程师 负对照指标选什么更靠谱？我们想用来检查残余混杂，最好短期不受投加变化影响。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "placebo干预这个比较简单，我可以照做。自检信号我怕没接进来，但PLC扫描周期应该有。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）样本构建按干预事件：treatment=Δdose，outcome=Δy(t+L)。  \n2）特征生成只用过去窗口，禁止center rolling；插补只向后填充。  \n3）时间切分训练/验证，不用random split。  \n4）事件字段：BACKFILL默认不进主训练集；DRIFT_TRIGGER/争议复核通过的短窗口原谱只进校准集，并把audit_ref带进元数据。  \n5）反穿越测试：label置乱、placebo干预平移，两套都要接近0效应。  \n6）多L训练：L=30/60/90可配置，输出敏感性对比。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我把第4条改成只看event_code和audit_ref。BACKFILL就分两套集：TRAIN只收is_backfill=0，EVAL再跑一遍混进去的，看对齐和效应漂不漂。今天我先把样本构建和两条反穿越测试接上，原谱校准集我可能要明天再补。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关键字段我用：collect_ts、seq、event_code、audit_ref、is_backfill、dose_setpoint、flow、ph、temp、pressure_dp、pfas_proxy_in、pfas_proxy_out。还有drift_score用来判断原谱触发窗口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在系统并网带负荷运行背景下，用户与导师围绕柔性负荷频响贡献率监测及计算口径持续沟通（6轮），其中在基线取值与K值结算口径部分与响应效能评估师沟通（2轮），并最终确定动态基线取前30秒实测值、拒动判定以执行回执为准及K值双段计算的流式逻辑编写方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算把响应时段的聚合功率拉出来，减去基线功率，除以指令目标值，算个比例。或者有没有现成的Python库能直接算这种频响指标？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基线会漂确实是个问题。那我用pandas的rolling取个前5分钟的均值当基线？这样应该能兜住变化吧。我看网上很多人处理时序数据都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频响贡献率和K值这些，结算口径怎么算？拒动的要不要踢掉？我本来想用rolling均值算基线的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "30秒实测功率，还要剔除拒动，还要算积分偏差。这比我想的复杂多了，Grafana里好像没法直接配这种逻辑。我是不是得自己写个流式计算脚本？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线得用触发前30秒的实测值，rolling不行。拒动超调得踢掉，不然算虚报。K值得算延迟和偏差积分。这得写流式脚本了，没法直接用大盘数据糊弄。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "功率没变比较好判断吧？如果指令下去5秒功率没动，就算拒动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态字？终端会上报执行状态吗？我之前没注意这个字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基线30秒，拒动看回执，K值双段。我这就去写。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在风控规则接入流式引擎联调背景下，与导师围绕测试策略、时序依赖与脱敏红线持续沟通（5轮），其中在时序边界与数据脱敏部分与风控策略分析师沟通（2轮），在乱序造数、State Mock与背压策略部分与流式计算研发沟通（2轮），并最终形成包含脱敏链路、乱序对齐、状态单测及回放对照的联调步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算先造一批质物数据推到Kafka，看风控规则能不能正常触发报警。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时序依赖，这块确实没想太细。我就想着只要波动率因子算出来，传给规则引擎就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "规则这块时序依赖怎么搞？测试数据有啥要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "因子得对齐事件时间，不能光看处理时间。脱敏也是硬要求。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回放对照测试我也加上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "能帮我写个TestWatermarkGenerator吗？还有State API在测试里咋Mock？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿这个Harness测一下乱序更新状态。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那背压超时风险在联调里要不要测？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先测乱序和状态，背压后面再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，用脱敏数据跑正常链路；第二步，用TestWatermarkGenerator推乱序数据，测Watermark和因子对齐；第三步，用AbstractKeyedStateTestBase单测风控算子的状态更新；第四步，跑历史行情A/B回放对照测试，看触发率。背压和Checkpoints超时留到集成测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

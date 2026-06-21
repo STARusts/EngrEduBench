@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异源资材入流核审与沙箱隔离背景下，用户与导师围绕隔离架构、容器开销及背压拒止策略持续沟通（3轮），其中在隔离粒度与GPU拦截部分与沙箱隔离安全员沟通（2轮），并最终形成基于进程级沙箱与背压拒止的入流核审隔离基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入流核审必须前置，不能让未校验的资材直接进材质重映射流。我考虑在调度入口加一层Proxy，所有AIGC资材先入沙箱。沙箱内做两件事：一是静态解析提取特征向量预判漂移风险，二是动态试运行检查是否有指令注入或资源越界。沙箱环境必须是强隔离，我倾向用轻量级容器方案，限制CPU和GPU配额。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "考虑到高频入流的延迟敏感度，容器的启停开销可能成为瓶颈。有没有更轻量但足以防止资材解析越界和指令注入的隔离方案？另外，动态试运行时如何有效拦截针对GPU的恶意Shader占用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "进程级沙箱的启停确实快很多。但如果是进程级隔离，多资材并发试运行时的GPU Context切换开销怎么控制？我想再确认一下时序编排上的约束。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "沙箱方案有调整。放弃轻量级容器，改用Namespace+Seccomp进程级沙箱，配合cgroup控权。GPU试运行通过API Hook加Timeout和Memory Limit拦截，并且限制并发槽位做背压。核审边界收拢到Shader编译通过率和首帧耗时。这样入流延迟可控，但需要调度侧配合背压。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认入流核审与沙箱隔离基线：1. 隔离机制采用Namespace+Seccomp进程级沙箱，配合cgroup限制CPU/内存，规避容器启停开销；2. 核审动作分两阶，静态提取特征哈希，动态试运行仅校验Shader编译与首帧耗时；3. GPU试运行挂载API Hook，设Timeout与Memory Limit防恶意占用；4. 沙箱槽位受限，满载时直接拒止入流，触发调度侧背压，严禁排队堆积。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

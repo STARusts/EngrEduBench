@@ -1,0 +1,950 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在工业烟羽碳监测与减排闭环系统的需求梳理背景下，用户与导师围绕排放痛点、用户画像、阻力与需求边界持续沟通（7轮），其中在采购链路与需求分层上与产品经理沟通（3轮），在CEMS口径不一致拆解与合规边界上与环境合规经理沟通（3轮），并形成Top3痛点、四类角色画像与最小验证动作清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解是：工厂现在有CEMS但口径经常对不上核算，间歇排放也抓不住，最后导致监管报送和内部减排是两张皮。系统要把在线量化、核算对齐、异常溯源、给调参建议、再验证成效串起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "痛点对象我先猜三类：环保/合规的人、生产工艺的人、还有管理层看碳资产的人。具体事件：比如被抽查时发现小时均值、日均值和核算口径对不上；或者检修/启停、旁路这些时段排放峰值没被记录；再就是上了减排措施但缺少能证明“有效”的证据链。代价：罚款、停产风险、以及碳披露被质疑、审计成本上升。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规这边：KPI可能是报送合规、抽查通过、台账齐；日常动作是对接CEMS数据、填报、准备审计材料；阻力是数据不可信、口径不统一还得人工补。工艺/生产：KPI是产量、能耗、稳定运行；日常动作是盯工况参数、处理告警；阻力是怕系统干扰生产、告警太多。管理层：KPI偏碳强度、ESG披露、成本；阻力是ROI不清晰。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对，仪表/运维：KPI是设备在线率、故障率、少被叫去背锅；日常动作是校准、巡检、修网关；抵触点是新增传感器意味着更多维护、校准工作量，外加怕数据被拿去追责。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先把痛点按“发生频率×影响”排。优先验证三条：口径不一致、间歇排放漏记、审计取证成本高。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "证据我能想到：企业被通报/处罚的公开案例、监管抽查常见问题清单、以及跟企业合规人员访谈看他们最耗时的环节。还有对比：同一厂的CEMS与核算报表差异区间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 在这个“烟羽碳监测与减排闭环”项目里，用户画像和采购链路一般怎么分？谁提需求、谁拍板、谁天天用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“最痛”的诉求通常是什么？我怕我把闭环讲得太大，结果用户只想要合规报表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "画像里信息化部门的一票否决，具体通常卡在哪？是数据要上云，还是权限审计？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理 “CEMS口径不一致”在监管和审计视角，具体会体现成哪些可被指出的问题？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们做“烟羽在线量化”，会不会变成监管不认、反而加风险？这点我不太确定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据保留和可追溯我能理解，但“数据最小化/隐私”在这个领域要怎么讲？我们采的是设备数据，不是个人信息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我暂定Top3：  \n1）口径不一致导致报送/核算对不上，抽查时解释成本高。核心用户：EHS/环保合规负责人。可验证：差异来源（折算条件、时间口径、边界）、历史整改记录和审计问询点。  \n2）间歇/异常排放（启停、旁路、放空）在现有链路里容易漏掉或定位慢。核心用户：生产主任+EHS（一个要定位原因，一个要承担解释）。可验证：异常事件与工况日志、告警与人工巡检记录。  \n3）取证材料分散（校准、维修、补数审批），每次审计/检查都要临时拼。核心用户：EHS+仪表运维。可验证：准备材料耗时、人力投入、被要求补充材料的频次。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阻力我先写三条：  \n- 生产担心误报太多影响节奏，或系统结论指向工艺问题但不给可操作建议。  \n- 仪表运维担心新增维护负担、校准工作量上升，还怕数据被用于追责。  \n- 信息化担心工业数据出域、安全分区、外部远程运维。  \n非目标用户：我倾向先不把监管部门当“直接用户”，他们更多是约束条件；还有集团ESG也许是间接用户但不一定是试点发起人。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把闭环分层承诺：第一期只承诺“发现—对齐—取证”闭环，也就是把数据口径、异常与证据链先跑通；调参建议属于第二层，先做“建议候选+人工确认”，不承诺自动控制。成效验证可以做“前后对比+置信度”，但先限定在少量场景。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用户画像我定四个：  \n- EHS/环保合规负责人：KPI是合规报送通过、抽查可解释；痛点是一致口径和证据链拼不起来。  \n- 生产/工艺主任：KPI是稳定产量与能耗；痛点是异常定位慢、结论不够可操作会被忽略。  \n- 仪表/运维：KPI是在线率、少故障少加班；痛点是新增设备带来校准维护负担，还怕被追责。  \n- 信息化/OT安全负责人：KPI是网络与数据安全、可审计；痛点是数据出域、权限与远程运维的合规风险。  \n最小验证动作：1）找2-3家工厂做半结构访谈，按上述四类各至少1人；2）收集公开处罚/通报案例，标注“不一致”落点属于监测/时间/边界/证据哪类；3）选一个典型事件（启停或旁路）走通“从发现到解释需要哪些数据”的清单，确认缺口。"
+              }
+            ]
+          },
+          {
+            "microScene": "在烟羽反演碳监测产品的需求与战略澄清背景下，用户与导师围绕碳核算口径、合规边界、数据权限与部署取舍持续沟通（8轮），其中在合规披露/审计红线与证据链部分与环境合规经理沟通（2轮），在核算边界、因子治理与CEMS/燃料法对齐规则部分与碳核算策略师沟通（2轮），并形成可写入需求的边界声明与口径要点清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“别人会追问什么”来拆。口径至少要回答：算哪些气体、算哪个组织范围、按什么时间粒度、排放因子用哪版、和CEMS/台账怎么对齐。合规边界要回答：我们数据能不能拿去报送、能不能替代法定监测、发现异常时算不算“执法证据”、以及数据出厂和权限怎么管。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不确定的是：烟羽反演算出来的CO2，能不能直接进企业温室气体盘查，还是只能当内部运营指标？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "做什么：用烟羽观测+工况数据，补齐间歇/旁路事件的排放量化，给内部核算和减排闭环用。\n绝不做什么：不宣称替代CEMS、不直接生成法定报送数据、不承诺监管认可。\n条件：如果企业内部盘查允许使用替代数据源，就作为“估算值/补充证据”，并且必须能回溯到原始数据、模型版本和不确定度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标准我只知道有ISO 14064、还有国内温室气体核算指南，但我不敢拍板哪些允许“反演”。不确定度我想至少出区间和置信度，另外要标注“估算/测量”的标签，避免混在一起。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理：监管/审计视角下，烟羽反演这类数据能在哪些场合用？哪些场合绝对不能用？如果我们输出报告，措辞上有哪些红线？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那如果客户很想把反演结果塞进年度碳盘查报告，审计方会怎么挑刺？我们提前怎么防？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@碳核算策略师：从核算口径角度，我们要定义哪些边界和因子规则？烟羽反演的排放量在盘查里应该算什么等级的数据，怎么和CEMS/燃料法对齐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“原因码”具体长什么样？我怕写需求时太抽象。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把两边意见合在一起理解：合规更在意“你别说能报送”，核算更在意“你别混口径、要可追溯”。我倾向于把系统定位成：内部运营核算+对外披露的补充说明，不做主报送。这样保守，但可能客户嫌“不够硬”。这取舍对吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分层输出：\n- 第一层“合规对齐层”：只展示CEMS与燃料法口径的结果和差异解释，不把反演当主值。\n- 第二层“运营洞察层”：反演用于发现旁路/启停增量排放、给工艺调参建议和措施前后对比，但标成估算并附区间。\n- 第三层“证据链层”：每个数字能点回数据来源、时间窗、规则版本、模型版本。\n边界写法：在需求里硬写“不可替代CEMS，反演为辅证/运营”，并写“不可用于排污许可执法口径”。\n客户成功承诺：承诺“异常发现率、解释闭环时长降低、审计取证材料完整度”，不承诺“通过监管验收”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对外不说“核证减排量”，只说“运营减排效果评估”。输出里加限制语：仅适用于内部管理决策，不能直接用于碳信用/CCER这类申报。并且把基线、边界、泄漏这些词先不碰，避免引到碳资产。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能想到的是“数据最小化”：对外披露只出聚合后的排放量和证据索引，不出原始视频/原始高频数据。权限上按角色：运维看设备健康，环保看排放与证据链，第三方审计只读且带水印导出。远程运维要审计留痕，默认关。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我给两档：\n- 保守档：本地或专有云部署，原始数据不出厂区网络域，只同步指标与哈希/摘要到集团侧；风险低但成本高、迭代慢。\n- 进取档：上云集中分析，但前提是脱敏与分级，且客户法务允许；风险是OT侧担心出域、审计要求更重。\n我偏保守档作为默认，进取档作为“可选但需要合规评审”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想加一条“版本锁定”，尤其是GWP和排放因子库版本，不然年度可比性会被质疑。另外，异常事件输出要强调是“线索”，要引导去拉CEMS/DCS/票据闭环，不是我们一句话定性超排。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工业排放/碳监测闭环产品的商业模式与落地路线梳理背景下，用户与导师围绕切入客户画像、三档产品套餐、定价锚点、试点到复制里程碑、渠道生态及合规护栏持续沟通（9轮），其中在定价与里程碑设计上与产品经理沟通（2轮），在数据最小化、权限审计与披露边界上与安全与隐私工程师沟通（2轮），并形成可讨论的阶段性要点结论与“不卖清单”。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“最小阻力”想：从合规压力最大的企业切进去，比如被点名、要做披露或接受核查的。卖点是审计取证成本和超排风险降低。商业模式我能想到两种：按厂区年费订阅+实施费，或者按监测点位/产线收费。落地路线可能先做一个示范厂，证明能抓住间歇排放和异常闭环，再复制到同集团。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "买单人我猜是环保/安环负责人或数字化负责人，使用人是环保专员、工艺工程师。反对的人可能是生产部门，担心被追责或者增加操作负担。产品包可以拆：合规核算对齐包（口径治理、报送材料）、在线量化监测包（烟羽+CEMS融合）、异常溯源工单包（线索到证据闭环）、减排建议与验证包（把工艺调整前后对比）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 工业烟羽碳监测与减排闭环系统这种，常见的付费锚点有哪些？怎么把价值写成采购能接受的口径？另外试点->复制的落地路线，通常怎么设计里程碑更容易批预算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“运营节约谨慎承诺”，那合同里是不是只能写过程指标？那客户会说不够“结果导向”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想做三档：  \n- 基础合规档：口径版本锁定+因子库治理+报送/核查材料自动汇总，承诺的是报送周期缩短、材料可追溯、版本一致性。  \n- 监测闭环档：在基础上加在线量化与异常线索->工单->多源证据闭环，承诺数据覆盖率、告警到闭环时效、闭环率。  \n- 运营优化档：再加工艺调参建议与成效验证，但合同写“建议生成与验证能力”，结果按区间或按“可归因案例数”来呈现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "路线一句话：用1个厂把“口径对齐+证据链”做成可审计的标准模板，然后按集团复制，复制交付周期逐厂压缩。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "渠道我倾向两条并行：1）找做环保合规/碳咨询的服务商联合，他们已有客户和核查场景；2）集团数字化部门，如果他们在推统一平台，我们就做一个“排放与碳的数据产品”。设备商我不确定，担心他们更想卖硬件。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "伦理合规上，我之前没想太多。直觉是要做权限隔离：生产工况和排放数据不是谁都能看；异常线索要标注“不构成定性结论”，避免被拿去直接扣帽子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 工业排放/工况数据接入这类项目，商业落地时常见的安全合规红线是什么？尤其是：我们做异常线索和证据链，怎么避免被当成“问责工具”引发内耗？权限、审计留痕、对外披露边界有啥建议？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“合规视图最小字段”，最小到什么程度？我们不是还要关联DCS去解释异常吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成要点：  \n1）客户与角色：高排放工业企业，近期有核查/披露压力或集团要统一碳数据的。买单多在EHS/安环或集团数字化；使用人是环保专员+工艺工程师；阻力主要来自生产端（怕负担、怕问责）和IT安全（怕出域）。  \n2）产品三档：基础合规档（口径/因子/GWP版本锁定+材料可追溯）、监测闭环档（在线量化+异常线索到证据闭环工单）、运营优化档（建议与验证能力，结果按区间/案例呈现）。定价锚点优先用“审计人天/报送周期/闭环率/数据覆盖率”，运营节约只做前提条件下的增值。  \n3）落地路线：先单厂试点，1个月做口径对齐+链路贯通，2个月跑通异常闭环，3个月做受控的建议与验证；形成集团可复制模板（指标字典、因子版本、证据包格式），复制时以实施周期缩短为目标。  \n4）渠道：与环保合规/碳咨询服务商联合获客；集团数字化平台共建数据产品；设备商合作谨慎，偏“接入生态”不被绑定硬件。  \n5）合规与伦理护栏：异常默认“需复核线索”；多源闭环后才升级事件；最小化字段与分级视图；临时授权有审批、期限、导出留痕；对外提供脱敏证据包，集团汇总以指标为主，避免指向个人。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "补：不承诺替代监管执法结论，也不直接承诺“保证不超排/保证省多少钱”；不做全量生产数据中台，工况数据只取解释排放所需最小集。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在工业烟羽碳监测与减排闭环系统方案设计背景下，用户与导师围绕多源烟羽感知架构的传感源分层、最小采集集与伦理边界持续沟通（7轮），其中在视频采集存储审计与防滥用部分与安全与隐私工程师沟通（3轮），在传感源必选/可选、采样频率与边缘预处理可行性部分与硬件接入工程师沟通（2轮），并形成“视频受控可选+无视频一致性评分验收口径+最小工况集”方案共识。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "到底哪些传感源要进来、怎么融合、哪些数据必须采、哪些坚决不采，边界怎么守住？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先抛两套。\nA：CEMS/烟道在线（流量、温度、O2、颗粒等）做主计量，外加厂界/高位摄像头的烟羽视觉做“发现间歇排放+取证补强”，再补一圈微站（PM/NOx/SO2）做空间约束。\nB：弱化视频，改成“多点低成本传感+气象站+简化扩散模型”做主发现，CEMS只做校准锚点。\n取舍我现在倾向A，原因是证据链更直观；但A的风险是视频会碰隐私和误伤，且维护成本高。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一句话：视频只用于烟羽存在性、形态和方向的感知，用来触发异常事件和辅助定位，不输出“超标结论”。\n伦理点：1）可能拍到人员/车牌；2）可能拍到别家厂区，引发商业敏感；3）视频当作执法证据被误用；4）模型误判把正常水汽当烟导致误伤；5）长时间存储被滥用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 我们的多源烟羽感知想引入厂界/高位视频做“烟羽存在性+方向+事件触发”。在不碰隐私和合规红线的前提下，你建议的视频采集与存储策略是什么？需要哪些最小权限、脱敏、留痕？另外怎么避免被客户拿去当“执法结论”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "结构化特征里你提到“截图哈希”，这个是为了防篡改？那如果客户要拿事件片段去对外沟通，我们是不是得提供完整链路证明“这段没被改过”？还是说我们就不该支持这种用途？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有误伤问题：比如水汽、蒸汽羽流跟烟羽很像，触发异常会让现场背锅。隐私侧能做什么缓解，还是全靠算法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件接入工程师 多源烟羽感知我们在选架构：CEMS做主锚点+视频/微站补充，或者多点低成本传感+气象+模型做主发现。你从现场接入与稳定性角度，建议哪些传感源必须有、哪些可选？采样频率、边缘预处理、断网缓存这些怎么设计比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提到微站漂移，我担心B方案把微站当主发现会被漂移拖死。现场上漂移一般多大？我们需要把校准变成硬需求吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把隐私和接入侧的结论捋了一下。\n隐私侧：视频可以用，但必须“边缘优先+事件留存+强审计”：视场只拍烟囱上空；常态不存原视频，只出结构化特征；异常事件才存前后短片段且自动脱敏；访问最小权限+全审计；导出材料不写超标结论，只给事件链+置信度+免责声明；片段做哈希签名保证完整性但不提供执法证据包。\n接入侧：必须有CEMS（浓度+流量/温度/O2等）和气象与统一时钟；微站可选但要承认漂移，最好做辅助约束；视频在供电网络可控时很值；边缘需做质量标记+本地缓存24-72h断网补传。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向不把视频做默认必选，做“受控可选项”。理由：不同厂区对摄像头敏感度差异很大，默认上会卡合规评审和推进速度；而且一旦有视频，客户很容易自然地想拿去对外解释甚至对人追责。\n触发条件：只有在“间歇排放频繁+厂界投诉压力大+烟囱视场可控”这类场景才建议上。\n可替代路径：没视频就用CEMS锚点+气象+厂界微站做异常发现，事件证据改为“多源一致性评分”而不是画面。\n不卖执法结论：在架构上把输出分两层：对外只能输出核算与合规披露口径的数字与审计链；对内异常事件也只给置信度与原因码，不给“超标判定”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版可验收口径：\n一致性评分输入信号三类：1）CEMS偏离：与历史同工况基线的偏离幅度；2）微站空间梯度：下风向站点相对上风向背景的增量；3）气象一致性：风向稳定度+下风向覆盖时长。\n门槛：CEMS必须有质量标记为“有效”（无缺测、无维护标记）；微站必须通过自检且与最近一次参比比对在允许区间，否则只做参考不计分；气象风向波动过大时事件只标记“低可信”不闭环。\n降误报：事件先进入“待复核”，需要人工确认后才触发工艺调参建议；并保留触发因子与时间窗，便于复盘。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小工况集我先定在“解释排放变化必须的那几类”，不碰产量、配方细节：比如关键阀位开度、燃料类型切换标志、脱硫脱硝/除尘设备启停状态、旁路开关、主要风机/引风机频率这类。用途限定为：异常溯源时做关联分析和生成调参建议的依据；不用于生产绩效考核，也不做全厂数据中台。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三条结论我这样记：\n1）分层：CEMS/烟道在线+气象+统一时钟是底座锚点；微站和视频是增强源，微站偏辅助约束，视频偏事件触发与定位但不默认必选。\n2）视频伦理：边缘优先、事件留存、自动脱敏、最小权限+审计留痕；导出不给超标判定，只给事件链+置信度+免责声明；签名哈希保证完整性但不承诺执法取证。\n3）无视频路径：用CEMS偏离+微站梯度+气象一致性做“多源一致性评分”，设质量门槛，风向不稳就降级为低可信；事件先待复核再入闭环；工况只取解释排放所需最小集，禁止扩成全量生产数据。"
+              }
+            ]
+          },
+          {
+            "microScene": "在排放监测平台方案设计的“数据可信与审计链路”背景下，用户与导师围绕最小闭环、不可抵赖控制点与双层数据模型持续沟通（9轮），其中在审计字段与血缘粒度定义上与数据治理官沟通（4轮）、在签名哈希/密钥/最小权限与视频元数据合规边界上与安全与隐私工程师沟通（4轮），并确定批签名+关键节点签名及字段与版本化要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解要分两层：一层是原始观测的可信，比如CEMS、气象、微站、视频的时间对齐、校准状态、有没有丢包；另一层是后面算出来的东西可信，比如反演排放量、碳核算结果、异常判定。审计链路就是把这两层之间的转换都留证据，能回放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必须不可抵赖的，我觉得是：原始数据落地的指纹、质量评分结果、核算结果的版本和输入、还有对外导出的报表。至于中间的清洗、插值、特征提取，我倾向先做可追溯就行，不然链路太重。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "威胁我能想到几类：1）人为改CEMS历史数据或删超标片段；2）边缘设备时间漂移导致对齐错误，事后说“数据不准”；3）算法版本换了，结果变了但说不清为什么；4）导出报表被改动再去报送。控制点就是：原始层写入后要有哈希链；时间同步要有漂移记录；算法/因子版本要锁定；导出要签名。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "适合双层的：CEMS分钟值、气象站数据、微站浓度、视频事件元数据（不是视频本体）这类原始观测。修订层用来处理补传、校准后修正。只需要单层的可能是：衍生指标，比如小时均值、排放量反演结果、以及“多源一致性评分”，这些本来就是重新算出来的，留版本和输入就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向只存：事件开始结束时间、触发原因（比如烟羽可见+风向一致）、ROI位置、脱敏状态、置信度、边缘设备签名、哈希。视频本体尽量边缘留存短周期，中心只拿摘要。对外导出只给事件链和置信度，加免责声明。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 双层数据模型在工业时序里，原始层和修订层各自必须带哪些审计字段？另外我们想要“可复算”，血缘要追到什么粒度才够？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：原始层多记“采集证据+时间证据+质量证据”，修订层多记“变更证据”。血缘不用到代码级，至少到版本、参数、时间窗、门槛。对吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 我们要做不可抵赖和最小权限，签名哈希、密钥、审计留痕怎么设计才不会太重？还有视频事件元数据这一类，有没有特别的合规雷区？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这边我先对齐一下我听到的：双层模型字段要补齐，尤其是revision层的reason_code、ticket_id、approver，外加指标口径版本。安全这边建议批签名，边缘签名+平台hash链两道。导出要export_id+签名。视频事件元数据可入链，但访问更严，且对外不作为超标判定依据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选“批签名+关键节点签名”。理由：1）时序数据量大，每条签名代价高，边缘算力和带宽压力会明显上去；2）我们的目标是审计复算，不是司法取证，批签名在风险和成本之间更平衡；3）关键节点（导出、核算结果、修订记录）单独签名能覆盖最敏感的篡改面。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "五类我先定：  \n1）原始批次（raw batch）：batch_hash、signature、signer_id、time_window、clock_quality摘要；  \n2）平台入库链（ingest chain）：payload_hash、prev_hash、ingest_time、ingest_channel；  \n3）修订记录（revision）：based_on_hash、revision_type、reason_code、ticket_id、operator/approver、diff_summary；  \n4）核算/反演结果（result）：result_id、input_dataset_version、algo_version、factor_version、params_snapshot_hash、quality_gate；  \n5）导出物（export）：export_id、scope（站点/时间窗）、metric_def_version、operator/approver、file_hash、signature、免责声明版本号。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "参数快照只放影响排放解释的最小集，比如：负荷档位、燃料类型或配比区间、脱硫脱硝运行状态的开关/设定点范围、停开机标志。不要放产量、订单、配方明细这种。具体字段我可能还得和产品/现场确认哪些算“解释必需”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把“质量门槛参数”也版本化：比如wind_stability_threshold、min_sources_required、missing_rate_limit，还有一致性评分的阈值。每次算结果都把使用的门槛版本写进去。异常事件如果被降级或待复核，也要写decision_code，比如LOW_TRUST_PENDING_REVIEW。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第3条里我想再加个小点：metric_def_version这项别忘了，不然同名指标月度对比会乱。其余我就按这五条往后续接口和数据模型里拆。"
+              }
+            ]
+          },
+          {
+            "microScene": "在排放异常闭环策略与端边云接口分层设计背景下，用户与导师围绕最小闭环链路、状态机、字段最小化、责任划分与API清单持续沟通（8轮），其中在对象拆分与验证方法结构化部分与行业解决方案架构师沟通（3轮），在免责声明/对外口径与数据分级边界部分与环境合规经理沟通（2轮），并汇总形成6条接口与闭环约束及两条优先时序图范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解的最小闭环是：先出一个可解释的“排放异常事件”，带时间窗、置信度、证据指针；然后把事件映射成“可能原因/影响因子”的候选集合；再生成一条或多条“工艺调参建议”，最后要有执行回执和效果验证。接口上我想把事件和建议都做成版本化对象，不直接传原始视频和全量工艺参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态机我先按粗粒度：DETECTED→TRIAGED→RECOMMENDED→APPLIED→VERIFIED→CLOSED。  \n字段我能想到的：event_id、site_id、stack_id、time_start/end、metric_name+metric_def_version、value_peak/avg、confidence、decision_code、evidence_uri（指针）、quality_flags。  \n到建议那边：rec_id、event_id、action_type、target_system（比如DCS/EMS）、param_delta（不要给绝对值，给变化幅度）、expected_effect、validity_window、safety_guardrails、need_human_ack。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：param_delta这种也算敏感生产信息吗？以及回执怎么做最不“背锅”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业解决方案架构师 闭环策略这块，你建议的端边云接口分层怎么做？尤其是事件、建议、执行回执、验证这几类对象，各自该在哪一层落地，哪些字段要强制最小化？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Outcome里的EffectVerification要怎么做对照？我担心现场工况变化很大，执行了建议但指标没下降，就会显得建议无效。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Recommendation的“自动型”你说要权限白名单，那具体在接口里怎么表达？是靠调用方身份，还是对象里带policy_id？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理 闭环里会生成减排建议并可能触发自动执行。合规边界怎么划？接口里需要哪些免责声明/责任字段，才能避免对外变成“超标认定”或“监管结论”？另外rec里带param_delta会不会踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "disclosure_level听起来挺实用。那EffectVerification导出给第三方时，能不能直接给kpi_delta？还是也要分级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见合一下，看看有没有矛盾：  \n- 对象分Event/Hypothesis/Recommendation/Outcome四类；  \n- Recommendation分人审和自动，自动要policy_id+白名单+安全规则版本；  \n- 建议内容用策略和范围，不给绝对设定值；  \n- 对外靠disclosure_level控制，默认internal_only；  \n- delta和kpi_delta都做内外分级；  \n- 全程带disclaimer_version和not_a_compliance_determination。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不确定的是Hypothesis里features_used只列字段名，会不会导致复核困难？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我建议把Hypothesis字段补成：features_used（列名）+snapshot_ref+compute_ref+assumption。数值只在snapshot里，且snapshot字段集合固定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个落地问题：AppliedReceipt如果DCS不方便改造，只能回传“已执行/未执行”，没有operator_id，这种要怎么降级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那闭环的KPI验收我想放两类：  \n1）闭环完成率：从DETECTED到CLOSED的比例，按policy分层；  \n2）验证可信率：EffectVerification里decision_code=VERIFIED可信的比例。  \n第三类“减排效果”我怕口径争议大，先做内部看板，不作为硬验收。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我列最小API：  \n- POST /events：边缘上报事件元数据（含metric_def_version、decision_code、evidence_uri指针）  \n- GET /events/{id}：中心查询事件与状态  \n- POST /hypotheses：中心生成/更新候选原因（含snapshot_ref、compute_ref）  \n- POST /recommendations：生成建议，带policy_id、guardrails、disclaimer_version、disclosure_level  \n- POST /receipts：现场回传AppliedReceipt（支持T1/T2/T3）  \n- POST /verifications：中心写EffectVerification（method、baseline_ref、kpi_delta分级、uncertainty、decision_code）  \n- POST /state-transitions：状态流转，要求提供actor_role与reason_code，防止黑箱改状态"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这6条能拆。时序图我先画两条：  \n- “DETECTED到RECOMMENDED”的链路，重点把Event→Hypothesis→Recommendation的字段边界画清，特别是snapshot_ref/compute_ref怎么串起来；  \n- “APPLIED到VERIFIED”的链路，把Receipt三档降级和Verification三种方法放进去，避免验收时扯皮。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工业烟羽碳监测与减排闭环系统工程开发的边缘采集与设备接入背景下，用户与导师围绕最小链路交付、点表与协议选择、字段与模块分层、幂等补传测试及权限审计持续沟通（9轮），其中在现场接入坑点与调试定位、时间戳/单位/字节序与点表版本管理部分与硬件接入工程师沟通（3轮），并形成本周8条验收点与验证实验清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把边缘侧做成可跑通的最小链路：仪表/网关接入→采集→本地缓存→上送，后面再接事件链路。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两类我倾向先选：CEMS烟道侧（SO2/NOx/颗粒物/流速/温压湿）加一个DCS工况（风机频率、负荷、燃料流量）。点表管理我有两个想法：\nA）把点表写成YAML/JSON随边缘包发版，缺点是改点要发版；\nB）点表从云端下发，边缘只做校验和热更新，缺点是现场断网初装要有默认。\n我更偏B，但怕做复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "现场看起来多数是以太网，少量老仪表走RS485。采集形态主要是边缘做主站去轮询（拉），CEMS有的能推但先不指望。协议我预计优先Modbus TCP/RTU，OPC UA先放后面，不想一开始就加。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@硬件接入工程师 工业烟羽碳监测与减排闭环系统要做边缘采集接入。我先上Modbus TCP/RTU轮询两类设备（CEMS+DCS）。你帮我列下现场最常踩的坑：时间戳、点表、单位/量程、通信稳定性、还有怎么快速判断问题在仪表还是在我们采集端。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你提的time_source我觉得关键。我之前只想存一个ts。那“分钟均值”的对齐是不是要单独存一个period_end？不然核算窗口会乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点表版本号我能做。还有一个：DCS工况点很多，先接哪几个能支撑后面事件链路？我想要最小集合，避免现场改造量太大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基于这些，我想把边缘上送的采样记录扩成：ts、ingest_ts、time_source、agg_window/window_end、unit+basis、quality、raw_payload_ref（可选）。你看这些字段边界会不会侵入到云端数据模型？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先按四层拆：\n- adapter层：Modbus RTU/TCP驱动，输出“寄存器原始值+通信元数据（耗时/超时/重试）”；\n- parser层：按点表把原始值转成工程值，处理字节序、拼float，输出value+unit+basis+quality；\n- buffer层：本地持久化队列，按topic/设备分区，存ts/ingest_ts等；\n- uplink层：批量上送，支持断点续传和幂等。\n我不确定的是：幂等键用什么组合最稳，ts会重复（分钟均值同一个window_end）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算做三个最小验证：\n1）断网补传：拉掉uplink网络10分钟，采集仍写buffer；恢复后按批次补齐，检查云端缺口为0，且重复率<0.1%；\n2）重启一致性：采集进程重启3次，seq不回退；云端按幂等键去重后数量与本地一致；\n3）字节序回归：用模拟器固定输出两组寄存器（同一物理量不同字节序），点表切换版本后解析值落在期望范围。\n指标我还在想：重复率怎么算更严谨。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想做两档：\n- 正常档：按“最近7天或最大20GB”保留；\n- 轻量档：只保留关键点（CEMS+最小工况集合）最近24小时，其他点丢弃但要记drop计数。\n触发条件：磁盘占用>80%进入轻量档，<60%回正常。这样能兜底。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我不太有把握。我直觉是：点表和采集参数算“配置资产”，需要云端签名下发，边缘校验签名；边缘本地也要能导入一份应急默认，但应急导入要在日志里留操作人和时间。操作人怎么做我还没想清，只能先做API token？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着收一下，可能不完整：\n1）先支持Modbus TCP/RTU轮询，优先接CEMS关键点+DCS最小工况点；\n2）采样记录字段：ts、ingest_ts、time_source、agg_window、window_end_ts、unit、basis、quality；\n3）点表云端下发+默认点表兜底，点表必须version化；\n4）解析层要处理寄存器类型、拼float、字节序；异常码映射quality；\n5）本地buffer持久化队列，断网不断数，恢复补传；\n6）幂等键：device_id+point_id+window_end_ts/ts+持久化seq；\n7）可调试：保留最近N次原始寄存器读数与通信元数据，做链路/协议/点位分层自检；\n8）磁盘>80%进入轻量档（24h+关键点），记录drop审计信息。\n权限审计我只能先做点表包签名验签和本地导入留hash日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "在排放反演与质量控制工程开发背景下，用户与导师围绕将输入/输出QC嵌入反演服务、区间与归因计算、口径一致与可审计及一致性校核持续沟通（9轮），其中在性能受限的不确定度实现上与算法工程师沟通（3轮），在下游口径统一与trace落地上与数据工程师沟通（3轮），并形成两级不确定度+单一analysis_value视图+trace与验收测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想拆成两段：先做输入QC，把会影响反演的观测过滤或打分；再做输出QC，对反演排放量给置信度和告警理由。实现上我倾向于“标记不丢数据”，即原始值照收，QC给flag和score，反演侧按配置决定是剔除、降权还是走降级模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先盯三类：1）仪表类：CEMS的SO2/NOx/颗粒物、O2、流速、温压湿；2）烟羽观测类：摄像/红外的烟羽边界、风场；3）工况类：负荷、燃料、启停。  \n一票否决我先放在“物理不可能”和“链路明显坏”：比如O2<0或>25%、温度负值、流速突变到0且持续、摄像时间戳倒退、同一秒多帧重复且元数据异常。  \n可降权更多是噪声：风向快速摆动、烟羽边界置信度低、某传感器短时丢包但有邻近插补。  \n输出QC：面向合规和内部优化两拨人。合规更关心“证据链”和“不确定度区间”，内部关心“哪里异常、可不可以调参”。所以输出我会给：排放率点估计、95%区间、主导不确定度来源top3（风场/边界/流量/工况），以及一个可回放的“反演输入快照索引”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "路径A偏工程：用误差传播+经验规则。每个输入源有一个σ或质量等级映射到σ，反演模型对输入做扰动采样（比如对风速、边界位置、流量做小幅随机扰动），跑K次得输出分布，取分位数当区间。来源top3用方差贡献（单变量扰动的ΔVar）近似。  \n路径B偏算法：直接训练一个“置信度头”，用历史标定/人工复核数据学一个uncertainty predictor，输出区间。  \n我倾向A先落地，B需要标注数据，开发期赶不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你们卡在“扰动采样太慢”具体是什么量级？我们目标是每分钟一条排放率，边缘算力一般。你希望QC/不确定度怎么做才算可用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果用导数近似，δ怎么定？太大就不线性，太小会被数值噪声吞掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "两级策略触发条件你建议用哪些？我怕条件太多维护不住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 你说的“flag会导致下游口径混乱”是指哪里？我们现在想做输入QC和反演输出QC，原始数据不丢，只打flag/score。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "analysis_value如果是插补的，会不会被质疑“篡改数据”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "decision_trace落地上你希望是事件表还是嵌在时序点里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我选“两级不确定度 + 单一分析视图”。  \n- 口径：每个输入源生成analysis_value + value_status + qc_score，raw只做保留与回放；反演只读analysis_value。  \n- 不确定度：默认用线性化敏感度（1+2M次推理，M先取3：风速、有效截面积、流量换算），输出粗区间；触发条件（三条最小集合）命中时，区间加宽并可选触发小K采样（K=8或10），但只在异常时跑。  \n- 可审计：反演输出带qc_rule_ver、point_table_hash、model_ver、uncert_method（SENS/SAMPLING）、reason_code列表、decision_trace_id（详细参数进trace表）。  \n测试我想分三层：  \n1）单元：QC规则对边界值、时间戳倒退、缺失窗，输出status/score正确；敏感度计算给定δ时区间单调性正确。  \n2）集成：回放一段混合丢包/风变/低置信度视频，验证触发逻辑只触发一次并写reason_code；反演读取analysis_value而不是raw。  \n3）性能：边缘CPU限定下，正常模式每分钟处理时延<10s，异常模式触发采样时P95<30s，并记录采样触发占比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，我刚才更多在输入。结果一致性我做两个校核器：  \n- 与CEMS的软对齐：同时间窗内比较反演排放率与CEMS排放率，算相对偏差r和相关系数ρ，超阈值就打结果flag，但不直接改值。阈值先用可配置，比如|r|>30%持续5个窗。  \n- 与工况的守恒约束：用负荷/燃料流量估一个“理论上限/下限”，反演落在区间外就判为物理不一致，直接把uncertainty拉大并标记reason_code=PHYS_INCONSIST。  \n我不太确定燃料到CO2的换算因子是不是在这一步就要引入，怕牵扯核算口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trace里我会避免写摄像原帧，只写边界的矢量/面积、置信度、以及统计量；时间戳、设备ID这些保留。工况里如果有班组/操作员ID我不放进反演链路，只保留机组/产线编号。审计需要的更多是规则版本和hash，不是个人信息。这个我拿不准是否够严格。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "实现清单我按模块说：  \n1）qc-prep：生成analysis_value/value_status/qc_score（含3类一票否决+可降权），并输出qc_rule_ver。  \n2）inversion-core：只读analysis_value；实现敏感度区间（变量先3个），异常触发后可选小K采样；输出uncert_method与区间。  \n3）consistency-check：实现CEMS偏差校核与工况护栏，产出result_flag与reason_code。  \n4）trace：写decision_trace（规则ID、阈值、δ、触发窗），结果表只存trace_id+版本hash。  \n验收口径：  \n- 正确性：给定构造输入，status/score/flag可预测；一致性校核在偏差注入时必触发且不改原值。  \n- 可追溯：任意一条结果能通过trace_id还原当时δ、阈值、规则版本、点表hash。  \n- 性能：正常P95时延<10s/分钟窗；异常触发采样P95<30s，采样触发率在回放集上<5%（先用现有三组可复现实验再加一组风变场景）。  \n- 资源：磁盘>80%时trace降级只保留reason_code+阈值摘要，仍能定位触发原因。"
+              }
+            ]
+          },
+          {
+            "microScene": "在分钟窗排放核算引擎与因子管理落地背景下，用户与导师围绕核算口径锁定、方法学防串、性能与权限审计等实现约束持续沟通（8轮），其中在因子字段最小集、版本/生效区间、GWP归属与不确定度表达部分与碳核算策略师沟通（4轮），并最终对calculation_run_id锁版本、factor_set设计、缓存降级与强约束清单达成一致。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把边界说清：核算引擎这块我理解是把反演出来的排放量（带置信度）统一换算到CO2e，并且输出能被审计复算的明细。落地上我想拆两层：计算层只认“只读analysis_value”和标准化单位；口径/因子层走版本化配置，不允许运行时随便改。担心点是：因子一多，分钟窗每条算一遍会不会抖；还有是不同方法学（比如按热值、按含碳量）在一个厂里混用时怎么防错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先按我们链路接得上的来：trace_id、asset_id（烟囱/产线）、window_start/end、pollutant（CO2/CH4/N2O）、mass_rate或mass（优先质量）、uncertainty、以及上游给的reason_code和阈值摘要。输出我想至少有：co2e、使用的因子集合（factor_set_id+版本）、每个气体换算后的明细、以及核算方法学id。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "锁版本我偏向：每次计算任务启动时，把“规则版本+因子版本”固定到一个calculation_run_id里，运行过程中不再读“最新”。防错我倾向计算时强校验：同一asset_id在同一窗口只能命中一种方法学路径，否则直接报错，不做隐式fallback。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@碳核算策略师 因子管理这块我需要能直接落到表结构和接口：因子最小字段该有哪些？版本怎么分（语义版本/生效时间）？同一资产多方法学怎么避免串用？不确定度和适用范围你们通常怎么写才算审计能过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“窗口结束时间命中”，如果valid_from/to的粒度是天，但我们算分钟窗，会出现同一天内修订因子需要立刻生效的情况吗？还有constraints_json如果写得很细，计算时每条都要校验会不会慢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "多气体换算这块，CH4/N2O的GWP版本（AR4/AR5/AR6）算不算因子的一部分？还是方法学的一部分？我怕同一工厂不同报送口径导致混。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。我回去把“asset绑定profile+生效区间”和“factor_set包含GWP版本”落进接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个：如果上游反演给了uncertainty，我们核算输出不确定度怎么传播？先做线性合成还是先不做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把策略师的点筛了一下，准备这么落地：  \n- 因子实体最小字段：factor_id、gas、value、unit、reference、region/sector、valid_from/to、version、status；再加uncertainty_type/value、confidence_level、constraints_json+boundary_notes。  \n- 计算不直接跑constraints_json：资产绑定methodology_profile时做适配校验；分钟窗计算只检查profile在有效期、factor_set版本被锁定。  \n- 引入factor_set：把排放因子+GWP表版本一起打包，计算输出里同时落methodology_id与factor_set_id+version，保证复算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太确定的是：我们现有分钟窗链路里，factor_set选择到底是“按窗口结束时间自动命中”，还是“由上游任务把factor_set_id固定传进来”？两种都能做，但接口会不一样。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向强路径走“calculation_run_id启动时固定factor_set_id+version”，并且由服务端在启动时用窗口时间+资产profile去解析出具体版本，解析完写进run上下文。这样分钟窗计算就不需要每条查“最新”。兜底是：如果外部明确传factor_set_id+version，我们只校验它和资产profile是否兼容，不兼容就拒绝。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存我想两级：  \n- 进程内LRU缓存 factor_set_id+version → 展开后的因子map（按gas+unit索引），TTL短一点；  \n- 数据库侧给factor_set(version, status, valid_from/to)和asset_profile(asset_id, valid_from/to, methodology_id)建组合索引，run启动解析时一次性查齐。  \n回滚：不允许覆盖active版本，只能deprecated旧的再active新版本；回滚就是把旧版本重新标active并记录原因。  \n测试上我能做三类：  \n1）确定性：同一输入+同一run上下文输出完全一致（含trace_id、factor_set_version）；  \n2）边界：valid_to交界点前后两分钟窗命中不同版本；  \n3）性能：run启动解析不超过比如200ms，分钟窗计算不因为因子查库而抖动（统计P95）。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没想细。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能先做最低限度：因子和factor_set的写接口只给管理员角色，所有变更写audit_log（actor、时间、before/after hash、reason）。读接口给核算服务账号只读。审计留痕能串到trace_id和calculation_run_id上。更细的合规口径我得再问下谁负责。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级我想到两招：  \n- factor_set展开结果只缓存“本厂当日用到的版本”，超过上限就只保留最近N个；  \n- 触发内存水位（比如70%）时，禁用进程内展开缓存，退化为按run启动时把factor_set明细序列化进run上下文（大小可控），分钟窗只读上下文，不再维护大缓存。代价是run记录会变大，但比全量缓存更稳。"
+              }
+            ]
+          },
+          {
+            "microScene": "在“烟羽碳通量突然跳高但工况未变”的异常溯源与工况联调背景下，用户与导师围绕排查顺序、异常阈值、最小复现与可审计输出持续沟通（7轮），其中在反演置信字段与失真条件上与算法工程师沟通（3轮），在断网回补/缓存降级导致时间对齐语义上与边缘计算工程师沟通（1轮），在故障注入用例与验收口径上与测试工程师沟通（1轮），并形成分类树规则与锁定对齐基准为source_ts的联调用例方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向从“对齐”开始。因为核算那边我们刚加了版本追溯和 audit_log，起码能说清因子没被人改。现在更像是数据/工况错位导致的。比如时间戳漂了、边缘缓存回补乱序、或者工况标签窗口跟分钟窗对不上，导致同一段排放被套了错误工况。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "顺序我先定三步：  \n1）从异常点的 run_id 往回查：分钟窗的 input_ref（原始采集批次）和 methodology_profile_id、factor_set_version，确认核算侧没换口径。  \n2）核对同一时间段的多源：CEMS（流量、浓度）、烟羽视觉反演通量、以及工况 PLC 标签。把它们对齐到同一 timeline，看是“一个源跳”还是“都跳”。  \n3）如果只有烟羽反演跳，优先看边缘预处理/模型置信度；如果 CEMS 也跳，就看采集链路、仪表漂移或实际排放。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "异常阈值：先不用复杂统计，先做工程阈值+置信度门控：比如通量超过最近 2 小时中位数的 3 倍且持续≥3 个窗，同时模型置信度低于某阈值则标记“疑似数据问题”，置信度高才算“疑似真实排放”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你们烟羽反演这块现在输出的置信度字段有哪些？具体怎么算的，哪些输入质量问题会让置信度失真？还有你们有没有“可疑但不确定”的分类标记？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "你说的“风速计卡常数”我之前没想到。那 `quality_score` 不是简单可用作异常真伪判断。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们有提供“风速合理性”单独指标吗？比如和厂区气象站对比，或者变化率阈值？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我这边排查分支里应该把 `wind_speed_stuck` 和 `sensor_health_flags` 放到第一层，而不是只看 quality_score。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们现在 `ci95` 的计算里，风速不确定度是固定值还是按健康状态动态调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就更要把卡死检测的 flag 接到异常溯源里。否则通量跳高时我们可能误判为真实排放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版分类树（偏工程可落地）：  \nA. 数据链路类（优先排）：如果同窗 `sensor_health_flags` 有相机过曝/欠曝/镜头污染/风速计丢包，或 `wind_speed_stuck=1`，则异常归为“传感质量风险”，下一步找硬件接入/现场确认。  \nB. 反演不确定类：健康 flag 正常，但 `ci95_high - ci95_low` 超过 `flux` 的 60%（相对区间过宽），标“反演不确定”，下一步做工况对齐核验和可视化回放看烟羽遮挡/逆光。  \nC. 可能真实排放：健康 flag 正常、相对区间 ≤60%，且通量突增持续≥3窗；再看 CEMS 是否同步上升（比如浓度或流量任一明显上升），同步则“疑似真实排放”，不同步则“跨源冲突”进入对齐排查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小复现我需要同一时间段（比如异常前后各 30 分钟）的四条序列：  \n1）边缘反演输出：flux、ci95、quality、flags、wind_speed_stuck；  \n2）CEMS：流量、浓度、设备状态码；  \n3）PLC 工况：关键阀位/负荷/旁路开关这类离散标签；  \n4）系统内部对齐用的时间基准：每条数据的 source_ts、ingest_ts、align_ts（最终窗口时间）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "复现手段：对同一段数据做两次回放，一次按 source_ts 对齐，一次按 ingest_ts 对齐，看冲突是否随对齐策略变化而消失；如果消失，说明是时间戳/乱序；如果不变，更像传感问题或真实排放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 边缘侧在断网回补、缓存水位触发降级时，数据上报的时间字段会怎么表现？source_ts/ingest_ts 有没有可能被重写？窗口聚合是按哪个 ts？另外乱序到什么程度会被你们丢弃或重排？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那基本坐实一条：云端对齐必须用 source_ts，ingest_ts 只能用于传输诊断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "需要在联调里加个“对齐基准=source_ts”的硬约束，并且如果发现对齐基准被切走要明确告警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 联调里你能帮我设计几类故障注入用例吗？重点是：断网回补导致 ingest_ts 集中、风速计卡常数但不丢包、相机过曝/镜头污染、以及 PLC 工况标签延迟。希望每个用例都有：注入方式、期望的异常分类、以及验收字段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第 1 条我想再加一个断言：如果有人把对齐基准切成 ingest_ts，要直接产出明确错误/告警，不然联调时很难看出来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第 2 条里，卡常数风速可能导致 flux 也稳定但偏大，系统应该在工作台显示“风速卡死”比“排放上升”更靠前。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "证据我准备最小化三件事：  \n- 触发分类的原子条件：比如 `wind_speed_stuck=1`、`sensor_health_flags` 的位、`plc_lag_sec` 数值、`ci95` 相对宽度。  \n- 对齐信息：用的是 `source_ts` 还是 `ingest_ts`，以及该窗的 skew 指标（ingest-source）。  \n- 可回放引用：run_id + input_ref，能把同一窗的多源数据拉出来复现同结论。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则：A 传感质量风险优先（flags 或 wind_speed_stuck）；B 不确定类看相对 ci95 宽度；C 真实排放要跨源同步且持续≥3窗，不同步就进对齐排查。  \n字段：边缘侧用 flux/ci95/quality/sensor_health_flags/wind_speed_stuck；对齐必须显示 source_ts/ingest_ts/align_ts；另外要有 plc_lag_sec 和 edge_seq_regress。  \n用例：断网回补验证 ingest_ts 堆积不影响对齐；风速卡常数触发 wind_speed_stuck；相机过曝/污染触发 flags；PLC 延迟触发 plc_lag_sec 超阈。  \n验收：每个用例能用 run_id 回放，分类结果一致；对齐基准=source_ts，并且对齐错误时要能在联调日志/工作台里看出是 ingest_ts 导致的错配。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发末期全链路压测与验收背景下，用户与导师围绕拆分链路压测口径、KPI定义、故障注入与合规审计要求持续沟通（9轮），其中在压测矩阵/取样与回放一致性判据部分与测试工程师沟通（4轮），在日志脱敏、最小权限与审计留痕基线部分与安全与隐私工程师沟通（2轮），并形成可执行的验收清单与待核对字段/阈值任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把链路拆成三段测：边缘采集/对齐、云端反演+核算、工作台回放和导出。压力口径我想用两个维度：吞吐（每秒对齐后的点数/事件数）和端到端时延（source_ts 到建议落库/可查询）。过线条件：时延 P95 不超过我们现在报警阈值的一半？这个我不确定，得跟测试对一下现有阈。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对齐错误率我想定义成：同一 run_id 回放时，align_ts 对齐到的 source_ts 桶如果发生跨桶漂移，就计错。具体是：原始回放结果里每条记录的 (edge_seq, source_ts, align_ts) 形成基准，再跑一遍对比，hash 不一致比例。故障注入点：断网导致 ingest_ts 堆积；PLC 延迟抖动导致 plc_lag_sec 过阈；风速卡常数触发 wind_speed_stuck；相机过曝/污染触发 sensor_health_flags。压力上再叠加“异常风暴”，让分类树高频触发。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你希望矩阵按“工厂数/相机数/采样频率”这种维度展开，还是按“链路组件”展开？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 我这边要做全链路压测验收，主要卡 source_ts 对齐和 run_id 回放一致性。你那边建议的压测矩阵怎么定？尤其端到端 KPI 取样、故障注入自动化、以及回放一致性你们常用啥判据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放一致性里，核算输出一致性如果涉及浮点和因子版本，会不会每次都差一点？你们通常 epsilon 怎么给？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障负载你说的控 PLC 模拟器延迟分布，我现在只能在我们的联调环境里调一个固定延迟+抖动，分布不太会配。你能给个够用的分布模板吗？别太学术，我只要能覆盖 plc_lag_sec 过阈和回落。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：异常率 A 你们怎么设？如果 A 太高，分类树一直跑，CPU 可能被吃光，看不出真实链路瓶颈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我理解。先不把降级写成必过项，除非后端已经做了。那我回去跟导师对齐 KPI 口径。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从测试那拿到矩阵建议：按站点 N、相机 C、有效帧率 F、异常率 A 组合三组负载（基准/峰值/故障）。端到端时延取样用 suggest_commit_ts - source_ts，P50/P95/P99；回放一致性同 run_id 重放，两次结果关键字段确定性比对：source_ts/align_ts/edge_seq、分类结果、flux/ci95/quality、核算 kgCO2e；浮点允许 epsilon（相对 1e-6 或绝对 1e-3，取决于单位量级）。PLC 延迟给了三段式模板+突刺，验收看 plc_lag_sec 触发率和回补后对齐漂移。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们现在云端落库那边有 ingest_ts、align_ts，核算引擎输出里我记得有 calc_ts 或 emit_ts，我不确定名字。这个我需要跟后端确认一下字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能拆三件：1）我去找后端把 final_store_ts 字段名定下来，并确认它是服务端生成还是沿用上游时间；2）我把对齐错误语义指标补上：按 source_ts 分桶的点数偏差率；3）和测试对齐负载参数范围：N/C/F 的具体数值。字段名我今天拉后端一起过一遍。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只顾着对齐和性能，日志合规没细想清楚。我去问安全怎么卡基线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全与隐私工程师 压测和回放会打很多链路日志、还要导出审计材料。我们现在日志里可能带站点 ID、设备序列号、甚至坐标。开发期验收你建议怎么做“最小权限/脱敏/审计留痕”的检查点？给几个能落地的规则。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“输入摘要+版本+输出摘要”，对齐链路里我能用 (source_ts, edge_seq, payload_hash) 这种。盐的管理是不是要上密钥系统？这块我可能搞不定。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把这三条变成验收点：模拟标识、分权、hash 摘要+版本。回去跟导师合并进矩阵。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，安全那边给了压测验收的合规基线：压测数据必须用模拟站点标识，真实企业名/坐标不能进日志和导出；run_id 回放要读写分权并记录导出审计；审计日志只存输入/输出摘要 hash + 规则/因子版本，不存敏感原文。验收上可以抽查日志无明文字段、以及越权访问 run_id 必须失败并落审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我给一版能跑的清单，你看有没有硬伤：  \n1）基准/峰值/故障三组负载：规模维度 N 站点、C 相机/站、F 帧率、A 异常率（1%/10%为必跑，30%做探索）。  \n2）端到端时延：抽样 1% 记录，t = final_store_ts - source_ts（final_store_ts 以核算结果表落库时间字段为准），输出 P50/P95/P99，峰值负载下 P95 不超过约定阈值（阈值我跟测试一起填具体数）。  \n3）回放一致性：同 run_id 重放两次，source_ts/align_ts/edge_seq、分类结果、flux/ci95/quality、核算 kgCO2e 比对一致；浮点用 epsilon（相对 1e-6 或绝对 1e-3，按单位定）。  \n4）对齐正确性：以 source_ts 为基准对齐；对齐错误语义指标=按 source_ts 分桶的点数偏差率，超过阈值判失败；对齐链路必须能区分 ingest_ts 堆积导致的错配，并在日志/工作台可定位。  \n5）故障注入：断网回补、PLC 延迟三段式+突刺、风速卡常数、相机过曝/污染；验收项包含 plc_lag_sec 超阈触发、wind_speed_stuck 和 sensor_health_flags 触发、回补后分类结果稳定且可复现。  \n6）资源与稳定：峰值+故障叠加时服务无崩溃，错误率（请求/任务失败）低于阈值；边缘侧缓存不爆（以本地队列长度/占用上限为判据）。  \n7）合规/审计：压测数据去标识化；run_id 回放读写分权；导出与越权尝试有审计记录；审计日志仅存 hash 摘要+规则/因子版本，抽查无明文站点名/坐标/序列号。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在工业烟羽碳监测与减排闭环系统进入运行评估背景下，用户与导师围绕上线切换节奏、可回滚策略与基线对比口径持续沟通（6轮），其中在时间字段定义与对齐键选择上与数据工程师沟通（5轮），在阈值表数值来源与拍板人追溯上与测试工程师沟通（2轮），并收敛双写7天、按event_ts做业务基线与按延迟分解做链路监控及回滚触发条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解基线是“老链路/老报表”的输出当参照，然后新系统上线后同一时间段对齐对比。指标我想分三层：数据链路层（丢点、延迟、回补）、算法层（分类一致性、置信度分布）、业务层（小时/日碳排量偏差、异常命中率）。分组上按站点、产线、风速区间、还有是否断网回补这类工况标签。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "切换方式我在想两种：A/B 双写一段时间，新系统先不影响业务口径；或者直接切新系统但保留老系统热备对照。窗口我倾向至少两周，但担心两周里工况变了，偏差解释会很费劲。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 现在上线切换要做基线对比，我需要确认两个点：① final_store_ts 的准确字段名和含义（到底是最终入库时间还是别的）；② 基线对比时推荐用哪几个时间字段对齐（event_ts、edge_ingest_ts、cloud_ingest_ts、final_store_ts 这类），怎么避免延迟/回补把对比搞歪。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那基线对比如果要对齐，你建议用哪个？我担心 event_ts 有漂移，final_store_ts 又会受回补影响。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "点数偏差率怎么定义比较稳？我怕我们说的“点数”到底是帧数还是传感器点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有 P95 是取哪个分布？是端到端延迟还是单段？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我先回去把这些写进“上线切换与基线对比”的执行步骤里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对了，事实表的名字你们内部叫啥？我只需要在对话里说“事实表”还是要写具体表名？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据工程师确认了：字段名就是 `final_store_ts`，定义是“清洗+质量规则+去标识化后写入可审计事实表的提交时间”。基线对比建议拆两张视角：业务量对比按 `event_ts` 对齐（按小时桶），链路健康对比用延迟分解，比如 `P95(final_store_ts - event_ts)` 作为端到端。点数偏差率按事件级 `event_id`，分数据源类型分别算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向 A/B 双写 7 天：新链路产出不喂给业务决策，只做镜像对比；老链路继续作为对外口径。等偏差稳定再切主。缺点是资源翻倍，但 7 天可控。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阈值表我现在只知道压测里写了“P95、点数偏差率、错误率、队列上限”，但数值是当时测试工程师提的草案，最后谁拍板我不确定。我能先列候选：P95 端到端延迟比如 5s/10s 两档；错误率比如 <0.5%；队列上限比如 50k 事件？我需要确认这些来自哪份现场约束或SLA。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 运行评估要补“阈值表”的数值来源和拍板人：1）P95（端到端/分段延迟）阈值是怎么定的，依据压测哪组数据还是现场要求？2）点数偏差率阈值依据是什么？3）错误率阈值（请求/任务失败）依据是什么？4）边缘侧队列上限（长度/占用）依据硬件容量还是故障注入结果？每项最后谁拍板确认的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“1.2倍”和“0.2%保护带”，这些数字是约定俗成还是有人明确说过？我怕审计时问起来，我们只能说“经验值”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解。我回去把阈值表的“依据链路”说清楚：压测分位数、现场断网时长假设、以及谁确认。回导师那边把 A/B 双写方案和基线对比步骤定下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 阈值来源我问清了：  \n- P95 阈值：取“峰值+故障叠加”压测分布的 P95 再乘 1.2 裕量，运维提草案、测试+你确认。  \n- 点数偏差率：基于断网回补后 `event_id` 数量差的稳定区间上界 +0.2% 保护带，数据工程师给口径、测试确认统计、你拍板。  \n- 错误率：压测验收门槛与业务告警噪声上限取更严者，运维提、你拍板。  \n- 队列上限：边缘磁盘容量/单事件大小/最长断网时长测算，再用峰值写入速率压测校验，边缘计算工程师测算、现场实施确认断网假设、你最终确认。  \n我打算切换用 A/B 双写 7 天：业务对比按 `event_ts` 小时桶做基线，新链路只出镜像报表；链路健康按 `P95(final_store_ts - event_ts)` 等延迟指标监控，回补场景单独分组看。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行吧，这三条我就按你给的口径推进：双写7天、回滚用“阈值+30分钟持续”、业务对比锁 event_ts，链路健康看 e2e 的 P95 分解，final_store_ts 定义也不再猜字段名。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的监控告警与值守流程设计背景下，用户与导师围绕告警分层、触发条件、证据字段、SOP与升级及合规留痕持续沟通（9轮），其中在告警路由去抖与合规模板部分与运维工程师沟通（4轮），在证据指标轻量化与时间口径定义部分与数据工程师沟通（3轮），并形成可落地的看板视图与oncall规则清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想按影响面分三层：P0 影响核算与对外披露的，P1 影响内部减排闭环但还能补，P2 就是噪声偏多的提示。第一眼我会让他先看“业务是否还能算”：按 event_ts 对齐的小时量有没有断，然后再看链路 e2e P95 的延迟分解是卡在哪段。还有一个是点数偏差率分组，先判断是不是某个数据源在飘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P0 我倾向两条触发其一：1）业务量化缺失，比如某关键排口 event_ts 连续两小时没有有效排放量；2）核算对齐失败，比如核算引擎对不上因子版本，导致 run_id 没产出。持续时间我想用“至少30分钟”这种，之前回滚也用了持续。抖动的话加一个去抖窗口，比如 5 分钟内反复触发只报一次。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 值守这块我想把告警分 P0/P1/P2。你给我一个可执行的流程：每类告警触发条件建议、分派到谁、升级阈值、告警里必须带哪些证据字段（run_id、规则/因子 hash、event_ts、final_store_ts 这些），以及怎么做降噪去抖，别把内部库表名和站点明文塞进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解 P0-A 其实是“缺口”两种：数量掉到基线的 X% 以下，或者聚合量 NULL。这里 X% 应该按点位历史波动定，不然间歇排放就天天告警。P0-B 是 run_id 级别状态，挺适合我们审计引用。还有告警 key 把规则hash带上，能避免规则升级后旧告警混进来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想加两个计数：raw_ingest_count（原始入库的 event_id 数）和 valid_emit_count（通过质量/置信门限后的数）。如果 raw 有、valid 没，那更像质量规则或算法门限；两者都没，就是采集链路或入库。再配一个 low_conf_ratio，表示置信度低于阈值的比例。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我不太确定。我的想法是别实时算大范围聚合，告警侧只取最近 N 分钟的窗口、并且只算“触发范围内”的排口/数据源。还有就是把这些计数做成预聚合指标，跟 e2e 延迟那种一样按小时落一份，这样告警只读指标表。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 告警证据我想加 raw_ingest_count、valid_emit_count、low_conf_ratio，再结合 event_ts 缺口、e2e 延迟分解、final_store_ts 延迟。怎样做预聚合/指标化能让告警查询轻量？另外 event_ts、入库时间、final_store_ts 三个时间在告警里怎么放才不引起误读？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺口用 P10 这种我能接受，避免一刀切。工况遮罩我之前没放进来，这里会影响告警级别：停机时 valid_emit_count 低不算事故。时间字段的话，告警里我会把 event_ts 范围和 ingest_ts P95、final_store_ts P95 分开列，避免人误以为是同一个延迟。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "P0 我选“核算无产出”这条：  \n- 触发：同一规则hash/因子hash 下，连续 2 个调度窗口 run_id 状态为 failed/timeout/no_output，且该窗口覆盖的 event_ts 小时数≥1。窗口结束后 T=20 分钟仍无成功 run。  \n- 告警内容：severity=P0；run_id 列表；event_ts 范围；site_code_hash/stack_code_hash；规则hash/因子hash；pipeline_latency_kpi 里入库→计算、计算→提交的 P95；final_store_delay_p95；最近一次成功 run_id + 时间。  \n- SOP：①先看 pipeline_latency 是否一起升高，判断是链路还是规则/任务本身；②若链路正常但 run failed，拉数据工程/后端看任务错误码与规则版本（只引用 hash）；③启用预案：暂停对外导出该站点结果，内部看板标记“数据不可用”，并开事件单。  \n- 升级：10 分钟无人确认或 30 分钟未恢复，升级到值班负责人+核算策略同学（因为可能是因子版本问题）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把升级条件改成：当 pipeline_latency 正常、raw_ingest_count/valid_emit_count 正常，但 run_id 仍 no_output 或 fail，且错误码指向规则校验/因子缺失类，再拉核算策略；否则先在数据/任务侧兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只能想到两层：告警消息默认不带任何可逆映射，站点映射表只给少数人查；另外告警平台按角色控制“展开详情”，普通值班看到 hash 和影响面，只有合规或负责人能点开看更细的上下文。是不是还要加审计：谁查过映射。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这 5 条落：看板做两张固定视图（emit_hourly_kpi、pipeline_latency_kpi），告警模板照字段来，P0 的升级条件加“链路正常+计数正常+版本类错误码”再叫核算策略。值守留痕我让运维那边把告警 key 和 run_id 串进事件单里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估的审计取证与报表交付背景下，用户与导师围绕证据链从告警留痕延伸到报表脱敏交付、不可用结论审批与不可抵赖锚点持续沟通（7轮），其中在合规口径与hash/映射可用性部分与环境合规经理沟通（1轮），在取证包结构、delivery_id与run_id_set_hash追溯设计部分与数据治理官沟通（1轮），并形成三层取证与交付最小包及受控展开流程草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解取证材料不该重做一套，就复用告警证据字段模板做“事件证据索引”。思路是：报表里只放摘要指标和hash标识；审计要追到原始数据时，用告警key、run_id、event_ts范围去定位。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我不太确定审计方一般会不会接受“只给hash不出站点名”，以及报表交付要不要带规则hash、因子hash这类技术字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对外报表我先列个最小集：  \n1）主体标识：企业统一社会信用代码、报告期；站点我倾向用site_code_hash。  \n2）排放结果：小时/日汇总的CO2e、以及NOx/SO2/颗粒物之类如果要披露就分开；再给一个“数据有效覆盖率”。  \n3）方法说明：因子版本（可能用因子hash或版本号）、核算边界描述。  \n4）异常说明：P0期间标记不可用的时间段占比，或者“数据不可用清单”。  \n我拿不准的是：审计可能要看原始计数 raw_ingest_count/valid_emit_count 这些，放报表里会不会太工程化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境合规经理 取证与报表交付这块：对外报表能不能只给site_code_hash这类不可逆标识？审计常见必备材料有哪些字段/附件？工程侧的run_id、规则hash、因子hash这些你们会认可吗，还是需要转成更业务化的版本号和口径说明？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "“不可用清单”那块，我之前只想着从值守事件单拉时间段，没考虑审批留痕要一起给。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现有锚点我能想到：告警key、run_id、event_ts范围、规则/因子hash、raw_ingest_count、valid_emit_count、low_conf_ratio、延迟P95分解、最近一次成功run_id，还有操作者+时间这些留痕。  \n缺的可能是：报表数字对应哪个run_id（比如月报是多次run拼的），还有“报表导出”的操作者和导出版本。以及站点映射查询的留痕要能关联到具体审计请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 审计取证与报表交付：我们已有告警证据字段模板（含告警key、run_id、event_ts范围、规则/因子hash、计数、延迟P95、操作者留痕）。想把它扩成“审计取证包”。  \n我卡两点：1）报表级run_id怎么定义（一个月汇总可能跨多次run）；2）报表导出版本/口径怎么做可追溯且不暴露内部表名与站点明文？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这套“delivery_id + run_id_set_hash”我能接住。run_id不硬拼成一个，审计要抽样再展开列表，这符合最小暴露。  \n我担心一点：run_id列表展开会不会量太大，审计抽样时要等很久；还有 report_scope_hash 的生成方式如果站点集合变更，会导致同一期的hash不稳定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "展开成本我想两档：  \n- 默认不展开，只给run_id_set_hash + 统计：参与run数量、失败run数量、缺口小时数。  \n- 真要展开时做“按审计抽样”展开：比如审计指定某天某小时，就返回覆盖那段的少量run_id。  \nscope hash稳定性：给scope一个“范围版本号”，比如本期站点清单冻结成scope_version；report_scope_hash用冻结后的清单算。站点增减在下期生效，别在同一期滚动改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "流程我写成5步：  \n1）审计提出请求，给delivery_id或报表页码+指标名+时间范围；我们登记审计请求号。  \n2）报表系统返回该指标的元信息：report_period、method_version、factor_version、run_id_set_hash、data_coverage、unavailable_window_summary。  \n3）若审计要抽样复核：由合规经理审批“展开run_id/映射查询”权限，记录 approver_id、approve_ts、审计请求号。  \n4）在受控环境里，按审计指定的时间窗返回对应run_id、event_ts范围、valid_emit_count等，并给出规则hash/因子hash作为校验锚点。  \n5）如需定位到具体站点/排口：查询映射表（最小权限），返回站点明文，但同时写审计日志：查询人、查询时间、查询的hash、审计请求号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补一句：返回的valid_emit_count要对应“有效监测点数/分钟数”口径，并附上剔除规则版本号（rule_version）以及低置信度剔除阈值说明；coverage=valid_emit_count/expected_count，expected_count口径也要写清楚（比如每分钟一个点）。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向两种：  \nA 不追溯重算：历史报表冻结，method_version变更从生效日开始；优点是稳定，缺点是前后不可比。  \nB 追溯重算：给“再发布”机制，delivery_id变新，旧版保留；优点是可比，缺点是工作量和解释成本高。  \n我不确定审计更喜欢哪种，但感觉B的证据链要求更严。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边缺口主要是：rule_version的命名规范我们还没统一，只留了规则hash；还有“补算原则”目前只在核算策略同学脑子里，我得去拉他们给一句可披露的摘要。  \n其余我能按你这三层去对齐值守事件单、告警模板和报表导出流程。"
+              }
+            ]
+          },
+          {
+            "microScene": "在减排成效运行评估复盘迭代背景下，用户与导师围绕复盘证据、归因口径、事件对齐与轻量/增强方案持续沟通（9轮），其中在指标口径与缺测披露、置信度双口径部分与碳核算策略师沟通（2轮），在执行时间推断、事件字段设计与补算打标部分与数据工程师沟通（1轮），并形成可执行的复盘框架与结论责任边界写法。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按“排放量变化”和“工况变化”两条线看。排放量我想用我们反演的烟羽CO2e（带置信度）+ CEMS的CO2/流量做交叉；工况用产量、负荷、燃料热值、风机频率、脱硫/脱硝启停这些。然后把“建议下发时间点”当分割点，做前后对比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小可行我想先做分层：按产量区间、负荷区间、燃料批次（热值/含碳）分桶，对比建议前后单位产量CO2e。然后再补一个“控制图”看过程是否有持续性变化，不是偶然波动。还有异常剔除：比如检修、旁路、启停阶段单独标记，不混进主统计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "几个卡点：1）建议下发后，现场执行有时晚几个小时甚至隔天，系统里只有“下发”，没有“执行确认”，我怕对齐错位。2）反演值置信度低的时候要不要纳入统计，会不会把结果做得太好看。3）“补算原则”还没拿到可披露表述，但复盘里肯定会碰到缺测补算的段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@碳核算策略师 复盘里我想用“单位产量CO2e下降”证明减排，但我们既有反演也有CEMS，缺测还要补算。你帮我定三个东西：A）复盘主指标和对照指标用哪套口径；B）缺测/补算在复盘里怎么呈现才不被认为在美化；C）置信度筛选的统计口径怎么说才算合理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这里有个细节：我们现在复盘期里，CEMS也会有漂移校准段，校准段算“实测”还是单列？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先给一版可执行的：  \n1）主指标：CEMS口径的单位产量CO2（tCO2/吨产品），作为复盘主结论；对照指标：反演CO2e（带不确定度）同口径边界下做旁证。  \n2）时段分段：正常运行、启停/检修/旁路、CEMS校准维护三类单列。运营改善主要看“正常运行段”的强度变化，同时保留“包含特殊状态的合计排放”给管理层看全貌。  \n3）缺测呈现：每个周期都拆“实测时长/补算时长/不可用剔除时长”，补算要写触发条件和占比，不隐藏。  \n4）置信度：反演结果做两套统计：全量（不筛）+高置信度（阈值待回放校准），两者都报，差异当成不确定度解释的一部分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 我们要做减排成效复盘迭代，但现场经常只有“建议下发”没有“执行确认”。我需要你给：1）怎么用现有数据还原“执行发生的时间点”；2）事件对齐字段建议（下发/参数变化/工况变化/排放变化）；3）缺测补算段在数据上怎么打标，方便做覆盖结构统计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "执行推断用“设定值/过程值阶跃+持续N分钟”这个思路我能落。N分钟我怕不同工艺不一样，先用10分钟起步再回放调。弱证据我倾向只做辅助，不直接用于主结论。对比窗口我想用stabilization_ts开始往后取，比如30~60分钟，避免瞬态。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "轻量版：只做两类事件对齐——advice_issued_ts和actuation_detected_ts（只用setpoint阶跃）；效果窗口固定为执行后第60-120分钟，主指标只算CEMS单位产量CO2，缺测只统计占比不细分方法。适合周报快速迭代。  \n增强版：加入stabilization_ts判断稳定段；效果窗口按负荷稳定自动伸缩；反演双口径+不确定度一起算；缺测补算细分到方法和触发；特殊状态单列两套指标。适合月度复盘和审计问询时用。  \n维护成本上，增强版需要维护阈值（阶跃幅度、稳定判定、置信度阈值），我觉得先做轻量跑两周，拿回放数据再决定哪些阈值值得固化。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可能会把结论分成三层：  \n- 事实层：哪些批次/哪些工况下，执行后单位产量CO2上升，窗口、覆盖率、补算占比都写清。  \n- 解释层：先列候选原因，不直接断言，比如工况未稳定、燃料批次变化、CEMS校准段混入、执行延迟导致对齐错位。  \n- 行动层：把“建议策略需要加约束/需要人工确认/需要禁用场景”写成可操作项。  \n责任边界我不太会写得很漂亮，但至少不说“系统保证减排”，只说“在已标记的正常运行段内观察到统计意义上的强度下降/未观察到”，并且保留不确定度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

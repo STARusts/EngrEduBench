@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端到端精算校验背景下，用户与导师围绕蒙特卡洛并行损失分布的校验口径、误差来源及补偿算法持续沟通（7轮），其中在校验硬指标与误差来源部分与质量与精算校验员沟通（1轮），并最终确定尾部风险校验口径、采用Kahan求和补偿截断误差及明确三条校验红线清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就对比了下总损失均值，差不多就行了。尾巴那点偏差不影响大局吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端到端校验要卡啥硬指标，误差哪来的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "误差就是浮点数加的顺序变了呗。这简单，我写个排序算一下差值不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "本来算得就快，有点误差也正常吧。我不太会隔离这玩意儿。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看这算法能补偿截断误差，我把抽样累加那块换成Kahan累加试试，拿单线程串行结果当基准，跑个对比看看漂移没。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "串行做基准。红线就是99.5%分位偏差0.5%内，KS那个D统计量小于0.01。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

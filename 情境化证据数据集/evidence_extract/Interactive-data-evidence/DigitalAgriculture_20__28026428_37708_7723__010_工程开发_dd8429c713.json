@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的数据质量与可观测建设背景下，用户与导师围绕字段级质量闸门、400/422区分、结构化日志与最小指标聚合方案持续沟通（6轮），其中在质量事件记录口径与血缘字段部分与数据工程师沟通（3轮），在日志脱敏与禁记VOC/表型红线部分与安全合规经理沟通（2轮），并确认优先落地入口校验与质量记录及用日志查询实现最小聚合验收。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能先别搞太复杂？我就加点日志吧，能看见就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…device_id 这些不能为空？然后 confidence 在0到1？差不多了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "400不就是错了嘛，422也算错了，有区别吗？我就都400行不行，省事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标我不懂，就把P95和5xx抄过来？再加个成功率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就怕埋点也要改一堆地方。我能不能只在入口打一条日志，里面放event_id和dedup_key？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 质量盘要看啥？我这边只想快点过，给我最简单的字段和统计就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rule_id这么多我容易写错，能不能就写一条fail_reason字符串？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "schema_ver要不要啊？我感觉多余。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记住：reject_code枚举，reject_detail随便写点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就加个质量记录吧，带reject_code，还有trace_id。schema_ver也塞个1。别的统计我先不做行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用现成的日志检索里做个查询？不写代码聚合了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规经理 日志里我能放啥不能放啥？别整长的，我就想知道红线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "plot_id还要哈希？太折腾了吧，我们内部用的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，那我就只打plot hash前8位，device_id也前8位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把A和B先弄了。C我用日志查询凑一个，别让我写啥dashboard。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，我先按这三条来，别再加了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

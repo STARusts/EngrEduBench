@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路数据闭环联调背景下，与导师围绕联调方案、闭环验证标准、Kafka链路追踪透传及数据脱敏持续沟通（6轮），其中在断网续传模拟部分与边缘端开发工程师沟通（1轮），在微服务联调断言部分与微服务开发专家沟通（1轮），并形成包含Docker模拟、tc netem断网、TraceId透传及位置脱敏的联调步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Postman直接发请求模拟边端上报，然后看调度微服务的返回结果。这样不用真去连设备，跑起来快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边端断网续传这块，联调的时候怎么模拟比较好？有没有现成的工具？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就先写个Docker模拟器发MQTT流，网络层加规则断网。不过这样只能看数据有没有回来，怎么确认推演结果真的触发了调度，而且调度指令边端也收到了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微服务间这种联调断言，一般怎么搞比较方便？我不想一个个去打日志比对。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我可以把这个机制迁移过来，在联调脚本里把从边端模拟器到调度下发的TraceId提出来，如果一致就说明闭环了，还能看各环节耗时！这比我自己写断言靠谱多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "实在不行我就先用版本号代替TraceId，只要边端收到指令里的版本号和上报数据的一致，也算闭环了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏我还没处理，直接拿了测试库里的数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调测试的步骤我整理下：1.起Docker边端模拟器发MQTT流；2.用tc netem模拟断网测续传；3.加上SkyWalking的TraceId透传看闭环和耗时；4.测试数据做位置脱敏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

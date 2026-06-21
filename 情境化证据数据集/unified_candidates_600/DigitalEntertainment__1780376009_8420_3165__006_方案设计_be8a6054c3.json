@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字人心智与剧情接口设计背景下，用户与导师围绕意图结构化、校验降级策略、连续降级熔断及接口契约字段持续沟通（6轮），其中在格式疲劳与推理延迟部分与大模型算法工程师沟通（1轮），在校验失败边缘处理部分与全栈联调工程师沟通（1轮），并形成心智-剧情接口契约基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "心智模型输出的是高维向量或者自然语言意图，但边缘侧叙事引擎只认确定性的Event和Condition。如果直接把大模型的自然语言丢给边缘，解析成本太高而且极易崩溃。我觉得中间必须有一层“意图结构化”的转换，把云侧的发散收口成边侧能执行的指令。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设想是用大模型的Function Call能力，直接输出符合预设JSON Schema的剧情动作原语。但大模型偶尔不按格式出牌，或者生成的动作原语根本不在当前剧情图的合法边集里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果在接口层加强校验，校验失败的代价怎么覆盖？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "心智推演输出给剧情引擎时，如果用Function Call约束格式，在长线叙事中模型会不会出现格式疲劳？推理延迟大概什么量级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重试对交互叙事是灾难，边缘侧等不起。如果云端下发的动作原语校验失败，边缘侧接口怎么处理才能不卡剧情？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回退到上一轮合法状态，会不会导致剧情逻辑出现死循环？比如模型陷入某种偏见，一直生成非法动作一直回退。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "连续降级说明模型可能陷入了偏见或者有害生成的死胡同。这时候接口层应该触发“熔断”，直接切断云侧心智输入，边缘侧切到预设的保底剧情树，比如NPC进入沉默或离场状态，同时触发风控拦截记录。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "除了action_type和params，必须带上心智向量的置信度得分、推演的SeqNo（和前面数据流对齐），还有风控审查的token。风控token放契约里，边缘侧拿到就能直接信纳，不用再二次请求风控服务，能省一次网络开销。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "心智-剧情接口契约基调：1. 格式采用JSON Schema强约束的Function Call输出；2. 校验失败采用静默丢弃加心智回退策略，云端用上一轮合法状态兜底；3. 连续N次降级触发接口熔断，边缘切保底剧情树；4. 契约元数据包含action_type, params, confidence_score, seq_no, compliance_token。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

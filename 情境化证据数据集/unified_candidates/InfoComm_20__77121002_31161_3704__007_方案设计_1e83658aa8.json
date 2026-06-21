@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在区块链物联设备接入方案设计背景下，用户与导师围绕接入协议选型、内生安全认证与国密加密流程持续沟通（4轮），其中在轻量协议与PUF硬件指纹方案上与协议实验室研究员沟通（1轮），并整理CoAP接入、指纹哈希脱敏与SM4会话加密流程及禁收数据要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接套MQTT加TLS加密得了，市面上到处是现成的库，我调一下接口就能通，省得咱们自己造轮子。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@协议实验室研究员 专家，你那有没有那种特别快、代码调一下就能搞定设备接入的协议模板？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这好办，我直接把MAC地址、出厂序列号还有设备GPS全抓上来打包。数据给得越全，指纹不就越准嘛，这样肯定安全。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这也不行那也不行。我就是想让认证更准一点，搞这么死板，这项目什么时候能落地？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧。那我退一步，我在设备侧先做个哈希脱敏，只把加密后的摘要传上去对比，原始信息留在本地。这样你们总没话说了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用国密SM4-CBC模式。密钥由区块链生成的临时标识派生，反正只要有指纹哈希做种子，每次生成的密钥都不一样，这不就是你们要的内生安全？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "记下了。接入协议定CoAP，身份标识用PUF哈希摘要，payload跑SM4对称加密。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

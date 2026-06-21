@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极低延迟高可用链路评估背景下与导师围绕安全机制延迟压缩、拓扑排布、尾延迟测试及降级策略持续沟通（7轮），其中在SGX与FPGA拓扑及防脑裂部分与量化交易架构师沟通（1轮），在尾延迟压测设计部分与高性能计算工程师沟通（1轮），最终形成FPGA与SGX撮合拓扑、Paxos防脑裂、压测方案及限流撤单降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接全上FPGA呗，网卡收包走DMA，DPDK旁路跳过内核，肯定快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SGX也放FPGA里？不行，FPGA写不了SGX。那就加机器，多起几个节点，挂了直接切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "SGX和FPGA怎么排布，还有高可用怎么切。有没有现成的暗池架构图我参考下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内存拷贝用零拷贝？Paxos撤单我不懂。我昨天看个推文说现在有SGX2指令集，进出飞地快很多，咱直接升级CPU不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么测刚才这套链路的P99延迟？要测哪些东西？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超了就把SGX关了？直接明文撮合？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

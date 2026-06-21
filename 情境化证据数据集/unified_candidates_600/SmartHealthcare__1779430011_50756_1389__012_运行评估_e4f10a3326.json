@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在病理多中心联邦系统部署与激活验证背景下，用户与导师围绕验证方案设计、偏差验证指标及工程合规短板补充持续沟通（4轮），其中在链路探通与算力约束部分与部署与运维工程师沟通（1轮），在梯度合规与审计留痕部分与数据合规审计员沟通（1轮），并最终形成Dummy探通加真实梯度抽检方案、K-S检验设计及规范补充计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先和各院节点建立安全通道，然后全量跑一遍特征重算，确保线上聚合精度和离线一致。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "精度保底最重要，只要能证明线上无损，多花点算力无所谓。我可以让各院半夜跑批处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不做全量重算，只做链路握手，怎么保证临床前置节点的特征提取接口真的对齐了？我担心轻量探针测不出真实负载下的OOM或通信超时。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规方面呢？Dummy数据能证明梯度没泄露原始切片吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "方案修正：Dummy数据探通链路与容错，抓取单次真实梯度验证DP噪声和密态聚合，同时确认审计网关日志。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我需要验证Dummy探针和真实梯度在聚合时的分布差异，确保探针不会掩盖什么系统性偏差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会比较探针梯度和真实梯度的范数分布，做双样本K-S检验。如果p-value大于0.05，说明探针没引入系统性偏差，置信度95%。效应量看Cohen's d，必须小于0.2，才算小效应量可接受。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对K8s资源Quota和CISA审计规范确实太陌生了，只盯着模型本身。接下来2周，我会每天花1小时读K8s LimitRange文档和CISA监控标准，把资源限制和审计拦截逻辑直接写进部署Helm Chart里，确保下次交付的Chart自带合规与资源护栏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

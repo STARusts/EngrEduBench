@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在申诉处置“降级/部分放行”方案的高可用与安全边界设计背景下，用户与导师围绕降级/重试/离线下计费事件与审计留痕的不丢不重不被篡改持续沟通（9轮），其中在计费幂等与可靠投递部分与后端负责人沟通（3轮），在放行票据签名、防篡改审计与离线防重放部分与安全工程师沟通（3轮），并确认动作分级放行边界与最小对账字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就 B 和 C 吧。漏扣钱，和没日志。伪造我感觉也会，但我不太会说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预览就可能一直预览不付钱。离线就，断网了发不回来。重试就……重试把东西弄乱了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没拿到授权凭证就不让出成品？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是…授权单号？签名？我记得有个 token 这种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 计费事件怎么别丢别重复？我脑子里只有订单号。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线一直不回呢，就白嫖？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等键我听懂一半。就是重试的时候别扣两次。那预览呢？预览也算钱吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）每次输出都要有事件，里面要有授权单号指纹id动作规格。2）重试要用一个唯一的 event_id 去重。3）离线要有限额和有效期，不然就白弄。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权单号+指纹id+动作类型+规格，再加个 nonce 之类。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 审计日志怎么防伪造？离线会不会被重放刷？我不知道该卡哪里。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "链式哈希是啥？就是把 log 串起来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那部分放行是不是也要签？不签就随便放了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）放行要服务端出个能验的票，客户端不能自己写。2）日志要能看出来被改过，不然谁都能洗。3）离线和重试要防别人拿一条请求反复用，得有次数或序号和过期。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Z 吧。预览卡太死用户会骂。导出就别乱来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为钱多？而且被刷就没法追回。还有版权方会找事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "预览：没网络也能给低清水印，但得有票据，或者至少能记到本地。\n导出/发布：必须服务端确认授权和计费事件进账，才给高清。\n离线：必须先拿离线票据，带有效期和额度，用完就只能预览。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要有服务端签过的放行票？没有就不给预览？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "授权单号、指纹id、动作类型、规格(低清/高清/水印)、event_id、decision_id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "tenant_id 或 user_id。加 user_id。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

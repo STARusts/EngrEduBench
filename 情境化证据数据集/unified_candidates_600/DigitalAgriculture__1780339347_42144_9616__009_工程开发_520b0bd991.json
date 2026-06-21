@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微生态演替推理模型开发背景下，用户与导师围绕模型驱动方式、数据流接入、推理延迟、模型简化验证及合规防超量持续沟通（6轮），其中在混合驱动实现部分与微生态推理模型开发者沟通（2轮），并最终形成基于PINN混合驱动、RTOS数据流接入、历史数据验证及硬截断防超量的开发约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接弄个时序模型，LSTM或者Transformer都行。把温湿度、EC值拼成特征向量扔进去，让它自己学演替规律。网上有挺多现成的时序库，改改输入维度就能跑。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没太考虑生物机理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "纯数据驱动在微生态预测里容易翻车吗？有没有什么现成的框架能结合一下生物机理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我得手写微分方程再拼到网络里？有没有稍微方便点的搞法？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加个Loss项倒是比改网络结构省事。我回去试试用这个库。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据流就用刚才RTOS上报的任务缓冲区。延迟的话，PINN如果太慢，我就把Monod方程简化一下，只留主要竞争项。推理结果存全局变量，注入中断直接读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就拿历史数据跑个对照测试呗。看预测的丰度曲线和实测是不是大体一致，方差别太大就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "方差卡10%以内吧。打多了确实不行。我再跑数据的时候加个上限阈值，预测值超了就截断，保证不超量注入。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用PINN框架，选DeepXDE库，Loss里加Monod方程残差做混合驱动；第二，输入接RTOS任务缓冲区，输出存全局变量给注入中断读；第三，Monod方程可以简化，但必须用历史数据对照测试验证，误差卡10%以内；第四，推理结果加硬截断，防止超量注入违规。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

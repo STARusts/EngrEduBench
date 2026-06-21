@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在联邦聚合通信协议设计背景下与导师围绕端侧信令约束、内生安全与合规红线持续沟通（4轮），其中在轻量信令与防推断部分与联邦协议设计师沟通（2轮），在差分隐私加噪与假名重签名部分与隐私合规专家沟通（2轮），并最终形成按信令骨架、编解码、内生安全分层的协议设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用gRPC吧，支持双向流，传ProtoBuf序列化也快，我之前写后端服务都用的这个。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧聚合信令怎么设计？要尽量轻量。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "防窃密是指TLS加密吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "防推断不是加密吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "聚合协议防参数推断怎么做？有啥底线要求？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加噪不会把模型搞废吗？本来端侧算力就差。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得加噪容易把模型搞坏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 摒弃gRPC用定制二进制帧头；2. 稀疏张量编码；3. 帧头带异步水位标记；4. 异构字节序对齐；5. 加差分隐私噪声；6. 假名重签名隐藏ID。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

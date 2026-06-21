@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在衍生品交易长周期履约方案设计背景下，用户与导师围绕状态机设计与数据流防膨胀、长周期上下文存储及幂等防重方案持续沟通（5轮），其中在状态机抽象与防膨胀部分与数据流建模工程师沟通（2轮），在业务原语与跨期依赖部分与衡生品业务架构师沟通（1轮），并形成状态机按事件原语抽象、上下文持久化及基于DB唯一约束幂等的三条技术红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按常规的状态机画呗，生息、付息、到期，几个节点一连，数据顺着流转就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "状态机该怎么设计？数据流怎么防状态膨胀？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "按事件原语抽象行不行？业务上有什么要注意的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用事件原语抽象，不用平铺状态。还有要保证幂等，加上违约事件，跨期依赖要把上下文传透。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原语就是敲出、敲入、付息、违约。幂等就加个去重表查一下。上下文就放内存里，流转快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "十年存续期上下文放哪？去重表并发怎么防穿透？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上下文要持久化到EventStore，幂等靠数据库唯一键抛错来拦截。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

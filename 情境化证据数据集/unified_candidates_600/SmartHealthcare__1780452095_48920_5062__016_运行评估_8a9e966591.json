@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段微境图谱增量更新与反演模型迭代背景下，用户与导师围绕全量微调与局部热更新的方案选择及LoRA微调复现性持续沟通（6轮），其中在局部热更新表征偏移与全量微调算力代价部分与算法反演工程师沟通（1轮），在全量微调延迟抖动与折中方案部分与运行效能评估师沟通（1轮），并最终形成图谱局部热更新加LoRA微调的折中方案及DVC版本控制复现策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "局部热更新快啊，加几个节点而已，后端接口改动最小。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "崩了就回滚版本呗。算法这块我不太懂，怕乱改出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "局部图谱热更新会不会导致反演预测崩？全量微调算力吃得消吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全量微调推理延迟会抖多少？线上能接受吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图谱局部热更新加上LoRA微调。这方案听着能行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "复现这块我确实容易翻车，之前调参经常换台机器结果就不一样了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看了点MLOps的资料，里面提到用DVC管数据版本。我想着可以把这次的LoRA配置、随机种子还有特征库版本用DVC绑一起打tag，下次跑就照着tag拉环境，应该能复现。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "非典型斑丘疹关键演进特征做图谱局部热更新，反演模型用LoRA微调防止表征偏移。复现用DVC绑定特征库版本和LoRA配置，保证下次增量更新效果一致。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

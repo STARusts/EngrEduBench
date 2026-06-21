@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在星地协同防重排重构运行评估背景下与导师围绕验证指标口径、部署风险与可观测性短板持续沟通（5轮），其中在乱序率量化分析框架部分与交付质量复盘师沟通（1轮），在灰度部署限制与回滚策略部分与轨道周期部署专员沟通（1轮），并最终确定分组比较非参检验、10%灰度双轨周期红线及BCC工具补齐目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备把新版本推到轨周期部署验证环境，看真实星历切换下保序引擎的表现。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算对比重构前后的乱序率大盘均值。如果下降了就算验证通过。压测时宽限期已经达标了，线上应该也差不多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "轨周期部署后，怎么严谨地量化防重排机制对乱序率的改善？我之前只看了均值。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就按高切换频率桶来做核心验证，低频桶作为对照。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "效应量这块我得现查下怎么算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "星上CPU和内存池对保序引擎新版本有啥限制？回滚怎么弄？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "10%灰度，双轨周期观察，CPU 85%和内存水位作为红线。这方案可行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过星上CPU峰值我怎么抓？之前压测是用perf，但星上环境那套工具装不上，我只会看顶层遥测的均值占用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "eBPF我知道概念，但没实操过，特别是受限环境下的字节码加载。我这块确实短板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定个短期目标：这周末把BCC工具集里的cpudist和offcputime在模拟星上容器里跑通，弄清怎么挂载到保序引擎的锁竞争点。下周灰度时我加上这俩探针。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证看高频桶效应量，灰度10%双轨周期，红线85% CPU与内存。我这就去查Mann-Whitney效应量算法和BCC受限环境适配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

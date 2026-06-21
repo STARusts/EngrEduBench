@@ -1,0 +1,526 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在多模态实时反欺诈风控引擎立项论证背景下，用户与导师围绕黑产痛点锚定与合规约束理清持续沟通（5轮），其中在黑产组合伪造痛点部分与反欺诈产品经理沟通（2轮），在多模态数据抓取红线部分与合规与审计专员沟通（1轮），并最终确认跨模态组合伪造对冲痛点与误杀红线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下周花三天看两份设备伪造的报告，弄明白他们怎么骗过风控的，到时候能说出三种伪造套路就行了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在的黑产到底怎么搞的？快点说最痛的点"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以重点就是设备农场对吧？搞死农场就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多模态抓数据有啥限制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "痛点就是设备农场，限制就是授权和误杀。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在实时风控延迟量化背景下与导师围绕阻断延迟指标依据与超时降级策略持续沟通（5轮），其中在业务耗时限制部分与反欺诈产品经理沟通（1轮），在计算物理极限部分与风控架构师沟通（1轮），咨询专家获取数据，分析超时放行与阻断的取舍，最终敲定P99延迟150ms及超时走基线兜底的降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@反欺诈产品经理 支付能等多久？@风控架构师 你们跑一版要多久？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超时就放行呗，不然卡住交易更麻烦。那阻断？阻断就踩误杀红线了啊"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "P99延迟150ms，超时走基线兜底。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风控即服务（RaaS）模式规划背景下，用户与导师围绕服务形态、多租户隔离、部署架构及付费验证逻辑持续沟通（8轮），其中在数据隔离与授权边界部分与合规与审计专员沟通（1轮），在部署形态接受度部分与反欺诈产品经理沟通（1轮），并最终修正验证思路，形成双轨交付、数据强隔离及PoC验证的RaaS策略总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接开API呗，给个SDK接入，按调用量收钱，多简单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个租户ID前缀不就完了，图库里多存个字段，查的时候带上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多租户数据怎么搞？我加个ID区分行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得隔离，不能穿透，还要授权告知。行，隔离我加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云端SaaS省事啊，我们维护一套就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端SaaS大行能接受不？我们不想搞私有化太麻烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就分两拨卖，小客户SaaS大客户私有化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发个问卷问问他们需不需要呗，或者开个发布会，看报名人数。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前验证思路确实偏了，光问没用，得改成先拿真实脱敏数据跑通效果再谈采购。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RaaS分两拨，中小客户SaaS，大客户私有化。多租户数据强隔离，图谱不穿透，要有授权告知。验证付费意愿就找两家大行内网跑PoC看效果。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多模态实时反欺诈风控引擎方案设计背景下，用户与导师围绕特征时序对齐机制、多模态融合方式选择及验证标准持续沟通（5轮），其中在融合方式优劣评估部分与风控架构师沟通（1轮），并最终形成基于Flink滑动窗口对齐、晚期融合基线与早期融合对照的特征架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看Flink的EventTime和Watermark文档，弄懂乱序数据怎么对齐，明天把它用在特征管道设计里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "早期融合和晚期融合哪个好？我要简单粗暴能跑通的，别搞太复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "晚期融合快又好维护，就晚期融合吧，掉点就掉点，先保证不超时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "假设就是晚期融合延迟低但AUC会掉，早期融合相反。对照设计就是拿之前两家大行PoC的脱敏数据，同时跑晚期融合基线和早期融合对照。如果晚期融合AUC比早期掉超2%，我就换早期融合。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就用Flink的滑动窗口把行为特征对齐到交易事件的时间戳上，然后再去查图谱拿向量，最后走晚期融合出分。就先这样定吧，晚期融合基线，早期对照，对齐靠Flink"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在实时推理计算图编排背景下，与导师围绕多模态DAG并发、节点故障降级与兜底策略持续沟通（7轮），其中在DAG结构与超时降级部分与风控架构师沟通（2轮），在特征缺失兜底策略部分与风控架构师沟通（1轮），最终确认三路并发DAG结构与降级兜底出口。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "串起来不就完了，Flink拉特征，查图谱，模型打分，出结果。一条线走到底多简单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发啊，那就多开几个线程呗，或者Flink里并行度调大点。这有啥难的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DAG怎么画，多模态反欺诈的算子怎么排。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "超时降级是啥意思，超时就不查了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，三路并发，超时不要图谱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "挂了就挂了呗，重试啊。或者直接拒付，最安全。反正不能让它跑过去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那咋办？总不能放过去吧。就，就降级呗，跟图谱一样，没特征也拿默认值出分。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果文本特征挂了，拿默认值出分不就放行了？咋兜底？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，挂了就走规则或者缓存，给个中间分，再扔给人审。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "认认认，事件进，三路并发，超时降级，挂了走规则兜底，最后出分。就这么定，赶紧下一环节。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在图谱与流式接口设计背景下与导师围绕接口暴露方式、延迟约束及核心参数持续沟通（5轮），其中在图查询接口性能部分与图谱研发工程师沟通（2轮），在流式特征对齐部分与数据流设计师沟通（2轮），并最终确定图查询3跳子图抽取与流式3秒Watermark窗口对齐的核心契约。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图就给个查询API，流就接MQ，最简单那种，赶紧推。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就gRPC呗，快。时间戳错位就等一等呗，能有多大事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图查询接口怎么搞才快？流式对齐咋弄？快点说，我赶时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图接口就限制跳数加缓存，流式加水印窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2跳！窗口1秒！"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "3跳3秒！定死了！"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图查询用子图抽取接口，3跳，属性剪枝，加热点缓存。流式用Kafka加Watermark，3秒窗口对齐。"
+              }
+            ]
+          },
+          {
+            "microScene": "在评估引擎高可用容灾设计背景下，用户与导师围绕容灾策略、降级方案及验证持续沟通（5轮），其中在主备与双活差异及风控盲区部分与可用性保障工程师沟通（2轮），在极端降级合规审查部分与合规与审计专员沟通（1轮），并最终敲定按特征重要性分级降级、禁止单点全放全拦及降级动作打审计日志的容灾策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主备得了呗。主挂了切备，全拦住，反正不能漏钱。双活多废机器啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "主备切过去到底要多久？双活是不是得翻倍机器？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "主挂了全拦，监管那边能过不？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "白名单放行？这怎么搞，太碎了吧。能不能就写个降级开关拉倒了事？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那个分享里提过“分级降级”。按风险等级走不同策略。我试着套一下：如果是低风险特征算子挂了，就走老规则放行；如果是核心图谱挂了，就只拦高危黑名单，剩下的放行加人工复审。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测的时候把图谱节点拔了，看流量是不是按预期走的呗。样本就抓线上回放的一部分。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多模态反欺诈风控引擎算子开发任务拆解背景下，用户与导师围绕算子拆解规范、降级审计日志与验证口径持续沟通（6轮），其中在算子边界与依赖约束部分与风控架构师沟通（1轮），在异步查询实现与验证口径部分与算子开发工程师沟通（1轮），并最终形成图谱强制AsyncIO、时序EventTime对齐、日志入湖及对照组验证的算子拆解规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就设备指纹算子、图谱关系算子、行为时序算子呗，直接开干不就行了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听懂了，20ms红线，超时就放行。别的太啰嗦我没记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计日志就打在本地文件呗，验证的话我造几条数据跑一下看看不报错就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱异步查询怎么搞？我直接写个同步查行不行，省事。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "AsyncIO？这玩意我没用过啊。同步查真的不行吗？大不了我加个缓存。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我去翻翻AsyncIO的文档，写个同步异步的对比例子跑跑看，顺便看看水位线咋设的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱异步，时序对齐，日志入湖，跑对照组。"
+              }
+            ]
+          },
+          {
+            "microScene": "在流式特征计算核心实现背景下，用户与导师围绕多模态异构流拼接、状态管理与降级日志规范持续沟通（5轮），其中在异构流连接与异步回调状态管理部分与数据流设计师沟通（2轮），在降级特征上下文与日志格式部分与算子开发工程师沟通（1轮），并最终确定流式拼接、降级及结构化日志方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用Flink的DataStream把文本、图谱、时序三个流union起来，然后一把梭过模型不就完了？赶紧把数据灌进去跑通最要紧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Flink里三个异构流怎么接最快？我要毫秒级出特征，最好别搞太复杂的窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图谱异步回调就先放Map里存着，到了就拿出来拼。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "刚才说的图谱异步回调状态，不用Map用啥？Flink状态后端怎么存回调的半成品？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用MapState存半成品，图谱没回来就降级往下发。TTL设个5秒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在特征里加个flag，标明降级了，然后日志打一行文本扔Kafka呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级特征上下文格式长啥样？直接给我个模板我照着填。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "is_degraded，missing_modalities数组，fallback_reason枚举。Kafka发这四个字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Connect加MapState，定时器降级，结构化Kafka日志。下班前跑通时序加文本，图谱Mock。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风控引擎真实服务联调背景下，用户与导师围绕联调协议、Flink异步非阻塞改造、线程池隔离及熔断降级逻辑持续沟通（10轮），其中在模型调用协议部分与模型推理工程师沟通（1轮），在图谱查询接口部分与图谱研发工程师沟通（1轮），并最终确认双异步算子隔离、gRPC单例初始化、图谱参数化查询及熔断走降级的改造方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把Mock去掉，配个模型HTTP地址，图谱用JDBC查Neo4j。跑通就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加多线程？开它50个线程并发查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型咋调？给个HTTP地址我直接Post过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱查询接口呢？我直接拼Cypher查行吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "gRPC调模型，参数化查图，超时熔断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用AsyncFunction？把请求丢进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "共用一个线程池省事啊，分那么细干嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "反正不拼接字符串呗。具体API我写的时候再看文档。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先查图谱拿特征，再送进模型推理，不就这样吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就填个默认值呗，赶紧往下走。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "双异步隔离，gRPC单例，参数化查询，熔断降级。这回真去改了！"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在极压性能调优排障背景下与导师围绕极压排障、火焰图证据分析、线程池调优依据及压测数据脱敏违规问题持续沟通（4轮），其中在极压瓶颈与数据边界分析部分与测试与压测专家沟通（3轮），在图谱查询线程池耗尽根因与调优参数部分与风控架构师沟通（3轮），并形成线程池拆分与参数调整方案及数据脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能跑通不就行了？压测随便压两下得了，赶紧上线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测跑出啥结果没？TPS多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "800就800呗，大不了加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "是不是你设计的图谱查询太慢了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨晚刚看了个博客说找最宽的红块就行。我瞅瞅，右边一大块确实是gRPC栈帧，好像是卡在等锁上了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "行行行，线程池耗尽。调大点不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接从生产库导的啊，压测还搞啥脱敏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核数乘2，队列200，CallerRuns。改完再压。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在多模态反欺诈风控引擎上线评估背景下，与导师围绕灰度发布策略、统计显著性与扩量依据持续沟通（6轮），其中在灰度比例与监控熔断指标部分与运维监控工程师沟通（1轮），在误杀合规红线与日志留痕部分与合规与审计专员沟通（1轮），并最终确定1%灰度起跑观察，计划补充灰度统计知识以计算扩量依据。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接全量切流啊，有问题再回滚嘛，多大点事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么弄上线最快？我想立刻看效果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1%太慢了，直接5%灰度，跑两分钟没报错我就全开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不用算那么细吧，看着大盘平我就推。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误杀怎么搞？大盘能看啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，1%灰度，跑半小时。半小时后误杀率低于1%我就扩量，行了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太懂啥区间下界。我今晚花两小时把AB测试和灰度统计那几个公式看一遍，明早我自己算一遍能不能扩。现在先按1%推上去观察。"
+              }
+            ]
+          },
+          {
+            "microScene": "在1%灰度测试运行评估背景下，用户与导师围绕灰度扩量决策与数据支撑持续沟通（5轮），其中在资损率与误杀率明细及归因部分与资损运营分析师沟通（2轮），在P99拦截延迟分位数据部分与运维监控工程师沟通（1轮），并最终形成维持1%灰度、优先解决误杀与延迟问题的调整方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "大盘绿着的啊，没报警。赶紧推5%吧"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就扫了一眼总成功率，没跌。具体数字没记，反正没崩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1%灰度这半小时的资损率和误杀率是多少？跟基线比咋样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "P99延迟呢？超没超？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "资损降了就行呗，误杀高一点慢慢调，延迟慢10ms用户根本感觉不到。能扩了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资损不是真降了吗！那你说咋办，不扩了？这数据还得看到啥时候去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "又得改啊。行，先1%吧，赶紧调完赶紧扩。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风控模型灰度评估深挖误杀根因背景下，用户与导师围绕降权方案否决与特征去偏重构方向持续沟通（4轮），其中在误杀群体分布归因部分与资损运营分析师沟通（1轮），在算法公平性违规严重性确认部分与合规与审计专员沟通（1轮），并最终形成停止降权扩量、转向特征去偏与重构的整改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "小额高频时序太敏感，直接把权重砍了不就完了，赶紧改完扩量啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误杀的那些人到底啥情况，赶紧给我拉个分布看看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "外卖骑手转账多呗，那给他们权重降了不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "风控模型误杀了几个骑手，导师说有风险，你看一眼。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "特征都上线了现在让我去偏？我哪会这玩意儿。能不能先上线再慢慢偏？大不了我加个白名单放行骑手呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "特征剥离，去偏。那我现在只能先停掉灰度，重新搞特征对吧？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在特征去偏重构后大盘切回老模型背景下，与导师围绕小样本迭代策略的合规底线与外推有效性持续沟通（5轮），其中在切流验证指标部分与资损运营分析师沟通（1轮），在分层抽样与外推边界部分与算法研究员沟通（1轮），并最终形成基于分层抽样构造样本、A/B回放验证分职业误杀率收敛后切流的迭代闭环策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@资损运营分析师 小样本切流验证怎么搞，我要最快的方案。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放还要分职业看？太麻烦了，直接看大盘误杀降没降不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法研究员 特征去偏后小样本怎么选？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽样得覆盖难例职业，不然线上长尾崩。回放指标得看分职业的误杀率，不能只看大盘。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前真没想过特征改了分布会变这么多，随便抽肯定不行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

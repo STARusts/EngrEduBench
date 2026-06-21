@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在沉浸短剧多端播放策略与会员/解锁/试看权益联动的方案设计背景下，用户与导师围绕分层边界、跨端一致项、接口对象与冲突治理持续沟通（7轮），其中在播放器可执行策略与投屏能力分档部分与音视频工程师沟通（2轮）、在权益硬规则与可弹性呈现部分与商业策略经理沟通（1轮）、在并发租约的告知最小化与审计留痕部分与合规与风控负责人沟通（1轮），并收敛出“播放许可+防护指令”合成、进度同步与投屏参数化的最小方案与验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是搞个“跨端会话状态中心”，所有端都去拉同一份“观看进度+剧透保护等级+权益状态”。然后播放器只负责渲染。这样不管换端还是投屏，体验都对齐。再往下我还想加端侧本地加密缓存，避免离线被扒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须同步的：解锁到第几集、试看是否用完、账号的会员等级、还有剧透防护的偏好开关。端侧自洽的：清晰度选择、倍速、弹幕开关、缓存。权益判定我觉得放服务端网关，避免端上被改。冲突的话，可能是“投屏到TV后，TV端绕过了移动端的沉浸模式限制”，还有就是多端同时播放刷试看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@音视频工程师 多端播放器这块，策略动作你们一般能支持到什么粒度？比如禁跳、进度条遮挡、投屏限制、弹幕延迟这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "投屏这块如果只是提示，那不是很容易被绕过？我本来还想做端到端DRM绑定设备，投屏就直接不让播。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业策略经理 权益联动这块，会员、分集解锁、试看、赠送券这些组合，哪些是必须硬执行的？哪些可以为体验让一点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我听下来是：权益真相必须统一，播放器策略可以端差异，但要遵循同一套策略指令。投屏强拦不可靠，更多是能力分档+水印溯源兜底。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不过我还想把“段落解锁”做得很细，比如按剧情要点切片卖，这样ARPU可能更高？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "播放许可我想要：contentId、episodeId、userId、canPlay、canSeek、maxSeekPos、trialRemaining、expiresAt。  \n防护指令：spoilerMode（off/low/high）、timelineMode（full/blur/hidden）、danmakuMode（normal/delay/off）、shareMode（normal/warn/block）、screenshotWatermark（on/off）。差不多这样？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点担心 watchedUntil 跨端同步会导致写放大。每几秒上报一次，五端同时看就很夸张。我想上事件溯源+CRDT，做最终一致。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "好，那并发播放薅试看呢？我想做播放租约 lease：同一账号同一剧集同一时间只能有一个活跃播放会话，其他端只能预览。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控负责人 播放租约这种“同账号同内容限制并发”在合规上有什么坑？告知、审计要怎么设计才稳？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回到设计里，把租约仅用在试看/未解锁播放，并且审计字段留简洁。设备指纹不当主键，只做风控补充。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过投屏场景，我还是担心版权方要求“必须限制”。要不要直接规定：投屏只能在会员且已解锁情况下才允许？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我这版收口是：  \n1）服务端给“播放许可”= 权益真相，端上缓存短TTL；试看扣减、未解锁播放走租约，减少多端并发薅。  \n2）服务端给“防护指令”= 剧透保护动作集合，各端按能力分档执行，做不到的走降级，不碰视频画面延迟。  \n3）播放器执行取合成：先看许可（能不能播/能不能跳/试看剩余），再叠加防护（时间轴展示、seek策略、弹幕延迟、分享提示/折叠、水印强度）。  \n4）进度同步不做高频一致性系统：30秒+关键节点上报，watchedUntil单调递增，切端时强制拉真相。  \n5）投屏策略做参数 castPolicy，默认试看片段不允许投屏或只允许强水印，具体边界等版权条款再定；合规侧要求对并发限制做明确告知和审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

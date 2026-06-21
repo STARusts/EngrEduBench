@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在异构报文数据流设计背景下与导师围绕报文解析扩展性与敏感数据脱敏持续沟通（5轮），其中在报文解析与动态扩展部分与数据流与契约工程师沟通（2轮），在敏感数据脱敏合规部分与合规与风控专员沟通（1轮），并最终形成动态适配器、Schema Registry联动路由及入口脱敏等关键约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块直接Kafka接进来，Flink清洗一把，转成我们自己的内部JSON格式存着就行了。查图的时候直接拿。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "改就改呗，写几个解析逻辑又没多大事。定长报文我之前切过，加个拆解器很快的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构报文进Kafka然后Flink清洗，这方案行不行？机构加得多会不会难搞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Schema Registry？就是集中管格式的对吧。动态适配器听着挺高级，其实就是把解析逻辑抽出来做成插件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白点意思了，格式集中管，解析做插件，还能跟路由联动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我转成内部JSON的时候原样保留呗，反正我们内网库是安全的。要用的时候再脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "报文里的账号姓名，能在入库后再脱敏吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "入口就脱敏，解密要单独鉴权。这改动有点大啊，不过既然是红线那就加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "关键约束：1. 报文解析用动态适配器，禁止硬编码；2. 格式管理用Schema Registry，和路由引擎联动；3. 敏感字段在进Kafka前必须脱敏，还原解密走独立鉴权通道。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

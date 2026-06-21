@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户启动多源异构数据采集模块开发，围绕物联网站点与哨兵2号影像同步接入、时空对齐与预处理挑战，与导师讨论采集管线鲁棒性验证；并与遥感/算法工程师就分辨率与采样频率权衡达成可检验实验方案，明确RACI分工、能耗估算与风险台账，形成阶段共识与后续修改配置安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我正准备通过 DVC（Data Version Control）构建一套可复现的数据实验流水线。昨晚我在本地跑通了基于 Git flow 的首个 Pipeline 节点，commit hash 为 `a7f2c1b`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "根据我识别出的个人胜任力差距，我在大规模地理空间索引（如 H3 或 S2）的底层实现上经验尚浅。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我已制定了 SMART 目标：下周五前完成《Geo-indexing 优化实战》课程及项目适配，目标是将千万级坐标点位索引的内存开销降低 30%，目前正在 MLflow 记录基准测试数据，RunID 为 `9e8ab_001`。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我理解两位的出发点。@遥感数据工程师 是为了保证数据的“原始保真度”，而 @AI算法工程师 是为了计算效率。但我认为我们不能只做二选一。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "基于 Nyquist-Shannon 采样定理，我们必须首先确定碳汇动态变化的特征频率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我提出一个可检验的假设：在非生长期（11月-次年2月），将卫星数据更新频率降低至 15 天，对碳中和路径优化结果的置信区间影响不足 1.5%。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会设置一组受控实验。自变量为采样频率（5d, 10d, 15d, 30d），因变量为反演模型的 MAE（平均绝对误差）和计算延迟，控制变量为同期的气象站观测数据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我们将选取 500 个样本点进行功效分析（Power Analysis），确保 0.8 以上的统计效力。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果 MAE 的置信区间（95% CI）波动小于设定阈值，我们就采用分时段动态采集策略，这也能显著降低系统长期的碳足迹。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "既然方向清晰了，我来明确一下我们本周的 RACI 责任分配矩阵。我作为项目负责人（Accountable/Responsible），负责整体流水线的逻辑集成与 DVC 版本调度；@遥感数据工程师 负责 L1C 影像的自动化预处理管线与硬件对时（Responsible）；@AI算法工程师 负责提供特征工程层面的阈值定义（Consulted）；@系统架构师 负责审核存储成本预算并监控能耗指标（Informed）。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我根据 CAPEX 500 万、3 年折旧及平均 0.58 kgCO₂e/kWh 的排放系数估算，目前数据处理中心的年碳足迹约为 4.2 吨。通过刚才讨论的动态频率优化，预计能将其降至 2.8 吨左右。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同时，我已经建立了 HSE 风险台账，将“大规模数据抓取对目标站点的带宽冲击”列为高影响风险项，缓解预案是设置分布式流量整形（Traffic Shaping）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@AI算法工程师 关于你担心的特征提取一致性，我会在采集脚本中强制执行 Schema 校验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在我汇总本轮达成的共识：第一，采用 DVC + Git 混合管理机制，确保数据血缘可追溯至 commit hash 级别；第二，执行为期 72 小时的采样频率灵敏度测试，样本量设定为 500 个地块；第三，明确分时段动态采集策略，目标是降低 35% 的冗余能耗。下周一早会我们根据实验数据（Effect size）决定是否正式修改采集参数配置文件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

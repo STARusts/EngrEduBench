@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虚实状态同步与时延攻坚背景下，用户与导师围绕协议替换稳定性评估与丢包量化验证持续沟通（4轮），其中在吞吐卡点与同步通道重构部分与编排引擎联调员沟通（2轮），在压缩时延方案与ACK超时概率建模部分与性能攻坚技师沟通（2轮），并最终形成协议UDP化、应用层ACK保序、TCP降级兜底及eBPF网卡层过滤补学方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "吞吐量卡在哪？是不是背压把同步流控死锁了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TCP开销确实大，但红线肯定不能破，物理状态漂移不可逆。你这边有什么压缩时延的硬核方案？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "内核旁路我确实不熟，XDP和DPDK的选型我还没摸透，这是我现在的短板。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "换UDP的思路没问题，去掉重传阻塞是提升吞吐的关键。我这两天得把eBPF在包过滤上的用法补一下，看能不能在网卡层直接拦截无效状态帧，减少用户态开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须构造弱网对照组测丢包率。不过协议层误差传递我分析不深，可能没法直接给出置信区间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网络抖动对ACK超时的影响，你能建个模型算一下状态漂移概率吗？我需要知道在多少丢包率下，50ms红线会崩溃。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "万分之一，超过这个概率就必须触发物理终端熔断重置。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先按UDP加应用层ACK重构同步通道，TCP通道保留做降级兜底。背压阈值暂时不变，等技师出模型后再调参。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先把eBPF的文档过一遍，争取明天把包过滤的伪代码逻辑带回来评审。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

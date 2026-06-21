@@ -1,0 +1,499 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在6G通感微隙配调与谱权裂变系统需求研判背景下，用户与导师围绕通感互扰痛点、业务验证场景与底层逻辑持续沟通（8轮），其中在同频互扰量化与假设提出部分与互抑建模师沟通（1轮），在高密物联双重确定性需求与合规红线部分与物联场景分析师沟通（1轮），并最终形成核心痛点、验证假设与约束边界三条结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没细想，感觉就是会互相影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "通感同频互扰到底怎么回事？有没有什么量化指标？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高密物联场景对通感有啥具体需求？频谱合规卡在哪？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "串起来有点难，我对微时隙配调的底层算法逻辑还不太懂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我接下来两周看5篇微时隙配调和互抑建模的核心论文，把方差公式推导一遍，保证能看懂建模师的代码逻辑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在高密物联双重确定性画像刻画背景下，用户与导师围绕通感业务诉求拆解、配调死区成因及合规红线影响持续沟通（6轮），其中在异构并发指标冲突与数据合规边界部分与物联场景分析师沟通（1轮），并最终确认业务分级画像基线及配调死区、合规红线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "都是越低越好嘛。保底就优先保人命关天的业务？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拆拆业务画像，重点看并发冲突和合规边界。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C档吧，时延和精度都要亚毫秒，肯定最难调。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "切片得切得更细？留痕还要占资源。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微切片商业闭环推演背景下，用户与导师围绕A/B/C三档定价因子、商业验证动作与样本口径持续沟通（7轮），其中在互抑补偿与溢价定价依据部分与频谱经济学师沟通（1轮），并最终形成三档定价锚点与高密物联验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按切片收呗，用多少收多少。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "B档要补偿，C档要溢价。A档就收个基础费？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "B档互抑补偿费怎么收？C档溢价怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "B档收益得大于惩罚，C档收机会成本。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "断在B档拒付？那就降级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下仿真看看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "选几个工厂测一下？口径就是看AGV给不给钱。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "去看看SLA违约成本怎么算，还有找三个典型子场景。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我更新日志，加上互抑补偿和违约成本映射，下次推演用。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在通感微隙配调与谱权裂变系统总体架构设计背景下，用户与导师围绕控制面与数据面解耦边界、架构范式选择及互抑收敛风险持续沟通（7轮），其中在解耦范式与边界划分部分与体制架构师沟通（1轮），并最终锚定分布式协商范式、明确控制与数据面边界及收敛验证补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@体制架构师 微隙配调的控制面和数据面边界怎么划？有没有可对照的解耦范式？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "高密物联节点太多，集中式中心节点算不过来，时延肯定大。分布式把配调权下发，边缘自己协商，能省中心算力，时延应该更稳。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实拿不准，证明方法没掌握。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天去翻几篇代数图论在无线资源协商应用的论文，把基于拉普拉斯矩阵特征值的收敛条件理出来，看能不能套进我们的互抑模型里当验证依据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 架构范式选分布式协商，配调权下沉边缘；2. 控制面与数据面边界：控制面只下全局策略，数据面边缘节点执行微隙配调协商；3. 互抑收敛轮次是核心风险，我要补学代数图论收敛证明去验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在谱权裂变切片边缘流转背景下与导师围绕多维数据流建模结构与维度选择持续沟通（5轮），其中在多维建模范式部分与裂变切片架构师沟通（1轮），在交易多对多特性与边缘算力约束部分与频谱经济学师沟通（1轮），并最终确认有向超图加边缘降级结构与四个核心维度。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就按边缘节点间的流转画个数据流图，用消息队列推过去就行了吧，保证顺序就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "谱权裂变这多维数据流怎么建比较好？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "超图建模和普通图到底差在哪？边缘算力扛得住吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多对多交易必须用超图，不然一致性没了。边缘算力不够还得局部降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结构用有向超图，边缘局部降级。维度有物理频谱状态、微切片拓扑、配调信令流，还有交易超边。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结构是有向超图加边缘降级；维度锁死物理状态、逻辑拓扑、信令流和拥塞指标。"
+              }
+            ]
+          },
+          {
+            "microScene": "在通感互抑动态路由规划背景下，用户与导师围绕互抑拥塞下的路由寻优与配调约束持续沟通（7轮），其中在代价函数构建部分与互抑建模师沟通（1轮），在配调时间窗约束部分与微时隙算法专家沟通（1轮），并最终确认路由规划设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找最短路避开呗，实在不行就降级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "互抑代价函数怎么建啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配调时间窗怎么约束路由计算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不加可能选到干扰大的路，信噪比烂掉？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "等的话时隙过期，配调对不上。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微时隙接口规约与信令设计背景下，用户与导师围绕信令防伪造、鉴权机制及设计基线持续沟通（6轮），其中在控制面信令字段与流转约束部分与微时隙接口规约师沟通（1轮），在鉴权边界划分部分与体制架构师沟通（1轮），并最终形成接口规约设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口格式吧，两边数据结构对齐了才能交互。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防伪造？加个校验位应该就行了吧，保证完整性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制面信令的必备字段和流转约束，还有鉴权机制怎么设计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "信令里要加时间戳、业务ID、惩罚因子，授权那边给切片ID，还要加双向签名和流水号防越权。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制面和数据面的鉴权边界怎么划？令牌桶校验放哪一层？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "控制面管签发，数据面只比对转发，令牌桶在配调引擎入口做硬匹配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线就是信令带周期戳、业务ID和惩罚因子，流转用双向签名加流水号，鉴权是控制面签发数据面比对，入口硬匹配。"
+              }
+            ]
+          },
+          {
+            "microScene": "在接口规约基线已定背景下，用户与导师围绕双重确定性高可用评估的指标、实验方案及基线持续沟通（8轮），其中在指标体系与实验方案部分与确定性验证师沟通（1轮），在互抑模型与高可用机理部分与互抑建模师沟通（1轮），并最终形成包含互抑变量、降级逃逸路由及时间约束的高可用评估设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，跑一下压力测试，看时延超不超，精度掉不掉。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来要建耦合模型，还要有逃逸路由。我之前没考虑到这个。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "公式太复杂我没推明白，就记了个结论说要留冗余资源。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在知道配调引擎得留个逃逸口，把感知切片挪走。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，互抑强度当变量，跑十万次看时延越限和精度劣化；第二，跌破阈值不能死扛，得触发降级走逃逸路由。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在配调引擎核心代码开发背景下，与导师围绕逃逸切换时延基线、上下文留痕合规、异步日志验证及无锁缓冲防溢出持续沟通（7轮），其中在日志时延限制部分与核心配调码农沟通（1轮），在审计合规底线部分与微时隙接口规约师沟通（1轮），并形成异步留痕、无锁缓冲防溢出及尾时延对照验证的开发策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就按这个阈值写抢占，一旦跌破直接切路由，应该没问题。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志确实麻烦。那就少打点？或者打个脱敏的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@核心配调码农 抢占逃逸这块，2微时隙内要完成切换，如果加详细日志肯定超时吧？怎么搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@微时隙接口规约师 审计合规这边，逃逸上下文是全量记录还是可以抽样？感知轨迹数据怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "码农说用无锁环形缓冲区异步写，接口规约师说必须留痕但要把业务数据丢掉只记切片ID。我结合一下，异步记切片ID就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就跑个压测看时间呗。环形缓冲区我以前用的现成库，无锁的自己写有点虚。溢出的话，就覆盖呗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我查查开源的DPDK无锁环形缓冲区源码，看看怎么防溢出。今晚看个demo，明天把防溢出逻辑加进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照实验就是，一组不开审计，一组开异步审计，跑十万次看时延分布的尾部长度。如果开了审计，99.9%尾时延没超2微时隙就算行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查DPDK源码，然后按无锁缓冲加防溢出写，验证就看尾时延。"
+              }
+            ]
+          },
+          {
+            "microScene": "在裂变切片联调与压测背景下，用户与导师围绕压测场景构造、流量注入方式及压测指标持续沟通（6轮），其中在通感互抑极限场景与切片漂移观测点部分与越限排障猎手沟通（1轮），在微时隙冲突测试桩注入部分与核心配调码农沟通（1轮），并形成数据面mock注入与控制面信令风暴的联调方案及压测指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把配调引擎和裂变切片连起来跑，发大流量压测，看时延超不超2微时隙就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把CPU核跑满？切片漂移就是资源不够分的时候吧，我多申请点切片应该就能触发了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测场景怎么构造，互抑怎么打满，还有切片漂移看啥指标。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用tcpreplay重放抓包？信令就多线程发请求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么在引擎里打桩造微时隙冲突？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在互抑拥塞瞬抑算法压测调优背景下，与导师围绕算法调优思路、门限与退避窗口关系及参数配置化持续沟通（5轮），其中在门限设置与退避窗口关系部分与互抑建模师沟通（1轮），在代码参数配置与调整部分与核心配调码农沟通（1轮），并最终决定将门限与衰减系数抽成YAML配置项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就跑压测呗，看触发率不行就调低门限，让它快点触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后果，可能就是切得太快？底层逻辑我不太熟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "瞬抑门限设多少合适？调低了有啥坏处？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "代码里这个门限和衰减系数怎么配的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师说门限太低切片会抖，码农说现在0.75太迟钝，要降到0.6，衰减系数降到0.8。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "退避窗口，5吧？就改门限和衰减系数呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，直接改常量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "抽成配置项，门限0.6，衰减0.8。"
+              }
+            ]
+          },
+          {
+            "microScene": "在通感时延越限排障脚本重构背景下，用户与导师围绕排障逻辑优化、滑动窗口参数确定及适用边界持续沟通（8轮），其中在全局重分配重构与极端负载降级部分与越限排障猎手沟通（2轮），并最终形成删全局重分配、加eBPF探针定方差、正常负载滑动窗口局部修正、极端负载降级瞬抑的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这排障脚本里一越限就全局重分配，容易震荡，现在要重构，怎么改比较好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是防抖嘛。N次的话，我写个3次？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我前两天看了BCC工具集，可以抓内核态的微时隙切换耗时。如果加个探针在配调引擎入口，就能精确量到单次配调时延，这样滑动窗口的大小就能根据实测的配调时延方差来定，方差大窗口就大点，不用写死3次。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "高负载下，可能所有的微切片都在越限，滑动窗口也会一直满的，局部修正估计也顶不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，删掉全局重分配；第二，加eBPF探针采集配调时延算方差；第三，正常负载用滑动窗口局部修正，窗口大小看时延方差；第四，极端负载降级走瞬抑算法。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在微态部署验证交付背景下，用户与导师围绕配调策略改完后的验证方法、统计显著性证明及数据缺口补充持续沟通（7轮），其中在现网验收口径与数据分析标准部分与交付验收专员沟通（1轮），并最终形成包含A/B测试、置信区间计算、方差收敛验证及切换触发率的验收核心点与脚本开发计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一遍压测呗，看时延没超限就算过了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "零散数字肯定不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@交付验收专员 现网微态部署验收，配调策略改了，怎么证明它变好了？验收口径是啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "均值容易被极端值拉偏？方差小说明波动小。但置信区间这个，我其实不太会算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看《概率论与数理统计》参数估计那章，写个读eBPF探针日志算均值、方差和95%置信区间的脚本，明天下午下班前跑出数据给专员看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，A/B分组对比老逻辑和新逻辑；第二，算95%置信区间看均值差异；第三，验证时延方差收敛；第四，看正常到极端负载的切换触发率。"
+              }
+            ]
+          },
+          {
+            "microScene": "在谱权流转监控大盘建设背景下，用户与导师围绕核心监控指标、报警阈值及临界态预判逻辑持续沟通（7轮），其中在采集口径与报警逻辑部分与链路监审运营沟通（1轮），在临界态趋势指标部分与链路监审运营沟通（1轮），并最终形成三主两辅监控口径及联动策略演化动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微切片漂移、互抑溢出还有信令一致性，采集口径和报警逻辑怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把5%调低一点？改成4%报警？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我不太懂怎么拆，我只知道这时候得赶紧拉核心配调码农看底层的抢占日志，还得和运营对齐监控面板的刷新频率，别漏了关键波形。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "临界态预判这块，除了看报警，还要盯哪些趋势指标？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就把这两项加到大盘的辅助视图里，出了问题直接拉策略演化规划师。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改监控配置。"
+              }
+            ]
+          },
+          {
+            "microScene": "在时延越限抖动根因复盘背景下，用户与导师围绕抖动根因定位与演化动作持续沟通（8轮），其中在底层互抑抓包与死锁定位部分与越限排障猎手沟通（1轮），在策略层退避与降级设计部分与策略演化规划师沟通（1轮），并形成加微时隙退避窗口、降优先级与调切片权重的演化动作结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这肯定是算法没调好，微时隙配调没抢过感知，切片不够用了呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，得看具体边界。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "能拉一下互抑抓包和抢占日志吗？看看卡在哪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "猎手说是雷达终端在T3边界抢占，撞上通信信令，同频互抑死锁了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "雷达终端在T3边界抢占撞上通信信令同频互抑死锁了，策略层怎么加退避或者降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论是雷达终端T3边界抢占导致同频互抑死锁。动作是加微时隙退避窗口，降感知抢占优先级，调低裂变切片权重。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在配调策略自适应迭代规划背景下，与导师围绕数据闭环设计、场景识别切换、特征提取逻辑及触发阈值设定持续沟通（8轮），其中在数据闭环与外推边界及触发阈值设计部分与策略演化规划师沟通（2轮），最终形成基于方差3倍标准差联合T3占比触发、场景策略切换及压测复现验证的自适应迭代规划三条核心规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "让它自己学就行了吧，看数据不好就自己调参数。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据闭环怎么弄？外推边界是啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据闭环就是监控抓溢出，提取特征，然后调参数。边界就是只对雷达密集场景有效，广域干扰不行。复现要跑压测脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前不懂怎么区分场景，现在知道了要看溢出聚集性。我把它记在日志里了，下次遇到广域干扰，我就不降感知优先级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把特征提取逻辑补上。自适应触发条件就用溢出聚集度大于阈值来触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脚本跑出来基线大概是5%的溢出率，那就定5%吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "方差3倍标准差加T3占比触发，广域干扰不降优先级。我这就去更新日志，把特征提取逻辑也迁移进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

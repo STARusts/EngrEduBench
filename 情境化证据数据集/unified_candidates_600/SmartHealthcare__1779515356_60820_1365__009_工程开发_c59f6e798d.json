@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧NPU算力受限的创面语义分割背景下，用户与导师围绕轻量级模型选型、特征降维方式及防误判兜底机制持续沟通（5轮），其中在轻量级网络选型与防误判方法部分与创面算法研究员沟通（2轮），并最终形成MobileNetV3+UNet-lite骨架、1x1卷积降维及置信度阈值卡控的分割方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "1.2Tops跑分割？这太紧了。我本来想直接套个SAM的微调版，或者用YOLOv8的seg头，加载数据集就能出结果，比较快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧只有1.2Tops算力，做创面语义分割有什么轻量级的网络能跑？最好是那种改动不大的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "通道降维我挂个现成的SE模块行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧分割出错了怎么防误判？有没有什么通用的置信度过滤方法？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "骨架选MobileNetV3+UNet-lite，特征降维用1x1卷积先融合再降维，误判兜底用置信度阈值卡控，低置信度区域送云端人工复核。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

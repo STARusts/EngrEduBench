@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在动力电池碳足迹溯源智能合约工程开发背景下，用户与导师围绕合约职责边界与Gas消耗验证基线持续沟通（6轮），其中在隐私约束实现与Gas测试标准部分与智能合约开发者沟通合约验证器职责、链下生成分离及Gas验证口径（2轮），并总结出合约只做验证、Gas上限20万等开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "前面定的哈希承诺、范围证明和密钥分片，怎么落实到合约里？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得哈希承诺最简单，直接在合约里算SHA256就行。但范围证明和密钥分片我不太会写，Solidity里好像没有现成的库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@智能合约开发者 前面定下来存证用哈希承诺，跨企用范围证明，监管用密钥分片。这几个在合约里怎么实现？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但ZKP验证听说Gas特别高，会不会一跑就OutOfGas？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就部署上去跑一下，看报不报错。如果Gas高我再想办法改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不清楚ZKP验证一次大概要多少Gas，也不知道用什么框架测Gas比较准。我得先补一下这块，我去查Foundry怎么用Gas Snapshot，再找几个ZKP验证合约的例子看看它们的Gas消耗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总结一下开发约束：第一，合约只做验证，不生成证明；第二，用Foundry测Gas，单次存证加验证不能超20万；第三，每合入一个逻辑都跑Snapshot比对。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

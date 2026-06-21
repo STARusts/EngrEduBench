@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在方案设计隐私计算安全架构背景下，与导师围绕未成年人数据合规、TEE与FL架构取舍及对照验证持续沟通（5轮），其中在数据可用不可见实现部分与隐私合规架构师沟通（2轮），并最终确认以TEE为主、PSI对齐、预留FL接口及全链路审计的架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就HTTPS传输加密，数据库里敏感字段AES加密，查的时候再解密。接口层做个脱敏，身份证号带星号返回就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法那边要全量数据跑模型，我总不能给他造假数据吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演算法要跑全量特征交叉，怎么做到数据可用不可见？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "FL要改算法训练逻辑，TEE是不是对我后端侵入小点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我刚才查了下TEE，感觉就像个安全沙箱，我后端服务不用大改，包一层就行。FL要算法那边配合重写训练逻辑，太折腾了。我想选TEE，加上PSI做特征对齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么验证？我总不能真去搞个侧信道攻击试试吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照实验，同数据集，比耗时和AUC还有审计覆盖率。那我就按TEE先设计，跑基准测试。FL留个接口。审计全链路打标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。隐私计算主架构TEE，特征对齐PSI，预留FL接口。审计日志含调用方、特征集、时间戳、用途。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路性能压测与异常排查背景下，用户与导师围绕压测方案选型、延迟毛刺定位及串口重传调优持续沟通（6轮），其中在轻量级压测与故障注入方案部分与测试调优工程师沟通（1轮），在PLC下发接口阻塞排查部分与工控联调工程师沟通（1轮），并形成基于tc与并发脚本的压测方案及重传超时调优思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算引入Chaos Mesh做全链路混沌工程，配合Istio的流量镜像功能，把生产环境的流量无感引入压测沙箱。我们要模拟各种极端网络分区、Pod驱逐和CPU热点抢占了，确保系统在云原生架构下的绝对高可用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种边缘场景下，不用Chaos Mesh的话，怎么模拟高并发和故障注入？有没有轻量级的Service Mesh能做流量调度和故障模拟？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果推理延迟超标，我怀疑是GNN在线微调时的内存动态分配导致GC停顿，需要引入JIT编译和自定义内存池来消除毛刺。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了边缘侧的CPU flamegraph，GNN计算时间很稳，反而控制线程在等某个锁释放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "往PLC下发加药指令的接口是不是有同步锁？是不是这个导致的阻塞？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对Modbus RTU底层机制不熟，之前一直以为是应用层逻辑问题。我得去补一下串口超时重传的参数配置，把默认的100ms降下来，或者改成非阻塞重试。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查一下Modbus协议规范里的超时计算公式，结合我们9600波特率和帧长算一个最小安全重传间隔。我把压测脚本里的重传超时参数暴露出来，做几组对照实验，找到不丢包又防阻塞的临界值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农田风险指数定价服务平台方案设计背景下，用户与导师围绕高可用与容灾的交付目标、覆盖范围与实现手段持续沟通（4轮），其中在SLO与RTO/RPO指标及降级策略部分与SRE可靠性工程师沟通（3轮），在发布回滚与容灾演练制度部分与DevOps工程师沟通（3轮），并回到导师处整合成可用于评审的口径表述。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是别挂吧。然后出事能恢复。要写个方案。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "API要进。还有数据库。别的我不知道。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据进来断了就没数据。然后算不出来。就这些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE可靠性工程师 我们这平台要做到多稳定？RTO RPO给个说法。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "99.9是每个月不挂？800ms我记不住。RPO 5分钟就是丢5分钟数据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那就缓存顶着。直接全都缓存是不是就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@DevOps工程师 发布这块要怎么写？还有演练要怎么说才像方案。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度按client_id就是按客户分批？那会不会不公平。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "演练就是故意弄挂一次？会不会把真实数据搞坏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对外API要99.9。然后RTO三十分钟，RPO五分钟。还有离线的松一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……同城两个地方？还有缓存兜底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "同城双AZ保证在线查询挂了能在三十分钟内切回来，最多丢五分钟数据；读链路能缓存/返回最近版本兜底；异地做备份恢复演练。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "发布先灰度一小部分客户，看指标不过线就回滚，数据库改动要兼容。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

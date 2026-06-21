@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异常检测与工单联动系统开发收尾的端到端联调与压测背景下，用户与导师围绕压测链路拆解、脏数据复现、验收口径与通过判据持续沟通（12轮），其中在故障注入矩阵与message_id/回放锚点对齐部分与IoT边缘工程师沟通（2轮），在证据入链延迟SLO与Outbox幂等/重复派单统计口径部分与后端开发工程师沟通（1轮），并形成明日联调压测执行顺序与验收指标集。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先把链路拆成三条主路径压：数据采集入湖/时序→规则/模型出事件→证据入链+工单触发。联调目标是“同点位同类型单OPEN、自动RESOLVED、409也算成功”这些口径在压力下不漂。指标我想先定：事件端到端p95延迟、重复派单率、误报率(用回放数据集)、以及证据链落链成功率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "压测分两层：第一层是纯服务压，模拟高频点位上报；第二层是“坏数据压”，按比例混入乱序、重复、缺测、时钟回拨。边缘侧我让网关按点位打包上报，服务侧用回放cursor把原始序列抽样重放，专门验证迟滞+cooldown能不能抗抖。至于断点续传我需要边缘同学给一个可控开关，能把同一批数据分片重复送。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@IoT边缘工程师 我需要你这边支持端到端压测的故障注入。能提供哪些可控维度：断网时长、缓存上限、重连批量大小、时钟偏移/回拨、重复发送比例？希望能按点位或按网关维度独立配置。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我要补一个：同一批数据重复送时，是否能保持相同message_id，方便我们验证幂等？还有，补发时能不能把cursor_start/end带上，跟我们证据回放对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我用batch_id+seq_range当回放锚点，message_id复用来打幂等。断网注入我优先用模拟器，真网关只做一次小规模验证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误报我按我们回放标注集算：实际无异常但被触发的事件数/总正常窗口数。抖动抑制我用两条：  \n- 同点位同类型在抖动期间最多只出现1个OPEN事件；  \n- 进入恢复区间满足恢复条件后，自动RESOLVED，且在cooldown内不被反复OPEN/RESOLVED抖动。  \n我会在压测脚本里固定几种波形：临界值上下穿越、短时尖峰、长尾缓慢回落，分别看事件状态机是否稳定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件表里我们已有event_key（点位+类型+规则版本），状态字段OPEN/RESOLVED，外加last_transition_at。压测时我按event_key聚合，检查任意时刻OPEN计数<=1；并统计同event_key在窗口内的transition次数，超过阈值就算抖动未抑制。另一个是工单：idempotency_key重复率、触发次数和409比率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想加一个端到端一致性断言：工单payload里只放evidence_hash和cursor_range，不放原始序列；然后工单系统回查证据链接口，必须在T+X秒内能拿到对应evidence_hash记录，否则算不通过。X先暂定10秒，但要看链上写入延迟的p95。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 压测验收我想加“工单可回查证据链”的一致性断言，需要你这边给：在压力QPS下，事件落库→证据入链→工单触发的延迟分布预期，尤其证据可查询的p95能承诺多少？还有Outbox重试在200/409成功口径下，如何统计“实际重复派单率”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "证据可查询p95 3-8秒，极端12秒我能接受，但验收门槛得分两档：正常压测门槛p95<=8s，容灾抖动场景允许p99<=15s。Outbox堆积到5分钟这块，我只在极端限流场景测，不把它当主门槛。重复派单我按你说的口径：多个2xx算重复，409算幂等命中。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测数据生成我用合成数据，不用生产工单内容，工单payload只带点位ID、severity、evidence_hash、cursor范围、rule_version，不带操作人、手机号之类字段。日志里把可能的企业名称/地址字段做脱敏或直接不打印，避免压测日志落盘带敏感信息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我排四步：  \n1）小流量端到端冒烟：每条主路径跑通，核对OPEN/RESOLVED、409成功、证据字段齐。  \n2）故障注入功能回归：乱序/重复/缺测各跑一组，确认迟滞+cooldown和单OPEN成立。  \n3）基准压测：逐级加压到目标QPS，观测p95延迟、证据可查询p95、Outbox堆积深度。  \n4）边界压测：超过目标QPS 20%观察降级是否触发（GAP/SKEW），以及降级不触发派单四类以外的事件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这块我不想拍死，先用自适应：当事件服务CPU>80%持续1分钟或Outbox backlog>50k就进入降级，只保留派单四类，其他标记为GAP/SKEW。阈值我会在基准压测中看拐点再调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通过判据我给一版：  \n- 事件正确性：同event_key任意时刻OPEN计数<=1；抖动波形下每小时transition次数<=2（OPEN→RESOLVED算一次循环）。  \n- 工单幂等：同idempotency_key的2xx次数<=1；409占比可高但不算失败；Outbox投递最终成功率>=99.9%。  \n- 证据一致性：工单产生后8秒内可查到evidence_hash（p95）；字段必须包含rule_version、参数、reason枚举、cursor_start/end（用batch_id+seq_range映射）、evidence_hash。  \n- 性能：端到端（采集入→事件→工单）p95<=2s在目标QPS下；错误率<0.1%。  \n- 合规：压测日志与payload不出现个人信息明文字段，抽查10条日志/工单样例必须满足最小化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，我的2秒只算到“工单请求发出并收到200/409”，证据可查询单独算8秒p95。两条分开，不混。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三件协作：  \n1）IoT边缘工程师提供模拟器注入：乱序/重复/缺测/断网/缓存溢出，且message_id复用、batch_id+seq_range固定。  \n2）后端开发工程师暴露压测可观测项：event_key聚合、outbox_delivery投递明细、证据入链提交批次延迟。  \n3）测试工程师把回放波形和标注集接入压测脚本，输出按我这套判据的自动报表。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

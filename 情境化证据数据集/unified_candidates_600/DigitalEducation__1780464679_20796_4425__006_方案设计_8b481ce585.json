@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在心智状态流式追踪建模背景下与导师围绕模型选型、动态状态空间处理及MVP约束持续沟通（7轮），其中在流式表征与偏差量化及MVP降级方案部分与认知建模师沟通（2轮），并最终形成心智追踪MVP选型与约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了几篇认知追踪的综述，隐马尔可夫模型HMM挺经典的。把学习者的认知阶段当隐状态，观察序列就是答题记录。状态转移矩阵就能表示心智演化概率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态空间爆炸确实是个问题。马尔可夫假设可能也太强了，毕竟心智状态有长程依赖。实时性我还没细想，HMM的参数估计本身就挺耗时的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "HMM做心智追踪在动态裂变图谱下状态空间会爆炸，流式更新怎么破？对齐偏差量化有没有合适的算子？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "粒子滤波是不是比卡尔曼滤波更适合非线性系统？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DBN确实复杂，MVP直接上风险太大。向量维度我还没定，KL散度计算开销应该不小。要不我再去问问有没有轻量级降级方案？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "MVP阶段DBN加粒子滤波太重了，有没有降级方案？向量维度能不能裁剪？KL散度算对齐偏差开销大，有没有更省算力的测度和收敛条件？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师建议MVP用MDP加低维向量，维度取图谱核心概念数。偏差测度换成余弦相似度，收敛条件是相似度大于阈值。这样算力省很多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选型MDP加低维向量，测度余弦相似度，触发干预条件是相似度低于阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

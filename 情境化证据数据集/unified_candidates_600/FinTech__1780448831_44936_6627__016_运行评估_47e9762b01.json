@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在异常撤单飙升与潜伏期拉长的归因排查背景下，用户与导师围绕撤单根因与修复方案持续沟通（5轮），其中在撤单分类与潜伏期拐点部分与运营监控分析师沟通（1轮），在模型误判边界与置信度崩塌部分与意图识别研究员沟通（1轮），并形成盘口深度骤降致特征偏移及模型误触发熔断的归因结论，明确后续迭代模型而非硬编码跳过熔断。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接搜撤单日志呗，Kibana里搜error关键字，拉个时间线不就出来了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那怎么分？现成脚本有没有？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异常撤单怎么查？有没有现成SQL直接拉分类统计的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以就是盘口深度骤降呗。Prometheus看盘口深度的面板就行了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盘口深度骤降时模型误判边界在哪？给个阈值我直接加个判断。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "置信度低于0.3就崩塌呗。那我加个if判断，置信度低于0.3就不走防窥探熔断，直接放行。这不就完了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "盘口深度骤降导致特征偏移，模型误判触发熔断。后续改模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

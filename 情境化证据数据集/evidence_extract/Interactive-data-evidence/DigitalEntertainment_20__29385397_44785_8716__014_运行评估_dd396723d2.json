@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估阶段搭建“剧情互动质量”指标看板背景下，用户与导师围绕质量维度拆解、核心指标收口、合规边界与刷新成本持续沟通（12轮），其中在事件定义/分组/去重与数据健康护栏部分与数据架构师沟通（4轮），在叙事连贯/互动疲劳/分支失衡指标与基线阈值设定部分与数据分析师沟通（4轮），并形成看板分层结构与指标口径清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能想到的就是延迟、错误率这种。内容质量……可能看观众选分支的次数？还有投诉量？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "创作侧…就是发布成功率？还有脚本编排保存次数？体验侧我还是只会想卡顿、互动响应时间。合规侧就命中率？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 现在要做内容质量看板。事件口径怎么定？我主要怕互动事件重复、乱序，然后指标算出来不可信。还有分组怎么做才能不碰原始内容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "重复和乱序怎么处理？我看到线上有重试，可能 submit 会重复。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "看板上怎么体现数据质量本身？不然我担心大家把坏数据当真。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。我再问一个：合规要求说不能用可识别原始互动内容，那弹幕类 interaction_submit 还能上报吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 内容质量看板要能解释“叙事断裂、互动疲劳、分支失衡”。有哪些指标比较像样？我怕最后只剩延迟图。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "熵这种我能算，但阈值怎么定？不然看板上全是红的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“内容好不好”最终怎么落到业务？是不是得挂留存、付费？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点担心 voice 互动，识别失败会影响分支，算内容问题还是识别问题？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我回来跟导师对一下。我可能会把指标搞太多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心我先挑：参与度（expose->submit）、每session互动次数、fallback率、branch_abort率、分支选择熵、还有数据健康四个。然后按 show_id/版本/端做分组。误读就是相关不等于因果，还有数据缺字段时别解读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能加这三个。end_to_end 是用 server_ts 算，对吧？submit server_ts 到 state_transition server_ts。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规这块我不太熟。我怕看板做出来合规说不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那看板结构我理解成三层：总览、剧目版本钻取、数据健康/合规。这样行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "dropoff_at_N 我选 N=5？我怕3太敏感。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那异常怎么提示？我只能想到超过阈值就红。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我懂了。成本上会不会很重？实时算熵、漏斗这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，我先按“实时3项+15分钟一刷”去跟数据同学对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

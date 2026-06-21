@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在生成式数字潮玩引擎模型服务与铸造接口联调背景下，用户与导师围绕超时退款落地、异常状态流转与补偿逻辑持续沟通（6轮），其中在异常与超时降级处理部分与后端铸造服务工程师沟通（1轮），并最终形成覆盖四条核心异常路径的补偿链路验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用gRPC调模型服务，要是超时，我就让铸造服务抛异常，然后触发退款。加个重试拦截器就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡住的话，我就加个定时任务去扫表，把超时的改回失败。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "模型服务那边如果生成超时或者返回坏数据，铸造服务这边的状态怎么回滚？之前定的超时退款逻辑怎么接进来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "死信队列听起来挺省事的，我直接用RabbitMQ的死信插件配一下就行，不用自己写扫表逻辑了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "内存堆积这块我没细想。补偿失败的话，我就再重试一次？如果一直失败，我确实不知道怎么弄了。我对RabbitMQ死信的具体配置和补偿重试阈值设置还不太熟，只会最基本的绑定交换机。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚去翻一下RabbitMQ的死信和延迟消息官方文档，再本地写个Producer和Consumer的Demo，专门模拟消费失败进死信然后触发补偿的流程。把重试次数限制在3次，超过就记日志报警。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按这四个用例去写测试代码，重点看坏数据和死信重试能不能正确把状态置回失败。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

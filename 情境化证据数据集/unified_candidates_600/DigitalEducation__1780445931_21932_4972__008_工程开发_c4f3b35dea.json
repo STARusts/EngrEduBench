@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在情感共振代码开发背景下与导师围绕隐私方案与共振兼容性、DP-SGD实现卡点及验证审计方案持续沟通（9轮），其中在哈希特征Embedding化与DP注入点部分与多模态算法工程师沟通（1轮），并形成特征哈希接Embedding、DP-SGD训练、对照验证及审计留痕的开发定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按照Russell的环状模型，Valence和Arousal是连续空间。差分隐私加的拉普拉斯噪声，只要尺度控制好，在连续域上只是概率密度平移，不影响聚类中心。所以理论上共振肯定还能做。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "呃，这，哈希确实把空间打散了。我就，是不是得有个映射表？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我还没想这么细，一般论文里都是假设有原始连续特征。我我得去问下做算法的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种离散哈希值怎么进情感提取模型？还有DP噪声加在哪不影响共振计算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Embedding层，DP-SGD。懂了，就是说共振计算基于学出来的Embedding，隐私保护在训练期做。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个，我平时主要看理论推导，PyTorch里反向传播加噪的具体操作我还没写过。我不太会用hook机制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去翻Opacus的源码，它专门做DP-SGD的。我照着写个简单的梯度裁剪Hook，明早跑个Demo验证一下能不能正常反向传播。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我设计过了。用之前的千级样本，分两组。一组用原特征训练，一组用哈希Embedding加DP-SGD训练。对比两组在情感分类上的F1 Score。做配对样本t检验，如果p值大于0.05，或者F1下降不超过5%，就说明扰动没破坏特征表达，共振有效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按之前的AuditLogger，我得把每轮的epsilon值、梯度裁剪阈值C和训练批次大小记下来，不记原始梯度数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

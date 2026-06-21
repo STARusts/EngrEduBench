@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在林间微气候菌菇产量决策网上线后的运行评估背景下，用户与导师围绕模型漂移检测、自校准边界与回滚顺序制定最小可运行规则持续沟通（8轮），其中在可观测指标/阈值/回滚触发上与算法工程师沟通（2轮），在校准版本留痕、权限分级与审计问责上与合规与数据治理经理沟通（2轮），并收敛为漂移分级处置、允许/禁止校准动作与双人授权留痕条款。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漂移就是模型不准了吧。发现就看误差变大，或者告警变多。自校准我想是不是直接每天重新训练一下就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "信号…就MAE？还有产量差。来源我就不太会分，传感器坏了也会误差大。自校准就把最近一周的数据加权高点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 漂移怎么判？阈值你们一般怎么定？还有自校准是不是就滚动训练？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PSI我听过，就是分箱算差异对吧。代理指标就是不用等产量。那阈值直接用0.2/0.3就好了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那自校准就是先校传感器，再改一点输出曲线。主模型尽量别动。回滚就切回旧版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理经理 自校准和回滚这块，权限和留痕要怎么搞？会不会很麻烦？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双人授权会不会拖慢？现场人急的时候怎么办。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控项…1）PSI或KS。2）误差MAE。3）缺失率。4）告警次数。5）代理指标达标率。6）极端天气标记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "黄就提醒，看看是不是缺数据。红就回滚到旧模型，然后开保守模式？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回滚校准就是把后面调的曲线撤了，主模型不变。回滚主模型就是直接换回之前那套权重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "允许：1）传感器偏置修正。2）建议阈值小幅调整。3）输出做个校正表。禁止：1）直接改主模型结构。2）用跨基地数据混在一起训练？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "双人授权可能会卡一下，但用保守模式顶着也行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "PSI分层阈值我怕我算不出来，我能不能用现成监控面板直接出P95/P99？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

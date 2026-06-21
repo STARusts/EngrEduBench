@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在视效音效自适应接口联调背景下，与导师围绕接口降级处理与Protobuf结构修改持续沟通（7轮），其中在端侧数据契约与降级回传部分与视效音效联调专员沟通（2轮），并最终形成调度参数基准态加偏移量、区分视效音效的fallback字段及含向量快照的降级日志等Protobuf改动点。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们接收调度参数，要是算力不够或者资源缺了，期望接口怎么处理？降级怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级了之后我这边要记日志吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原来是一个float直接给值。现在改成message，里面放base和delta。fallback字段挂在调度参数外层，降级触发了我就写日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就存个降级前的特效ID和降级后的ID，再加上联调专员说的向量快照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动点有三：一是调度参数从单float改成包含base和delta的message；二是外层加fallback字段，区分视效和音效两个子字段；三是日志结构加降级前后的ID和向量快照，快照类型复用反演算子的输出定义。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

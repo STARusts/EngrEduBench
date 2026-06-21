@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在处方平台方案设计的多源数据标准与血缘定义背景下，用户与导师围绕标准对象清单、血缘粒度、质量规则、主键对齐与权限审计持续沟通（6轮），其中在轻量基因型与表型指标标准化部分与育种数据经理沟通（5轮），在业务/数据血缘粒度与版本/告警/审计拆分部分与数据架构师沟通（5轮），并汇总为6条评审可读设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“主数据-指标-事件”三层拆。主数据先定能跨系统对齐的键：品种、地块、季节/批次、作业任务。指标层是产量、品质、土壤性状、微气候这些要给统一口径和单位。事件层是处方生成、处方发布、处方执行、回传对账，血缘就沿事件链把输入-处理-输出串起来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：我们基因型这块很可能只有轻量特征，不是全基因组；标准要怎么既严谨又不过度设计。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@育种数据经理 基因适配这块，如果我们只拿到轻量基因型特征（比如少量标记/分型、或者品种分群标签），数据标准应该怎么定？哪些字段必须有，哪些允许缺失？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "缺失允许到什么程度？比如农场端只知道品种名，没有任何基因型数据，还能跑处方，只是少一条信号，对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：品种试验数据经常跨年、跨站点，表型指标口径会飘。标准里需要把表型也做成“字典+版本”吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 多源数据血缘我们做到什么粒度更合适？既要支撑处方复盘对照，又不能把系统做成“追溯过度”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算子版本是指我们定义“汇总规则版本号”，比如气象从日到旬、从点到面插值方法，这些都要可追溯？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质量规则和告警怎么放？我担心全都做会拖慢落地。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规与审计这块我理解是：谁看了什么数据、谁发布了处方、谁改了模板，这些要审计。血缘里要不要把“操作人”也算进来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边的意见汇总一下，回到你这边确认取舍。  \n1）基因型特征标准：用 genotype_profile_id 版本化；必填 marker_panel_id、call_rate、lab_id、qc_status；缺失允许，处方解释要标注“未使用”。  \n2）表型/品质指标：做 trait 字典+版本，方法不同拆 trait_code。  \n3）血缘粒度：以“快照-处方版本-任务-回传”为最小链路，记录 feature_schema_version、agg_rule_version、model_version/rule_pack_version。  \n4）质量规则先抓红线（单位、面积、时间对齐、基因型QC），其余软告警。  \n我倾向于血缘先按业务对象落地，数据字段级血缘先做到关键指标即可，不全量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主键对齐我想用“主数据映射表+一次性人工确认”的思路承接上一微场景的轻量化约束：  \n- variety：允许外部 variety_code/名称进入，落到 internal variety_id；首次对账失败走人工确认映射并留审计。  \n- field：地块用 field_id，外部可能是合作社地块号或农机终端号，同样映射。  \n可比样本控制点在数据层：  \n- 快照化：field_snapshot_id / variety_snapshot_id 固化输入，不随源数据回填而漂移；  \n- 指标口径版本固定：feature_schema_version + agg_rule_version；  \n这样复盘时按同一口径取数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按分级：  \n- 原始基因型位点或向量属于高敏，默认不出育种企业域；平台侧只接“派生的可用特征+版本+QC”，并且只对处方服务可见。  \n- 农场/合作社侧只看到解释层的分群标签或“相似品种得分区间”，不暴露可逆向的特征明细。  \n审计上：处方发布、模板修改、映射人工确认都记 actor_id 和时间戳；访问日志单独留存，血缘只保关联键。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）标准对象：variety/field/season（主数据），trait字典（指标），prescription/version、task、execution_record（业务对象）。  \n2）轻量基因型标准：genotype_profile_id 版本化；marker_panel_id、call_rate、lab_id、qc_status 为必备；缺失允许但解释需显式标注。  \n3）指标口径：trait_code 按测定方法拆分；unit、stage、aggregation、valid_range 纳入字典并版本化。  \n4）血缘粒度：field_snapshot + variety_snapshot → prescription_version → task → execution_record；固化 feature_schema_version、agg_rule_version、model/rule版本。  \n5）质量红线：单位量纲、地块面积/边界、时间窗对齐、基因型QC；其他规则软告警留痕。  \n6）合规边界：高敏基因型不出域，只接派生特征；农场端仅展示不可逆解释；映射人工确认/处方发布/模板修改均审计留痕并可追溯到血缘记录。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

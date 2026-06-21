@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云端预算受限需设计自动化回归测试方案背景下，用户与导师围绕资源受限下的覆盖率保障、用例分级与容器化落地持续沟通（6轮），其中在Hardhat Forking降本与内存控制部分与测试开发工程师沟通（2轮），在界定核心用例与底层敏感模块部分与区块链架构师沟通（1轮），并形成云端沙箱+本地Docker限内存/清卷的混合回归与调度思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然云端没额度了，我就直接在本地服务器上跑全量用例。咱们机房不是还有几台旧机器吗，我把它们都接起来当执行节点，只要能跑通，测试效果应该是一样的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试开发工程师 我们现在回归测试的云端预算被压缩了，不能开大规模节点集群。导师说本地环境一致性太差，除了硬堆机器，还有什么省钱的法子能跑自动化回归？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就直接按这个 Forking 方案去写测试脚本，把之前的全量用例都迁过来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试开发工程师 刚才导师提醒我内存可能会爆。如果多个测试进程同时 Fork 镜像，内存开销怎么控制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白了，就是把用例拆开，重要的上云，次要的在本地用 Docker 限制着跑。这样确实能省不少钱。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "呃，这个我还没细想。要不就把涉及到转账和权限修改的都算成核心用例？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链架构师 老师让我问下，在咱们合约验证平台里，哪些执行路径和模块最容易出环境适配问题？我需要根据这个来定自动化测试的优先级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "寻址和跨合约调用这种底层的必须上云，其他的可以放本地。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会把刚才提到的分级标签和调度规则整理好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是给每个容器设 2GB 限制，然后异步跑。至于幂等性，只要每次镜像都是同一个版本，跑出来的结果应该都一样吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "清理脚本我也会加上去。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "刚才讨论的结论我梳理了一下：核心用例走云端沙箱，普通用例本地 Docker 分批跑并限制 2GB 内存，每次执行强制清理数据卷，通过这种混合模式平衡成本和覆盖率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

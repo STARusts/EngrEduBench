@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在量信令与经典信令联调背景下，用户与导师围绕时序同步、事务机制与合规日志审计持续沟通（6轮），其中在状态机与多跳回滚部分与协议架构师沟通（3轮），在流表回退与局部降级部分与经典信令开发工程师沟通（2轮），并确定“预留-确认”事务、局部降级策略及日志必填字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口对齐不就完了，经典网发个路由请求，量子网回个成码率，直接写个RPC调一下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个互斥锁卡一下不就得了，谁先搞完谁等着。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@协议架构师 导师让我问状态机，加锁怎么加？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听起来就是先占坑，不合适再退呗。那我套个try-catch，抛异常就回滚流表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "多跳回滚有点麻烦，那我不如直接全路径重算，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@经典信令开发工程师 你们经典网不是有SDN控制器吗？让控制器下发个全节点刷洗指令不就回滚了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那局部降级具体怎么搞？我只管调接口，你们底层得给我封装好啊。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，那我就在Env里加个异常监听，收到事件就删边重新算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事务就按架构师说的，预留完等量子确认，超时就退。日志嘛，打个error日志存文件里呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TraceID，窃听码，成码率，还有节点ID。够了吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

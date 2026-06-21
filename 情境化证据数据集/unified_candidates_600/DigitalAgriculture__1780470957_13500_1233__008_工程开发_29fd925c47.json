@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在农地碳汇核算算法工程化实现背景下，与导师围绕模型封装、传感数据容错、插值补全及精度验证持续沟通（7轮），其中在时序数据缺失容错与插值算法选型部分与算法开发工程师沟通（2轮），并最终形成包含Spring Boot服务封装、样条插值补全及基于Golden Dataset计算MAPE指标验证的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Spring Boot起个微服务，把Python模型翻写成Java呗。如果太复杂翻不了，就用Jython或者JNI起个Python进程跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "容错的话，加个Redis缓存上一时刻的数据？如果新数据来了就覆盖。毛刺我就设个阈值过滤掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "传感数据断了或者有毛刺，Java端该怎么容错？直接用上一个有效值顶替行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "三次样条插值？这玩意Java里能直接调包吗？我自己手写太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "边界条件我更懵了，平时写CRUD根本不碰这些。我只知道线性插值，就是两点连一条线那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚回去把Apache Commons Math的样条插值API看一遍，写个单元测试把几种边界情况跑通，明天再整合到核算服务里。我只能先照着官方Demo改，边界条件可能还得问你们。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿几组历史传感数据输入，看输出的碳汇值跟以前Python算的差别大不大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就算个误差率呗，比如误差在5%以内就算通过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，用Spring Boot封装核算服务；第二，遇到数据缺失用样条插值补全，这块我今晚补学Apache Commons Math的用法；第三，开发完必须用Golden Dataset做对照测试，算MAPE指标，达标才能合并代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

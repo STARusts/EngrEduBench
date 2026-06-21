@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估互锁误报漏报分析背景下，用户与导师围绕误报漏报分布确认、修复方案及验证口径持续沟通（8轮），其中在误报漏报分布与根因对齐部分与监控运维分析师沟通（2轮），在算法调整与降级策略部分与轨迹预测算法师沟通（2轮），并最终形成修复项清单与极限测试验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了SPC控制图，误报率大概3%，比预期高一点。漏报在日志里没看到触发记录，应该是0。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没细想。日志里没记，我就当没有了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "对齐视频流，查误报和漏报的分布。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "误报是因为算法对速度变化太敏感？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分析师说误报是伸手拿料太快算法太敏感；漏报是被料箱挡住没识别到人，有两起差点撞上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漏报的话，是不是得加摄像头补盲区？误报的话，把阈值调高一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@轨迹预测算法师 遮挡导致漏报，姿态突变导致误报，算法上能调吗？不能直接加阈值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "平滑窗口和历史轨迹记忆，这俩能马上改吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师说误报加平滑窗口今晚能改，漏报要改栅格状态逻辑，得两天。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我再跑一遍灰度？或者用极限测试？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "修复项：1. 预测模型加平滑窗口，解决姿态突变误报；2. 栅格状态加历史轨迹记忆，解决遮挡漏报。验证口径：极限测试注入遮挡和突变工况，漏报率必须为0，误报率降到1%以下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

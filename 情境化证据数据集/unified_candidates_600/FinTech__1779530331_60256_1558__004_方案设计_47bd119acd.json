@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨域隐私求交与特征对齐方案设计背景下，用户与导师围绕异构ID映射、求交算法选择、交集基数泄露风险及合规底线持续沟通（6轮），其中在跨域ID映射与求交安全边界部分与数据对齐架构师沟通（2轮），在交集基数泄露防护与合规底线部分与数据合规官沟通（1轮），并最终确定采用Circuit/DP-PSI防泄露、受控节点伪ID映射及最小化密态特征对齐方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "求交嘛，直接上KKRT算法呗，基于Cuckoo Hash的，通信量小，速度快，几千万ID瞬间出结果。特征对齐就按主键Join合并呗，这有啥难的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ID不一样的话，让业务方自己给个映射表呗？全量求交就是算个交集，又没暴露具体人的信息，应该没事吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域ID不一样怎么求交，还有特征对齐怎么做？我本来想直接KKRT的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那交集基数泄露的事，怎么防？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得加个盐就行了，性能差点但能跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域求交这块，交集大小泄露怎么办？我想用分桶加盐糊弄一下行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Circuit PSI？带电路的？这性能不是得炸吗？而且只能对齐必须的特征，不能全拉通。好吧，合规说了算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "求交不能用KKRT，得用Circuit PSI或者DP-PSI，防止交集大小泄露。前置要做异构ID到统一伪ID的映射。特征对齐只能按模型必须的最小特征集做密态对齐，不准全量Join拉通。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认：求交用Circuit PSI或DP-PSI防泄露；ID映射在受控节点做不落地；特征对齐最小化，只拉模型必需特征。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

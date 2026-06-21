@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在方案设计审查与调度流规划背景下，与导师围绕调度总线串接、背压与降级旁路设计及验证实验设计持续沟通（8轮），其中在并发调度与背压传导部分与总线调度开发工程师沟通（1轮），并形成审查前置同步拦截、探路异步背压、溢出降级旁路的调度约束及含基线对照组的验证实验方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用消息队列串起来，保证顺序就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审查优先，探路靠后。积压就加个限流，挡住外面的请求。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "审查和探路并发怎么调度？背压怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是沙箱满了告诉解析器慢点发，依据就是看沙箱剩余容量。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨晚看了Reactive Streams规范，里面说背压是下游向上游要多少给多少。但我没看懂这机制怎么套到我们这调度总线里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规范里有个drop策略，类似丢帧保命。那我们这也就是，解析器发太快，沙箱接不下，缓冲池满了就直接丢到旁路打标放行，不进沙箱试错了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多压点探路任务进去，看它崩不崩，打标率多少。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发多模态传感联调背景下，用户与导师围绕边缘侧时间戳对齐、特征提取实现方式、数据合规及传感断连安全停机机制持续沟通（6轮），其中在异构数据硬件打标与合规底线、特征提取资源评估与看门狗硬件拉脚部分与多模态传感适配专员沟通（2轮），并形成基于PPS硬件打标、RTL调IP核特征提取、原始数据不出舱及CPLD看门狗直连停机的传感接入逻辑修改方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用ROS的时间同步包呗？网上说订阅一下就自动对齐了。噪声的话，加个卡尔曼滤波库应该就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降采样不就丢信息了吗？中间件，换ZeroMQ？合规，啥合规？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "超声和生化这种采样率差特别大的，在边缘侧怎么打时间戳对齐？还有原始日志合规怎么搞？有没有现成的轻量级库能直接套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得用硬件PPS秒脉冲打时间戳，FPGA抓上升沿。数据不能直接对齐波形，得提特征再拼。还有，原始数据不能往外传，只能传特征，还要带设备ID和校验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "FPGA我打算用HLS写，就当C语言写呗，方便。延时，几十毫秒应该够吧？断连的话，我在应用层加个判断，收不到数据就发停机指令？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "HLS写打标资源够不够？超声特征提取实测延时多少？传感断连的看门狗怎么直接拉网关硬互锁引脚？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不能用HLS，得手写RTL调IP核。延时470微秒。看门狗用板卡上的CPLD，超时拉低引脚，直接接网关的SHUTDOWN脚。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

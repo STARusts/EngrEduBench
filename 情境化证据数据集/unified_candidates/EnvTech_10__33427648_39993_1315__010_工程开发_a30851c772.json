@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在两天内跑通“流式异常检测→审计事件→自动工单”MVP背景下，用户与导师围绕异常分层、事件字段/证据链、合并闭环、派单幂等与资源合规持续沟通（7轮），其中在阈值与误报控制及证据回放设计上与算法工程师沟通（5轮），在事件→工单接口触发点、Outbox重试、白名单静默与审计字段最小集上与后端开发工程师沟通（4轮），并形成可联调的派单规则与实现口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我倾向分三层：采集质量异常、核算一致性异常、合规阈值异常。先把“采集质量”做稳，因为它最容易造成噪声。工单刷爆这块我想做两道闸：事件去重（同点位+同异常类型的抖动合并）和节流（同一责任人/同一设备窗口期最多N单）。但我不确定阈值体系怎么落到实现里，尤其是漂移和季节性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 我们要在两天内跑通“异常检测→审计事件→自动工单”。MVP阶段只做规则/统计。你给我一套可落地的：异常类型清单（优先采集质量）、每类建议阈值/窗口、以及怎么控制误报（合并/迟滞/置信度）？另外需要输出哪些“可解释证据”方便审计回放？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这些异常里，哪些你建议直接触发工单？我担心像STEP_CHANGE/SPIKE会误伤，现场会烦。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据里你说的“前后各2个值”，会不会对存储有压力？我们点位多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我把算法这边的MVP建议拿回来了：异常先做6类，但派单只对DATA_GAP/CLOCK_SKEW/RANGE_VIOLATION/STUCK_AT四类，STEP_CHANGE和SPIKE先不派单只进审计队列。误报控制用“迟滞（连续N点）+合并（30分钟cooldown）+分级（WARN/ALERT/CRITICAL）+维护期白名单留痕”。证据链建议存规则参数+窗口摘要+reason枚举+cursor范围，原始序列不入链，靠cursor回放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异常事件我想独立一张AnomalyEvent表/主题：event_id、site_id、point_id、anomaly_type、severity、ts_start/ts_end、first_cursor/last_cursor、count、status（OPEN/ACK/RESOLVED/IGNORED）、rule_version、evidence_hash。幂等键用(point_id, anomaly_type, severity, window_bucket)再加cooldown窗口。工单我打算一个WorkOrder实体：wo_id、event_id、assignee_role、assignee_id可空、priority、sla_due、status。审计留痕：事件创建、合并、升级、派单、关闭都写到AuditLog，关键字段带hash链。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "DATA_GAP：当检测到gap>2P时创建事件，ts_start取缺口开始的预期时间点，first_cursor取缺口前最后一条有效cursor；事件保持OPEN，直到数据恢复并连续到达M个点（比如3个）把ts_end和last_cursor补上，然后标记RESOLVED。合并：如果同point_id同类型有OPEN事件，新gap继续扩大就更新last_cursor和count，不新建。cooldown用于已RESOLVED后短时间再断流，合并到上一事件还是新建，我倾向新建但加related_event_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CLOCK_SKEW我想按“稳定修复”闭环：只要|skew|持续超过阈值就保持OPEN；当偏差连续低于阈值T分钟（比如10分钟）自动RESOLVED。合并逻辑同上：同点位同类型有OPEN就更新统计（max_skew、duration）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 异常检测MVP准备上：派单只对GAP/SKEW/RANGE/STUCK，事件需要合并与升级。你帮我把“事件→工单联动”落地到接口和幂等：  \n1) 触发点：事件创建/升级到ALERT才派单？  \n2) 幂等键怎么做避免重复派单？  \n3) 工单创建失败怎么重试不造成多单？  \n4) 审计日志最小字段集你建议哪些（要能回放、能对账）？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "工单关闭你提“只能人工或恢复条件自动关闭”，那自动关闭怎么触发？在事件服务做还是工单服务做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "白名单静默需要留痕，你建议放哪层？我怕工程师直接在检测器里if掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，后端给的实现约束：派单只在severity升到ALERT/CRITICAL时触发；幂等用idempotency_key=hash(site_id,point_id,anomaly_type,event_id,CREATE_WO)，工单侧唯一索引保证重复请求返回同wo_id；失败重试走Outbox（wo_command）指数退避，200或409都算成功；白名单静默用MutePolicy表，不在检测器里硬if，命中时仍记录事件但固定WARN不派单并写审计。自动关闭MVP放事件侧触发，工单可直接“系统关闭”并留审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源这块我想做“轻量统计+分桶”：只对启用异常检测的点位跑，默认只开四类会派单的；STEP/SPIKE先关。窗口计算用在线增量统计（MAD用近似或用IQR替代），每点位保留固定长度ring buffer（比如W对应的最多N个点），避免全量扫描。并发上按site分区消费，超载时先降级只做GAP/SKEW（不依赖窗口）。  \n隐私：工单里assignee_id可以是内部账号ID，不落姓名/手机号；展示层再通过权限去解析。审计日志只存actor_id和role，不存明文个人信息；reason写枚举别写自由文本，free-text只允许在人工备注且做脱敏规则。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在并发并发症风险推演模型设计背景下与导师围绕推演建模方式、计算延迟与推理引擎选型持续沟通（8轮），其中在并发关联建模与数据来源部分与知识图谱工程师沟通（3轮）、在流式推理引擎选型部分与知识图谱工程师沟通（1轮），并最终形成Neo4j管图谱结构与SMILE做贝叶斯概率传播的推演方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就上Neo4j存图谱呗，拿到动作标签直接查图，匹配到高危路径就报警。规则我熟，写几条Cypher查语句就完事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "组合的话，就多写几条规则呗，把A和B绑一起。概率，就统计一下历史数据，定个阈值。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动作并发组合这种，图谱里怎么搞？我不想搞GNN那种黑盒，调参太玄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对，过不了审，医生看不懂就不敢用。贝叶斯加图谱这个，具体怎么跑？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "条件概率表这些数据哪来？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱那边建议用贝叶斯网络加知识图谱。不用GNN，可解释性过关，也不用我手写一堆Cypher组合规则。概率表可以后面迭代。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟的话，刚才切片流不是分出来了吗，云端算力应该够。大不了推演服务多挂几个节点。只要不是GNN那种吃显存的就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不手撸，用现成的，pgmpy或者直接上Pyro？pgmpy纯Python，Pyro底层是PyTorch。我倾向pgmpy，轻量，好调试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "pgmpy做流式并发推理扛得住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "SMILE我看过，有Java和Python API，能接Flink。那就定图谱用Neo4j存结构，推理用SMILE引擎算概率传播。这样规则和概率都有了，还能解释。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。Neo4j查拓扑给SMILE初始化网络，流式特征进来触发SMILE算概率，超阈值就推给前端报警。后续新术式只改图谱和CPT，不用动推理代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

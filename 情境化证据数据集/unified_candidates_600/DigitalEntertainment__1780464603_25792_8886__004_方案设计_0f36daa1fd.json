@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在潮汐流式计算与数据流编排背景下与导师围绕高并发局部密度计算的延迟红线与架构选型持续沟通（4轮），其中在极低延迟局部聚合与乱序数据处理部分与流计算专家沟通（1轮），分析延迟与可靠性取舍，最终确认轻量极速流编排方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得必须上Flink做实时流计算引擎，配上Kafka做消息总线。Flink的CEP正好处理复杂事件序列，Kafka能保证数据绝对不丢。我们在Flink里做全局聚合算出每个网格密度，再推给渲染层，这样数据链路最完整。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "延迟确实是个问题。但不用Flink，乱序数据怎么处理？用户指令过来时间戳肯定乱，不用Watermark机制对齐，算出来的密度不准。我们可以把Kafka的批次调小，Flink关闭Checkpoint，应该能压到50ms内吧？或者上两套Kafka做冷热分离？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在这个50ms的延迟红线内，流计算和数据流编排该怎么做？乱序数据又怎么处理？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不用Kafka绕过消息总线，直接内存计算？如果计算节点挂了，当前窗口的潮汐数据不就全丢了？不过专家说的对，我们要的是瞬时密度，历史对齐没意义。Disruptor的环形缓冲确实快，单机能扛住吞吐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选轻量极速。演艺场景确实对延迟更敏感，丢帧能容忍，脱节不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认流编排方案：主链路用定制RPC或UDP接入，Disruptor做内存环形缓冲和微批处理，用20ms滑动窗口加简单衰减算局部密度，不搞Watermark对齐。Kafka只做旁路异步冷备，不进主链路。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

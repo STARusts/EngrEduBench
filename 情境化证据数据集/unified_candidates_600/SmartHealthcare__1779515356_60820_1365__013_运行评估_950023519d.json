@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在孪生推演策略运行评估背景下，与导师围绕数据漂移业务归因及MLOps工具局限性持续沟通（5轮），其中在协变量与概念漂移区分部分与模型效能审计员沟通（1轮），并最终形成基于DeviceTwin医嘱事件匹配的漂移归因与分级报警监控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我觉得用现成的MLOps工具就能搞定。阿里云PAI有个模型监控，或者开源的Evidently，配一下就能算PSI和特征分布。精度就看RMSE和MAE，超阈值就发钉钉报警，重训模型。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "工具本身不管这些上下文啊。那要不把PSI报警阈值调高点？或者加个白名单过滤掉这些波动？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微生态和影像双轮的漂移怎么监控才不误报？工具算出来分布变了，但可能是用药引起的，这种怎么区分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "临床事件怎么自动识别？总不能人工一个个去查病历吧，有没有更自动一点的办法？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "DeviceTwin影子里有医嘱事件。那是不是在监控流里把医嘱事件作为上下文注入，PSI报警时去匹配最近有没有新增抗生素或特殊敷料的医嘱？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "监控策略就按这个定。底层用Evidently算分布和精度，上面包一层医嘱事件匹配的归因逻辑。有医嘱的漂移只记录不阻断，没医嘱且连续超15%才真报警触发复盘。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

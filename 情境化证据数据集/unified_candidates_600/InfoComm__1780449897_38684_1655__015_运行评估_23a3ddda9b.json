@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上织合信道空口震荡溯源与处置背景下，用户与导师围绕排查方向、处置动作及合规风险持续沟通（8轮），其中在底层指标排查部分与运行监控与调优师沟通（1轮），在相控阵复位合规限制部分与合规与安全审计师沟通（1轮），并最终形成慢漂渐变复位与快闪降权监听的震荡处置规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "从数学模型看，可能是流形寻优的目标函数在鞍点附近震荡，或者盲聚合的相位补偿项发散了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我得看看波形数据。可是现网的抓包工具我不太熟，之前都是用离线脚本跑的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行监控与调优师 现网织合信道空口异常震荡，一般从哪些底层指标开始查？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "频偏超限和相移漂移，这俩在波形上怎么区分？我看现网仪表一脸懵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果是相移漂移，得重新下发相控指令校准；如果是频偏超限，得调整织合窗口的容忍边界，或者剔除这个节点。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没想。直接复位可能会产生瞬态强辐射。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与安全审计师 超表面相控阵列做状态复位时，电磁辐射合规有什么要求？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以复位得走渐变插值，不能一步到位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "频偏超限可能是终端晶振温漂，如果直接踢掉，后续它温度降下来又得重接，信令开销大。不如先把它的织合权重降为零，保留监听。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总结一下：1. 慢漂查相移日志，复位走单步15度渐变；2. 快闪查频偏，劣化节点降权监听不剔除。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

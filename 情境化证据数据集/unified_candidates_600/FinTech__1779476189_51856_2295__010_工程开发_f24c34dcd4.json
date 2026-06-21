@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在估值因子计算核心编码背景下与导师围绕流式计算逻辑拆分、状态后端选型、背压风险及编码步骤持续沟通（6轮），其中在状态机制与窗口算子选型部分与流式计算研发沟通（1轮），在衰减逻辑编码与历史状态依赖部分与动产估值算法师沟通（1轮），并形成编码步骤清单与背压风险点记录。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先把Kafka里的物联数据源接进来，然后写几个算子把数据转成估值因子，最后发到下游引擎。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "水位线我设个固定延迟就行吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态后端这块我不太懂选哪个，直接用默认的可以吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "窗口算子和状态后端怎么选？风控不能丢状态。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减公式在代码里具体怎么实现？有历史依赖是不是很麻烦？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算子要用滑动窗口和Keyed State，状态存RocksDB，还要开Checkpoint防丢。衰减就是拿上一个状态乘个系数再更新回去。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "背压超时这块我确实没考虑到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "RocksDB配在HDFS上吧，Checkpoint间隔我先设5秒？超时的话我不清楚怎么防。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，写Source接Kafka并生成水印；第二步，写滑动窗口算子算波动率因子；第三步，写Keyed ProcessFunction算衰减因子；第四步，配RocksDB和Checkpoint。背压超时风险我得先记下来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Flink State API这块我实在不熟，得去查一下用法。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

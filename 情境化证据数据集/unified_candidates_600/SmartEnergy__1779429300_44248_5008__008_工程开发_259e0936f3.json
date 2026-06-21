@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在潮汐路由引擎核心代码开发背景下，用户与导师围绕图计算与强化学习寻路算法的落地选型、工程约束及混合架构验证持续沟通（7轮），其中在RL推理延迟部分与调度算法工程师沟通（1轮），在图计算并发写冲突部分与性能调优专家沟通（1轮），并最终确定图计算粗筛与RL精排混合架构及验证标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向强化学习，论文里都是用PPO或者DQN做这种动态决策，能端到端输出路由表，理论收敛性也有保证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用RL做潮汐路由，推理延迟到底能不能压到毫秒级？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用NetworkX或者更快的图库做最短路径，能不能满足？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RL太慢，图计算更新权重又卡锁。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不太懂这些部署工具，平时只训模型。我得补一下这块。我这两天把ONNX Runtime的C++ API文档过一遍，在本地跑通一个图模型的转化推理流程，看看能不能把RL模型推理压到5ms以内。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我设计个对照实验。构造一个包含100个节点的跨域拓扑，分三组：A组纯RL原始推理，B组纯图计算加锁更新，C组图计算无锁粗筛出Top-K路径再用加速RL精排。主要观测指标是端到端寻路时延和绿电消纳命中率。每组跑5000次请求，看时延分布和命中率差异。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就定混合架构。图计算负责实时感知拓扑和粗筛，这部分用无锁图结构解决写冲突；加速RL模型负责在粗筛路径里做精排，兼顾时效和优化深度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在将“微气候—菌棒状态—作业执行”建议上线的工程开发背景下，用户与导师围绕推理服务接口字段、规则与模型冲突裁决、可解释可回溯与降级及权限留存持续沟通（9轮），其中在幂等/版本号/解释字段/trace日志与编排上与后端开发工程师沟通（3轮），在在线置信度(data_conf/model_conf)与低置信度输出策略上与算法工程师沟通（2轮），并明确接口必备字段、三类硬闸门与降级最小输出口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是弄个接口，然后模型出结果，再加点 if else？我看很多项目都用规则引擎，直接配就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就传温湿度光照这些，还有图片的结果。输出就是“通风/覆膜/遮阴/补水/采收”五个按钮加分数。冲突就…优先规则？规则比较稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 推理服务这块接口怎么做才不容易乱？我主要怕字段一改就全崩。还有规则和模型一起跑怎么串？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "规则ID也要回给前端？我以为就一句“因为湿度高”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那冲突裁决器是不是就选分高的？我能不能直接用一个现成的规则引擎库，把规则写进去就算了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口…要有地块、时间、传感、视觉、作业记录。返回要有动作列表和理由，再加版本号。冲突就先跑硬规则，再跑模型，最后挑一个。回溯就存 trace_id 然后查日志。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就都给出来？按分排。采收就是给个时间点，比如明天采。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缺了就先不推？或者用最近一次的值顶上。拍照没来就当正常？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 在线推理时置信度怎么弄？传感缺失、视觉没结果这种，建议还能给吗？我怕直接空了前端没东西。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是就加个阈值，小于0.5就不出？我看很多都是这么卡。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "硬闸门就是污染高就别补水？还有温度太高就必须通风。响应字段必须有动作、理由、trace_id、版本号。降级就…输出让人去补拍照、检查传感器这种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "互斥就是两个动作不能同时出现。那就写个表？比如覆膜=1 就通风=0。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "rule_id 随便起个？if 就是已经覆膜了 then 禁止通风 window 一天 override 不给覆盖。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那就是“覆膜后6小时内不要强通风，除非露点风险高就可以短时通风”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就都存在库里，90天清掉。权限给管理员看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "嗯，班组就够了，不放人名。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在支付链路异常溯源与疏导系统方案设计背景下，用户与导师围绕图存储与路由引擎选型、二清风险及架构约束持续沟通（4轮），其中在路由选型与图存储性能部分与图谱与路由架构师沟通（1轮），在路由规则不一致引发的二清监管判定部分与合规与风控专员沟通（1轮），并最终确认HugeGraph与自研无锁一致性路由引擎选型及核心约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "卡单量级我之前捞数据看过，峰值可能到百万级节点。单机Neo4j确实可能OOM。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "分布式图库这块我没实战过，JanusGraph底层依赖HBase，我怕运维太重。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我得这周花两天把HugeGraph的分片和索引机制看明白，不然图存储这块我没法做容量估算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "支付场景要求秒级甚至毫秒级决策，自研路由引擎的话，一致性怎么保证？还有图存储，HugeGraph做亿级节点穿透查询，延迟大概在什么量级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "但我自研引擎开发周期肯定比用Drools长，能不能先上Drools，后面再重构？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果疏导瞬间路由到了未签约渠道，监管怎么判？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "二清红线不能碰，那Drools绝对不能用了。必须自研强一致路由引擎。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我做个对照假设：Drools在10000 TPS下热加载规则，会有千分之一的路由错误率；自研无锁版本号引擎在同等TPS下错误率为0。验证动作就是写个压测脚本，模拟规则变更并发报文，看有没有错发。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心约束清单：1. 图分片必须按支付机构ID做Shard，避免跨节点遍历；2. 路由引擎规则切换必须基于版本号全量生效，禁止部分生效中间态；3. 备用通道必须经过签约校验白名单拦截，防二清。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

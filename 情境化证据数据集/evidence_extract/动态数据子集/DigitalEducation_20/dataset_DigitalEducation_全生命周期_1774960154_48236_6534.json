@@ -1,0 +1,1063 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“感官负担自适应课件编排系统”立项前的痛点调研背景下，用户与导师围绕痛点边界、典型场景举证、数据采集红线与调研成功门槛持续沟通（7轮），其中在访谈对象与提纲及量化问卷设计上与产品经理沟通（4轮），在认知负荷可操作指标、阈值设定与无障碍覆盖上与教育场景研究员沟通（3轮），并形成痛点假设-验证数据-不采集清单与进入下一步的门槛。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心我会把系统想得太大，所以先从“学习负担痛点”开始做调研，把做什么和为什么做先压实。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感官负担我先分三类：视觉（字多、对比度低、信息密度高）、听觉（旁白+音效叠加、语速快）、交互（频繁点击/弹窗打断）。核心用户我倾向先抓“教师备课+课堂投放”，因为他们决定课件形态；学生是体验方。数据上我想用行为数据+主观量表结合：比如注意力漂移、暂停/回看、跟读错误率，再配一个简短的主观负担问卷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三个场景我先拍出来：\n1）小学语文识字课：课件一页同时有字形、拼音、例句、动画，学生跟不上，表现为老师频繁口头重复、学生抬头发呆。证据：课堂投放端的停留时长异常、老师手动跳回上一页次数。\n2）初中物理概念课：图示+公式+旁白同步推进，学生笔记来不及，课后作业错在概念辨析。证据：课后练习错误集中在某些页对应的知识点、这些页的回看率高。\n3）线上自学微课：互动题插得太密，导致学生完成率下降。证据：中途退出点集中在互动插入点、重复播放短片段增多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想加眼动/摄像头估计注意力，但确实风险大。调研阶段先不碰生物特征：不采人脸、不采音视频、不采精确位置信息。能采的偏“使用行为日志”：翻页、暂停、回看、互动题耗时、退出点；再加设备信息只到型号/分辨率这类，不做跨应用跟踪。问卷也只采匿名或班级层级聚合。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 访谈怎么设计能把“感官负担导致的学习负担”问得具体，还能落到可验证证据？我倾向先做MVP，但我怕把问题问浅了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "样本上5-8听起来少，我怕统计不稳；我想一步到位做更大规模，甚至先做全量问卷，再聚类找痛点人群。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我收回“全量先行”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那问卷阶段你建议量什么？我不想只问“你觉得累不累”这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我们把痛点归因到“感官负担”，可能被质疑是教师授课问题或学生基础问题。怎样让归因更站得住？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把它当假设池。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 认知负荷/多模态里，有没有适合我们这种课件场景的可操作指标或测量方式？要能支撑需求决策，不要上来就很重的实验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解为需求期先建立“可控项—指标—后果”的链路，先相关性，再考虑因果。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那指标阈值怎么定？比如“停留时间多长算负担高”，不然容易变成拍脑袋。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这就会需要埋点和数据治理了，我差点又想往数仓架构上扯。先停在需求边界内：我们只要说清楚“需要哪些事件、用来验证什么假设”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "无障碍需求也会影响“负担”，但调研里怎么覆盖，不至于样本太分散？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我现在的结论是：先用探索性访谈把痛点模式挖出来，再用轻量问卷和行为日志做第一轮量化验证；注意力的生物特征先不采，优先用行为日志代理指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我口头列一版，控制在需求期能落地的层面：\n1）痛点假设A（信息密度过高）：同一页承载字形/拼音/例句/动效导致跟不上。验证数据：翻页回退次数、关键页停留时间分位异常、教师补充解释频次（访谈/简记录）。\n2）痛点假设B（多模态冗余/节奏不匹配）：旁白+动效+公式同步推进导致笔记与理解断裂。验证数据：关键页回看率、对应练习错误集中度、学生自评“需要反复看”的量表。\n3）痛点假设C（交互干扰）：互动题插入过密导致完成率下降。验证数据：退出点集中在交互节点、互动题放弃率与耗时异常。\n4）无障碍补充假设：对比度/字幕/动效可控性不足会放大负担。验证数据：小样本可用性反馈+“是否能完成任务”的结果型问题。\n5）明确不做/不采：不采人脸、不采原始音视频、不做眼动/生理注意力识别；设备信息只到必要粒度；未成年人数据以告知同意与最小化为前提。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "门槛我定三个：\n- 访谈：至少覆盖教师/教研/学生或家长三类对象，每类5人以上，能归纳出重复出现的前3类负担触发模式。\n- 量化：用问卷或现有平台日志验证至少2条假设呈现一致方向的相关性（比如高回退页对应高自评负担）。\n- 边界：采集项清单能通过“最小化”自检，不需要触碰音视频与生物特征。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育产品需求与战略阶段的多类学习者画像定义背景下，用户与导师围绕最小可运营画像数量、日志可识别信号与命名边界持续沟通（7轮），其中在画像可落地运营切分上与产品经理沟通（2轮）、在学习科学有效性与观测口径上与教育场景研究员沟通（2轮）、在无障碍/弱网画像的敏感性与留存告知上与合规与隐私官沟通（2轮），并形成5+冷启动的“过程倾向类+条件强约束”折中结构与合规处理原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向直接做一个画像体系树：设备能力、学习阶段、注意力稳定性、无障碍需求、课程类型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就收敛到三条主轴：A设备与环境约束（屏幕尺寸、系统版本、网络）、B学习负担风险（比如回退多、停留异常、频繁打开提示）、C可达性需求（高对比、字号、读屏、简化交互）。每个轴做低/中/高三档，组合出有限几类。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以先把画像做成“主类+修饰符”。主类控制在6类以内，修饰符只做个性化标记但不单独成类。比如主类按负担风险×可达性先切，设备只做约束标签。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 画像想压到6类以内，你会怎么切，才能跟教师投放/备课流程对得上？还要能靠我们现有边界内的数据识别。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这5类我担心“高辅助可达性”和“低资源设备/弱网”会跟前四类正交，做成主类是不是会挤占名额？能否都作为标签？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 画像打算控制在5-6类。产品侧按行为日志切了“快节奏/易迷失/易疲劳/高无障碍/弱网低端”。从学习科学看，这样的类有没有意义？以及每类用什么观测信号更稳，不碰音视频/生物特征。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“理解结果代理”我怕会牵扯到题库质量不稳定，甚至不同学科不通用。能不能只用行为也做初判？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "产品要可运营、研究要口径不误导。我准备把主类拆成“过程型三类+条件型两类”，条件型作为强约束覆盖过程型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定5个主类，外加1个通用“未归类/冷启动”：  \n- P1 高速度浏览型：单位内容页翻页间隔短、目录跳跃多但回退不高；但不承诺理解好。排除：弱网导致加载慢的反向指标。  \n- P2 导航迷失型：回退高、同页重复访问高、目录/锚点频繁切换。排除：课堂投放“老师控制翻页”场景。  \n- P3 中断疲劳型：单节多次进入、退出点集中在高负担段落（比如长图文/密集公式页）、每次有效交互数低。  \n- C1 无障碍优先型：系统无障碍开关开启/应用内开启高对比大字/读屏。  \n- C2 低资源约束型：网络错误/超时重试多、资源下载耗时长、离线命中率高或低端机型标记。  \n规则：先判定C1/C2（强约束），再在剩余里判P1-P3，否则进入冷启动。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就改成：退出点集中在“高回退页”“高停留页”“高提示请求页”附近，用我们上个微场景的触发模式去定义“疑似高负担页”，不说它是公式还是长文。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 学习者画像这里我们想用日志把人分成P1-P3过程型，加上C1无障碍、C2弱网低端强约束。都不采音视频和生物特征。哪些字段算敏感，哪些能存，告知同意要怎么做才稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果无障碍不长期存，那教师端想看“班里谁需要大字”这种需求就做不了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这会影响产品的“个性化可见度”，但风险确实太高。我回去跟导师把“C1只做会话级”定下来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "折中版本：  \n- 类别数量：主类维持5+冷启动。过程型3类只在“个人可控浏览/课后自学”判定，课堂投放且教师控页时不判P类。  \n- 命名：P1改叫“高速度浏览倾向”，P2改叫“高回退/重复访问倾向”，P3改叫“高退出分段倾向”；避免暗示能力高低。  \n- C1无障碍：只做会话级即时标记（来自系统无障碍状态或应用内偏好），不在服务端长期存个人画像；服务端仅存聚合比例与触发次数。  \n- C2低资源：存档位不存精确机型；滚动窗口计算，默认30天内有效，过期自动降级为未知档。  \n- 告知：首次进入产品时统一告知日志与设备档位；首次触发C1时单独解释“用于无障碍呈现，可随时关闭”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我还是想把画像做成向量，后面策略会更灵活，但这一步先按“有限类+标签”走。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育产品需求与战略阶段的合规与价值路径规划背景下，用户与导师围绕合规边界、可验证价值主张与最小验证动作持续沟通（9轮），其中在告知同意/留存/自动化决策与可解释可控设计上与合规与隐私官沟通（2轮），在低成本试点对照验证设计与指标口径上与教育场景研究员沟通（3轮），并形成对外合规承诺、价值链路与试点验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向把合规当成“产品能力边界”，反过来做卖点：我们只用页面/交互日志、测验代理、设备档位、无障碍状态，不碰音视频和生物特征。价值路径我想走三段：1）课件可用性提升（无障碍+低配设备也能顺畅）；2）课堂投放更稳（节奏、交互频率自适应减少卡顿/分心）；3）闭环指标证明“感官负担下降”，带动机构续费。但我有点想加一层更高级的个性化引擎，做成策略插件市场。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第二段和第一段比较稳，基本不用推断注意力状态，更多是设备与无障碍的“条件强约束”。第三段闭环会碰到定义问题：感官负担的指标口径、成功阈值、以及会不会被质疑是“我们自己定义我们自己赢”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们系统只用交互日志/测验代理/设备档位/无障碍状态，不采音视频和生物特征。想在产品上宣称“感官负担自适应”。想问三件事：1）告知同意要怎么表述才稳；2）C1会话级聚合、C2滚动窗口留存，这样够不够；3）“自适应/个性化”会不会被认定为自动化决策，需要额外的解释或退出机制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "退出机制是不是会把系统效果打折？如果都能关掉，那数据闭环会断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回到导师那边，把“可解释+可控”的做法变成价值叙事的一部分。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "三条我先写成口头版：  \n- 路径A（可达性）：基于无障碍状态与设备档位自动调节字幕、对比度、动画与交互密度，目标是“更多学习者能完成同一教学目标”。验证用完成率/跳出率/重复播放率。  \n- 路径B（课堂稳态）：投放端根据设备性能降级呈现节奏，减少卡顿导致的中断。验证用播放中断次数、加载时延分位数、课堂模式下的交互失败率。  \n- 路径C（体验改进）：在不做人群敏感推断前提下，通过页面日志推导“呈现负担代理指标”下降。验证用页面停留分布更平滑、无效点击减少、提示触发率下降。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 在不采音视频/生物特征的条件下，我们想证明“自适应编排”确实降低了学习中的感官/呈现负担，但又不把它说成注意力或能力推断。你能给一个小规模、低成本、可操作的验证设计吗？最好能把指标口径讲清，避免自证。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阶段1的随机分配对学校试点可能阻力大，他们不喜欢“拿学生做实验”。能不能用更温和的方式，比如同班不同章节交叉？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：我们画像P类只在个人控制场景生效，那课堂投放算不算个人控制？如果不算，研究里P类就不能用？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把C路径对外话术降级，把研究设计放到内部验证计划里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规承诺我按三条：  \n1）数据边界：仅页面/交互日志、测验代理指标（可选）、设备档位、无障碍状态；不采音视频与生物特征，不做敏感属性推断。  \n2）留存与隔离：原始事件短留存用于排障；长期只保留会话级聚合指标；按机构/班级隔离，C2滚动窗口到期删除。  \n3）可解释可控：每次自适应都能说明触发原因（设备档位/无障碍开关/会话内交互特征），教师可锁定档位或回退默认。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "买单方我先押B端学校/教培机构的信息化部门+教研组。价值链路两条主打：  \n- 课件投放稳态：降低课堂中断与投诉，减少教师临场救火；指标是课堂模式下中断率、加载时延分位数、交互失败率。  \n- 可达性合规：无障碍与低配设备覆盖提升，减少“内容不可用”的风险；指标是无障碍开启用户的完成率、关键内容到达率、退出率。  \n“呈现负担下降”先作为内部质量指标，不当作合同承诺。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两步：  \n- 试点前两周：选2门课、各2个章节，做标准版与自适应版（只基于设备档位+无障碍+会话级聚合的简单规则），用班级交叉设计；预先锁定指标口径：学习结果不下降、投放稳态提升、可达性提升。  \n- 试点期间：上线“为什么会调整”的解释面板和教师端“锁定/回退”开关，收集最轻量的2题呈现体验问卷作为补充证据。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可持续性我之前确实没展开。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我补两条原则：  \n- 策略可维护：先用少量规则+档位配置，不把策略写死在每门课里；策略变更走版本化，避免每次都重新生产素材。  \n- 降级优先：低配设备与弱网场景以“保证可用”为先，宁可少动画少交互，避免堆复杂自适应导致更多兼容问题。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在感官负担自适应课件编排系统的方案设计背景下，用户与导师围绕负担指标体系建模、合规边界与可解释分层持续沟通（9轮），其中在原始事件短留存与端侧聚合/分位摘要设计上与数据工程师沟通（3轮），在阈值选择与两周试点校准方法上与教育场景研究员沟通（2轮），并形成指标分层、维度划分、数据源与解释字段的对齐版本。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把“负担指标体系”建起来，后面编排策略才能有依据。问题是我有点想把它做成一套通用的“负担向量”，不同课件、不同端都能吃同一套。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是三大块：呈现负担（视觉/听觉密度）、交互负担（点击频率、失败率）、节奏负担（停顿、翻页速度）。再加一块无障碍相关的“可达性负担”。然后每块做成0-100分，最后合成一个总分。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就完全不碰生理或眼动，纯用页面事件：停留时长分布、连续返回、频繁暂停、重复播放。它更像“内容节奏与设备/网络的匹配度”，不是人不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先按四个一级维度写骨架：  \n1）呈现负担：单位面积文字量、图片占比、动效频率、对比度不足次数；  \n2）交互负担：单位分钟交互数、交互失败率、撤销/重做比、输入长度；  \n3）节奏负担：页面停留时长P50/P90、翻页间隔波动、暂停/回放次数；  \n4）可达性负担：无障碍开启时完成率、替代文本缺失率、键盘可达失败率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但这些到底怎么标准化，我想引入“负担向量”加权学习，之后再动态调整权重。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内容固有：文字量、图像占比、动效次数、替代文本缺失。投放条件：时延分位数、失败率、加载重试。交互数介于两者之间，内容设计和教学环节都会影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 负担指标体系里我想放停留时长分布、翻页波动、失败率、动效频率这些。考虑原始事件短留存、长期只留聚合，你觉得哪些指标容易踩到“必须留序列”的坑？怎么设计埋点和聚合粒度比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我理解是：节奏类不要在服务端做序列重放，尽量前置到端上窗口统计，上报聚合。分位数用摘要结构存，别存原始。那“重复播放次数”这种算节奏吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还想把所有指标做成统一事件流，之后上Kafka一把梭，顺便接特征平台。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好，我先不把“流式架构”写死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那指标命名和分组维度我打算固定：课件ID、页面ID、班级ID（隔离）、设备档位、无障碍状态、网络档位。这样能支持我们对外“课堂投放稳态”的证据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三条：  \n1）节奏类只保留“窗口统计”而不是序列：比如页面停留时长P50/P90可以服务端分位摘要；翻页间隔波动改成端侧短窗口的均值/标准差上报。  \n2）模式识别类（比如连续回退）先不做，怕逼着留序列；如果真要做就端上变成计数特征。  \n3）内容固有指标尽量从课件解析离线算，不占用在线埋点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把“可达性”拆两层：  \n- 对外KPI层：无障碍开启用户的完成率、退出率、关键任务成功率。  \n- 内部诊断层：替代文本缺失率、键盘可达失败率、焦点顺序异常次数、对比度不足。内部诊断不合成“负担总分”，只作为修复清单输入编排。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "解释要能说清“触发了什么阈值、影响了什么体验、系统做了什么”。字段我想要：触发指标名、当前值、阈值、对比基线（同课件默认档位或同班平均）、采取的编排动作、动作可回退标记。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 我们在做负担指标体系建模，想把阈值设成可解释触发条件，但又不能滑向“注意力差”这种推断。两周小试点里，你建议哪些指标先设阈值、阈值怎么来、怎么校准？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你这意思是，阈值尽量从分位数来，不用绝对值；呈现类先提示别强制；把阈值当作“触发策略强度”的旋钮，在两周里校准到不影响学习结果的前提下提升稳态/可达性。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想保留“向量”的内部表述，方便策略引擎做多目标权衡。但对外和对教师解释时，不出现“总分”。我把它设计成：内部多维分数+规则阈值触发，不对外承诺“负担降低X%”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "允许的：页面使用统计（翻页、停留、交互计数）、交互成功/失败与请求时延、设备档位、网络档位、无障碍状态；测验代理是可选但我倾向先不用，避免被理解成学习评价。明确不采音视频、不采生物特征，也不做能力/注意力推断。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第2条里“投放稳态”我建议单列成一级维度，别混在交互里。因为我们要把稳态作为主对外证据，口径更干净。还有一点：我还是想给内部一个“组合评分”，但只在策略引擎里用，解释层永远展开到具体指标，不显示总分。"
+              }
+            ]
+          },
+          {
+            "microScene": "在试点仅两台8核16G资源约束下，用户与导师围绕编排服务总体架构拆分、同步/异步数据流、对象模型与版本回退、审计与降级持续沟通（8轮），其中在稳态阈值证据链与最小改动回退口径上与教育场景研究员沟通（2轮），在指标快照最小化采集、留存与审计字段设计上与合规与隐私官沟通（2轮），并确定模块化单体+异步渲染队列的架构清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是拆成“编排决策”和“课件渲染/打包”两条链。决策拿指标输入，输出编排动作序列；渲染拿动作序列+素材库，生成投放包。同步的我觉得只有“教师预览”那条，课堂投放可以异步预生成。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我也有个坏毛病：我想上事件驱动、把每个动作当事件流跑，这样回放和追溯会很爽，不过两台机可能扛不住一堆组件。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小的话我收敛成三块：  \n1）编排API（同步）：给教师工作台调用，输入课件ID/目标设备/无障碍开关/期望节奏，返回“动作建议+可解释理由+预览链接”。  \n2）编排任务服务（异步）：生成投放包，带幂等；失败可回退到上一次稳态版本。  \n3）指标与策略服务：接收负担指标快照，做规则/阈值判断，输出动作序列。  \n数据上：课件内容先解析成结构化“页面-组件-素材”树，再给策略服务做评估。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对象我先定四个：  \n- LessonPackage：一次可投放的包，有package_id，绑定课件content_hash和目标端profile。  \n- OrchestrationPlan：动作序列，有plan_id，关联指标快照snapshot_id。  \n- Snapshot：负担指标输入，包含稳态维度、交互、信息密度等子项，带采集时间和来源端。  \n- PolicyVersion：策略版本，影响plan生成。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回退就是：同一课件+同一profile，优先选“最近一次通过稳态阈值且渲染成功”的package_id；如果当前策略生成的plan导致稳态风险上升，就回退到该package对应的plan。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 稳态阈值和回退口径你建议怎么定？我们这边资源很紧，只能做轻量的证据链，不想搞大实验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那阈值就先分场景：比如课堂投放、课后自学、无障碍模式，各一套上限；策略输出带“分项->动作->预期变化”。回退优先找“差异最少”的安全包。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心一个点：预期变化怎么估？没有模型就只能规则估计，会不会被质疑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 指标快照、设备profile、注意力状态这类数据，在编排服务里怎么做最小化和留存？我们还要支持回退与审计留痕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以编排服务的输入就别带可识别信息，只留会话匿名ID；注意力状态只用分桶。快照短留存，plan和审计长留存但去标识化。解释层对教师只展示“触发依据=指标分项越界”，不展示学习者状态细节。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我还有个冲动：想把所有快照进数仓全量存起来做后续训练，但这显然踩线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选后者：单体偏模块化的编排服务，内部拆模块但部署先单进程或少量服务，配一个轻量任务队列跑异步渲染。理由是：  \n- 预算下先把CPU留给解析/渲染，别把资源耗在一堆基础设施上；  \n- 我们更需要稳定回退与可解释，不需要超高吞吐；  \n- 事件流的价值（回放、血缘）可以先用审计日志+plan版本来替代。  \n风险：后面如果动作库膨胀、并发上来，任务队列会成为瓶颈；但那是试点跑通后的扩容问题。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总体架构我先压成五块：  \n1）编排网关API：教师工作台/投放端调用入口，做鉴权与限流，转发到编排核心。  \n2）编排核心（同步）：解析课件结构树，拉取设备profile与无障碍开关，生成OrchestrationPlan，返回可解释理由；预览请求走这里。  \n3）渲染与打包（异步）：消费“生成投放包”任务，产出LessonPackage，失败写原因码，可触发回退。  \n4）策略与阈值配置：分场景阈值、policy_version管理；策略输出只到分项指标与动作，不输出组合总分给UI。  \n5）审计与观测：记录规则ID、动作ID、policy版本、schema版本、回退原因；快照短留存，plan/package去标识化长留存。"
+              }
+            ]
+          },
+          {
+            "microScene": "在自适应课件编排系统方案设计收口背景下，用户与导师围绕教师预览/课堂投放两条数据流的数据最小化、解释分层、留存与审计及权限矩阵持续沟通（8轮），其中在合规边界与敏感数据处理上与合规与隐私官沟通（4轮），在RBAC+ABAC落地、角色集与跨校隔离上与系统架构师沟通（3轮），并形成关键数据对象清单与数据流+权限设计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我倾向做成“全链路事件溯源”，所有输入、策略命中、渲染素材、解释分项都串成一条Trace，然后给教师端、教研端、运维端都能查。权限上用ABAC，属性包括学校、班级、课程、设备profile、无障碍标签。这样后续扩展策略也不用改太多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预览流我觉得得有：课件原稿结构、素材清单、教师选择的教学目标标签、学生端设备情况、注意力状态。课堂投放现场就读package，附带可选回退列表，最好还能查到当时策略命中的理由，便于老师临场决定。解释与版本我想教师能看“为什么这样编排”，教研能看更多，甚至能回放完整快照。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 注意力状态、设备信息、无障碍标签这些在教师预览/课堂投放里怎么用才合规？能不能把“策略命中理由”给教师看？留存和审计一般怎么做才不踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果不采集注意力，系统怎么“自适应”？只靠设备profile会不会太弱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "策略命中理由给教师看呢？会不会泄露学生信息？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那课堂投放现场，如果老师想知道回退为什么出现，是不是只能看到“触发了回退原因码X”，不要看到任何学生侧信号？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规这边基本是：注意力/情绪这类别采，或者用会话内的交互聚合桶替代，还尽量端上处理不出端；无障碍需求最好也只传“桶化声明”，后端不存明文；教师看到的解释要去个人化，只讲设备桶、课件特征、策略版本、动作依据；审计要记访问者、资源、权限、降级原因码、版本号。留存方面请求体/快照短一点，审计日志长一点但也要脱敏。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我列个主干：1）OrchestrationRequest（输入请求，包含课件结构摘要、目标标签、设备桶、无障碍桶、会话桶）；2）Plan（编排计划，动作序列+理由分项）；3）Package（渲染后的可投放包）；4）StrategySnapshot（策略/模板快照，短留存）；5）ExplainView（给教师看的解释视图）；6）AuditLog（审计）。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@系统架构师 我们在感官负担自适应课件编排系统里做数据流与权限设计。你建议的最小角色集、对象级权限边界、以及跨校/跨班隔离怎么做比较稳？我之前想上ABAC全套，担心过度了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "具体到动作呢？比如Plan、Package、Explain这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "跨校隔离就靠租户ID硬隔离？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据流上，两条链路怎么落到权限上？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我准备把Trace拆掉：不做全链路可回放的原始事件串。改成三层：业务对象层（Request摘要/Plan/Package/ExplainView），审计层（访问与降级原因码、版本号），再加一个聚合指标层（给教研看）。权限上用RBAC做角色主干，tenant+课程/班级做ABAC门闩。SystemOperator只能看脱敏审计和队列状态，不碰课件内容。Teacher看ExplainView但不看StrategySnapshot和原始请求体。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "进库的我想只留：tenant_id、course_id、class_id、teacher_id、content_hash、content_structure_summary（比如页数、组件类型计数）、device_bucket、accessibility_bucket、policy_version_requested、timestamp。会话桶比如停留时长桶、频繁回退桶，尽量不落库，只用于当次生成/回退判断，最多写成“触发回退原因=ENGAGEMENT_BUCKET_HIGH”这种原因码进审计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有可能。那content_hash改成“课件版本ID+随机salt”的派生键，只在本租户内可比对；跨租户不共享salt，避免全局碰撞关联。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "结论我按5块说：  \n1）关键数据对象：TeachingAssignment；OrchestrationRequest（仅桶化摘要）；Plan；ExplainView（去个人化）；Package+PackageManifest；StrategySnapshot（短留存受控）；AuditLog；AggregatedMetrics。  \n2）两条数据流：教师预览=同步GeneratePlan+轻量渲染，产出Plan/ExplainView；课堂投放=提前异步GeneratePackage，课堂端只读Package并做选择/回退，上报仅成功/失败/原因码，不做现场重渲染。  \n3）权限模型：RBAC主干（Teacher/Researcher/SchoolAdmin/SystemOperator/ServiceAccount），ABAC门闩（tenant硬隔离 + 课程/班级域约束）。Teacher不能读原始请求体与StrategySnapshot；SystemOperator只看脱敏审计与队列态。  \n4）解释分层：教师端只看指标分项与动作依据（引用课件特征、设备桶、策略版本、原因码）；教研看聚合指标与抽样脱敏Plan；任何个体状态不出端或不落库。  \n5）留存与审计：Request摘要与StrategySnapshot短留存；AuditLog较长留存但脱敏，必须记录访问者/资源/权限判定、策略/模板版本、降级与回退原因码、回退是否成功。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在感官负担自适应课件编排系统工程开发落地背景下，用户与导师围绕课件解析与素材抽取的省钱实现边界、最小IR字段、降级与可测口径持续沟通（7轮），其中在插件接口/队列幂等/错误码与合规降级设计上与后端工程师沟通（3轮），并收敛出JSON最小IR、幂等键、枚举化错误码与CI测试清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主路径走“结构化优先”：PPTX直接读XML拿到文本框、图片、形状、动画时间线；PDF能拿到文本流就拿，拿不到再走轻量OCR兜底；H5尽量解析DOM和CSS。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "抽取结果统一成一个中间表示IR。我甚至想把IR做成Protobuf，后面各服务都能复用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小字段我先想：page/slide_id、bbox、type(text/image/shape/audio/video/interaction)、content_ref、style(字号、颜色、对比度)、timing(出现/消失)、z_index、alt_text。失败降级：返回“抽取为空 + 失败原因码”，并且只留Request摘要，具体内容不进日志。验证：用一套golden课件做快照比对，输出的元素数、bbox分布、字体统计要对得上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 我这边要做课件解析与素材抽取的落地。预算紧，主路径不能依赖大模型。你给个建议：插件式解析接口怎么设计才轻量？任务队列怎么配幂等？错误码/降级怎么枚举，方便后面审计但不泄露原始内容？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "插件接口的`CanParse`评分挺实用，我本来想统一都走一个Parser入口。幂等键里加parser_version我认可，避免升级导致artifact混用。错误码我会照这个结构走。截图缩略图这块我担心合规，可能要默认关闭。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问一个偏实现的：PDF抽取“疑似文本块bbox但无内容”，你觉得怎么做最省？我怕搞版面分析又复杂。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白。我回去和导师把IR字段再砍一下，避免我搞成“万能中间层”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了后端工程师，拿到一套更轻量的落地建议。我打算把第一版IR用JSON，不上Protobuf；插件接口用`CanParse()->score`+`Parse()->IR+ParseReport`。幂等键用`tenant_id+course_id+content_hash+parser_version`，重复任务直接复用`artifact_id`。错误码按阶段枚举：不支持、解密失败、超时、损坏、抽取为空、兜底OCR被禁用/超预算。PDF省钱路线：能拿文本坐标就聚类成bbox，拿不到就只输出page_size和图片数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把style缩到负担相关：font_size、contrast_bucket、motion_flag（来自动画/视频）、interaction_flag、media_type。内容本身用content_ref指向对象存储，不在IR里放正文。text元素只放length和language_guess，不放文本字符串"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同意。bg_color_bucket我之前没加，但对对比度计算有用。AssetRef里的content_hash我想保留，后续去重省存储。就是担心hash会不会跨租户关联。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证口径我想做两层：解析单测 + 抽取统计回归。单测用一组小课件夹在仓库里（或用生成器），跑完断言：page_count一致、元素type计数在阈值内、bbox都在页面范围、duration_ms不超阈、error_code为0或白名单warning。统计回归：对同一份课件不同parser_version，比较关键bucket分布漂移不要超过阈值。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "收到。我差点又把“回归”做成大工程。那原因码和降级也要进测试：比如遇到加密PDF必须返回`E_DECRYPT_FAIL`，不能卡死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把warnings限定为枚举，比如`W_FONT_MISSING`、`W_IMAGE_DECODE_PARTIAL`、`W_TEXT_LAYER_EMPTY`，不带自由文本。异常堆栈只进内部调试通道，且SystemOperator也只能看脱敏审计和队列态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）IR用JSON，字段按你那6类最小集；text不落原文，只留length/language bucket。  \n2）解析器插件接口：`CanParse->score`、`Parse->IR+ParseReport`，支持PPTX/PDF/H5各自实现。  \n3）幂等：`tenant_id+course_id+content_hash(租户salt派生)+parser_version`，复用artifact避免重复算和重复存。  \n4）错误码固定枚举（E_开头）+ warning枚举（W_开头），降级时输出最少结构信息并标记fallback_used。  \n5）CI测试只做结构完整性、IR_summary_hash确定性、性能上限、特定失败用例的原因码断言。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发的负担评分引擎实现背景下，用户与导师围绕IR输入输出契约、默认规则算法、确定性/异常降级、缓存复用与验收点持续沟通（10轮），其中在阈值区间与解释口径部分与教育场景研究员沟通（1轮），在规则引擎形态、配置hash与测试口径部分与算法工程师沟通（1轮），并收敛出最小可交付接口/规则清单、枚举与合规输出约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把它做成可插拔的评分管线：先做特征抽取层，再接规则+模型融合层，最后出分数和解释。我甚至想加个策略DSL，让后续编排规则能热更新。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入就用上一步的IR：slides数组、每页元素列表（text/image/audio/video/interaction），再加解析器输出的warning和fallback_used。输出我想是每页page_score和course_score，还要有按模态拆分：visual/auditory/interaction三个子分，另带top_k原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "默认先全规则。比如视觉负担：文本密度=字符数/有效面积，图片数量、颜色对比度异常、动画数量；听觉负担：音频时长占比、并行音轨；交互负担：每分钟交互次数、强制输入。最后加权求和再映射0-100。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 阈值和权重你们有没有可执行的建议？我们要把感官负担分成视觉/听觉/交互子分，并能解释每项扣分原因。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这些阈值挺硬的。我担心不同年级差异很大，要不要把年级、学科都做成配置维度？再加个贝叶斯校准，按历史课堂数据自适应更新权重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "所有计算只用IR和明确配置；配置有score_config_version；浮点统一用decimal或固定小数位；排序top_k原因按impact desc，再按reason_code稳定排序。并且输出一个score_trace_hash，把IR_summary_hash+config_hash+engine_version拼起来算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把异常分三类：输入不合法、特征缺失、计算异常。输入不合法直接E_SCORE_INPUT_INVALID；特征缺失给W_SCORE_FEATURE_MISSING然后跳过该特征并标记degraded=true；计算异常比如除零给E_SCORE_COMPUTE_ERROR但仍输出course_score=null、page_score数组保留长度和page_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以在评分服务里加个result_cache表，key用tenant_id+course_id+IR_summary_hash+engine_version+config_hash。命中就直接返回，并把cache_hit=true写进输出。存储就存score_json和trace_hash，避免存全量中间特征。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那解释结构我定成这样：\n- reason_code（如 R_VIS_TEXT_DENSITY_HIGH）\n- modality（visual/auditory/interaction）\n- metric_key（text_density）\n- current_value、threshold、direction（gt/lt）\n- impact（对分数的扣分）\n每页top5，课程汇总再聚合count和max_impact。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "扣分点数，满分100，从0到100越高越重载，impact为正数加到负担分上。每个子分先0-100再加权到总分。课程分用页面分的加权平均，权重用页面时长，没有就按1。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 规则评分引擎你建议怎么实现？我们需要确定性、可配置阈值/权重、可解释输出和可复现测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解成：把规则当成插件函数集，按顺序跑；cfg先规范化再hash。权重默认给一版，校准先离线出cfg版本。金样本测试要断言causes排序和集合。性能目标是100页<200ms。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小集合我定：\n1）接口：`POST /score` 输入IR_summary+pages，输出course_score、page_scores、causes_top5、warnings、engine_version、config_hash、trace_hash、cache_hit、degraded。\n2）规则先做10条：文本密度、文本层级复杂度、注意力转移点、图片数量、低对比度标记（如果IR有）、有声占比、双音轨、同屏长文+有声、交互频率、不可跳过输入。\n3）降级：缺duration统一1并W_；缺有效面积E_SCORE_AREA_ZERO但仍输出结构；缺音轨信息W_SCORE_AUDIO_META_MISSING。\n4）确定性：cfg规范化json再hash；规则固定顺序；top_k稳定排序。\n5）测试：金样本3套（轻/中/重），失败用例断言E_/W_，性能测试跑100页合成IR。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规这点我差点忽略。causes里只放数值和计数，不放文本内容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那枚举我补：\n- E_SCORE_INPUT_INVALID：IR缺pages或page_id重复\n- E_SCORE_AREA_ZERO：有效面积为0导致密度不可算\n- E_SCORE_NUMERIC_OVERFLOW：出现NaN/Inf\n- W_SCORE_DURATION_MISSING：缺时长统一1\n- W_SCORE_AUDIO_META_MISSING：缺音轨/有声段信息，听觉规则跳过\n- W_SCORE_CONTRAST_UNKNOWN：对比度特征缺失，相关规则跳过\n- W_SCORE_FALLBACK_UPSTREAM：上游fallback_used=true，提示分数可信度下降但仍算"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收点我按可测的来：\n- 同一份 `tenant_id+course_id+IR_summary_hash+engine_version+config_hash` 重复请求，trace_hash不变且cache_hit=true。\n- 金样本：总分、子分、前5个cause的reason_code顺序完全一致。\n- 任何缺字段不导致500，最多E_/W_并返回最少结构（page_id列表、course_score可能为null）。\n- 输出不包含原文/URL等内容字段。\n- 性能：本地单核100页IR评分<200ms（规则10条）。"
+              }
+            ]
+          },
+          {
+            "microScene": "在负担评分引擎已定、需最小化编排规则与生成管线并定死规则顺序和cfg字段的工程开发背景下，用户与导师围绕固定管线、规则依赖与patch/cfg最小schema持续沟通（12轮），其中在无障碍必做项收敛与字段命名上与无障碍设计师沟通（2轮），并最终确定7条规则顺序、cfg顶层结构与patch不含原文的合规输出约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把编排做成两层：先算每页/整课的score，再走一套规则把score映射到“改哪里、改多少”。规则顺序我倾向用插件链，可动态插拔，后面扩展快。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那就硬编码一条管线：解析课件->拿评分引擎结果->按规则顺序跑->生成编排patch。cfg只控制阈值和开关。输出就给patch和少量摘要字段，避免带内容。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先给个草案顺序：  \n1) 输入校验与缺省：score缺就跳过，patch空  \n2) 无障碍强制规则（字幕/替代文本/对比度/字号）  \n3) 视觉密度规则（图文密度、行距、留白）  \n4) 节奏规则（每页信息量、分页/拆分）  \n5) 交互频率规则（题目/点击/动效降频）  \n6) 提示方式规则（声音/震动/闪烁降级）  \n7) 设备约束规则（低端机降级、离线资源）  \n8) 合并与去重（patch冲突解决）"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@无障碍设计师 无障碍这块我需要把规则写死、cfg字段尽量少。你给我“必做项”3-5条，最好每条都能变成patch，不牵扯内容存储；还有建议的cfg字段名和默认值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字幕/替代文本只打标不生成，这样确实省事。但会不会影响“自动编排”的完整性？我担心老师看了觉得系统没做事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "了解。我回去跟导师把无障碍收敛成4条+1个可选阻断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳4条必做：对比度、字号行距、减少动效/禁闪烁、替代文本/字幕缺失标记。cfg我尽量压成5个：  \n- `a11y_min_contrast`  \n- `a11y_min_font_px`  \n- `a11y_min_line_height`  \n- `a11y_reduce_motion`  \n- `a11y_require_text_alternatives`  \n阻断发布我先不加cfg，先只warning，免得引入流程分歧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想做成：`version` + `rule_order` + 每条规则一个小节；再加`limits`控制资源，比如最大拆分页数。还有`device_profile`做低端机。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，那cfg顶层就压成：  \n- `v`  \n- `thresholds`（放数值）  \n- `toggles`（放bool）  \n- `limits`（放上限）  \n- `debug`（少量开关）"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终规则顺序我定成7条，合并规则做最后一步内置：  \nR1 `sanitize_input`：如果缺page_score列表，返回空patch；依赖：无；产出：空/最小结构  \nR2 `a11y_enforce`：对比度/字号行距/动效；依赖：page_score里的`visual_load`,`motion_load` + page_meta里现有style统计；patch：`style.*`,`motion.*`  \nR3 `visual_density`：压图文密度、增加留白；依赖：`visual_load`; patch：`layout.adjust_density`  \nR4 `pace_split`：按信息量拆页/加停顿页；依赖：`info_rate`,`course_score`; patch：`page.split`,`page.insert_break`  \nR5 `interaction_throttle`：减少点击题/动效触发；依赖：`interaction_load`; patch：`interaction.reduce`  \nR6 `cue_modality`：提示从声/闪改为文/静态；依赖：`audio_load`,`motion_load`; patch：`cue.switch_to_text`,`motion.reduce`  \nR7 `limit_and_merge`：冲突消解、去重、预算限制；依赖：patch列表 + `limits`; patch：裁剪后的patch"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那R2我改成只看score：如果`motion_load`高就`motion.reduce=true`；对比度/字号行距这种如果没style统计，就只能给建议型patch，不保证命中。我怕变成空操作。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想在patch里加`mode`枚举：`apply|recommend`，再加`path`和`value`。这样统一。输出结构也简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "`limits`里我只放两个：`max_new_pages`、`max_patches_per_page`。超了就按规则优先级裁剪：先保R2/R6这种安全与无障碍，再保R4节奏，再保视觉/交互。裁剪算法就稳定排序+截断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "cfg：  \n- `v: 1`  \n- `thresholds`:  \n  - `t_visual: 0.7`  \n  - `t_motion: 0.6`  \n  - `t_interaction: 0.65`  \n  - `t_info_rate: 0.7`  \n  - `a11y_min_contrast: 4.5`（虽然暂时recommend）  \n  - `a11y_min_font_px: 18`（recommend）  \n  - `a11y_min_line_height: 1.4`（recommend）  \n- `toggles`:  \n  - `enable_a11y: true`  \n  - `a11y_reduce_motion: true`  \n  - `a11y_require_text_alternatives: true`  \n  - `enable_split: true`  \n  - `enable_interaction_throttle: true`  \n- `limits`:  \n  - `max_new_pages: 10`  \n  - `max_patches_per_page: 6`  \n- `debug`:  \n  - `emit_rule_trace: false`"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "patch schema我定为：`{page_id, op, path, value, mode, reason_codes}`。`reason_codes`只放类似`W_A11Y_MOTION_HIGH`这种，不放任何内容片段。整体返回：`course_id?`不需要，评分那边已经不强依赖；我这里就返回`page_patches[]`和`course_actions[]`（比如整体节奏建议），再加`warnings[]`。"
+              }
+            ]
+          },
+          {
+            "microScene": "在多端渲染与课堂同步联调背景下，用户与导师围绕多端一致口径、同步范围收敛、验收可测指标与constraints产出持续沟通（8轮），其中在课堂同步最小字段、延迟口径与弱网段级降级上与客户端工程师沟通（3轮），并最终确定快照同步+render_constraints断言联调落地方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想把编排产物做成一套跨端统一的“渲染中间表示”，类似scene graph，再配一个同步协议，把每次patch都变成可重放的事件流。这样端上渲染只是解释器，逻辑就不会漂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "一致口径我想分三层：页面结构一致、组件属性一致、时序一致。同步我希望是“播放头”同步，包括当前page_id、分段索引、交互可用性状态。patch我想支持实时下发，让课堂上根据注意力波动动态调整。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端工程师 课堂同步这块，最小同步状态你建议有哪些字段？延迟和丢包到什么程度算可接受？弱网时你们通常怎么降级，才能保证学生端不乱跳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "你说的segment_id跟我们pace_split正好对齐。interaction_gate我也能从interaction_throttle直接落成端上状态。那渲染一致性呢？比如visual_density在Web和端上字体/排版会不一致。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果只做状态快照，我担心后端重放不了导致难查问题；我更想加上patch事件日志……"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我从客户端那边拿到的建议偏“最小同步”。同步状态用快照，不做事件流：session_id、leader_id、page_id、segment_id、t_play_ms、interaction_gate、version单调递增。延迟验收：同屏跟随P95≤300ms；弱网允许到1s但避免回跳；客户端只接受更大version。弱网降级到段级同步，只在segment边界对齐，同时把交互锁住防分叉。渲染一致性不追求像素级，改成“密度档位一致”，用相对约束实现。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想把visual_density的计算做成一套跨端共享的WASM模块，三端都用同一份计算器，这样档位肯定一致。然后渲染端只消费“档位”输出。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "也行，但我担心端上实现的约束会漂，最后还是不一致。要不至少把约束校验做成一份共享的JSON Schema + 断言库？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "render_constraints字段我先草拟：max_text_lines、max_images、max_interactions、min_font_size_sp、min_contrast_ratio、cue_modality（比如VISUAL/AUDIO/BOTH），还有segment_count。够吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "同步消息里要不要带reason_codes？我想让学生端能解释“为什么交互被锁”。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "隐私这块我差点忽略了。同步payload里我本来想塞注意力状态的分数，看来不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那联调用例我建议按三条跑：1）普通课件无触发，三端渲染一致且同步顺滑；2）触发visual_density裁剪，验证constraints被满足、patch数量不超max_patches_per_page；3）弱网模拟下段级同步不回跳、交互锁定不分叉。这样基本覆盖。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我最后还是想加一个“版本回放”用于debug，但只在本地：缓存最近20个同步快照，配个导出接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "收到。我把WASM那条先压住，先按constraints+快照同步把联调跑通。之后真出现漂移，再看要不要做共享校验库。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发收尾的端到端测试与压测背景下，用户与导师围绕E2E关键路径断言、trace贯通、最小事件schema与验收口径持续沟通（8轮），其中在用例分层/断言点/压测拆分与trace聚合方案上与测试工程师沟通（3轮），并形成E2E分层与强弱规则断言、双路径压测及日志合规最小化的落地计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是把E2E做成“全链路事件溯源”，从课件编排到三端渲染都串同一条trace。甚至可以把快照和constraints放进统一的回放格式，压测就回放流量。缺点是工程量会炸，但一次把框架搭好后面省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须断言的我先放三类：  \n1）同步：version单调递增，客户端只接更大；弱网下segment边界对齐不回跳；interaction_gate一致锁定。  \n2）渲染口径：后端render_constraints三端断言通过率，比如每页规则命中与否、超限项数量。  \n3）时延：正常网P95≤300ms，弱网到1s但不回跳。  \n像素级一致先不做。至于trace，我怕排障没抓手。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 E2E这块你们打算怎么组织？我想做“场景驱动+追踪ID贯通”，但不想搞成巨型回放框架。用例结构、断言点、压测怎么打比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "卡顿事件定义我这边可能要再跟客户端对齐。你说constraints通过率≥99%，这个阈值怎么定？我担心规则有些端差异先天就会掉点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测模型呢？我们是“课堂session”比较重，还是“编排API”更重？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解了。trace_id就别上OpenTelemetry那套全家桶，先做case_id+trace_id的日志聚合。回到导师那边我会主张“强规则/弱规则”两套阈值，不然容易扯皮。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三点：  \n1）E2E用例按“场景模板”：输入（课件包+设备画像+网络脚本）/执行（编排->分发->三端加入session）/断言。  \n2）断言分强弱：强规则100%（无障碍、interaction_gate、可读性底线），弱规则看通过率目标（先从99%起但用黄金集定基线）。同步断言坚持version单调、segment边界对齐不回跳。  \n3）压测拆两条：编排API（吞吐、幂等、P95）和播放链路（同步延迟分布、回跳率、gate一致率、卡顿事件数）。trace用case_id+trace_id贯通，不引入复杂回放框架。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小事件我先给一版：  \n- orchestrate_done：trace_id、courseware_id、page_id、segment_id、render_constraints_hash、version  \n- snapshot_emit（服务端）：trace_id、session_id、page_id、segment_id、t_play_ms、interaction_gate、version、ts_ms  \n- snapshot_apply（客户端）：trace_id、client_id、page_id、segment_id、t_play_ms、interaction_gate、version、apply_ts_ms  \n- segment_align：trace_id、client_id、from_segment_id、to_segment_id、align_reason（boundary/force_lock）、ts_ms  \n- rebuffer（卡顿）：trace_id、client_id、start_ts_ms、end_ts_ms、at_t_play_ms  \n- gate_change：trace_id、session_id、interaction_gate、version、ts_ms  \n字段我尽量复用上次最小快照那套，避免重复口径。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我容易忽略。client_id我用运行时随机ID，不落真实账号。留存我不太确定要多久，先给个7天？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能落。卡点主要是“卡顿事件”的统一定义和三端埋点一致性，我得拉客户端把rebuffer口径对齐；还有黄金集别膨胀，我会控制在10份课件×3画像×2网络先跑基线。trace_id这套我先按HTTP头透传+日志聚合做，不上重型追踪系统。强/弱规则我支持，能减少争论。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在感官负担自适应课件编排系统进入运行评估背景下，用户与导师围绕灰度对象收敛、放量节奏及回滚/告警指标拆分持续沟通（7轮），其中在发布模板、RTO与阈值防抖上与运维与SRE沟通（3轮）、在坏事事件分级与最小样本量口径上与数据工程师沟通（1轮）、在灰度观测数据最小化与留存审计上与合规与隐私官沟通（1轮），并形成可执行的灰度发布与回滚预案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "感官负担自适应课件编排系统现在要进运行评估了，我想先把灰度发布和回滚预案搞定。我倾向做一套“多臂老虎机灰度+策略在线学习”，但怕把上线复杂度搞爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你帮我压一下范围：这迭代灰度到底要做到什么粒度？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "灰度对象我想按“课件编排策略版本+播放器端版本+画像”三维切。节奏从1%到5%到20%到50%到100%。回滚信号我想做一个综合评分：卡顿事件数、gate一致率、编排API错误率、还有学习完成率跌幅。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "服务端编排API版本能最稳，客户端不发版也能切。策略版本我也能在服务端切，但播放端有些渲染差异会影响“卡顿事件”口径。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "硬回滚我先拍脑袋：\n1）编排API 5xx错误率>0.5%持续5分钟；\n2）P95延迟>800ms持续10分钟；\n3）播放链路同步延迟P95>300ms；\n4）卡顿事件数比对照组高30%；\n5）gate一致率<99.5%。\n但我不确定阈值是不是太激进。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维与SRE 灰度发布与回滚预案怎么定才不翻车？我现在想按服务端编排API版本做灰度，想要你给：发布步骤模板、回滚RTO、以及指标阈值怎么防抖（别一抖就回滚）。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "RTO 5分钟能做到，我担心的是“相对差+置信区间”会不会太学术，现场算不出来。我更想搞一个实时流式计算，把每个case_id做因果归因，自动判断是策略还是网络导致卡顿。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白，你是说把“复杂归因”放到复盘，不放到回滚判定里。那我回滚就用硬指标+连续窗口。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "还有个点：我们埋点有坏事事件 rollback_detected、constraint_violation，我想把它们也当触发条件，但担心误伤。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问了SRE。他们给的最小可执行模板是：灰度主轴用服务端编排API版本；节奏 1%(15min)→5%(30min)→20%(60min)→50%(半天)→100%(次日课前)，每步都有检查点；回滚RTO目标5分钟内全量切回旧版本。阈值防抖用“连续超阈值+最小样本量”，卡顿这种波动大就用会话级卡顿率的实验/对照差，算不动置信区间就用连续两窗口。constraint_violation做强告警，只有影响不可播放时才自动回滚，rollback_detected不作为触发避免自激。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "自动回滚我先定4条，告警观察4条：\n自动回滚：\nA1 编排API 5xx错误率 >0.5%，5分钟窗口连续2次，且请求数>2k：切回旧版本；\nA2 编排API P95 >800ms，10分钟窗口连续2次：切回旧版本；\nA3 gate一致率 <99.5%，5分钟窗口连续2次，且会话数>500：切回旧版本；\nA4 constraint_violation（不可播放级别）每分钟>20且连续5分钟：切回旧版本。\n告警观察：\nB1 卡顿会话率实验组-对照组 >+20%，10分钟窗口连续2次；\nB2 同步延迟P95 >300ms，10分钟窗口；\nB3 回跳率实验组-对照组 >+10%，30分钟窗口；\nB4 幂等冲突率>0.1%，30分钟窗口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 constraint_violation 这种坏事事件，线上怎么区分“不可播放级别”和一般级别才靠谱？另外像gate一致率、卡顿会话率这些最小样本量怎么从埋点口径上保证，避免窗口里样本不足误判？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "P0/P1/P2这个分级我能接。会话做分母也对，我之前卡顿事件数容易被某些端重复上报放大。1%阶段样本不足我得调整：播放链路类只告警，硬回滚只看服务端API和P0违规。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据工程师建议constraint_violation用reason_code映射成P0/P1/P2：P0是素材缺失/渲染失败/结果为空这类阻断；P1是严重退化但可播；P2轻微偏离。灰度期间只让P0触发自动回滚。样本量这块建议所有播放链路用session_id做分母，并且1%阶段可能凑不够会话数，所以播放指标先告警不硬回滚；分桶用user_id或device_id哈希固定，避免随机导致噪声。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 灰度发布期间我们想更细地观测“感官负担”相关体验指标，怕触到未成年人数据红线。灰度阶段允许额外采集哪些项？留存周期怎么定？回滚发生时数据要不要冻结做审计？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我容易走偏，我本来想把注意力状态也做分层灰度，看效果更快。那就不做。回滚时冻结trace_id范围日志快照，7-14天留存，过期清掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 合规给的边界是：灰度阶段不新增注意力/面部/行为推断类采集，只用发布安全直接相关的技术指标；新增字段没有授权链路就不能上；留存7-14天，回滚/事故时可按trace_id/case_id冻结相关范围做审计但要到期清理；灰度分桶不能用敏感属性做键。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我来压成6条：\n1）灰度轴：以“服务端编排API版本”为唯一灰度对象；策略版本只作为同版本内开关，不参与分层。\n2）节奏：1%(15min)→5%(30min)→20%(60min)→50%(半天)→100%(次日课前)，每一步有检查点，不通过不放量。\n3）自动回滚（仅硬信号）：API 5xx>0.5%（5min×2且请求>2k）；API P95>800ms（10min×2）；constraint_violation= P0（阻断级）持续超阈；回滚RTO目标5分钟全量切回旧版本。播放链路指标在低比例阶段不做硬回滚。\n4）告警观察：gate一致率、同步延迟P95、卡顿会话率、回跳率、幂等冲突率，统一按session_id做分母，并要求最小会话数门槛，不够只展示不判定。\n5）回滚动作：先停止放量→切流回旧版本→冻结新版本配置→保留相关case_id/trace_id时间窗用于复盘。\n6）合规：灰度不新增注意力/行为推断采集；分桶不使用敏感属性；观测数据短留存7-14天，冻结也需到期清理。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段建设体验指标监控看板背景下，用户与导师围绕看板分层、首屏指标收敛、动态基线阈值表达与数据不足呈现持续沟通（8轮），其中在指标口径/窗口去重/新旧桶差分与钻取粒度上与数据工程师沟通（1轮），在无障碍切片展示与session/trace权限审计边界上与合规与隐私官沟通（1轮），并形成首屏8项指标卡统一模板与P0持续超阈规则文案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成三层：全局健康度、策略维度、用户分群。全局放SLA+体验核心指标的红黄绿；策略维度按编排动作拆，比如图文密度、交互频率、节奏；分群按设备档位、无障碍开关、网络类型。然后每个卡片都能钻到session_id级别看trace。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用户感知我放：卡顿会话率、首屏渲染时延P95、交互响应P95、音视频不同步率（如果有）、回跳率。系统链路：同步延迟P95、gate一致率、幂等冲突率、策略命中率、失败重试率。业务结果：课件完成率、关键知识点停留时长、课堂投放中断率、教师手动改编排比例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值我想用动态基线：对照期同小时段的P95做基线，设一个倍数，比如1.3x；或者用分位点差异，比如当前P95超过对照期P95的+Δ。报警要满足最小会话数门槛，不够只展示不判定。P0持续超阈我写“连续N个窗口超过基线×K”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照期用同一内容包、同一学校、同一时段的“旧版本桶”做实时对照，而不是用历史天。也就是看差分：新桶指标-旧桶指标，报警看差分是否超过阈值。这样能抵消外部波动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 看板这块我需要把口径定死：卡顿会话率/回跳率/同步延迟P95/gate一致率/幂等冲突率这些，分母统一session_id没问题。你帮我确认下：窗口怎么切（5min/15min）、去重怎么算、以及新旧桶差分怎么做才不会被采样和缺数带偏？另外看板钻取层最多到什么粒度合适？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "差分里P95用比值而不是差值，这点我之前没想清。有效会话的定义也能避免脏分母。采样率下限放在告警里挺关键，不然会误报。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一屏每张卡我建议固定结构：  \n- 指标：例如“卡顿会话率（session级）”  \n- 口径：分母=有效会话；分子=会话内出现≥1次jank/长帧事件；同会话去重  \n- 阈值：r=新桶/旧桶的相对变化率，超过“对照期分位点×K”且持续N个5min窗口；两桶都≥最小会话数门槛；采样率≥下限  \n- 切片：设备档位、网络类型、无障碍开关、策略版本  \n- 钻取：到lesson_id/学校维度看趋势；session_id只跳转排障页并受权限控制"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "统一写：  \n- 对照基线=旧版本桶同窗口的指标值（比例类直接用值；分位数类用P95_old）  \n- 触发条件=当前指标相对基线的倍率 r 超过“配置的倍数阈值K”，并满足持续窗口N+最小会话数门槛+采样率下限。  \n如果没有旧桶（比如全量后），才回退到“历史对照期同小时段分位数”做基线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 体验监控看板要做分群切片：设备档位、网络类型、无障碍开关、策略版本、学校/lesson维度。我们不新增采集，沿用灰度阶段的限制。你帮我确认：  \n1）无障碍相关字段在看板上展示到什么粒度安全？  \n2）session级钻取/trace_id跳转需要哪些权限和审计？  \n3）“注意力状态”这类字段是否一律不准进看板，即便是聚合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把“注意力状态”从第一屏和告警里移除，只保留设备/网络/无障碍这种“非推断、用户可控”的切片。session钻取做成排障入口，权限只给SRE和后端，且每次查询落审计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第一屏我收敛到8个，面向值班/SRE+产品值守：  \n1）gate一致率（新旧桶差分/倍率）  \n2）同步延迟P95（倍率）  \n3）卡顿会话率（倍率）  \n4）回跳率（倍率）  \n5）幂等冲突率（倍率）  \n6）策略命中率（绝对值+差分）  \n7）渲染失败会话率（倍率）  \n8）课堂投放中断率（绝对值+差分，按学校聚合）  \n分析页给教研/体验：按策略版本、设备档位、无障碍开关做分布；再给一个“影响面”视图：受影响学校数、受影响课件数、受影响会话数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "卡片上固定展示三件数：new桶有效会话数、old桶有效会话数、采样率（如果适用）。当任一低于门槛，卡片状态显示“数据不足”，趋势线照画但告警灯不亮，同时hover里写清楚“不参与判定的原因：会话数不足/采样率不足/对照桶缺失”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "P0规则文案我写成：  \n“当指标在5min滚动窗口内，满足两桶有效会话数均≥最小门槛且采样率≥下限时，若 r=metric_new/metric_old ≥K 并连续持续N个窗口，则触发P0；若对照桶缺失，则以历史对照期同小时段基线B替代，判断条件改为 metric_current/B ≥K。”"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估需复盘“P0触发但主观反馈不差”的异常样本背景下，用户与导师围绕样本分层取样、证据链拼接与归因标签闭环持续沟通（7轮），其中在数据链路排查清单与最小看板信号部分与数据工程师沟通（4轮），在“指标变差但学习不受损”判别与替代证据部分与教育场景研究员沟通（2轮），在复盘可用字段与未成年人数据边界部分与合规与隐私官沟通（2轮），并形成7个可执行归因标签与5步复盘流程卡。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直觉上三类：一是新老桶用户结构不一样，设备或无障碍开关比例变了；二是埋点或聚合口径在某些课件类型上不稳定，像互动题多的课件；三是策略本身在某些场景对体验没伤害，但指标会被拉高，比如提示频率变低导致“交互等待”这类指标变差。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先把P0命中的会话拉出来，按课件类型、设备档位、网络、无障碍标记做分层，再看同层内新旧桶差异。然后用“学生侧客观行为”做反证：完成率、退出点分布、回看次数。如果指标涨了但这些没变，我倾向判为“指标敏感但体验不降”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@数据工程师 异常样本复盘里，P0触发但主观反馈不差，这种你会优先怀疑哪些数据层面的原因？我想要可以用证据排查的清单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果我想给每类都配一个“最小排查SQL/看板信号”，你觉得优先级怎么排？我担心做得太重，上线评估节奏被拖慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“无障碍替代渲染走另一套事件”这个，我之前没想到。我是不是要把无障碍开关作为分层的第一优先级？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算把“数据问题”拆成三种可证据化标签：\n- 采集缺口：关键事件缺失率在某端版本/无障碍路径显著升高；\n- 重复/补发：事件ID重复率或重试码比例异常；\n- 回填扰动：初算与回填差异大，窗口内分母偏小。\n再加一类“分布异常”：新旧桶端版本、设备档位、无障碍开关比例差异过大，先不谈策略对错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@教育场景研究员 在感官负担自适应课件里，如果P0指标触发但课堂主观反馈不差，你会怎么判断这是不是“指标对合理变化过敏”？哪些教学场景里，指标变差反而可能是好事？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在在线侧随堂题正确率有，但覆盖不全。只用完成率+退出点会不会太弱？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想把体系做成两层：一级“异常类型”，二级“可执行归因”。一级先四类：数据链路、分布漂移、指标过敏、真实体验回退。二级每类给2-3个子项。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我收敛到7个：\n1）埋点缺失（owner：数据工程师/客户端）：关键事件缺失率在特定端版本或无障碍路径升高；动作是拉端版本diff和回归测试。\n2）事件重复/补发（owner：数据工程师/后端）：同session重复事件ID或重试码升高；动作是检查幂等与重试策略。\n3）窗口回填扰动（owner：数据工程师）：初算与回填偏移超阈；动作是延迟确认、调整告警延时或改用稳定窗口。\n4）分桶结构漂移（owner：产品经理+数据工程师）：端版本/设备档位/无障碍开关分布差异显著；动作是重新加权或限制触发条件。\n5）指标对教学节奏过敏（owner：教育场景研究员）：完成率稳定、退出点无集中，且互动密度下降符合策略预期；动作是给该指标加“场景豁免”或改成复合判定。\n6）特定课件类型不适配（owner：产品经理+算法工程师）：异常集中在互动题/视频长课等类型；动作是策略分场景参数回退或灰度。\n7）真实体验回退（owner：算法工程师+客户端）：完成率下降/退出点集中/无操作停留上升，且排除1-4；动作是回滚策略或降级到保守编排。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@合规与隐私官 异常样本复盘要做分层：设备档位、端版本、无障碍开关、互动密度、退出点这些我觉得都行。如果想进一步用注意力状态或更细的行为序列来归因，合规上边界在哪？哪些做法会踩未成年人数据的红线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我把“注意力状态”先从复盘证据里拿掉，只用互动密度、停留、退出点这些代理信号，会不会影响我们解释“指标过敏”？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流程卡我这样定：\nStep1 取样：取P0命中窗口会话，先做最小有效会话门槛过滤，并按端版本/设备档位/无障碍开关分层。\nStep2 快速排数：先查三项健康度——关键事件缺失、重复/补发、初算vs回填偏移，对应标签1-3。\nStep3 看分布：新旧桶分层分布差异，命中就打标签4，并暂停“策略归因”。\nStep4 判体验：用完成率、退出点集中度、无操作停留、互动密度做结果锚点与过程信号，区分标签5/6/7。\nStep5 出结论：每个样本必须落一个标签+证据阈值+owner+下一步动作；涉及推断数据一律不拉个人序列，必要时走合规专项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "三条例句：\n- “当关键事件缺失率在异常窗口相对前一日同小时段提升≥Δ，且集中在单一端版本top1时，判为埋点缺失。”\n- “当初算与回填后的指标偏移达到偏移比例≥P，且偏移主要来自分母变化时，判为窗口回填扰动，结论延迟确认。”\n- “当退出点集中度相对对照桶提升≥Γ，且无操作停留占比同步提升≥Λ，才进入真实体验回退判断；否则优先考虑指标过敏或场景不适配。”"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段制定教师反馈闭环最小可运行流程背景下，用户与导师围绕反馈分层入队、判定门槛、必选/按需证据、角色分工与SLA回告持续沟通（10轮），其中在主观反馈落地为可检验假设与最小验证动作部分与教育场景研究员沟通（4轮），在闭环可用数据范围、告知留痕与权限边界部分与合规与隐私官沟通（4轮），并确认一版三类入口+自动补证+分流动作+合规约束的闭环流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "判和回。老师的反馈经常是“这页太花”“学生分心”，很主观。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向做一个“反馈-证据对齐”机制：每条反馈都要求绑定同一节课的三类证据之一：退出点、停留异常、或无障碍替代触发。没有证据就先放观察池。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 反馈闭环里，老师一句“太花、节奏快”这类主观话，怎么拆成可检验假设？我们想让它能回到编排策略改动上，最小验证动作怎么设计？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小验证只盯2个主指标这点我能接受。那“反馈-证据对齐”是不是可以做成系统自动补证：老师只选问题类型，系统从同一节课里自动关联退出点、停留、跳页频率这些？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回去把分类改成“体验/目标冲突/无障碍”三类，并给默认动作。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 反馈闭环里，我们想从同一节课自动关联一些证据（退出点、无操作停留、页切换、策略覆盖次数等），用于判断是体验回退还是数据过敏。哪些能用、需要怎么告知和留痕？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们之前有想把语音转写当隐性反馈，这块先放弃，避免踩敏感处理。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“自动补证”只用聚合指标+教师端覆盖次数应该合规风险低一些？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我给一版简化流程，尽量不做复杂路由引擎：\n\n1）入口：老师在课后弹窗选反馈类型（体验/目标冲突/无障碍），补一句自由文本，可选“发生在哪一页”。不强制填证据。  \n2）自动补证：系统按课堂会话ID拉取聚合指标：退出点集中度、无操作停留占比、页切换/暂停/回退、教师端策略覆盖次数；再带上端版本和策略版本。  \n3）初判分流：  \n- 若满足上个微场景的“埋点缺失/回填扰动”标签条件，直接进数据问题队列，结论先标“待确认”，不触发策略回滚。  \n- 否则进入体验回退判定：退出点集中度↑且无操作停留↑才算强信号；若只有一个指标飘，先标“指标过敏/场景不适配”。  \n- 无障碍类直接进无障碍验收队列，不走A/B。  \n4）动作：  \n- 体验类：先做最小策略改动（比如密度阈值下调一档或提示间隔+20%），开小流量对照，只看2个主指标+教师二次评分。  \n- 目标冲突类：优先给“课堂模式模板/开关”建议，不轻易改全局策略。  \n5）回告：48小时内给老师一条状态：已定位为数据/体验/需更多信息；一周内给“采取了什么动作、效果如何”的结论性反馈。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "必选我压到4个：策略版本、端版本、教师端覆盖次数、页切换/暂停回退。学生端聚合指标（退出点集中度、无操作停留）作为按需：只有当老师选“学生分心/跟不上”这类，才去拉。这样能省不少查询和存储。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分工我先按现状粗分：  \n- 我这边（评估owner）：盯入口质量、分流规则、以及每周结论汇总口径。  \n- 数据工程师：处理埋点缺失/回填扰动，给“可用/不可用”的数据判定。  \n- 教育场景研究员：定义A/B最小验证与解释话术边界。  \n- 无障碍设计师：无障碍反馈的验收与整改优先级。  \n- 导师你这边：当出现“要回滚全局策略/影响多个学校”的决策，做最终拍板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能保证的是：入口工单创建后自动带SLA。数据问题队列24小时必须给“是否埋点缺失/是否回填扰动”；体验队列48小时出“是否进入小流量验证”；无障碍队列72小时给“是否命中规范、需要改组件还是改内容”。但我对跨团队排期不太有把握，可能需要产品经理一起盯。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最容易拖的是无障碍整改，因为要走验收。预案：72小时回告先给“已命中哪条无障碍规则/临时规避建议”，比如建议老师切换高对比模板或关闭某类动画；正式修复时间不承诺具体日期，只承诺进入下一次发布窗口评审。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回告只描述课件与策略，不评价个人：  \n- 不说“你班学生注意力差”，只说“该策略在此类设备/课堂模式下提示频率偏高”。  \n- 不展示单个学生数据，只给班级层聚合变化趋势。  \n- 说明使用数据目的：改进课件编排体验，不做考核。  \n- 策略变更记录可追溯：反馈类型+聚合指标依据。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。我的补充是：体验类的小流量对照不要扩大成全链路实验平台，就按现有分桶能力做，先把每周能产出“反馈-动作-效果”三元组跑通。后面如果量上来了再考虑更自动化的路由。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育运行评估收尾背景下，用户与导师围绕模型/规则迭代评审的最小证据包、判据阈值与7步评审流程持续沟通（8轮），其中在证据包字段与合规回放摘要设计上与数据工程师沟通（3轮），在负担分归因与分层排查清单上与教育场景研究员沟通（2轮），并形成评审模板骨架与准入/输出规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做成月度的“策略版本评审会”，把规则、模型、素材模板都统一纳入，顺便引入一个策略DSL，评审通过就自动灰度。这样迭代更快，也不会每次都靠人肉对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我收缩下。输入我觉得至少要：线上核心指标变化、触发规则Top、人工反馈三元组、以及误伤案例。输出是：规则阈值怎么调、哪些场景先降级、以及要不要回滚某个策略版本。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 评审证据包你这边能给个最小字段集吗？我想把“指标-触发-样本-版本”串起来，但别搞得像数仓大改。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "误伤样本匿名ID集合这块，评审会现场看回放摘要会不会触到合规？我们之前说“回告不涉及个人评价”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我再追一个：指标里“关键题正确率”有时没有题，课件偏讲解型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想设三档：  \n- 立刻改：出现明显误伤或合规风险，比如无障碍标签误关、提示音在静音需求下仍播放；  \n- 小流量验证：指标波动不大但教师反馈集中，比如“节奏太快”这种；  \n- 不改：只有个别主观抱怨，且线上指标没变。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "误伤我想用“高负担占比”突然上升，比如一周内+5个百分点；或者某条规则触发后中断率高于基线2倍。合规类就不设阈值，出现就先降级。小流量验证就按现有分桶能力，跑一周，看“反馈-动作-效果”三元组能不能闭环。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育场景研究员 评审里怎么避免把负担分变化误判成规则问题？给我一套“先排查什么再下结论”的清单，能在会上直接用的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解成：评审先分层，再看构成项，再映射到编排动作；只有“构成项-动作”链路明确，才动规则。否则先做验证或去查数据漂移。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流程我压成7步：  \n1）固定范围：本次评审策略版本、灰度桶、课程类型/设备分布；  \n2）先看数据质量章：延迟、缺失、埋点版本，有问题先停；  \n3）分层看效果指标与稳定性：完课/中断/卡顿/无障碍触发率；  \n4）分层看负担构成项：视觉/听觉/交互/节奏，定位异常层；  \n5）对齐证据：Top触发规则 + 聚合反馈主题 + 匿名误伤样本摘要，找“构成项-编排动作-规则”的链；  \n6）决策三档：合规/误伤立即降级或回滚；其余按现有分桶做一周验证；无证据不改；  \n7）落地与回告：给出动作、预期影响指标、观察窗；48小时状态回告，一周复盘效果。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本能想补埋点，但确实会把评审拉成工程活。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "替代信号我可以先用“页面类型/模块类型”当阶段代理，比如导入页、讲解页、练习页、总结页，很多课件本来就有结构；没有的话就只在误伤样本里人工打一次轻量标签，用来判断是不是阶段差异导致的，不强推全量。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "摘要就限制字段，不写自然语言长评。比如固定五个字段：触发规则、编排动作、前后参数、持续时长、是否命中无障碍需求。必要时再附一条“观察到的异常现象”短句，但不作为硬性要求。这样基本是结构化拼出来，少量人工补。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规矩三条：  \n1）没过数据质量章，不讨论阈值改动；  \n2）改动必须指向可复现的“分层异常 + 构成项变化 + 规则触发证据”，否则只能进一周小流量验证；  \n3）输出只包含：降级/回滚/阈值调整/验证计划四类动作，以及对应的一周观察指标和回告节奏，不新增平台能力。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

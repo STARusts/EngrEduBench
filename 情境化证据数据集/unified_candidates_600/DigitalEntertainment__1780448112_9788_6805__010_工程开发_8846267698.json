@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多源异构数据接入设计背景下，用户与导师围绕接入架构、容错降级、合规脱敏与时钟同步持续沟通（7轮），其中在模态分流与容错降级部分与多模态感知工程师沟通（4轮），在源头脱敏与合规底线部分与合规风控官沟通（1轮），并最终形成含边缘校验脱敏、按模态分流、降级包及时间戳对齐的接入层基线方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上那种物联网项目，都是直接上 EMQX 或者 Kafka，把设备数据全扔进去，下游再消费。这挺方便的，不用自己写接入层。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我看直接用个开源网关把数据统一推到 Kafka 里，下游分发器再拉，这样是不是最省事？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就分几个 Topic？按数据源分 Topic，还是按设备类型分？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "差异化处理这就得自己写好多适配器了。有没有那种能拖拽配置的流处理平台？我配一下规则行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断连的话，框架一般都有重试机制吧。乱码就扔掉？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边缘端评估这就有点复杂了。我得写个前置校验模块。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那合规方面呢？数据进来要不要先脱敏？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "接入源头这块，视频流和生理电数据，是不是进来就得脱敏？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "人脸模糊化，这得加个推理模型在网关上，好麻烦。不过如果不做又进不了内网。行，我就在边缘网关加校验和模糊化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳，我用系统时间打一下？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "PTP 协议我只用过 NTP 的库。插值对齐我得查查怎么写。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线：1. 边缘网关做人脸模糊和设备授权校验；2. 生理电高频走 UDP 直推计算节点，带降级包逻辑；3. 视频流边缘抽特征再传；4. 接入层做时间戳对齐。不用 Kafka 做统一管道了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

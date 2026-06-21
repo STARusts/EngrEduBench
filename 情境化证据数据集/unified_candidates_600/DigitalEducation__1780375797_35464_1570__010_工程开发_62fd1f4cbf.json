@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发鉴权链路设计背景下，用户与导师围绕防水平越权、鉴权性能、防指令注入及自动化测试持续沟通（6轮），其中在跨区越权防范、渗透范围、ABAC性能优化与指令注入防法部分与安全与鉴权开发工程师沟通（2轮），并最终形成网关ABAC加本地缓存、Schema校验防注入、dast自动化测试及审计日志的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用JWT做登录态，加上RBAC角色校验。写个Spring拦截器，挡住未授权请求应该就够了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "水平越权就是改请求参数里的ID吧。拦截器里我会校验当前用户ID和请求里的ID是不是匹配。但跨区调度的上下文比较复杂，我还没想好怎么在拦截器里拿跨区关系。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么防水平越权？渗透测试要打哪些点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关层做策略决策，那属性数据要从Redis拿。渗透测试我用Burp Suite手工跑一下IDOR。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "延迟确实没想。指令注入不知道咋防。我最近在补Python自动化测试，学了dast工具，要不我试试写脚本替代手工Burp，能跑快点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ABAC属性从Redis拿太慢咋办？孪生指令注入怎么防？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关加ABAC，属性带本地缓存；调度入口加Schema校验防注入；dast写脚本跑。误报我人工复核。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "鉴权链路：网关ABAC策略拦截，JWT只存标识，属性走Redis加Caffeine本地缓存；调度入口加Schema校验防指令注入。拦截失败必须打审计日志记录。测试范围：用脱敏数据，dast自动化扫IDOR和越权，根据置信区间人工复核误报。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高盐废水资源化智能管控平台工程开发的设备接入落地背景下，用户与导师围绕首批协议、点位/object_id编码、断网续传去重、默认拒绝白名单与最小可验证测试持续沟通（6轮），其中在协议选择/适配器接口/点表字段与时间戳缓存质量位框架上与IoT接入工程师沟通（2轮），在白名单策略与审计链路（audit_request_id与版本追溯）落地上与安全工程师沟通（1轮），并形成设备接入开发实现清单与分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现场设备一堆，我有点不知道从哪下手，协议适配要先写啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "协议就……Modbus这些吧。点位编码就按设备名加点名。断网就重连就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@IoT接入工程师 首批要接哪些协议比较现实？适配器要怎么写才不乱？我怕越写越散。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是三种协议先做，点表就是这些字段。写操作先不做也行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳就用设备时间吧，设备上肯定准。缓存就放内存，反正断网也不会太久，重复就不管了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就网关时间为准，磁盘也存一份，去重按点位加时间。可以。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "三种协议：Modbus TCP、RTU、OPC UA。适配器就是每个协议一个模块，然后都有 read、health 这些。点位编码就用 object_id 加 point_code，就能白名单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "object_id 就我随便起个，比如 EVAP-01？我看着顺眼就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 设备接入这里，白名单要怎么做才算“默认拒绝”？还有审计请求ID要怎么串到采集这条链路里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是白名单写死，不在点表里的就连不上。审计请求ID就是改点表的时候打一个ID，采集数据就不用打。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就……采集任务有版本号，点表版本号。出问题看版本号就知道当时采啥。然后改点表必须有 audit_request_id。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用仿真器跑下，看有没有数据就行。再去现场看下趋势。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@IoT接入工程师 字节序、缩放、质量位这些要怎么统一？我怕不同厂家的寄存器乱七八糟。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那点表里就加 byte_order、scale、offset，质量位三段式。reason_code 我也加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就负责 Modbus TCP/RTU 的适配器，还有点表解析。OPC UA 先让同学搞。联调我用仿真器，不用生产点位名，别把现场工艺参数拿来乱测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

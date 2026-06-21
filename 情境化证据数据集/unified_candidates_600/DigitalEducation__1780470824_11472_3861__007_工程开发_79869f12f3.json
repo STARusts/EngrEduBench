@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在前端微交互埋点采集开发冲刺背景下，用户与导师围绕SDK轻量化、涂改轨迹捕捉、隐私脱敏与阈值验证持续沟通（7轮），其中在涂改监听与防卡顿部分与前端交互埋点开发沟通（1轮），在数据最小化与脱敏部分与教育合规风控师沟通（1轮），并形成基于MutationObserver捕捉、异步上报、特征脱敏、动态阈值及Puppeteer验证的MVP方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接引神策的SDK，监听输入框的change事件，加个时间戳上报。隐私的话，我不传用户名行吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "涂改过程？这怎么抓？我只知道监听键盘敲击事件。性能的话，我加个debounce防抖行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "涂改过程怎么监听？我用debounce怕丢状态，而且怕频繁触发卡主线程。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MutationObserver？这API我没用过，写起来有点虚。beforeinput和idleCallback我熟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实卡住了。我今晚下班看MDN文档，跑个demo把MutationObserver的回调逻辑搞明白。今天先拿beforeinput把敲击间隔写了，idleCallback上报也先顶上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微交互上报怎么做数据最小化？我不传姓名学号够不够？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "只传动作特征，不传内容明文，截图前端裁切。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先写死停顿2秒，涂改3次算有效。验证我就自己手动敲键盘试试，看后台收到没。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我加个配置项读阈值。脚本验证我可以用Puppeteer写个自动输入的case跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

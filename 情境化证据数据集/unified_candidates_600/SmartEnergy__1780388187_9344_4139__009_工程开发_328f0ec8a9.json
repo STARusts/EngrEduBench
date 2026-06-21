@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在微渗特征提取与定位联调背景下，与导师围绕特征维度对齐、算力与特征阶数平衡及联调方案持续沟通（7轮），其中在特征需求与算力优化部分与定位算法工程师沟通（2轮），并最终形成降采样提13阶MFCC及TDOA时标的联调方案与验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按之前设计的，C结构体直接序列化推过去，里面塞了高频能量值和时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还没全跑通，算法那边刚联调就报错，说特征维度不够，没法算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我边端现在只推高频能量值和时间戳，你们定位模块吃得下吗？报错说维度缺。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MFCC？边端算力刚砍了全频带，再算MFCC会不会又爆了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "注入脚本我用pytest写一个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我试试只算前8阶MFCC，省点乘法器周期。时标我加上。脚本就用pytest挂个mock数据源。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没算过依据，先试8阶吧，反正大不了再改。定位误差5%以内是红线，我盯着就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降采样率提13阶，这招行。我改改滤波后处理逻辑，把采样率砍一半再算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端滤波后，降采样率提13阶MFCC，打上TDOA时标，用gRPC推给算法端。联调用pytest注入微渗样本，验收标准定位误差小于5%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

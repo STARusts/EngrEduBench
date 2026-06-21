@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在策略引擎微服务化集成且云边资源严重受限背景下，用户与导师围绕轻量级替代方案与合规审计权衡持续沟通（4轮），其中在低配环境技术选型与防内存溢出部分与后端微服务工程师沟通（2轮），并最终确认FastAPI与Redis Streams等轻量级集成约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我原本计划用Spring Cloud Gateway加Nacos做服务发现，配合gRPC调用算法节点，这样并发吞吐和后续扩展性最好。既然资源这么紧，我最多把JVM堆调小点，压缩Survivor区。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法侧是Monod加LSTM的灰盒模型，这种低配环境怎么搞策略引擎微服务集成？总不能用CGI脚本吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这连服务熔断和链路追踪都没有，出了问题怎么排查？而且没有完善的RBAC权限体系，策略下发到边缘侧执行器，安全怎么保障？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计留痕我同意，但只留策略下发前后的关键快照，不记全量时序报文，不然存储成本扛不住。RBAC只做接口级的JWT校验，不上细粒度鉴权。熔断我在FastAPI里加个中间件做超时降级，不挂独立Sentinel组件。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过Redis Streams如果积压太多，内存会不会爆？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认集成约束：1. 引擎框架选FastAPI，原生承载Monod+LSTM计算；2. 通信总线用Redis Streams，MAXLEN截断防OOM；3. 审计仅保留策略快照与执行结果状态；4. 鉴权仅接口级Token校验；5. 熔断降级用FastAPI中间件超时实现；6. 取消注册中心，边缘配置写死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

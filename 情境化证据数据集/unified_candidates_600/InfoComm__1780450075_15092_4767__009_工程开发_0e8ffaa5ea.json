@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在反演模型训练与推理加速背景下，用户与导师围绕老脚本重构逻辑、伪量化节点插桩及精度验证指标持续沟通（5轮），其中在重构方案与插桩实现部分与威胁反演算法工程师沟通（2轮），并最终确认因果图条件独立性剪枝、算子融合及手写伪量化节点结合KL散度验证的重构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这脚本写得也太乱了，还是TensorFlow 1.x的静态图。我想直接用PyTorch重写，然后接TensorRT做推理加速，网上说这样提速很明显。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接转PyTorch加TensorRT，但导师说因果图有硬伤。您看这重构该怎么搞？有没有比较省事的路子？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算子融合我还能试试，用ONNX自定义一下。但插伪量化节点这操作我没干过，自动量化工具好像不支持这种自定义插桩吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "手写伪节点这就有点超纲了。我回去找找有没有类似的开源实现可以参考一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就跑一下之前留的测试集，对比一下F1值？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "应该在拟态重构决策输出前插。行，我先去把因果剪枝的逻辑改成条件独立的，然后尝试写一下伪节点插桩，用KL散度做对照验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

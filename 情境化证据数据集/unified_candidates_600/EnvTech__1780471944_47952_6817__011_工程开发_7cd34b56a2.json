@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在执法布控工作流实现背景下，用户与导师围绕取证出工单链路、误报拦截、异步上链及状态机流转持续沟通（5轮），其中在工单必填项与误报拦截部分与环保执法督察员沟通（1轮），在合规红线与上链状态机枚举部分与合规与取证实证师沟通（2轮），并形成包含工单必填项、误报阈值、异步状态机及防否认签名的工作流约束骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发个消息不就结了。取证一命中，我直接往kafka扔个event，执法端订阅出警，搞那么复杂干嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "执法工单到底要塞啥？有图有坐标，直接给你们发过去不就得了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你这边还有啥规矩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时间戳设备号归因标签，误报压到5%以下。先上链再发工单，还得加个什么签名。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先上链，上链成功再发kafka。误报就在发消息前加个if判断。签名直接用JWT，现成的东西。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上链失败就重试啊，重试三次还不行就报警。误报我就算最近一小时的。签名那我换个加密库不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "上链异步回调失败，工单状态怎么变？给我个明确的状态枚举！"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就这几个状态：INIT到CHAIN_SUCCESS。上链失败就停在那。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

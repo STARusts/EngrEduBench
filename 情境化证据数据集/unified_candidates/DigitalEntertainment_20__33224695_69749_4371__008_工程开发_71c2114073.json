@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在情绪标注规范与训练流水线不稳定的工程开发背景下，用户与导师围绕切分策略、标签与强度定义、质检与合规落地持续沟通（8轮），其中在标注单元/字段schema/质检可自动化部分与数据工程师沟通（3轮），在情绪类别体系、分段兜底与不可用样本处理部分与语音算法负责人沟通（3轮），并确定最小可行实现清单与50条试标F1统计接口约定。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉2）整段取一个情绪会糊，短剧台词经常一句一个情绪。还有3）强度没例子就乱打，训练肯定飘。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想按句子切，或者按时间切成小片段，每片段一个标签。强度的话给几个参考音频，标注界面里点一下能听对照。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "固定窗口简单点，比如2秒一段？但有的句子很短。ASR分句我怕错分，尤其带口吃、拟声词。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 情绪标注这块，旧规范太粗了。你觉得最小可用的标注单元、字段、质检怎么定，才方便进流水线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "质检那条怎么改？旧的只看一致率0.6就过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "speaker_role不是真人ID，这块能过隐私吗？我之前以为不能存任何说话人信息。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@语音算法负责人 情绪标签旧的只有四类，还按整段标。你从训练角度想要啥标签体系？强度怎么搞比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分段的话ASR断句会不会坑？我担心短剧里很多拟声词、重叠说话。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "强度标注怎么避免大家标准不一样？靠样例吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了，就是要加不可用标签，不然脏数据进来效果会抖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先上：segment用ASR断句，ASR低置信就用1.5秒窗口。情绪类改成6类，加一个“不可用/重叠”。强度0-3加样例。字段就按数据那套加start/end、asr_conf、label_version这些。质检阈值我有点拿不准，kappa我不会算实现上会不会麻烦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "50条可以。我就怕标注员说太麻烦，时间变长。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "工具里我能做几个快捷键：情绪1-6快捷选，强度0-3快捷选；默认给中性0，标注员只改少数；不可用一个键直接跳过。还有对照样例在右侧一键播放。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我训练用的音频是不是要再存一份到训练桶？还是只存路径？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我会在样本里只留object_key的内部ID，不带用户信息。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能做1）里切分规则落到worker和标注导出，3）字段schema也能加。2）标签枚举我也能配到前端。质检4）里F1统计我得找数据同学帮我写脚本，我只会简单算准确率。合规5）这块我按你说的只留ref，授权的实现我可能要@安全那边确认，但我先不乱改鉴权逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

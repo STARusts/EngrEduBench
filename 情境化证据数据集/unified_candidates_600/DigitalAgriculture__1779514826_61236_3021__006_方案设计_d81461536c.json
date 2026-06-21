@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧四路异构数据闭环与低延迟保障背景下，用户与导师围绕DDS数据流架构、QoS策略、时钟同步及延迟验证方案持续沟通（7轮），其中在QoS策略与资源消耗部分与系统架构师沟通（1轮），并形成DDS加共享内存架构、分路QoS配置及P99延迟50ms验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最近翻了个DDS的白皮书，说延迟比ROS2低，我想着直接上DDS，全统一了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差异就是DDS走发布订阅，底层用共享内存。QoS这块，我看过配置项，但具体怎么配没试过，反正把可靠性开到最高不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在边缘侧有四路异构数据，点云、视觉、推理结果和调度指令，我想全用DDS串起来，QoS不知道怎么配。还有长期跑的话资源消耗怎么控？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "点云走BEST_EFFORT丢帧无所谓，指令走RELIABLE保命。发现协议也要限制在子网内。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Jetson上有系统时间，打时间戳相减就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个脚本，从点云输入开始打点，到指令下发再打点，算差值。不过确实没想好基准时钟的事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证的话，我设计两组对照：一组正常密度点云，一组极限高密度点云。用PTP打硬件时间戳，跑1000次循环，统计P99延迟。如果P99在50ms以内，就算稳住。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "点云BEST_EFFORT加VOLATILE，指令RELIABLE加TRANSIENT_LOCAL，验证看P99延迟。我去整理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

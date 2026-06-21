@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在体验指标告警阈值试跑的运行评估背景下，用户与导师围绕`sync_offset_p95_ms`与`haptic_drop_rate/空洞事件`告警分流、最小信息包、分级首响与10分钟runbook及权限审计边界持续沟通（12轮），其中在字段可算性、口径（ack超时2秒/相对stable比例）与本周接入范围确认上与数据工程师沟通（2轮），并落定告警payload、抑制机制与升级路径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向把告警做得很细：按端（iOS/Android/PC）、设备型号、是否多人房间、是否空间音频开、触觉设备类型、网络类型都拆开阈值。然后触发了就自动打开异常会话的时序桶和更细埋点，这样根因会更快出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就把告警里带上分桶维度的topN：比如贡献最大的端、版本、机型、触觉设备、网络。再加上canary vs stable差异、P95和drop rate的绝对值和相对涨幅。然后给一个runbook链接，里面写排查顺序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "`sync_offset_p95_ms` 的话先看：1）是不是canary独有；2）是不是某端/版本集中；3）同时看音频渲染CPU和帧率波动；4）看网络RTT和抖动，排除网络；5）再看多人房间比例是不是上升。\n`haptic_drop_rate` 的话：1）看是否集中在某触觉设备型号/固件；2）看触觉事件队列长度、发送频率；3）看和音频同步偏移是否一起升；4）如果只触觉升，怀疑驱动/蓝牙链路。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 告警要带的“最小信息包”你这边哪些能直接算？我先抛一版：`sync_offset_p95_ms`、`haptic_drop_rate`、空洞事件（每局>=3次）、按端/版本/机型/网络/触觉设备的top贡献分布、canary vs stable对比、以及异常会话计数。现有埋点和数仓能覆盖多少？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "触觉设备细分我想要到型号+固件，不然定位很难。还有我也想把“队列长度/发送频率”塞进去，能不能补？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“空洞事件”定义我需要你帮我固定一下。之前强度=0也算，这会把drop rate抬高吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能落地的最小信息包我改成这样：\n- 指标值：`sync_offset_p95_ms`（按局聚合，P95）、`haptic_drop_rate = 1-ack/send`（按局或会话聚合，P95也出一个）、“每局空洞次数>=3”的会话占比（空洞按ack超时/丢失）。\n- 维度Top贡献：端、app_version、机型、网络类型、是否多人房间、触觉连接方式（蓝牙/有线）、触觉设备类型大类、release_channel。\n- 对比：canary vs stable 同时给绝对值和相对变化（比例变化）。\n分级：P2是“试跑观察”，P1是“影响体验明确”。首响我觉得SRE看工程告警，体验告警给客户端主程或触觉/音频同学。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "分支我试着写：\nA. `sync_offset_p95_ms` 体验告警触发：\n1）先看release_channel：如果canary明显高于stable（>20ms或>20%），走“版本回归”路线；否则走“环境/内容”路线。\n2）看Top维度：如果集中在某端+版本或某机型，标记为“端侧问题优先”；如果集中在网络类型或多人房间，标记为“链路/房间态优先”。\n3）看是否和 `haptic_drop_rate` 同时上升：同升说明可能是主线程卡顿/节拍调度；不同升先只盯音频同步。\nB. `haptic_drop_rate` 或空洞会话占比告警触发：\n1）看触觉连接方式：蓝牙集中先判链路；有线也高再看端侧调度。\n2）看触觉设备类型大类：集中在某类就通知触觉交互工程师；分散就先看端/版本。\n3）如果同时 `sync_offset` 也升，优先查“节拍->触觉事件调度路径”；如果不同步偏移正常但drop高，优先查“ack超时阈值/设备侧兼容”。\n升级条件：P1=持续10分钟以上且影响会话数>某阈值（比如>500局/小时）或canary相对stable差异显著；P2=刚过阈值但会话数低，先观察并拉数据对照一周。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定位token可以用：release_channel + app_version + 端 + 时间窗 + top1机型 + 是否多人房间 + 网络类型 + 触觉设备类型大类 + 触觉连接方式。这样大家至少能在面板里复现同一桶。\n权限边界：异常会话时序桶的开关只能SRE或导师指定的人开，并且只对canary或被告警命中的会话样本开；未成年人模式相关会话默认不开细粒度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "告警侧：\n- 增加抑制：同一定位token在30分钟内只发一次，除非相对stable变化继续扩大（比如再增加10%）。\n- 分级试跑：第一周所有体验告警默认P2，只进群不打电话；只有工程告警（canary相对stable P95偏差>20ms 或丢失率相对上升>0.2%）才升P1。\n排查侧：\n- 每次P2只要求做“分桶归因是否稳定”：看是否持续集中在同一端/版本/机型；不稳定就记为噪声，不继续加指标。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 这版告警payload我想定死：指标值（`sync_offset_p95_ms`、`haptic_drop_rate=1-ack/send`、空洞会话占比=局内ack超时/丢失次数>=3的局占比）、Top维度（端/app_version/机型/网络类型/是否多人房间/触觉连接方式/触觉设备类型大类/release_channel）、以及相对stable变化。你确认：1）哪些能在本周接入告警消息；2）“相对stable变化”用 `(canary_p95 - stable_p95)/stable_p95` 还是差值；3）空洞事件ack超时的超时时间我们现在用多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "现实点：工程告警P1首响给SRE，体验告警P2首响给值班客户端主程；如果Top维度显示触觉设备大类高度集中，再把触觉交互工程师拉进来；`sync_offset` 集中在空间音频开启且某端版本，再拉音频算法工程师。升级到P1的条件先不走电话，先由SRE确认“canary vs stable差异+覆盖会话占比>1%且持续20分钟”，满足才升级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

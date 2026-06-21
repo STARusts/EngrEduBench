@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘数据桥接与端侧部署背景下与导师围绕边缘算力限制、非侵入式采集、协议适配及验证口径持续沟通（5轮），并在边缘算力与协议适配现状部分与边缘网关开发者沟通（1轮），最终形成旁路镜像采集、C++插件化硬解码、NCNN推理及P99延迟5ms的验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备在网关上部署轻量级K8s（K3s），容器化管理最方便。数据桥接用gRPC，支持流式传输和多路复用。为了非侵入式，我在交换机上做全量端口镜像，所有BMS报文先复制一份再送进K3s节点解析。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "512MB确实紧。K3s可以换掉，用Docker Compose编排。gRPC保留，它的序列化开销可以接受。全量镜像带宽不够的话，我加个FPGA做硬件抽帧，只抓特征帧。时间同步用PTP协议，保证嗅探特征和毫秒级时标对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原想用Docker加gRPC加FPGA抽帧，这套在现网可行吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我调整方案：放弃容器化，用C++原生进程加共享内存做IPC。协议解析做成插件化硬解码。旁路网口镜像采集。INT8模型用NCNN部署。不过网络I/O这块，我想引入DPDK框架做零拷贝收包，彻底消除内核态开销，保证嗅探实时性。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "CAN报文量级确实用不上DPDK，常规的epoll多路复用足够了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "端侧桥接方案就这么定：旁路网口镜像 -> C++插件化CAN/Modbus硬解码 -> 共享内存喂给NCNN推理 -> 解码出的衰退特征通过MQTT推给云端MPC。为了验证非侵入式采集的可靠性，我准备在测试台打标注入模拟故障帧，对比旁路镜像和原端数据的丢包率和时延抖动，只要P99延迟在5ms内就过关。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

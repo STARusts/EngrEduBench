@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发控制指令低延迟优化背景下，用户与导师围绕链路延迟优化方案、并发模型短板、IO线程阻塞风险及审计日志合规落盘持续沟通（6轮），其中在耗时瓶颈剖析部分与性能调优专家沟通（1轮），在合规落盘与低延迟兼顾方案部分与性能调优专家沟通（1轮），并形成保留Netty架构、IO线程无锁化编码、MMap异步刷盘及校验前置的优化结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想直接把通信层换成Aeron？网上很多高频交易系统都是靠它做低延迟的，或者用Netty的FastThreadLocal，套用这些现成框架应该能降不少吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没细看。我就看网上说Aeron微秒级延迟。可能卡在序列化？我之前用Protobuf感觉也挺快的，别的就不太清楚了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在的指令下发延迟主要卡在哪？我想直接换Aeron或者用Netty的FastThreadLocal，这方案行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不用换Aeron。卡点在网关编码的对象拷贝、锁竞争，还有业务线程到EventLoop的上下文切换。FastThreadLocal不管业务线程唤醒的开销。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那我不换框架了，但对象拷贝和上下文切换怎么优化？我平时只会调调JVM参数，这种底层线程模型我不太会改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我最近刚好在啃Netty的源码，看EventLoop的writeAndFlush链路。原来我只知道调channel.write，现在看懂了，如果在业务线程里直接write，会有volatile写和MpscQueue入队开销，这就会上下文切换。我可以尝试把指令编码逻辑也扔进EventLoop线程里执行，用ChannelHandlerContext直接写ByteBuf，这样就没有队列排队能力切换了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对哦，IO线程绝对不能打日志。审计日志我放内存队列，异步丢后台线程打。阻塞风险的话，加个超时？比如编码超过5毫秒就丢弃？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "审计日志必须落盘，不能丢。但在IO线程打日志延迟会炸，放内存队列又怕宕机丢数据。这怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家给了个MMap日志方案，用Chronicle Queue。IO线程只做内存追加拷贝，后台按页刷盘。编码校验前置到进EventLoop之前，保证IO线程里的活儿极轻量。这样延迟就主要是内存拷贝和系统调用send的开销了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

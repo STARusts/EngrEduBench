@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云侧数据管线联调与压测且Flink预算砍半背景下，用户与导师围绕千万级并发抗压方案及是否增加中间件和多Topic物理隔离持续沟通（4轮），其中在Flink算力不足防丢与微批过滤调优部分与流式管线工程师沟通（2轮），在Kafka多Topic性能瓶颈与单Topic逻辑隔离部分与联调压测工程师沟通（2轮），并最终形成单Topic接入、RoaringBitmap过滤、微批处理及RocksDB调优的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "预算砍半？那必须在Flink前面加多层Kafka集群做缓冲，再挂一个Redis集群做流量整形，把突发洪峰削平。为了减轻Flink计算压力，甚至可以把Doris拉进来做实时聚合降维，让Flink只处理聚合后的数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果Flink算力只有原计划一半，怎么保证溯源核心链路的事件不丢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "RoaringBitmap做水位阈值过滤？这比写Redis Lua脚本快吗？还有微批处理，延迟会不会超标？我们溯踪要求秒级响应。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Flink状态后端调优这块我确实只停留在默认配置，得赶紧补一下RocksDB调参的机制。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Kafka这边，我还是建议按流域分多个Topic，物理隔离更稳，某个流域数据爆炸不会影响别人。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果Kafka按流域拆成几十个Topic，在千万级并发注入时，会有性能瓶颈吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "单Topic加KeyBy？那如果某个流域突发大流量，不是会挤占其他流域的算子资源，导致反压传导到全局吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终方案就是：单Topic接入，Flink源头用RoaringBitmap过滤正常波动，微批100ms处理，状态后端调优RocksDB。放弃多Topic物理隔离和Redis整形。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

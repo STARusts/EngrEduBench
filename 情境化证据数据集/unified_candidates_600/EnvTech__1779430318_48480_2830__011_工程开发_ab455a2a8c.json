@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在弱网下边缘节点丢包与延迟缺陷修复背景下，用户与导师围绕传输方案选型、实现可靠性、重传边界及验证指标持续沟通（7轮），其中在弱网高丢包传输策略部分与边缘云协同设计师沟通（1轮），并最终确定采用轻量级可靠UDP与选择性重传策略，准备裁剪开源栈改代码并跑单测验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "丢包就重传呗，延迟就加缓冲。我直接把TCP的重传阈值调小，或者换个更大的接收队列，应该就搞定了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不加缓冲。重传风暴我限流不就完了。限流再丢包就不管了，反正大部分能到云端就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱网下TCP重传风暴，丢包又不能丢，到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可靠UDP，就是自己写个ACK呗。审计日志我加上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我我我之前确实没写过，但我刚查了开源的轻量级栈，照着抄个状态机进来就行，比TCP省内存多了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "乱序我排个序不就完了。我下午写个demo跑一下，看丢包率降没降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐了，就加个重传标志位。3秒没ACK就丢弃，这我懂。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先去改代码，把那个开源栈裁剪一下塞进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

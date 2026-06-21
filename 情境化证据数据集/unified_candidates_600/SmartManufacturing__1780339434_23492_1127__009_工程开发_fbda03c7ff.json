@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在孪生推演算子编码开发背景下，用户与导师围绕热场推演与微刃磨损模型的数值稳定性、求解格式及步长控制持续沟通（7轮），其中在算子工程化数值求解坑与半隐式替代方案部分与孪生算子研发员沟通（2轮），并最终形成半隐式Crank-Nicolson求解、CFL校验与PID步长自适应三条核心编码约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就照着之前给的物理方程，一行行翻译成Python呗，加个循环迭代，能出数就行，管它稳不稳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "热场和磨损直接套公式写代码有啥坑？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "隐式求解多麻烦还得求逆矩阵。我就显式写，步长卡死0.001微秒，多跑几圈不就完了？磨损也固定步长，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没验证过，跑起来没报NaN不就是收敛的嘛。这还用专门验证？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CFL条件是啥玩意？没听说过。我不懂这推导啊。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺偏微分方程数值解法呗。我这就去扒GitHub上热传导求解的开源项目，看人家步长怎么限的，抄个CFL判断逻辑进来总行了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，半隐式加CFL抄代码，磨损加PID限误差。就这三条，赶紧定下来我去写了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

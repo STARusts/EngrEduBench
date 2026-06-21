@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在高频宽频波形数据实时流式计算管道构建背景下，用户与导师围绕后端承接数据、乱序与背压处理及Flink作业拓扑要求持续沟通（5轮），其中在Flink背压/Watermark/时间戳分配与Protobuf对接约束部分与流计算开发工程师沟通（2轮），并最终明确以Kafka接入+Protobuf反序列化+Watermark乱序处理+滑动窗口FFT为主的管道逻辑草案待绘制拓扑与参数。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是写个程序把数据往数据库里塞吗？我打算直接用多线程写个消费端，从驱动接口拿数据然后丢进 Kafka，后面随便接个脚本算一下就行了，没必要搞得太正式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加服务器内存不就完了？现在的硬件性能这么强，我就不信处理这点电力信号还能卡住。至于乱序，咱们电力线数据本身就是有时戳的，我直接在内存里排个序，费不了多大事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@流计算开发工程师 老师非说我那套不行，让我来问问你。咱们这个平台非得用 Flink 这种大家伙吗？我就想弄个简单的 Python 脚本直接消费 Kafka，把波形数据读出来做个转换，这逻辑有啥漏洞？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得你们考虑得太细了。什么时钟漂移，那点误差在几百赫兹的振荡面前几乎可以忽略吧？我就直接按数据到达的顺序算，哪怕慢个几十毫秒，电网也不会因为这点延迟就崩了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不过我觉得 Flink 那个 Checkpoint 机制太占 IO 了，为了快，我打算把状态保存全关了，反正坏了重启也就几秒钟的事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我总结一下：首先是用 Kafka 消费者接数据，然后按你们要求的 Protobuf 格式反序列化；第二步是套用那个 Flink 的 Watermark 处理乱序，时间容忍度我先设死；第三步是进滑动窗口做 FFT。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

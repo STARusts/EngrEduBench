@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在心智护航调度引擎流图设计背景下，用户与导师围绕端侧策略匹配架构选型、状态流转方案与降级机制持续沟通（4轮），其中在干预策略匹配流程简化部分与心理干预策略师沟通（1轮），在端侧有限状态机轻量替代方案部分与后端开发工程师沟通（1轮），并最终确认基于状态模式与EventBus的五节点核心流图及降级出口，放弃Drools选型。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得可以用Drools规则引擎来做策略匹配。文献里都说Rete算法处理大量产生式规则推理效率高，解耦也彻底。感知信号进来触发规则，然后调用干预资源池，整条链路理论上很清晰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冷启动耗时确实是个问题。但我没做过端侧规则引擎的裁剪，不太清楚具体能压到多少兆。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "干预策略的匹配流程能不能简化？不用复杂推理网行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按极性和强度分级的话，确实不需要Rete算法了。那流图里的状态切换怎么做？如果不用规则引擎，我怕状态多了管不住，容易写乱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧做有限状态机流转，不用Drools的话，有什么轻量替代方案？要求不能阻塞主线程。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回去把流图改成这五个节点，去掉Drools。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果EventBus积压了怎么办？异步事件总线容易丢事件吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认心智护航调度引擎流转图：核心节点五个，EventReceiver接收多模态感知信号，EmotionEvaluator评估极性与认知负荷，StateTransitioner用状态模式做LearnerState转移，StrategyRouter根据状态映射护航策略，ActionExecutor下发干预。节点间用EventBus异步通信防阻塞。降级出口设在StrategyRouter，如果EventBus积压超阈值或端侧内存不足，直接路由到轻量文本提示，放弃调重资源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

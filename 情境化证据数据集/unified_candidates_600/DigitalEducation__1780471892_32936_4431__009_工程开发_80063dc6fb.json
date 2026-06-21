@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在视听代偿模块开发背景下，用户与导师围绕算力限制下的实现方案与验证口径持续沟通（7轮），其中在低成本实现与验证方案部分与前端适配开发工程师沟通（1轮），并最终确定原生DOM与CSS变量开发方案及包含50ms延迟与axe合规断言的Jest验证要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "0.5C？那就正常写呗，用Vue或者React直接渲染代偿组件，不够的话加机器。验证就跑一下看页面出没出来就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力只有0.5C 128M，视听代偿模块怎么写？还有验证要量化延迟。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "验证设计我不太会写，之前没写过Jest的性能单测，也不知道怎么测DOM更新延迟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我把axe-core这个无障碍测试库加到测试脚本里，每次代偿DOM更新后跑一遍axe断言。性能那边，我写个beforeEach挂载节点，用performance.now测时间差，断言卡50ms以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力0.5C 128M，只能用原生DOM和CSS变量做代偿。验证要写Jest单测，延迟卡50ms，合规用axe跑WCAG 2.1 AA。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

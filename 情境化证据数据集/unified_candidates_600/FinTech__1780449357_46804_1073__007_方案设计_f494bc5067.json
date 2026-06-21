@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在极速定价接口规范设计背景下，用户与导师围绕重计算与毫秒级感知的矛盾、接口模式及背压机制持续沟通（4轮），其中在重计算接口规范及同步REST可行性部分与并行计算优化师沟通（2轮），并最终形成异步任务模式、入参加配额与优先级、网关动态背压拒流的接口规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接RESTful啊，前端把参数发过来，后端开多线程算，算完JSON扔回去，多省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超时就把timeout设长点呗，加机器加节点不就行了。熔断先不搞，太繁琐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算直接REST同步返，有啥问题吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆接口还得轮询，太墨迹了。直接上WebSocket啊，建立长连接，服务端算完直接往回推，多帅。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断线重连写个心跳保活不就完了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "背压到底啥意思？就加个令牌桶限流不就防住洪峰了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "提交拿ID，轮询拿结果。入参加配额和优先级，网关搞动态背压。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就觉得搞这么复杂容易出bug。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

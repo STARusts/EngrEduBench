@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在异构感知数据融合流设计背景下，用户与导师围绕企业排口数据入流的合规与精度取舍持续沟通（5轮），其中在采集脱敏合规底线部分与环保合规分析师沟通（1轮），在流式架构脱敏与推演关联兼顾部分与大数据架构师沟通（1轮），最终敲定双轨架构设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Kafka接，Flink全量算。精度第一啊。脱敏等落盘后再说？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "企业排口DCS数据我想全量拉进Kafka，后面再脱敏，这样行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规说流里绝对不能传原始曲线，只能传特征和标识。这怎么跟AERMOD对齐？没原始浓度场算不准吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规不让传原始数据，要特征和标识。Flink流里怎么做关联推演？AERMOD还要浓度场呢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说弄个可信沙箱脱敏，主链路只走特征和哈希ID。AERMOD用特征推演，关联用哈希ID。查原始数据走授权接口。就是多一层沙箱开销。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确认。沙箱脱敏进Flink，图谱用哈希ID，反查走授权。这样不用担责。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

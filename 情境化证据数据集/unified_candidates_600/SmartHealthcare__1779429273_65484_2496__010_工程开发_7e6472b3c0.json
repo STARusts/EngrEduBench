@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在测试环境代谢轨迹追踪断裂排查背景下，用户与导师围绕LP求解器超时兜底中间解导致的通路丢失及边界风险持续沟通（5轮），其中在超时兜底机制确认部分与算法工程师沟通（1轮），在权重为0的临床边界风险分析部分与药代建模师沟通（1轮），并形成热点边剪枝预处理与中间解加epsilon保底的代码调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚看了后端的MQ日志，消息没积压，图计算服务也没报错，就是最后输出的调平方案里，有几条代谢通路的追踪记录凭空没了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图计算索引构建和LP求解那块，是不是超时兜底拿中间解的时候，把某些代谢通路给丢了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "权重变成0就追踪不到了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LP求解超时返回的中间解里，CYP450酶系边权重变成0，这种解在临床上能用吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "中间解抹掉了微弱代偿，有脏器损伤风险。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我之前确实看过一篇图计算加速的分享，说可以把高频冲突的边先做固定或者降维，减少LP的变量数。如果我们在输入LP之前，先把多药联用图里的高频冲突热点边剪出来单独算，剩下的再扔给LP，是不是就能加速收敛，不超时了？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改代码。预处理加热点边剪枝，中间解加epsilon保底，避免权重为0。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

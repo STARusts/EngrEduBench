@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在触觉引擎与多端触觉SDK联调背景下，用户与导师围绕事件时间基准、强度映射、降级与验收口径及适配层接口边界持续沟通（9轮），其中在SDK调用模型与分端收敛策略上与客户端负责人沟通（2轮），在pattern语义层与duration降级/节流规则上与触觉算法工程师沟通（2轮），并最终明确双模式下发、profile参数与分层验收及最小日志合规要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先做一层适配器，把 tick 转成 SDK 需要的时间单位，然后把 pattern 映射成 SDK 的波形 ID 或参数组合。关键是时钟：编辑器预览是按 ms 播放，SDK 可能是自己内部调度，得找一个统一的“触发基准时刻”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "tick->ms 目前是线性的：`ms = (tick / ticksPerBeat) * (60000 / bpm) + offset_ms`。我倾向让播放器侧算，触觉层只吃“绝对时间点”。这样触觉层不关心 bpm，只关心“何时触发、触发什么”。不过 offset 要一致：音频 start 的 reference time 得暴露出来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跟音频时钟走。因为音游判定也要对齐音频，否则画面帧抖会把触觉带偏。我会在音频开始播放时拿到一个 `t0`，然后事件的触发时刻是 `t0 + event_ms`。触觉线程只做“距离触发还有多久”的等待与触发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 现在我们联调触觉 SDK，需要搞清楚调用模型：能否按时间点调度、pattern 参数怎么传、是否线程安全、有没有回调或错误码能用于校验触发成功？另外各端（手机/手柄/可穿戴）差异你们怎么打算收敛？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我们在统一层不能假设“绝对时间调度”总可用。可能需要两种策略：\n- 能提交时间队列的端（可穿戴）走 schedule；\n- 只能即时触发的端（手机/手柄）走提前量 pre-roll：根据当前音频时钟，提前 X ms 发送，让体感尽量落在目标点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我担心提前量会把“±10ms”的验收弄复杂：我们测到的是触觉实际发生的时刻，不是命令发出的时刻。SDK 不给实际触发时间回调时，怎么测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 客户端负责人反馈：三类 SDK 能力不一致。可穿戴支持批量 schedule（时间偏移+pattern）精度 5~10ms但队列会 busy；手柄/手机基本是即时触发，手柄建议提前 20~40ms 预发命令，手机会被系统合并/延后。结论是我们统一层要支持两种模式：可 schedule 的走队列；不可 schedule 的走 pre-roll（提前量由 device_profile 配）。验收上，“±10ms”更适合在可测的基准设备上做一致性；手机/手柄做功能与体感分层验收。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备把 device_profile 设计成两级：\n- 设备能力：支持的通道数、pattern 列表、最大持续、最小间隔、是否支持同时叠加；\n- 映射曲线：`strength(0-100) -> amplitude(0-1 或 0-255)`，用分段线性或 gamma。\n同一首曲子在不同端想一致，至少要同一个“参考点”对齐，比如 strength=50 对应“清晰但不刺”的体感。然后把曲线参数作为 profile 的标定结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我倾向最小可行的标定流程：选 5 个强度点（10/30/50/70/90），每个点发固定 pattern（比如 v1_pulse_50ms），让测试人员在同一环境下主观打分“弱/适中/强/过强”，把“适中”对齐到 strength=50。然后拟合 gamma 或分段线性，产出每设备一组参数。短期先只对可穿戴和手柄做，手机震动因为不稳定，曲线只做保守映射，避免过密触发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@触觉算法工程师 pattern 枚举现在是带 v1 前缀，事件字段有 duration_tick。联调时我们需要把 pattern 落到各端 SDK 的具体波形/参数。你建议 pattern 的语义怎么定义才便于跨端？duration_tick 在不支持精确时长的端怎么降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "pattern 语义层这个我认同，否则 v1 枚举会被某个端绑死。量化档位和重复补足会影响节奏密集处的手感，我需要一个规则避免“补足导致连发”。有没有建议的节流策略？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耗电/发热我之前没放在联调目标里，但确实会在手机上炸体验。那我回导师确认：我们把 min_gap 和能量上限也放进 device_profile 的开发验收里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 触觉算法工程师建议：v1 pattern 作为语义层（标准包络/建议频段），设备侧近似；duration_tick 若端不支持则量化到离散档位并用重复次数补足，总之要有降级。为避免密集处连发失真，建议在 profile 加两类约束：`min_gap_ms`（通道最小间隔，小于则合并并对强度做 cap）和“窗口能量上限”（200ms 内累计强度*时长限额，超则压缩后续强度）。这也顺带控制耗电/发热，尤其手机端。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验收点我先给一版：\n1）时间一致性（基准设备=可穿戴开发固件）：同一 chart_content 连续播放 5 次，触觉入队时间相对音频 t0 的偏差均值在 ±10ms 内，P95 在 ±15ms 内。\n2）映射一致性：同一 strength=50 的 `v1_pulse` 在手柄/可穿戴上幅值落在各自 profile 标定的“适中档”范围；strength=10/90 不出现饱和或几乎无感。\n3）降级规则：在手机端对 duration 不支持时，duration_tick 会被量化且触发次数不会超过 `min_gap_ms` 允许的上限；密集段不出现持续震动卡死。\n4）预览隔离：关闭触觉预览时，SDK 不应收到任何触觉调用；开启预览时，不修改判定/得分层的逻辑路径（至少不共享状态）。\n5）日志合规：联调日志只记录事件的 tick、pattern、设备类型、错误码，不记录账号标识、地理位置或可关联个人的信息；且默认关闭 debug 级别。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我改成：手机端 60 秒密集段（最小间隔逼近 min_gap）运行，SDK 调用失败率 <1%，连续 busy 重试不超过 3 次就降级为合并事件；并且主线程帧率下降不超过某个阈值。帧率阈值我不太确定用 5% 还是固定掉帧数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "了解，那性能验收改成“主线程最大阻塞 <100ms”，并强制触觉调用走非主线程或异步队列。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我建议适配层暴露三组接口：\n- `init(device_profile, mode)`：mode=preview/gameplay，决定日志级别和降级策略；\n- `schedule(events[], t0_audio_ms, bpm, offset_ms)`：内部自己把 tick->ms；对可 schedule 端转成队列，对即时端转成 pre-roll；\n- `stop(all|channel)` 和 `setPreviewEnabled(bool)`：保证预览开关只影响触觉通路。\n另外需要 `onError(code, detail)` 回调给上层，用于埋点和联调。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同意。那 `events[]` 里就带 `time_ms`，tick 只用于日志对齐。字段变成 `{channel, tick, time_ms, pattern, strength, duration_ms}`，duration_ms 也是播放器换算的，适配层再量化/合并。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "为了复现实验，我会把 device_profile 的版本号也打到日志里，不含用户信息，方便定位“提前量/曲线”是哪一版导致的偏差。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

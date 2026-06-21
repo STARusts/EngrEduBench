@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在储荷微态协控与碳迹溯配引擎总体架构设计背景下，用户与导师围绕边云协同架构、分流边界设计、压测验证及容灾补学持续沟通（6轮），其中在云端调度与容灾补学部分与微网架构师沟通（2轮），在边缘数据存储可行性部分与数据链路专家沟通（1轮），并最终确定边云协同架构定调及压测补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先把微态协控和碳迹溯配拆成两个大微服务，直接上K8s，数据走Kafka，这样最快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那能有多抖？内网延迟一般也就几毫秒吧。把逻辑都堆云端，运维多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果把储荷微态的调度逻辑全放云端，下行控制指令走Kafka，这架构能过审吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那数据全放边缘呢？碳迹溯配不是要算全生命周期排放吗？边缘能扛住？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这就矛盾了。微网架构要边缘自治，数据链路要全量上云，那我到底怎么切？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我懂了，微态感知和控制指令留边缘，碳迹核算相关的全量数据上云。但这个边界具体按什么指标切？延迟？还是数据量？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对边缘侧怎么做容灾接管没概念，规则引擎怎么写也没底。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周把KubeEdge的边缘自治白皮书过一遍，重点看断网重连后的状态恢复逻辑。看完我再把容灾定级补进架构图里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "总体架构就定调：边云协同，边缘负责微态自治和秒级响应，云端负责碳迹溯配和全量数据聚合。分流边界看压测结果定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

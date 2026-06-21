@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在授粉收益结算对账的智能合约工程开发背景下，用户与导师围绕链上交互最小化、结算窗与迟到调整流程、链下对账链路实现及测试验证持续沟通（8轮），其中在轻量合约接口（批次登记簿、Commit/Finalize、版本字段校验、单hash与Merkle取舍、每窗1个ADJUST与防重放）部分与区块链与合约工程师沟通（4轮），并产出接口清单、对账校验点与实现/单测计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“链上最小化”拆三块：1）链下算清楚收益分成，2）链上只存承诺（hash）和状态机，3）对账靠可重复计算的事件流水。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：迟到数据我们上个微场景说只出 ADJUST_CANDIDATE，不碰已结算投影，那在合约侧是要支持“补差”还是只允许下个结算窗体现？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态我先粗列：DRAFT（链下生成）、COMMITTED（上链了批次hash）、FINALIZED（上链确认结算结果摘要）、ADJUST_COMMITTED（上链调整hash）、ADJUST_FINALIZED。\n事件上链我倾向只两类：commitBatch(hash, window_id) 和 finalizeBatch(result_root, totals, window_id)。调整也是同样两步。链下留存是明细、解释、source_event_ids_hash这些。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@区块链与合约工程师 合约侧最小交互怎么设计？我们链下会产结算明细和解释，只想把hash/根上链；还要带 schema_version、calculation_version、source_event_ids_hash，以及隔离原因码（SCHEMA_MISMATCH、VERSION_MISSING、GEO_LEVEL_VIOLATION）。另外迟到数据只出 ADJUST_CANDIDATE，不改已结算投影，链上怎么接得住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说 finalize 时做版本 allowlist，这个 allowlist 放链上会不会变得很重？我们预算不太够做复杂治理。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Merkle root 和单hash我有点纠结。单hash便宜，但争议时没法只举证一条记录。我们有争议场景：农户说某次授粉没算进去，服务方说算了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那合约需不需要限制“一个window最多几个adjust批次”？否则会被刷。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我回去跟导师对齐我倾向：版本检查用“commit一致性”；先单hash；每窗最多1个adjust批次。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我采纳三条：\n1）批次登记簿：window_id 下 SETTLE 和可选 ADJUST，两步 Commit/Finalize；ADJUST 带 parent_hash 指向 settle_batch_hash。\n2）版本策略先走轻量：commit 里写 schema_version/calculation_version，finalize 必须一致且非空；allowlist先不做链上治理。\n3）争议举证先走单hash（result_hash）+ 链下整包校验；字段预留 result_root 以后换 Merkle。\n不采纳的是“链上资金划转合并 finalize”，我们现在结算钱还是链下打款，链上先只做确认和可审计。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实现上我拆成两个服务模块：\n- settlement-builder：消费回放事件流，按 window 聚合出结算明细包，生成 batch_hash/result_hash/source_event_ids_hash/version；落库并标 DRAFT。\n- chain-registrar：只管把 DRAFT 推上链，分两步写入 COMMITTED/FINALIZED。\n幂等：用 (window_id,batch_type,batch_hash) 当幂等键；commit/finalize 交易里也带同样字段，链上做“已提交/已最终化”检查。\n失败重试：链上交易回执失败就退避重试，但不重新计算 batch_hash；链不可用门禁：如果节点不可达，builder 继续产 DRAFT，但 registrar 停发交易并打标 BLOCKED，等恢复再补发。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我做两级存储：\n- 明细包只保留“压缩后的明细行+解释摘要”，并且对 geo 做 hash/分桶，遵循上次不落明文经纬度。\n- 超过 N 个 window 未上链就只保留 batch_hash/result_hash + 一个可重算指针（比如 event_offset 范围、source_event_ids_hash），需要时重算明细。\nN 我先拍 7 个结算窗，超过就触发清理。这里可能会牺牲一点查询便利，但省存储。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我没准数。我能做个小实验：用你们回放压测口径，模拟链不可用 1 天、3 天、7 天三档，观察明细包存储增长和重算耗时的 p95。然后选一个“存储增长不超过阈值、重算p95还能接受”的 N。阈值我想先按环境给的磁盘预算倒推。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "权限我打算分三层：\n- 农户端：只能看自己地块的结算明细行和解释摘要，不见别人的；\n- 服务方：看自己服务单关联的明细；\n- 审计/风控：能看全量，但地理信息依然是分桶，不给精坐标。\n留痕：每次生成批次包，把 batch_hash、source_event_ids_hash、calculation_version 写入审计表；隔离队列的原因码也写审计表，链上不写原因码，只保证版本字段和hash一致。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口我按合约侧两类批次、两步走：\n1）commitBatch(window_id, batch_type, batch_hash, schema_version, calculation_version, source_event_ids_hash, parent_hash可空)\n2）finalizeBatch(window_id, batch_type, batch_hash, result_hash(占位result_root), totals摘要)\n对账校验点三条：\n- 校验A：finalize 的 batch_hash 必须等于 commit 的 batch_hash，版本字段一致且非空；\n- 校验B：链下明细包 hash == 链上 batch_hash；明细包里每条记录引用的 source_event_ids_hash 与批次一致（保证回放确定性）；\n- 校验C：adjust 批次必须引用 settle 批次 parent_hash，且每 window 最多一个 adjust，净额=settle+adjust。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

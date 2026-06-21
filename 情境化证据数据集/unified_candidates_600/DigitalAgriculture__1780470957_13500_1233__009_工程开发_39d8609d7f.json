@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在物联网关采集与联调背景下，与导师围绕后端数据接入方式、弱网重传、时间戳校验、设备认证及农户隐私数据脱敏持续沟通（7轮），其中在网关协议转换与数据管道部分与物联接入开发工程师沟通（3轮），并最终形成改用MQTT接入、校验采集时间戳及脱敏拦截经纬度的后端联调开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "LoRa我只听过名字，Modbus完全没碰过。后端只管接JSON。网关那边怎么转我确实没底。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关那边Modbus和LoRa怎么转成我们能懂的格式？弱网断了数据咋办？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网关解析完直接Pub到MQTT Broker，后端写个Subscriber收数据？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时间戳这点我之前真没注意。后端收到的JSON里必须带 `event_time`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "后端不能光等HTTP了，得加个MQTT客户端，订阅网关发上来的Topic。JSON格式不变，但得加个校验，必须有 `event_time` 字段，不然拒收。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我之前没做过，得查查Spring Boot怎么配MQTT SSL连接。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没考虑。那网关上报的JSON里，把经纬度去掉，只留 `plot_id`？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，后端接入改用MQTT，连Broker，我今晚补一下MQTT SSL双向认证的配置；第二，接收数据校验 `event_time`，没有就打回；第三，数据里不能有明文经纬度，只留 `plot_id`，有经纬度的后端直接截掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

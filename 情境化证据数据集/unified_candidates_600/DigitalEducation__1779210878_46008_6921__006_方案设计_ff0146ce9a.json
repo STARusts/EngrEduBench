@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课堂情境与策略匹配链路设计背景下，用户与导师围绕实时检索时延矛盾、预取方案及缓存降级策略持续沟通（5轮），其中在业务时延要求部分与教育业务架构师沟通（1轮），在算法推理耗时部分与算法架构师沟通（1轮），在流式管道预取落地部分与数据流架构师沟通（1轮），并最终形成Flink预取缓存及未命中降级弱提示的匹配链路基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接查Milvus呗？把当前课堂情况向量化，然后去搜相似度最高的策略。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教育业务架构师 课堂里出状况，老师等咱给策略，最多能等多久？@算法架构师 咱们那个蒸馏策略检索，一次链路跑下来要多久？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要500毫秒，一个要1.5秒。这怎么搞？不能等出事了再查吧，能不能提前查？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据流架构师 Flink那边能不能根据课堂进度，提前把可能用得上的策略拉出来缓存着？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Redis查肯定快，500毫秒没问题。预取放Flink也不影响推理。就按预取来呗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "没命中就不管了？或者给个弱提示？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，没命中就降级，不弹强干预的弹窗，只在侧边栏闪一下弱提示。预取的K值和窗口大小做成可配置的，上线再调。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

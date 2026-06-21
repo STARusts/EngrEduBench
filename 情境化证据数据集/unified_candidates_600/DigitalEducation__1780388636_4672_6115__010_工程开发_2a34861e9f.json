@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在课境多模情感微变捕捉与导学系统特征提取开发背景下，用户与导师围绕推理延迟飙升与AU识别率骤降的排查与修复验证持续沟通（6轮），其中在底层卡点定位部分与特征提取工程师沟通（2轮），并形成ONNX异步推理重写、TCN步长对齐推导及独立验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑起来P99延迟直接飙到200多毫秒，AU识别率也才三十几。我感觉是不是轻量主干还是太重了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边跑视频流延迟特别高，AU识别率也很低，你帮我看看是咋回事？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "解耦的话，要不我找前端同学把解码放到WebWorker里？步长，步长我设成和输入帧率一样？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂ONNX异步推理和TCN参数计算。我今晚去看ONNX的Python API文档，把异步执行流的方法摸清楚，重写预处理部分。TCN步长这块，我重新推导一下感受野和下采样的数学关系，写个步长计算器函数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用之前定的5000样本验证集，控制光照和姿态变量。步长这块我设计个对照实验，跑一下步长对齐前后的AU识别率对比，看差多少。异步管线改完，重点盯P99延迟是不是降下来了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

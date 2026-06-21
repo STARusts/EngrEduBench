@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在路侧感知融合模块开发背景下，用户与导师围绕雷达与视觉时序对齐、坐标转换及合规脱敏持续沟通（4轮），其中在时序对齐与坐标转换工程化落地部分与边缘融合开发工程师沟通（1轮），在视觉数据脱敏与留痕合规部分与信安评估师沟通（1轮），并最终形成四条工程化约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就把雷达的点云和相机的检测框做个匹配，然后拼成目标列表发给赋形模块。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间戳就取最新的吧。坐标系我统一转到雷达坐标系下。合规这块，不就是不能侵犯隐私吗，我把画面裁剪一下只留检测框？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "雷达和视觉时间戳对齐还有坐标转换，在路侧边缘节点上怎么写？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视觉数据脱敏具体怎么做？日志怎么留？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "时间对齐要用PPS硬同步加插值，坐标转换要热加载外参。脱敏就是把人脸车牌模糊掉，日志要带时间戳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件是震动？日志还要设备SN和脱敏标识。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 硬同步用PPS，软同步做插值；2. 外参矩阵热加载，监听文件更新；3. 视觉数据脱敏后才能融合；4. 日志带设备SN和时间戳留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

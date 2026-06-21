@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在跨岛数据总线高并发重构背景下，用户与导师围绕线程隔离、流控与背压策略持续沟通（6轮），其中在流控和线程隔离实现部分与边缘物联集成师沟通（1轮），并最终形成IO与计算分离、心跳与业务分池隔离、业务池加有界队列与拒绝策略及TraceId上下文传递的重构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "老代码是用FastJson序列化整个工单上下文，然后丢进一个全局ThreadPoolExecutor。序列化太慢了，阻塞了IO线程。我想把FastJson换成ProtoBuf，然后把线程池改成异步的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加队列？把队列长度拉大一点？不对，拉大还是会OOM。要不加个拒绝策略？但心跳丢了岛就掉线了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在老代码是全局共享线程池，散单多的时候大包计算把心跳都堵死了，怎么搞流控和隔离？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Reactive全改肯定来不及，里面状态机逻辑太绕。我打算先做线程池隔离，把心跳的EventBus单独拆出来，业务计算放另一个池子。背压先上有界队列加CallerRunsPolicy，水位超了就让调用方自己跑，不丢消息。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，调用方如果是IO线程就卡死了。那只能用AbortPolicy然后捕获异常打日志？不行，心跳不能丢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一，Netty的IO线程只做收发，拆包后丢到计算池。第二，心跳包和业务包分两个计算池，心跳池优先级高，队列满时只拒绝业务包。第三，业务池加有界队列和AbortPolicy，拒绝的订单记录下来重新路由。TraceId要在往计算池提交时手动塞进Task的Runnable里，不然线程切了就丢了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

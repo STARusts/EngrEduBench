@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在暂态电压越限监控背景下，用户与导师围绕监测手段、触发逻辑与阈值设定持续沟通（7轮），其中在暂态压升监测与触发逻辑部分与电能质量监测员沟通（2轮），在触发阈值计算与合规归档部分与暂态稳定控制师沟通（1轮），并最终形成基于高速录波与dV/dt双重触发的监控及归档方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接在运维平台上配个看板，把电压拉出来，超了就发告警。Grafana这种现成工具接进去快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "平台采样大概是秒级。毫秒级确实可能漏掉。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有更方便一点的办法？比如有没有专门抓暂态的现成组件可以直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "秒级采样抓不住毫秒级峰值。有没有开箱即用的暂态监测模块？我不想从零写触发逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "存储爆盘麻烦。触发条件怎么定稳妥？能不能简单设个电压上限？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "普通看板不行，得用专门录波装置触发。触发不能只看电压超限，还得看变化率dV/dt，两个一起满足才录波，免得存储爆掉。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "打算用dV/dt和幅值双重触发录波，dV/dt阈值不知道定多少。有没有经验值可以直接用？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "不用普通看板了，改用高速录波装置。触发逻辑：dV/dt超过极限压升速率加15%裕度，且电压幅值超限。抓到的数据打工况标签和时间戳归档，满足审计溯源。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在双师协同实践课智能调度与评价云进入排班调度引擎实现背景下，用户与导师围绕排班求解引擎雏形的数据模型、硬约束枚举化、回溯剪枝策略、失败可解释性与日志合规持续沟通（10轮），其中在接口定义/diagnostics失败原因输出/最小回归测试设计部分与后端负责人沟通（6轮），并形成可实现的DTO/Session模型、约束清单、diagnostics与测试用例实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边要开始做排班调度引擎实现。现在我卡在“怎么把规则写进代码”的第一步，该从哪块开？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入大概是老师、企业导师、班级、实训室、时间段，还有任务。输出就是一周的课表？硬约束我记得有：不能撞课、实训室容量、导师可用时间。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先写个简版：tenantId、termId、classId、courseId、timeSlots、rooms、teachers、enterpriseMentors、constraintsJson、strategy。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解是同一节课需要校内老师和企业导师同时到场。可能也有企业导师只做点评那种，但先不做？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就把一个“Session”里加 requiredRoles=[schoolTeacher, enterpriseMentor]，每个role绑定候选人列表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想回溯+剪枝。现成求解器我不太会接，而且怕引入太重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 现在我在做排班调度引擎的雏形，准备回溯+剪枝。想确认三点：1）引擎接口入参/出参怎么定比较利于扩展；2）排不出来时怎么输出“失败原因”方便排查；3）最小化的单元/回归测试怎么搭？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "diagnostics要这么细啊。我原本只想返回空列表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我引擎里做“可控随机”是不是有点多余？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，我记下。diagnostics里firstConflict是运行时记录一个就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认下：ScheduleResult 的 status 里 TIMEOUT 和 INFEASIBLE 分开，是靠 maxSearchMs 触发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备采纳：入参里加 options(maxSearchMs、maxNodes)、出参加 status 和 diagnostics。diagnostics我先做 unsatisfiedSessions + searchStats，firstConflict我不确定能不能抓到准确的“第一次”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对。我怕回溯里失败很多次，哪个算第一次我说不清。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想先排最难的，比如候选导师最少的、时间窗最窄的。就是按候选数量排序。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就预处理每个session的候选时间槽列表，然后按长度排序。排一个就从列表里取timeSlot+room+人员组合。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "CLASH_CLASS、CLASH_TEACHER、CLASH_MENTOR、ROOM_CAPACITY、MENTOR_AVAILABILITY。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "plannedHeadcount我漏了。我加到session里。ROOM_TIME_AVAILABLE 我也加。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我有个疑问：审计和权限那块会不会影响引擎？比如日志里不能打印个人信息？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，我就打 teacherId、mentorId、roomId。名字不打。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那diagnostics里 unsatisfiedSessions 的原因我就用枚举，不带具体人名。最多带 sessionId。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）定义 ScheduleRequest/ScheduleResult 的DTO，包含 options、status、diagnostics；2）定义 Session 模型：requiredRoles、candidateTeachers/candidateMentors、plannedHeadcount、可选timeWindow；3）实现回溯主流程：按候选timeSlot数量排序、分层选择timeSlot->room->people，并在每步做硬约束检查；4）硬约束枚举和检查器：CLASH_CLASS/TEACHER/MENTOR、ROOM_CAPACITY、ROOM_TIME_AVAILABLE、MENTOR_AVAILABILITY、ROLE_COLOCATE；5）实现 diagnostics：unsatisfiedSessions（原因枚举）、searchStats(visitedNodes、prunedNodes、elapsedMs)，加 TIMEOUT/INFEASIBLE 分支；6）三类最小测试：可行/不可行/超时。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

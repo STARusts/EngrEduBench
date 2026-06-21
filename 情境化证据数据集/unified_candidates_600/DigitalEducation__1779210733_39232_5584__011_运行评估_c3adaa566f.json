@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在多模态实训平台灰度部署与算力交付背景下，用户与导师围绕算力预留策略、灰度收益A/B Test验证、数据隔离与审计合规及FinOps成本短板持续沟通（7轮），其中在算力配额与成本红线部分与算力交付运维工程师沟通（1轮），并形成常态预留与弹性扩容结合的交付方案、基于t检验的灰度验证方案、租户隔离与脱敏审计合规方案及Kubecost学习目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度池直接按峰值1.5倍预留GPU和CPU资源，确保首批实训机构进来时，多模态推理算力绝对不触发降级，体验必须拉满。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "体验打折直接砸招牌啊。算力不够就扩呗，反正云上资源弹得出。不过确实，全锁死可能影响其他在线服务，而且一直空置也浪费。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力配额怎么定？我希望能保证多模态推理不降级，但导师说不能1.5倍锁死资源。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "弹性扩容有冷启动延迟，节点拉起可能要几十秒，这期间多模态推理早就排队溢出了。不过有 ResourceQuota 限制和熔断兜底，至少不会把集群整体打爆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么证明灰度放出来的这批机构，他们的实训效果和系统延迟是真的因为新架构变好，而不是因为他们本身基础就强？我得做严格的分组比较。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我设计一个A/B Test。灰度组的3家机构走新的边云协同链路，对照组选历史基线数据相近的3家走老链路。观测变量是云端P99排队延迟和干预准确率。前提是这两组机构的实训科目和初始技能画像分布必须同构，不然结论无效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前提检验可以拉取他们前三个月的实训通过率做独立样本t检验，p值大于0.05才算同构，保证起点一致。至于数据隔离，我给每个机构租户打 Namespace 隔离标签，网络策略设严格出入站规则。操作审计我配一下 API Gateway 的访问日志，留存所有干预指令下发记录。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我平时只管算力够不够跑得动，很少看账单，对弹性伸缩的实际花费和资源利用率没概念。这导致我设计的交付方案往往只保上限不计成本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定个目标：两周内完成 Kubernetes 成本管理模块的专项学习，掌握 Kubecost 工具的使用。下周我会把当前灰度集群的 YAML 全部加上 Request/Limit 声明，用 Kubecost 跑出一份基于 HPA 策略的成本预测报告，看看弹性扩容的实际花费是不是在预期内，并据此修正我的资源预留系数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力交付方案：常态预留30%基准算力，依赖HPA弹性扩容，单机构设 ResourceQuota 并卡150%成本红线。灰度验证方案：基于t检验筛选同构的对照组与灰度组，比对P99延迟和干预准确率。合规要求：租户级Namespace隔离，干预指令下发日志脱敏审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改部署 Chart，把 Request/Limit 和 Quota 加上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

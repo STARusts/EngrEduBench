@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在数字教育产品运行评估的版本迭代复盘背景下，用户与导师围绕delivered_rate断崖、timeout激增与缺陷池堆积的归因假设、最小数据切片与复盘议程持续沟通（7轮），其中在指标归因与分桶判定/阈值口径/数据局限部分与数据分析师沟通（5轮），在复盘结论落地为版本计划与灰度回滚/缺陷处理时延指标部分与产品经理沟通（4轮），并形成8条以内可执行复盘提纲与监控留存边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先拍三个：1）delivered_rate 断崖那次，到底是端侧离线还是服务端超时导致；2）timeout 激增是不是跟我们加的脚本校验有关；3）缺陷候选推缺陷池后，产品和研发实际处理时延，别变成堆积。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先看 delivered_rate，因为它最影响课堂体验。分组我想按：学校/机型/网络类型（WiFi/4G）/脚本类型（讨论、测验、资源投放）/环节粒度。证据就用 expected_cnt/received_cnt/end_reason 串起来，看看断在谁那一段。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设A：端侧离线缓存导致收到的事件延迟上报，表现为 end_reason=offline_flush 增多，同时 received_cnt 最终补齐但时序拉长。切片：看同一课堂的事件到达延迟分布+end_reason。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设B：服务端执行编排超时导致环节没下发，表现为 end_reason=server_timeout，expected_cnt 还在增长但 received_cnt 卡住。切片：看 timeout 指标和 end_reason 的共现。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 归因这块怎么做得更靠谱？我现在有 delivered_rate、timeout、expected_cnt/received_cnt/end_reason。担心按维度切太多会把结论切碎，还可能误判端侧问题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "桶我能理解。关键事件缺失你指哪几个？我们现在日志里有“task_delivered”“task_ack”“task_submit”这些。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果端侧没有细日志，我们用 ack 缺失当分发失败，会不会把“学生没点开”算成分发失败？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规这块我不太确定，session_active 算个人行为吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认下：这轮复盘输出最好是“主因占比+证据链+数据局限+下一步验证”，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）先用事件链路四个桶，把 delivered_rate 的下降拆到“下发/未确认/回传”等类别，占比用 end_reason+关键事件缺失判。  \n2）分组只优先三维：网络、机型档位、环节类型，学校先不做主结论。  \n3）阈值不拍脑袋，用一周 ack_p95、submit_p95 推窗口，复盘里把规则写清楚。  \n4）端侧触达和未打开目前不可区分，桶命名会保守；后续若治理允许，考虑课堂级匿名活跃计数做验证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 复盘这块你希望输出到什么粒度，才能直接进下个版本迭代？我这边能给出主因占比、证据链和数据局限，但不确定你们怎么消化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果 delivered_rate 的下降主因是“未确认（含未触达/未打开）”，这类问题你会算哪一类？感觉不一定是bug。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 timeout 激增这条，如果和脚本校验相关，但修起来要动不少，会不会先灰度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有缺陷池堆积的问题。你想用什么指标看“处理时延”？我们这边能打通 symptom_code 到缺陷候选。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我大概能组织出来：把复盘结论按“缺陷/体验/不做”三栏落地，再附两档方案和灰度回滚条件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）复盘目标：解释 delivered_rate 下滑与 timeout 激增的主因占比，并给出下一版本动作优先级。  \n2）归因方法：按事件链路四桶（下发失败/分发或未确认/确认未回传/回传超时）用 end_reason+task_delivered/task_ack/task_submit 缺失判定。  \n3）对照策略：同脚本类型下做迭代前后时间切片对照，并按网络、机型档位、环节类型三维分组。  \n4）阈值口径：ack、submit 的窗口用一周数据的 p95*1.5 设定，复盘里明确计算口径。  \n5）数据局限：端侧“未触达 vs 未打开”暂不可区分，相关结论以“未确认（含未触达/未打开）”表述，避免误伤。  \n6）缺陷项（必须修）：列出触发条件、影响范围、回归验证指标（delivered_rate、timeout、end_reason 分布）。  \n7）体验项（可延后）：先加监控与灰度策略，明确回滚条件（delivered_rate 断崖、timeout 激增同时出现）。  \n8）流程项：缺陷候选到受理/关闭时延、误报率作为版本质量指标，给出降噪动作（阈值调优/规则合并）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一句：新增的监控和规则优先用聚合维度、短留存，误报率高的规则不进常驻告警，只进缺陷候选池，避免运维告警疲劳。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

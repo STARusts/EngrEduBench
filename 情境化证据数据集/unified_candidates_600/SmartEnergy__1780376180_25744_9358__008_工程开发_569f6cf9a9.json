@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在余压并网控制内核开发背景下，用户与导师围绕频阻解耦实现、时序同步、控制帧结构与对照测试持续沟通（6轮），其中在频阻解耦实现部分与并网控制内核开发者沟通（1轮），在阻抗匹配时序对齐部分与柔性并网路由设计师沟通（1轮），并最终确定状态机驱动、无锁队列同步及阶跃对照测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "内核开发，不就是写控制指令下发吗？我把算出来的余压值直接扔给并网接口不就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抗冲击，加个限幅不就好了嘛。我之前写后端接口都是这么干的，超了就截断。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并网控制内核里频阻解耦怎么搞？加限幅行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "所以不能顺序写，得弄个状态机一直跑，算偏移量再补偿。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "路由策略下来的时候，怎么跟内核的阻抗观测时序对上？我怕两边时间对不齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我知道怎么写，ringbuffer嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照测试，就跑一遍看并网有没有报错呗，没报错就是过了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在内核里埋点日志，抓动态阻抗观测器的输出曲线，跟没补偿的做对比。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

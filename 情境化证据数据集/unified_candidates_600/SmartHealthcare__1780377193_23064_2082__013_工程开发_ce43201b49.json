@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路压测去噪信噪比崩溃排查背景下，用户与导师围绕根因定位、修复方案及验证持续沟通（4轮），其中在信噪比下跌根因诊断部分与挥发本底去噪工程师沟通（1轮），在eBPF修复方案压测验证部分与全链路联调测试师沟通（1轮），并最终确定eBPF内核态时间戳修复方案与800 QPS压测红线监控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "压测流量一大，环境本底噪声肯定非线性爆发。我准备引入Flink CEP做边缘侧的复杂事件处理，再挂一个轻量级的Transformer模型做在线自适应去噪。原来的维纳滤波和卡尔曼滤波根本扛不住这种高并发特征漂移。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测并发上来后，去噪信噪比为什么断崖式下跌？是环境本底出现了突发高频震荡吗？我准备加Flink和Transformer，你觉得算力够不够？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来是时间戳漂移导致特征错位，不是噪声本身变复杂了。现有的维纳滤波能用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "为了防备以后真的出现非线性突发噪声，我能不能把Flink的侧输出流保留着做异构备份？这样架构扩展性更好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然问题出在用户态拿时间戳有调度延迟，我可以把时间戳打点用eBPF注入到内核态的Socket读取瞬间，直接绕过用户态抖动。这样对齐精度能进亚毫秒级，去噪信噪比肯定能稳住。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我已经把时间戳采集点下沉到eBPF内核态了。你跑一轮压测，看看去噪信噪比恢复没，顺便给个对照分析的边界结论。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试通过了。800 QPS内信噪比稳定，超过会有软中断瓶颈。eBPF迁移确实解决了用户态抖动问题，精度提升很明显。Flink方案我撤了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

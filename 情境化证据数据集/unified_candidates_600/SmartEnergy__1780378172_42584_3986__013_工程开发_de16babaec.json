@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多微源时延补偿与逻辑调优背景下，用户与导师围绕时延补偿方案与调优边界持续沟通（7轮），其中在通信时延分布与时标对齐部分与边缘网关联调专员沟通（1轮），在时延破坏边界与低阶近似适用边界部分与虚拟惯量算法主程沟通（2轮），并最终形成按最慢节点时标对齐、采用低阶超前近似补偿及明确频带与截止频率限制的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "直接加个延迟模块模拟一下？Simulink里有Transport Delay，套上去调调参数就行吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有现成的时延补偿包？直接调包行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关这边的时延分布是啥样？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时延破坏边界是啥？加个Smith预估器能不能搞定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "专员说要按最慢节点对齐，主程说时延超0.3倍就振荡，不能用Smith。那我写个Python脚本把数据对齐，算法里加个超前环节？网上有超前校正代码，我改改？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模型不准的话，可以用个低阶的近似代替？不用精确模型，就算时延抖动，也不会马上崩。算力也能省点，网关跑不动太复杂的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按最慢节点做时标对齐，算法里不用Smith，用低阶超前近似补偿。补偿频带不超自然振荡频率0.2倍，截止频率低于采样率五分之一。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

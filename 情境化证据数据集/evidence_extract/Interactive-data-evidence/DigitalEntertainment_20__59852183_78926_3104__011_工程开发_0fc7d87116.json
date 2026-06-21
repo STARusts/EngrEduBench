@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在发布地图版本的审核管线与风控接入联调报错定位背景下，用户与导师围绕审核回调偶发403“签名不匹配”、修复点与可控复现验收持续沟通（8轮），其中在签名串字段/时间戳nonce与body规范化及snapshot_id编码问题上与隐私与安全工程师沟通（2轮），在风控接入范围最小集合与标签处置上与审核策略工程师沟通（1轮），并明确snapshot_id从query迁到body、回调验签与日志留痕及对照测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是两接口：写事件和读事件。写的时候带发布版本和快照id，uuid做幂等，服务端给seq。读就按seq读，先找 checkpoint，再往后播，缺了就回个 STATE_REPLAY_GAP。字段就按那堆：project/map/publish_version/snapshot_id/session_id/seq/event_type/node_id/edge_id/trigger_source/payload_schema/payload/consent_version/user_pseudo_id。坐标不存，用户用 pseudo，TTL 30天可配。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "签名不匹配就重试呗，403就再发一次。或者把签名关了，先跑通发布。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不知道谁参与签名。我们就把 payload 直接丢过去。snapshot_id 就是个字符串，能变啥。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私与安全工程师 现在审核回调偶发403，说签名不匹配。我们发布审核请求里带snapshot_id时更容易触发。签名到底拼哪些字段？body是不是要做canonical？snapshot_id要不要编码？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就把 snapshot_id 挪到 body，JSON 用一种 stringify。可以了吧，别搞太多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "日志这块我想先不管，先把403干掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就发布那边：把 snapshot_id 放 body，签名用固定 stringify。验证就看不出403了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就 publish 的时候送审核，用户走地图的事件也送吧，风控就爱数据多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@审核策略工程师 风控接入到底要哪些数据？我现在就有事件流那堆字段，还有发布时的内容包。哪些要送，哪些别送？给个最小集合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "抽样上报听着就麻烦。能不能先全部不上报，等后面再说？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "A就是发布前把文案之类送审核，带 map_id、version、snapshot_id、创作者id、内容hash。B就是管理台的 publish/rollback 这些动作也送风控，带操作者、IP段、UA、结果码。玩家事件不送。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第4条我嫌慢，但你要就加个 hash。回调验签我不太懂，照着你说的算一次就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就用同一份内容，多发几次，总会撞到一次吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，这个我能测。就做个包含加号的 snapshot_id，走旧的 query 方式看403，再切到 body 看OK。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

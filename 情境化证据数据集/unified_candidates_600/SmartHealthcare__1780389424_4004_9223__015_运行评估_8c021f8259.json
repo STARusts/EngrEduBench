@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在模型运行评估背景下，用户与导师围绕随动效果指标、异常监控逻辑及报警与审计机制持续沟通（5轮），其中在业务指标与逻辑冲突抓取部分与算法工程师沟通（2轮），在院外代理指标、报警聚合与转人工审计部分与运维监控工程师沟通（1轮），最终确定以随访预期INR代理TTR、抓特征偏移与逻辑冲突、报警时间窗聚合及转人工留快照审计的监控策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用Prometheus把模型接口的返回值拉出来，再套个Grafana大盘。主要看模型推荐的剂量和医生实际开医嘱的剂量偏差，偏差超了就报警？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "模型输出异常我只会设个固定阈值，比如推荐华法林剂量超过3mg就报。但万一是患者真需要加量呢，直接阻断肯定不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "随动效果看啥业务指标？模型抽风推错剂量导致误伤怎么抓？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "TTR需要INR值，我们院外终端采不到血，拿不到INR啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "逻辑冲突抓出来后怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说核心看TTR，但院外没INR。异常得抓逻辑冲突，比如房颤置信度低还推加量，抓出来得转人工。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "院外没INR算不了TTR，拿什么代理？逻辑冲突报警多了会不会刷屏？转人工怎么留底？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

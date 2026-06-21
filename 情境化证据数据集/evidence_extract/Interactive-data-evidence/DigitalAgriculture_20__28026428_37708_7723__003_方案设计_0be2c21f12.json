@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在虫情气味多模预警协同系统方案设计背景下，用户与导师围绕MVP气味传感采集架构的采样频率、端侧预处理、上报策略、断网补传与原始数据30天留存持续沟通（6轮），其中在采样周期/清洗段与风扇或泵、特征与异常原始窗、漂移自检与阈值初始化部分与传感硬件工程师沟通（4轮），并最终敲定端-云存储边界、最小字段与对时要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就传感器装温室里，然后数据一直发到云上。频率就…1秒一次？反正多点好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要曲线吧，不然模型怎么学。虫子味道应该是突然变重那种。阵列就…买个贵点的模块就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@传感硬件工程师 采样怎么搞？我就想知道要不要一直抽气、多久采一次、数据怎么吐出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“清洗段”是啥？还要泵？我以为直接露天放着闻就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我是不是就固定 2分钟采一次，然后算个平均值上报？别搞一堆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "3σ听着就玄学。阈值能不能拍脑袋给个数字？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。那数据吐出来就是特征包+偶发原始窗。回去我跟导师说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 硬件说别1秒全上云。端上1Hz采着算特征，每2分钟发一个特征包；异常才传10分钟原始。采样要有采样段+清洗段，不然基线回不去。还能先用风扇导流，别上泵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端就存一下原始，云上都存。断网就…等有网再发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端侧原始就存…一天？特征存7天？网关我想不要，直接4G上云。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，端上多存点无所谓。只要别让我写复杂逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）每2分钟发特征，触发才发原始窗。2）断网先堆着，先发特征。3）参数能远程改。4）加密、权限、留记录。差不多吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段…就时间、传感器id、数值？原始窗就是数组。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "UTC毫秒就UTC毫秒。对时每天一次，重启也对。可以了吧，别再加东西了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

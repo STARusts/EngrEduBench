@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在脓毒症系统底层数据基座床旁流注时序数据开发背景下，用户与导师围绕异构设备数据实时对齐与清洗、Flink状态后端调优及验证持续沟通（4轮），其中在设备时间戳同步精度部分与生征设备集成专家沟通（1轮），在乱序注入与水位线设置及流式清洗部分与流注时序开发工程师沟通（2轮），并最终形成接入层统一打标、动态水位线乱序容忍、增量聚合加先验硬截断清洗及RocksDB压测调优四个工程实现锚点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么在流上做实时对齐和清洗是关键。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "宏微循环耦联看的是毫秒级血流动力学演进，肯定得基于事件时间。但ICU里设备时钟漂移太要命，我需要先摸清底层协议的时间戳机制。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "床旁这些设备的时间戳同步精度到底能控到多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我考虑用Flink的CEP做模式匹配，滑动窗口对齐多模态特征。不过Flink的RocksDB状态后端调优我以前只改过默认配置，面对这种高频写入，状态TTL和Compaction策略我心里没底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对RocksDB底层LSM树写放大机制理解不深，这是现在的卡点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我计划这周把Flink状态后端源码的RocksDB配置项过一遍，重点搞清write_buffer_size和max_write_buffer_number对高频时序写入的影响，在本地搭个压测环境跑出最优配置，然后直接把调优参数迁移到咱们时序对齐的Job里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备构造两组对照测试数据：一组是严格时序的理想流，另一组是注入了随机延迟和时钟回退的乱序流。假设我的水位线延迟设为200ms能覆盖95%的乱序情况，我会统计对齐后的特征丢失率和时间偏移方差，如果丢失率>1%，说明容忍度不够，需要放宽水位线但又要评估对推演实时性的影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种乱序注入和水位线设置，在Flink里怎么实现最干净？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按设备类型分治，比全局统一死阈值合理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征提取前的清洗，像导管抖动引起的伪迹，我打算在滑动窗口内用3-sigma滤除突变点，你看和Flink的窗口API结合有坑吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "微循环灌注指数可能偏态分布。增量聚合加临床先验硬截断，既省内存又安全。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "咱们对齐和清洗的工程实现就按这几条落：1. 接入层系统时钟统一打标；2. 自定义水位线按设备类型动态设乱序容忍；3. 增量聚合实现3-sigma加先验硬截断清洗；4. 本地压测补齐RocksDB调优。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

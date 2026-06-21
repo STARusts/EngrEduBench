@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在数字人微动仿生推演系统方案设计背景下，与导师围绕跨模态数据流选型与防操纵校验持续沟通（7轮），其中在多模态流式对齐与延迟一致性权衡部分与实时调度架构师沟通（3轮），并最终确定Kafka接入与Flink对齐校验架构及反压约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "数据流这块先弄啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Kafka，之前项目都用的，先把数据接进来再说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐我写个脚本算。校验放最后呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时调度架构师 导师让我问多模态流式对齐怎么搞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们要低延迟，B方案好，快就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "丢帧会恐怖谷啊。那A方案怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink状态管理我不懂，反压也没调过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚看Flink官方文档Checkpoint那章，还有反压调优案例。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明早把容错点画在架构图上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "防操纵是红线不能断。A方案能保证每帧过审，虽然慢点但安全。选A方案，Flink+Kafka。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "200ms人眼分辨不出来，能接受。B方案丢帧风险太大，不符合防操纵。就用A。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Kafka接入，Flink对齐加校验，Checkpoint秒级，反压0.75。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

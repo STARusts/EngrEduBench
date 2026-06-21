@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在链上合约联调与安全审计背景下，用户与导师围绕防重入Gas优化与灰度降级一致性持续沟通（4轮），其中在防重入与Gas优化部分与智能合约设计师沟通（1轮），在灰度降级版本兼容部分与链端研发工程师沟通（1轮），并最终形成内联分润与版本校验revert的修复锚点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "联调主要卡在链上链下状态同步的原子性。刚才链下改了合并函数，如果灰度降级退回深拷贝，链上事件还在按新逻辑出块，两边状态就撕裂了。审计方面，资产拆分流转涉及多签分润，重入攻击和越权调用是高危区。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "资产拆分流转如果用OpenZeppelin的ReentrancyGuard，在跨合约调用分润池时Gas损耗大概在什么量级？微支付场景下会不会导致交易失败率飙升？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "链下服务开启Unleash灰度后，如果降级回退到旧合并逻辑，发送给合约的交易怎么避免状态错乱？链上事件是单向的，没法回滚。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "设计师建议分润逻辑内联，用低级call推款，避免跨合约Gas陷阱；链端建议交易带`logicVersion`，合约加版本校验modifier，降级时直接revert旧版本交易。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "安全性绝对优先。Gas飙升会导致微支付堵死，内联分润虽然合约代码多一点，但调用链短了，反而更好审计。降级期间revert是合理的，前端加个Toast提示“系统维护中”就行，总比资产对不上好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，防重入与Gas优化，摒弃跨合约分润调用，将分润逻辑内联并使用低级call推款；第二，灰度降级一致性保障，交易体增加`logicVersion`，合约增加版本校验modifier，降级时revert不兼容交易；第三，前端适配，捕获版本不匹配的revert并给出维护提示，掩盖链上错误细节。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在并发下压与性能调优背景下，用户与导师围绕施压定界、反压定位、GMP知识迁移及观测指标持续沟通（8轮），其中在下压场景构造部分与性能压测工程师沟通（1轮），在算法反压阻塞与死锁风险部分与寻优算法工程师沟通（1轮），并最终形成阶梯脉冲施压、mock慢消费端反压定位及Keepalive防断连的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想引入一套基于 eBPF 的无侵入内核态观测工具，配合 Service Mesh 的全局限流矩阵来做下压。因为图计算 gRPC 输出物料流时，如果后端寻优算力池出现毛刺，传统的应用层打日志根本抓不到 nanosecond 级别的上下文切换损耗。我们可以用 eBPF 直接在 sock 层抓包分析延迟分布。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心瓶颈应该在图计算引擎和寻优工作流引擎之间的 gRPC 反压机制上。如果寻优算法收敛慢，Prometheus Gauge 暴露的中间状态堆积，gRPC stream 会背压，导致图计算侧物料流阻塞。但我坚持认为，如果没有 eBPF 的火焰图，我们很难区分是 gRPC 序列化慢，还是寻优计算本身慢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你觉得在模拟提炼指令并发下压时，怎么构造才能既压出反压断点，又不把图计算引擎直接打挂？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果用 mock 慢消费端，那反压断点应该会体现在图计算引擎的发送队列堆积上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "了解到 GMP 模型里网络轮询器在处理大量 gRPC 连接时，可能会因为 M 被阻塞导致 P 的窃取失效，进而引发全局延迟毛刺。我是不是应该在压测时，专门配置 GOMAXPROCS 或者调整 gRPC 连接池来适配这个底层机制？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我迁移过来的改进想法是：在寻优算法的 gRPC 客户端侧，配置 Keepalive 参数，定期发 ping 帧保活，避免被对端或者中间网关当成死连接掐断，同时也能让 netpoller 保持活跃。适用边界是：这只在连接数大于 500 且存在明显空闲期的场景下有效，如果产线是持续满载物料流，保活反而增加开销。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心指标有三个：1. 图计算引擎的 gRPC 发送队列长度（判定反压是否传导）；2. 寻优算法单次迭代的 CPU 耗时（排除计算本身慢）；3. Prometheus Gauge 暴露得率预测值的抖动幅度。如果队列长度超阈值但 CPU 耗时没涨，说明是网络或序列化瓶颈；如果 CPU 涨了但得率预测抖动不大，说明是算法内部锁竞争，不影响最终收敛。不过，这里有个边界问题：如果压测时配方浓度哈希混淆的计算占了 CPU，会干扰我们对寻优算法本身耗时的判断。这块我不太确定怎么隔离噪声。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想确认一下，当 gRPC stream 背压导致物料流输入暂停时，你那边的寻优算法线程池是会阻塞等待，还是会丢弃过期物料？如果阻塞，Gauge 暴露中间状态的锁会不会被死锁？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我就不用担心反压传导到算法内部导致雪崩了。我可以放心地用阶梯脉冲把并发拉上去，重点观测图计算侧的发送队列。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "提炼指令并发下压与性能调优方案：1. 施压模型：阶梯式脉冲并发，模拟产线批次物料脉冲。2. 反压断点定位：使用 mock 慢消费端，通过 pprof 和 gRPC flow control window 变化定位，放弃 eBPF 方案。3. 调优手段：配置 gRPC Keepalive 防止 netpoller 无效轮询和断连。4. 核心观测指标：图计算发送队列长度、寻优单次迭代 CPU 耗时（扣除哈希脱敏底噪）、Gauge 得率预测值。5. 验证边界：寻优算法异步消费且 Gauge 无锁，反压不会导致算法侧死锁。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

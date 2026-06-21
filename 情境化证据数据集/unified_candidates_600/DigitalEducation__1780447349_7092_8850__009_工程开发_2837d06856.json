@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异构算力沙箱镜像轻量化和快速拉起背景下，用户与导师围绕技术方案持续沟通（5轮），其中在异构分发与毫秒级拉起部分与容器化开发工程师沟通（3轮），并最终确定多架构Manifest List、P2P分发Dragonfly、镜像瘦身distroless+GPU宿主机注入及调试用ephemeral container的技术栈，准备改写Dockerfile。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Alpine做基础镜像，然后Docker多阶段构建，把编译环境和运行环境分开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "异构就分别打不同架构的镜像呗。毫秒级拉起，只要镜像小了，拉取不就快了吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构分发和毫秒级拉起怎么搞？Alpine和多阶段构建够不够？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "overlayfs共享底层这个，是不是只要基础镜像一样，后面起的容器就很快？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对，GPU驱动放进去太大了。那GPU咋办？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "多架构用Manifest List，分发用Dragonfly P2P，本地靠overlayfs共享。GPU驱动宿主机注入，镜像用distroless瘦身。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以留个debug用的epkg？或者用ephemeral container？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我去改Dockerfile，把shell删了试试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

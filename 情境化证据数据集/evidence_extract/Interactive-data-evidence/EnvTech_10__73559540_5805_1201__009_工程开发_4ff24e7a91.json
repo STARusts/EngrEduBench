@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在产气预测管道工程开发（特征工程与建模）背景下，用户与导师围绕标签口径、时间对齐、特征/防泄露、切分评估与接口状态返回持续沟通（6轮），其中在数据对齐与质量规则上与数据工程师沟通（3轮），在模型选择、评估口径与分位数输出上与算法工程师沟通（3轮），在特征层敏感数据最小化与审计留痕上与合规与隐私官沟通（2轮），并明确第一版MVP的特征分组、切分评估与meta.status输出要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标签就是产气量吧，比如每天的沼气立方。输入就用传感器的温度、压力这些。可以先把所有字段都喂进去？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先 24 小时？日累计也行。甲烷量我感觉也算产气量的一种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 产气预测这块的数据怎么对齐？我怕时间戳乱。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那台账的字段都 hash 了是不是就能随便用？反正不泄露。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了。还有 rolling 是不是就相当于 TTL？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 模型这块用啥合适？我就想先跑起来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分位数回归就是输出三个数字？那我接口就返回三个字段就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "模型训练要不要深度学习？感觉 LSTM 听起来更高级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我就先树模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们做特征表会不会踩隐私？台账里有些字段挺敏感。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我把所有特征名都 hash 掉存起来，就最安全？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是先按小时对齐，然后做 rolling 的均值啥的；模型用树的，输出 p10/p50/p90。还有台账别乱用，事后的不能进。审计就按 hash 记。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "特征类别…温度压力算一类，pH算一类，投料算一类，模式算一类，质量标记算一类？泄露就是只用之前时间的。切分就按时间切，别打散。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "返回 meta.status 的 state=EXPIRED？然后 message 说超时。预测值就不返回，或者返回空。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在重构调度延迟飙高的运行评估背景下，与导师围绕延迟归因与锁冲突处置策略持续沟通（5轮），其中在耗时阶段定位部分与重构动作监控专员沟通（1轮），在锁冲突解决方案部分与产线重构控制规划师沟通（1轮），并最终形成保留路径软锁、放弃提权抢占的归因与处置结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜是网络抖动，或者云端算力瞬间不够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "重构延迟P99飙到800毫秒，耗时集中在哪个阶段？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "查到了，是MES转发给PLC慢。特别是旁路复检后二次下发的指令最慢，常规一次下发不慢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "复检完再下发，多走了一遍流程，肯定慢。是不是要优化下发代码，写个异步并发之类的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "旁路复检后二次下发指令延迟高，因为复检挂起时释放了路径锁，二次下发要重新抢锁排队。这怎么解决？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "规划师给了两个方案，一个是保留软锁，一个是提权抢占。我觉得提权抢占好，快，不用改太多逻辑，直接插队就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没算过，应该不大吧，复检率才5%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因是复检挂起释放锁导致二次下发抢锁排队，处置是复检期间保留软锁，二次下发正常转硬锁，不用提权抢占。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

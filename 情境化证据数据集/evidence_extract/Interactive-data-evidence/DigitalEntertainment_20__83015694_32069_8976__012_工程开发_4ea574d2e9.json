@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在创作者工作台联调完成后的工程开发压测回归阶段，用户与导师围绕“读者侧语音触发转圈”定位与可回归断言持续沟通（11轮），其中在压测覆盖失败模式与通过口径部分与测试负责人沟通（4轮），并最终明确缺字段即失败、前端埋点记录loading_end_ts+request_id及mock_audio开关与压测脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都转。就是点一下就一直转，反正就是转。也不知道哪条。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "request_id 我有一堆，哪个算。matched 我没看过，我就看它转。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概是说完话，松开，页面就卡住。也可能拿到了吧，我没看日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 现在要压测回归，你说要测啥？我这边就知道会转圈。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "200 RPS 是啥，我这边就能点点点。还有 reason_code 我不认识。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反正就是别转。缺字段就算错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是别等太久。300ms 我也不知道怎么量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我在前端，阅读器那块。埋点我没怎么写过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "request_id 前端能拿到吗？我只看到 response 里有一串。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就打 request_id。别的我不敢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不想站边，我就想别让我改很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就渲染不了，页面就空，可能一直转。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@测试负责人 缺 panel_variant_id 就会一直转，所以缺字段就直接算失败吧，不要放过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合成短音我不会搞，脚本谁写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "顺序就是先申请麦克风，然后录一段，然后发接口。header 有 X-Request-Id。就这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "开了能看到更多吧，那就全开。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那压测就不加这个头。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我把录音时长限制 2 秒？就这样？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我能加个 query 参数，比如 ?mock_audio=1，然后就用本地文件发。应该行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就做这俩。别再加别的了。request_id 我只打这个，不带别的字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

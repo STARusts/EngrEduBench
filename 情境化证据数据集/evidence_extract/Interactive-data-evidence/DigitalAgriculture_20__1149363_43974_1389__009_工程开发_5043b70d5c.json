@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的“预测服务+策略服务+审计落库”链路压测与异常追踪修复背景下，用户与导师围绕压测口径/阈值拆分、链路串联键、可复现缺陷与修复闭环持续沟通（9轮），其中在压测场景与观测字段最小集部分与SRE运维工程师沟通（3轮），在幂等键/审计唯一索引/Redis原子更新实现细节部分与后端研发工程师沟通（3轮），并形成压测用例优先级、关联字段与错误码分层及修复落地项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先分两层压：接口层（预测->策略）和端到端（含审计写库）。指标我先抓三类：p95/p99 延迟、错误率、还有策略决策吞吐。过线标准我不太敢拍死，但我倾向先按“峰值 2 倍目标流量”跑 30 分钟，错误率<0.1%，p99<500ms 这种量级。审计写库会拖后腿，可能要单独看队列堆积。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "口径按“箱码事件”会更贴近真实：每条温湿度/震动上报可能触发一次预测，但策略不一定每次都触发。那我拆成：  \n1）预测服务：输入事件 QPS，输出 rslHours/freshnessScore/riskLevel。  \n2）策略服务：以预测输出为入口的 QPS。  \n端到端 500ms 先指“预测+策略决策返回”，审计写库允许异步，单独设 backlog 不超过比如 1 分钟积压。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "目前我们在网关有 requestId，但跨服务串起来不稳定。有些链路是异步的。我的想法是把幂等键作为“业务 trace 主键”，比如 tenantId+batchId+boxCode+predTime，再补一个决策序号。日志里每条都带这个 key，方便 grep。就是担心 predTime 粒度太细，会把同一箱的多次事件分裂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 我们要做预测+策略+审计链路的压测和异常追踪。你给一套能落地的：1）压测场景怎么切（稳态/突刺/乱序/重放） 2）核心指标阈值建议 3）日志/指标里最少要带哪些字段，才能把一次决策串起来定位瓶颈？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“asOfTimeBucket”按分钟还是按 cooldown 窗口？我们 cooldown 配置是 10 分钟，滞回也在 2-3 分数波动。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计写库降级你提“只写摘要”，会不会破坏我们之前说的 operatorId/role/reason 必填？自动触发也要系统账号。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去把压测用例和观测字段按你这套补齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会先采纳三块：  \n1）压测场景：稳态+突刺+乱序/重复包，这三类必须有；热点我也想做但可能第二优先级。  \n2）指标：端到端 p99 用“基线*1.5”比固定 500ms 更靠谱；审计 backlog 60s 红线我认。  \n3）字段：correlationId + tenantId/boxCode + cooldown bucketStart + idempotencyKey + policyId/decision/reason/operatorId/role，这套最小链路我会推进。  \n暂时不做的是：全链路 traceId/spanId 的强制贯通，我们现在埋点不齐，短期靠 correlationId 顶一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一是幂等：同一箱码在乱序+重复包下，策略服务可能重复触发“改价”并写多条审计，或者冲突消解顺序不一致。复现方式：对同一 boxCode 连续喂 3 条 predTime 很近但 riskLevel 一高一低，夹一条重复包，看幂等键是否把它们合并成一次决策。  \n第二是防抖/滞回：高频事件下状态读写竞争，导致 cooldown 没生效，决策翻转次数飙升。复现：热点压测，让 1% 箱码高频上报，观察“翻转次数/窗口”和策略命中。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "幂等我倾向两层：  \n- 入口先用 idempotencyKey 做一次“快速拒绝/命中返回”，减少重复计算；  \n- 落库用唯一键兜底，冲突就读已存在的决策结果返回。  \n防抖/滞回的状态我不太想粗锁整个箱码，会影响热点。可能用“按 boxCode 分片的轻量锁”或基于原子更新的版本号，保证同一 bucketStart 内只允许一次状态推进。这里我得看我们现有存储是啥（内存缓存+DB），如果只有 DB 就可能要小心写放大。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态存取是后端研发工程师那边在写，我这边主要盯压测方案、观测字段、以及 bug 复现用例。我能提 MR 但不想直接改他那块核心逻辑，怕引入新问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端研发工程师 幂等和 cooldown 状态这块我需要对齐：1）策略服务当前 idempotencyKey 具体由哪些字段组成？有没有落库唯一键兜底？2）唯一键冲突时返回语义是什么（返回旧决策还是报错）？3）cooldown/滞回状态存在哪里、更新是原子的吗？我这边要据此设计乱序/热点压测的复现断言和观测指标。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就解释得通了。idempotencyKey 用 predTime 太细、审计没唯一键、Redis 也非原子。你们能接受改 key 吗？比如用 cooldown bucketStart 替代 predTime，再加 decisionType？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Redis 的原子更新用 lua？还是用分布式锁？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "OK，我把这三种结果当业务拒绝计数维度。压测时也能看 DENY 比例。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "关键点三条：  \n- 现在 idempotencyKey 过细，审计无唯一键，“先查后写”压测会穿透；需要用 bucketStart+policyId 做幂等主键并加唯一索引，冲突时“读回旧决策返回”。  \n- cooldown 状态在 Redis 目前非原子，热点下会竞态；改 lua 原子脚本，返回 ALLOW/DENY_* 并暴露版本号。  \n- 这些都会直接变成压测断言：乱序+重复包下同一 bucketStart 的决策次数应接近 1；热点下 DENY_COOLDOWN 比例上升但翻转次数不爆，审计冲突率可控且无 5xx。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给最小集合，偏工程可观测：  \n- VALIDATION_4XX：入参缺 tenantId/boxCode/asOfTime。  \n- GATE_REJECT：门控拒绝（dataConf/modelConf 不达标），算业务拒绝。  \n- IDEMPOTENT_HIT：命中幂等直接返回（非错误）。  \n- CONFLICT_UNIQUE：审计唯一键冲突但读回成功（非错误，算一次计数）。  \n- DEP_REDIS_SCRIPT_FAIL：lua 执行失败或超时。  \n- DEP_AUDIT_WRITE_FAIL：审计写失败（含重试耗尽）。  \n- DEGRADED_AUDIT_WAL：进入降级路径（只写摘要/WAL）。  \n- TIMEOUT_UPSTREAM：预测/策略相互调用超时。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只盯字段贯通，没细想日志内容。那我建议：审计日志里 operatorId 用内部 UUID，不写明文；如果前端传来手机号这类，后端直接拒绝或脱敏。系统账号用 system@tenantId 这种形式，至少不混租。这里可能要合规那边再确认边界，但我先按最小化做。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

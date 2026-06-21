@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在靶向施药控制指令联调测试背景下，用户与导师围绕旧施药脚本重构及控制链路安全持续沟通（5轮），其中在飘移补偿与下位机通信机制部分与精准控制联调工程师沟通（1轮），并最终明确脉宽动态折减、ACK回读重发与安全停车的三条重构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这脚本写得太糙了吧，全写死在main里。不过接应该好接，把模型输出的病害概率转成喷头开合时间不就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这模型又不管风速。喷头开没开，我发完指令让它自己跑呗，大不了我加个try-catch。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我觉得加个重试就行了，飘移是不是可以先用个固定系数顶着？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "等ACK还要写超时逻辑，这好麻烦。K因子折减我大概懂，就是风速大就少喷点呗。那我回去把脚本拆开，加上重试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 脉宽计算不能写死，得接实时风速算折减。2. 发指令得等下位机回ACK，超时就重发。3. 重试几次都不行就得让农机停下来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把旧脚本拆成模块，再慢慢加这些逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

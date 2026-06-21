@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在节拍引擎MVP后推进触觉系统开发背景下，用户与导师围绕触觉事件对齐节拍时钟、统一事件模型、设备适配校准、指标埋点与降级策略持续沟通（9轮），其中在设备差异与校准参数设计部分与触觉交互工程师沟通（6轮），并最终确定MVP字段、两步校准、聚合合规记录与优先级降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做得更“物理一致”点：先把触觉当成一个连续信号，不是简单强弱。谱面里给每个note一个触觉包络（attack/decay），再按设备频响去做映射。理想情况还能做个小型系统辨识，测每个设备的传递函数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没传感器就只能主观校准了？我可以做个校准向导：播放标准pattern，让用户调“强度/锐度/延迟”，最后落到三四个参数。同步指标我想加`haptic_latency_ms`和`haptic_jitter_ms`，用触觉事件计划时间 vs 实际提交到驱动的时间差。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@触觉交互工程师 设备适配和校准一般怎么做？我现在想把谱面触觉做成包络+频响映射，但我怕太重。我们至少要哪些参数，才能让不同设备手感差不多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“sharpness”在没有频率的设备上，是不是就等价成更短的duration？或者把同等duration拆成多段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想加一个“纹理”事件，比如持续震动叠加节奏，做环境感。这个在你说的模型里怎么表达？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "校准向导这块，我想做得很精细：先测用户阈值、再做幅度匹配、再做延迟匹配，最后输出一整套曲线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "同步那步如果用户不稳定，会不会误差很大？我想用统计：让他点按“同时”按钮，多次采样出均值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那适配层要不要做“设备指纹”？比如识别机型、手柄型号，给默认参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）统一事件结构：`type(tap/rumble/texture)`、`intensity(0-1)`、`sharpness(0-1可选)`、`duration_ms`、`start_time_ns`。  \n2）设备档案：`gain`、`latency_offset_ms`、`min_effective_intensity`，外加一个`device_class`（只分大类）。  \n3）调度：触觉跟节拍时钟走同一套`start_time_ns`，但在提交前加上`latency_offset_ms`做补偿；texture走200ms tick更新，超预算就降到400/800ms或关掉。  \n4）指标：我准备打点`haptic_submit_latency_ms`（计划提交时刻-实际提交时刻）、`haptic_queue_depth`、`haptic_missed_event_count`，也给P50/P95/P99。校准只存`calib_latency_offset_ms`和`calib_confidence`，不存每次点按。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我更倾向不丢弃，感觉会损失谱面细节。我想做抖动量化：把小事件累积成下一次更大的脉冲，类似噪声整形。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，这个我能接受，tap必须保。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那校准UI我想加一个“设备自检”：循环tap，如果API失败就提示禁用触觉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "错误码我先列五个：  \n- `HAPTIC_E_NO_CAPABILITY`：设备无触觉能力  \n- `HAPTIC_E_API_UNAVAILABLE`：系统API不可用或权限限制  \n- `HAPTIC_E_QUEUE_OVERFLOW`：事件队列溢出触发降级  \n- `HAPTIC_E_SUBMIT_FAIL`：调用提交失败（返回码非0）  \n- `HAPTIC_E_CALIB_INVALID`：校准结果置信度太低，回退默认  \n开关策略：发现前两类直接全局关闭触觉；溢出就降级texture并限流rumble；submit失败连续N次就熔断30秒。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来还想把校准过程的每次点按都留着做回归分析，但算了，先按聚合。后面真要研究再说。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终版本：  \n- 事件模型就四五个字段，`tap/rumble/texture`三类；`start_time_ns`对齐节拍时钟；`sharpness`不是所有设备都支持，做可选映射。  \n- 设备档案存`gain/latency_offset_ms/min_effective_intensity/device_class`，端侧用默认表+用户校准覆盖。  \n- 校准流程两步：强度三档选择生成`gain`；听觉click+触觉tap滑条生成`latency_offset_ms`，只存结果和`calib_confidence`。  \n- 指标：`haptic_submit_latency_ms`、`haptic_queue_depth`、`haptic_missed_event_count`，P50/P95/P99；队列压力大时按`tap>rumble>texture`降级，texture先降频再关闭。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

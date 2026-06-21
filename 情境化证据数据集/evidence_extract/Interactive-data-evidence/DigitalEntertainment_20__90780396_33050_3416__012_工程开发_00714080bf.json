@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动链路压测与延迟优化背景下，用户与导师围绕分段打点口径、压测脚本矩阵、验收阈值与退化对照实验持续沟通（8轮），其中在延迟预算拆分与对时/receipt打点上与互动链路架构师沟通（4轮），在网关队列可观测指标与采样/traceKey设计上与实时网关工程师沟通（4轮），并形成可复现尖刺的最小压测闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按说明跑一遍？然后看 p95。客户端时间戳不准这块我不太会处理，是不是换成服务端打点就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "播放器这边有 playerPosMs，然后 tick 吐 event 的时间我能打。applyOverlay 调用点也能加时间。网关到客户端下行…我没加过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@互动链路架构师 延迟预算一般怎么拆？我现在历史文档用客户端时间戳算 RTT，你们说不准，那要怎么打点才靠谱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ACK 我们现在互动协议里有，之前为了重放一致性做了 seqId+ack。那我可以在网关记录 send_ts 和 ack_ts 来估 C？但 ack 也要走回去，会混进上行吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我还想问阈值怎么定？我们要到多少算低延迟？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先按这拆。还有个问题：历史压测把 debug 日志全开了，我怕关掉就测不出问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "大概是四段：上行、网关内部、下行、端侧消费。先不靠客户端时间戳，网关打 in/out 算 B；再用 send 到收到 receipt/ack 的时间当网络上界；端侧我打 SDK 收到到 tick、到 applyOverlay。阈值先盯 p95 200ms、p99 400ms，端侧 D 争取 30ms 内。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选 receipt 吧，收到就回，别等渲染。ack 现在可能在队列后面才发，会把端侧消费混进来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按阶段来：先恒定 1k/5k/10k 并发，然后加一个 2 秒的 burst，比如瞬间翻 3 倍消息量，看合并策略能不能压住。再加 seek 场景，强制客户端 seekStart 清队列，然后 SnapshotEvent 重建，看有没有误丢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我…用两类 event：旧 epoch 的大量堆积，再插入新 epoch 的少量关键事件。看新 epoch 的能不能按时到达并渲染。旧的应该被丢。然后统计丢弃计数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "指标…网关侧：dropped_by_epoch_total、merged_event_total、queue_depth。客户端：event_lag_ms（收到到 displayAtMs 的差）、applyOverlay_cost_ms。还有 receipt_rtt_ms 分位数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在播放器事件队列里我能加一个 gauge，长度。网关房间队列…我不确定是不是有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时网关工程师 房间路由这块现在能拿到队列深度/排队时间吗？我们要做压测分段指标，想加 in/out、queue_depth、send->receipt 的分位统计，最好别引入新组件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "roomId 高基数不能做我之前没想到。那 shard 聚合我照做。trace key 用 seqId 就行？会不会重复。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "uid 不打标签，这块我记住。那排队时间 histogram 我加在出队处取 now-入队ts。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我能控，压测环境先预热缓存一组，再加一组清缓存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我负责播放器/SDK 端侧的 D 段打点：SDK 收到、tick 吐事件、applyOverlay 前后耗时，还有 event_lag_ms。脚本我来写：恒定+burst、epoch 混入、seekStart+Snapshot 重建、缓存命中/缺失两组。网关那边我提 MR 需求给网关同学：shard 聚合的 pending、enqueue_latency、send->receipt histogram，加 connShortId+seqId 作为 trace key。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "口径我先这样写：  \n- receipt_rtt_ms：p95 ≤ 150ms，p99 ≤ 300ms（压测网内）  \n- end_to_end_to_applyOverlay_ms：p95 ≤ 220ms，p99 ≤ 450ms  \n- 端侧 applyOverlay_cost_ms：p95 ≤ 20ms；tick 到 applyOverlay 调用间隔 p95 ≤ 10ms  \n退化：当 room_enqueue_latency_us p99 超过阈值时，启用同类合并更激进（合并窗口从 50ms 到 100ms），并保持 epoch 丢弃不变。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我只能先在压测里对照：50ms 和 100ms 两套跑，比较 end_to_end 的 p99 和“事件实际显示滞后”，看滞后是不是明显变大。要是滞后变太多，就不改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "压测用的是合成账号，uid 不进指标标签；日志只白名单字段，trace 用 connShortId+seqId，不落 payload。压测回放也不存原始消息体，只存分位和计数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

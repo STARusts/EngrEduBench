@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在极低延时容错与风控熔断方案设计背景下，与导师围绕熔断机制实现、合规报送同步与软硬件取舍持续沟通（5轮），其中在合规报送同步与状态留存部分与合规与报送架构师沟通（3轮），在硬件加速与排期风险部分与极低延时架构师沟通（2轮），并最终形成状态机内嵌FPGA硬撤单与软件Seq快照兜底的熔断约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算用错误率熔断。设个滑动窗口，如果暗池拒绝率超过阈值，就把路由状态机强制跳转到撤单态，退回明池。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "滑动窗口确实有延迟。那用心跳检测？暗池没心跳就直接熔断。不过心跳间隔也不好定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果暗池链路异常，我们在微秒级直接熔断撤单，监管报送这边来得及同步吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果等报送确认再熔断，延迟就上去了。硬件层面有没有办法让报送和熔断同步？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "FPGA预校验能解决下单前置，但熔断撤单时的状态留存怎么保证？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我最近在看PCIe DMA零拷贝的规范，里面提到硬件直出带校验和的帧结构。能不能让FPGA生成撤单报文时，直接把合规字段和校验和写死在硬件描述里？这样既快又不可篡改。我来设计个实验验证下延迟和合规完整性。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量控制：软件撤单和FPGA硬撤单两组。控制订单吞吐量变量，从1万TPS到10万TPS递增。观测指标：撤单指令P99延迟，和合规报送流的匹配完整率。跑三轮取均值，如果FPGA硬撤单P99在5微秒内且匹配率100%，就说明方案可行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个大坑。如果现在改RTL，项目排期肯定超期。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选硬软结合。FPGA做前置拦截和撤单报文硬封装，软件侧并行做状态快照兜底。如果FPGA撤单失败，软件快照补发合规报送。排期上，FPGA逻辑复用现成的网卡帧头模板，只改payload，周期可控。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用序列号对齐。FPGA发出的撤单包带全局递增Seq，软件快照只补发Seq缺失的段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "熔断约束：1.触发源仅限状态机跳转，禁用外部心跳；2.撤单通道走FPGA硬封装，带合规字段与Seq；3.软件侧维护Seq快照，仅补发缺失段；4.滑动窗口废弃，改用瞬时错误码直接驱动状态机。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

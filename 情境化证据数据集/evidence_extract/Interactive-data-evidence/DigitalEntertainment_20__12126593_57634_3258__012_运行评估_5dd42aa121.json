@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在剧透防护沉浸短剧平台灰度运行评估背景下，用户与导师围绕线上监控指标、阈值分级、回退取证与P1处置流程持续沟通（9轮），其中在监控分层与采样/告警路由部分与SRE运维工程师沟通（5轮），在事件口径与序列完整率/乱序率/缺失率及高基数维度治理部分与数据产品经理沟通（4轮），并形成“指标—阈值—告警级别—处理动作”的最小闭环清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点想把链路全量上分布式追踪+全量日志采样，再加一套实时特征监控，怕漏掉问题，但又担心监控本身拖慢TP95。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按压测验收口径抄一份：TP95<350ms、5xx<0.1%、超时<0.2%、degrade<2%。然后我想再加：播放器首帧时间、剧透检测模型的线上准确率、还有策略命中率波动。阈值我没想好，模型准确率是不是可以设个99%？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 我现在要做剧透防护沉浸短剧平台灰度期的线上监控和告警。除了TP95/5xx/超时/degrade这些护栏，你建议怎么分层监控？我想全量trace，但怕成本和性能。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "动态采样是指，比如5xx的时候把采样率调到100%？那我是不是需要一个“采样控制平面”来实时下发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "告警阈值你会怎么设？我担心“波动导致乱叫”，所以我想用更复杂的异常检测，比如季节性分解+ESD。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灰度自动回退是你们那边配，还是我在业务里做？我怕回退触发后不留证据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源可持续这块，监控会不会把成本打爆？比如日志量、trace存储。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据产品经理 我需要把线上监控指标和告警口径补齐，尤其是“事件序列正确率≥99%”怎么在线上衡量。我们现在有S1/S2/S3三类场景的埋点序列。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把content_id也作为监控维度看每部剧的波动，直觉上能很快发现“某部剧策略配置错了”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "关于剧透防护的“误伤”，线上有办法监控吗？比如不该遮罩的被遮罩，用户会投诉，但我想提前发现。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "隐私合规这块，我想把用户评论文本也打到日志里，方便定位剧透扩散来源；但可能踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我想把告警做得“智能点”，比如对shield_show触发率做自动异常检测，你觉得有必要吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着列一版，可能不全：  \n1）端到端TP95>350ms（5分钟、QPS达标）→P2，通知值班看慢点分解；  \n2）5xx>0.1%持续10分钟→P1，触发灰度回退并保留错误trace；  \n3）超时>0.2%持续10分钟→P1，同上；  \n4）degrade>2%→P1，直接回退；  \n5）序列完整率<99%→P1还是P2我拿不准；  \n6）缺失率或乱序率>0.5%→P2；  \n7）shield_show触发率突然涨很多→P3观察。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "桶漂移这条我之前没想到。我担心为了这点又要加很多记录字段，日志量会飙。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那告警处理链路，我想把每个P1都自动创建工单、拉群、再跑一段自动化诊断脚本，把最近10分钟的trace聚合一遍。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "P1流程我压成5步：  \n1）告警触发后自动回退灰度开关到0/1%，冻结bucket；  \n2）在日志里按error=true和时间窗抓trace_id样本（至少20条）；  \n3）看是5xx/超时/降级/序列异常哪一类，先按服务维度定位到接口；  \n4）对照strategy_version/policy_id，看是否某版本集中；  \n5）把trace_id列表和结论丢给对应owner（后端/播放器/策略）进快速复盘。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "你在点我。我确实差点想把采样调成全量，然后把每个请求的策略上下文都塞日志里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就按你这版先把告警分级和回退动作接上，异常检测先放一边。下一步我会先盯序列完整率和policy_decision成功率，别让灰度评估口径先崩掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

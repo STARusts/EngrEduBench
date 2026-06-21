@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在创面微生态解析系统部署上线背景下，用户与导师围绕居家终端准入验证方案与弱网重连可靠性验证方法持续沟通（7轮），其中在准入合规红线部分与合规与伦理审查官沟通（1轮），在真实设备准入流转部分与终端运维与部署专员沟通（1轮），并最终形成零信任网关+OurCloud SDK+DeviceTwin影子同步的准入架构及基于二项分布置信区间的验证方法与个人提升计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接用DeviceTwin这套开源框架来搞，我看网上很多IoT项目都是这么弄的，调调接口应该比较快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着DeviceTwin有现成的设备注册API，我调一下把设备Mac和患者ID绑一块发给云端就行了。mTLS证书的话，框架里好像有插件可以自动签发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "医疗终端准入验证这块，合规上有什么硬性要求？我本来想直接用Mac绑患者ID。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那真实设备的准入流转怎么做？SE芯片证书这些怎么下发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规要求必须有设备SE证书、患者医保核验和医生处方，不能直接Mac绑ID。运维专员说要用零信任网关，走OurCloud的流程，先注册Token再下mTLS。DeviceTwin只能管影子，管不了处方。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DeviceTwin我留着管设备状态同步，准入这块我不敢自己写了。我准备用OurCloud的零信任SDK，它有现成的接口，我调一下，把处方校验和医保核验接进去。但是，OurCloud这套东西我没用过，我不确定它的SDK在断网重连时，Token缓存会不会丢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算挑10个内测患者的终端，统计他们在弱网下的重连成功率。如果成功率高于95%就算可靠？不过10个样本是不是太少了，而且怎么定义弱网？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这块确实不太会算置信区间，之前都是凭感觉定个通过率。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "合规这块我老想用通用框架套，没考虑医疗特殊要求。统计这块我只会算平均值，不会做假设检验。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我接下来两周，每天花1小时看《医疗物联网安全规范》，把三重校验的逻辑理清；同时跟着B站的统计学教程，把置信区间和二项分布应用看完，自己用Python写个脚本算这次重连验证的置信区间，下周五前把脚本和结果跑出来给您看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "准入方案就定为：设备出厂烧SE证书 -> 零信任网关校验 -> 业务侧校验处方与医保 -> 下发mTLS -> DeviceTwin同步状态。验证方面，我先跑内测基线，用50次重连事件算95%置信区间。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

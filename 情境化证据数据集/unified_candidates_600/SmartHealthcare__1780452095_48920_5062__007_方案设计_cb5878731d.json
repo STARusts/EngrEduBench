@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在跨院区多组学数据反演推演背景下，与导师围绕跨域隐私计算防泄露、对齐约束及安全与延迟平衡持续沟通（5轮），其中在流转红线与低延迟折中方案部分与隐私安全专家沟通（2轮），在时序对齐约束部分与多组学数据架构师沟通（1轮），并形成禁用明文/FedAvg、采用PSI-CA与本地滑窗轻量同态聚合的设计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接走内网专线脱敏传过来不就行了，或者用开源联邦学习框架套一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是特征拼起来嘛，这还能泄露啥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域多组学数据对齐，导师说普通FedAvg会泄露频次，这具体卡在哪？我们想直接拼特征。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那多模态对齐如果只能拿统计值，反演模型怎么喂入？时序特征怎么对得齐？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "本地滑窗加MPC聚合？这工程量也太大了，MPC通信开销扛得住吗？我们流图还要低延迟呢。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种跨域时序分片，有没有轻量一点的协议？我这两天得把MPC和PSI的原理再翻翻，不然没法评估开销。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们流图要求低延迟，MPC通信开销肯定爆，能不能用TEE？或者有啥优化的PSI协议能算特征统计的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用PSI-CA加轻量同态，只加密聚合表征。这样通信轮次能压下来，延迟可能扛得住。架构师那边本地滑窗再送上来也能对齐。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "今晚得看几篇论文把参数接口理出来，明天把流转协议的约束补进方案。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

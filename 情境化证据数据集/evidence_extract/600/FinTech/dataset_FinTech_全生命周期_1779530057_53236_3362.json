@@ -1,0 +1,554 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在实时图谱反欺诈引擎立项背景下，与导师围绕团伙欺诈痛点、图谱核心假设、A/B验证逻辑、合规底线与学习计划持续沟通（8轮），其中在行业痛点与验证逻辑部分与商业分析师沟通（1轮），并最终明确业务假设与合规约束，形成验证设计草稿的学习任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "团伙太狡猾，单个看都是好人，一查关系才发现是一伙的。图谱能画线嘛，肯定能解。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资损高呗，图谱上了资损肯定降。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "团伙欺诈痛点，还有图谱方案到底怎么验证。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分析师说现在漏报高，图谱能降15%漏报，得做对比。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一跑看结果呗，没降就说明不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太懂，就是分两拨流量试吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据我得找风控组要，我一个人搞不来权限。合规得找法务看，抓人不能乱抓，误伤了客诉炸锅算谁的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看看风控论文，学学怎么搞对照。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在法务与架构就团伙图谱合规与实时性僵持背景下，与导师围绕合规红线与实时性能冲突的协调持续沟通（5轮），其中在脱敏合规底线部分与合规审计师沟通（3轮），在加解密延迟与哈希性能部分与方案架构师沟通（3轮），最终对齐不可逆脱敏建边不留原文、接受哈希损耗及盐策略待验证的可行性结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规审计师 @方案架构师 你们到底卡哪了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "加个密能有多慢？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规审计师 脱敏能不能简单点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明文肯定不行，存明文出事要坐牢的，之前红线考试刚考过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就，脱敏又快的那种？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就固定盐呗，先跑起来再说。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不能吧。那就动态？动态又慢。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规红线不可逆脱敏不留原文，技术接受哈希损耗，盐策略和碰撞率待验证。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在图谱风控商业模式与战略规划背景下与导师围绕商业模式选择、ROI计算与基线验证持续沟通（9轮），其中在图反欺诈收费与ROI口径部分与商业分析师沟通（1轮），并最终确认私有化部署优先、战略卡位为高净值资损挽回及补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "肯定得赚钱，就卖给信贷部门呗，按月收钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图反欺诈怎么收费，ROI咋算？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，SaaS按量收，ROI就是挽回损失减成本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "碰撞不是待验证吗？基线数据，就查查历史库呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "口径不一致，那就取个近似值吧，差不多就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺算账的方法。我记一下，回去看两篇论文。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先SaaS吧，门槛低好推。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业模式先推私有化，因为SaaS多租户有碰撞风险。ROI算挽回资损减成本，挽回得跑对照实验。战略卡位是高净值团伙资损挽回。还有我得补学基线资损率和样本选取口径。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在实时图谱反欺诈决策引擎流式图计算总体架构设计背景下，用户与导师围绕图谱连通性与数据最小化平衡、分域架构影响及对照实验验证召回率持续沟通（6轮），其中在跨实体关联合规限制部分与合规审计师沟通（1轮），在分域架构对计算性能与召回影响部分与方案架构师沟通（1轮），并最终确认采用分域架构方向及先跑对照实验验证。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规审计师 这种跨实体关联，合规上到底怎么卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@方案架构师 这种分域只存ID，对咱们流式图计算架构影响大吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图里只存ID，属性后拉，合规没问题。但可能会慢，而且抓坏人可能抓不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个对照实验呗，看看资损差多少。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我这方面确实不行，我得去补补课，学学怎么做这种对照实验设计，还有分域图架构具体长啥样。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构选分域，图存ID属性后拉。先跑实验验证召回率不低于95%。我去补学实验设计和分域架构。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数据流与特征接口设计背景下，用户与导师围绕流式窗口切分、特征接口字段暴露、合规红线及超时降级策略持续沟通（5轮），其中在数据流合规与字段限制部分与合规审计师沟通（1轮），在流式特征聚合与接口契约部分与数据流设计师沟通（1轮），并最终确认源端脱敏入流、滑动窗口策略、接口仅暴露指标与风险码及超时兜底拦截方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "接口我就把字段全放开，策略那边用起来省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规啊，那就加个脱敏。窗口就10分钟吧，随便切切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据流合规怎么弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流怎么聚合？接口契约呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是不能带明文，接口用GraphQL，只给图指标不给属性。窗口1小时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "脱敏在进图之前弄吧。超时就放行呗，反正大部分是好的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。源端脱敏，1小时窗口，接口给指标，超时走兜底拦截。"
+              }
+            ]
+          },
+          {
+            "microScene": "在决策引擎高可用与安全评估背景下，用户与导师围绕高可用架构、状态同步、防篡改落地及验证方式持续沟通（5轮），其中在高可用架构与状态同步部分与方案架构师沟通（3轮），在安全底线与防篡改验证部分与安全评估员沟通（2轮），并最终形成规则Raft强一致、图WAL快照同步、签名校验、幂等及Chaos注入验证的五条核心约束结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@方案架构师 高可用咋搞？@安全评估员 安全底线是啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了Raft协议，就多数派投票那种，可以用这个同步图状态吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，规则用Raft，图用快照。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上线前跑个压测看看呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "杀节点，看延迟，对比成功率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 规则分发用Raft。2. 图状态用快照和WAL。3. 规则加载要验签名。4. 杀节点测高可用。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在实时图谱反欺诈决策引擎开发背景下，与导师围绕图计算与规则执行边界、开发规范与联调验证口径持续沟通（6轮），其中在图特征暴露方式部分与图计算开发沟通（1轮），在沙箱执行隔离与耗时部分与规则引擎开发沟通（1轮），并最终形成增量视图暴露、线程池隔离、5ms熔断降级及资损率对比验证等开发规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图那边建图，规则那边跑逻辑，中间传数据就行。规范就按公司Java规范走。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增量吧，增量快。应该不会拖垮，规则很简单。验证就跑一把看看报错没。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图特征怎么给规则引擎用？要全量还是增量？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱执行怎么隔离图查询耗时？同步调用会阻塞图更新吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图计算给视图，规则引擎异步拿，超时5ms就降级。规范就写这些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我不太会CompletableFuture的高阶用法，消息队列熟一点。降级验证也没思路。我今晚回去看两篇CompletableFuture的博客，再写个Demo试试异步超时怎么抓。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就造一批超时的数据，看看是不是都放行了。误杀应该比不降级的时候少吧？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在实时图构建与聚合代码开发背景下，与导师围绕5ms超时落地、增量视图、状态容错、乱序处理及特征落库审计持续沟通（6轮），其中在图状态与查询解耦部分与图计算开发沟通（1轮），在状态后端容错与窗口时间语义部分与数据流设计师沟通（1轮），最终确认双层架构、RocksDB后端、EventTime窗口及审计时间戳等开发约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个Timeout注解，然后查图的时候丢到异步线程池里就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图状态存哪？怎么解耦查询？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "内存挂了状态丢咋办？聚合状态怎么存？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "有快照就不怕丢，用EventTime窗口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟2秒吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "双层，ChangeLog，RocksDB，EventTime，水印待定。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在规则引擎与图库联调对接背景下，与导师围绕查询超时降级策略、时间差处理与合规审计标签持续沟通（8轮），其中在沙箱超时定义与降级标签注入部分与规则引擎开发沟通（2轮），在查询超时熔断与空特征状态区分部分与图计算开发沟通（2轮），并最终确定超时降级与审计标签对接方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱超时咋弄？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "查询超时能熔断不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "50ms，80ms，超时打标记。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就按短的来？50ms超时就降级。标签得加吧，不然查不到。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "降级标签谁打？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图查询那边超时返回的空特征有区分吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "status分开，TIMEOUT走降级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图查超时80ms，规则看TIMEOUT，降级标签沙箱打。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "日志记QueryTimeout。审计看降级原因码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在反欺诈链路压测与功能验证背景下，用户与导师围绕压测验证范围、数据来源及降级兜底逻辑持续沟通（6轮），其中在压测数据构造方式部分与测试工程师沟通（1轮），在生产数据导出合规性部分与合规审计师沟通（1轮），并最终确定压测方案四项要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿Jmeter压呗，看接口延迟和通过率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，测图。数据直接连生产库拉一份。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "团伙反欺诈压测数据怎么造？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "行，造星型和环形图。那数据能不能用生产的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "生产数据能导出来做压测吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "造拓扑图，脱敏边，然后降级也测一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，看图里的边数对不对。降级就看重启后能不能接上。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在延迟瓶颈分析与计算资源优化背景下，与导师围绕图查询P99超时根因、异步化成本、资源隔离、日志脱敏及验证方式持续沟通（9轮），其中在P99毛刺根因部分与性能调优师沟通（1轮），在代码锁竞争部分与图计算开发沟通（1轮），并最终确定查图异步化、资源物理隔离、日志脱敏及A/B验证P99降幅四个优化点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加机器？把并行度调大？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图查询那块P99毛刺怎么回事？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "代码里是不是有锁？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了点CompletableFuture。把查图那段改成异步，不阻塞主线程。但线程池开销我还没算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "混布吧，省机器。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我本来想加个DEBUG日志看图状态的，但测试数据里有真实姓名和身份证号，直接打出来肯定违规，所以我给注掉了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在实时图谱反欺诈引擎灰度部署背景下，与导师围绕灰度验证标准、实验有效性、资源降级预案与合规留痕持续沟通（11轮），其中在核心监控指标与分流对比部分与监控运营沟通（1轮），在误杀率控制与拦截留痕部分与风控策略师沟通（1轮），并最终形成包含切流、指标盯盘、客诉回滚、降级开关、拦截留痕及补交验证方案书的灰度约束动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先切1%流量看看呗。标准就是不出错，拦截率涨了就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对哦，误杀了要被投诉。那我就切一小点，看大盘没问题再慢慢扩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@监控运营 灰度上线要盯啥指标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，盯P99、超时和通过率，还要分流对比。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@风控策略师 误杀率怎么控？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，客诉高就回滚，拦截要留痕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，问完了。就是盯P99、超时、通过率和客诉。客诉高就回滚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看数字大不大呗，大就是有问题。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太清楚，反正跑跑看，数据好就说明好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之后看看监控怎么弄的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "资源爆了就加机器呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级开关，我找开发加一个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一开始切1%流量，盯P99那些指标，客诉高了就回滚。还要有降级开关，关掉图谱特征。下周三我补个验证方案。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，拦截原因必须落库留痕。我去推流程了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在灰度运行盯大盘背景下与导师围绕拦截率、延迟及误杀率的监控指标口径与留痕机制持续沟通（4轮），其中在指标口径定义部分与监控运营沟通（1轮），在监控探针性能影响部分与性能调优师沟通（1轮），并最终确定拦截率与延迟拆分口径及客诉留痕需补申诉反转记录。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加几个图表呗，看拦截总量和P99延迟就够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，误杀率得看。那就加上客诉数据。我弄个大盘出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拦截率和延迟指标怎么定？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "监控探针会不会卡？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开看延迟，用图库自带的，不加埋点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拆图构建和规则匹配。客诉留痕，就用之前加的拦截留痕就行吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在误杀异常分析与客诉反馈复盘背景下，用户与导师围绕误杀复盘闭环、恶意申诉防范及复盘SOP落实持续沟通（7轮），其中在误杀反转合规红线与防洗白留痕部分与合规审计师沟通（1轮），在团伙恶意申诉图谱特征与低成本复查部分与风控策略师沟通（1轮），并最终形成包含归因、防洗白校验与留痕的复盘SOP。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就看看客诉工单呗，被申诉反转的那些就是误杀，统计一下原因就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "误杀客诉反转这事儿，合规上咋卡？团伙洗白咋防？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "双人复核，就，加个审批节点？图谱复查，再跑一遍图？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "团伙恶意申诉咋识别？图谱复查咋做省力？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "归因口径就是看原链路，看是阈值严还是特征缺。恶意申诉就看一跳邻居的申诉率，高了就驳回。反转留痕记双人复核和子图复查结果。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "归因、防洗白校验、留痕，落实SOP。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在策略自适应调优与迭代规划背景下与导师围绕业务与公平性权衡、验证方法及调优权限控制持续沟通（8轮），其中在偏见拦截安全边界设定部分与风控策略师沟通（2轮），在合规审查与差异比阈值部分与合规审计师沟通（1轮），并最终形成引擎仅出建议、验差异比、双人复核的迭代规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "得兼顾，不能光看资损。加个公平检查就行吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "策略自动调优的时候，怎么保证不产生偏见拦截啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种偏见拦截在合规上怎么卡？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就调优的时候跑一下验证集，看差异比。超了就熔断，然后让人工看。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "好像不能。那就在线上也盯着？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑历史数据复现一下？如果历史没偏见，应该就行。不过线上如果真偏了，我可能看不出来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前导师反馈说我看大盘只看总拦截率，我现在把群体拆分加到监控大盘里了，算是个改进。但这验证方法我确实不太会设计。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那不行，如果引擎自己乱调出了歧视，我们担不起责任。我提议自适应调优只能出建议，不能直接改线上阈值。变更必须经我和风控策略师双人复核确认不违规，才能下发。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "清楚，建议不直上，验差异比，双签复核。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

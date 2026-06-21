@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发末段的核证结算联调压测背景下，用户与导师围绕关键路径/失败模式、压测用例矩阵与联调/压测验收口径持续沟通（8轮），其中在API契约与回放/幂等/权限字段确认上与后端工程师沟通（2轮）、在可控故障注入与压测报告维度上与测试与质量工程师沟通（1轮），并最终定下A-E场景清单、阈值与三条必须修红线及两天闭环安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“交易链路”拆：1）核证审阅页拉取 evidence_ref 列表+摘要；2）核证通过触发 settle；3）结算侧回写结算凭证（settlement_id、payable、credit_units、digest）；4）财务/交易方拉取对账单。  \n失败模式我觉得重点三类：幂等冲突（重复 settle）、digest 不一致（核证看到的摘要和结算用的摘要不同）、cutoff/event_time_range 边界错导致口径漂。压测指标就看：P95、错误码分布、幂等命中率、以及 evidence 查询的延迟。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "并发模型我想分两层：  \n- 核证审阅并发读：比如 200 并发拉证据清单、50 并发点开单条证据摘要；  \n- 结算写：比如 20 并发触发 settle，同一个 project_period 里故意做 30% 重放请求，打幂等。  \n数据规模：一个 period 里 1e5 个 event 的 digest 汇总成 evidence_digest；证据条目列表控制在 2000 以内分页。冷热：热是 settle+对账单查询；冷是历史 period 的 evidence_ref 回放。  \n越权验证：核证角色只能拿到 digest 和 time_range 等最小字段，不能拿 raw/minute；审计角色才允许审批后拿明细。回放就是拿 settlement_id 再跑一次“结算快照查询”，结果 digest 必须一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 结算联调压测这块，现有接口里哪些支持：1）settle 幂等键怎么传；2）结算后能否按 settlement_id 查到用于回放的“计算输入摘要/输出摘要”；3）evidence_ref 查询的分页和权限字段有哪些；4）recalc 的 cause 校验做到了哪一层？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对账单接口有吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "回放用 `/replayCheck` 就够了，不需要我自造接口。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "联调通过我给四条硬口径：  \n1）同一 `(project_id, period_id, request_id)` 重放 settle，返回同 settlement_id 且 `idempotent_hit=true`；  \n2）同 period 不同 request_id 的第二次 settle，必须报 `IDEMPOTENCY_CONFLICT`，且不能产生新结算；  \n3）`recalc` 不带 cause_code 必须 `PARAM_INVALID`，带 cause_code 会生成新 settlement_id 并关联 previous；  \n4）核证角色拉 evidences 只能看到 evidence_ref 最小字段（按权限可能还要少），但 settlement 的 statement 可拿到汇总金额和声明 hash。  \n压测通过我先定：evidences 列表 P95 < 800ms（page_size=200），settle P95 < 1.5s，statement P95 < 500ms，replayCheck P95 < 2s；错误码比例 < 0.5% 且都可解释（主要来自故意注入的冲突/非法参数）。  \n错误码注入：digest 不一致可以通过在 settle 前后切换 ingest_time_max（模拟晚到数据）触发；cutoff 无效用 period_id 对不上 event_time_range 或传不合法 cutoff 参数触发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 联调压测这块，我想覆盖：幂等冲突、digest 不一致、cutoff 无效、权限不足最小披露。测试环境里这些怎么可控注入？另外压测报告你们通常会输出哪些必备维度，方便我们做发布准入？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "注入方式我采纳：snapshot_tag 只在测试环境用 header，能稳定复现 digest mismatch；cutoff 也用测试开关传入，避免改数据。混合 token 压测还能顺便看响应体变小对带宽影响，这块偏“可持续”角度能解释成本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "场景清单我定 5 组：  \nA. Evidence 列表读：`GET /v1/evidences`，80% 核证 token、20% 审计 token，page_size=200，含翻页；  \nB. 结算写：`POST /v1/settlements:settle`，20 并发，30% 重放同 request_id，10% 故意换 request_id 触发冲突；  \nC. 结算查询：`GET /v1/settlements/{id}`，与 B 串联，验证 digest 字段完整；  \nD. 回放校验：`POST ...:replayCheck`，其中 5% 注入 snapshot_tag=B 触发 FAIL，验证 fail_reason；  \nE. 对账单：`GET .../statement`，验证缓存命中（压测侧观测时延分布和响应大小）。  \n阈值：A P95<800ms；B P95<1.5s 且 IDEMPOTENCY_CONFLICT 在预期比例附近；C P95<400ms；D P95<2s；E P95<500ms。全链路 5xx<0.1%，非 2xx 都必须能归因到我们注入的用例。  \n必须修过线：幂等冲突不能产生新 settlement；digest mismatch 必须被 replayCheck 抓到且返回固定错误码/原因；权限裁剪不能泄露 raw/minute。  \n可接受风险：statement 缓存命中率在测试环境可能不稳定，但只要 P95 达标且不出现抖到秒级；字段裁剪导致前端展示缺 source_type，我们先按“可缺省”渲染，不阻断联调。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我拆成三条线并行：  \n1）后端配合我对齐压测脚本参数和幂等/冲突预期；  \n2）测试与质量工程师负责数据工厂和开关校验、出压测报告模板；  \n3）我这边把前端/核证流程里字段缺省策略和错误码映射补齐，确保 FORBIDDEN_MIN_DISCLOSURE_ONLY 不会让页面挂。  \n两天节奏：第 1 天跑小流量联调把错误码/权限跑通；第 2 天上目标并发 30 分钟稳定性压测，缺陷按“必须修过线/可接受风险”分级，当天收口到可复现的三要素：接口、request_id、期望与实际错误码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边缘算力受限与老楼控MQTT约束背景下，与导师围绕阻隔寻优算子选型、接口轻量化及验证方案持续沟通（5轮），其中在寻优替代方案部分与寻优算子开发沟通（1轮），在接口极简设计部分与云边架构师沟通（1轮），并最终形成启发式粗调加短时域MPC精调、MQTT极简接口及3病区交叉对照验证基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我原本想用多智能体深度强化学习（MARL），把每个通风口当独立agent，分布式协同寻优。接口用gRPC双向流，全双工实时推流。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能申请加显卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种条件下阻隔寻优怎么做？纯规则行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看了篇讲边缘侧滚动优化的文章，里面提到“缩短预测时域、增大控制时域”能大幅砍掉计算量，我准备把这个思路迁移过来，把MPC的预测步长压到3步以内，控制步长拉长，应该能在4核上跑起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得得加一层消息防篡改网关，用Kafka做消息缓冲，保证寻优指令绝对可靠，断网也能重放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Topic和JSON字段怎么设计最轻量？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "砍掉Kafka，Topic三级拆分，JSON只留4个核心字段，不传隐私。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "寻优验证方案怎么定？我想做一个严格的对比实验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "研究假设是：MPC精调在动态风场下的阻隔响应延迟低于纯规则。实验设计上，变量控制就是开关MPC模块；我们在3个不同布局的病区做交叉验证，样本量覆盖至少20次气溶胶扰动事件；验证方案书我先在院感科做预注册，免得事后挑数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

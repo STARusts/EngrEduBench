@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度上线偶发卡顿的运行评估背景下，与导师围绕微剧引擎长链路监控项拆解、报警逻辑与阈值设定持续沟通（5轮），其中在监控点埋点与灰度基线定阈值部分与SRE运维工程师沟通（2轮），在并发排队控制与降级指标部分与AIGC调优工程师沟通（1轮），并形成五项核心监控口径及降级报警逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定要盯P99延迟和QPS。书上说用滑动时间窗口算异常值，超过3个西格玛就报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我不太清楚这种链路怎么拆，@SRE运维工程师 多模态微剧这种长链路，监控点怎么埋？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以重点是看TPS？只要Token吐得快，玩家感觉就是流畅的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "排队太久肯定不行。@AIGC调优工程师 并发高了排队怎么控制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级？微剧这种怎么降级，不生成剧情了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就四个点。特征提取耗时、大模型TTFT、排队长度、还有显存水位。报警逻辑是，如果排队长度和显存同时高，就触发降级报警。TTFT超标就发延迟报警。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我确实不知道怎么定。根据历史数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用灰度基线定阈值，不能随便写个数。监控项补上状态机查询，一共五个：特征提取、TTFT、状态机查询、排队长度、显存水位。降级看排队和显存双超标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

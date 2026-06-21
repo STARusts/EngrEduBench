@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在叙境生成式剧情共创与版权结算系统的方案设计背景下，用户与导师围绕剧情图谱数据建模的核心实体、关系、版本/审计、风控与结算对齐字段持续沟通（3轮），其中在MVP节点边定义、Version冻结机制、审计字段与对账字段部分与数据架构师沟通（6轮），并口头确认一版“节点+边+关键字段”的MVP建模口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这块先做剧情图谱数据建模，但我不知道从哪下手。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……剧情、角色、章节？还有分支。差不多这些吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "作品、角色、剧情节点、分支、作者？大概。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 剧情图谱建模怎么定核心节点和边？还要带版本和审计、结算能对齐的字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "边怎么连？是不是 StoryNode 直接连 StoryNode 就行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Version FREEZES 这个我不太理解，是不是复制一份内容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那审计字段要放哪里？我怕每个表都一堆字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "结算要对齐的字段，你刚说 license_no。还要什么？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我是不是把 Contribution 直接连到 Work 就行？省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就先要 Work、StoryNode、Choice、Character、Version、Asset、Contribution。Scene 我先不弄。边就是作品有节点，节点有选择指向别的节点，节点可以用素材，版本冻结节点，贡献挂在节点上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A/B/C 我就放在 StoryNode 上，字段 risk_level。授权凭证就放 Asset 上，节点用素材就能追到。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以，Version 也加。原因码我不知道写啥。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Work：work_id、标题、状态。  \nStoryNode：node_id、类型、hash、risk_level。  \nChoice：choice_id、文案、to_node。  \nCharacter：character_id、名字。  \nAsset：asset_id、license_no、hash。  \nVersion：version_id、work_id、risk_status、reason_code。  \nContribution：contrib_id、对象id、贡献者、角色分组。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就都加 created_by/created_at/updated_at。都一样加。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "比例我先不填，后面算的时候再说？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，加 contract_id 和 contract_share。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

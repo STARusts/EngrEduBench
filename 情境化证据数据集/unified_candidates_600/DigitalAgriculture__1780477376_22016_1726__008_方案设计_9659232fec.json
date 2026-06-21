@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在田间恶劣环境系统生存策略背景下，与导师围绕断网降级施药还是停机、停机触发条件、数据校验防乱码及故障注入验证持续沟通（8轮），其中在断网历史处方合规性部分与绿色农业合规师沟通（1轮），在停机安全原则部分与农田物联网安全师沟通（1轮），并形成基于Fail-Safe原则的停机锁死与故障注入测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定得喷吧，装了机器不喷药农户不骂死？本地存个最近几天的处方，断网就拿它顶上，总比干停着强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网时候拿本地历史处方接着喷，合规这边能过不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规说必须停。停机的话系统可用性不就成零了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不喷才是安全的。那就停机。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "心跳断了就停，或者传感报的值超出物理可能，比如温度说有200度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前两天我翻那个IEC 61508功能安全标准，里面有个概念叫Fail-Safe。断网或者数据坏了算未定义故障，按那标准得进安全态。对咱们这系统，安全态就是停机锁死。所以光看心跳和物理范围不够，还得加数据校验，签名不对也得直接停。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在实验室测，把网线拔了看喷头关没关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是断网时长，还有注入篡改报文的比例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "得写个脚本，随机时间切断通信，重复个几百次，看每次是不是都触发停机了，而且重连后能正常恢复。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方引擎MVP规则落地与可审计闭环开发背景下，用户与导师围绕输入输出字段、decision三段判定优先级、解释码命名及验收口径持续沟通（6轮），其中在规则分层/版本/审计与actions结构上与处方引擎工程师沟通（4轮），在禁忌校验与抗性/轮换提示规则上与植保策略官沟通（3轮），在默认安全门槛与权限留痕上与合规与风控经理沟通（2轮），并明确两层规则骨架与两天内最小交付验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是把识别出来的杂草、置信度，还有之前那套硬剔除/软保留/正常，变成处方建议。还要能追溯，知道是哪条规则出的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入大概有field_id、拍照点位、weed_class、score、还有reason_code和quality_tag。输出我不太确定，是不是给药剂名、剂量、还有“建议复核/可执行”的状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拒绝执行：硬剔除的就不出药。允许但提示复核：软保留的，比如逆光、模糊、小目标。允许执行：正常的就直接出。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@处方引擎工程师 规则这块要怎么落地？我现在只有识别的weed_class、score、reason_code这些，想做成“拒绝/复核/执行”三段，还得可追溯，应该怎么设计字段和规则版本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "actions[]里面要放什么粒度？药剂名、剂量、还是更抽象的“化学防除”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "review状态也会出actions？怕现场直接照做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "reason_code跟explain_codes会重复吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@植保策略官 处方引擎要先做MVP的禁忌校验。现在有decision：REJECT/REVIEW/EXECUTE。你给我一小套“必须拒绝/必须复核”的规则点，尽量是跟作物期、混配禁忌、抗性风险相关的，能用解释码表达的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "水体缓冲区我们现在可能没法算，点位有时候也不准，这条是不是先不做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "混配禁忌的10条高频对，你这边能给名字列表吗？我怕我写错。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我把禁忌做成配置，不写死在代码里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先做两层：判定层先算decision。优先级大概是：硬剔除直接REJECT；然后score低或WEED_UNCERTAIN走REVIEW；crop_stage缺失也先REJECT或REVIEW我有点拿不准；geo缺失就REVIEW加RX_ENV_NOT_CHECKED；剩下正常就EXECUTE。推荐层只对EXECUTE和REVIEW出actions，REVIEW必须带MANUAL_CHECK且allow_execute=false。explain_codes里把VISION_reason_code带上，再加RX_*的码。rule_version用日期.序号，audit_hash存输入字段和命中rule_id列表的hash。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "优先级：  \n1）quality_tag=硬剔除 -> REJECT，码VISION_HARD_EXCLUDE  \n2）score < low_th 或 reason里属于“物种不可靠”(遮挡严重/极小目标) -> REVIEW，码VISION_UNCERTAIN  \n3）crop_stage缺失 -> REVIEW，码RX_CROP_STAGE_UNKNOWN  \n4）geo缺失或不可信 -> REVIEW，码RX_ENV_NOT_CHECKED  \n5）否则 -> EXECUTE，码RX_OK"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在推荐层：如果history_summary里有失败两次，就加RX_RESIST_HIGH，decision保持REVIEW；如果只是连续同MOA多次，就EXECUTE但加RX_ROTATE_WARN，然后actions里加一条AGRI或MECH的补充措施。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先做个映射表：quality_tag=软保留默认REVIEW，但允许特例：比如reason_code只是“逆光”但score很高，就还能EXECUTE。我不太会定阈值，可能先沿用识别侧的pass阈值？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与风控经理 处方引擎这块我准备做decision三段：REJECT/REVIEW/EXECUTE。想确认下默认安全策略：哪些情况下必须REVIEW而不能EXECUTE？审计留痕要记录哪些字段，权限上怎么限制“review候选处方”被直接执行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我这边“逆光但分高就EXECUTE”的特例，是不是不太合规？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "校准我现在不会做太细，我先把阈值做成配置项，默认关闭特例，全部软保留都REVIEW。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我负责三件事：  \n1）把输入/输出字段按处方引擎工程师那套接起来，尤其decision、actions、explain_codes、rule_version、audit_hash。  \n2）把判定层优先级规则做成配置，默认安全：信息不足都REVIEW，硬剔除才REJECT。  \n3）把审计字段打全，review态必须要有审核权限才能转execute态。  \n两天内验收：能拿一批识别结果跑出decision和解释码；review/execute能区分；rule_version能冻结；audit_hash能复算一致。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

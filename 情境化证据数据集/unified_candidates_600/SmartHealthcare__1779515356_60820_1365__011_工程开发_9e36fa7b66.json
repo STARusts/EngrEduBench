@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在端云交互协议与传输性能设计背景下，与导师围绕边缘侧多光谱影像与微生态序列上云的协议选型与落地持续沟通（5轮），其中在Protobuf序列化与Triton gRPC配置部分与全栈联调工程师沟通（1轮），在传输脱敏与mTLS加密合规部分与合规与伦理审查官沟通（1轮），并最终确定gRPC+bytes+mTLS的端云协议方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接用HTTP发JSON，网上说加个Gzip压缩就挺快了，反正Triton也支持HTTP协议。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我试着把影像数据塞进protobuf里，但好像比JSON还大，不知道哪里配错了。工具自动生成的代码我也没敢改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用Protobuf传多光谱影像，体积反而变大了，是不是这玩意不适合传图像？Triton的gRPC端怎么配啊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前导师说要去设备指纹，那传输的时候，日志里是不是也不能打设备ID了？还有多光谱数据算不算敏感医疗数据，要不要额外加密？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "Protobuf不能套多维数组，得用bytes展平了传，还得适配Triton的gRPC协议。网络不稳要加本地缓存。合规这边说日志必须脱敏，传输得走mTLS，不能留患者信息。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Python的grpcio库，按照Triton的文档写个客户端封装，把影像转bytes发出去。mTLS的话，我看到有certifi库可以加载证书，我试试把证书路径写进环境变量里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

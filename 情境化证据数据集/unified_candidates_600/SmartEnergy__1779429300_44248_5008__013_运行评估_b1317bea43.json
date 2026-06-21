@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在算电协同运行监控体系构建背景下，与导师围绕监控指标选取、异常检测算法实现、资源优化及跨区数据展示合规持续沟通（6轮），其中在态势感知指标与瞬态异常捕捉部分与运行观测分析师沟通（1轮），在调控数据展示与审计留痕合规部分与安全合规审计员沟通（1轮），并最终形成包含核心指标、检测算法、预聚合及跨区隔离合规的监控构建策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "监控的话，主要看算力集群的CPU利用率和电网的P/Q吧。把Prometheus的指标拉出来，配上Grafana大盘，设几个阈值告警，比如CPU超过80%就报警，应该就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "耦合关系这个，书上讲过相关系数，但具体到秒级波动和惯量支撑，怎么算匹配偏差我不太确定。是不是得算互相关函数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "秒级波动和惯量支撑的耦合偏差具体用什么指标抓？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "CUSUM这个算法我没写过，现写感觉容易出bug，而且这俩指标怎么在现有的Prometheus里算出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开源库应该有吧，Python里好像有。内存消耗我没概念，可能得加机器？权限的话，给运维账号开只读权限就行了吧？审计留痕这词我听过，具体要留啥我不太清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们要展示算电协同的调控指标，权限只读够不够？审计留痕具体怎么做才算合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "至于CUSUM的资源消耗，我想能不能把滑动窗口的计算下推到采集Agent端做预聚合，只传聚合后的统计量给Prometheus，这样能不能省点带宽和内存？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

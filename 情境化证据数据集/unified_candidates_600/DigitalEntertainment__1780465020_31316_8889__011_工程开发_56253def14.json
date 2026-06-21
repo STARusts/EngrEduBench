@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异常注入与鲁棒性验证背景下，用户与导师围绕物理层故障注入方式和逻辑层残缺数据校验熔断机制持续沟通（6轮），其中在物理层故障注入部分与质量与鲁棒性工程师沟通（1轮），在特征缺失熔断阈值部分与质量与鲁棒性工程师沟通（1轮），并最终形成物理层用Chaos Mesh注入故障、逻辑层加缺失率校验与熔断及路由统一降级的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备写几个测试用例，模拟下反演算子挂掉，或者Redis连不上的情况，看路由那边能不能走通默认剧情降级分支。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "系统级的故障注入工具没接触过。是不是得在K8s里搞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我目前只会在代码里写Mock模拟服务挂掉，怎么用Chaos Mesh做物理层故障注入？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Chaos Mesh配NetworkChaos和IOChaos，比写Mock省事而且更真实。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把压测集群的K8s装上Chaos Mesh，把反演算子和路由服务圈进故障作用范围。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺了的话，我就在反演算子里用均值填充补上，然后继续往下算，织算路由那边应该感觉不到吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "均值填充可能掩盖真实问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "特征向量缺失率达到多少，反演结果就不可信了，应该直接熔断？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "超过20%缺失，或者关键维度丢了，均值填充就不靠谱了，得直接抛异常熔断。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去反演算子里加特征缺失率的统计和熔断逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主动熔断我直接在反演算子返回里打一个特定错误码，路由那边识别到这个错误码，不走正常织算，直接切默认剧情。跟超时降级走的是同一条分支。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

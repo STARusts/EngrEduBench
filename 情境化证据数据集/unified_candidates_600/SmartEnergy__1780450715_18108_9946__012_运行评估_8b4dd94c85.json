@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在盐穴储气系统上线运行评估背景下，用户与导师围绕漂移判定逻辑、残差分布特征、非参数检验及效应量计算持续沟通（7轮），其中在残差分布与阈值适用性部分与运行监盘员沟通（1轮），并最终敲定基于Mann-Whitney U检验与效应量的校准触发机制，废弃绝对阈值方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备用绝对阈值，形变预测值和实测值差超过5cm就触发校准。这样逻辑最简单，寻优那边也不容易因为频繁校准中断出力计算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加个滑动窗口取均值平滑一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这数据分布啥样？能直接定绝对阈值不？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "分布偏了，确实不能硬卡绝对值。得看置信区间。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "t检验要正态假设，这数据肯定不能用。得用非参数检验，比如秩和检验？但具体选哪种秩和、怎么算效应量，我拿不准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基本没用过。我主要写寻优调度算法，统计检验只懂点皮毛，效应量计算更是没写过。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这两天下班把Mann-Whitney U检验和效应量计算的原理看明白，用Python写个验证脚本跑通历史残差数据，然后再把这套逻辑迁到校准触发模块里。周五下班前把脚本和测试记录贴出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发条件是U检验显著且效应量超0.3，不用绝对阈值。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

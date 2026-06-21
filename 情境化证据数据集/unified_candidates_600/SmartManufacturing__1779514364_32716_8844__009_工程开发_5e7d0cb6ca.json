@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在耗态估算模型训练与集成背景下，用户与导师围绕模型选型、轻量化及低延迟集成方式持续沟通（5轮），其中在模型选型与ONNX集成方案部分与算法工程师沟通（2轮），并最终形成按耗材分类建模、算法侧导出ONNX、后端Java用ONNX Runtime加载推理的集成要点总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿到清洗后的消耗量时序数据，我直接用Python跑个线性回归，算出每分钟的消耗速率，然后包成REST接口给后端配给引擎调用呗。速率算准了，配给量就算准了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "曲线差异我倒没细看。延迟的话，内网调用REST也就十几毫秒吧，应该能忍？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "耗态估算模型怎么搞？我这边后端是Java写的配给引擎，需要调用你们的模型拿耗态预测结果。延迟必须低。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ONNX？我以前都是直接调Python的flask服务。ONNX Runtime在Java里能直接加载XGBoost模型吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算法这边建议用XGBoost做刀具耗态，导出ONNX给我。Java端用ONNX Runtime加载。这确实比调HTTP快，而且省了维护Python服务的事。但ONNX Java API我没用过，不知道坑多不多。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要点是：1. 耗态特征提取按耗材分类，刀具用XGBoost，焊丝用回归；2. 算法侧做特征剪枝和量化，导出ONNX格式；3. 后端不用REST调Python，改用Java ONNX Runtime直接加载模型推理，保证低延迟；4. 我得去查一下ONNX Java API怎么用，把加载和推理的接口摸清。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在课件合规检测系统的离线批处理与扩展方案设计背景下，用户与导师围绕批处理链路拆解、禁记项约束下的产物存储、分阶段队列编排、契约字段、失败分流、指标与降级持续沟通（9轮），其中在多媒体中间产物TTL/复用与幂等重跑部分与多媒体处理工程师沟通（2轮），在结果表/队列表/指纹表字段与追溯合规部分与数据治理工程师沟通（1轮），并形成可扩展离线批处理的最小决策要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是夜里跑一堆课件，按租户分开。然后出检测结果和替代建议。问题是量一大就排队，可能卡住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入是课件文件、视频音频、还有交互内容的导出包？步骤我能想到：先解析格式→抽取文本/图片/音轨→跑规则库检测→如果缺字幕就先做字幕→再生成替代文本/讲义→最后汇总成报告。产物…就是检测条目和建议，可能还有中间的字幕文件。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那字幕这种算内容吧？那就不落库？直接生成完给替代引擎用，用完删掉。复核的时候…只看定位信息？我有点不确定，review不是要看片段吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@多媒体处理工程师 离线批处理里，像抽帧、转写字幕这种中间东西怎么存才合规又省钱？失败重跑怎么处理不重复烧资源？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那复用是靠 hash+模型版本。抽帧图就别存长时间，存短 TTL 的临时桶。指纹表能存久点。对吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "导师，我从多媒体那边听到的重点：中间产物分三类，可再生低成本的元数据可以存TTL稍长；ASR/OCR/抽帧这种成本高的内容别长期存，只存 job_id、hash、分片 locator、模型版本这种引用，内容放短TTL临时桶；重跑靠每阶段的 artifact 指纹（hash+版本）做幂等跳过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向按文件切。一个文件从解析到生成建议一路走完。这样简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那…A？因为可以给视频那段单独扩容。B就是大任务，一慢全慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "契约…比如解析阶段输出：resource_id、tenant_id、resource_type、解析到的结构信息、还有 locator。检测阶段输入就用这些。输出是 issue 列表：rule_id、severity、locator、reason_code、hash。生成阶段再拿 issue 和解析信息，输出建议：建议类型（alt_text/字幕/讲义/易读版）、建议内容的引用…不放原文，只放存放位置？或者放一个建议模板id？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是建议内容可以在业务库里存，给教师看；但审计日志里不出现。那契约里建议阶段输出可以是 recommendation_id + version + content_hash + storage_ref？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用不同 reason_code？比如 SYSTEM_TIMEOUT、DECODE_FAILED 这种就算系统失败。合规类是规则命中。系统失败就重试几次，还是不行就进失败队列，不要进 need_review？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理工程师 离线批处理要做分阶段队列和幂等指纹。结果表/队列表/指纹表字段怎么设计，才能追溯又不写入原文这些禁记项？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这个我能用。policy_version、rule_pack_version也放在job里，方便追溯。artifact_fingerprint里有 expires_at，符合短TTL。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "吞吐量，比如每小时处理多少分钟视频、多少份PPT。还有单位资源成本？比如每1000分钟视频转写用多少GPU小时。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口就按 22:00-06:00 这样。口径：完成=所有 work_item 到 generate 阶段结束并写 recommendation 状态为 draft 或 need_review。失败进 dead_letter 不算完成。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先砍易读版和结构化讲义？保留检测和最基础的字幕/alt_text。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记下了。就是分层能力，先出“可采纳最小建议”，重的生成靠配额和优先级。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1分阶段队列。2重的中间内容短TTL，表里只放引用和hash、模型版本。3指纹表做幂等。4 issue和recommendation分开，审计里不放内容。5系统失败去dead_letter，合规/质量才need_review。6指标按夜间窗口的完成率，加吞吐和每千分钟的资源成本，资源不够先停讲义/易读版这种重的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

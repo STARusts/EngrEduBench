@@ -1,0 +1,432 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在连续纤维微屈曲反演纠偏项目需求分析背景下，与导师围绕痛点定位、算力可持续性与知识缺口持续沟通（8轮），其中在微屈曲生发机制与反演物理边界部分与制程机理研究员沟通（2轮），并最终锚定大曲率横向压缩微屈曲为核心痛点、反演应力场为目标，明确边缘算力与知识补全约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我不懂啊，就看着它皱了。要不我去问问懂机理的人？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@制程机理研究员 微屈曲咋回事？为啥皱？我们要反演啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着太复杂。所以大曲率有问题？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "机器跑着不就要钱吗，这还用想。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这周末前把复合材料本构方程看懂，能自己推导出来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认，大曲率微屈曲，反演应力场，算力要省着用。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在纠偏寻优商业模式推演背景下，与导师围绕纠偏系统收费模式选择与ROI测算基线持续沟通（4轮），其中在收费模式与回本周期设计部分与智造商业架构师沟通（3轮），并最终确定按效分成主商业模式及大曲率构件废料率降8%的ROI核心假设。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按时长收费挺好，分成太麻烦了，还得去对账。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "按时长收简单，但长期维护费钱，可能人家不续费。按效分成麻烦，但能绑定利益。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "废料省了大家分，我们也有动力把算法弄好。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "假设废料率降5%？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "商业模式按效分成，ROI核心假设是大曲率构件废料率降8%。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在产线柔性升级战略锚定背景下，与导师围绕现有产线接入纠偏系统的技改红线、物理约束及闭环时延验证持续沟通（4轮），其中在技改红线与物理约束部分与敏捷产线规划师沟通（2轮），并最终明确不碰安全PLC走旁路接入的红线及200毫秒闭环时延验证基线，对齐至后续方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "机台不是有厂家吗，让他们开放接口不就行了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不改PLC，那咋控制？还有200毫秒怎么保证？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "红线就是不能动安全PLC，得走旁路。还有个200毫秒的限制，压力和速度耦合。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前一直以为柔性升级就是换新机器，现在知道得在老机器上改。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把旁路切入和测200毫秒时延记到学习笔记里，回去查查怎么写时延测试脚本，后面验证要用。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在连续纤维铺放反演纠偏系统方案设计背景下，用户与导师围绕边缘感知架构选型与时延约束持续沟通（5轮），其中在多模态数据对齐与管线搭建部分与多模态数据链长沟通（1轮），在微屈曲前兆感知物理边界部分与制程机理研究员沟通（1轮），并最终确定边缘侧硬同步与FPGA特征压缩架构方向及验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这架构我直接画个数据流向图就行了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就把相机和传感器数据都传到边缘服务器，用个多线程程序接收，不就很快吗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视觉和热力数据怎么弄到一起啊，还有怎么保证200毫秒传完？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微屈曲前兆是啥，我要看啥？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设FPGA很快？对照组就是不用FPGA？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂PTP同步怎么写代码。我这几天去查查边缘侧多模态同步的论文，看明白时间对齐的逻辑，再改这个架构图。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在屈曲反演流场数据管线设计背景下与导师围绕传输方式、张量拼装分工、背压机制与硬件成本持续沟通（4轮），其中在流场传输部分与多模态数据链长沟通（1轮），在反演数据接收部分与核心推演引擎主程沟通（1轮），并形成零拷贝直通、管线侧拼张量、信用池背压及硬件开销评估等管线设计约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，弄个消息队列传过去？像Kafka那种？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那，那换Redis？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "流场怎么传，要低延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@核心推演引擎主程 反演那边怎么接数据？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们说要用共享内存和DPDK，还要做背压。反演那边要拼成定长张量，用滑窗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "管线侧拼吧？背压，就，就是满了不让发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "成本，应该可以吧？反正比慢好。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "DPDK，拼张量，信用池，算开销。记下了。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在轨迹纠偏控制闭环设计背景下，与导师围绕闭环数据源的控制精度与隐私合规冲突及取舍持续沟通（7轮），其中在纠偏闭环数据全量采集需求部分与闭环控制算法师沟通（1轮），在车间数据全量采集合规红线部分与产线交付保障官沟通（1轮），并最终确定精度向合规让步的设计基线，形成闭环输入源分级采集与降维重构约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "闭环不就是写控制算法吗？采集数据就按最大带宽来呗，数据多肯定准。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有合规这回事。这我不懂，我该去问谁？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "做纠偏闭环是不是必须把工人的微调动作全采下来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法师说要全量采集工人动作，你看行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师说要全量，不然不准；保障官说全量违规，要脱敏。俩人说的完全反着。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就选合规？精度掉下来闭环不就废了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。闭环输入分两级，敏感的只传统计值。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微屈曲反演算力部署背景下与导师围绕算力部署方式、弹性调度验证及可持续演进持续沟通（6轮），其中在算力卸载与实时调度部分与算网协同调度师沟通（3轮），在对照实验设计部分与孪生架构设计师沟通（2轮），并形成端边云协同抢占、阈值卸载、对照实验验证及预留异构接口的部署方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多买几台服务器放机房。或者全推到云上算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力不够怎么往上卸载？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前两天看了篇K8s弹性伸缩的帖子，能不能直接套那个Pod自动扩缩容？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一遍不卡就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分两组跑。一组不切，一组切。多跑几次取平均？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "换新板子。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "留接口插模块。那部署方案就是边缘算，算不过来扔云端？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 边边云，实时抢占；2. 算力超了扔云端；3. 分两组测延迟；4. 留接口插模块。就这些。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在视觉应力融合算法工程开发背景下，与导师围绕边缘侧时空对齐、体素化融合逻辑及验证方案持续沟通（8轮），其中在时空对齐部分与多模态数据链长沟通（1轮），在接口格式与算力开销部分与核心推演引擎主程沟通（1轮），并最终形成基于外参标定与SIMD体素化的融合方案及对照组验证策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就把相机拍的图和传感器传的数放一起算呗。乘一下或者加一下，丢给反演引擎就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我调个库对齐吧。延迟就等一下，等数据都到了再算。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "视觉和应力数据怎么对齐啊？我直接加一起反演引擎不认。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演引擎那边要啥格式？算力吃得消吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个外参标定，打时间戳，用SIMD做体素化。验证就跑一下看报不报错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SIMD我不太熟，体素化以前也没写过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下午看SIMD的文档，找个体素化的开源代码抄抄改改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记一下：1. 坐标和时间对齐；2. SIMD体素化；3. 对照组测误差和延迟。下午先学SIMD。"
+              }
+            ]
+          },
+          {
+            "microScene": "在纠偏控制指令联调测试背景下，用户与导师围绕测试推进方式、时序对齐、防抖处理及滞后超限应对持续沟通（5轮），其中在时序对齐与死区测试方法部分与软硬联调测试专家沟通（1轮），并最终明确防抖改用死区滤波及列出联调核心测试项。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先测单条指令下发，再测连续发，看铺放头动不动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟死区我还没看代码。震荡的话，我加个软件防抖行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令时序对齐和执行器死区在联调时具体怎么测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "超了就等下一拍再发呗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 抓指令和反馈的时间戳差分；2. 用死区滤波代替软件防抖；3. 开环测纯滞后时间；4. 滞后超了先降级纠偏量。"
+              }
+            ]
+          },
+          {
+            "microScene": "在边缘推流性能极致优化背景下，用户与导师围绕推流加速方案、零拷贝前提及优化执行顺序持续沟通（4轮），其中在推流瓶颈与算子加速部分与核心推演引擎主程沟通（1轮），在边缘侧内存与带宽限制部分与嵌入式开发主管沟通（1轮），并最终明确算子融合、CMA配置和重构时序的依赖顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "推流太慢了。我觉得可以多开几个线程，并行跑数据应该就快了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我这就去加个零拷贝接口函数？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "零拷贝能不能加？内存够不够？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "要改内核CMA，还要算子融合。那我先去改驱动代码吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 先出算子融合拓扑和内存需求；2. 再调CMA配置；3. 最后重构推流时序。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在复杂曲面铺放工况验证背景下，与导师围绕大曲率反演置信度、误差影响及纠偏降级策略持续沟通（6轮），其中在反演误差来源部分与制程机理研究员沟通（1轮），在低置信度工况验证设计部分与软硬联调测试专家沟通（1轮），并修改测试脚本增加挂起逻辑，最终确认极限曲率、阈值触发与降级挂起三项测试关键点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拿个弯急的件跑一跑？不出错就完事了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太清。就盯着表面起不起皱呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大曲率的时候反演准不准？误差哪来的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "置信度低的时候怎么测？怕机台抖。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前测试脚本只判有没有褶皱，不懂置信区间阈值。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就把脚本里的判断条件改了，加上区间宽度超限就挂起的逻辑"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1.弯特别小的件。2.置信区间太宽。3.纠偏挂起别乱动。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在纠偏系统上产线背景下，用户与导师围绕旁路安全接入原则和灰度切流放行依据持续沟通（7轮），其中在旁路安全接入部分与产线交付保障官沟通端口镜像与只读监听（1轮），在灰度切流放行标准部分与运行效能评估师沟通统计显著性指标（1轮），并总结形成旁路只读、切流依统计指标、异常降级挂起的三条约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拉根网线连到交换机上，看着数据不就行了。反正是旁路，出问题拔网线。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产线交付保障官 导师让我问旁路怎么接。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "切流就一点一点加呗，先1%再2%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行效能评估师 灰度切流放行标准是啥？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这算的也太细了，直接看抑制率比原来高不就行了，高了就加比例。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "统计这块我确实没搞懂，我今晚回去把假设检验和效应量的书看一章，明天把计算脚本跑通，套到这项目里算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 旁路用端口镜像，只读不写。2. 灰度切流看统计指标，效应量大于0.8才能加5%。3. 出问题降级挂起。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在灰度流量切入背景下与导师围绕屈曲抑制率监控与异常溯源持续沟通（6轮），其中在监控体系拆分与溯源链路部分与运行效能评估师沟通（1轮），并最终形成看板拆分三子项与基于P95动态基线的预警口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看大盘仪表盘，抑制率掉下去就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查日志呗，看看报错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运行效能评估师 监控怎么拆，溯源怎么做。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "要拆三个环节，看时间戳对齐。反演慢了指令就滞后。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "挂反演耗时，还有执行偏差。阈值就定个几百毫秒吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没算方差，就看了平均耗时大概两百多毫秒。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "看板拆三个子项，阈值用P95基线，超10%预警。我去跑统计。"
+              }
+            ]
+          },
+          {
+            "microScene": "在纠偏效能复盘与演进规划背景下，用户与导师围绕纠偏复盘口径、反演边界复现、演进排期及产线协调持续沟通（7轮），其中在高曲率抑制率与误纠偏部分与运行效能评估师沟通（1轮），在模型微调排期部分与数据演进规划师沟通（1轮），并形成降级旁路保生产策略及复盘演进口径。",
+            "evidence": []
+          }
+        ]
+      }
+    ]
+  }
+]

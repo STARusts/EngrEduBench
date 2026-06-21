@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在音频采集固件与推理板联调背景下，用户与导师围绕数据流互通、接收端改造及合规脱敏持续沟通（6轮），其中在休眠唤醒时序部分与低耗微控专家沟通（2轮），在I2S DMA双缓冲与日志脱敏部分与硬件联调专员沟通（2轮），并最终形成联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边模型输入接口已经定好了，就按16kHz 16bit单声道。只要固件那边把采集到的音频按这个格式打包发过来，我直接塞进推理队列就行吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "间歇唤醒我确实没细想，ADC上电预热这块我不懂。DMA冲突我只在书上看过，实际怎么防没概念。我只管把数据喂给NPU。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "休眠唤醒后音频采集这边时序是怎样的？我需要扔掉前面一段数据吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件触发就是有声音才开？那前导音不就丢了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "唤醒前有1秒环形Buffer，唤醒后丢30ms预热。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "I2S接口这边怎么把数据给我？我定长取会不会和DMA冲突？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "也就是我这边也得配合做双缓冲或者环形队列，不能傻等定长包。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接收端我改成环形队列，根据半满/全满中断信号取半包数据，攒够推理长度再喂给NPU。验证口径，我就在收发端打时间戳，测一下端到端的延迟抖动，看看时钟漂移严不严重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "固件侧传过来的音频流带定位信息吗？测试日志脱敏怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "固件侧只传PCM和设备ID，不带位置，本地联调日志只要不混入GPS就是合规的。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

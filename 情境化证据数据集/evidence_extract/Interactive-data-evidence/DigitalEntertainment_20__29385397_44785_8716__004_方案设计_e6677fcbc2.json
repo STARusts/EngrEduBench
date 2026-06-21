@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在幻声引擎互动剧场编排平台方案设计背景下，用户与导师围绕多模态编排总体架构的模块划分、数据流、回退留痕与接口契约持续沟通（12轮），其中在状态/资产/事件ID与版本及分支收敛设计上与叙事系统设计师沟通（5轮），在事件留痕最小化与可删除撤回边界上与合规与内容安全官沟通（2轮），并收敛出State/AssetRef/Event/DecisionEvent/ContextKey与两道闸的架构表达。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我开始做幻声引擎互动剧场编排平台的方案设计，先想把“多模态编排总体架构”理清楚：编排台怎么把剧情、弹幕/语音互动、播放器触发器串起来，还要支持回退留痕。你先帮我定个讨论边界和要出什么。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模块我大概想：编排工作台、运行时引擎、播控、日志。多模态这块是不是要单独一个“素材管理”？我对素材、模型、播放器的边界有点乱。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我感觉我想把它做成类似对象存储+一堆JSON，运行时按ID拉。回退就是回到某个状态ID，再把当时用的资源ID也复原。是不是这么简单？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@叙事系统设计师 状态机这块我想做成：状态ID + 分支条件 + 动作列表。多模态资产就用资源ID引用。我要支持回退留痕，状态、资产、事件这三者的ID/版本关系怎么定才不乱？还要能做分支收敛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "event这块统一我能理解。privacy_level是干嘛的？我只想把输入记下来做回放，不存行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那语音/弹幕转成意图标签，是不是就要个NLP服务？我担心会把多模态搞得很重，MVP撑不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "收敛节点要带上下文变量，这变量哪里定义？我怕变成全局变量乱飞。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "你这边再给个很具体的最小字段清单，我好照着画图：State、AssetRef、Event、ContextKey。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 我问完了。大概意思是：状态要可复现，引用资源要带版本和checksum；观众输入统一成Event，不管弹幕语音选择题；收敛用join state，还要有ContextKey白名单控制变量回滚。听着挺合理，但我不确定我们总体架构图怎么把这些东西放到模块里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：编排工作台产出一个“剧目版本”，里面有状态机定义（State/Transition）和资产引用（AssetRef），还有ContextKey声明。发布到运行时引擎。运行时引擎在播控开始时加载这个版本，接收端上回来的Event，更新Context，然后走状态机。日志层存Event和每次状态跳转，回退就是把状态指针改回去，再按日志重放？我不太确定是不是要重放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向快照式，听起来简单，怕重放会出不一致。代价就是存储多点。我不知道存储会不会爆。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "事件……如果同时在线1万，弹幕很多，但我们只取“命中标签”的话，每个用户可能一分钟1条？那就是1万/分钟。快照按“剧情全局”存，不按用户存？我有点糊涂，我们的状态是全场一致还是每个观众一份。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Event就不是每条都存？只存聚合结果？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "DecisionEvent这个词我能用在架构里。那治理层怎么插进来？我怕又变成一堆审核系统。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我能不能把“可删除撤回”理解成：用户请求就把他那条弹幕删掉？但我们又不存原文，那删什么。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与内容安全官 我们在设计多模态编排总体架构。事件留痕这块：为了回退审计，我们想落DecisionEvent（投票计数、触发器ID、规则ID、时间窗），端上原子弹幕/语音默认不落原文。你帮我定下：必须存什么、禁止存什么、哪些能走白名单例外；还有“可删除撤回”在数据结构上要预留什么。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说“操作人/系统身份”，我们是工具平台，会有编剧、审核、运营、系统。是不是每个动作都要打上actor？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我回导师那边。我记住三块：禁止默认存原文音频，必须存版本/规则/决策结果/actor，白名单例外要短保留期和可单条删除。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模块边界：编排层（工作台+校验+版本发布）、运行层（状态机/触发器/回退）、多模态资产层（asset_id+version+checksum）、播控与端（指令下发+事件回传）、治理层（发布闸+运行闸+权限审计+可删除撤回）。  \n对象：State/Transition、AssetRef、ContextKey、Event（原子，默认最小化）、DecisionEvent（用于留痕回退）。  \n数据流：发布流是编排产出剧目版本->治理发布闸->运行时加载；运行流是端上Event->运行闸->聚合成DecisionEvent->驱动状态迁移->播控下发->日志留痕，回退靠快照策略偏向关键节点存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

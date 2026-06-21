@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在物联感知与跨岛流控协议设计背景下，用户与导师围绕跨岛流控协议选型与降级策略持续沟通（7轮），其中在实时性与协议选型部分与边缘物联集成师沟通（2轮），在非标协议合规与降级安全部分与合规约束审计员沟通（2轮），并形成正常态走OPC UA over TSN、降级态走MQTT加TLS与Token的双轨流控及审计策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "数据上报嘛，岛上的PLC和传感器数据，用MQTT汇到边缘网关再上云就行。流控指令，也是云端算好了往下发MQTT吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨岛流控走MQTT延迟真不行吗？散单一来就卡？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "UDP组播自己写重传，这操作能过审？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要UDP搞实时，一个要OPC UA搞安全，这俩怎么拼？UDP加个密行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上一步选了OPC UA Pub/Sub和TSN。所以跨岛流控也全压在OPC UA上？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级的话，能不能退回到MQTT？TSN正常走OPC UA的高优Pub/Sub，抖动超限就切MQTT异步重试？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源消耗这块，网关内存和CPU够加这层代理吧？别到时候流控没降级，网关先OOM了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议这块就定了：正常态跨岛流控走OPC UA Pub/Sub over TSN；降级态走MQTT加TLS和Token异步；降级条件是TSN心跳超时；所有指令留痕审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

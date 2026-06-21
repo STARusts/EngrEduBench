@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的性能压测与故障定位背景下，用户与导师围绕压测拆分、验收口径、可观测字段与瓶颈对照设计持续沟通（9轮），其中在压测分层/容量基线/故障注入矩阵与定位方法上与测试工程师沟通（3轮），在压测日志脱敏边界与审计留痕上与合规与隐私官沟通（2轮），并形成8条可执行的压测与故障定位最小计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把吞吐拉满看极限，再逐步加故障，看重试和 resourceKey 锁会不会把队列堵死。指标上我盯 p95/p99 latency、错误率、重试次数分布、attemptNo 到达上限的比例。还想做端到端和单服务两套。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端到端就从策略下发到边缘执行回执，再到云端状态落库。串联用 commandId、resourceKey，配上 state/reasonCode/rawDeviceCode/latency/nextRetryAt/payloadHash。基线过关我先拍个：成功率 99.9%，p99 < 800ms？退化时比如设备超时就允许重试，但 attemptNo 不能无限涨。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块你给我个可落地的分层方案：基线容量怎么跑、怎么测到瓶颈、故障注入矩阵怎么设计，最好能跟 commandId/resourceKey 这些观测字段对齐。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "故障注入这块你说个矩阵，我想覆盖重试、离线、乱序。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "定位瓶颈你更偏向看什么？我怕全链路一跑，看到 p99 变大但不知道是数据库还是队列。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳分三层测，先云服务层和边缘层单压，最后端到端。基线容量我先用阶梯：cmd/min 和资源并发两维。验收阈值我不再拍 800ms，先用“当前试点规模的峰值操作”倒推，不过业务峰值我还缺，我先用 30% 设备上限做开发期基线跑起来。故障矩阵我先做三类：网络抖动/断网、边缘重启、设备异常码+乱序回执。定位上做 latency 分段，用现有字段拼时间戳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "现有观测字段里有 latency 但它是云端算的总时延。要分段，我能在云端下发入队时记 t_enqueue，下发出队/发送记 t_send；边缘收到命令记 t_edge_recv，边缘发回执记 t_edge_ack；云端收到回执记 t_ack_recv，终态落库记 t_persist。这样至少拆成：队列等待、传输+边缘执行、回执到落库。实现上我可以先把这些时间戳打到同一条结构化日志里，key 还是 commandId/resourceKey/attemptNo。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向只用同端差值：云端算云端段，边缘算边缘段。跨端就只看“收到回执前后”的云端段，边缘段用边缘自己出的处理耗时。端到端总 latency 还是云端口径。这样不需要对齐时钟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我会加一个对照：同样 cmd/min，分别用 resourceKey 高基数（比如 500 个资源均匀）和低基数（比如 20 个资源热点）两种分布。若低基数下队列等待段显著上升、且同一 resourceKey 的 commandId 排队明显，那就是锁竞争。再结合 attemptNo 分布，如果热点下重试被拖长、nextRetryAt 推后很多，也能侧证锁导致的延迟放大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我之前只在联调日志里做了脱敏模板，压测可能有更多第三方库日志。我想把日志级别压到 info，把鉴权头和连接串过滤掉，结构化日志里只保留 commandId/resourceKey/attemptNo/state/reasonCode/rawDeviceCode/latency/nextRetryAt/payloadHash 以及这些 t_* 时间戳，不把原始 payload 打出来。要看 payload 就只看 hash。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 压测与故障定位阶段，结构化日志和第三方库日志这块，哪些字段允许留用于定位？哪些必须过滤？像鉴权头、设备标识、连接串、原始 payload 这些你给个明确边界。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "resourceKey 这点我有点担心，我们现在用的是“棚区-控制器-通道”的组合串，内部人一看就知道是哪台。要不要直接 hash？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收敛成 8 条：  \n1）分层压测：先云服务层（下发/落库）单压，再边缘层单压，最后端到端；每档阶梯持续 10 分钟，避免瞬时波动误判。  \n2）负载模型两维：cmd/min 阶梯（100/500/1000），资源并发阶梯（50/200/500），并加对照分布：resourceKey 高基数均匀 vs 低基数热点。  \n3）基线通过口径（不注入故障）：终态成功率按 commandId 统计；p95/p99 latency（云端总口径）+ 各段耗时（同端差值）都要稳定不单调上升；队列深度在每档末能回落。  \n4）故障注入矩阵（最小集）：网络抖动/断网（30s、5min）、边缘进程重启、设备异常码+乱序回执；每个注入要求可复现并能定位到具体段。  \n5）可观测证据链字段：commandId/resourceKey/attemptNo/state/reasonCode/rawDeviceCode/latency/nextRetryAt/payloadHash，再补 t_enqueue/t_send/t_ack_recv/t_persist（云端）与 edge_process_ms（边缘）。  \n6）重试验收：attemptNo 不超过上限；nextRetryAt 单调推后；离线恢复后能继续推进到终态；乱序回执进入拒绝路径并有 reasonCode。  \n7）瓶颈判定：热点 resourceKey 场景下若队列等待段显著上升且同 key 排队明显，判定锁竞争；若落库段上升且写耗时放大，判定存储瓶颈；边缘段上升则判定边缘执行/资源瓶颈。  \n8）合规：默认过滤鉴权头、token、密钥、连接串与 payload 原文；resourceKey 在压测环境做映射/哈希；仅保留 payloadHash 等摘要，开启详细日志需审计事件记录。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

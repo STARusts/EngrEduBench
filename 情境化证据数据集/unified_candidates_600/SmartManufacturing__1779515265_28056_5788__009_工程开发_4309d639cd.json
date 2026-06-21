@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在状态感知接口联调背景下，用户与导师围绕车间状态同步与防乱序机制持续沟通（5轮），其中在边缘断线缓存与状态对齐部分与边缘联调工程师沟通（2轮），在引擎输入端防乱序拦截部分与核心开发带头人沟通（1轮），并最终形成边缘SDK缓存重发带序列号、云端Spring Integration过滤旧包及断网恢复验收标准的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看网上都是用MQTT或者OPC UA，直接拿现成的SDK连设备，配一下Topic就行了。应该挺快的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "SDK里好像有自动重连的配置项，我打开就行了吧。时序乱了我就不知道了，加个时间戳？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种自带断线缓存和重发的SDK？我不想手写重连逻辑，太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对齐怎么做？光比对时间戳？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用SDK的缓存重发，但云端接口得做序列号比对，丢弃旧包。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "引擎接收端有没有自带防乱序的组件？我不想在业务代码里写一堆if-else判断新旧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘用SDK缓存重发，带上序列号；云端用Spring Integration过滤旧包。验收的话，拔网线5秒再插上，看状态能不能续上，引擎不拿旧状态排程。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在触觉谱面多端能力抽象的方案设计背景下，用户与导师围绕分层架构、capability contract字段、声明/观测能力、空间降级与授权联动持续沟通（10轮），其中在多端实现约束与端侧探测可行性部分与客户端负责人沟通（3轮），并收敛为Core+Extensions的contract轮廓及HapticSessionProfile/DevicePlan的边界约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把“触觉输出”拆成三层：谱面层只表达意图（比如击打/滑条/持续、强度包络、空间方位的抽象）；中间一层是设备无关的 capability contract；最底层是各端驱动实现。关键是 contract 里要能描述设备的“可实现集合”，否则映射会变成黑盒。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先列我认为必须进入 contract 的维度，后面再筛：\n1）ActuatorTopology：单点/双马达/多点阵列，位置坐标系（设备局部坐标）。  \n2）WaveformSupport：是否支持自定义波形、是否只支持预置pattern、最小可控单位。  \n3）AmplitudeResolution：强度档位/线性范围、是否非线性。  \n4）TemporalPrecision：最小事件间隔、启动延迟分布、抖动上界。  \n5）Concurrency：可并发通道数、混合策略（叠加/取最大/优先级）。  \n6）ThermalPowerBudget：持续输出的限额与降频策略（这个我不太确定要不要放这里，怕过早）。  \n然后映射层要输出一个 DevicePlan：把 RenderPayload 里的抽象事件编译成端侧指令序列，并带上“降级说明”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "标称不可信，我倾向做一个“能力探测+基线库”。出厂/安装时跑一次短测，得到 latency/jitter 的经验分位数，比如 P50/P95。contract 里存的是静态上限+探测结果的统计摘要；运行时再有动态状态（温度/省电模式）会影响，那是另一条 runtime signal。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把 capability 分成两份：\n- DeclaredCapabilities：厂商/SDK声明的功能集合与硬约束，比如是否支持波形下载、最大通道数。  \n- ObservedProfile：我们测出来的性能画像，比如延迟分布、强度响应曲线的粗粒度。  \n映射器优先满足硬约束，ObservedProfile 只用于时间对齐和强度校准，且要有版本号避免不同版本测法混用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我说的校准是端侧本地完成：测得的是“设备->主观感受”的粗参数，尽量不回传；就算回传也只能是离散档位的映射系数、并做聚合，不能回传连续曲线或用户击打轨迹。并且未成年人默认关回传，只保存在本地。这个要合规再确认。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "谱面层不直接给“左手柄/右手柄”，而是给一个 Canonical Space，比如以玩家身体为基准的方位（LEFT/RIGHT/FRONT/BACK + 可选高度），再加一个 SpatialFidelity 期望值。映射器看 Topology：\n- 单点：忽略方向，只保留强度/节奏；可用微弱差分（如果系统允许在左右握持推断，那也不稳定，先别依赖）。  \n- 双点：LEFT/RIGHT 映射到左右马达。  \n- 阵列：做插值/扩散，把事件投影到最近的触点集合。  \n降级要可解释：比如 SpatialFidelity=HIGH 但设备只有单点，就在回放/对战一致性上标记“方向丢失”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得先不放到匹配里，复杂且可能伤害覆盖。赛事可以给“推荐设备等级”提示，但不做强制。工程上我们只需要在会话开始时协商一个 HapticSessionProfile：本端能力等级、是否允许触觉、当前 entitlement 是否允许输出触觉（上个微场景的软失效）。然后触觉渲染就跟随 profile 降级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 多端触觉能力抽象这块，你从实现角度最怕 contract 设计成什么样？还有能力探测（延迟/抖动/强度档位校准）在端上做，成本和坑在哪？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果没有“振动已开始”回调，那 ObservedProfile 的延迟测不就虚了？是不是干脆只做机型库，别折腾端测？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白了。我再追一句：你更喜欢 contract 输出什么形态？是统一的 HapticCommand（时间戳+通道+幅值+patternId），还是直接每个平台各自一套？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要两条我采纳：  \n- 不要把映射器设计成实时信号合成器，应该尽量“编译时做重活”，运行时只是按计划驱动SDK。  \n- ObservedProfile 不能假设能测到物理开始时刻，所以它更多服务“事件丢失/合并阈值”和运行时降级，而不是做毫秒级对齐承诺。  \n我会把 contract 拆成 Core + Extensions：Core 只覆盖绝大多数设备能稳定实现的能力；扩展给手柄HD、可穿戴阵列这种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "Core 我提一版：\n1）Channels：通道数N、每通道标签（GLOBAL/LEFT/RIGHT/ARRAY_INDEX）、并发策略（MIX_MAX/MIX_SUM/PRIORITY）。解决“多事件叠加怎么处理”。  \n2）TimingLimits：minIntervalMs、supportsTimestampSchedule(yes/no)、estimatedMergeBehavior（低于阈值会合并/丢弃）。解决“事件密度上限与编译器合并”。  \n3）IntensityModel：range[0..1]、steps（离散档位数或连续）、gamma（可选，用于近似非线性）。解决“强度映射与跨设备一致性”。  \n4）PatternModel：supportsCustomWaveform、builtinPatternSet（枚举/ID范围）、maxPatternDurationMs。解决“用预置还是自定义”。  \n5）SpatialModel：topologyType(SINGLE/DUAL/ARRAY)、arraySize、optional anchorMap（逻辑方位到通道/索引）。解决“方向/位置能不能表达”。  \n6）RuntimeFlags：systemHapticsEnabled、powerSavingMode、thermalState(粗级别)、mutedByPolicy（比如 entitlement soft fail 时强制静音）。解决“运行时能否输出/是否降级”。  \nExtensions：vendorSpecificBlob + capabilityVersion。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在 HapticSessionProfile 里加一个 OutputPermission：ALLOW_HAPTICS / MUTE_HAPTICS，并带 entitlementRef+policyVersion。DevicePlan 即使缓存，也必须是加密的 plan，端侧解密需要有效票据。并且接口层要保证“没有解密材料就只能得到静音计划”，不能让第三方SDK直接拿到明文 pattern。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“双保险”：服务端编译时就根据 entitlementStatus 给出默认 OutputPermission；端侧每次播放前也要用本地票据再判一次，避免离线宽限到期后还继续震。端侧判定变化会写入本地审计事件（只记状态切换，不记触觉细节）。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "我做个最小验证动作：选三类代表设备（手机单点、手柄双通道、穿戴阵列）各挑两款，拿同一份触觉谱面渲染后看两件事：  \n1）编译器是否只用 Core 就能给出可接受体验（主观评分+事件丢失率/合并率的客观统计）。  \n2）扩展字段使用频率：如果超过 30% 的谱面事件必须依赖 extension 才能表达，就说明 Core 设计太弱要加字段。  \n维护上，机型库和 capabilityVersion 做强约束：新设备只要能落到 Core，不要求立即支持扩展；扩展走白名单，避免无穷分叉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补一个小边界：SpatialModel 里 anchorMap 先限定为“逻辑方位到通道/索引”的静态表，不引入复杂坐标变换，避免映射器被迫做实时空间计算。之后真要做体感空间化，再走扩展。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

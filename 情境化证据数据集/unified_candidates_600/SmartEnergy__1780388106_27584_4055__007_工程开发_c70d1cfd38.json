@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在光阵云遮微态重构系统工程开发背景下，用户与导师围绕气象数据接入方式、云图解析方法、Kafka配置及解析验证指标持续沟通（6轮），其中在推演模型输入要求部分与算法设计师沟通（1轮），在推流接口与流式解析框架部分与后端开发主管沟通（1轮），并最终形成Kafka推流接入、xarray流解析及RMSE与SSIM验证指标方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先搞气象接口适配和云图解析这块。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看网上很多气象数据拉取都是用Python的requests库定时轮询，或者用现成的SDS SDK。我想直接用MinIO的SDK去气象中心拉HDF5文件，省得自己处理协议。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "解析的话，我打算直接调OpenCV的轮廓提取，把云团抠出来，这库多方便啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们推演模型对输入到底有什么要求？HDF5文件是不是太慢了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "气象中心那边除了HDF5全量文件，有没有推流接口？我不想自己写解析器，有没有现成的流式气象数据接入框架？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我以前只拉过静态文件，Kafka消费端配置和流式解析我有点卡壳，不太熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找两篇Kafka Python客户端的教程看一下，顺便把xarray处理GRIB2的Demo跑通。今天下午我把消费组拉起和反序列化这块代码写完，跑不通我再问后端主管。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算写个脚本把解析出来的矩阵画成图，肉眼跟气象局的图对比一下。误差的话，灰度值差个10以内应该都行吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，气象接口改用Kafka消费雷达拼图推流；第二，解析用xarray处理流数据；第三，验证指标用RMSE<5和SSIM>0.95，跑100个时次。下午我先搞通Kafka这块。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

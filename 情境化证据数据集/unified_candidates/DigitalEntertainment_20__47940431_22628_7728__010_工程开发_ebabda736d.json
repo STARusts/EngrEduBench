@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动编排规则引擎开发并需与playhead队列对齐的背景下，用户与导师围绕规则要素、时间线对齐、队列调度、互斥仲裁与合规日志持续沟通（7轮），其中在事件模型与幂等/乱序窗口部分与实时数据工程师沟通（2轮），在规则DSL落地形态、版本灰度与失败策略部分与后端开发工程师沟通（2轮），并明确要实现规则评估器与action生成+slot仲裁写入指令队列两模块。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则就是点按钮触发吧。比如观众点投票就弹出来。然后就按顺序发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件就是收到事件就触发。事件可能是击杀、掉塔、观众送礼物这种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用target_ts吧，时间戳简单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是事件，输出就是指令…指令就发给前端？然后前端显示互动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时数据工程师 互动规则引擎这边，事件模型怎么定？幂等怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那窗口要多大？我拍脑袋 10 秒？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。幂等键就是 rule_id+seq 这种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 规则执行器怎么落地？版本和灰度要怎么做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "fallback 是啥？失败就重试？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件要有event_id和occur_seq，然后规则出来action_id，用 rule_id+seq 去重。还有窗口不要太大，800ms差不多。版本就按房间分桶灰度，一个active。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用毫秒吧，1.2秒就是1200ms。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "条件表达式就…写成字符串，然后解析？比如 \"event.type==kill\" 这种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "都发吧，越多越热闹。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "slot_key…行。那就优先级高的留。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就把规则都放内存里，然后遍历？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "rule_id、version、priority、match、action、schedule、slot_key、guard、fallback…差不多这些。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就直接打到日志里方便查？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就做两个：一个是规则评估器，按event_type筛规则然后match；另一个是action生成加slot仲裁，写到指令队列。日志里 user_id 不明文。就这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

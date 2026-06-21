@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发中落地“过程数据→能力画像→评价快照”的计算与校验背景下，用户与导师围绕输入事件、画像结构/版本化、落库接口、校验与测试清单持续沟通（9轮），其中在画像最小数据结构与一致性/异常校验设计部分与算法工程师沟通（2轮），在证据到维度映射与缺失策略及原因码合规口径部分与行业课程教研负责人沟通（2轮），并形成可实现的字段/规则/测试与异步计算方案清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把学生的能力分算出来，然后放到画像表里？再给个分数。校验就是别算错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有工单、证据、签核记录。还有任务完成状态。就这些吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 画像这块我们现在只有工单、证据、签核。画像结构要怎么放？还有怎么校验计算靠谱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "confidence是啥，要做很复杂吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解就是先把维度分拆开存：每个维度一个score，然后overall是加权。confidence先别训练模型，用证据覆盖率和签核状态算。异常检测先做标记，不改分。先做一致性校验这些硬规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "版本就放modelVersion字段。接口返回带version。历史就按computedAt查？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "evaluation-snapshot里加：modelVersion、inputEventHash、calculatorVersion、dimensionScores、overallScore、confidence。还要computedAt。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先用JSON存dimensionScores，快点。后面要查报表再拆表。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单测就是给一组工单和证据，算出来固定分。还有重复算要一样。再就是缺证据的时候应该是0分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业课程教研负责人 缺证据、未签核这种情况，维度得分怎么处理？还有证据类型到能力维度的最小映射规则要怎么定？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "职业规范扣分我有点怕，算不算太敏感？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算采纳：6个维度先固定；证据类型映射按他们那套；签核当闸门不加分；缺失分两种覆盖率，算confidence。职业规范扣分只在REJECT+原因码时，最多-5。暂时不做权重校准，就平均。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原因码我想先来这几个：EVIDENCE_INCOMPLETE（材料不全）、EVIDENCE_MISMATCH（与任务不符）、PLAGIARISM_SUSPECT（疑似抄袭？）、FORMAT_INVALID（格式问题）。差不多？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，那我把抄袭改成待核验，不自动扣。扣分触发就用EVIDENCE_FRAUD_CONFIRMED这种？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着列：\n1）表/快照字段：evaluation-snapshot加modelVersion、calculatorVersion、inputEventHash、dimensionScores(JSON)、overallScore、confidence、computedAt。\n2）计算输入：workOrder+evidence+approvalRecord，按evidenceRefHash聚合出inputEventHash。\n3）规则：证据type映射6维度；未通过签核不计分；缺失贡献0；REJECT且teacher原因码=FRAUD_CONFIRMED才触发职业规范-5。\n4）校验：同inputEventHash+版本重复算结果一致；overall等于维度*权重；confidence跟覆盖率变化单调。\n5）测试：固定样例事件算分；重复请求幂等；REJECT不同角色触发不同标记。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

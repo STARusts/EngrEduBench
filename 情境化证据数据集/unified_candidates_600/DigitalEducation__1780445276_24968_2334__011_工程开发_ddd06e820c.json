@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多源感知流端侧集成调试背景下，用户与导师围绕多源流对齐方式、抖动验证断言及CPU开销评估持续沟通（6轮），其中在时钟对齐与原帧处理部分与动觉采录架构师沟通（2轮），在CPU阈值与联调打压部分与测试联调指挥沟通（1轮），并形成端侧集成测试脚本规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对齐就是按时间戳拼一起呗，先进先出，我写个缓冲队列就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时钟漂移就是时间对不上嘛。我查一下，应该有现成库。丢包就重传呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧多源时钟对齐怎么做？误差多少能接受？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我写代码的时候，是不是直接调FPGA的对齐接口就行？不用管时钟了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证，我打日志看时间差？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了一篇讲PTP时间戳校准的帖子，里面提到用硬件寄存器抓取时间差做直方图统计。我能不能在端侧加个统计模块，把每帧的抖动算出来，如果P99超过2ms就报错？这样断言就能写了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开销，应该不大吧？就几个加减法。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧加抖动P99统计，CPU占用率上限定多少？联调怎么打压？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

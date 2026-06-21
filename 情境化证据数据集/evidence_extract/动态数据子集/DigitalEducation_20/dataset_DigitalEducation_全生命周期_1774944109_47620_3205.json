@@ -1,0 +1,926 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在“校园数字实验安全实训平台”需求摸底背景下，用户与导师围绕风险痛点调研的边界、访谈对象与问题框架、量化口径与样本覆盖持续沟通（7轮），其中在教学流程嵌入与痛点问法上与产品经理沟通（2轮），在近失事件/违规记录的数据最小化与告知授权边界上与合规与隐私负责人沟通（2轮），并收束为可执行的一页调研提纲与输出形式。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我初步想先覆盖三个高风险：化学危化品、用电用气、还有设备操作。事故类型我能想到的有：误混试剂、废液乱倒、忘关气阀、违规用电、还有离心机/高温设备误操作。平台我想做闭环：实验前训练+准入测验，实验中提示，实验后复盘。优先级上我倾向先做“准入”和“高频违规提醒”，因为最容易落地也能看指标。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对象我想分三类：学生、任课教师/带教、实验室管理员或安全负责人。问题我先列个粗版：1）过去一个学期常见违规/近失事件；2）哪些操作最难教、最难记；3）现在准入是怎么做的（纸质签字还是口头）；4）发生问题后怎么追溯；5）他们觉得最缺的工具是培训内容、提醒方式还是记录台账。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以用一个简单矩阵：频次×严重度×可控性，先把Top 5风险点排出来。样本上我想至少覆盖：化学基础实验室1个、分析/仪器室1个、机电类1个（用电多）、再加一个综合实训室。每个点至少访谈1位教师/管理员、3-5个学生，先跑一轮快速调研。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 我现在要做实验室风险痛点调研。你觉得在校园实验课里，安全训练平台最容易卡在哪里？调研问题怎么问才不会变成大家泛泛吐槽？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再追问一个：如果要在需求阶段把“可落地”说清楚，你建议我把痛点分成哪些可交付的能力块？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我把产品那边的点带回来了：最卡的不是内容本身，是课时、权责敏感、和流程割裂。调研我打算改成“事件回溯”问法，把痛点都归到四块：准入、训练内容、过程提示、追溯证明。然后用频次×严重度×可控性排Top 5，作为一期候选。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 我们要做实验室风险痛点调研，可能会涉及近失事件、违规记录、准入考试等。调研阶段哪些信息不该采？如果要采，怎么做最小化和告知，避免引起老师和学生抵触？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实想直接问“谁违规最多”，这样肯定不行。那调研阶段我就把问题改成“最常见的三类违规/近失”+“发生后需要补的材料清单”，不问具体人。后续如果要做准入和追溯，再单独做告知方案。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "@导师 合规这边给的结论是：调研优先匿名化和聚合口径，不碰个人违规排行；近失事件尽量结构化采集，少自由文本；如有录音要做告知和删除期限。我准备把调研提纲按这个改掉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着压成一页口径：  \n- 覆盖实验室：化学基础、分析仪器、机电用电、综合实训各1个。  \n- 访谈对象：每个实验室1位教师/带教、1位管理员/安全岗、学生3-5人。  \n- 方法：以“最近一次麻烦/近失事件”回溯为主，辅以5分钟小问卷拿频次感知；数据尽量匿名聚合。  \n- 产出：Top 5风险点（按频次×严重度×可控性），每个风险点归到四块能力（准入/内容/提示/追溯）并标注当前做法与痛点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "结构我能用。我要改的只有一点：学生访谈我想加一句“为什么会偷懒/不按流程”，不问人名，只问触发条件，比如赶时间、设备排队、觉得没必要。这样能指导后面做提醒的时机。其他就按你这套跑。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育实验室安全准入业务梳理的需求阶段背景下，用户与导师围绕准入判定输入、规则骨架、最小化采集与规则模块化持续沟通（9轮），其中在硬性底线/审计留痕/免训认定上与实验室安全官沟通（2轮），在个人信息采集边界与留存及刷脸合规路径上与合规与隐私负责人沟通（2轮），在风险分级映射维护变更机制上与产品经理沟通（2轮），并形成6条收束口径输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉就是三步：先学一段安全课，再做个测验，过了就给通行。然后老师或管理员扫码放人进。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我先列：学生身份、课程/班级、做什么实验、有没有通过对应安全训练、考试分数、培训时间，可能还有老师审批。还要看是不是危化或用电用气的高风险。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实验室安全官 准入这块你们一般怎么卡口？哪些是硬性底线，哪些需要留审计证据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那免训一般怎么认？比如学生上学期学过类似的，能不能直接放行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着拆一下：  \n准入结果先分三种：允许进入/禁止进入/允许但需人工审批。  \n判定条件：先验身份在名单里；再看基础训练是否有效；再按实验风险等级叠加专项训练；再看场地开放时段；再看设备上机资质。  \n留痕字段：审批人和理由、训练和测验记录、进出时间地点、关联课程和实验类型、异常放行原因。  \n我不确定“事故后暂停”和“黑名单”是不是要放在准入规则里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 准入判定这块，我们需要采哪些个人信息才够用？有哪些容易越界的点？审计留存一般怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果学校坚持要刷脸进门，平台是不是就得存人脸库？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小集合我觉得是：学号工号+姓名、组织信息（班级院系）、课程关联、实验室编号、实验风险等级/类型、训练通过状态和有效期、测验结果、审批记录（人+理由+时间）、进出记录（时间+地点+结果）。  \n不做或后置：自己存人脸/定位轨迹/健康信息。刷脸这事优先让学校门禁做，我们拿结果。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "模块我先列：  \n1）人员与角色：学生/教师/助教/访客/外来施工等  \n2）课程与名单：教务名单、临时名单、旁听处理  \n3）训练与考核：基础/专项、有效期、补训、免训  \n4）风险分级：实验类型到风险等级映射  \n5）准入审批：自动/人工、二次审批、非开放时段  \n6）设备上机资质：仪器授权、带教记录  \n7）异常与处分：事故后暂停、违规黑名单、复训要求"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 风险分级这块，需求上怎么定边界？映射表由谁维护、怎么变更才不乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这个“教师选标签”会不会很随意？选低风险省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收一下 6 条：  \n1）准入结果分三类：自动放行、拒绝、需人工审批（含非开放时段/高风险/身份异常）。  \n2）准入规则按 7 个模块梳理：人员角色、课程名单、训练考核、风险分级、准入审批、设备资质、异常处分闭环。  \n3）最小数据集合：学号工号+姓名、组织与课程关联、实验室与实验风险标签、训练/测验状态与有效期、审批记录、进出记录；不采定位轨迹和健康信息，平台不自建人脸库。  \n4）审计留痕必须覆盖“谁批准、依据是什么、学生训练与测验、进出与异常放行原因”，并按学校制度分层留存。  \n5）免训只认可可审计的同等证书/有效期内记录/带教补训记录，高风险实验不默认免考核。  \n6）风险分级映射不做自动推断，优先由责任教师在课程/实验项目选择风险标签，学校级模板+课程级加严，降级需审批；试点期用抽样课程对照验证一致性并收敛模板。"
+              }
+            ]
+          },
+          {
+            "microScene": "在校园数字实验安全实训平台需求阶段，用户与导师围绕一期合规边界与商业模式可行性持续沟通（6轮），其中在数据敏感项/告知授权/留存与看板分层部分与合规与隐私负责人沟通（3轮），在采购路径/定价形态/合同雷区与试点指标部分与商业运营经理沟通（2轮），并形成“最小可追责集+分层看板+课程包订阅售卖与服务分层+指标口径调整”的需求边界结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先猜三个坑：一是未成年和学生数据怎么拿授权，二是训练记录算不算学籍类数据要不要进校内，三是我们卖订阅会不会撞学校采购流程，比如必须走招标、按年结算这种。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "非采不可我觉得至少要有：学生身份标识、课程/实验项目、训练完成和测验结果、审批记录和日志。可选的比如定位、设备信息、视频监控类都别碰。承诺边界：训练内容不做“自动判责”，只是记录和提示；风险分级也还是教师选。商业一期可能按“课程包+服务费”，别一上来按学生数全校订阅，采购阻力大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 我们做校园数字实验安全实训平台，一期如果只做准入训练+测验+审批留痕，看板先给院系用。你帮我框一下：最敏感的数据项有哪些、哪些必须做告知授权、日志留存期限通常怎么定、哪些做法会踩红线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果学校说“想把训练过程的操作轨迹、每一步点了什么”都留着，方便出事倒查，这算不算过度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：我们会做数据看板，院系主任想看班级、老师、甚至学生个人排名，这块怎么守住？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业运营经理 学校买这种安全实训平台，常见的采购路径是啥？我们想一期用“课程包+基础订阅”，你帮我拆一下：怎么定价更容易过会、合同里最常被卡的条款、试点转规模一般看哪些指标？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "学校老问“买了之后你们是不是一直要驻场”，这个怎么说比较合理？我们团队也撑不住。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定三条：  \n1）默认不采：定位、通讯录、点击流、视频音频。只保准入所需的“最小可追责集”。如果学校强要点击流，变成可选包，且必须学校给制度依据和期限。  \n2）看板默认汇总到院系/课程，个人层面只做“未达标/过期名单提醒”，不做排名。  \n3）商业上先卖“课程包+基础订阅（按院系/校区）+实施服务费”，试点期再加可选驻场和内容共创，不承诺夸张SLA。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "告知这块：平台提供告知模板和版本号，学校在入学/选课/进实验室前统一告知，平台只记录“已告知留痕”，不搞强制勾选。  \n留存期限我不太有把握，我先按区间说：系统安全日志6-12个月可配置；业务记录按学校制度，至少覆盖学期+审计需要，可能是学制期或更久，这个写成“按校方制度配置并分层归档”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "做成选配清单里明确：越界项需要校方提供制度依据、审批人、用途说明；我们给替代方案，比如用“关键节点证据”替代全量轨迹。谈不拢就不交付那一项，但主合同不绑死。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我担心“工作量下降”不好量化，校方会说你怎么证明。我们可以把它改成更可测的，比如：审批平均处理时长、需要人工介入的比例、以及抽查一致性通过率。工作量下降当成目标，不当验收硬指标。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在校园数字实验安全实训平台方案设计背景下，用户与导师围绕安全情境训练的编排形态、统一触发与审计留痕架构持续沟通（7轮），其中在审计证据与准入闭环要求上与实验室安全官沟通（4轮），在事件字段、服务边界与触发扩展方案上与解决方案架构师沟通（3轮），并汇总形成可评审的触发/事件/准入关键决策点与最小试点验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想拆成四块：情境内容库（脚本+题）、训练引擎（流程编排、分支、计时）、风险提示（实验中弹窗/扫码触发）、复盘与看板（达标、错题、近失事件）。然后准入规则挂在训练结果上，比如“必须完成某个情境并达标”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "触发我本来想简单点：课表里安排了实验课就推训练，到了实验室再扫二维码开启“实验中风险提示”。留痕粒度我觉得先到“完成/未完成、得分、错误类型”，再加一次“签署承诺”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实验室安全官 安全情境训练这块，学校最少要留哪些审计证据？我现在只有“是否完成、分数、错题类型、签署承诺”，担心不够。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件序列我懂，就是像时间线一样串起来。那免训这里是不是会很敏感？比如老师口头说“这组同学以前做过”也算吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "训练包版本要跟实验项目绑定，不然真的对不上。你说的“系统提示内容也要记录”，会不会太重？提示可能很多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "关键提示白名单+变更审批记录，这个我能推动。还有“实验中触发风险提示”，你更倾向用什么触发方式？我现在想二维码或NFC点位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我回去跟导师把“课前推送”和“到位触发”的边界讲清楚。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我想加两条横切能力：  \n- 触发服务：来源包括课表、实验室点位扫码、教师手动发起；统一生成“训练任务/提示任务”。  \n- 审计事件服务：所有关键节点都往这里打事件，形成事件序列；准入判断只认事件服务里的证据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向流程编排为主，题库为辅。因为安全情境很多是“先做A再做B”，错一步就要回退补训。题库只能测会不会背。风险是编排复杂、内容制作成本高。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "我给两个控制点：  \n1）情境模板化：把流程拆成“步骤卡片”，每张卡片有：提示语、判定方式（单选/多选/确认/计时）、关键提示标记、关联点位。内容制作负责人按模板填，不用每次从零写。  \n2）分层内容：通用安全（PPE、用电）做一次全校复用；实验室/专业特有的做插件包，先覆盖高风险的少数实验。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "架构这块原来是解决方案架构师在写，但他这周一直没回我消息。我担心他把触发/事件当成日志，最后审计不够用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 我们在做安全情境训练架构，我这边需要你拍板三点：1）审计事件最小字段你怎么定；2）触发服务/训练引擎/审计事件服务的边界怎么划；3）点位扫码、设备联动这类触发以后怎么扩展，不想每次改一堆业务逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段里 payload 放“提示内容摘要”，怎么保证以后审计时能对得上原文？我怕摘要不严谨。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一点，我担心 session_id 的定义不统一：一次训练、一次入场、一次实验课到底算哪个？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先把我理解的定下来，可能有漏：  \n1）训练形态：流程编排为主、题库为辅；内容用“步骤卡片模板”降制作成本。  \n2）触发统一：有触发服务，来源三类——课表推送（预习）、点位扫码（关键确认）、教师发起（补训/临时）。触发服务只产出任务，不掺教学规则。  \n3）审计留痕：单独审计事件服务，记录关键事件序列；字段至少要有 actor、时间、课程/实验项目、实验室、内容版本、触发来源、步骤ID、以及引用内容片段ID+hash。  \n4）准入依据链路：准入规则服务只读训练结果和审计事件；免训必须有批准人+证据+有效期，口头不算。  \n5）一期边界：设备联动先不做控制，只做提示+确认+留痕，避免复杂度爆炸。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "关键提示白名单我觉得归安全官或安全办维护，我们平台提供可配置+审批记录，老师只能选用不能改。"
+              },
+              {
+                "behaviorLabel": "研究",
+                "behaviorEvidence": "验证动作我想做个小试点：同一门实验课，两组分别用“课表推送完成即算” vs “到位扫码+关键提示确认”，对比三项：到课后仍未达标比例、异常上报数、以及抽查时的证据完整率。周期就两周，先看趋势，不追求统计显著。"
+              }
+            ]
+          },
+          {
+            "microScene": "在实验室准入系统落地的方案设计背景下，用户与导师围绕“准入规则引擎”的规则表达、分层优先级、变更审计、可解释与验证指标持续沟通（7轮），其中在合规留痕/日志留存/临时管控与例外机制上与实验室安全官沟通（3轮），在规则包产品化与文案本地化边界上与产品经理沟通（3轮），并收敛出6条评审用设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解准入就是算一个“能不能进”的结果，但背后得可解释。不然学生会觉得被卡。规则来源可能有三块：学校制度（比如危化、用电）、实验课要求（老师加的要求）、还有临时管控（某实验室维修停用）。引擎里我想拆成“硬拦截”和“软提醒”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "有两个备选。\nA：规则表驱动。每条规则就是：适用范围（校区/楼宇/实验室/课程/设备）+条件（训练达标/证书/时间窗/角色）+动作（拦截/放行但提示/要求补训）+原因码。优点是直观，缺点是复杂条件会很长。\nB：模板化流程。像“准入评估”固定几个步骤，每步挂一个检查器，最后综合。优点是能控复杂度，缺点是对管理端理解门槛高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我偏A先起步，原因是试点学校安全办更习惯“条款”，模板流程他们可能看不懂。复杂条件我先限定表达能力，比如只支持AND/OR，不支持太多嵌套。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "留痕上：规则归属“安全办/安全官”主维护，教师只能在课程层选一些“可选规则包”，不能改底层条款。变更要走审批，至少有：发起人、审批人、变更前后差异、生效时间、影响范围。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "优先级我先定三层：校级底线 > 实验室级 > 课程级。\n- 更严可以叠加：校级允许不代表课程一定放行。\n- 更松不允许：课程不能覆盖校级拦截。\n冲突处理：同一条件出现相反动作时，取最严动作。比如“放行”和“拦截”冲突，结果拦截，同时把原因列表都显示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实验室安全官 准入规则这块，你最在意哪些合规点？比如审批留痕、日志留多久、以及“临时管控”算不算必须有签批？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "临时管控7天这条挺硬。还有日志留存呢？学校会要很久吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "人工放行一次性，这个我之前没考虑。那“豁免”是不是完全不允许？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 规则引擎这块，如果做“规则包”，你觉得怎么定义才好卖、也不让学校觉得我们在卖制度？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "场景能力卖法可以。那包和规则的关系，是一对多，包里挂一堆规则，对吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "话术可改会不会导致不一致？比如把“拦截”说得很委婉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我拿到两边意见后，我想把规则引擎设计收敛成几条：\n- 规则结构按“条款表”起步：范围+条件+动作+原因码+版本+生效/失效时间。\n- 冲突策略取最严，输出原因码列表；展示文案允许学校改，但不动原因码和动作。\n- 临时管控作为一种规则类型：必须有发布人、到期时间，默认不超过7天。\n- 支持人工放行，但只做一次性凭证，强留痕，不能变成永久豁免。\n我不太确定的是：输入数据快照要存到什么程度，怕存多了合规风险。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "两档我可以写成：\n- 低敏档：存输入字段值（如达标时间戳、证书ID、课程ID）+来源系统+拉取时间。\n- 高敏档：只存来源系统记录号+字段哈希+拉取时间，明文字段留在来源系统。\n然后按字段分级，像身份证号这种不进准入引擎。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "验证我想做三层：\n1）规则静态校验：范围是否重叠、是否有永不过期的临时管控、是否出现自相矛盾动作。\n2）沙盒模拟：用几条典型人群跑一遍，输出准入结论和原因码，给安全办确认。\n3）上线后灰度：先对一个实验室或一个课程生效，观测“拦截率/人工放行次数/申诉量”，一周内可回滚到上一规则版本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给假设：\n- 拦截率如果比同类课程历史均值高20%就报警给安全办复核规则。\n- 人工放行次数如果单日超过10次，优先排查规则过严或训练推送没到位。\n这些阈值可能很拍脑袋，只能先用试点两周校准。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）规则表示：表驱动条款，字段包含适用范围、条件、动作、原因码、版本、生效/失效时间。\n2）规则分层与优先级：校级底线最高，实验室级其次，课程级最低；冲突取最严，返回原因码列表。\n3）规则包：按场景能力打包，包含必选/可选规则与默认范围模板；教师可选用但不能改底层条款。\n4）变更治理：安全办维护，审批留痕含发起/审批/差异/生效时间；临时管控必须有到期时间且默认不超7天。\n5）例外机制：支持一次性人工放行并强审计；豁免必须规则化并绑定外部证明记录号，尽量引用不上传材料。\n6）可验证与合规：决策日志保留≥1年；输入快照按敏感度两档（明文或引用+哈希）；静态校验+沙盒模拟+灰度观测，阈值先假设后试点校准。"
+              }
+            ]
+          },
+          {
+            "microScene": "在准入规则引擎评审后进行身份权限与审计设计背景下，用户与导师围绕跨系统主体对齐、RBAC+ABAC落地到角色/范围/动作/数据域及审计回放与导出控制持续沟通（7轮），其中在高风险动作底线与防滥用审计要求上与安全工程师沟通（1轮），在日志敏感分级、平台管理员可见范围与留存口径上与合规与隐私负责人沟通（1轮），并收敛关键角色权限集与受控协查机制供评审。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“角色-权限”想：学生、任课老师、实验员、安全办、教务管理员、平台管理员。然后把“准入判定、临时放行、豁免、规则维护、日志查询”拆成权限点。审计就记录谁在什么时间做了什么。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主体来源我先这样分：\n- 学生/教师：统一身份导入，平台不允许手建；\n- 课程/班级关系：教务系统；\n- 实验室/门禁设备：资产系统或门禁系统；\n- 平台内建：安全办角色组、内容制作人员、平台运维账号。\n外部来的主体只做映射，不改基础信息。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想先 RBAC 为主，ABAC 做补充条件。比如“安全办审批员”这个角色能审批豁免，但只对自己负责的校区/院系生效，这块用属性控制。放行时必须选理由码、关联外部证明记录号；临时放行必须填到期时间，默认不超过 7 天。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 我们平台要做准入判定、临时放行、豁免、规则维护、日志回放。权限模型我倾向 RBAC+少量属性。你给我一套你觉得“必须有”的权限点和审计底线，尤其是放行/豁免/规则变更怎么防滥用？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "导出日志也要双人复核，这个我之前没放进去。一次性放行单人但要阈值告警，这个也更现实。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 这边要做身份权限与审计：日志里会有准入决策、训练达标、放行理由、外部证明记录号、还有设备/门禁事件。你帮我划一下哪些字段算敏感、查看与导出怎么控、留存多久比较合规，平台管理员能看哪些细节比较合适？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解的重点是：运维账号看聚合不看明细；导出比在线查看更严格；高敏输入别明文进审计，走引用+哈希。留存要分层，不是“一刀切都一年”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定一个结构，避免散：\n1）权限维度：Role（岗位）+ Scope（校区/院系/实验室）+ Action（读/写/审批/导出/发布/回放）+ DataDomain（准入、训练、内容、审计、事故近失）。\n2）RBAC 管岗位，ABAC 管 Scope 和 DataDomain 里的细分，比如“只看本实验室”“只看聚合不看明细”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计串联这块我想这样做：\n- 每次准入决策：记录 rule_version、输入来源系统引用（教务/门禁/统一身份）、输入快照按两档（低敏明文；高敏引用+哈希），并保留≥1年；\n- 放行/豁免：必须 reason_code + external_proof_ref（只存引用号），临时放行必须 expire_time，默认≤7天；\n- 规则变更：记录发起/审批/差异/生效时间，可回放到某个 rule_version 做沙盒模拟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太确定的是：把“平台管理员不能看明细”写死会不会影响排障。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我补一条“受控协查”流程：平台运维发起协查单，只能填 request_id/时间窗/实验室范围；安全办或教务审批后，在校方角色界面查询明文并导出受控结果，平台侧只拿到脱敏结果用于排障闭环。所有协查也进审计，算一次“受控导出”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收敛到 6 个：\n- 学生：查看自身训练与准入状态；参加训练；查看个人历史（不含系统日志）。\n- 任课老师：查看所授课程学生的达标/准入结果（默认聚合+名单，不看错题细节）；发起一次性放行申请（自己不能审批）；查看本课程的异常统计。\n- 实验室管理员：查看本实验室准入名单与门禁事件；发起临时管控（到期≤7天）；发起近失事件上报。\n- 安全办审批员：审批临时放行/豁免/规则发布；维护 reason_code 及其适用范围；查看高敏审计明细（按 scope）。\n- 教务管理员：维护课程-实验室映射；查看跨课程的达标统计；不参与放行审批（避免权责混）。\n- 平台运维管理员：仅系统配置与运行监控；可查去标识化审计（request_id、错误码、延迟、来源系统状态）；无导出个人明细权限。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加第 7 个更合理，内容制作和运维不该混：\n- 内容制作负责人：创建/发布训练内容与题库版本；提交内容审核；查看内容效果的匿名统计；不能看个人错题明细，只看题目维度聚合。内容发布走双人复核：内容制作提交，安全办合规审核通过再发布。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定的 5 条是：\n1）权限模型：RBAC 管岗位，ABAC 管范围与数据域细分；权限按 Role+Scope+Action+DataDomain 组合，默认最小授权。\n2）关键限制：规则发布/回滚、豁免变更、含个人信息日志导出、内容发布都走双人复核；一次性放行可单人执行但必须强审计+阈值告警；临时放行强制到期且默认≤7天。\n3）审计与回放：决策日志≥1年；记录 rule_version、source_system_refs、reason_code、external_proof_ref、diff、effective/expire 时间；输入快照分级：低敏明文、高敏引用+哈希，回放规则版本时按授权再取数。\n4）查看/导出分级：平台运维只能看去标识化链路与聚合；校方业务角色按 scope 看明细；导出默认禁，确需导出走审批、字段白名单、水印+有效期，并记录用途与接收人。\n5）受控协查：平台侧只能提 request_id/时间窗/范围的协查单，审批后由校方角色在本校范围内查明文并输出脱敏结果，协查全流程入审计。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育平台方案设计收尾的“数据闭环与指标体系”背景下，用户与导师围绕训练-提示-复盘的数据采集、事件最小字段、指标口径与阈值动作持续沟通（6轮），其中在字段分级/来源系统引用/rule_version回放的事件标准化上与数据治理负责人沟通（4轮），在指标分层口径与最小验证方法上与数据分析师沟通（4轮），并最终形成事件元数据+分级落库+指标三层+责任分工的闭环骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按三段拆：实验前是安全训练和准入，实验中是风险提示和违规拦截，实验后是复盘。数据上就是：学了没、过了没、现场有没有触发告警、最后有没有事故或近失。指标我能想到训练达标率、告警次数、事故率下降这些。字段分级和 source 引用、rule_version 要在事件里带上，方便回放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件我想先定 6 类：用户训练开始/完成、测评提交/判定、准入申请/通过、实验过程风险事件、教师处置、事后复盘记录。字段最小：user_id、role、course_id、lab_id、event_time、event_type、payload。然后 payload 里带输入分级的字段，比如危化品名称算高敏？不确定。source_system_refs 就放教务、统一身份、实验室设备系统的引用 id。rule_version 放在准入判定和风险事件里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 事件体系我暂定 6 类事件。想落地“字段分级+来源系统引用+rule_version回放”，你建议事件里哪些字段必须标准化？字段分级怎么在数据字典里表达，尤其是训练/准入/风险事件这几块。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "source_system_refs 如果有多个系统，比如教务课表和门禁都有，放一个数组就行？会不会太重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rule_version 回放时，如果规则升级了，旧事件里的 rule_version 怎么和规则仓库对上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 指标体系我现在只有训练达标率、告警次数、事故率这类大词。你帮我把“闭环+可计算口径”拆一下：指标分层怎么做、每个指标分子分母/时间窗、以及怎么用最小验证证明有效，不用等一年事故数据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小验证你说不用等事故数据，具体怎么做对照？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了。我回去把指标按三层收束，再把 event 元数据补齐。还有个点：如果学校不愿意给事故数据，我们就用近失和重大违规做代理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边先定四块：  \n1）事件统一元数据：event_id、time、school、actor_type、actor_id_ref、object_type/id_ref、action、source_system_refs(数组)、payload_schema_version。决策类事件额外必填 rule_id+rule_version、reason_code、decision_time；证据只放 external_proof_ref+hash。  \n2）字段分级：在数据字典里给字段打 L1-L4；事件再带 payload_redaction_level 标记是否明文/脱敏/引用。个人身份和违规细节倾向 L4，设备状态可能 L2/L3，危化品我先不拍板，等安全官制度口径。  \n3）指标三层：过程（覆盖/达标/触达/时效）、结果（近失/违规复发/事故低频）、运营系统（活跃、规则命中、数据质量）。口径上准入/告警一律按 rule_version 切片，学习按 content_version。  \n4）闭环动作：用“指标-阈值-动作”三元组，触发内容更新或规则复核；短期用近失+重大违规做替代验证，试点用分批或前后对照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据质量我先给三条够用：  \n- 事件完整率 = 必填字段非空占比（按 event_type 分开算）  \n- 延迟分布 = event_time 到入仓时间的P95，尤其是离线训练  \n- 版本填充率 = 决策类事件 rule_version 填充占比、学习事件 content_version 填充占比  \n闭环责任我想：内容相关（达标率低、误题集中）给内容制作负责人；规则相关（告警异常、复发高）给实验室安全官牵头，平台给建议；系统相关（触达率、延迟）给技术侧。可持续性上，阈值触发先自动生成待办，不强制自动改规则，避免误伤。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。再补一句我怕我忘：规则改动要保 effective/expire，回放按事件 decision_time 去对版本。其余没啥遗漏。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在校园数字实验安全实训平台开发背景下，用户与导师围绕训练内容制作流水线MVP的范围/DDL、版本不可变、状态机、发布回放与审计留痕持续沟通（8轮），其中在内容颗粒度/审核级别/字段锁定与素材引用部分与内容制作负责人沟通（4轮），在版本表结构/发布事务/并发冲突与回放查询部分与后端负责人沟通（3轮），并收敛为6条可验收实现要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我先说个粗方案：内容分成场景脚本、题目、素材三类，统一挂在content_version下面；审核走一条状态机。纠结点是版本策略：要么全量快照一份；要么差量+基线。MVP我倾向全量快照，牺牲点存储，换稳定和回放简单。你看会不会踩坑？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容制作负责人 我这边在做训练内容制作流水线MVP，想确认三件事：1）脚本/题库/素材你们一般怎么拆颗粒度，哪些是必须一体版本的；2）审核流到底需要几级、常见退回原因；3）发布时你们希望锁哪些字段，后面改动要怎么留痕。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "素材这块我之前想直接存URL，看来会导致回放漂。你说asset_id+hash，我理解是：素材本体可以不跟版本复制，但版本里记录引用时的hash，回放校验hash一致才算同一份，对吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备这样落：  \n- 内容模型按“课程包-场景-步骤”，场景作为最小发布单元；题目和答案解析跟content_version一起冻结。  \n- 素材不直接存URL，改成asset_id+hash；content_version里冻结引用关系。训练端校验hash，异常就占位+上报。  \n- 审核先两级：内容负责人自检→安全官合规审；退回原因做标签+备注，方便统计。  \n- 发布后锁脚本文本、步骤顺序、题目答案解析、风险标签、素材引用hash；改动一律新版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想快照“结构化内容”：场景、步骤、题目、选项、解析、风险标签、引用列表；素材本体不快照，只记录asset_id+hash。这样回放一致性主要靠hash校验兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据库层面我可以加约束：published状态的记录禁止update，只能插新版本。实现上用“版本表+内容表按version_id分区式写入”，更新只发生在draft版本。可能还需要把发布动作做成事务：锁定draft，复制生成immutable版本，状态切到published。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 内容制作流水线MVP我在落地，想确认：1）content_version不可变你建议怎么做（表结构/约束）；2）发布动作怎么保证原子性；3）并发编辑冲突怎么处理，MVP需要做到什么程度。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload_json快照我能接受，省得拆一堆表。draft内容怎么存？也用snapshot？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "并发409也够，正好前端提示“刷新后再编辑”。我回去跟导师对齐一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳“版本头表+快照表”：content_version+content_snapshot，用payload_json存scene/step/question/asset_ref。原因是MVP快，回放逻辑也直。  \n不采纳的是“开发环境就上数据库权限隔离”这块我可能先做成可配置：线上严格禁UPDATE，开发/测试先靠代码层限制+审计，避免本地调试被卡死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "节点我按四段：  \n1）制作：创建draft版本，写入scene/step/question/asset_ref快照；每次编辑rev+1。  \n2）提交审核：draft→in_review，冻结编辑入口（除非退回）。  \n3）审核：in_review→approved 或 rejected（带reason_tag+note），rejected回到draft可继续改。  \n4）发布：approved→published，生成新的published version_no，写入published快照，填effective_at/expire_at；旧published版本如有冲突则写expire_at作为失效点。回放按decision_time找命中的published版本。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想做两层：  \n- 操作审计：记录actor、action、version_id、timestamp、from_status/to_status、reason_tag。  \n- 内容差异不做全文diff，MVP只存payload_hash变化和变更的kind列表，必要时能定位到哪个快照变了。  \n敏感这块我不太确定哪些算敏感，但至少不往审计里塞学生个人信息，这条流水线主要是内容侧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我把这轮定下来的点压成6条：  \n1）内容结构按课程包-场景-步骤，场景为最小发布单元；题目答案解析随版本冻结。  \n2）版本存储用content_version头表+content_snapshot快照表，payload_json+payload_hash；published快照只读不可变。  \n3）素材用asset_id+hash引用，版本里冻结引用关系；训练端hash不一致就占位+上报。  \n4）状态机：draft→in_review→approved/rejected→published；rejected回draft并带reason_tag+note；draft编辑用rev乐观锁，冲突返回409。  \n5）发布用事务生成新published版本并写effective_at/expire_at；回放按decision_time命中有效窗口内最大version_no。  \n6）审计留痕：记录actor/action/status流转、reason_tag；内容变更只记kind列表+hash，不做全文diff。"
+              }
+            ]
+          },
+          {
+            "microScene": "在内容制作流水线工程开发中为第3天跑通“draft-审核-发布-回放”链路背景下，用户与导师围绕规则引擎边界、流程编排、审计与测试用例持续对齐（10轮），其中在接口形态/事务边界/回放查询/错误码与素材hash校验落点上与后端负责人沟通（3轮），在审计hash口径/字段命名/留存脱敏与服务端统一计算上与数据治理负责人沟通（2轮），并形成团队可执行的5条实现约定与两天内拆分验收计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把流程拆成3块：内容状态流转、发布生成版本、回放按decision_time取版本。规则引擎这块我有点不确定边界，是只管“能不能流转”还是连“怎么选命中版本”也算规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入我倾向统一成一个context，比如 actor_role、content_id、current_status、action、decision_time。输出就是 allow/deny + reason_tag。错误码我想分：403权限、409版本冲突、422业务条件不满足。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 规则引擎和流程实现这块，你建议的调用顺序是怎样？我需要能跑通 draft→in_review→approved→published，然后按decision_time回放。接口字段、事务边界、审计点位、错误码怎么定更合适？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "payload_hashes放到规则输入里是为了第5天“素材hash不一致上报”吧？那是在哪个命令里校验更合适，Publish还是更早？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心规则引擎里塞太多校验会变成一堆if。我们要不要做成“规则表+表达式”那种？但现在是第3天要跑通链路，搞太重可能来不及。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回去跟导师对齐下：先用代码规则集，流程层统一写审计，发布事务里做最终hash一致性校验。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算这么落：  \n1）接口：CreateDraft、SubmitReview、DecideReview(approve/reject)、Publish，再加只读的Replay(content_id, decision_time)。  \n2）每个写接口都带rev，服务层先查content当前rev，若不一致直接409；一致才进规则判断。  \n3）规则拒绝返回422并带reason_tag：比如状态不对、权限不对、素材不齐/不一致。权限不对也可以是403，我倾向403只在明显越权时用。  \n4）审计：每个命令不管成功失败都写一条？我有点犹豫，失败也写会不会太吵。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "全链路用例我做成一条集成测试：  \n- CreateDraft拿到content_id、rev=1；  \n- SubmitReview带rev=1成功，状态到in_review，rev变2；  \n- DecideReview approve带rev=2成功，状态到approved，rev变3；  \n- Publish带rev=3成功，生成published_version_no=1，有effective_at=now；  \n- Replay用decision_time=now+1s，命中version_no=1；  \n再补一条：Reject时带reason_tag+note，状态回draft，rev+1，然后能再次SubmitReview。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Publish时如果已存在上一个published版本，就把它的expire_at设置成新版本的effective_at。这样回放窗口就不会重叠。这个写在同一事务里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则输入我按后端说的context对象：actor_id、actor_role、action、content_status、rev、decision_time（回放才需要）、payload_hashes（提交审核和发布需要）。规则本身先做成一组函数，按action分派。回放规则不放在RuleEngine里，放ReplayService的查询逻辑，单测用固定effective_at/expire_at数据来验证decision_time命中哪个版本。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我改一下：回放“选取规则”不塞进通用RuleEngine，直接固化在ReplayService查询里，但写成一个可单测的选择函数，比如selectVersion(versions, decision_time)；数据库查出来的一组候选版本交给它做最后挑选。这样既不搞复杂规则引擎，也能保证口径一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "hash我让内容服务在保存draft时就算，存content_hash和kind列表hash。流程服务写审计时只引用这两个字段，不把正文塞进去。具体hash怎么算我可能要跟数据治理或安全那边确认下格式，避免不同服务算出来不一致。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 我们审计只存 kind列表+hash，不做全文diff。hash口径你建议怎么定：哪些字段参与、算法选什么、字段命名怎么统一？另外审计留存和脱敏有硬要求吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "序列化规范这块我怕实现时各端不一致。我们服务端都用同一套库就行？如果移动端也要算manifest_hash，会出事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我回导师那边，把“hash口径”和“服务端统一计算”这点敲死，避免多端口径漂。"
+              },
+              {
+                "behaviorLabel": "项目管理",
+                "behaviorEvidence": "我按优先级：  \n- Day1上午：把4个命令接口骨架 + rev校验 + 状态写入跑通；  \n- Day1下午：RuleEngine最小规则集（状态迁移+权限）+ 422/403/409错误码落地；  \n- Day2上午：Publish事务（新版本+旧版本expire_at）+ Replay查询与选择函数；  \n- Day2下午：审计事件全链路打点 + 两条集成测试用例（approve链路、reject回draft链路）。  \n验收口径：集成测试过；数据库里能看到状态流转、published版本窗正确、审计每步都有记录且只含hash和kind列表。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "五条约定我确认下：  \n1）流程层四命令：CreateDraft/SubmitReview/DecideReview/Publish；只读Replay按decision_time回放。  \n2）所有写操作都带rev并先做乐观锁校验，不一致直接409；通过后再走规则判断。  \n3）RuleEngine先做代码内规则集：权限+状态迁移；拒绝返回422并带reason_tag，越权返回403。  \n4）Publish在单事务内：生成新published版本(effective_at) + 回写旧版本expire_at + 更新指针；发布前做material_manifest_hash一致性最终校验，不一致422且写审计。  \n5）审计每次命令无论成功/失败都写：actor/action/from/to/result/reason_tag/changed_kinds + content_struct_hash/material_manifest_hash，不记录正文和URI明文。"
+              }
+            ]
+          },
+          {
+            "microScene": "在移动端离线训练开发背景下，用户与导师围绕离线包版本选择、校验、断点续训与补传接口及验收点持续沟通（6轮），其中在离线包结构/本地状态与事件队列方案上与移动端工程师沟通（4轮），在补传鉴权、token续期与本地加密落盘及session_token策略上与安全工程师沟通（2轮），并收敛到最小闭环交付与审计字段/422-403处理口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按链路拆三块：1）训练包下载+校验+版本选择；2）本地状态机：进度、答题、得分、断点；3）补传：把事件/结果发回去，服务端按权限/状态迁移验。验收我想用两类：弱网/断网下能完成训练并恢复；还有一条是补传后管理端能看到同一次训练的最新有效版本命中。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解是移动端只认“训练包里带的published_version_id”，下载时从服务端拿到“当前有效版本”以及包的hash。离线训练就固定用这个版本，等恢复网络时补传时把version_id带上。要是服务端已经有更新版本，也不能把旧的训练硬算到新版本里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 离线训练这块你建议怎么落地？我主要想定：包结构/校验、本地进度存啥、补传事件怎么做才能断网也稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源不放URI明文这点挺关键。补传payload_hash不放payload本身，那服务端怎么还原得分？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我们这期大多是安全情境选择题+流程操作题，主观题可以先不支持离线，或者离线只做“练习不计入达标”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "清理策略我倾向先做上限+最近使用，提示用户可手动清理。换机丢进度先接受。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "再问下：断点续训的checkpoint你们一般怎么打？每一步都写库会不会卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备采纳几条：  \n- 离线包zip里带manifest.json：published_version_id + content_struct_hash + material_manifest_hash + 资源sha256列表；资源路径只用相对路径，不落远端URI。  \n- 下载校验：先校zip整体hash，再逐文件hash，不一致直接丢弃。  \n- 断点续训：session/progress两张本地表，关键节点+定时checkpoint落盘。  \n- 补传：本地event_log append-only，恢复网络批量post；服务端对每条返回ack或422(reason_tag)/403。422进dead_letter不重试。  \n验收点我想定4个：1）断网完成训练并重启app能继续；2）包hash不一致会被拦；3）补传幂等，不会重复计分；4）服务端能按published_version_id把结果算到对应版本，不会串到最新版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等我想用event_id做去重，event_id在客户端生成UUID，服务端按(event_id, actor)做唯一约束，重复就返回已处理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计这块：服务端对补传接口也算命令，每批事件里每个事件对应一次审计记录：actor/action/from/to/result/reason_tag/changed_kinds + content_struct_hash/material_manifest_hash；不记正文和URI。客户端不写审计，只写本地事件队列。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 补传离线事件这块，鉴权和token过期怎么处理比较合适？另外本地存答题/进度有没有合规和安全底线要卡？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "session_token要在线开始才能拿到，那完全离线首次进训练怎么办？我们有场景是学生在宿舍先下包，到实验楼没网直接开练。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向第一种，给个N=24小时，预签发10个token，避免完全无凭证的离线训练被滥用。练习不计入也能做，但会引发投诉。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小闭环我定三件：  \n1）离线包下载/校验/缓存：支持一个课程包，manifest校验+逐文件sha256；缓存上限先做500MB+LRU。  \n2）离线训练session：支持3类题型（单选、多选、步骤确认），断点续训（关键节点+30秒checkpoint）。  \n3）补传：事件队列批量post，能处理服务端逐条ack；遇到403停下走重新登录；遇到422按reason_tag落dead_letter并提示“本次训练不计入”。  \n测试：我会跟测试负责人定一组弱网脚本：断网/切网/时间回拨/包损坏/重复补传。覆盖至少把“approve链路命中最新有效版本”那条的审计字段校验也加进去，避免我们这边传错hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补传请求（每条event）我建议字段：  \n- event_id、session_id、published_version_id  \n- occurred_at、type（START/CHECKPOINT/ANSWER/SUBMIT）  \n- content_struct_hash、material_manifest_hash  \n- payload（只包含step_id、选项id、耗时、得分片段；不带题干，不带素材URI），payload再带payload_hash用于防篡改  \n- session_token（预签发的一次性token）  \n服务端审计记录每条事件至少要能看到：actor、action=INGEST_OFFLINE_EVENT、from/to（比如session状态in_progress->completed）、result、reason_tag、changed_kinds（progress/score/status）、content_struct_hash、material_manifest_hash。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今天把reason_tag枚举跟后端对齐，优先把HASH_MISMATCH、SESSION_INVALID、TOKEN_EXPIRED、STATE_CONFLICT这几类串起来；明天给你看两条：1）包校验失败的客户端行为和服务端422对应；2）补传一条SUBMIT事件，审计字段齐、且回放命中对应published_version_id，不串最新版本。"
+              }
+            ]
+          },
+          {
+            "microScene": "在训练事件上报链路联调压测与缺陷修复背景下，用户与导师围绕压测模型、验收口径、状态机/幂等与审计完整性持续沟通（9轮），其中在压测场景分组与阻断标准上与测试负责人沟通（4轮），在重复与乱序事件返回码及审计记录规则上与后端负责人沟通（2轮），并收敛为4条可执行验收点与数据脱敏要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先保三件事：不丢事件、状态不乱跳、422/409这些错误码返回稳定。指标我先盯吞吐和P95延迟，还有失败率。切入上就先压“START+IN_PROGRESS心跳+SUBMIT”的组合，因为离线补传会把这些叠一起。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型我先按学生端来：每人一次训练大概1个START，过程可能10到20个IN_PROGRESS事件，最后1个SUBMIT。补传会在网络恢复时把这堆事件集中打上来。验收口径我先定成：事件入库成功率99.9%，P95小于300ms，422/409这些按预期出现且不导致服务端500。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "300ms我确实是先拍的，我改成先用基线测出来再定阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率按“事件最终落库率”，因为有些422本来就该失败。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "审计字段我补一个抽样校验：比如每1万条里抽100条，检查tenant_id、user_id、session_id、published_version_id、client_event_id、server_received_at都有。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 压测我准备测事件上报链路（START/IN_PROGRESS/SUBMIT + 离线补传），你这边能给个压测场景分组、数据构造建议，以及通过/阻断标准吗？我们现在重点是联调压测+缺陷修复。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“队列堆积”我们这边是看什么指标？我这侧只看到了接口延迟和状态码分布。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先做第一组基线链路+第三组离线补传尖峰。第二组真实行为先放后面，因为它更像“长时间稳态”，我们现在是把明显缺陷先掐掉。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "状态机正确我想用两条：\n1）对同一个session，server端记录的session_state只能按START->in_progress->completed走，不能因为ANSWER之类回跳；\n2）如果事件乱序到达，应该返回STATE_CONFLICT或做幂等忽略，不允许把completed覆盖回in_progress。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向服务端做最终幂等：按client_event_id做唯一键，重复直接200但带标记duplicate=true，或者409？我不确定现有约定。移动端只保证尽量不重放，但离线重试肯定会重复。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 现在在做联调压测，想确认下：同一client_event_id重复上报（离线重试、断点续传）服务端期望返回200还是409？另外审计落库对重复事件是只记一次还是要记录duplicate标记/计数？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那乱序呢？比如先到SUBMIT后到IN_PROGRESS，服务端会怎么处理？是直接409还是允许SUBMIT把状态推进然后忽略之前的IN_PROGRESS？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去压测里把“乱序补传”单独做成失败用例，不算系统不稳，但要看409比例是否符合构造。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先定4条：\n1）压测组1（START+SUBMIT）下：无500，事件最终落库率>=99.9%（排除预期422/409），且P95不超过基线*2。\n2）压测组3（离线补传尖峰）下：重复client_event_id返回200且duplicate=true；落库不重复，dup_count递增，last_seen_at更新。\n3）状态机：任何session_state只允许START触发in_progress，SUBMIT触发completed；ANSWER/IN_PROGRESS不改最终态；乱序或缺前置一律409+STATE_CONFLICT。\n4）审计字段抽样：tenant_id/user_id/session_id/published_version_id/client_event_id/server_received_at 必有；HASH_MISMATCH、TOKEN_EXPIRED、SESSION_INVALID、STATE_CONFLICT这些reason_tag与规则引擎枚举一致。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "基线我用单用户低并发（比如10 rps）跑10分钟，取P95当基线。数据我用固定的测试账号集合，user_id做假号，token我这边客户端日志不打印，只打印token_hash前8位定位。服务端如果有request log，我也提醒后端把Authorization打码。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在校园数字实验安全实训平台试点上线与验收交付背景下，用户与导师围绕今日硬DDL的发布回滚、核心链路可用与可复核验收证据持续沟通（4轮），其中在发布/回滚/监控底线与阈值及校内网络兜底上与SRE运维负责人沟通（4轮），在MVP验收清单、证据口径与抽样及隐私边界上与测试负责人沟通（2轮），并汇总形成MVP上线+验收执行点、签字角色与缺陷分级结案口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我想把今天的目标定清楚：先把试点学校环境跑通、上线后监控能看、再按验收清单过一遍。@导师 你帮我把“今天必须交差”的点卡死下？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拆成四段：  \n1）上线前：用一套“试点环境核查表”过一遍（域名、证书、统一身份、教务同步、训练包CDN/下载）。  \n2）上线：灰度到一个试点班，先只开“实验前安全训练+准入判定”，实验中提示先不强推。  \n3）上线后2小时：看错误率、P95、离线补传幂等命中、STATE_CONFLICT比例。  \n4）验收：按功能点录一组可复现的用例口径，外加审计日志抽查。  \n我不确定验收证据要到什么粒度，怕最后被说“没法复核”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "先找SRE。@SRE运维负责人 试点上线这块，你给我一套最小可行的发布+回滚+监控底线，我今天照着做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回滚这块我有点疑问：我们试点只开新功能，旧平台没有同等功能能切回。你说的数据可回滚，具体我能做的就是“功能开关一键关闭”，但数据已经写进去了，算不算踩线？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "监控告警阈值你建议怎么拍？我现在只有压测基线：10 rps跑10分钟取P95当基线。试点真实量估计更小，但会有离线补传尖峰。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：校内网络经常被代理/SSL检查搞崩，有没有上线当天的兜底建议？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去跟导师对齐，把回滚说成“功能开关+数据可控伤害面”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 试点上线验收，你给我一套最小验收清单和证据口径，别太理想化，能在一天内跑完的那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用例这块我能跑，但“看板数据对上抽样3个学生”这里，学生是试点真实学生吗？我有点担心又碰到个人信息的问题，但验收又想看真实数据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我回去跟导师说：演示班走假账号，真实班只看聚合不导出。审计抽查我们只抽字段不记明文。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定一版MVP执行点：  \n1）发布底线按SRE的“3-2-1”：依赖连通/配置一致/版本可追踪；回滚走“功能开关一键关+写入打source/version标记+必要时可清理且有审计”；监控四黄金信号+两条业务告警。  \n2）灰度范围：先开一个“试点演示班”，只启用实验前训练与准入判定链路；实验中风险提示先不强推，避免验收当天变量太多。  \n3）验收用例按测试的8+3：重点覆盖离线补传幂等、乱序STATE_CONFLICT、准入判定reason_code、看板抽样对数。  \n4）阈值口径：延迟告警=基线P95*2（5分钟），5xx>0.5%（2分钟），补传堆积看入队/出队趋势。  \n5）数据与隐私：演示与回归用固定测试账号池（假号）；真实试点证据只看聚合，不导出个人明细；日志不落明文token，只留token_hash定位。  \n我不太确定第5条是不是够合规，但至少能避免明显踩雷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "签字我先按角色：学校侧教务顾问做业务验收确认，实验室安全官看审计留痕抽查，我们这边你来总签。缺陷结案分级：阻断级（500/审计缺失/幂等失败）当天清零；高优先（影响准入/成绩一致性）给出修复时间点；其余进入迭代池，但必须写清“不影响试点上线范围”的理由。"
+              }
+            ]
+          },
+          {
+            "microScene": "在校园数字实验安全实训平台运行评估的事故近失事件监控背景下，用户与导师围绕监控边界、是否到人绑定、分级阈值及证据审计持续沟通（8轮），其中在合规底线与解码护栏上与合规与隐私负责人沟通（2轮），在追责需求与证据链要求上与实验室安全官沟通（2轮），并形成分级+两段式绑定及可执行8条口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先想分两层：一层是“近失事件”本身的上报和处置闭环，另一层是为了识别近失去采集什么数据。冲突点在第二层。直觉是尽量用设备/环境事件和训练过程事件，少用人身相关的连续数据，比如视频或定位这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "比如危化品柜门被打开但没登记、用电超载告警、气瓶压力异常、学生在训练里多次跳过关键步骤但还是进实验。触发可以来自IoT告警、系统规则、老师手动上报。证据我理解要有事件时间、实验室、设备、触发规则、关联到哪个实验课次；通知对象先老师和安全官，学生端只给安全提示不点名。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 近失事件监控里，如果要定位到个人，合规底线是什么？哪些数据最好别采、哪些可以采但要条件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果安全官说“必须定位到个人”，那能不能用“默认不定位，触发严重级别才解码”的方式？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实验室安全官 近失事件你们最在意的是什么？一定要追到个人吗，还是能接受到班级/课次？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "证据链里，你们会要求视频吗？平台本身主要是训练和流程，不一定接摄像头。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向做“两段式绑定”：默认事件不出现具体学生，只显示到课次/小组；只有当事件级别>=高风险且由老师或安全官发起处置单，走审批后才解码到个人。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先按事件来源和后果来分：  \n- S1提示：训练内的步骤遗漏、轻微违规倾向，只做提醒不入库到人；  \n- S2近失：设备告警但无人员暴露、柜门开启未登记这种，入库但先不解码；  \n- S3高风险近失：危化品领取异常、用电/用气越限、老师确认“存在伤害可能”，这类允许解码。  \n阈值我不敢拍死，先用试点数据跑两周，看误报率和处置时延，再调。依据就是处置资源跟不上就要收紧、漏报反馈多就要放开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以做分组：按课程、按实验室、按设备类型拆。再看每类告警的“有效处置率”（老师是否确认/关闭原因）、“重复告警率”（同一课次重复触发）、以及学生端的“提示点击/忽略比例”。如果某类告警重复高且多数被标成误报，优先调规则；如果学生忽略率高但老师确认率也高，可能是提示文案和时机不对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误报：系统触发了近失，但老师或安全官在处置单里选“无风险/规则不适用”，并给原因，比如设备维护中、演示环节例外。漏报：实际发生了近失，靠人工上报或事后复盘发现，但系统没触发，或者触发了但没升级到S3导致没被处理。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选分级+两段式绑定。牺牲的是“老师一眼看到是谁”的便利，换来默认不把学生贴标签、减少被误伤。对追责的补偿是：S3走审批解码，且只在处置闭环里短期可见，不进长期画像。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学校侧我想是：任课老师发起，实验室安全官审批解码；如果是跨学院的公共实验中心，可能要加教务顾问确认“是否影响准入/成绩”。我们平台侧只做权限和留痕，不参与判断。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "夜间的话教务不应该卡住。可以把“解码审批”限定在安全官+值班负责人；教务只看统计和学期复盘，不参与实时解码。成绩相关的处理走另外的教学流程，别混在近失处置里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）近失事件分S1提示/S2近失/S3高风险近失，只有S3允许到人解码。  \n2）默认事件展示到“实验室+设备/环节+课次/小组”，不直接展示学号姓名。  \n3）个人标识用短期可逆凭证，解码仅在处置单里可见，不写入长期画像标签。  \n4）解码触发：级别=S3且老师发起处置单；审批人=实验室安全官或值班安全负责人。  \n5）学生侧只收“安全提示与操作指引”，不点名、不排行、不做惩戒性提示。  \n6）误报/漏报口径：以处置单的“确认结果+原因”与人工上报对照为准；每两周复盘一次阈值。  \n7）审计留痕：谁查看到人信息、谁解码、谁关闭处置单都要留痕可追溯。  \n8）留存：明细按学期/年度设期限，过期只保留去标识化统计用于趋势与改进。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字教育平台运行评估背景下，用户与导师围绕训练“达标”可计算规则、留存定义、分组对照与看板最小化展示持续沟通（8轮），其中在指标口径与两周试点验证设计上与数据分析师沟通（5轮），并最终确定达标/留存核心指标、应训人数口径、分层维度与试点复盘方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心两件事：一是达标被刷题刷过去，二是留存只看登录太虚。还有不同专业、不同老师布置方式不一样，直接比会有偏差。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "达标我想拆两层：硬门槛+质量。硬门槛比如必修模块学完、考试到分；质量就看做题是不是一次过，还是反复蒙。可质量怎么量我还不确定，可能用重做次数、用时？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 训练达标和留存这块，你给一套能直接在看板上用的指标口径行不行？我现在只有很粗的想法：达标别只看分、留存别只看登录。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "留存你怎么定义？我们想看“学完过两周还记得”，但平台上只能看行为。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "异常通过那块我有点担心，别到最后变成在抓作弊，搞得老师不舒服。你说只提示不判定，提示给谁看？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小验证动作你怎么建议？我不想一口气做很多指标，最后没人看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我把“达标”先锁在完成+通过+关键步骤错误率，质量里先不做太多花的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个问题：应训人数怎么定？有些学生免训，有些旁听。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先采纳两块：  \n1）达标：必修完成率、首次通过率、关键步骤错误率；“应训人数”按选课-免训-退课。补考通过率我先留着当辅助。  \n2）留存：D14行为留存+复训完成率+能力衰减率。  \n“异常通过”我先不放到主看板，怕误伤和引起反弹，只在试点里做内部观察，先验证是不是噪声多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关键步骤应该是内容里标注的，比如危化配制、通风柜开启、断电确认这种。错误就按步骤题里“必做动作缺失/顺序错/安全阈值填错”。但我不确定标注是不是已经全覆盖。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "对，首训分太低会把衰减率放大。我倾向于两种做法选一个：  \nA）只对首训≥60的人算衰减率；  \nB）用分差而不是比例，比如复训分-首训分。  \n我更想用B，解释简单。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看板默认只给全校总览和院系层，点进去再按课程/班级。分层维度我先放四个：专业、课程、是否危化、是否新生。老师维度先不在默认页出现，避免变成“考核老师”，但允许管理端筛选。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我能接住：看板给老师只看自己班的聚合；安全官/教务管理员才有跨班对比，而且操作留痕。个人明细只在需要处理个别学生申诉时开放，且必须有理由码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没漏。第6条里“异常”阈值我先不定死，试点里用分位数找极端班级，避免一开始就定阈值被打脸。"
+              }
+            ]
+          },
+          {
+            "microScene": "在两周试点后需三天内确定下个小版本范围的运行评估背景下，用户与导师围绕内容迭代优先级、证据口径与MVP版本规划持续沟通（7轮），其中在内容改动信号与误判规避上与数据分析师沟通（3轮），在内容包/产品版本边界与发布复核节奏上与内容制作负责人沟通（2轮），在审计留痕与最小化采集合规影响上与合规与隐私负责人沟通（1轮），并形成可执行的迭代对象、版本边界、验收信号与卡口分工清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先按“影响面”和“改动成本”排。影响面最大的是：题目表述/选项歧义、情境里步骤顺序不符合实验室实际、还有风险提示太泛导致学生瞎点也能过。成本低的先做，比如文案和判分规则；成本高的像重做交互动画就往后放。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "证据我想到两种：一是错题分布，如果集中在某些题且选项分散，可能表述有问题；二是通过时长，如果很多人用极短时间也能过，说明训练不够“卡点”。但我不确定该怎么把“时长短”变成可执行的改题建议。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 两周试点的数据里，怎么找“该改内容/该改题”的信号？我怕把学生水平差当成内容有问题。能给几个你们常用的判断办法吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "班级间方差高这个要用什么量？直接看分位数差距行吗？我不想一上来就定死阈值。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“瞎点路径”你说的极短用时，有没有更稳的办法？我怕有人本来就快。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着拆成三档：  \n- 快修（1-2天能改）：题干/选项文案、名词对齐、答案解析补充、提示文案从“泛提醒”改成“指向关键风险点”。  \n- 中修（1周内）：情境步骤调整、把本校规程差异做成可配置片段（比如设备名称、准入流程）。这个我不确定是不是内容组能独立做。  \n- 需评估（>1周）：交互漏洞要改判分或加节点记录，可能要开发支持，放后面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容制作负责人 我们想做“内容迭代+版本规划”。哪些问题你们能靠内容侧发布直接修（不发产品版本），哪些必须等开发改功能？另外内容发布你们最快节奏能到什么频率？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果每周两次，那试点后两周复盘，我们可以先做快修循环。安全官复核会不会卡住节奏？比如小改动也要排队？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私负责人 内容要高频迭代的话，会不会影响我们现有的“训练记录/审计留痕”的合规口径？比如题目变了、提示变了，记录还能对得上吗？需要重新告知或更新授权吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可追溯我之前只想着内容包号，没想到要写进训练记录。那我们先做到“记录里存版本号”，不做更细的。新增埋点这块我怕大家一上头就要全量序列。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我定个MVP：  \n1）内容侧快修一轮（不等开发）：先按“P10-P90撕裂最大题Top10”+“错选很散的题”做文案/选项/解析修订；再把风险提示从泛话改成指向关键风险点。这里标注轻审还是全审，走内容组每周两次节奏。  \n2）产品版本里只放一件事：训练记录里补充“内容版本号/题库版本号”，保证可追溯；其余像判分收紧、步骤序列埋点先不做。  \n3）验证信号：这些题在修订后，看班级间差异是否收敛、极短用时通过的比例是否下降一点；另外看复训第二次是否更稳（至少不再完全无提升）。  \n4）卡口：内容改动由安全官复核（轻审/全审分流），合规侧只在新增采集或用途变化时介入。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主要是三天DDL下，判分和埋点牵涉开发和回归，风险是上线后把正常学生误判成没看、反而投诉；而内容快修能先解决最可能的歧义/对齐问题。刷题漏洞这轮先用“极短用时占比+双峰”做监控，如果在快修后还很明显，再进下一次冲刺把判分收紧当主项。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "可以，就按这四条讲。我这边同步时会强调“先快修拿证据，再决定要不要动判分/埋点”，避免大家一上来就要大改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

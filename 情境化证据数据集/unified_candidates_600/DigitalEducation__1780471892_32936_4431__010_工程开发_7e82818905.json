@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在适配策略联调集成背景下，用户与导师围绕感知、策略与前端联调的防崩机制与降级契约持续沟通（6轮），其中在防抖与脏数据校验部分与策略联调工程师沟通（1轮），在异常与超时降级预案部分与代偿策略引擎设计师沟通（1轮），并最终形成防抖对齐、缺字段降级不丢弃、超时回退有效指令的三条联调硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接连呗？把感知的输出接给策略，策略的输出接给前端，跑一下看报错不就行了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "契约？不就是把数据传过去吗。感知那边不就是出个JSON，策略那边接一下。我照着接口文档抄不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知到策略这块联调，防崩机制是啥，卡口在哪？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就在入口加个debounce，数据不对就return掉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间就设50ms呗。脏数据就是缺字段呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "丢错了我也没招啊，总不能让系统崩了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "感知数据异常或者策略超时，降级预案怎么搞？导播不能断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "超时就用上一次成功的指令，或者用默认配置。不能卡死不能没声音。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入口防抖50ms，缺字段走降级不丢弃，超时回退上一次成功指令或默认配置，保证导播不断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

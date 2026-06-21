@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在营养盐事件预测架构的方案设计背景下，用户与导师围绕输入输出闭环、事件定义、空间映射、双引擎取舍与可追溯接口持续沟通（8轮），其中在事件边界与阈值设定上与水文过程建模师沟通（2轮），在两阶段模型服务化、不确定性与误报控制上与算法工程师沟通（3轮），并复述收敛双引擎架构与证据快照/event_id链路及API草案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就…直接上个现成的预测平台不行吗？我看很多都用一套AutoML，输入雨量、传感器值，输出风险分就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是气象预报、雨量站，还有水质传感器的氮磷。输出就是红黄绿预警。给政府大屏看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@水文过程建模师 事件边界咋定？是下雨就算吗，还是浓度超了才算？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那阈值P、S怎么来？直接用规范里一个固定值行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 模型这块是不是就堆特征然后分类？能不能用现成的时序模型直接搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不确定性是不是就输出个概率？概率高就报警。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我大概懂了，但感觉很重。能不能只做一个模型，直接给风险等级，别分两段。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我回去跟导师说两段式。还有版本化这些，我记不太住，但应该是要加字段。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件不是“下雨就算”，是下雨之后真的有径流那一段，从开始到退水。风险尽量看负荷，不只看浓度。模型这边分两步，先判会不会产流，再算负荷或风险，还要给个不确定性，不然就乱报警。上线要有版本号和特征口径版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "空间映射…是不是就按最近的河道，把田块挂到一个断面？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选C吧，听起来最保险。A我怕不稳，B我又不会调模型参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则就负责判断会不会产流、事件什么时候开始结束。ML就算风险等级和负荷，然后给预警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "也放规则里？按田块到沟渠的连通关系，算到断面上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加日志？把每次预警用到的输入保存一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 event_id 是不是就每次下雨生成一个？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听着就好多id……能不能只用一个id，从预报开始一路用到底？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）架构选双引擎：规则/机理做事件检测+时段边界+空间路由，ML做负荷或风险预测。\n2）输出不只红黄绿，还要带不确定性或分位数，用来决定是提示还是下工单。\n3）要留证据：特征摘要、阈值命中、模型版本，还有能按event_id查为什么触发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

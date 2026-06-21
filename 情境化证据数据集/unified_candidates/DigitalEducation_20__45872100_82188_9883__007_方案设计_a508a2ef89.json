@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段制定MVP开放接口对接规范背景下，用户与导师围绕证据采集接口信封字段、事件字典分层版本化、幂等审计与最小化约束持续沟通（10轮），其中在身份标识与高风险字段边界上与合规与隐私官沟通（2轮）、在事件字典版本与血缘追踪口径上与数据治理经理沟通（2轮）、在批量上报幂等键与错误码/重试策略可实现性上与后端负责人沟通（3轮），并最终确定3类事件+主体对齐接口的对接契约要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉就是做几个接口：上报作业、上报课堂互动、上报测验成绩。然后定义个事件类型表。细节我就怕各个学校系统字段不一样，接起来扯皮。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须有：事件类型、发生时间、学生ID、班级ID、来源系统。还有题目ID这种看事件吧。然后带个trace_id方便查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 对接接口里学生怎么标识才不踩线？外部系统想传学号姓名这种行不行？事件字段里哪些算高风险最好别收？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果外部只有学号，没有student_ref，咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我这边就按“student_ref/class_ref/school_ref”来，不让人传姓名学号进采集事件。外部只有学号的，先走一次对齐接口拿ref。哈希学号我先不碰，怕出事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 事件字典和证据采集接口的通用字段怎么定比较稳？版本怎么管，必填选填怎么分，血缘追踪要留哪些？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我听着有点多。event_id和trace_id都要？会不会重复。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件字典按“领域+事件名+版本”来。接口统一一个信封：带事件唯一ID做幂等；带事件类型和版本；带发生时间和来源系统；带学校/班级/学生这种ref；细节放payload。再加个trace/correlation用来把一串事件串起来。诊断用到的rule_id那些不在采集接口里算结论，只是后面引用。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "对，我说错了。外部只传证据，rule_id在我们内部算。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "作业提交、测验得分、课堂互动计数。课堂我不想收语音视频，就收举手次数、答题器正确率这种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "domain我用learning_evidence。事件名：homework_submission、quiz_result、class_interaction_summary。版本都先v1。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "POST /api/v1/evidence/events 批量上报事件；POST /api/v1/identity/resolve 做学号到student_ref对齐；GET /api/v1/evidence/events/{event_id} 查单条用来排查重复（可选）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "必填：event_id、event_type、schema_version、occurred_at、source_system、school_ref、actor_ref。选填：class_ref、course_ref、subject_ref、term_ref、trace_id、payload。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那响应就回个结果列表：event_id + status + evidence_id（成功才有）+ reason_code（失败才有）？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 证据采集接口我想做POST /evidence/events 批量上报，信封里event_id做幂等，返回每条status+evidence_id+reason_code，再加retryable。错误码想标准化。你看有没有坑，尤其是幂等和批量部分。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回溯窗口这块我没想过。7天是拍脑袋吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳：幂等键用source_system+event_id，批量按每条返回，错误码分三类并标retryable。回溯窗口写成可配置，默认先给7天但不承诺一定。HTTP 207我不确定，可能用200简单点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "homework_submission payload：assignment_ref、resource_ref_list（可选）、submitted_at、score（可选）、max_score（可选）、attempt_no（可选）、answer_sheet_ref（只ID，不带内容）。  \nquiz_result payload：quiz_ref、score、max_score、item_result_ref_list（只ID）。  \nclass_interaction_summary payload：session_ref、duration_sec、hand_raise_count、clicker_correct_count、clicker_total_count。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这6条我能照着画接口说明。第6条你刚提醒的“ref不代表我们能拉正文”我记住了，写进约束里就行。现在我就按这版去跟对接方沟通口径。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

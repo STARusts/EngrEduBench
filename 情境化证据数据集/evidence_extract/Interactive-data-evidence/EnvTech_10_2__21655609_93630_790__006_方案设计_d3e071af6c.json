@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在干预处方与“预警→处方→执行→核算→反馈”闭环链路的方案设计背景下，用户与导师围绕处方服务的接口、状态机、对象模型与证据回收持续沟通（10轮），其中在事件级可干预动作与触发/禁止条件拆解部分与环境治理策略师沟通（2轮），在证据链最小集合、审计留痕与隐私权限边界部分与合规与核证官沟通（1轮），并落实处方API清单、Action字段、证据分层与阈值离线回放验证思路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "处方就是给个建议吧。比如“少施肥”“别排水”。然后点一下确认就行？我觉得做成模板会快点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是风险等级、概率，还有解释topk。输出就是动作列表？状态就…已下发、已完成。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@环境治理策略师 处方要怎么写才算能执行？事件级能干预哪些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我理解就是，处方主要就是“暂停追肥”和“关闸门”这类。然后加个触发条件。减排量就写个区间，不要写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "API…是不是就 `create_prescription`、`get_prescription` 这种？状态就是 created、sent、done。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "证据…传照片？或者设备回传一个开关状态。可以让他们用小程序上传。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与核证官 处方执行要怎么留证据才算能核证？隐私这块要注意啥？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是别收太多隐私，主要收时间地点和动作。然后每条动作都要有actor和证据hash。核证先做齐备性，不要搞成自动鉴定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预警事件就是 forecast_event_id。确认后变 event_id。处方绑 event_id。执行记录绑处方。效果核算也绑处方…就这样？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "状态有点多。我怕实现麻烦。能不能就 proposed、active、done、cancel？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就 proposed、active、completed、partially_completed、failed、cancelled。`evaluated` 可不可以不要，算在 closed 里？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺个…审核？是不是要 `approve_prescription`。还有查询列表 `list_prescriptions`。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "action_id、action_type、target（地块或设施）、time_window、priority、params、trigger_condition、forbidden_condition、expected_reduction_range、evidence_required。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用历史数据跑一遍？看命中率。或者直接用默认值…我也不清楚阈值怎么定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A就用 risk_level≥3 且 prob≥0.6。B就更严一点 prob≥0.75 或者要P90超过线才触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设施类优先用遥测，不用照片。农户类就照片可选，先收“声明+地块+时间”，然后高风险再补照片？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能画。就是状态和接口我照着写。证据分层我记住了，L0-L2。阈值A/B回放也能写进去。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在工地扬尘噪声振动监测系统方案设计的安全与高可用收尾背景下，用户与导师围绕断网断电下采集/告警/留痕、RPO/RTO指标、功能降级与MVP分层配置持续沟通（11轮），其中在边云协同高可用拓扑与离线防篡改摘要链部分与解决方案架构师沟通（2轮），在离线补传权限边界、设备密钥与时间可信部分与安全工程师沟通（2轮），并整理出评审可讲的六条方案条目。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就怕现场一断网就全瞎了。粉尘、噪声、振动这三路一起挂，第二天谁都说不清。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有省事点的办法，比如用云上那套高可用，直接开就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至少要能继续采集吧。再就是告警别丢。还有…留痕？但留痕我不太会拆，反正就是别被施工方改了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 工地这种边缘盒子+云平台的，断网断电怎么做高可用？要说能落在方案里那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哈希链是说每条数据都算一次？这会不会很费？我感觉算力不够就崩了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "本地告警那块，我怕误报。就一堆阈值，现场风一大就响，施工队就烦死了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概是三层：边缘先能存住、能补传；告警最少能在边上跳出来；云挂了也别卡边缘。然后留痕用分钟摘要和事件做…哈希链，原始数据不都算。这样算力压力小。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 离线缓存、断点续传这种，会不会给施工方篡改留口子？方案上怎么写比较稳？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间漂移标记是说，补传的就先不算？那监理会不会说你这系统不准？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MVP必须：网关能离线存+恢复补传；本地有最简单的越限告警；分钟摘要和事件做签名/哈希链；补传只能追加不能覆盖；位置确认、告警撤销这类必须监理/园区在线操作。  \n增强：UPS、4G备链、云多可用区这些…我感觉都挺贵，先当可选？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "学校、医院、还有精密仪器的点？之前说过“敏感设施”。那这些点位附近就上更强配置。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "RPO我有点不敢拍，怕说错。是不是就写“尽量不丢”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我怎么把“可证明丢了多少”说清楚？是不是用你们说的摘要链就能看出来缺口？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：三源协同。断网时只做单源阈值，那会不会跟我们项目名“协同管控”冲突？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我明天说的时候，怕被问“施工方会不会拔电源躲处罚”。我们怎么防？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "覆盖率KPI这个好记。是不是就用百分比：应监测时长里有数据的时长/总时长？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最后你帮我确认下，我们这微场景的结论要落成哪些条目？我怕漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

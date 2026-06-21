@@ -1,0 +1,466 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在游境同屏态同步系统需求定义背景下，用户与导师围绕同屏同步痛点拆解、需求指标体现及工程可持续性持续沟通（4轮），其中在同屏同步痛点与一致性崩溃部分与文娱架构师沟通（1轮），并最终确认包含5000+实体支撑、帧级容错与算力潮汐感知的三条需求边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做个游境同屏态同步演进与帧级一致性容错系统。就是解决那种一大堆人同屏的时候，状态乱飘、卡顿拉扯的问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@文娱架构师 同屏态同步这块到底痛在哪？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是5000人会漂移，我们要搞定漂移。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "系统必须抗住潮汐，保证不漂移。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "成本这块我确实没想过，算力潮汐调度我也没搞明白怎么回事。缺算力调度这块的知识。我接下来两周去啃一下弹性切片和潮汐感知的资料，起码把动态调度的基本逻辑搞懂，再回来定需求指标。"
+              }
+            ]
+          },
+          {
+            "microScene": "在弹性切片算力变现规划背景下，用户与导师围绕闲置算力变现方式与底线约束持续沟通（5轮），其中在计费模型与变现闭环部分与商业分析师沟通（1轮），在切片外租保底隔离策略部分与文娱架构师沟通（1轮），并最终认下外租切片硬隔离与熔断机制两条底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们搞切片，玩家同屏多就多收钱，同屏少就少收，按人头收点卡费最快。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们是不是按同屏人头收费最直接？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来就是闲时把算力租出去赚外快，按时间收费。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片租出去会不会把咱自己系统搞崩？能不能全租了多赚点？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能全租，得留保底，还得硬隔离。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "底线就是不能崩。延迟了就，就强制回收呗，兜底肯定是系统自己兜。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在推演状态一致性合规与可行底线背景下，与导师围绕帧级快照数据出境风险、跨国同屏与一致性校验的取舍持续沟通（5轮），其中在数据出境与隐私红线部分与合规审计师沟通（1轮），在最小化数据下的一致性校验闭环部分与一致性稽查员沟通（1轮），并最终形成逻辑域隔离、数据最小化与逻辑帧驱动的底线约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "合规肯定得搞，不然上线就完蛋。这得听法务的吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "角色坐标，朝向，放技能的动画编号？这些算敏感数据吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧级同步的快照，有隐私风险吗？能出境不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就各管各的呗，国服查国服，外服查外服。查的时候少查点，抽查？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "数据只给一点点，一致性还能查出来吗？"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨端游境互操作战略论证背景下，用户与导师围绕跨端互操的体验底线、异构输入可行性及验证方式持续沟通（7轮），其中在体验底线与反向牵制力部分与玩家体验洞察师沟通（1轮），在异构输入归一化与最小验证动作部分与跨端适配联调师沟通（2轮），并形成跨端互操战略基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "肯定要全互通啊，大世界肯定大家都在一个服里玩，分服就凉了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就限速？让PC端慢点，或者手机端快一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@玩家体验洞察师 跨端互操的体验底线怎么定？不能让手机变观众吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@跨端适配联调师 异构输入在战略上怎么定可行性？频差这么大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "体验上要保留低频端的反向牵制力，技术上要在网关做输入归一化和分频对齐，还要跑个基线数据看误差。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就弄点玩家数据来看看分布呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前确实对输入频率这块没概念"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我回去看几个跨端网关的案例，把抖动区间和降频策略的笔记补上，然后在这个项目里，我要求网关层必须留降频接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "搭个最简单的原型？让PC和手机连同一个服，打两把看看卡不卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "战略上定调：跨端互通必须保留低频端反向牵制力，技术上走网关输入归一化与分频对齐，验证用压测机器人跑三端指令注入测毛刺比例。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在游境同屏态同步演进与帧级一致性容错系统总体架构设计背景下，与导师围绕算力潮汐下帧级同步选型、验证假设与协议兜底机制持续沟通（7轮），其中在架构选型与低频端牵制力保障部分与文娱架构师沟通（1轮），在帧校验协议与抖动防范部分与网络协议专家沟通（1轮），并最终形成混合架构及冗余包容错方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就锁帧呗，锁帧最一致，大家都这么干。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我我我不太懂算力潮汐这块怎么跟锁帧配，之前没做过这种高并发的底层架构。我得去补确定性锁帧在异构算力下的适用边界，这周末前看两篇论文扫一眼。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算力潮汐下纯锁帧和混合架构选哪个？还有低频端牵制力架构怎么保？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混合架构好，不卡死。超过20%就不要纯锁帧了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是延迟毛刺比例，20%是阈值。超过就说明A方案不行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧校验的协议怎么弄？抖动怎么防？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个，就先定个10%？我不太会算这个带宽开销，回头再研究。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在帧级状态流与接口敲定背景下与导师围绕帧包裁剪、接口暴露模式及防重放校验持续沟通（5轮），其中在帧包结构与流式接口部分与网络协议专家沟通（1轮），在容错重传与快照拉取接口部分与容错规划师沟通（1轮），并最终形成包含CRC32校验、流式发布订阅、插拔式容错及令牌防重放的接口规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就放位置和血量呗，接口给客户端用，用HTTP请求发过去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧包里放啥？接口咋开？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "容错接口呢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用二进制流，包里放帧号、ID、差分和校验码。容错接口能插拔，丢了就重传，不全量拉。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个MD5加密不就完了？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在同屏算力切片容错降级预案设计背景下与导师围绕降级策略、触发阈值与容错机制持续沟通（6轮），其中在降级动作部分与容错规划师沟通（1轮），在潮汐感知阈值部分与切片调度引擎开发沟通（1轮），并最终形成包含触发条件、分级降级与状态回滚的预案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "崩了就重连呗，或者让运维赶紧加点机器，拉起来不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片算力不够崩了怎么降级啊？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是降帧、踢人、然后存档读档。公平性我会注意的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就CPU超了就踢呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度引擎怎么判断要不要降级？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是时延高了就降帧，不行就踢边缘的人，状态不对就回滚。公平性不能忘。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在防作弊与脱轨区分方案设计背景下，与导师围绕区分自然脱轨与作弊篡改、帧级校验防误伤、防逆向及验证设计持续沟通（6轮），其中在帧级校验与误伤控制部分与压测攻防官沟通（1轮），在脱轨与作弊标记区分部分与一致性稽查员沟通（1轮），最终形成包含鉴别双轨、帧级校验、处置降级与验证设计的四条核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "作弊肯定不行，抓到就封号，数据不对就是作弊呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "之前我看一篇文章提过什么校验和，加上是不是就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧级同步怎么防作弊？网络不好误伤咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那脱轨和作弊怎么区分？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加哈希和签名，乱序给窗口，有标记算脱轨没标记算作弊，踢去观察局。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拔了就完蛋了，再换个算法？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "文章就提了一嘴，没细看防逆向。验证就找个外挂跑跑看封不封得住呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "防逆向我确实没看懂，我今晚去补一下签名动态混淆这块。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在帧级一致性系统微服务拆解与规范制定背景下，与导师围绕服务切分粒度、通信协议选择及验证标准持续沟通（5轮），其中在核心逻辑切分部分与游境服务端主程沟通（1轮），在帧级服务间协议选择部分与网络协议专家沟通（1轮），并最终形成服务拆解、通信规范与RTT验证口径三条核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按功能拆呗，同步一个，容错一个，切片一个。协议就用RESTful，挺标准的，大家都用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "导师让我问核心逻辑怎么切微服务。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧级服务间协议用什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主程说锁帧和状态树放一个服务，空间切割和容错分开。协议专家说用UDP和共享内存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就切三个服务，帧驱动服务、空间切割服务、容错裁决服务。验证的话，跑一下看看卡不卡就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂这个RTT具体要卡多少毫秒，还有怎么测微服务间的延迟。我今晚去学一下怎么用压测工具打UDP接口，再看两篇锁帧延迟分析的论文，把实验记录补上。"
+              }
+            ]
+          },
+          {
+            "microScene": "在帧级对齐核心逻辑实现背景下，用户与导师围绕确定性锁帧机制与参数约束持续沟通（6轮），其中在逻辑帧推进与参数边界部分与游境服务端主程沟通（3轮），在包乱序影响与协议缓冲部分与网絡协议专家沟通（1轮），并最终形成Tick步长20ms、队列深度3帧、溢出回滚的核心逻辑基准约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧对齐逻辑怎么弄？具体点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那网络包乱序怎么办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "包乱序对帧对齐影响大吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Tick就50ms？队列深点好，10个？溢出了就丢包？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Tick步长20ms的话，队列深度和溢出处理怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 逻辑帧Tick步长20ms；2. 输入队列深度3帧；3. 溢出触发服务端快照回滚。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨端联调与压测验证背景下，用户与导师围绕多端帧级一致性保证与压测指标及容错兜底持续沟通（8轮），其中在移动端时钟漂移补偿部分与跨端适配联调师沟通（1轮），在压测溢出率指标设定部分与压测攻防官沟通（1轮），并最终形成插值平滑过渡验收指标与降级容错触发延迟约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@跨端适配联调师 移动端时钟漂移太厉害怎么补偿？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@压测攻防官 压测溢出率怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "联调那边要做时钟插值补偿，超过10ms快进；压测要打5000人看回滚频次。"
+              }
+            ]
+          },
+          {
+            "microScene": "在帧同步延迟毛刺排障与调优背景下，用户与导师围绕毛刺根因定位、FEC适用边界与降级兜底逻辑持续沟通（5轮），其中在排查链路与调优手段部分与网絡协议专家沟通（1轮），最终确定自适应缓冲兜底、5%内启用FEC及超限降级回滚的调优方向，并计划补齐FEC配置及向游境服务端主程对齐时钟校准接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我盯着服务端日志，延迟高我就把发包频率调快点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧同步延迟毛刺怎么查，调优怎么做？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5%以内。超了就触发降级。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我今晚把FEC冗余度的配置补一下，明天把参数挂到配置中心。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我得找@游境服务端主程 对齐一下校准接口，不能自己瞎改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "自适应缓冲兜底，5%以内开FEC，超了就降级回滚。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在游境同屏态同步演进系统运行评估背景下，与导师围绕灰度放量策略、监控指标选择、AB对照验证及补学目标持续沟通（7轮），其中在切片监控与验证机制部分与切片调度引擎开发沟通（1轮），最终确定灰度比例与大盘核心指标，并制定补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备直接开全量跑一把。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "监控就看CPU和内存吧，不够就加机器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "切片监控看啥？我准备看CPU。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99降20ms，区间不重叠。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实不太清楚，之前没看过切片引擎的代码。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "周五前看完，画一张切片扩缩容触发阈值的逻辑图发你。看完我顺便把大盘的PromQL语句改了，把排队深度加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切片利用率、排队深度、P99、扩缩容频次，FEC启用率。灰度10%。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在灰度发布一致性脱轨告警背景下，与导师围绕异常反演与根因定性持续沟通（6轮），其中在脱轨反演稽查与留痕部分与一致性稽查员沟通（1轮），在异常定性与回滚验证部分与容错规划师沟通（1轮），并最终确认快照对齐、沙箱重放与日志留痕的三步反演流程。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "是不是网络抖了？重传一下行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱轨了怎么反演，要查啥字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "怎么验证脱轨是bug还是作弊？"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在游境反馈与同步迭代背景下，与导师围绕玩家体感滑坡原因与弹性容错策略迭代持续沟通（7轮），其中在微操延迟数据部分与玩家体验洞察师沟通（1轮），在帧级抖动与算力开销部分与态同步运维指挥沟通（1轮），并最终确定滞回拉宽与容错软化的迭代方向及复现条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微操反馈滑坡是多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帧级抖动大盘啥样？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把容错放宽点，算力也放宽点？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "缺怎么调参的知识。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我记日志，下次压测前补上。滞回拉宽，容错软化。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在同屏PVP的时候有效吧。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "实体密度大于50，帧率大于60。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "滞回拉宽，容错软化，审计留痕。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

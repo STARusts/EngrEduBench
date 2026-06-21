@@ -1,0 +1,558 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在工控TSN刚性对齐枢纽项目立项背景下，用户与导师围绕柔性产线痛点剖析、动态流表能力缺口补齐及研究假设定义持续沟通（6轮），其中在柔性产线换型网络问题部分与产线痛点分析师沟通（1轮），并最终明确痛点为静态流表与动态重构矛盾，确定补齐动态流表机制目标，形成基于重构频率与收敛时间权衡的研究假设及反驳标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专线太贵了，而且不好扩展。以太网便宜。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "柔性产线换型的时候，网络到底出了什么问题？是不是只是带宽不够挤了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以问题不只是时延大，是流表配死了，产线一变就失效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前想的调度算法都是离线算好的GCL门控列表。如果流是动态加入的，在线计算GCL非常难，算力可能跟不上。这块我真不懂，我只懂怎么把已知的流排进时间槽里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我要去补NETCONF和TSN流表动态下发的相关标准，目标是能画出CUC和CNC之间交互的时序图，搞清楚流加入的请求信令怎么传的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "核心假设应该是：在产线拓扑重构频率不超过F Hz的情况下，我的对齐枢纽能在T ms内完成新流的GCL计算和下发，并且重构期间，已有控制流的端到端时延抖动仍然保持在微秒级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果重构频率太高，在线算力打满，算不出GCL，新流就进不来，老流可能也会因为资源抢占出现越限抖动。这时候系统应该拒绝接纳新流，保持老流的刚性对齐，而不是让整个网络崩溃。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在需求与战略背景下，与导师围绕动态重构的合规审查、功能安全与流隔离红线持续沟通（5轮），其中在动态流表合规红线与硬隔离部分与商业合规审计师沟通（2轮），并最终形成动态重构合规需求边界与刚性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们产线是物理隔离的，应该不用管网络安全吧。只要业务跑通不出错就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加校验不行吗？算力够的话算两遍再下发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态改流表在合规审查里具体卡在哪？是不是要补很多审批流程？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变更快照我能做，就是打点日志存下来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但重构瞬间不降级怎么保证？混叠又是什么意思？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果新流刚进来一点点就被抢占了，确实可能混。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬隔离那就是要预留固定时隙给控制流，不管重不重构都不动这块。这跟动态重构的灵活性有点矛盾啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规需求边界：1. 动态重构触发必须带快照和回滚路径；2. 控制流时隙硬隔离，感知流不可逾越时间墙；3. 重构过程不能导致已有控制流确定性降级。这几点记下来了，后面设计时我给控制流单独留死区。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在商业模式与降本测算背景下与导师围绕TSN商业闭环与降本点持续沟通（4轮），其中在OPEX降本与确定性溢价测算部分与商业合规审计师沟通（1轮），在换型停机成本与痛点量化部分与产线痛点分析师沟通（1轮），并最终形成商业需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "换TSN交换机硬件成本肯定高，但省了以前那种专线电缆的钱？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我就知道换设备要花钱，你们这账到底怎么算？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "废品率这块我能懂，抖动大了确实出次品。维护和换型快能省多少我不清楚，感觉不好量化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在产线换型停机一次得亏多少？TSN能不能省这钱？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "商业模式就是卖“减少停机”和“降废品”，硬件贵点客户也能接受。核心卖点不是交换机本身，是刚性对齐带来的产线效率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "商业需求基线：1. CAPEX增加但OPEX降本；2. 降本点在统一维护、降次品率、缩换型时间；3. 核心卖点是确定性溢价，靠减少停机回本。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工控协议演进战略规划背景下，用户与导师围绕存量资产过渡、演进路线选择与验证样本设计持续沟通（8轮），其中在存量协议保护与混合演进机制部分与工控战略规划师沟通（2轮），并最终形成存量透传与增量调度并存的混合演进路线及基于分层抽样的验证战略基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接全上TSN呗，旧协议全扔了，反正TSN带宽大时延低。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就加个网关？把旧协议包起来传？但我只懂EtherCAT底层，其他协议包进来延抖动怎么算我不清楚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@工控战略规划师 现场一堆旧设备，协议乱七八糟，想全换TSN又没钱，这战略怎么定？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Preemption？帧抢占？这我听说过，但真要混合，怎么保证旧协议的帧不被拆碎导致控制失效？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "选混合演进。旧设备走透传，新设备走TSN调度。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我怎么知道现场哪些设备能支持帧抢占，哪些只能纯透传？这得去产线摸底吧。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂怎么设计这种调研样本，之前只管写代码，抽样这种事都是随便挑几个机台跑下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我找产线痛点分析师要份历史设备台账，按协议类型分层，每层抽20%覆盖核心机型，跑一轮流量特征抓包。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前我总想靠拍脑袋定范围，现在得改，以后定验证范围都得先看总体分布再分层。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "战略基线补充：4. 采用存量透传与增量调度并存的混合演进路线；5. 演进可行性验证需基于产线设备台账分层抽样，单层覆盖率不低于20%。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在时空敏感架构总体设计背景下，与导师围绕流分类卸载路径、拓扑时延不对称、带宽预留比例验证、时延边界计算及物理部署施工依赖持续沟通（6轮），其中在拓扑与流分类模型部分与确定性网络架构师沟通（1轮），最终形成冗余双星拓扑、ST加CQF混合分类及带宽预留验证的架构设计原则，并明确补学时延模型与对接物理施工。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "架构这块我得把流分类和调度拆开看。我初步想全走硬件卸载做流分类，软件只管下发门控列表，这样时延最低。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延不对称，加缓冲区对齐不行吗？我主要怕软件处理慢，硬件分类快，就想着把分类全压到硬件上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我原想全硬件卸载流分类，但好像没考虑拓扑时延不对称。这种多源感知流，拓扑和分类模型怎么搞比较好？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "ST和CQF得拆开。控制指令走ST，感知数据走CQF。那我硬件卸载只管ST流，CQF流走软件队列或者普通硬件队列？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个比例，我假设控制流占比不超过总带宽的20%。验证的话，我可以拿之前产线痛点分析师给的历史设备台账，按分层抽样跑一轮抓包数据做对照组。如果ST预留超过30%导致CQF感知流拥塞丢包，就说明我20%的假设不对，得往下压。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "没完全搞懂，特别是网络跳数增加后的时延上界怎么算。我今晚得去啃一下IEEE 802.1Qbv标准附录B的推导过程，把流整形参数计算弄明白，明天把时延估算模型加到架构约束里。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只管逻辑架构通不通，施工这块是不是得找产线的人对齐一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构总体设计先定这几条：1. 拓扑用冗余双星；2. 流分类用ST加CQF混合；3. ST带宽预留比例需基于历史流量分层验证。物理施工对接我后面找产线痛点分析师补上。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在TSN多流汇聚门控设计背景下与导师围绕GCL时隙切分、动态流重配开销与冗余时隙预留持续沟通（6轮），其中在时隙冲突避免与周期对齐部分与时空流控设计师沟通（3轮），并最终形成GCL大周期5ms对齐、ST与CQF时隙物理隔离及预留20%空白时隙的门控约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "门控不就是配优先级嘛，ST最高，CQF次之，Best Effort垫底，按这个排时间片。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "周期不是整数倍的话，硬切可能会让CQF的帧卡在ST保护带里出不去，会抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "GCL这块怎么设计才能不让CQF堵死？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "感知流周期有1ms的，也有5ms的，控制指令基本都是1ms。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "算力开销这块，交换机芯片扛得住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说大周期定5ms，切5个1ms，ST占20%剩下给CQF。但GCL条目有硬件限制，算力开销大，得用启发式算法离线算。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "动态增减的话，重配GCL肯定影响正在跑的流，难道要全量重刷？那不是要断网？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "留个10%吧？够不够？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "GCL按5ms循环，内部切分，ST和CQF时隙物理隔离，留20%空白应对动态变更，避免动不动就重算全量GCL。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在方案设计冗余与高可用机制背景下与导师围绕容错机制、冗余分级取舍、验证方案及审计留痕持续沟通（8轮），其中在TSN零丢包与日志补齐部分与高可用评估师沟通（2轮），在FRER带宽与合规审计部分与商业合规审计师沟通（1轮），并最终形成分级冗余及序列号间隙中断留痕方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着，既然是时间敏感网，是不是搞个快速重连？或者像后端服务那样做个心跳检测，发现挂了立刻切备用节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线节点要是挂了，心跳太慢，TSN里怎么保证不丢包？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER这种双发选收机制，带宽翻倍，审计能过吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就卡死了。FRER保证零丢包但没日志还费钱，审计要日志要省钱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能不能把思路迁移过来：只有ST这种极关键流走FRER双发选收，普通CQF感知流就走传统主备，主备切换虽然慢一点但有日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个故障注入实验。变量就是冗余机制，控制组是全量FRER，实验组是分级冗余。注入链路断开故障，测量ST流的恢复时间是不是在微秒级零丢包，CQF流的切换有没有日志。每个工况打100次断流做统计，看功效分析结果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "FRER底层转发太快，加日志肯定卡顿。是不是可以在消除模块上加个计数器？断流时计数器跳变就上报？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "序列号间隙中断，这招好，不插进数据面转发流程，走旁路控制面。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. ST流走FRER双发选收，保障零丢包；2. CQF流走主备链路切换，保留审计日志；3. FRER消除节点通过序列号间隙中断补齐审计留痕；4. 验证方案用故障注入，100次采样测恢复时间和日志完整性。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核心调度器代码落地与验证背景下，用户与导师围绕硬件卸载验证方案、Base Time对齐能力缺口补充、验收阈值确定及硬约束总结持续沟通（6轮），其中在网卡硬件适配与微秒级验证用例构造部分与底层驱动开发工程师沟通（1轮），并最终形成核心调度器落地的3条硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑个ping看通不通，或者抓包看看有没有丢包就行了呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网卡这边的门控列表具体怎么下发？还有微秒级验证到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Base Time对齐具体怎么算我有点懵，之前都是软件里直接赋值的。验证用硬件时间戳打点这个我之前没碰过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "翻一下网卡的那个DATASHEET，专门看EST引擎那章，今天下班前把Base Time寄存器位图和PTP系统时间的换算关系理出来。验证这块我参考专家说的，写个脚本发冲击流，抓硬件时间戳算偏移。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "之前方案里定的ST流周期是1毫秒，允许抖动1%，算下来就是10微秒。调度器本身的开销得压在2微秒内，这样才能留够余量给链路传输和冗余切换。所以门控偏移阈值我定2微秒。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. GCL下发必须走硬件卸载接口，不能走软件回退；2. Base Time要跟系统PTP时间严格对齐，换算逻辑我今天查手册补上；3. 验证用硬件时间戳测门控偏移，偏移阈值卡在2微秒内，超限直接打回。"
+              }
+            ]
+          },
+          {
+            "microScene": "在重构协议栈适配层代码背景下，用户与导师围绕GCL下发硬件卸载的位宽、时序与原子性重构持续沟通（6轮），其中在位宽截断与时序回滚红线部分与底层驱动开发工程师沟通（1轮），在流式数据配合硬件原子写入部分与协议栈联调专家沟通（1轮），并最终形成三条重构硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把软件GCL数组往硬件寄存器接口里塞，完全没管位宽截断。而且下发顺序也是乱的，肯定跑不通。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时序这块我不太确定，我就想着把下发逻辑拆开，一个个写寄存器，中间加延时？不对，加延时会破坏时间对齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "之前那版协议栈适配代码，直接把GCL数组强转指针丢给硬件接口，这写法有什么致命问题？我该怎么改？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "位宽要拆分，写入时序得卡在Gate_State变更前。回滚这事确实没考虑到。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把所有Entry打包，在一个Cycle里一口气写完？但协议栈那边数据是流式过来的，不一定能凑齐一包啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "协议栈这边给硬件卸载接口喂数据时，如果是流式的，怎么保证硬件那头不触发状态回滚？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "原来得用双缓冲。软件侧先攒够一整块AdminConfig，再一次性Commit切换。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. GCL条目写入前必须做32bit到8bit的位宽拆分，不能强转指针；2. 协议栈侧必须维护AdminConfig缓冲区，流式数据先进缓冲区；3. 缓冲区满后，通过原子Commit指令切换到OperState，禁止边收边写硬件寄存器。"
+              }
+            ]
+          },
+          {
+            "microScene": "在真机联调跨域流态时序对不齐与时隙撞车背景下，用户与导师围绕排障思路、对端协作获取关键日志及GuardBand约束量化持续沟通（6轮），其中在跨域GCL对不齐排障切入点部分与协议栈联调专家沟通（1轮），并最终形成对齐PTP、获取对端GCL时间戳及配置GuardBand的三条排障约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我抓包看了，Commit指令发下去，本侧MAC控制器的OperState确实切过去了。但流一出网卡就乱。我怀疑是交换机那边GCL表没配好，或者它根本没按我给的时隙开门。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对端协议栈那块是另一个组负责的，我没权限看他们的状态机，我只知道我给的时间偏移量是按理论算的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域流态联调时序乱跳，我这边Commit生效了，交换机那边时隙还是对不上，一般这种排障从哪下手？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间基准没对齐的话，是不是得去调PTP？还有GuardBand具体怎么算？我代码里没留这块余量。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Delta就是两端配置真正生效的时间差？我算不出来，对端不给我看他们下发配置的时序逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 两边必须统一时间基准，对齐PTP；2. 对端必须吐出GCL生效的时间戳，用来算Delta；3. 我这边出队前要加GuardBand，大于同步误差加Delta。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我得去查一下我们用的PHY芯片手册，上面应该有标称的PTP同步精度指标，大概几百纳秒级别？我回头确认一下具体数值。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极限抖动压测与优化背景下，用户与导师围绕压测方法与抖动判定标准持续沟通（4轮），其中在突发流特征建模与硬件注入抖动部分与性能压测工程师沟通（1轮），并最终形成基于FPGA硬件发包与99.9%分位统计的压测验收方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个脚本用tc netem加随机延迟就行，看门控列表是不是还能兜住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "多起几个线程并发打流不行吗？把发包速率拉满。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工控多源并发时的突发流特征怎么建模？还有怎么注入微秒级抖动？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前只会用tc，这下得改脚本了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "把软件发包换成调硬件卡的API，按重叠时间槽发抢占帧，这样测出来的抖动才真实。我这就去改压测脚本的发包逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看最大值呗，最大抖动不超过我们留的GuardBand就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一百次越限一次，这可能是测试环境干扰？误差来源，网卡收包时间戳本身有精度限制。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在压测收尾转现网部署与验证背景下，用户与导师围绕灰度节奏、对比基线与统计验证原理持续沟通（3轮），其中在灰度放量策略部分与现网交付专员沟通（1轮），在大盘统计口径部分与确定性态势监控员沟通（1轮），并反思统计短板、制定补齐目标，最终确认旁路镜像先行的部署口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把TSN流切过去？压测都扛住了，现网应该问题不大。我打算看有没有报错就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度放量一般怎么做？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现网专员说要分三步切，还要算什么置信区间和效应量，我按他说的做就行了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不太清楚，我只看过P99和极值。大盘算这个得现写脚本吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算时延的95%置信区间和Cohen's d效应量，大盘支持吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对这统计原理还是一知半解，以前只看分位值。这次现网验证暴露我这块短板了，接下来一周我得把现网交付SOP和基础统计验证方法补齐，目标就是能独立看懂T检验结果并判断是否显著，先把监控员的对比视图用到这次灰度里。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微秒级流态态势监控与运行评估盯盘背景下，用户与导师围绕监控指标判断与偏移越限后果持续沟通（7轮），其中在调度偏移红点含义与越限口径部分与确定性态势监控员沟通（2轮），在控制流偏移后果与核心裕度指标部分与异常溯源分析师沟通（2轮），并最终明确监控核心为C类流裕度消耗率及调整大盘视图。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "上面指标太多了，微秒级时延、抖动、偏移啥的。我看到有几个红点闪烁，但不敢确定是不是真出问题了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好像是调度偏移量那块。但具体偏移多少微秒算异常，大盘默认阈值我没改过，不知道准不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "盘上调度偏移那列闪红点，这代表啥？微秒级偏移多少算越限？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5微秒和50微秒，这差距挺大。我现在看到的红点是哪种流？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得看流类型。控制流超5微秒就报警，感知流50微秒。我看那些红点好像都是S类感知流的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制指令晚到呗，可能设备动作慢一点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制流偏移超5微秒会怎样？会导致产线急停吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "裕度消耗率？这指标大盘上有吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "监控核心得看裕度消耗率，超80%就高危。我刚才没注意这指标。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "盯C类流的裕度消耗率，不能只看红点。只要消耗率接近80%就得预警，哪怕还没越限。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去大盘上把C类流裕度置顶显示。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估期C类流裕度报警与异常帧堆积背景下，与导师围绕异常帧溯源与降级策略持续沟通（6轮），其中在异常帧指纹定位与降级动作部分与异常溯源分析师沟通（1轮），分析了降级误伤风险并调整策略，最终形成保留B类流最低帧率的降级判定与执行口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看抓包数据里有一堆帧间隔不对的，是不是底层网卡FIFO溢出了？我准备去查驱动代码里的DMA接收环形缓冲区大小。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果是门控列表没对齐，帧应该在预定时隙进不来，会被丢弃，怎么会堆积？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种堆积的指纹怎么定位？现在产线还在跑，我们该怎么做降级？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级就是直接把B类流全掐了保C类流。审计日志我加上。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "视觉断了会出安全事故。那我保留B类流的最低帧率？比如从30fps降到5fps？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "判定条件是异常帧时间戳偏离量等于B类流周期。触发降级后，把B类流限流到5fps，保障C类流裕度。同时触发操作台声光报警提示视觉降级，并记录审计日志。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段面向新流型迭代规划背景下，用户与导师围绕新流型调度容纳性评估、离线容量评估短板补充及迭代切入点与验证步骤持续沟通（6轮），其中在调度结论边界与冲突复现部分与敏捷迭代规划师沟通（1轮），并形成新流型迭代的切入点、约束与离线仿真验证步骤规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "包更大的话，现在的GCL时隙肯定不够吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "新流具体参数是多少？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在大盘上B类和C类跑稳了，如果塞进一种微秒级周期、兆级帧长的新流，现在的调度结论还能直接用吗？怎么复现可能出现的冲突？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没做过，我都是看现网日志查异常，没算过理论边界。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备建个学习日志，把规划师说的“时隙重叠复现步骤”记下来。然后找底层驱动开发工程师拿一份当前的GCL配置脚本，自己在测试环境搭个离线仿真，把新流参数加进去跑一次。搞懂怎么算冲突边界后，这次规划我就先提离线仿真验证，不直接动现网。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "切入点是离线调度仿真验证时隙冲突；约束是新流不能挤压现有B/C类流的确定性裕度，避免误触降级；验证步骤是提取现网GCL脚本加入新流模型跑离线仿真，确认无时隙重叠后再灰度上线，并在监控大盘增加新流时延越限看板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

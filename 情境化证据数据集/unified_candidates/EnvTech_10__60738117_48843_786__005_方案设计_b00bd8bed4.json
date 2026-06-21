@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计的模型治理与灰度策略背景下，用户与导师围绕治理分层、灰度最小单位、门禁指标及降级/回滚与审计留痕持续沟通（9轮），其中在最小MLOps闭环与shadow对比/回滚配置设计上与MLOps工程师沟通（3轮），在审计粒度与估算/补传数据参与口径及decision record数据最小化上与合规与隐私官沟通（2轮），并收敛第一期最小可行治理小节骨架与关键约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先猜两个坑：一是模型一升级，建议策略抖一下，现场操作员会骂；二是数据里MISSING/ESTIMATED一多，模型还硬出建议，会带偏口径。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我有点想搞很重的体系，比如所有模型都走同一套feature store+模型注册+在线A/B，然后每条建议都有可解释报告。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象分层…我想分数据、特征、模型、策略四层。灰度最小单位我倾向按“装置/产线”做，比如同一个厂的A炉先吃新模型。门槛我不太确定，可能看预测误差、建议采纳率、还有排放超标风险。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我分两类：强约束类（跟合规口径/告警绑定）就保守，上线要更慢；弱约束类（只是优化建议）可以快一点灰度。强约束类我甚至想做“双轨输出”，新模型只在后台算，不对外展示，直到稳定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@MLOps工程师 灰度和回滚这块，如果我不搞一整套很重的平台，最小要有哪些东西？版本、对比、回滚怎么做才算工程上靠谱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "影子期的在线稳定，你说的指标我能理解。但“建议偏离度”怎么量？我怕这个指标很虚。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "听起来我可以把“安全过滤器”当成策略层，不完全依赖模型。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那灰度单位按装置行吗？还是按工况段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 模型治理这块，审计留痕要到什么粒度？还有ESTIMATED/BACKFILLED这些数据，如果模型用了，会不会影响对外口径的合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解成：推理可以算，但展示/执行要分通道。那我想把decision record做得很“全”，把输入原始点位都打包进去，免得追溯缺东西。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我回导师这边说结论。我先梳一下：模型和策略分版本；线上切换靠runtime config；先shadow对比7天；回滚就是回退config；decision record记版本+质量汇总，不存全量原始。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先放弃feature store，改成“特征定义清单+计算版本号”，等数据质量规则那场讲透再说。在线A/B也不做成对用户随机分流，就shadow+按装置灰度。这样对现场冲击小。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "降级我想分三级：  \n- 轻度：输入可信度标签低（比如ESTIMATED比例高），建议照常算但UI标黄，只给“建议区间”不下具体值；  \n- 中度：模型输出波动太大（剧烈变更次数超阈值），切回旧模型输出，但继续shadow新模型；  \n- 重度：触发合规风险（预测显示可能超标，或安全过滤器拦截率太高），直接关闭该装置的优化建议，只保留达标相关提示。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "重度我觉得自动触发没问题，别等人点确认。权限上，只有平台管理员能改runtime config；现场操作员只能选择“是否采纳建议”，不能切模型版本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "恢复条件我先定成：连续N小时输入可信度恢复到正常、shadow评估指标回到阈值内，才允许恢复灰度比例；阈值修改走审批，写入审计。N先用24小时？我不确定是不是太久。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我再确认一下：我别再往“全量A/B平台”写了，就按你这五条骨架写。然后把“原因码”我也补一套枚举，比如ROLLBACK_DATA_QUALITY、ROLLBACK_DRIFT、ROLLBACK_COMPLIANCE这类，方便统计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

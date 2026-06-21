@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在工差自愈调控接口设计背景下，用户与导师围绕接口时序、防撞逻辑及防撞计算位置持续沟通（6轮），其中在接口时序与防撞权限设计部分与边端接口控制师沟通（1轮），并最终形成工差自愈调控接口基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用OPC UA把补偿值写到CNC的变量里就行了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时序就卡在插补周期前写进去？防撞我不太懂，前面不是加了软件限幅熔断吗，这不算防撞？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "工差自愈指令下发到CNC，接口握手时序怎么定，防撞逻辑怎么防，还有指令权限怎么管。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口用OPC UA写坐标系偏置，时序要在插补前一个NC周期写，防撞要回读坐标算包络线比软限位，权限要有使能位和时间戳。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "放边端算吧，CNC可能来不及。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加锁同步？或者就算有误差，用上一拍的数据算，差一点点也能接受？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "工差自愈调控接口基线：1.下发走OPC UA写坐标系偏置；2.时序在插补前一个NC周期写入；3.防撞由边端回读坐标算包络线与软限位比对；4.防撞计算用上一拍坐标，零阶保持；5.指令有使能位和时间戳防重放，优先级低于手动操作。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

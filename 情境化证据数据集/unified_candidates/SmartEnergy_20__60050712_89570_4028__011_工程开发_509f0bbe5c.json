@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虚实双向同步联调背景下，用户与导师围绕数字孪生电压曲线与实测相位偏差的排查与协同对齐方案持续沟通（7轮），其中在拓扑映射精度与解算耗时定位上与数字孪生建模师沟通（1轮），在Kafka/Flink背压与Watermark导致延迟上与实时流处理工程师沟通（1轮），并记录动态Watermark与Actor解算优化及验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想应该是刚才写的Actor状态更新没跟上，或者是网络传输太慢了"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实，200毫秒感觉挺长的。您这么一说，我觉得两种可能性都有，要不我都查一下？反正肯定有一个是主因，查清楚就明白了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数字孪生建模师 老师让我来问问，现在模型跟物理侧对不上，是不是咱们那个拓扑映射的步长设得有问题？现在的偏差已经到200毫秒了，这在咱们的精度要求范围内吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时流处理工程师 建模师那边说可能是计算耗时，但我看数据流入的速度好像也变慢了。咱们的Kafka和Flink管道在处理这波负荷冲击时，有没有出现数据堆积或者乱序的情况？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师觉得是我Actor解算耗时长了，但流处理工程师说是Flink那边的Watermark机制等得太久，产生了180毫秒的背压。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "看来主要问题还是在流处理这块，我直接让他们把流控策略改一下行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实不能光看这180毫秒，那20毫秒的解算缺口也得补上。那我就听您的，先不让他们改流控，我先把Actor内部的逻辑再优化一下，减小那20毫秒的开销，然后再看剩下的怎么弄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我对Flink那个Watermark的边界值确实不太熟，不知道设多少才算安全。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去查相关的手册，把这些约束记在开发文档里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第一，Flink那边改动态Watermark策略；第二，我优化Actor里的内存拷贝，把那20毫秒抠出来。验证口径我会列出在100ms到300ms背压波动下，自愈算法触发的准确率对比，这样可以吧？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

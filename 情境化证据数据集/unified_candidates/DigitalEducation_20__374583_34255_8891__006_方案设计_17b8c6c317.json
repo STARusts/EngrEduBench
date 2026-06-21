@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在数字教育平台方案设计收尾的“数据闭环与指标体系”背景下，用户与导师围绕训练-提示-复盘的数据采集、事件最小字段、指标口径与阈值动作持续沟通（6轮），其中在字段分级/来源系统引用/rule_version回放的事件标准化上与数据治理负责人沟通（4轮），在指标分层口径与最小验证方法上与数据分析师沟通（4轮），并最终形成事件元数据+分级落库+指标三层+责任分工的闭环骨架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按三段拆：实验前是安全训练和准入，实验中是风险提示和违规拦截，实验后是复盘。数据上就是：学了没、过了没、现场有没有触发告警、最后有没有事故或近失。指标我能想到训练达标率、告警次数、事故率下降这些。字段分级和 source 引用、rule_version 要在事件里带上，方便回放。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件我想先定 6 类：用户训练开始/完成、测评提交/判定、准入申请/通过、实验过程风险事件、教师处置、事后复盘记录。字段最小：user_id、role、course_id、lab_id、event_time、event_type、payload。然后 payload 里带输入分级的字段，比如危化品名称算高敏？不确定。source_system_refs 就放教务、统一身份、实验室设备系统的引用 id。rule_version 放在准入判定和风险事件里。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理负责人 事件体系我暂定 6 类事件。想落地“字段分级+来源系统引用+rule_version回放”，你建议事件里哪些字段必须标准化？字段分级怎么在数据字典里表达，尤其是训练/准入/风险事件这几块。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "source_system_refs 如果有多个系统，比如教务课表和门禁都有，放一个数组就行？会不会太重。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rule_version 回放时，如果规则升级了，旧事件里的 rule_version 怎么和规则仓库对上？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 指标体系我现在只有训练达标率、告警次数、事故率这类大词。你帮我把“闭环+可计算口径”拆一下：指标分层怎么做、每个指标分子分母/时间窗、以及怎么用最小验证证明有效，不用等一年事故数据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小验证你说不用等事故数据，具体怎么做对照？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了。我回去把指标按三层收束，再把 event 元数据补齐。还有个点：如果学校不愿意给事故数据，我们就用近失和重大违规做代理。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我这边先定四块：  \n1）事件统一元数据：event_id、time、school、actor_type、actor_id_ref、object_type/id_ref、action、source_system_refs(数组)、payload_schema_version。决策类事件额外必填 rule_id+rule_version、reason_code、decision_time；证据只放 external_proof_ref+hash。  \n2）字段分级：在数据字典里给字段打 L1-L4；事件再带 payload_redaction_level 标记是否明文/脱敏/引用。个人身份和违规细节倾向 L4，设备状态可能 L2/L3，危化品我先不拍板，等安全官制度口径。  \n3）指标三层：过程（覆盖/达标/触达/时效）、结果（近失/违规复发/事故低频）、运营系统（活跃、规则命中、数据质量）。口径上准入/告警一律按 rule_version 切片，学习按 content_version。  \n4）闭环动作：用“指标-阈值-动作”三元组，触发内容更新或规则复核；短期用近失+重大违规做替代验证，试点用分批或前后对照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "数据质量我先给三条够用：  \n- 事件完整率 = 必填字段非空占比（按 event_type 分开算）  \n- 延迟分布 = event_time 到入仓时间的P95，尤其是离线训练  \n- 版本填充率 = 决策类事件 rule_version 填充占比、学习事件 content_version 填充占比  \n闭环责任我想：内容相关（达标率低、误题集中）给内容制作负责人；规则相关（告警异常、复发高）给实验室安全官牵头，平台给建议；系统相关（触达率、延迟）给技术侧。可持续性上，阈值触发先自动生成待办，不强制自动改规则，避免误伤。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确认。再补一句我怕我忘：规则改动要保 effective/expire，回放按事件 decision_time 去对版本。其余没啥遗漏。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在绿证对冲并发安全方案设计背景下与导师围绕防双花机制、Saga补偿与时空锁联动、并发压测验证持续沟通（8轮），其中在长链路一致性保障部分与并发交易护航员沟通（1轮），并最终形成Saga长事务、幂等键防双花、补偿清引用及带故障注入压测的方案基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个分布式锁呗，锁住绿证ID，用完释放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就设超时时间，超时就放锁。或者用强一致性事务，要么全成功要么全回滚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们现在绿证对冲并发高，不能用强一致事务，怎么防双花还能保证不出错？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我前两天刚看了Saga补偿的文章，里面说失败要发反向补偿事件。这里如果合约挂了，就发个补偿事件把绿证状态改回未占用，跟时空锁没啥关系吧，锁不是早就放了吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就多起几个线程并发请求，看看有没有超卖。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线就是：Saga长事务、幂等键防双花、失败发补偿事件清状态和时空锁引用、压测带故障注入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

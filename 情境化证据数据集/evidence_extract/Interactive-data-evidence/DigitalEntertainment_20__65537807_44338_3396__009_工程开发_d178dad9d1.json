@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在直播链路联调压测背景下，用户与导师围绕三端编排指令时间轴对齐、回放可复现、压测门禁与合规日志持续沟通（8轮），其中在对齐口径与弱网抖动测量上与实时音视频工程师沟通（3轮），在压测用例拆分、黄金样本复现比对与日志字段设计上与测试工程师沟通（3轮），并明确media_pts对齐、复现比对规则与阶梯加压验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按回放喂同一份输入，然后看输出是不是一样。对齐的话就看时间戳差不多就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "漂移就…100ms？字段就 timeline 全量比对。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时音视频工程师 对齐这块你们一般怎么定口径？我现在就只知道看时间戳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果网络抖一下，pts 不就乱了？是不是要把指令都缓存住，等稳定了再放？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了。那门禁就是 P95 40ms、P99 80ms。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测和复现你们一般怎么做？我怕我只会跑一跑接口。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "黄金样本是你们直接把服务端输出存下来对吧？那端上怎么比对，截图吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白。那我回去就把日志字段都加上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是…指令用 media_pts，对齐看 exec_pts 和 media_pts 的差，P95 40ms、P99 80ms。然后回放复现做黄金样本，离散字段完全一致，连续字段允许一点误差。压测就多房间并发，看 P99 延迟和丢弃率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧不做系统时间，不做离散字段插值。成本…就把指令变小？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先上 2000 房间，不行再降一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先 100 房间，然后 500，然后 1000、2000。看 P99 延迟如果超过就停？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就 P99 延迟超过 80ms 就停，再加上丢弃率超过 1%？CPU 超过 80%？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哦，那服务端 30ms，端侧对齐 80ms。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写 trace_id、room_id、media_pts、section、energy_bucket、intensity、还有 exec_pts。不能写用户弹幕原文、不能写音频原始数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就照这 5 条做。要是对齐统计我算不出来，再问你们。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

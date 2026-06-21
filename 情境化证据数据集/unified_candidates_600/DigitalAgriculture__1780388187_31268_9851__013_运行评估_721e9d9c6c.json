@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上报出P1异常衰变告警背景下，用户与导师围绕告警根因排查与定性持续沟通（7轮），其中在高湿敏感度及冷凝风险判断部分与衰变机理建模师沟通（1轮），在特征分布偏移与指令执行失败原因排查部分与运维监控分析师沟通（2轮），并最终形成告警根因链路闭环及后续迭代action。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我刚拉了日志，温度在2度，没超限。但衰变概率飙到90%了。是不是湿度传感器抽风了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "湿度吧？之前车厘子没跑过这么高湿度的。我不敢肯定，反正温度看着没问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "车厘子衰变模型在湿度突然变高的时候，会不会直接把衰变概率拉爆？线上一批车厘子告警了，但温度没超。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我只看了温湿度原始值，没管衍生特征。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这批告警车厘子的湿度特征分布是不是偏了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "除湿指令没执行？那告警是真的啊，确实在衰变。我去找硬件那边看看除湿为啥没动。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传感器数据是真的，指令也发了。我觉得是真实衰变，告警没问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "指令执行率低，看板能区分是网关拒发还是设备拒动吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "设备拒动，那就是设备扛不住这湿度，没法除。根因就是：环境高湿导致设备除湿能力不足，真实衰变风险高，告警准确。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "给模型加设备能力特征？这改动太大了，我肯定搞不定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "根因链路：环境高湿超设备除湿上限，微调指令设备拒动，衰变真实发生，告警准确。后续迭代：1. 硬件侧评估除湿能力上限；2. 模型侧增加设备约束特征，减少无效指令下发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

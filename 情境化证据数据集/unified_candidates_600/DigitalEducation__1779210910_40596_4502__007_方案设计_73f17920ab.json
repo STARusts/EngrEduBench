@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在端侧推理性能与高可用评估背景下，与导师围绕端侧性能红线、降级触发条件与链路及推理框架选型持续沟通（6轮），其中在性能红线与量化约束部分与性能优化工程师沟通（1轮），在降级策略与端云协同架构部分与系统架构师沟通（1轮），并最终形成基于MNN框架的端侧性能约束与跳帧云端粗判降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用TFLite自带的Benchmark跑一遍呗，看数据不就完了。要是跑不动，就切到云端算，网上好多端云协同的框架可以直接套。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键端云热切换的组件可以直接用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧打分模型跑不动咋办？有没有现成的端云热切换组件？性能红线一般怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是超时就不管这帧了，把数据全扔给云端算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用MNN或者NCNN呗，我看别人做端侧推理都是这俩，开箱即用，不用自己写底层算子。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "安卓端用MNN框架。单帧推理不超过30ms，内存不超过50MB。要是超时或者内存爆了，就跳过这帧，只发特征切片给云端做粗判。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

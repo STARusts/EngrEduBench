@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在光互连驱动封装与性能调优背景下，与导师围绕驱动接口定稿与调优方向持续沟通（6轮），其中在寄存器直通框架部分与硬件驱动专家沟通（1轮），在带宽损耗压测部分与测试工程师沟通（1轮），并最终形成VFIO直通、Uncacheable映射及40%红线回退的冲刺目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "封装就是把微腔器件的寄存器读写包一层。我打算用字符设备的ioctl，上层调用通用性最好。调优先不管，先跑通再说。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "ioctl确实有内核态切换开销。那我换成mmap？把物理内存映射上来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们微腔驻波反演要高频读器件状态，之前ioctl太慢，mmap行不行？有没有更规范的框架？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "VFIO用户态直通，这能省掉系统调用。Cache一致性确实是个雷。如果读到旧状态，阻尼寻优就全乱了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "两种路子：一是把映射区域设成Uncacheable，强一致，但PCIe读性能会下降；二是软件里主动加cache flush，但容易漏刷。我选方案一，MVP先保正确，Uncacheable性能烂点就烂点，总比反演发散强。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微腔映射区域如果设成Uncacheable，PCIe带宽大概掉多少？怎么快速测出来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果掉超40%，就得回去改软件刷Cache逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改封装代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

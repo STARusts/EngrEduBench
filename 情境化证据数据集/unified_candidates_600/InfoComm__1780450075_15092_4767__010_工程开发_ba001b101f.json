@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在拟态重构组件开发与置换背景下，与导师围绕置换调度、状态迁移、日志脱敏与信令伪装持续沟通（4轮），其中在状态机与清洗管道编码部分与拟态重构调度工程师沟通（2轮），在跨域信令伪装部分与通信协议专家沟通（1轮），并最终确认手写无锁状态机、走eBPF管道、日志脱敏及信令伪装成路由协议报文四点开发要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算直接用K8s的Deployment做滚动更新，把重构指令转成YAML下发，用Helm包管理一下就行了。现成的容器编排工具不用，自己写调度太费事了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态迁移我可以加个Init Container，启动前先拉旧数据。时序透明的问题，我可以在调度前加个随机Sleep时间，打乱节奏"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拟态组件置换有没有现成的SDK或者开发脚手架？我不想从零手写状态机，K8s的Operator能不能包装一下当状态机用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "侧信道清洗管道是不是得自己写Socket转发？有没有类似Netty的组件能复用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能还是用Go语言写个微服务当管道？开发快一点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志就用Log4j2或者Zap打一下呗，把执行体ID和切换时间写进去，查问题也方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "跨域重构的信令交互，如果直接发gRPC，是不是也会暴露？有没有现成的协议混淆工具？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我只会用应用层协议，底层报文构造没搞过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

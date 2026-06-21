@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农业径流营养盐预警与减量闭环系统方案设计背景下，用户与导师围绕“田块到流域数据图谱”的对象/关系/证据追溯与隐私审计底线持续沟通（8轮），其中在空间分层、关联链路与置信度/血缘记录上与数据架构师沟通（4轮），在最小可用验收与预计算汇总策略上与产品经理沟通（3轮），并确定最小图谱对象关系与Evidence最小字段要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这块“田块到流域数据图谱”要先怎么下手？我想直接用现成GIS底图套一下行不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就一张地图嘛。点线面叠在一起，能点田块看到施肥记录，然后往下游画一条线到河道监测点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象…田块、河、沟、雨量站、传感器、农户、施肥、预警、处方…差不多？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 田块到流域这种数据图谱一般怎么建？我就想能从田块一路点到下游断面，还能留证据。还有隐私这块别踩线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Subcatchment就是小流域？我能不能不搞这么多，直接Field连到Basin？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "置信度我不太会算。是不是直接给个高/中/低也行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我地图上点田块，想看到“谁家”的怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行。我回去跟导师说下我就按Field到Subcatchment的链路做，Ditch先不做。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解就是三层：空间实体、业务事件、证据血缘。空间先做田块、小流域、流域、河道监测点。田块跟小流域用叠加关系，河网拓扑先放一放，免得太复杂。隐私就不放人名，用匿名ID，真要查得审批。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 田块到流域数据图谱这块，你觉得最小能用要做到啥？我这边怕做全河网沟渠太慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那“断面上游汇水分区”就是Subcatchment集合？我就用水利部门现成分区行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我怕统计跑很慢。要不要直接把统计结果存成表？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "折中就是：先做Subcatchment为核心，不做全沟渠河网。断面到上游分区用现成分区或者DEM推出来的，血缘写清楚。然后预计算分区的汇总指标，点断面先看汇总，避免现场卡。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对象我就定：田块、分区、流域、断面、事件、数据源版本。关系：田块属于分区，分区属于流域，断面关联上游分区，事件发生在分区和断面，事件引用数据源版本。字段…就ID、面积、风险等级、时间。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "接受。就是“Evidence”我可能会偷懒只放个链接行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，那就按你这四个字段来，scope我先写事件ID。别的以后再补。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

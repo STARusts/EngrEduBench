@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧渲染与埋点测试背景下，用户与导师围绕图谱渲染卡顿和埋点漏报的定位、解决方案及工程边界持续沟通（6轮），其中在主线程阻塞与sendBeacon限制部分与前端开发工程师沟通（2轮），在埋点丢失原因与Worker验证部分与测试工程师沟通（2轮），并最终形成力导向计算拆至Worker及埋点改用sendBeacon的优化方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱节点好几千个，肯定是数据量太大渲染压力顶不住了。埋点漏报，是不是请求发得太快被网关限流了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图谱渲染卡死，主线程是哪里堵了？埋点漏报，网络请求有啥异常？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "处理页面卸载时的请求可以用 `navigator.sendBeacon`，这个能保证请求异步发出去。还有 Web Worker，把计算挪出去主线程就不卡了。这么改应该能行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "sendBeacon 好像有大小限制，不能发太大的包。Worker 通信如果是结构化克隆也耗时间。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "埋点改用 sendBeacon 发 POST，接收端配合改。图谱渲染拆 Worker，测试用 TBT 指标卡。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去改代码，把力导向计算逻辑抽离到 Worker，埋点发送换成 sendBeacon。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

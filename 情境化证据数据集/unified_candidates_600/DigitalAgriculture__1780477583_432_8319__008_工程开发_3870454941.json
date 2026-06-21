@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在种禽繁育声纹与行为图谱映射系统核心模块开发背景下，用户与导师围绕边缘降噪方案、图谱存储架构及NFA状态机补学持续沟通（4轮），其中在边缘算力与降噪方案部分与边缘算法工程师沟通（1轮），在图谱时序写入架构部分与图谱数据流建模师沟通（1轮），并最终敲定边缘混合降噪及对照验证、Kafka+Flink+Neo4j流图架构及NFA补学迁移方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "传统谱减法算力小但强噪下残留多，轻量级CNN比如TinyNet去噪好但怕边缘算力不够。我倾向写个TinyNet试试，大不了降帧率。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱定义我打算用Neo4j，声纹片段和微动行为做节点，它们之间的映射关系做边。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "想用轻量级CNN替代谱减法，但担心ARM网关算力溢出。咱们网关的CPU和内存上限具体是多少？如果跑CNN，帧率能撑住多少？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "验证设计我会设三组：纯谱减、纯CNN、VAD+谱减+CNN。因变量是特征SNR和内存峰值。对照组跑至少20轮，看OOM率。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时序流并发写入Neo4j会不会卡死？应该怎么改架构？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边缘端我改用VAD+谱减+CNN混合方案，验证口径是对比三组的SNR和OOM率。图谱端改用Kafka+Flink+Neo4j流图架构，Flink做时序对齐。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我现在卡在Flink CEP写NFA状态机这块，以前只写过简单SQL流，复杂事件处理的状态转移代码我不熟。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "先写一个模拟温度异常的NFA demo跑通，再把这套代码迁移到声纹-微动的对齐逻辑里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

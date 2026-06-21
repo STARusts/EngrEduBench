@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发的溯源图谱服务实现背景下，用户与导师围绕图模型最小节点边、缺失/可信度表达、幂等写入与查询接口持续沟通（9轮），其中在图存储落地与追加事件/审计/时间线查询部分与后端工程师沟通（3轮），在降级信息最小化与neutral/risk缺失区分部分与合规与隐私官沟通（2轮），并明确V1接口与GapEvent/RejectEvent及审计字段要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱就是把事件都连起来？我觉得弄个表也行，按作业id查就能串起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "节点…有学生、作业、提交。边就是学生提交作业。过程事件也算节点吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缺失就…字段写null？可信度给个分？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 图谱服务这块你觉得咋做？直接用数据库存行不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听起来就是节点多一点，然后加个GapEvent。那我就照着做表。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计日志也要我做？我以为图谱只管查。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模型就是作业、提交、版本、事件这些节点，再加GapEvent表示缺失。写入就upsert，按event_id去重。接口就时间线和证据图两个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…event_id不行就用提交id？反正唯一就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端侧是actor_id加event_id。服务端是actor_id、submission_id、event_type，再加一个时间桶。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "放Attempt上，一个degrade字段，写弱网低电量之类。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 降级原因这些要怎么存？会不会算隐私。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "明白，就是别存具体电量和wifi名，改成枚举。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "区分成两种缺失原因。行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GapEvent里加个字段，写neutral或者risk？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就gap_class默认NEUTRAL，如果reason_codes里有WEAK_NET/LOW_POWER/STORAGE_DROP就NEUTRAL，不然就UNKNOWN。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "能，做个RejectEvent，也放图里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "原因码、时间、关联的event_id？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我做写入接口和幂等，查询让后端同学帮我？我也能写一点时间线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我做三个接口：ingestEvents、getTimeline、getEvidenceGraph先两层。表就照这些节点建，Attempt里加data_coverage、process_fidelity、reason_codes。GapEvent带range和class，RejectEvent带原因码、event_id、再加ingest_id。审计表也补上request_id这些。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

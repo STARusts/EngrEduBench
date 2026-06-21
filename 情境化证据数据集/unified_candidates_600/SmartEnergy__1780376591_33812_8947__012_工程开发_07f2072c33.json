@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧极端断网容错背景下，用户与导师围绕断网数据冲突、合规打标与重连回放逻辑持续沟通（4轮），其中在数据冲突处理部分与容错调试员沟通（1轮），在断网期数据打标合规部分与合规审计师沟通（1轮），并最终形成基于WAL日志回放与合规时标哈希的断网容错三条规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网有啥难的，本地存SQLite，网一通再往上传呗。大不了加个重试。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网重连后数据直接传上去会双花？这怎么搞？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "CRDTs？听着就头大。我就加个本地时间戳，谁的时间新听谁的，覆盖掉旧的，这不就没冲突了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网期间的数据我加个时间戳覆盖传上去，合规能过吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规说必须加什么断网起止时标和哈希。数据合并我就用时间戳覆盖，简单粗暴，能跑就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时钟漂移我确实没想过。覆盖真会丢数据啊？我之前一直觉得谁新听谁的就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚查了查，SQLite有个WAL模式，写日志嘛，我用WAL把断网期间的操作全记下来，重连后按顺序回放，这样总不能丢了吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "不停调，加时标哈希，WAL回放。我去改。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在指数计算服务工程实现背景下，用户与导师围绕可审计风险指数的计算函数、落表审计、质量规则与degraded原因码及最小交付清单持续沟通（10轮），其中在接口分层与结果/审计/错误边界字段设计部分与后端工程师沟通（3轮），在阈值配置表、规则ID映射与原因码枚举部分与农业风控分析师沟通（3轮），并确认先实现气象子项、阈值provider回退、quarantine写入与单测覆盖且暂不做API。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道从哪开始。是不是先写API？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入…地块id？还有日期。输出就一个分数吧。错误就返回失败。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 指数计算这块我该先写啥？字段要哪些？我怕写错。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就照着这些字段写就行？components我先空着？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我分不清啥算关键输入缺失。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业风控分析师 阈值那些怎么定？规则ID要怎么写进指数？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "所以我就把0.6、0.8写死？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我怕我搞不来配置表，还要查版本。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我回去要做啥？我脑子还是乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就…先做气象子项。components里就填meteo。阈值不写死，用一个provider拿。然后落审计表。测试我不知道写哪些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "hard就是小于0.6？soft就是小于0.8？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "quarantine…有规则id，还有入库时间，还有dt？还有原始数据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "TTL我也不懂配。是不是先不管？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志也要管？我一般都print。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1是算个meteo分数，返回一堆字段。2是阈值从表里拿，没拿到就降级。3是0.6以下进quarantine，0.6到0.8就是WARN加规则ID。4是没版本就用最近一次，给原因码。5按dt跑。6四个测试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用你们说的那几个：UPSTREAM_NO_NEW_VERSION、THRESHOLD_FALLBACK、METEO_WARN、METEO_QUARANTINED？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这我记不住，反正我照你说的写：soft不写reason_code。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在批改提交到诊断与练习推送链路进入端到端压测与调优的开发收尾背景下，用户与导师围绕压测范围、KPI阈值、轮询与缓存取舍及合规观测清单持续沟通（10轮），其中在场景矩阵与数据构造/验收口径上与测试负责人沟通（2轮），在压测形态、容量评估、观测与脱敏日志上与SRE运维工程师沟通（1轮），并形成今晚可复跑的压测矩阵、验收指标与执行分工。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最危险的还是诊断任务这段。提交量一上来，队列堆积、DB 写放大、以及练习包生成的 CPU 会爆。其次是教师端轮询 job_status，如果轮询没节制会把网关和 status 表打热。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "范围我倾向分两层。\n第一层是真 E2E：教师端提交 commit（含撤回窗口）、写 commit 表、投诊断任务、算法服务跑诊断并落诊断结果、练习生成服务生成练习包、订阅服务写入推送任务、学生端拉取练习列表。\n第二层是半链路：算法推断可以用固定耗时的 stub 替代，只验证队列/DB/练习生成的吞吐和一致性。必须真实跑的是撤回状态传播、幂等键、审计/脱敏日志链路。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先给一版可执行的口径：\n- 提交接口：峰值 200 RPS，P95 < 300ms，5xx < 0.1%\n- job_status：平均每个提交轮询 6 次以内，P95 < 150ms\n- 诊断完成时间：从提交到 DONE 的端到端 P95 < 45s（含队列等待）\n- 学生端练习列表可见：从 DONE 到可拉取 P95 < 5s\n- 撤回一致性：revoke 后 2s 内 job_status 不再返回 ACTIVE 结果；练习列表不出现该 commit 生成的包（允许“生成了但被标记 INACTIVE 不可见”）"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "有点经验值，但不够硬。教师批改后等一分钟以内还能接受，超过就变成“黑盒等”。更稳妥我想问下测试和 SRE，他们通常用什么方式定基线和容量点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 端到端压测这条链路，你建议的场景矩阵怎么拆？尤其是撤回/幂等/轮询这些混在一起，数据怎么造更接近真实？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撤回竞态那块，DONE 后 revoke 还能发？我们之前接口允许，只是标 REVOKED 并回滚指针。压测里 DONE 后 revoke 的验收怎么写才不含糊？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 这条链路准备端到端压测和调优，你建议的压测形态、容量评估步骤是什么？还有我们有脱敏要求，压测日志和追踪怎么做才合规？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心 next_poll_after_ms 会牵扯前端改动，今天不一定赶得上。压测先用固定轮询频率，会把 status 表打得很难看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "取舍：先在服务端加一个很小的保护，不改前端。job_status 响应里加建议字段可以先不消费，但服务端对同一 job_id 的 status 查询做 1s 的本地缓存；再加每个 teacher_id 的软限流。这样压测至少不会把数据库当靶子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存 key 里把 commit_id 和当前 commit_state 带上；revoke 写入后，先发一个轻量的 cache-bust（比如内存里把该 job_id 标记 dirty），让下一次查直接穿透。做不到跨实例一致也没关系，压测环境先单实例验证；多实例再看需要不要上分布式缓存。我知道这块我没那么熟，可能要你们后端带一下实现边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三件事：\n1) 我把压测场景按测试那四类配比写进压测脚本参数里，数据用三档 commit 大小混合；同时把撤回/幂等的验收点写成接口级断言（状态机、可见性、幂等返回）。\n2) 后端这边加 job_status 的 1s 本地缓存 + revoke 后 cache-bust；并把 status 表访问加索引检查（至少 job_id、commit_id、updated_at 这几个组合）。\n3) 跟 SRE 对齐观测：trace_id 打通、队列 backlog、消费速率、DB pool 等待这些指标在压测时能看见；日志检查一遍，确认不会打出题干/作答。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规这块我能做的是压测环境只接入合成数据源，不连生产题库；并在压测配置里强制开“脱敏日志模式”。更正式的把关可能要合规与数据治理官确认，但今晚时间不够，我先把“压测环境禁止导入真实 student_uid/题干”的校验加在数据生成器里，生成器发现疑似真实格式就拒绝。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测收口我希望得到三类结论：\n- 在目标 200 RPS 下，端到端 P95 是否满足（提交、status、诊断到 DONE、练习可见），以及是哪一段拖了后腿（队列/诊断/生成/DB）。\n- 撤回与幂等在高并发和竞态下是否仍然满足外部可见性与状态机规则。\n- 资源拐点：RPS 提升到多少开始出现 backlog 持续增长或 DB pool 等待飙升，从而锁定下一步调优优先级（先限轮询还是先拆队列并发）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

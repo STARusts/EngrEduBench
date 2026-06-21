@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在高并发吞吐性能调优背景下，与导师围绕边缘背压控制、云端非阻塞改造、审计降级策略及压测置信度持续沟通（5轮），其中在审计日志高吞吐降级部分与微服务架构师沟通（1轮），并最终形成边缘背压限流、Reactive改造、审计批量降级与稳态压测验收四条调优策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "瓶颈大概率在两处。边缘侧多路光谱仪并发推流，如果网关接收线程池打满，不仅延迟飙升，还可能OOM；云端侧Kafka消费积压会导致流转管控指令下发滞后，分拣动作变慢。我初步想法是边缘侧加背压控制，云端侧对流转服务做异步非阻塞改造，Kafka消费者组横向扩容。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这确实是个冲突。全量审计保合规，但高并发下可能拖垮系统。背压如果直接丢包，合规就有盲区。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "针对高并发场景，如果边缘侧全量推审计日志到Kafka，再由网关写ES，这套链路的吞吐上限在哪？有没有不违背审计红线的降级策略？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算采纳批量提交，这样既没丢数据，又降了IO。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "关于流转服务的同步锁问题，我最近在补WebFlux响应式编程，想把传统的同步阻塞接口改成基于Reactor的非阻塞模型，这应该能显著提升吞吐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天跑了几组WebFlux的Mono/Flux链路测试，发现只要把流转核算里的RestTemplate同步HTTP调用换成WebClient，线程池占用能降一个数量级。我准备先改价值核算和调度下发这两个高频接口。验证的话，我会用JMeter模拟产线峰值并发，对比改造前后的P99延迟和吞吐量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这个我确实没细想，通常就是多跑几次取个平均值。但JVM的GC停顿确实可能让某次结果偏得离谱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "高并发调优的核心策略确认为：第一，边缘侧推流加背压限流，超限请求降速排队而非丢弃；第二，流转管控核心接口迁移Reactive非阻塞模型，同步HTTP换WebClient；第三，审计日志高并发降级，网关侧批量Buffer后写ES，保数据不丢但允许查询延迟；第四，压测验收必须多轮稳态打流，监控P95/P99和EventLoop占用。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

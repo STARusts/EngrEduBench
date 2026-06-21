@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在术野动作解析系统工程开发背景下，用户与导师围绕4K视频实时解码与推理加速方案、性能验证及隐私脱敏持续沟通（7轮），其中在4K视频硬解与零拷贝传输部分与视觉算法实现者沟通（2轮），并最终形成FFmpeg硬解加显存池方案、P99延迟对照测试策略及插入脱敏预处理的后续开发动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看大家都用OpenCV VideoCapture抓流，拿帧之后直接丢给TensorRT跑分割模型。这样写最快，我以前也这么干过。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "毛刺这块我确实没细想。我只知道能跑通，内存拷贝的开销具体有多大我不清楚。这块原理我不太懂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚把FFmpeg硬件解码和Zero-Copy的文档过一遍，先在本地写个小的解码Demo跑一下看看。然后我再去问问专门搞视觉算法的同事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "4K术野流硬解码之后，怎么零拷贝传给TensorRT？OpenCV那种拷贝方式延迟太大了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "全程显存操作？那显存怎么管理？每帧都申请释放肯定不行吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我写个对照测试脚本。同一份4K视频，分别用OpenCV解码加CPU到GPU传输，和FFmpeg硬解加显存直传，跑个500帧，对比两端到端推理的P99延迟。这样能看出差距。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "脱敏我还没做，我想着先跑通分割模型再说。难道要在解码之后、进TR之前加一步人脸检测抹掉？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接下来三件事：第一，今晚补学FFmpeg硬解和显存池管理，写Demo验证；第二，写对照测试脚本，跑P99延迟对比；第三，在解码和推理中间插上脱敏预处理模块，不脱敏不推理。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

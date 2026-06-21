@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关协议适配联调背景下，用户与导师围绕私有Hex报文解析、断网缓存策略、数据防丢刷盘机制及模糊测试范围持续沟通（4轮），其中在协议解析与断连保序机制部分与边缘计算开发者沟通（1轮），并形成异步刷盘策略与Decoder测试用例范围。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "车载网关那种老设备，报文格式可能很奇葩，直接上Protobuf会不会有兼容问题？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "插件怎么热加载我不太熟，还有时间戳回传如果乱序，后面轨迹微服务会不会拒收？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在有三种私有Hex报文，怎么映射成标准结构体？还有弱网下断连缓存重传怎么保序？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得内存缓冲掉电会丢数据，器官转运数据丢了可是大事，是不是必须强制fsync？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "三种Decoder，我得构造极端报文做模糊测试，保证解析不会崩"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "异步刷盘间隔100ms，丢两帧可接受。Decoder先跑正常和截断异常的用例。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在农技复核工单机制的接口与事件路由设计背景下，用户与导师围绕trigger_id生成与稳定追踪、dedup_key去重策略、snippet证据拉取与工单绑定、API层权限审计契约持续沟通（12轮），其中在敏感字段分类、snippet短期留存与EVIDENCE_REQUEST审计边界上与合规与数据治理官沟通（2轮），并对齐trigger_id格式、强弱去重配置、按trigger证据请求与审计要素/拒绝码。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "trigger_id我想搞成全局唯一就行，比如雪花ID。dedup_key可以用device_token+event_time+reason_code再hash一下。snippet我倾向于上报时就带云端一份，这样复核更快；工单里直接存snippet url。权限审计的话就网关层做JWT校验，然后审计日志异步写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trigger_id是单次触发的主键，dedup_key是幂等用的。同一个事件重试上报，trigger_id可能会变，但dedup_key不变，这样云端能去重。路由就按field_token分区处理，trigger_id只是追踪。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "确定性字段我选device_token、field_token、fingerprint_vector的hash、再加event_time取分钟粒度。reason_code我觉得也加进去，不然不同原因会撞。event_time漂移就分钟粒度能吸收一点；reason_code变化…那就算两个事件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 需要你给个硬边界：trigger事件里哪些字段算敏感？snippet怎么存、留多久？EVIDENCE_REQUEST谁能发起，API层审计要留什么？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那snippet不能直接塞在触发事件里，只能后续按工单拉。触发事件里就放snippet_ref_local。审计要把“谁、何时、调取啥、为啥、结果”全记。trigger_id这块我回导师再对齐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "备选A强去重：dedup_key=H(device_token+field_token+bucket(event_time,5min))。这样5分钟内只算一次，工单少，但可能漏掉短时间内从低risk变高risk的变化。\n备选B弱去重：dedup_key=H(device_token+field_token+bucket(event_time,1min)+risk_band)。risk_band比如low/med/high。这样高risk升级会新开一条，工单多一点，但更稳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trigger_id就边缘生成UUID并落outbox，重试不变；云端保存trigger_id和dedup_key映射。云端遇到duplicate就返回duplicate，边缘就把这条标记成已送达。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "格式我想用：`trg_{field_token_short}_{device_token_short}_{YYYYMMDDHHmm}_{rand}`。rand是6位。这样查问题时一眼能看出地块和时间。dedup_key仍是hash，避免泄露太多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以。那排障就靠src8映射表在受控环境查。就是我担心现场实施同事看不懂。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想工单里有个evidence_state：none/requested/received/expired。云端创建工单时，如果risk高或reason_code命中某些规则，就自动发EVIDENCE_REQUEST，带trigger_id和需要的时间窗。边缘回传时带ingest_id+trigger_id+snippet_id，云端把snippet_id挂到工单的evidence_refs里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向按工单发，减少请求数量。工单里记录primary_trigger_id，再附一个trigger_ids数组。EVIDENCE_REQUEST发primary_trigger_id，时间窗覆盖所有触发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 如果工单合并多个触发，证据调取按工单一次性拉更大时间窗，和按trigger逐条拉，合规上你更支持哪个？时间窗上限怎么定？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "收到，那就按trigger来。工单里还是合并展示，但每个trigger都有自己的evidence_refs。时间窗默认比如[-30s,+30s]，超过要写理由并留审计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "角色我想三类：edge_device、cloud_service、agri_reviewer。\n- edge_device只能调trigger-events上报、接收EVIDENCE_REQUEST并回传证据。\n- cloud_service能创建工单、发EVIDENCE_REQUEST、读写工单状态。\n- agri_reviewer能看工单、填复核结论、必要时发起证据请求。\n拒绝原因就用HTTP 403/401，body写message。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "trigger-events的rejected我补：\n1) `SCHEMA_INVALID` 字段缺失或类型错；\n2) `TOKEN_REVOKED` device_token失效；\n3) `FIELD_NOT_BOUND` device未绑定field_token；\n4) `VECTOR_TOO_LARGE` fingerprint_vector超过128或不合法；\n5) `CLOCK_SKEW` event_time偏差太大。\naccepted/duplicate维持上次定的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我之前想把snippet直接上云和工单绑定，这条就删了。trigger_id我也不坚持可读地块了，改成短hash。dedup我可能还是想保留可配置，试点地块如果农技员人手少就用强去重，免得炸。剩下就按你这四点走。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

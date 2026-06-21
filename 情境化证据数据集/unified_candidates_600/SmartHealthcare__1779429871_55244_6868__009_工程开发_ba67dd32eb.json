@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预后演进图网络训练与验证方案制定背景下，用户与导师围绕验证指标、防过拟合策略及算力优化持续沟通（6轮），其中在验证指标与防过拟合部分与图网络算法设计师沟通（1轮），在多卡并行与显存优化部分与算法训练工程师沟通（1轮），并最终形成包含DDP多卡、DropEdge等训练配置及重构误差、KL散度等验证指标的完整方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿之前解耦好的脱敏合成数据，直接喂给PyG的图网络跑呗，先看loss降不降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "收敛就卡loss低于0.05？验证口径，我拿测试集跑一把AUC看准不准。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "图网络训练验证怎么做，AUC是不是不够？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "DropEdge就是随机删边嘛，我加到dataloader里。阈值卡0.1？算力，我就开单卡跑，显存爆了就减小batch size呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态图网络训练多卡并行怎么配？显存爆了咋优化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "训练：DDP多卡，混合精度，梯度累加，加DropEdge。验证：看边权重构误差和KL散度，阈值0.1，关梯度。单卡跑不动就多卡。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

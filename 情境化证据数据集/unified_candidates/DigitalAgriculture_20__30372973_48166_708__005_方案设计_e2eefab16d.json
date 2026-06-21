@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在检测报告可信接入平台的MVP方案设计背景下，用户与导师围绕接入渠道、验真证据链、状态流转、绑定规则、失败隔离与数据最小化持续沟通（10轮），其中在审计证据与必收字段部分与行业合规经理沟通（3轮），在签名/签章分级验真、审计日志与权限部分与安全工程师沟通（2轮），并汇总形成分级验真+状态模型+字段口径的方案要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是检测机构给一份PDF，然后我们存起来，给批次挂上去。再做个校验，比如文件hash。大概就这些？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "入口…API一种，文件上传一种？还有邮件？我不确定MVP要不要邮件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验真…上传后算hash存库；机构那边也给hash；我们比对一样就通过？然后记录时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@行业合规经理 检测报告接入这块，审计时你们最看重哪些证据？MVP最低要收哪些字段，才算“这份报告可信、可追责”？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“机器可读摘要”是要我们把每个检测项都结构化录入吗？那很大。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有作废更正，是每次检测机构改报告我们都要同步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 检测报告可信接入，MVP想做到“来源可信+不可抵赖”。不写实现细节的话，你建议用什么验真方式？验签失败/缺签怎么处理？审计日志要记什么？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "隔离区是指我们收下来但不让用？我有点分不清“拒收”和“隔离”。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我打算分三级：A API签名，B 签章PDF，C 账号上传。必填字段我先抓：报告编号、机构信息、出具日期、样品标识、批次关联、结论。检测项结构化只做平台要用的那几项。状态我想是：已接入→待验真→可用/隔离/拒收？但拒收就没状态了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "可以。我之前把“可用”和“发布”混一起了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那PUBLISHED就是给C端扫码页能看到？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "绑定粒度我先按“报告—样品—批次”三层？但我不确定样品在我们模型里是不是要单独建。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记下：多批次绑定要写依据字段；没依据的手绑要复核。更正用前后指针加原因，旧报告作废但保留。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这块我没想过。是不是全存着更好审计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就：结构化字段里不录入个人联系方式；原件允许包含但展示脱敏，权限隔离。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第4条“2-5个检测项”我能理解，但不同品类要的不一样，我怕PM后面要加很多。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行。我能按这7条往下接。接口清单我只列到“上传/推送、验真结果回执、绑定、作废更正”这几类，不写内部细节。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

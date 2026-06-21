@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在园区雨洪预警与泵闸联动的方案设计背景下，用户与导师围绕预测模型接入、孪生数据流主链路、可追溯证据链与版本对齐、触发对齐规则及轻量化降级持续沟通（10轮），其中在预测服务输出字段/时效/漂移与再训练/失败降级上与算法工程师沟通（1轮），并形成可写入方案的接口字段与触发互锁、层级化仿真和保守降级原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是提前知道要下雨，然后系统就能提前把水腾出来，别超标。数据流就是传感器到平台再到模型，再回到控制策略。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "提前就…半小时一小时都行吧。量的话降雨量、流量、水质。输出给控制策略用。错了可能就排多了或者蓄不住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降雨就是未来X分钟的雨强序列。入流水位就是未来水位曲线。污染就是未来COD之类的曲线…字段的话，时间戳+预测值？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集到的是时序点位数据；云端推理产出预测时序；孪生仿真用预测+当前状态算未来状态；策略拿未来状态判断要不要预泄或分流；然后下发指令给泵闸，再回读。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把告警、模型输出、策略版本、指令、回读都串起来。还有原因码。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "版本就统一用时间戳对齐？比如用同一时刻的数据跑出来的结果就算一套。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 预测这块输出字段要有哪些？时效怎么定？漂移和再训练怎么搞？失败了怎么降级？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采纳字段：target、horizon、step、yhat时间序列，再带p10/p50/p90，还有confidence、valid_until、model_version、输入数据新鲜度。降级原则：推理挂了就给FAILED，策略改用实时阈值规则；输入缺测就DEGRADED，用更保守的安全裕度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "设施就是泵、闸、调蓄池水位；管网就是关键管段水位流量；边界条件就是降雨和上游来水。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用固定调度吧，每5分钟跑一次，比较稳定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件触发就…5分钟内最多一次？超过就忽略。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可以只跑重点区域，或者只跑关键工况。还有就是降级时少跑点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我选粗模高频+精模低频。平时用粗模看趋势，暴雨或者有告警再用精模确认。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加置信度低就不自动控制？改成只预警？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）预测输出给策略和孪生用，带target、时间序列、分位数、confidence、valid_until、model_version、data_freshness。\n2）孪生输入要有同一时刻的状态快照：设施、管网、边界条件。\n3）孪生运行：固定调度为主，事件触发为辅，5分钟限一次，且要求confidence和data_freshness过门槛。\n4）算力：粗模高频，告警/暴雨再跑精模低频。\n5）降级：FAILED/DEGRADED时只做保守规则或只预警，自动控制要看置信度并走互锁+审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

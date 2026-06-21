@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在微结延迟异常复盘背景下，用户与导师围绕排查方向、根因定位及排查分工与熔断策略持续沟通（6轮），其中在链路拆解与根因分析部分与清结延迟复盘师沟通（2轮），并最终形成B通道根因排查方向、分工方案与熔断策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先去查数据库慢查询吧，看看有没有锁表或者索引没命中。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看看流式任务的管理界面，看积压情况。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "P99到了800ms，你看是反压还是对账卡了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我直接把B通道的超时时间改长一点？这样窗口就不会这么快报超时了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "幂等失效风险大。不改超时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他怀疑是灰度切进来的B通道返回慢，导致状态机卡在等待，窗口闭不上。不能改超时，会破坏幂等性。要查B通道是抖动还是限流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我让运维看B通道的网络和限流指标。我负责盯状态机的等待数量和水位线推进。如果确认是B通道限流，就找产品把B通道流量摘除。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分工确认：我盯状态机比例，超50%触发熔断；运维查B通道网络和限流；产品评估摘除影响。我现在去拉对齐会。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

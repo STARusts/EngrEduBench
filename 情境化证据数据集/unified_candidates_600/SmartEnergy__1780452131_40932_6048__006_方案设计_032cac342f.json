@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在掺氢比寻优控制流方案设计背景下与导师围绕算法选型、降级切换代价权重调整与验证方案持续沟通（9轮），其中在算法选型与算力约束部分与调配寻优算法工程师沟通（2轮），最终确定MPC为主控流、降级切代价权重保安全及对照验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这种动态调控，强化学习挺合适的吧？直接端到端，输入状态输出掺氢比，不用搞复杂的数学模型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "确实，RL探索容易乱来。那启发式呢？粒子群或者遗传？我之前调参用着挺顺手的，好改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "掺氢比寻优这种带安全硬约束的，RL和启发式好像都不行，工业上一般怎么搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "求解器算得快吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是MPC加二次规划。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "代理模型降级了，MPC就换用静态包络算？这切换逻辑我得想想。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前两天看了篇Safe RL的论文，说是用约束马尔可夫过程，能把安全边界卡死。要不咱们在MPC外面再套一层Safe RL做兜底？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降级了说明流场不可信了，那MPC优化目标就不能再追求效率最优，得改成安全最优。代价函数里跟踪误差的权重减小，控制增量的权重加大，对吧？我把我刚学的MPC权重调节机制用这儿了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "变量就是算法，MPC对RL对启发式。扰动就加掺氢比阶跃和负荷波动。指标看越界时间和收敛步长。我得写个验证方案书，把这几个定死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主控流选MPC，降级切代价权重。验证对比MPC、RL和PSO，指标看越界时间和收敛步长，变量控制就是这三种算法跑同一个扰动工况集。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

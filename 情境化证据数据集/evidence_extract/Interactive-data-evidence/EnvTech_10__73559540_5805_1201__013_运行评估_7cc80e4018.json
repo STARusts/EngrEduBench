@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在厌氧发酵产气预测与柔性调度平台运行评估的灰度上线与回滚落地背景下，用户与导师围绕切流方式、上线闸门、回滚步骤及分工持续沟通（5轮），其中在发布阶梯与闸门指标部分与SRE运维工程师沟通（2轮），在审计留痕与日志/配置隐私边界部分与合规与隐私官沟通（1轮），并形成灰度阶梯、停止/回滚条件与执行分工口头清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要搞运行评估这块的灰度上线，还有回滚怎么弄，怕一上线就炸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就先上生产吧，先给一两个站点用用。比例就先少点。出错就回滚到上个版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "数据库我没想太多，应该不改就行。RUNNING 卡住就取消一下。策略下发我觉得回滚了就自动没了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度怎么搞比较稳？回滚要多快？我就想别出事故。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就从 5% 开始就行了吧？30 分钟看一下告警，不红就推到 100%。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 灰度上线和回滚时，隐私这边我需要注意啥？我怕踩线。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了，就是别写站点信息，用 tenant_hash，所有开关都记一下。回滚就把版本退回去就好了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我来改 tenant_hash 白名单，然后盯看板。SRE 负责回滚操作。合规那边就…你们要我填原因我就填。群里我拉一下，把告警链接、看板链接贴上去就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "推进就是 30 分钟没出大事，几个 p95 不超，5xx 别太高，RUNNING 别堆起来；回滚就是 RUNNING 卡住那种，还有 5xx 超了、延迟超了就退回去。审计我也会记着要填。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

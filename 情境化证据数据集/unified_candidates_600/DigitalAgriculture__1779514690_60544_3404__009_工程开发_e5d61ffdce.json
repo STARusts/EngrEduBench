@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在渔群摄食声纹解码系统特征提取开发背景下，与导师围绕声纹特征选择与边缘网关算力权衡持续沟通（7轮），其中在水下声纹关键特征补充部分与算法实现工程师沟通（1轮），在网关算力红线与定点化要求部分与性能优化专家沟通（1轮），并最终形成基线特征方案与对照验证条件。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用 librosa 划帧，帧长25ms步长10ms，提40维MFCC。之前拿Python脚本试过，能跑通。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法实现工程师 提特征的话，光MFCC够不够？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@性能优化专家 网关侧跑这些特征，ARM Cortex-A53能行不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不就留MFCC和短时能量？谱质心砍掉？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照实验我就跑两组，一组全特征，一组只有MFCC+能量，看准确率掉多少。定点的话，我得去查查CMSIS-DSP库有没有现成的定点DCT接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "特征就先定MFCC+短时能量，窗函数用汉宁窗，分帧后直接调定点算子？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "基线特征：汉宁窗分帧，提取MFCC和短时能量，用CMSIS-DSP定点算子。验证条件：在同等水下噪声下对比全特征和基线特征的准确率，单帧处理延迟压在15ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

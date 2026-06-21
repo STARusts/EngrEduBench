@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在声纹特征与溶氧预测模型联调优化背景下，与导师围绕特征维度匹配、时序对齐逻辑及偏移量数据清洗条件持续沟通（5轮），其中在特征输入层维度与时序对齐工程细节部分与算法实现工程师沟通（2轮），并形成基于环形缓存的时间戳配对及偏移量过滤的联调方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接把MFCC和短时能量拼一块送模型跑，看预测的溶氧跟探头实测值差多少，差得多就调调模型参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都在边缘网关上跑，时间戳应该是一致的吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "声纹特征送进溶氧模型，联调时维度和时序怎么对齐？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "MFCC我提13维加短时能量共14维，模型输入我改一下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间戳对齐具体怎么做？缓存等一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "维度要跟模型输入层改一致，我用14维。时序上得用环形缓存按时间戳配对，声纹算完有延迟，不能直接拼当前溶氧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加个日志把偏移量打出来，看看延迟抖动大不大。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写环形缓存，把偏移量算出来，筛掉偏移大的对再送模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

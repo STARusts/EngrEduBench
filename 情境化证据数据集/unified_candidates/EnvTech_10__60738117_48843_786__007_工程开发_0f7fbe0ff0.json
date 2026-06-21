@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工业尾气碳氮协同优化平台进入工程开发、需打通数据采集网关联调背景下，用户与导师围绕envelope定义、双时间戳口径、断网缓存补传、幂等ACK、安全审计与联调测试清单持续沟通（10轮），其中在现场协议/频率/NTP与质量位约束上与现场边缘工程师沟通（3轮），在中心接入契约的幂等键、分桶ACK与限流审计上与后端工程师沟通（2轮），并形成联调第一版实现清单与可测验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想一步到位把采集链路做成“事件溯源+统一总线”，但怕一上来就把事情搞大了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我目前纠结两件事：\n1）网关上报协议是不是直接 MQTT + protobuf，再接入中心的流处理；\n2）时间戳到底用“采集时刻”还是“到达中心时刻”，我怕后面做工况识别会被乱序影响。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向在网关侧做统一 envelope：`device_id/point_id/ts/value/quality/seq`，再加上压缩、批量、ACK。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@现场边缘工程师 现场这次采集侧到底是什么协议居多？采样频率、网络稳定性、时钟同步能做到什么程度？还有点位质量位你们一般怎么出？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 quality 这块感觉要做个统一枚举，不然中心没法用。我是不是可以网关做插件式解析：Modbus/OPC UA/CEMS 都映射到统一 `quality_code`？顺便在网关侧做“窗口化聚合”减少带宽，比如 1s 点位按 10s 打包。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白，聚合我改成“批量传输不聚合值”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "缓存上我想搞个本地 RocksDB 或者轻量时序库，72 小时保底；同时用一个 WAL 方便断电恢复。这样会不会太重？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 中心侧接入我准备做批量上报+ACK，字段里有 `seq`、源时间戳、质量码、原始状态。你那边建议的幂等键怎么取？ACK 是按批次还是按条目？还有断网补传会产生重复包，怎么处理更稳？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "`最大连续seq` 我担心按点位返回会很大；按分区返回又怕乱序。我是不是可以把 items 先按 `point_uid` 分组再发送，每个批次只放一小组点位？这样 ACK 简单，但请求数会涨。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "安全这块我想顺便上 mTLS，甚至把网关证书放 HSM 里，钥匙轮换自动化；再加个 service mesh……我知道听起来有点硬核，但感觉以后省事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把刚才几个人的信息合一下，准备这么落地：\n- 网关 envelope：`gateway_id/point_uid/source_ts/recv_ts/value/quality_code/vendor_status/seq`；source_ts 用网关采集时刻，recv_ts 是中心接收生成。\n- 传输：批量请求带 `batch_id`；按点位分桶 N=16，每桶独立连续 seq；ACK 返回每桶 `max_contiguous_seq` + `rejected`。\n- 本地缓存：轻量档文件分段（按桶+小时），72 小时；断网补传按桶推进水位；落盘加密。\n- 去重：中心幂等键 `(gateway_id, point_uid, source_ts, seq)`。\n我还想加一层 schema registry 管控字段演进，怕后面加点位会乱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时间同步我能做个简单指标：网关每次 NTP 校时记录 `offset_ms`，超过阈值就把对应时间段的 quality 打成 `STALE` 或加个 `clock_drift` 标记；阈值我先写个初版建议，比如 500ms 或 1s，但标注“待客户制度与压测校准”。\n测试我可以在网关到中心链路中间加丢包率、延迟抖动模拟（iptables 或代理），观察：\n- 中心入库是否出现重复；\n- ACK 水位是否单调推进；\n- 补传后窗口内缺点率是否回到 0。\n不过我不太确定缺点率怎么定义更合理。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就做两类日志：\n- 接入运行日志：批次大小、桶水位、重试次数、完整率/乱序率；\n- 审计日志：只记鉴权结果、配置变更、接入成功/失败的摘要，不落具体 items。\n不过我怕排障时没有明细会很难查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "懂了。我把“抽样”做成受控开关，只给管理员临时开，留 `related_event_ids`。SLO 这块，我是不是要在联调阶段就埋点？比如接入链路 99.5%、建议链路 99.0% 作为初版建议。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有个点：我想把网关侧的缓存从“72小时”扩成“7天”，这样现场再怎么断也不怕。硬盘不够就加盘？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "降级策略我之前只想着模型层，这里也需要。那我加三档：全量缓存、关键点位缓存、只保水位不保数据（极端）。降级全留痕。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按这 6 条去拆实现。schema registry、service mesh 先不碰；HSM 也先当可选增强。N=16 分桶我先写死还是做成配置？我倾向配置化，但又怕把配置中心也拉进来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

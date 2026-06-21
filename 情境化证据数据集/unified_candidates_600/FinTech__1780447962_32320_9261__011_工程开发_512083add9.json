@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在碎单撮合引擎吞吐量压测与调优背景下，与导师围绕锁争用瓶颈、无锁队列实现与伪共享验证持续沟通（6轮），其中在订单簿并发读写与内存布局调优部分与撮合引擎极客沟通（1轮），并最终确定采用MPSC无锁队列、ThreadLocal内存池及JMH基准测试的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我觉得是并发量没给够，线程池再开大点应该能上去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我把synchronized去掉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "订单簿这块并发读写怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "环形数组那种，Cas一下。伪共享我就加点空字段垫一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在可演性算子代码实现背景下，用户与导师围绕算子计算复杂度与总线同步超时冲突的协调方案持续沟通（6轮），其中在精度保证部分与可演性评估专家沟通马尔可夫链及异步复核可行性（2轮），在实时性吞吐部分与总线调度开发工程师沟通同步耗时及粗分可行性（2轮），并形成同步粗分与异步精算复核的折中方案及代码实现约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个算子类，把那些指标都实现出来，比如通关率、死路率啥的，挂上去跑就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，不能超时。我尽量优化代码，写快点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算子计算复杂度能不能降一点？总线怕卡。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "评估专家说要用马尔可夫链，总线这边能跑吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "他们俩冲突了。评估专家坚持要马尔可夫链保证精度，总线工程师说同步跑马尔可夫链会超时崩吞吐。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就，把马尔可夫链放异步？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@总线调度开发工程师 同步流走轻量启发式粗分，异步走精算，这样吞吐没问题吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@可演性评估专家 同步走粗分，异步旁路用马尔可夫链精算复核，这样精度能保证吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "同步粗分控5毫秒，异步精算结果回写图谱触发二次标记。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

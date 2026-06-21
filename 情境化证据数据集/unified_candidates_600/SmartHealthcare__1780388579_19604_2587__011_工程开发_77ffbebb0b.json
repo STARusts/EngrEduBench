@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在ICU高并发性能调优与联调测试背景下与导师围绕防IO阻塞、缓存一致性风险及压测指标持续沟通（6轮），其中在入队与缓存调优部分与后端开发主管沟通（2轮），在压测数据构造与延迟指标部分与质量保障工程师沟通（1轮），并最终形成分级线程池隔离、缓存前置加DB兜底、P99小于200ms的验收标准。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个线程池调调参数呗。压测我就用JMeter跑一把，看QPS能不能上千。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟容忍度我确实没谱，临床那边肯定越快越好。压测数据确实是个坑，随机报文过不了配伍校验，直接报错打不进去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在入队用的单线程池，拉流图每次查库，这性能肯定拉胯。怎么调优？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地缓存？多节点部署状态不一致咋办？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测数据怎么造？我只会用JMeter发随机数，过不了校验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我前两天刚看了JMeter的CSV数据源配置插件，正好能派上用场，不用再傻乎乎手写脚本造数据了，测出来的结果也靠谱点。P99小于200ms记下了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入队要分级隔离线程池，流图拉取加Caffeine本地缓存，短TTL带失效。压测得用脱敏波形CSV驱动，P99得小于200ms，还要看GC停顿。这次压测直接用JMeter的CSV插件，造数据效率高多了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这确实是个坑。但现阶段节点少，先用本地缓存顶一下。要不我先把TTL压短点，比如100毫秒，风险小点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加Redis锁太重了，还得引入新组件。直接查库兜底吧，缓存命中就走快路，没命中或者失效就走DB慢路，这样既快又不会用错状态。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

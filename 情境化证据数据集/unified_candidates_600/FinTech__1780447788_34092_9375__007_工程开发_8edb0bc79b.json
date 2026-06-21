@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在池化信贷穿透溯源系统异构数据适配器开发背景下，用户与导师围绕动态AST解析与策略模式选型、非标SM4解密卡点及解法、适配器压测验证口径持续沟通（6轮），其中在动态解析可行性评估与架构折中部分与微服务研发主管沟通（3轮），并最终确定架构退回策略模式加反射DTO、设计对照实验验证性能及明确联调顺序。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用一套基于AST的动态Schema解析引擎来应对各家银行不同的信贷流水结构，这样以后加新数据源完全不用改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "未来会有几十家，结构千奇百怪。用AST解析虽然首版开发量大点，但扩展性无敌。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差异主要在嵌套层级和字段命名上。推断错误确实有可能，但我可以加一层Schema校验缓存。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我设想的是用JavaCC生成Parser，配合Avro做动态序列化，你觉得这套在微服务架构里好搭吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "策略模式太OO了，不够灵活。不过你说的Debug地狱确实是个问题。那如果我用策略模式做主干，但在策略内部保留一点基于反射的动态赋值，这样算折中吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A银行要求信贷明细在传输前用非标的SM4-CBC模式做密态封装，但我们这边的PSI+TEE架构默认只处理明文特征求交或者标准RSA加密。我之前没碰过这种非标国密和PSI结合的流程，现在适配器的解密模块写不下去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我刚才查了他们给的联调文档，SM4-CBC的IV是动态拼接在密文头的。我今晚得先写个单测，把他们的Java示例代码翻译成Python，验证IV截取和SM4解密能跑通，然后再把这个解密逻辑包装成适配器的前置Filter。这样新增的Filter就能直接接入我们现有的PSI流程了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "控制变量是数据源类型（A银行XML，B信托Text），自变量是序列化方案（动态Avro vs 静态POJO），因变量是单条报文反序列化延迟和PSI对齐前的吞吐TPS。我要验证静态POJO的延迟显著低于动态Avro，p值小于0.05，以此证明策略模式优于动态解析。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构退回策略模式。我先去写A银行的SM4解密单测，然后接B信托的明文适配器。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

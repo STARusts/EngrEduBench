@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘集群协同调度接口联调背景下，用户与导师围绕通信协议、时序同步机制及核心字段定义持续沟通（3轮），其中在端侧通信机制与时序要求部分与边缘计算架构师沟通（2轮），在多机调度时间基准要求部分与群体智能算法师沟通（1轮），并形成基于ZeroMQ+Protobuf及NTP绝对时间戳的联调接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写个HTTP接口把靶窗坐标POST过去，或者直接扔Redis里让调度那边订阅，反正数据量也不大。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧调度接口用什么协议？HTTP太慢的话换啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有啥要注意的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个时间戳不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调度算法那边，输入的时间戳用相对的还是绝对的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通信用ZeroMQ的Pub-Sub，数据格式Protobuf。消息里必须带NTP同步的绝对时间戳，加上靶窗的三维坐标和势态参数。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

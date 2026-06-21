@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在反演引擎路由与调度接口设计背景下，与导师围绕路由机制与接口拆分持续沟通（6轮），其中在路由分发与接口要求部分与算法路由设计师沟通（1轮），并最终弃用API网关，确定自研基于特征与误差的路由分发及上行gRPC与下行MQTT的接口边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想着直接复用API网关，比如Kong或者Spring Cloud Gateway，根据请求里带的地块ID，把数据转发给对应的算法服务就行。这样最省事，路由逻辑都不用自己写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态挂不住的话，我在网关后面加个Redis缓存一下前时刻的状态不就行了？反正网关只管转发，业务逻辑自己处理。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法这边对路由有什么要求？我想用现成的API网关做转发，加个Redis存状态，这样搞行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有类似Triton Inference Server那种现成的框架？它好像能管模型路由和gRPC接口。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "C++写的求解器确实不好塞进去。那是不是反演接口和调度接口得拆开搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "上行gRPC接口里要有地块ID、时间戳、多维感知张量，还要有个字段指定当前精度需求或者模型版本？下行MQTT就是阀门开度、冲洗时长、预期脱盐率这些。路由逻辑我就按专家说的，看误差和负载来切模型。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在异常预警逻辑开发排错背景下，用户与导师围绕预警阈值分区、路由兜底逻辑与链路追踪验证持续沟通（8轮），其中在工艺差异边界判断部分与环境机理建模师沟通（1轮），在误报排错与用例构造部分与测试与效能优化师沟通（2轮），并最终形成按工艺分区阈值、前置路由与最严兜底、边界用例及Jaeger追踪的排错方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果当前指纹跟基准比对差异超过20%，就报警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我没细想，感觉都差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "衰减预警的边界怎么按工艺区分？现在20%一刀切全误报了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种误报怎么排错？测试用例怎么加？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没有，现在全写一块了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "建模师说生化曝气容忍35%，脱硫15%，要分区；测试师说要加工艺路由，按边界造用例。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加在预警判定最前面吧，先判断工艺，再选阈值。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "兜底？就默认走20%？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前日志都是靠肉眼找，特别慢。前两天看同事用Jaeger做链路追踪，我学着配了一下，好像能看到请求走到哪个分支了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就给每个工艺分支打个span标签，跑用例的时候看看是不是按预期走到对应阈值了，不用再翻日志了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，预警阈值从一刀切20%改成按工艺分区，生化曝气35%，脱硫15%；第二，代码入口加工艺类型路由，缺省或异常时兜底走最严的15%阈值；第三，造两组边界值用例验证分区逻辑；第四，接入Jaeger打span标签追踪路由分发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

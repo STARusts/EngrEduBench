@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在视听资产实时拼装联调背景下，用户与导师围绕剧情分支切换时的资产拼装时序控制与版权合规持续沟通（5轮），其中在资产拼装时序与状态过渡部分与前端开发工程师沟通（1轮），在AIGC与开源素材版权拦截部分与合规与版权专员沟通（1轮），并最终形成基于状态机的依赖树加载与入口合规标签拦截两个关键实现点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "根据WebGL渲染管线理论，视听资产拼装就是构建一个Render Pipeline，背景层、人物立绘层、UI层分层渲染。资源调度用FIFO队列做预加载就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跳分支确实会打断预加载序列。我想可以用LRU替换策略，保留最近访问的资产。至于没加载完，可以先显示一个黑屏转场遮罩？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "剧情分支切换时资产拼装的时序到底怎么控制？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "资源包里的图和音频，有些是开源的有些是AIGC生成的，拼装时候要不要管版权？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "拼装引擎联调时，AIGC和开源素材的版权怎么卡？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，资产拼装跟着状态机走，用引用计数和依赖树管理生命周期，用遮罩动画做加载容忍窗口。第二，拼装入口加拦截，无合规标签的资产直接丢弃，不进管线。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

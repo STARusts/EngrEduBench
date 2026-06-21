@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在处方引擎与任务编排的遗留实现治理背景下，用户与导师围绕训练/推理读表边界、禁止raw坐标路径、版本字段结构化落日志与回归校验持续沟通（12轮），其中在推理与训练应读的视图/快照、模型注册表绑定关系及权限审计与日志字段写入细节上与后端开发工程师沟通（3轮），并收敛训练与推理最终读表清单及日志字段规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "训练为啥要读 gps 啊…我感觉把表名换掉就行？日志我就加个 json 打印，差不多吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…特征表？还有气象预报那张。别的我不太确定，反正别去 raw。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就 `feature_store.v1_features`？然后 `weather.forecast`？还有…农事记录汇总 `agri.event_agg`？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "训练读：\n1) `fs.nutrient_feature_v1`  \n2) `meteo.forecast_feature_v1`  \n3) `agri.farm_event_window_v1`  \n推理读：`fs.nutrient_feature_v1` 就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就弄个 `fs.online_feature_view_v1`，推理只查它？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "把相关代码注释掉？或者在配置里把 `raw.plot_boundary` 的连接串删了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 处方引擎这块，线上推理到底读啥表？还有日志里那些 version 字段怎么塞进去？我怕漏。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那训练那边是不是也直接读 `fs.online_feature_view_v1` 就完了？省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "懂了点。那日志里 `dataset_partition` 我就写今天日期？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 后端说推理只查 `fs.online_feature_view_v1` 加 `ml.model_registry`，训练读 `fs.train_feature_snapshot_v1`，再查两个 registry 拿版本号。日志要把 `plot_sid/window_end_ts/model_hash/model_version/feature_version/qc_rules_version/dataset_partition/code_commit` 都塞进去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那…CI 里 grep 一下 `raw.` 出现就失败？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "训练 job：  \n- `fs.train_feature_snapshot_v1`（按 dataset_partition）  \n- `ml.qc_rules_registry`（拿 qc_rules_version）  \n- `ml.feature_registry`（拿 feature_version）  \n- `ml.model_registry`（写回 model_hash/model_version 绑定？）  \n推理服务：  \n- `fs.online_feature_view_v1`  \n- `ml.model_registry`  \n日志：从 view 里拿 `feature_version/qc_rules_version/dataset_partition`，从 registry 拿 `model_hash/model_version`，`code_commit` 走构建注入。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）训练脚本里原来有个 `load_raw_tracks()`，我就把它换成 `load_train_snapshot(partition)`，下游都吃 dataframe 应该还能跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "2）推理那段算连通性的函数就不用了，直接从 `online_feature_view_v1` 拿 `topo_conn_feat_*`。窗口就让请求里带 `window_end_ts`，任务编排把这个传给特征查询。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "视图里放两套字段吧，`farm_evt_7d_*` 和 `farm_evt_30d_*`，然后处方规则里写死用哪个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "训练读表：只读 `fs.train_feature_snapshot_v1`（按 `dataset_partition`），再读 `ml.qc_rules_registry`、`ml.feature_registry`、必要时读 `ml.model_registry` 写绑定信息；CI 里禁止出现 `raw.`，训练账号不允许导出明细。  \n推理读表：只读 `fs.online_feature_view_v1` + `ml.model_registry`，线上账号无任何 `raw.* / controlled.*` 权限，地形连通性和农事窗口都从视图取。  \n日志字段：`request_id, plot_sid, window_end_ts, window_profile, feature_version, qc_rules_version, dataset_partition, model_hash, model_version, code_commit`，不记录明文坐标和逐日轨迹。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

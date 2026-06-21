@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工艺联动控制联调背景下，用户与导师围绕离线回放指标报数、联调闭环（建议-下发-回执-回退）、降级与审计口径持续沟通（7轮），其中在命令契约与互锁/手自切换处理上与联动控制工程师沟通（2轮），在最小联调用例集与验收阈值（含P95与合规日志）上与测试负责人沟通（1轮），并明确单回路联调与适配器改造方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "离线回放…我记得能耗那块大概降了 3% 左右，产盐量波动小了一点点。降级用例，基本都能触发。P95 延迟我看是两百多毫秒。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "约束违例就会拦住执行，变成建议模式。数值我可能记错了，能耗 3 点几，波动…就小了。用例是我点了几次开关，能回到 MANUAL。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这边接口是通的，能收到优化出来的 setpoint。然后我就往控制那边发了，差不多能动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "点位…是蒸发那边的阀门开度。我发过去后，现场那边说有变化。ack 应该有返回个成功吧，超时我没细看，互锁就是失败了就不发？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@联动控制工程师 联调这块命令怎么对？我这边现在就发 setpoint，回执和互锁要怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是要有 cmdId，然后 PLC 回个 ackCode。互锁就当成失败，不再发了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就把互锁码也记一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试负责人 联调这块要测哪些？怎么算过没过？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "了解，就是测模式、回执、互锁、性能。P95 小于 300ms 我就当过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "回路就先蒸发进料阀吧，比较直观。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "降级后界面提示一下“降级了”，审计里记一下时间和人。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "第2点…必须有 cmdId、点位 targetTag、value，还有 ttl。回执有 ackCode 和 actualValue。reasonCode 是互锁那种原因。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我按这套做。站点信息我也只用编码，不写真实名字，EXECUTE 也先卡权限。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在流场引擎接入数据源头的背景下，用户与导师围绕深仓传感数据的解析清洗、插值方法、丢包重传及接口格式持续沟通（6轮），其中在深仓通信特性与清洗策略部分与边端网关联调专员沟通（2轮），并最终确定边缘清洗策略、重传上限与接口格式。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个接口把温湿度拉过来塞进引擎呗"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加校验位，错了重发。数据脏就直接扔了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "仓里传感数据丢包多，怎么搞最快？直接丢不行，初场会废。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我网关加个均值滤波，跳变就插值补上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "5个点窗口，线性插值多快啊。算力不够就换好点的网关呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算力不行换不了。协议层校验，跳变插前值。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "插前值加跳变阈值，重传3次超时算丢包，接口用Protobuf。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

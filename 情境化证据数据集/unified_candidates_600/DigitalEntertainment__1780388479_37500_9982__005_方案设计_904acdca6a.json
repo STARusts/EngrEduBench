@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘算力受限的多模态输入解析接口设计背景下，用户与导师围绕解析降级方案及云端异步意图与剧情转移边的匹配机制持续沟通（5轮），其中在模态拆解与降级部分与多模态算法工程师沟通（1轮），在网关层快慢双通道接口切分与字段定义部分与系统架构师沟通（1轮），并最终形成快慢双通道多模态输入解析接口定稿。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "上端侧多模态大模型啊，像 LLaVA 那种，全模态投影对齐，W4A16 量化一下端侧肯定能跑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘算力卡死在 2TOPS，还要做多模态输入解析，大模型肯定没戏，咋弄？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开搞。边缘跑轻量 ASR 和规则，重活丢云端。接口也拆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个请求 ID 呗？requestID 带回来不就匹配了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "剧情流转要瞬时信号，但多模态解析一部分在边缘快出，一部分在云端慢出。网关层接口怎么设计，才能让云端慢回来的结果还能对上当时的剧情转移边？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口分两级，Primary 和 Supplementary。Primary 是边缘快数据，Supplementary 是云端慢数据，要带 node_id 和 edge_id。如果引擎已经按 Primary 转移了，Supplementary 就丢弃。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入解析接口分快慢双通道。PrimarySignal 带 requestID、时间戳和边缘结构化数据；SupplementarySignal 带 requestID、图谱节点 ID、边 ID 和云端意图特征。剧情引擎优先消费 PrimarySignal 驱动流转，SupplementarySignal 做补充评估或丢弃。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

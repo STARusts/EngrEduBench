@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农机位姿数据接入联调背景下，用户与导师围绕报错排查、带宽与兼容性冲突协调及强校验取舍标准持续沟通（7轮），其中在确认报错及同步更新部分与测试工程师沟通（2轮），在追问裁剪原因及要求必选字段完整部分与嵌入式开发工程师沟通（2轮），在反馈砍字段问题及提出必选与可选修改方案部分与通信协议专家沟通（2轮），并最终形成Schema强弱校验契约及核心必传字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按接口文档对齐呗，让嵌入式按协议把数据发过来，测试那边写脚本收，我盯一下进度。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "让他们自己抓包看日志，报错就改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联调报错具体是什么情况？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你这边数据包怎么少字段了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "嵌入式那边说带宽不够，把你定的扩展字段砍了，现在联调跑不通。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "感觉都得按协议来吧，不然以后更乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要不让他们妥协一下？协议这边保留字段定义，但允许嵌入式暂时不传？或者嵌入式搞个压缩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "协议Schema里加必选和可选标记，嵌入式必须发必选项，可选项看带宽发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "协议Schema改成必选和可选两部分。核心经纬度和航向角做必选强校验，扩展属性改Optional允许缺失不报错，这样兼容性和带宽都能保住。你看这样改行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "必选的经纬度、航向角和速度必须按格式传，不能再裁剪了，扩展字段你根据带宽情况选传。赶紧改一下发包逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "协议会更新Schema放宽容校验，嵌入式会保证必选字段完整。你们反序列化脚本也同步更新一下，准备重新跑联调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "经度、纬度、航向角、速度、时间戳，这五个必须传。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

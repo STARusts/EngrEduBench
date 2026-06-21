@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在碳迹溯配引擎偏差飙升及负值排查背景下，用户与导师围绕负值成因、不可信数据处理策略及合规性持续沟通（6轮），其中在时间戳错位成因及降级兜底策略部分与能效审计师沟通（2轮），在数据丢弃红线及MRV合规要求部分与碳合规审计师沟通（2轮），并最终形成异常数据隔离、降级粗粒度挂载兜底及异步重算的修正策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我刚扫了一眼Grafana，是几个边缘网关传上来的充放电周期数据，算出来的碳迹是负的。偏差超过了15%。我想在碳引擎那边加个if判断，把绝对值大于20的直接过滤掉，别让它污染大盘。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大盘上这几个负值是怎么回事？我看输入数据都在合理范围啊。负值我直接drop掉行不行？算污染数据。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "打标签隔离我会写，加个`is_trace_valid: false`字段。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但重算的话，全量重算云端算力扛得住吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能不能先存起来，等半夜低峰期再跑重算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果fingerprint_collect一直关着，碳因子挂载怎么兜底？不能一直错位吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那现在的处理逻辑就是：1. 当前异常数据全打`is_trace_valid: false`隔离；2. 降级期间碳因子挂载切到分钟级粗粒度兜底，防止再出负值；3. 异步任务用粗粒度因子重算这批错位数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这样处理符合MRV要求吗？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

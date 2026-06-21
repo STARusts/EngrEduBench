@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在联邦训练安全方案设计背景下与导师围绕梯度防泄漏、模型抗毒化及隐私预算分配持续沟通（6轮），其中在攻击原理与基础防御部分与模型安全审计员沟通（1轮），在三方算力约束下的防御选型部分与模型安全审计员沟通（1轮），并最终形成Median鲁棒聚合、L2裁剪加微噪防泄漏及隐私预算按比例分配的防御基调。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "传梯度不是有SSL加密吗？链路都加密了应该推不出原始数据吧。至于乱喂数据，我在入口加个格式校验，字段不对直接打回，这样行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联邦训练里拿到梯度怎么反推出数据？还有那种格式对但值是坏的语义投毒，常规校验拦不住，工程上一般怎么防？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "预算超了我确实没算过。Krum开销大啊？那我三方SS场景下是不是跑不动？裁剪阈值我也没经验，随便设一个怕把模型裁废了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们只有三方参与，算力有限，Krum和Median哪个更适合？还有梯度防泄漏，裁剪和加噪哪个对模型精度影响小点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Median比Krum轻，三方用Median；防泄漏主选L2裁剪，配一点点DP噪。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我算不来总epsilon，这得看前面PSI那步用了多少。要不我让两步共享一个总epsilon，比如整体定个上限，两边按比例分？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抗毒化Median，防泄漏L2裁剪加微噪，epsilon按比例分。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

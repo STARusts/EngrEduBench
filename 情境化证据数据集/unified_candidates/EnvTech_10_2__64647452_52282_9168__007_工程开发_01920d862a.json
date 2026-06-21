@@ -1,0 +1,117 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在循环水质数字孪生与合规管控平台进入工程开发背景下，用户与导师围绕网关接入如何稳定上报、合规可追溯、证据ID与引用链对齐及验收用例持续沟通（6轮），其中在接入分层/最小字段/离线与签名策略上与物联网架构师沟通（5轮），在端到端测试用例与拒收原因码上与测试工程师沟通（2轮），并收敛网关侧实现清单与payload必备字段。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "设备协议适配和网关这块，有没有能直接抄的接入模板？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "协议就…常见的吧，Modbus、OPC之类。字段就pH、COD、氨氮、流量。引用规则我打算都放到消息里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就三类：Modbus、OPC UA、还有HTTP。实现方式…就用现成库连上读寄存器、订阅节点、再发HTTP。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 网关接入这块，给个能跑的规范行不行？我就照着做。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "quality是啥？我能不传吗，省事。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那离线咋办？我看别人就断了就算了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "sign是签名？是不是搞成JWT就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记下了。那引用ID那堆东西，要我放网关里吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "adapter_version我随便写个1.0行吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。大概就是：南向Modbus/OPC UA/HTTP，北向MQTT，字段device_id那些，再加个HMAC签名。引用ID那几个不用塞网关，网关给measurement_id就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "measurement_id我就用时间戳拼一下device_id？重复上报就…平台去重？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "A吧，hash看起来省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断电就从0开始？撞了就撞了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用raw_packet_hash吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "帧我直接存全量行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "六项…measurement_id、raw_packet_hash、ts、device_id、point_id、value？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那阈值版本、动作库版本这些，我就不管了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我payload就塞这些字段。JSON就行吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验收…就连上设备，读到pH就算过？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我写步骤可能写得很烂。你让我去问谁？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 网关接入这块要怎么测？给我几条用例，我照着跑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "拒收原因码也要？我没写过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 用例有了：正常、CRC/超时、断网回放、版本追溯、签名篡改。还有拒收码三种。这样够了吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能做Modbus和MQTT上报，OPC UA我可能要抄库。签名我照着HMAC写。quality我尽量做。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "字段有点多，我先按这个来。adapter_version我就用git提交号写进配置里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

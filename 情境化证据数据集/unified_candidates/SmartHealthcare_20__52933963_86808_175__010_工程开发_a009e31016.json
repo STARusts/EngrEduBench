@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在病理高清切片云端流媒体分发链路开发背景下，用户与导师围绕分发架构选型与原型验证计划持续沟通（3轮），其中在WebRTC可行性、并发成本与浏览器渲染风险部分与系统架构师沟通（2轮）、与前端开发工程师沟通（3轮），并确定Tile-HTTP/2为主配合WASM解码加速与DataChannel标注增量同步的混合方案方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前对比过几种路径。目前的主流做法是图像金字塔配合 Tile-based 静态缓存分发，走 HTTP/2 比较稳。但我有个跨界想法，借用云游戏的思路，尝试用 WebRTC 实时推流渲染后的视口。这种方式对终端内存压力极小，而且在弱网环境下的自适应丢帧处理非常出色，我想以此解决医生在 40 倍率下拖动卡顿的问题。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "老师提到的像素丢失确实是个硬伤。我想请教一下，如果我们采用 WebRTC 配合 DataChannel 传输原始位图的增量补丁，目前的架构能支持多大的并发？前端那边在处理高倍率纹理切换时的帧率损耗，能不能控制在 60 帧左右？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "架构师提到的成本问题，如果我们引入一个热点区域预测逻辑，只对医生大概率点击的区域进行预渲染和流式缓存，能不能把成本压到可接受范围内？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这样，我提一个折中方案：核心切片分发依然走成熟的 Tile-based HTTP/2 确保基本盘；但我们引入 WebAssembly 进行前端解码加速，同时在 AI 辅助诊断结果动态更新的图层，尝试用 DataChannel 进行增量同步。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "兼容性我调研过了，WASM 在目前主流医疗终端的覆盖率没问题。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以负责编写 WASM 的多线程解码逻辑，不占用你原本的 UI 开发排期，你只需要负责标准的接口对接。这样既解决了缩放卡顿，也没给你的任务量加码，怎么样？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在的技术路径明确了：我们确定采用“Tile-HTTP/2 为主 + WASM 解码加速 + DataChannel 实时标注流”的混合架构。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这周会先做一个针对 100ms 延迟环境下的缩放流畅度实验，验证帧率是否能稳定在 60fps。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "另外我也意识到自己对浏览器内存回收机制不够精通，在做 WASM 内存共享时得恶补一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

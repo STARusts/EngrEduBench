@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在术中预警推演服务压测P99延迟飙高背景下，与导师围绕延迟根因定位、有界队列参数设定与熔断阈值对齐持续沟通（6轮），其中在偶发延迟毛刺抓取与锁竞争排查部分与性能调优攻坚手沟通（2轮），并最终形成抓火焰图排查根因及按QPS安全水位算队列深度的排查方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P99有点高，飙到1.5秒了，触发熔断。平均倒是800毫秒。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了下grafana，就是推演服务那块CPU突然拉满。我猜是图谱查询并发上来以后卡住了，或者模型推理那块没排开。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测并发一高P99就飙到1.5秒，CPU拉满，这种偶发的延迟毛刺怎么抓？我本地跑单测都很快的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那要是连接池打满，我是改大池子还是加排队？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "专家说要挂Profiler抓火焰图，看是不是Malloc锁或者连接池等锁。不能直接加大连接池，得加有界队列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算子不稳定我没看。我只看了接口耗时。如果算子有问题，是不是得找算法那边？队列超时告警，我可以在Sentinel里加个规则。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就先设个100试试？超时设200毫秒。总耗时不超过1秒就行吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我再去压一下图谱单点，拿到QPS再算队列深度。火焰图我这就去加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两步：第一，压测环境挂Profiler和eBPF抓火焰图，看是不是Malloc锁或者连接池等锁；第二，压测图谱单点拿QPS极限，按安全水位算队列深度，队列超时暂定200毫秒，配合Sentinel打告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

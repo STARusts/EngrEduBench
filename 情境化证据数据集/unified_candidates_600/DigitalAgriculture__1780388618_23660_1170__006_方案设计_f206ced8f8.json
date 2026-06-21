@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在处方图下发与通信安全设计背景下，用户与导师围绕通信协议选型、防篡改机制及弱网验证实验设计持续沟通（5轮），其中在通信安全与防篡改实现部分与安全与通信设计师沟通（1轮），并最终形成MQTT(QoS 2)+JWT+HMAC通信方案及Netem弱网验证实验设计。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "咱们农机端也上零信任？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力扛不扛得住我确实没算过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "处方图下发用MQTT加TLS够不够？防篡改咋整？零信任能上吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MQTT QoS 2，加JWT和HMAC签名。零信任太重了用不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Netem加延迟和丢包。变量就设丢包率，从1%到20%吧。测处方图下发成功率，每个丢包率发50次？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "通信方案：MQTT(QoS 2) + JWT鉴权 + 载荷HMAC签名。验证实验：用Netem模拟弱网，自变量是丢包率(1%-20%)和延迟抖动，因变量是下发成功率和哈希对齐率，每组合测200次。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

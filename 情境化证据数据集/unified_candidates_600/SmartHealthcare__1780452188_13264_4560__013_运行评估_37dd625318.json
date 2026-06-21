@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在推演集群线上部署验证背景下，与导师围绕流式计算稳定性与推演结论统计有效性持续沟通（7轮），其中在集群监控指标与熔断机制部分与运行保障工程师沟通（2轮），在有效性统计验证方法部分与临床疗效评估员沟通（1轮），并最终形成包含积压率、发散率熔断及效应量校正的部署验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "稳定性我打算看CPU和内存，用压测工具打点体征数据进去，看延迟。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "统计有效性是啥？看推演出来的阻截建议准不准吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就打算对比一下推演建议和医生实际处方，看一致率。置信区间这些我上学学过但早忘了，得查查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演集群部署上去后，除了CPU内存，还要盯哪些指标？我主要是怕体征数据流进来后推演服务扛不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "发散率高了是不是要熔断？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "推演结论的有效性怎么算？导师说要算置信区间和效应量，我只会算一致率。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署时重点盯推演任务积压率和模型发散率，发散了就熔断重置。有效性验证得拉历史对照组，算衰弱指数下降的95%置信区间和Cohen's d效应量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不会算效应量，只会调包算p值。这次得补上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这两天用Python的scipy包把历史对照数据重跑一遍，写个函数算Cohen's d，周五前加到评估脚本里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "部署验证就按这三点来：1. 积压率低于5%；2. 发散率低于1%超限熔断；3. 有效性用历史对照加t检验加效应量验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

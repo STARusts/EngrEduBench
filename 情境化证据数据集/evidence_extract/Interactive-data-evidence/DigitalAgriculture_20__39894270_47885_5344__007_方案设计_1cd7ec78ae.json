@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在气味指纹风险告警的边云协同推理链路方案设计背景下，用户与导师围绕边云职责切分、在线/弱网降级、幂等与解释字段及事件接口骨架持续沟通（11轮），其中在最小闭环与断网队列去重/降级策略上与边缘计算工程师沟通（3轮），在API权限审计落地与hash可识别性风险上与合规与数据治理官沟通（2轮），并最终确认trigger-events上报接口与EVIDENCE_REQUEST取证任务的规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按链路拆一下：节点采集到snippet，边上做特征化生成fingerprint_vector，先跑一个轻量筛查得到risk_score。低于阈值只本地记账，超过阈值生成trigger事件上云，云端再融合天气/历史/同地块近邻做二次判断，最后落工单。  \n我担心的是我想把链路做成“可插拔推理图”，边上也能跑不同模型版本，云上再跑更重的，这样以后扩展快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "时延我猜从采到出“疑似风险”最好在10秒内，不然现场没意义。带宽预算…我们上云的不是原始snippet，主要是vector和少量元数据，单次几百字节到几KB。断网最低要求：能在本地继续判断并缓存事件，恢复网络再补传，不能丢触发记录。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在线：采集→边缘特征→边缘初筛→触发事件（含vector、risk、token）→云端二次推理→工单。snippet本地存30-90天用于复核，云端默认不收snippet，只收派生特征和告警字段。  \n弱网/断网：边缘初筛照跑；触发事件先写本地队列，带上本地snippet引用；网络恢复补传事件，云端再推理，必要时再发“补采样/复核”任务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trigger_id我想用雪花ID这类全局唯一，或者UUID。版本对齐可以在事件里带edge_model_version、feature_schema_version。解释字段我能想到：top_k特征贡献、相似历史案例ID列表、环境上下文摘要。  \n但我又想搞得更强一点：边缘把snippet做局部哈希签名上云，这样云端可以追溯数据一致性。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 边云协同推理链路里，边缘初筛+云端复核怎么切分最稳？弱网断网时你会怎么设计队列、重试、降级，避免重复触发和爆量？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "dedup_key用什么合适？我怕光靠UUID没法去重。还有reason_code怎么设计才不被认为是算法细节写死？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "高阈值本地红告警这个我喜欢，但会不会漏掉一些需要及时处理的中风险？我想把边缘做成“多级告警+可订阅策略”。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 API层的权限与审计要怎么落？我们有token化地块/设备标识、snippet短留存、不上报真实地块名。触发事件里放dedup_key和可能的hash会不会踩合规线？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解成：hash最好不出边缘；如果要出，也得带轮换salt，且云端只短期用。审计方面，解映射是单独服务，不能让工单API顺手查到真实地块。  \n我还想加一层：对云端复核服务也做“决策可追溯签名”，避免被质疑改结果。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "回到导师这里，我倾向于把边云分三层：边缘实时、云端复核、云端学习离线。边缘两级告警，断网只在high阈值上屏。幂等靠dedup_key，hash尽量留边缘本地；权限把解映射隔离，所有敏感读操作强审计。  \n但我还是有点想把“可插拔推理图”留着，怕后面扩模型麻烦。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "边缘上报我想做成`POST /edge/events`：请求里有event_type=odor_risk_trigger，包含trigger_time、device_token、field_token、fingerprint_vector、risk_score、reason_code、edge_model_version、feature_schema_version、本地snippet_ref（只是引用）、network_state。响应给edge一个server_event_id和dedup状态（accepted/duplicate），再给一个云端decision的轮询地址或回调配置。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "ttl_hint_days我之前没想加，但挺好，能提醒云端别强留snippet。snippet_ref_local我担心工单关联时云端拿不到snippet，复核会缺证据。是不是要有个“申请取证”的反向任务，让边缘按工单ID上传snippet片段？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把我想要的“推理图”退一步，写成“版本扩展字段预留”，比如payload里允许`extensions`但不保证解析。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "KPI上我建议三条：边缘触发到云端接收P95<3s（在线），断网补传成功率>99%，duplicate率可控（比如<2%）。这算不算太拍脑袋？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "试点里我会做三种网络条件：正常4G、弱网限速、断网30分钟。每种跑固定数量触发事件，比如每设备每天50次模拟。看三项：  \n1）ingest延迟分布（event_time到server_time差）  \n2）补传队列堆积长度与清空时间  \n3）dedup命中率和误去重（同一时间桶不同snippet被误判重复）  \n误去重这块我不太确定怎么判，可能得在边缘保留一段本地日志用于对照。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认三件事：  \n1）职责切分：边缘只做特征提取+轻量初筛输出risk和reason_code；云端做多源复核出decision并开工单；离线层做阈值校准和漂移评估，不参与实时链路。  \n2）上报接口：`/v1/edge/trigger-events`里带trigger_id或dedup_key、event_time、device_token/field_token、fingerprint_vector<=128、risk_score、reason_code、版本字段、snippet_ref_local、可选env_summary；响应只回ingest_id和accepted/duplicate/rejected及原因，不在这里塞决策回传。  \n3）可用性：边缘有event_outbox，至少一次投递，云端靠dedup_key幂等；断网只对high阈值本地上屏，其余observe；需要snippet时走下行`EVIDENCE_REQUEST`任务，且受权限与审计控制、短留存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

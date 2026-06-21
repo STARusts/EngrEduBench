@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在边缘声学阵列与硬件接口规范设计背景下，用户与导师围绕阵列规格、功耗约束与接口安全隔离持续沟通（4轮），其中在阵列拓扑与接口选型部分与声场感知架构师沟通（2轮），在TDM接口规范与TEE映射部分与边缘算力规划师沟通（1轮），并最终形成8阵元稀疏阵列、TDM接口规范及DMA直写TEE隔离的设计决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得阵列规格得拉满，直接上64阵元的MEMS麦克风阵列，做高精度波束成形，空间分辨率才能好。接口走PCIe，带宽够大，原始多通道PCM数据全量进TEE，一点不丢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我打算用64阵元MEMS做波束成形，接口走PCIe，但这好像算力吃紧。在边缘侧做声纹图谱提取，阵列拓扑和接口有没有更合理的方案？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "稀疏阵列确实省电，但8阵元波束成形角度分辨率会不会太糙？TDM接口我懂了，同步性好。那数据分流具体怎么做？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "但我还是担心8阵元分辨率不够，误报率会上升。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "TDM接口进TEE的DMA分流具体怎么配？采样率和通道映射这块有什么讲究？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "阵列拓扑：放弃64阵元，改用8阵元稀疏阵列，降低功耗，满足空域采样要求。硬件接口：用TDM总线替代PCIe。规范细节：48kHz采样率锁相同步，32bit位深，前8个TDM slot给麦克风，后续留给控制反馈。数据隔离：TDM收发器DMA直写TEE非缓存RAM，普通OS无访问权限，彻底切断原始数据泄露路径。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

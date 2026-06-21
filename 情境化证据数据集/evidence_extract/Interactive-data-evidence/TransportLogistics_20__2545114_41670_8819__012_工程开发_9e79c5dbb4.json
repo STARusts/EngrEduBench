@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "交通物流",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在货厢重组状态机因RSSI波动触发死锁的修复背景下，用户与导师围绕异常归因、验证口径与修复方案持续沟通（6轮），其中在压测崩溃率与重传模拟设定上与自动化测试员沟通（3轮），在实车对接触点抖动对总线干扰上与现场工程支持沟通（1轮），并敲定幂等化Request-ID与状态机非法跳转拦截及复测安排。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看了。我正盯着那段重构握手的代码，逻辑上确实在信号重连瞬间容易产生状态位冲突。但我感觉光改代码没用，硬件那边反馈说传感器的底层滤波也有延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@自动化测试员 你那边模拟出的重放成功率现在是多少？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前用逻辑分析仪挂过边端节点，发现是锁定指令下发后，反馈包没回来，状态就卡在“待确认”出不来了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这个我还没算得那么细。我刚才尝试加了一个重试计数器，但效果不明显。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@现场工程支持 你在实车环境测试时，货厢物理对接后，传感器的电平信号跳变是不是也会干扰通信总线？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然模拟器和实车都出问题，那咱们得定个统一的验证口径。我刚在查 MQTT 协议的 QoS 级别影响，发现咱们在重组握手时用的 QoS 1 可能会导致消息重复，从而触发重复锁定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "前天晚上我把协议规范里关于“重复消息处理”那块重读了一遍。我发现咱们在处理异常重组时，没考虑到边缘网关在重连后会重发未确认的 PUB 包。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我打算把重组序列号改成幂等的，这样不管重发多少次，逻辑状态都不会乱。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想在测试脚本里加一个专门的变量控制，模拟不同频率的消息重发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@自动化测试员 咱们能把模拟器的重传频率调高到 500 毫秒一次吗？我想看看幂等锁能不能扛住。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想的是，只要能在 3 次重传内完成状态同步，且不出现重复扣费或重复锁定指令，就算通过。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "至于具体的误差来源，我现在说不太准，可能得看运行日志里的时间戳偏移。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，我写这类异步回调的时候经常心里没底。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备这两天找几个开源的高并发网关案例，重点看下他们的状态机是怎么防止竞态的。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这次改完我会在代码里加详细的 Trace 日志，方便后续复盘。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，把重组握手包增加唯一的 Request-ID，实现业务幂等；第二，在状态机里增加“非法跳转”的拦截逻辑，防止从待确认直接跳到初始化。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

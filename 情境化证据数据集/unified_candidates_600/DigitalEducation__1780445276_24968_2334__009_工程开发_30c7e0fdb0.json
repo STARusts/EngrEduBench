@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微动势提取到图谱入库联调开发背景下，用户与导师围绕增量哈希链拦截时序与脱敏差分隐私对照实验的代码组织与实现逻辑持续沟通（9轮），其中在入库前拦截层级部分与本体衍编工程师沟通（1轮），在脱敏epsilon对照实验联调部分与测试联调指挥沟通（1轮），并确定提取侧输出端同步拦截与推流打标算子路由方案及先编写哈希链单测demo。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在提取完特征后，调一下脱敏函数，然后再调入库接口，哈希校验也放进去。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写个开关控制一下？跑两遍看效果。哈希校验我就加在入库函数开头，try一下不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "入库前的增量哈希链同步拦截，具体要在哪一层写？是入库函数里面加个判断吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "脱敏的epsilon对照实验，开发期联调怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "入库拦截要在提取侧输出端做，推流进队列前验；脱敏实验要做分流打标，不同epsilon走不同算子。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "因为数据在队列里攒着，到入库侧时已经晚了，所以得提前拦。时序就是先算哈希，不对就扔，对再进队列。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前没写过这种链式校验的代码。我缺哈希链拼接的实现经验。我去搜一下类似的防篡改链代码案例，自己先写个单测demo跑通，再往系统里加。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是加个A/B测试的路由逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "标记我会加，就是特征包里塞个实验组ID。算子路由我找测试联调指挥对一下接口。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

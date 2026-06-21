@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在排涝机组通信预算严苛背景下，用户与导师围绕自组网协议选型、数据流降维及容错取舍持续沟通（7轮），其中在低成本抗动态拓扑协议及容错机制部分与无线组网协议工程师沟通（2轮），在窄带传输边缘数据降维部分与边缘系统架构师沟通（1轮），并最终确认Sub-1G窄带TDMA协议、特征降维数据流及插值容错妥协方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "80块单机成本？Wi-Fi和5G模组直接出局了。只能搞Sub-1G或者蓝牙。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "单机通信预算卡死80块，还要抗机组高速移动和拓扑变化，延迟还不能炸，有啥便宜协议能顶住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压缩怎么做？推演出来的网格数据量挺大的，压狠了网关还怎么调度？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只传变化大的地方？或者只把水最深的几个点传回去？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "窄带自组网传不了全量径流网格，边缘侧怎么降维提取特征？还要保证网关能拼出调度依据。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传质心和极值向量，这招省流量。工程师说用Sub-1G加TDMA，数据流只传热点质心坐标和梯度极值，指令用2字节位图。这样80块钱能搞定，延迟也稳。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时隙废了就跳过？数据丢了就重传呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "保指令下发和机组核心位置，牺牲网格全量数据。时隙废了就发个心跳占位，网关没收到心跳就把这机组标离线，时隙回收。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "插值兜底，这个好处理。那自组网协议就是Sub-1G私有TDMA加心跳保活；数据流上行只传质心坐标和梯度极值，丢了不重传靠网关插值；指令下行极简位图编码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在质权并发登记性能调优背景下，用户与导师围绕并发瓶颈定位、MQ选型与削峰、快速失败兜底及验收指标持续沟通（6轮），其中在并发控制逻辑部分与核心业务开发沟通（1轮），在异步改造与压测权衡部分与高并发调优工程师沟通（2轮），并形成同步转异步、Kafka削峰、Redis细粒度锁及快速失败的调优方案与验收指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "之前单机压测登记接口，TPS一过800就开始大面积超时，数据库连接池也很快报满。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "质权登记入库这块，并发控制是怎么处理的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种同步写库加粗粒度行锁，交割高峰怎么扛？要怎么改？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前项目只用过RocketMQ，但这次交割场景要求极低延迟。我昨天刚看了Kafka的零拷贝机制，理论上更适合这种高吞吐并发登记，但我没实操过Kafka的调优，不太敢直接定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果用Kafka替换RocketMQ，零拷贝能减少网络IO，高吞吐应该能扛住交割峰值。但Kafka消费端处理不过来还是会积压。可以配合Redis锁做快速失败，拿不到锁的登记请求直接拒绝，不让它进队列，这样能保护下游。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑两组对照测试？一组老同步逻辑，一组新异步逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "调优方向：登记接口同步转异步，用Kafka做削峰；防重锁从数据库行锁改为Redis细粒度分布式锁；拿不到锁的请求快速失败拒绝；消费端做幂等校验。验收指标：对照压测，TPS目标提升一倍，P99延迟涨幅不超过10%，数据库锁等待时间下降90%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

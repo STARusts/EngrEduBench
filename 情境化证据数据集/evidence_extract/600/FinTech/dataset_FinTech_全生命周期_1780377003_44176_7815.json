@@ -1,0 +1,551 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在密态联邦异构信贷风控引擎需求梳理背景下，用户与导师围绕业务痛点、可检验假设、异构特征对齐及核心约束持续沟通（8轮），其中在多头借贷痛点与合规限制部分与信贷产品经理沟通（1轮），并形成欺诈拦截率提升15%的可检验假设、异构特征映射表任务及包含时间窗口的密态风控核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多头借贷这种破事，不就是因为银行间不共享数据嘛，用联邦学习套一下，立马就能查出来谁在多处借钱，很简单的事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@信贷产品经理 你来说说，多头借贷除了查不到数据，还有啥大不了的痛点？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是坏账率呗。假设就是用了我们的引擎，坏账率肯定下降。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在相同测试集上，密态聚合特征对欺诈拦截率的提升，比只用单域特征高至少15%。如果没高15%就算失败。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下周给你画个表。我把同义词归归类，看看哪些字段对不上，再找几个业务文档扫一眼。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "约束一：明文数据绝不出域，只能密态交互。约束二：防同一时间窗口内的跨机构多头申请，不能只看逾期。约束三：特征对齐得解决业务口径不一致的问题。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在跨域数据合规研判背景下，与导师围绕密态交互的法律认可底线与防推理约束持续沟通（4轮），其中在授权覆盖与推理攻击防范部分与金融合规师沟通（3轮），并最终形成授权穿透参与方与差分隐私加噪两条战略级约束纳入需求基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这有啥好研判的？数据都在本地加密算，谁也看不见谁的，肯定不违规啊。我觉得这步可以直接跳过。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@金融合规师 是不是数据不出域就绝对合法？我觉得肯定是，你给个准话。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "授权加个勾不就完了？特征对齐就对几个字段名，能泄露啥统计？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "反正明文没出去，推理就推理呗，他又拿不到具体人。我觉得不用管这么多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加一条，用户授权必须把所有参与方都写进去呗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防推理，就，就限制查询次数呗。一天只能查一次，谁也推不出来。这总够轻量了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以结论就是：授权穿透所有参与方，查询加个噪。"
+              }
+            ]
+          },
+          {
+            "microScene": "在联邦风控商业模式闭环背景下，用户与导师围绕多方利益分配、算力成本与激励相容问题持续沟通（5轮），其中在激励不相容难题部分与商业分析师沟通（1轮），在保底接受度与特征质量要求部分与信贷产品经理沟通（1轮），并最终形成低保底加成效分成及劣质特征惩罚的折中商业约束策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分钱还不容易，按调用次数给钱呗，他们有数据肯定想赚这钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分成机制怎么搞？他们总不能既要又要吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那就给点保底，剩下的看效果，底薪加提成呗，多简单。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "业务方能接受保底吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "不保底不玩，保底又怕给垃圾数据。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就低保底，只够覆盖他们改造成本，大头看效果。IV高的多分，IV低的不仅少分还要扣保底。"
+              }
+            ]
+          },
+          {
+            "microScene": "在银企数据孤岛与互信破局背景下，用户与导师围绕互信痛点、授权信任锚点设计与数据反噬解决持续沟通（8轮），其中在互信痛点分析部分与金融合规师沟通（1轮）、与信贷产品经理沟通（1轮），并最终形成密态计算定向授权与联邦风控诊断反哺两条破局需求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "联邦学习不传明文，传个梯度过去能看出啥。他们要是造假，风控模型直接拒批不就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "银企互信到底卡在哪？签个协议授权不就完事了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就加个条款保证不乱查、不抽贷呗，写进合同里，出事赔钱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "搞个三方认证机构呗，或者弄个区块链存证，现在不都流行这个吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就搞个临时Token呗，过期作废。银行只看结果，不看原始数据，这样企业就不怕了呗。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一，授权搞成定向的，只算不给明文，凭证过期作废；二，给企业出个体检报告，让他们觉得有便宜占。"
+              }
+            ]
+          },
+          {
+            "microScene": "在异构信贷风控信审战略制定背景下，用户与导师围绕客群差异化分层与验证口径持续沟通（5轮），其中在风控分层诉求与最小实验设计部分与信贷产品经理沟通（2轮），最终确定四个信审池及对照组设计，并决定补齐KS指标短板。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "你们业务端到底要分几层？我觉得两层够了，搞多了没意义。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我不懂KS具体咋算，平时就看看通过率。这块我确实短板，我今晚回去翻那本《互联网信贷风控》，把KS和AUC的公式看明白，明天分层阈值我就先拿书上的基准套。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "样本要多少？对照组咋弄？我得去补KS了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就按5000来。小微、消费优质、消费次级、欺诈高危，四个池子。对照组用本地，实验组加联邦。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在密态联邦异构信贷风控引擎方案设计背景下，用户与导师围绕TEE与MPC架构选型、时延与合规权衡、对照实验设计及安全知识盲区持续沟通（6轮），其中在跨域信任根与选型风险部分与隐私架构师沟通（1轮），并形成修正架构假设、跑对照实验及补充安全机制知识的行动计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构选型嘛，直接上TEE不就完了，硬件隔离多省事，跑得还快。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "怕什么，签个协议不就行了。业务要的是出分快，MPC那套密码学算法慢得要死，业务才不管你黑盒白盒。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@隐私架构师 TEE和MPC选哪个？我觉得TEE够用了，MPC太慢不想用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "MPC合规好但慢，TEE快但黑盒。那就核心特征走MPC，其他走TEE，折中一下不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是混搭能提速呗。对照组全TEE，实验组混搭，看看时间差多少。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "侧信道攻击是啥？我怎么知道黑盒有没有后门？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先跑对照实验，看P99时延和KS，同时补那两个知识点。"
+              }
+            ]
+          },
+          {
+            "microScene": "在密态异构特征对齐设计背景下，用户与导师围绕对齐方案与验证逻辑持续沟通（5轮），其中在特征安全对齐方法部分与算法设计师沟通（1轮），在对齐合规边界部分与金融合规师沟通（1轮），并最终形成基于PSI求交、Embedding映射、自动匹配复核、合规审查脱敏及12个月时序切片的对齐方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这有啥棘手的。维度不一样就补零对齐呗。语义上大家都是做信贷的，字段名大差不差，拼一起跑模型不就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "搞个映射字典让业务自己填啊。密态补零反正都是0，有啥难的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我觉得搞个映射字典让业务自己填，密态补零就搞定了，对吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规这边呢？对齐个特征还能有风险？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不过KS跌穿确实不行，补零这招算废了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "时序就按时间窗切。字典肯定得要，但让算法出个自动匹配接口，业务只做复核。补零改成缺省值填充。合规那边，对齐日志脱敏留底审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "窗口就定12个月，信贷标准周期嘛。密态均值替代，让算法搞个同态加密算子算。验证的话，跑对照实验呗，拿明文对齐的KS做基线，看密态对齐的KS掉没掉。"
+              }
+            ]
+          },
+          {
+            "microScene": "在联邦模型接口规约设计背景下，用户与导师围绕密态接口定义、通信拓扑与安全机制持续沟通（5轮），其中在密态接口格式与拓扑风险部分与隐私架构师沟通（1轮），在梯度交互安全与加噪验签部分与安全协议专家沟通（1轮），并最终形成包含MPC绑定、差分加噪、环形拓扑与防重放验签的四条规约原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "接口不就是传参嘛，定个JSON，把特征塞进去发过去。用gRPC调一下就搞定了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加密算法包一层不就完了，同态加密库都有API，调一下。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拓扑肯定星型啊，中心方收一圈数据，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态接口到底怎么定？我就想用JSON套壳传密文，中心化拓扑，有啥问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "梯度交互接口直接传行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "环形拓扑太麻烦，还得搞路由。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加噪幅度我跑对照实验调呗，跟之前验证KS一样。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "星型确实有单点风险，那就改环形。密文格式跟MPC走，我不自己造轮子了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 密态分片传输格式跟底层MPC协议绑定；2. 梯度交互必须加差分隐私加噪；3. 拓扑用环形抗单点；4. 接口全量加防重放验签。"
+              }
+            ]
+          },
+          {
+            "microScene": "在方案设计梯度防泄与高可用背景下，用户与导师围绕推断防御与容灾机制持续沟通（5轮），其中在攻击链与容灾逻辑及验证方案设计部分与安全协议专家沟通（2轮），用户经纠正放弃固定阈值与简单对照，接受动态百分位裁剪与三变量验证，最终形成防推断与高可用闭环方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加噪不就防泄了吗？高可用更简单，多部署两台备用机，挂了直接切。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "梯度推断到底怎么搞事？还有节点挂了密钥凑不齐怎么办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我最近刚好看了篇讲防御的论文，里面说梯度裁剪直接设个固定常数阈值最省事，我打算就这么裁，不管他什么数据分布。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑两组数据，一组固定阈值，一组不裁，看哪个AUC高不就完了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "动态百分位就动态百分位，变量加全，重构误差也算上。容灾那边，协调者存快照这方案我认，就按环形拓扑加旁路接管定。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "加噪配合动态百分位裁剪防推断，环形拓扑加协调者快照旁路接管防单点。验证要跑三个变量的对照实验，看AUC和重构误差。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在密态联邦异构信贷风控引擎工程开发背景下，用户与导师围绕安全聚合算子的求交协议选择、定点数放大因子边界及对照验证方法持续沟通（8轮），其中在密态求交合规红线部分与隐私架构师沟通（1轮），在定点数溢出与放大因子部分与联邦开发工程师沟通（1轮），并最终形成算子实现与验证约束总结。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "安全聚合算子这块我打算直接套个开源的Paillier库，多方加一下就完事了"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "维度不一样就补零呗。Hash求交加个随机盐不就安全了？溢出这事儿，Python大整数本来就不会溢出啊。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态求交用Hash加盐到底行不行？还有算子里面Python大整数是不是就不用管溢出了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "1e12这么容易超？那我缩小点，1e4行不行？OPRF我不懂怎么实现，没写过这种底层协议。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚去翻两篇OPRF的论文，看看有没有现成的C++扩展包能调。模数边界这块，我去查查Paillier的源码，推一下最大放大因子。明天下午之前把这两个点搞明白，然后改代码。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "肯定不能只看没报错啊。我弄几个小数据集，跑一遍密态聚合，看看解密出来的结果对不对。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "密态求交必须用OPRF协议，不能搞Hash加盐；定点数放大因子要根据Paillier模数严格推算，不能拍脑袋定1e6；验证要跑明文和密文的对照实验，误差卡在1e-4以内。我先把这几条改了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在跨域信审密态联调排障背景下，用户与导师围绕排障方案与硬约束持续沟通（5轮），其中在密态报错排查部分与联调测试工程师沟通（2轮），在中间结果落盘合规风险部分与安全协议专家沟通（1轮），并最终形成不打明文、看哈希、日志过审计网关及明确探针埋点位置的排障硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接两边一起跑啊，报错看日志改就行了，能有多大事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把中间结果解密打出来看不就完了，或者测试环境里干脆把加密关了跑一遍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态联调报错怎么查？我想把中间结果解密打出来，导师不让。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "哈希对不上我咋知道具体哪错。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测试环境里把中间结果打出来看一眼，应该没事吧？又不上生产。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 不打明文；2. 看哈希；3. 出错找联调工程师。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加一条，日志过审计网关。探针就埋在特征对齐和聚合出结果的地方。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在模型防窃与性能调优背景下，与导师围绕差分隐私加噪与通信轮次的平衡及稀疏化比例持续沟通（5轮），其中在防窃与差分隐私机制部分与安全协议专家沟通（2轮），在通信开销与性能优化部分与性能优化专家沟通（2轮），并最终按导师要求确定稀疏化与加噪对照实验的严格参数边界。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "加噪就加噪呗，跑慢点就慢点，总比模型被偷了好。我直接在梯度上乘个随机数，再开10个线程并发传，不就结了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "梯度传出去怎么防偷？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那性能呢？现在太慢了，能不能少传几轮？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一个要多轮验证，一个要减少轮次。我折中一下，噪声加小点，比如0.01，轮次砍一半，并发拉满，这不就两边都照顾了嘛。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我刚刷到个帖子讲稀疏化，就是把梯度里小的值全置零，只传大值。能省带宽，零值多也不好反推。我就用这个，把梯度砍掉30%再传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "30%就是个大概嘛，零值反正没信息。AUC掉个1%2%的，风控本来就有误差，无所谓啦。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "80%太多了吧，0.5又那么大。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在密态联邦异构信贷风控引擎沙箱部署验证背景下，用户与导师围绕参数注入生效、审计留痕与AUC波动归因持续沟通（7轮），其中在沙箱隔离与参数校验部分与部署运维工程师沟通（1轮），并最终确认沙箱验证必做项与AUC归因补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "现在直接扔到银企沙箱跑一把就完事了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "配置文件写死不就生效了？还确认啥。审计留痕不就是打个日志嘛，多大点事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "沙箱隔离和参数校验到底怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是网络加白名单，配置拉下来对一下写进表里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑几把看结果呗，掉得多了就调参数"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "多跑几次求个平均呗，上下浮动不大就算没事。沙箱性能损耗能有多少，忽略掉不就行了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "目标就是这周内把沙箱跑出来的AUC算明白，看懂波动咋回事。"
+              }
+            ]
+          },
+          {
+            "microScene": "在联邦风控引擎上线运行评估背景下，用户与导师围绕联邦指标监控看板设计与合规底线持续沟通（4轮），其中在隐匿风险与多方对齐指标监控部分与风控监控专员沟通（2轮），并最终形成基础大盘、漂移监控与合规留痕三块看板模块。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "盯AUC和KS呗，红了就发邮件，这有啥难的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "投毒哪那么容易，不是有安全协议挡着吗。我觉得AUC降了肯定就是出问题了，其他的太虚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联邦看板还要盯啥？投毒咋办？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "PSI、梯度、贡献度，这得加三个模块？太重了吧。我觉得看个AUC就行了，其他的等出事再查呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得没必要，太麻烦了，能不能先不上。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加PSI和梯度波动，误拒报警也加上。但我还是觉得AUC最能说明问题，其他的都是防小概率事件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "基础大盘、漂移监控、合规留痕。我这就去改看板需求。"
+              }
+            ]
+          },
+          {
+            "microScene": "在联邦安全模块报警隐匿投毒背景下，用户与导师围绕密态下投毒定位与排查红线持续沟通（6轮），其中在投毒指纹抓取与交叉验证链路部分与风控监控专员沟通（4轮），并形成基于梯度正交、Shapley反转与PSI基线比对的三步闭环溯源预案框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "查操作日志啊，谁搞鬼抓谁，直接封禁。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "停机，让各方把明文交出来对一对，谁错谁担责。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态下抓投毒怎么搞？总不能靠猜吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直接看Shapley值变负了就踢人不行吗，简单粗暴。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误杀了再拉回来呗，多大点事。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "相似度跑了，贡献反了，但PSI没大变，就是投毒呗。PSI也变了就是漂移。加个判断逻辑的事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定个0.5，反转超一半肯定有问题吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用前四周基线定呗。反正逻辑就是三步交叉，阈值看历史。这也算溯源方案了吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "不解密，看三步，不单踢。我加到预案里去。"
+              }
+            ]
+          },
+          {
+            "microScene": "在风控拒判复盘迭代背景下，用户与导师围绕拒判异常归因、严禁明文排查红线、Shapley值迁移应用及迭代口径制定持续沟通（6轮），其中在看板数据与误杀率分析部分与风控监控专员沟通（1轮），在客诉与松阈值风险部分与业务迭代经理沟通（1轮），并形成分层抽样、密态Shapley归因、人工抽检到灰度放量的复盘迭代闭环口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "拒判多说明风控严呗，好事啊。业务闹就让他们闹去，坏账算谁的？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "看板数据咋样，拒贷率高不就是模型牛逼吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "FPR高就调低点呗，把阈值松一松。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "客服那边吵啥呢？我降点阈值行不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "定性？不就是看谁被拒了嘛，翻翻日志。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "学习日志里写个“缺误杀归因能力，需补学”。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用Shapley算算特征权重，看是不是哪个特征抽风了。但这结论能直接用吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "复现就跑一遍Shapley归因脚本呗。外推我懂，这波是异常期，平时不能这么卡。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "抽样一批被拒的，走密态Shapley归因，人工复检几个，确认没毒再灰度放量。不准一刀切调参。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

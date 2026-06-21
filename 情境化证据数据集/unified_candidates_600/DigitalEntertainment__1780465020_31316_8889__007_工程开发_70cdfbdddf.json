@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在情绪波反演工程开发背景下，用户与导师围绕Flink算子拆分、精度与延迟权衡及验证口径持续沟通（4轮），其中在反演耦合风险部分与情绪反演算法工程师沟通（1轮），在延迟红线部分与性能压测工程师沟通（1轮），并形成算子拆分与Redis解耦方案、验证口径及多流对齐补学计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把特征提取和流式反演塞进一个Flink算子，少一次shuffle，延迟应该能压下来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这种写法，特征提取要是卡了，反演是不是就全堵住了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那拆开呢？拆成两个算子，中间加个队列缓冲？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就很矛盾了。一个要精度上Transformer，一个要延迟上轻量模型。我都塞在一个Flink作业里肯定不行，拆开的话，中间状态怎么存？我只会写那种简单的KeyedState，多模态对齐的状态我不会搞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我肯定不能爆延迟，爆了剧情分发就断了。我选拆分算子，特征提取算子做异步重计算，结果写回Redis，反演算子只从Redis读轻量特征做LSTM推理。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变量就是特征维度和模型类型。评价标准，延迟看P99，精度看能不能触发剧情分支，不一定要AUC。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "多模态对齐这块我确实没写过，我今晚得把Flink的多流Join和IntervalJoin源码看一遍，特别是怎么处理乱序和迟到数据，我之前只写过单流。我明天把对齐的窗口算子代码提交一下试试。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "方案是：特征提取和反演拆成两个Flink算子，中间用Redis做状态异步解耦。反演算子用轻量LSTM，保50ms延迟。验证口径：控制特征维度为自变量，延迟P99和剧情触发率为因变量，跑两组对比。我今晚补学Flink多流Join和水位线机制，明天补齐对齐算子的代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

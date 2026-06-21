@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预测服务与策略服务联调背景下，用户与导师围绕接口最小契约、置信度合成归属、门控防抖与验收用例持续沟通（8轮），其中在预测口径与modelConf/modelUnc及时间戳处理上与算法工程师沟通（2轮），在动作模板/冷却滞回/冲突消解与幂等退化上与策略产品经理沟通（2轮），并产出联调字段最终版、三条回放验收用例与审计字段贯通事项。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我担心两块：一是预测输出的口径不稳定，比如同一箱在不同时间窗口给的RSL（剩余货架期）差很大；二是策略侧一旦接了预测，规则触发会抖动，导致频繁改价或改线。还有就是上一步的confidence，要怎么进到策略里，我现在只知道它在映射输出里。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小契约我想是：对象维度用箱码或批次+箱码；时间点用eventTime；预测值给rslHours或freshnessScore；再带一个predConfidence（模型置信度）和dataConfidence（映射那套0/0.5/0.8/1.0）。策略侧返回action和reasonCode。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "抖动我有两种：A是策略侧加滞回，比如阈值上下各一段；B是预测侧做窗口聚合输出，比如只每15分钟出一次、或者输出带趋势项。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "定价相关可能还要：预计到店时间ETA、剩余可售窗口sellableHours、建议折扣discountSuggestion、以及风险等级riskLevel。可信度合成我倾向策略侧算，因为它更清楚动作风险；但预测侧也可以给一个finalConfidence，策略只消费一个数，联调更省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 预测服务这边联调要用：rslHours/freshnessScore这些输出口径你们现在定了吗？置信度你们是怎么给的，能不能把dataConfidence（箱码映射0/0.5/0.8/1.0）纳进去？低置信度的时候策略侧你建议怎么处理，直接不触发还是降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们rslHours是以“当前温度趋势”外推的吗？如果输入迟到或插值，会不会导致突然跳变？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "一版折中：预测接口固定输出  \n- id：batchId、boxCode（如果boxCode缺失就只到batchId，但策略动作限制）  \n- times：predTime、asOfTime  \n- values：rslHours、freshnessScore  \n- quality：modelConf、modelUnc、dataConf、featureQuality(插值占比/迟到标记)  \n策略门控我先按三层：  \n1）dataConf<0.8：只发告警或进人工队列，不自动改线/改价；  \n2）dataConf>=0.8 且 modelConf<0.6：允许“低风险动作”，比如折扣上限5%，不改线；  \n3）dataConf>=0.8 且 modelConf>=0.6：走全自动模板，折扣可到15%，允许改线但要冷却30分钟。  \n测试case我想覆盖：映射conf从1.0掉到0.5、迟到数据回补导致rslHours回升/回落、插值占比从2%到5%、以及predTime和asOfTime不一致时策略不抖。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@策略产品经理 联调阶段我需要把“预测输出→策略动作”跑通。现在我打算用dataConf/modelConf做门控，再配动作冷却防抖。你们策略侧希望的动作模板有哪些（改价/改线/分拣/补贴），各自需要哪些字段？冷却时间、滞回阈值你们一般怎么定，联调能先用什么默认值？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这些默认值我能用来写联调测试。冲突消解我记住：改线>改价>分拣，同级取更高风险。滞回我之前只想冷却，看来两者都得上。还有“同一箱只执行一次”的分拣，这个在策略里做幂等就行，对吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "最终方案我倾向“预测侧不合成finalConf”，只输出modelConf/modelUnc/featureQuality和rslHours等；策略侧做门控和防抖，因为动作风险在策略。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "接口字段最终版：  \n- identity：tenantId、batchId、boxCode、boxMapConf(dataConf)  \n- time：predTime、asOfTime  \n- predict：rslHours、freshnessScore、riskLevel(按24/48h映射)  \n- quality：modelConf、modelUnc、interpRatio、lateFlag  \n策略输出：actionType（pricing/reroute/sort/none）、actionPayload（折扣/线路/等级）、reasonCode、cooldownUntil。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收用例3个：  \n1）dataConf从0.8降到0.5：预测仍出结果，但策略必须只给none或人工审核标记，不得触发reroute/pricing；  \n2）迟到回补：同一箱predTime递增但asOfTime回补，rslHours发生回溯变化时，策略不得在cooldown内重复触发同类动作；  \n3）插值占比>3%：预测下调modelConf，策略只能走“低风险动作”（折扣<=0.05）且带reasonCode说明quality限制。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算把它做成策略参数，不写死在代码常量里，默认0.05只是联调的基线。证明上我没法现在就给经营最优，只能做最小验证：用历史回放挑一批插值>3%的样本，比较折扣0.05和0.1时的报损差异，至少看是否明显误伤毛利。这个需要业务分析师后面给口径，我这边先把参数化和可回放跑通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解自动触发时operatorId应该是系统账号，比如“system-policy”，role写“service”，reason必须填，比如“auto_trigger_by_model”。如果有人审核通过再执行，operatorId换成人的，reason写审批理由。日志里不该带精确geo，还是分钟降精度那套。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

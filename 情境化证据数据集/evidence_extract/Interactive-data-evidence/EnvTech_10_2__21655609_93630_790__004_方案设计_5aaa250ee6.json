@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在多源监测接入策略方案设计背景下，用户与导师围绕必接数据源、接入分层、统一口径、质控与主备源降级策略持续沟通（8轮），其中在野外传感接入分层/补传/心跳与消息模型部分与物联接入工程师沟通（4轮），在Observation统一对象/元数据最小集/质控门分级与时间对齐窗口部分与数据架构师沟通（3轮），并收束为接入策略最小规范要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "必须接的就传感器和气象吧。遥感感觉也得有，不然看不到田里。晚点的可能是施肥记录？反正农户不一定填。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "水质主源是沟渠水质探头？备源是…人工采样。水文主源雨量计，备源气象站。农事主源就是APP填报，备源我不知道。遥感主源卫星图，备源无人机？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联接入工程师 野外那些水质、水位、雨量的东西，接进来一般怎么分层？有没有省事点的通用做法。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "sensor_health_code 是不是就 0/1 好了？我怕太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那协议是不是统一用一种就行？我看很多都用 MQTT。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "消息模型就是 device_id、时间、指标值？再加电量那些。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分三层：设备、网关、平台。还有补传要断点续传、去重键。心跳字段有电量、信号、存储满不满。quality_flag 也要带着。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 各类数据接入时接口口径怎么统一？还有元数据最小集、质控门要怎么设，给我个简单版。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Observation 里 subject_id 是不是都用田块ID就行？点位也绑到田块？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那遥感的时间很稀疏，质控怎么跟传感器对上？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接入都变成 Observation，字段里要有 subject_id、时间、指标、quality_flag，还要挂 evidence_id。质控分 L0 接入门和 L1 业务门，先标记别删。subject_id 不能只用田块，要区分点位、子汇水区那些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主源就传感器，备源就遥感+人工？降级就是没数据就用模型估计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "水质：主源探头，备源人工采样，降级就只提示不算量。  \n水文：主源雨量计水位计，备源气象格点+水尺，降级就提高阈值。  \n气象：主源预报，备源自动站，降级用最近一次。  \n遥感：主源卫星，备源无人机，降级就不更新作物覆盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "农事主源就是农户填，备源…用合作社台账？降级就按作物类型给默认施肥量？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第2条里 calibration_version 我怕设备拿不到。还有 subject_id 多类型会不会太难做，能不能都先塞到 scope 里？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

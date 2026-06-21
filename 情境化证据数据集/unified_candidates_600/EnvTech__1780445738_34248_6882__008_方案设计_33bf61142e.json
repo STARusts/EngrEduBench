@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计多源异构水质感知接入规范背景下，用户与导师围绕边缘聚合与全量上云的取舍及规范设计持续沟通（8轮），其中在边缘聚合省带宽部分与边云协同开发工程师沟通（1轮），在特征保留、分层接入与数据最小化部分与水质数据架构师沟通（3轮），并最终形成分层接入、采集白名单及历史数据回放验证的规范要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这不就是配数据源地址，写个解析规则嘛，Modbus TCP拉一下，存进时序库。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边缘侧聚合具体咋弄？省带宽肯定好啊，网断了也不怕。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "听着挺靠谱，就边缘聚合吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压差这些数据要是被聚合了，是不是就没法抓突变了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "一边要省带宽，一边要保特征，这怎么弄，总不能全上云吧，带宽扛不住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "前几天看了OPC UA的规范，里面有种订阅机制，可以按变化率动态调频率。但那协议太重了，网关跑不动，不知道这思路能不能改改用在这。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "字段对齐？时间戳格式统一？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿现场网关跑一下看看？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用之前存的一段历史工况数据包，从网关进口注入回放，看云端收到的时序对齐率，重点看压差高频特征有没有丢，没丢就算规范有效。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 关键量像压差SDI高频上云，常规量边缘聚合降频；2. 用OPC UA的动态订阅思路做分层，但网关端降级实现；3. 定采集白名单，按数据最小化原则屏蔽产能机密字段；4. 用历史数据回放注入来验证时序对齐和高频特征不丢失。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

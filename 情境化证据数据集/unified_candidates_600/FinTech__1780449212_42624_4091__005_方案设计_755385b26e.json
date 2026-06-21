@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在跨日回转套利图式匹配方案设计背景下，用户与导师围绕跨日状态接续、算力约束与合规边界持续沟通（4轮），其中在轻量图库选型与增量匹配逻辑部分与图计算专家沟通（2轮），并最终形成自研轻量时序图、增量子图同构、悬空边跨日接续及窗口兼顾漏报误杀合规边界的方案约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是直接把图存到Neo4j里？我看网上很多图计算都是直接上Neo4j，比较方便。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有那种轻量级的图工具包？@图计算专家 有没有什么开源的内存图库能直接搞定跨日匹配的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是用Redis存这些带时间的边？Redis总快了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@图计算专家 增量匹配的核心逻辑是啥？Redis不能用的话，咋搞？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "窗口大小我随便设个2天？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不用Neo4j也不用Redis做计算。用内存里的时序图，只算增量。跨日靠悬空边快照拼起来。窗口不能瞎设，得防漏报和误杀。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在溯源系统方案设计收口的安全风控与容灾评估背景下，用户与导师围绕设备身份冒用、source_id/采集数据伪造、离线补传与验收指标持续沟通（10轮），其中在设备证书签名验签、密钥轮换吊销与防重放上与安全工程师沟通（1轮），在灾难分级与RTO/RPO、降级与边缘离线保障上与解决方案架构师沟通（1轮），在敏感数据最小化留存与取证导出上与合规与数据治理官沟通（1轮），并口头复述形成控制点清单、容灾目标与合规原则要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，安全就加登录、加密传输，然后数据库备份，挂了就恢复。设备那边就给个密钥，差不多就能防住吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "伪造 source_id 就不让他随便填，服务端校验一下来源。伪造数据的话，就签名一下就行了。离线补传…就按 receive_time 来，应该也没事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…在请求里带 token？token 对上就行。或者白名单 IP。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 设备身份被冒用这块怎么做才算够？source_id 伪造、扫码称重造假怎么防，密钥轮换和吊销怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "听懂了，就是要设备证书签名，服务端验签，然后被盗就吊销。数据造假就加原始证据 hash、多设备签名、seq_no 防重放。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@解决方案架构师 容灾这块怎么定目标？比如断网、云服务挂了、数据中心故障，RTO/RPO 怎么取，边缘离线怎么保，哪些能降级但证据不丢？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概就是分 D1-D3，然后核心是事件先落本地，能补传；云端挂了就 pending；跨区恢复慢点也行。降级就是风控和报表先别跑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那…D1 断网就撑 1 天？D2 积压就 10 万条？D3 的话…RTO 一天，RPO 一天？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "核心事件不丢，RPO 就 0；RTO 就…几个小时？非核心比如报表可以一天再恢复。验证方法就是拉闸测试？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "D1 就把网断掉 3 天，看网关还能不能记住，补传后看有没有漏。D2 就把云端写入关掉一会儿，再打开，看 pending 能不能补上，证据包没进 pending 的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "seq_no 回退就当重放，verify_result 标一下不进证据包；吊销证书就验签失败也不进；claimed_time 就不信它，按 receive_time。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 证据做强会要照片/定位/原始帧，这些算敏感吗？怎么做到最小化、留存多久、取证导出给谁看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是默认不上照片，只存 hash；定位也别存太细，导出要审批留痕。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试下：  \n1）每条事件要签名，签名覆盖 batch_id、event_type、event_id、source_id、seq_no、record_time、grid_id、evidence_hash。  \n2）服务端验签，失败就 verify_result=fail，不进证据包。  \n3）source_id 不能随便填，要绑定设备证书/密钥。  \n4）seq_no 单调递增，回退/重复当重放。  \n5）设备丢了就吊销 key_id，吊销后补传也不认。  \n6）证据包只看 receive_time，离线 lag 写入，T2 默认不入包。  \n7）断网 D1：网关缓存 72 小时，恢复后 4 小时补传 95%。  \n8）D2 云端抖动：写入 RTO 30 分钟，pending 不入证据包，积压超限就限流降级。  \n9）D3 区域故障：核心写入 RTO 4 小时，RPO=0（已 receive 不丢），非核心 24 小时恢复。  \n10）合规：照片/精确定位默认不上传，只存 hash；导出要审批水印和审计。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

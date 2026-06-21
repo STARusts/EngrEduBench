@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在驻波反演核心算法实现与验证背景下，与导师围绕离散化方案、CI集成、性能精度双约束及极端工况处理持续沟通（6轮），其中在数值稳定性与对照基准部分与算法工程师沟通（1轮），并最终形成基于Crank-Nicolson格式、解析解加噪声基准、双目标评价及异常触发的实现与验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我初步打算用显式有限差分把偏微分方程拆解，配合步长自适应的梯度下降做阻尼反演。验证的话，我准备构造几组已知阻尼的标准微腔，看反演输出的误差是不是在2%以内。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高Q值微腔的数值稳定性怎么保？还有对照测试的基准怎么选才不漏报？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备把差分格式改成Crank-Nicolson，验证用L2范数看误差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "要是集成到GitLab CI流水线里，每次提交都自动跑这组科学计算测试，我有点拿不准怎么处理NumPy数组的断言和浮点误差容忍。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚把PyTest的fixture机制和NumPy测试工具包`numpy.testing`的文档过一遍，定个目标：明早写出一个能跑通L2范数断言的CI Job Demo，容忍度设为1e-3。弄懂后直接套到咱们反演模块的验证流水线里，以后每次Merge Request都得过这道关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会在验证用例里加一个计时装饰器，记录每次反演的耗时。如果超标，我考虑把稀疏矩阵预分解，或者用共轭梯度法替代直接求逆。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "极端阻尼我会在测试集里加一组突变衰减系数的Case，模拟微腔断裂。如果反演发散，我让它抛出`DivergenceException`，这样上层寻优模块能捕获并触发降级仲裁，正好接上前序阶段定的全局策略引擎回调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "驻波反演核心算法实现与验证方案确认：1. 离散化采用Crank-Nicolson半隐式格式保稳定；2. 对照测试基准为解析解加高斯白噪声注入，评价指标为L2误差范数（容忍度1e-3）与单次反演耗时（<5ms）双目标；3. 极端工况如微腔断裂注入突变衰减系数，反演发散时抛出`DivergenceException`触发降级仲裁；4. CI集成方案今晚基于PyTest和`numpy.testing`补学并落地Demo。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

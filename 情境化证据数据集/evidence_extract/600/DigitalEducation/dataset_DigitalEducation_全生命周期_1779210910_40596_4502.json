@@ -1,0 +1,583 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在在线学习防走神系统需求剖析背景下，用户与导师围绕走神定义、核心假设与合规边界持续沟通（7轮），其中在心智游移判定假设部分与教育心理架构师沟通（2轮），在人脸关键点采集合规性部分与数据合规官沟通（1轮），并确立多模态隐式特征推断游移的核心假设与原始生物特征不出端的合规红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "走神就是看手机或者发呆呗。我查了下，好像有现成的面部识别API，直接调一下就能判断是不是在看屏幕。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "走神到底怎么算？有没有直接能用的判定公式？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那眼动轨迹这东西怎么拿？有SDK吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是得同时看眼睛和鼠标。但我记得github上有好多开源的人脸关键点检测库，直接跑就能拿到眼动数据，挺方便的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "开源的应该没事吧？大家都这么用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我用开源库抓人脸关键点判断走神，这合规吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "不能直接存图啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得在本地算，不能传原图。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在游移侦测合规与隐私评估背景下，与导师围绕端侧推理合规卡点、特征脱敏防撞库与架构取舍持续沟通（5轮），其中在采集授权与特征传递合规部分与数据合规官沟通（2轮），在特征哈希防撞库与差分隐私脱敏部分与隐私计算专家沟通（1轮），并最终形成复用端侧推理SDK、自研差分隐私脱敏层与强制前置授权的折中架构方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地跑模型的话，是不是直接套个开源的隐私计算框架就行了？我看网上有那种端侧推理的SDK，应该自带脱敏吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我们只在本地算，不传原图，是不是就合规了？有没有那种一键通过的合规方案可以买？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征向量传上去也有风险？我都哈希过了啊，哈希过还怎么认出人？这也要授权？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "哈希特征容易被撞库吗？有没有那种加噪的工具包，我直接调一下把特征毁容了再传？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还得自己算阈值？就不能给个默认值吗？那大厂那些端侧安全计算服务也不能用？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "定制太麻烦了，我又不会算噪声阈值。但是合规风险我也担不起。能不能这样，前端我还是用现成SDK跑推理，但输出特征后，我自己加一层差分扰动？阈值我就先随便设个经验值试试？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "好，那我就先找现成推理SDK，然后自己写个加噪函数。授权弹窗我让前端加一下。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在防走神系统商业化探索背景下与导师围绕买单方定位、有效干预定义及价值主张持续沟通（5轮），其中在B端切入与按效果计费风险部分与商业规划师沟通（2轮），并最终形成基于专注度提升率阶梯计费的B端SaaS订阅商业模式定调。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就加个VIP呗？学生想用防走神功能就开会员，一个月三十那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网上好多课不都这么搞嘛，解锁功能就充钱。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业规划师 这种防走神的功能，一般是咋收费的？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "按次数收费啊？这怎么算有效次数？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不算吧。那得看有没有拉回来。可是这不好统计啊，有没有什么插件能直接算出来拉回率的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以不能瞎弹窗，得弹了真有用才算钱。那我们就卖这个拉回效果？"
+              }
+            ]
+          },
+          {
+            "microScene": "在按效果收费商业模式定调后的核心院校试点战略规划背景下，用户与导师围绕试点院校选择标准、样本代表性及入选硬性约束持续沟通（6轮），其中在试点落地路径与基建条件部分与商业规划师沟通（1轮），在样本口径与效果验证部分与教研督导沟通（1轮），并最终确定试点入选的四条硬性约束及后续学习动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找名气大的呗，装起来快，数据也好看。有没有那种现成的学校资源库可以直接拉？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@商业规划师 试点学校是不是得找那种啥都现成的？有没有那种一键对接的校园SaaS底座？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教研督导 样本怎么挑？是不是随便选几个班跑跑就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得找能开权限的，还得文理科都有。对照组我记下了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就找算力够的，文理科都有的。对照组也得有。但我其实不太会算算力冗余，也不太懂怎么设计对照组的变量控制。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "之前我以为只要装上就行，现在看还得看端侧条件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "今晚先找两篇多模态端侧部署的论文，把算力门槛的几个指标摘出来，比如内存占用上限。然后把教研督导说的学科覆盖和对照组，写进我的实验设计笔记里，修正我之前以为随便选班的错误想法。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在心智游移侦测系统多模态总体架构设计背景下，用户与导师围绕端云协同架构方向、可检验对照假设及核心约束持续沟通（6轮），其中在端云协同组件与特征提取实现部分与系统架构师沟通（2轮），并形成端侧提特征云端聚合的大方向及三个核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我看网上好多人做这种多模态都是直接上Kubernetes套个微服务模板，我们能不能也这么弄？比较快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "合规不是可以后面对接的时候再加密吗？先跑通流程嘛。而且现成的脚手架搭起来快，不用我们自己从头写路由分发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有什么现成的端云协同组件？最好能一键生成那种，不用写太多胶水代码，直接把摄像头和麦克风的数据丢上去就能在云端出结果的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧提特征，云上算，是吧？听起来好像有点麻烦，还得在端上拆模型。那端侧用什么框架提特征？有没有那种一键导出多模态特征的库？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对齐，时间戳对齐，我记下了。这听起来挺复杂的，我不太确定怎么在流式处理里保证对齐不出错。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "假设就是，端云协同肯定比全云端快？对照组就是一组全放云端，一组放端侧？如果云端延迟太高，就说明端云协同好？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "400毫秒，5%准确率，这数怎么来的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我确实不太懂多模态流怎么在代码层面对齐，我今晚去看看Kafka的官方文档，看看能不能用消息队列拼起来。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "能，特征不出端，总延迟400毫秒，要有对齐机制。我今晚先去翻翻论文，看看别人对齐怎么做的，明天再补这块的设计。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在生理特征与交互数据流设计背景下，与导师围绕端侧数据采集合规性、特征提取方式及数据流拼装架构持续沟通（6轮），其中在数据最小化与脱敏原则落地部分与数据合规官沟通（1轮），在端侧无感采集与多模态对齐部分与前端交互专家沟通（1轮），并最终形成端侧闭环的三层数据流架构。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用WebRTC拿摄像头流，MediaPipe提人脸关键点，鼠标键盘事件JS监听一下，打包发上去不就完了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我在端侧跑MediaPipe，把算出来的那些坐标点数组传上去行不行？坐标就是数字，又看不出长啥样，这总安全了吧？而且现成的库直接出结果，多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我在端侧跑MediaPipe出坐标，挑几个传上去，这算合规吗？有没有那种一键脱敏的工具，我套上直接发就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧从视频流里算这些向量，有没有现成插件能直接出这些业务向量的？我不想自己写算法。还有交互数据，鼠标轨迹啥的，怎么跟这些向量对齐？分开传行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规官说坐标也不能传，只能传像眨眼频率这种向量，还得把用户ID去掉，只留SessionID。前端说没插件，得自己算，还得在端侧用本地时钟每200毫秒拼一次特征帧再发。分开传不行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自己算向量还要拼帧，端侧会不会卡啊？要是卡的话，能不能少算几个特征？或者帧率调低点，500毫秒打一次标？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一层，浏览器拿原始视频和鼠标事件；第二层，跑MediaPipe算向量，跟鼠标事件拼成帧；第三层，去掉用户ID发到云端。"
+              }
+            ]
+          },
+          {
+            "microScene": "在专注锚点生成算法路线设计背景下，用户与导师围绕大模型可行性、工程与心理需求冲突及折中方案持续沟通（6轮），其中在大模型延迟与预置库匹配部分与算法工程师沟通（2轮），在动态干预强度与可解释性部分与教育心理架构师沟通（2轮），并最终敲定预置锚点池加轻量化可解释打分模型路线及核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把侦测到的特征扔给大模型呗，现在API这么方便，让它生成个提问或者提示词很快的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "大模型生成锚点这路子是不是走不通啊？延迟很高吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "锚点直接匹配预置库行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法说大模型太慢，要用预置库匹配；心理说硬匹配太死板会烦，要能调强度。这俩好像有点冲突。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "搞个折中的？预置一堆，再套个小模型选？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用预置锚点库，怎么搞出动态强度？用小模型排序行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "用小模型给预置锚点打分，还能算干预强度，权重能看懂是啥意思，你觉得行不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "两边都同意了。用预置锚点库，加个小模型打分算强度，模型得是能看懂权重的那种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心约束就是，不用大模型，用预置的；用小模型打分，得能看懂权重，算出强度；端侧跑，得快。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在端侧推理性能与高可用评估背景下，与导师围绕端侧性能红线、降级触发条件与链路及推理框架选型持续沟通（6轮），其中在性能红线与量化约束部分与性能优化工程师沟通（1轮），在降级策略与端云协同架构部分与系统架构师沟通（1轮），并最终形成基于MNN框架的端侧性能约束与跳帧云端粗判降级方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接用TFLite自带的Benchmark跑一遍呗，看数据不就完了。要是跑不动，就切到云端算，网上好多端云协同的框架可以直接套。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种一键端云热切换的组件可以直接用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧打分模型跑不动咋办？有没有现成的端云热切换组件？性能红线一般怎么定？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是超时就不管这帧了，把数据全扔给云端算。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用MNN或者NCNN呗，我看别人做端侧推理都是这俩，开箱即用，不用自己写底层算子。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "安卓端用MNN框架。单帧推理不超过30ms，内存不超过50MB。要是超时或者内存爆了，就跳过这帧，只发特征切片给云端做粗判。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在端云协同脱敏接口设计背景下，与导师围绕视频脱敏方式、接口字段、防逆向验证及特征混淆持续沟通（6轮），其中在端侧特征提取部分与隐私计算专家沟通（1轮），在合规底线与防逆向重构部分与数据合规官沟通（1轮），并最终形成TEE提特征、不可逆混淆及GAN攻击验证的接口方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我查了下，PySyft这种框架能做联邦学习，直接套上去是不是就不用传原图了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有什么轻量级的SDK，能在本地直接把视频流洗干净变成特征发出去？我不想碰原始图片数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规是不是只要不发原图，不存本地就行了？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看过一点ARM TrustZone的资料，是不是用这个套一下就行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就测试一下呗，看能不能还原出脸。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我前两天看了个讲同态加密的推文，感觉也能拿来加密特征。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实搞混了。我今晚去翻两篇特征不可逆混淆的论文，看看有没有现成的降维映射矩阵能直接乘在特征向量上，加到接口协议里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口字段就传feature_vector, timestamp, auth_status。验证方案用GAN重构攻击做。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧游移侦测模型开发背景下，用户与导师围绕现成库与自研模型取舍、精度与延迟平衡及验证方法持续沟通（6轮），其中在特征匹配与自研必要性部分与算法工程师沟通（1轮），在端侧延迟与量化需求部分与性能优化工程师沟通（1轮），并最终形成自研轻量分类器加INT8量化方案及双指标验证任务。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上大家都用MediaPipe，前端引入一下就能出人脸特征，多省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我直接拿MediaPipe的输出接个分类器做游移判定准不准？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "几万参数，这种在端侧跑会不会卡死？浏览器里跑不动吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以MediaPipe不行，得自己搞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我不会写训练代码啊，有没有生成这种小模型的脚手架工具？直接出权重那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就选算法说的轻量模型，再让性能那边压一压。验证的话，我本地跑几个视频看看出不出结果就行了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实不会从零搭网络。我可以去搜一下怎么把Keras模型转成TFLite，照着抄抄改改。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去翻TFLite量化的官方文档，重点看Post-training quantization那节，自己拿个开源小模型练手导出一次，看看精度掉多少。"
+              }
+            ]
+          },
+          {
+            "microScene": "在锚点策略引擎重构背景下，用户与导师围绕走神干预策略的重构方式、冷却锁机制及核心逻辑实现持续沟通（6轮），其中在干预分级与防误伤机制部分与教育心理架构师沟通（2轮），并最终决定删掉旧代码重写纯函数决策树，加入15秒冷却锁，输出分三档干预动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是加个规则引擎比如Drools重构一下？我看网上很多复杂逻辑都用这个搞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在代码是一走神就弹窗，这为啥不行？分级具体怎么分？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我用LiteFlow这种轻量规则流编排一下？配三个节点就行，应该比Drools轻。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就想找个现成的流式处理包搞一下，手写判定太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我不如直接写个函数树。冷却期设个5秒？深度大于0.8就弹窗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "删掉重写。不用框架，写个纯函数决策树，加15秒冷却锁。阈值我跑跑数据再看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "特征就用模型输出的score和duration，输出分三档。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在前端采集插件与策略引擎全链路联调背景下，与导师围绕流式数据测试、脱敏授权及断流兜底持续沟通（6轮），其中在插件输出与延迟部分与前端交互专家沟通（1轮），在数据合规红线部分与数据合规官沟通（1轮），在自动化测试与异常兜底部分与联调测试工程师沟通（1轮），并形成禁存原图、授权后置初始化及自动化压测验证冷却锁的联调策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口通就行呗。我弄个Postman，照着文档造几条JSON发过去，看引擎返不返回三档动作。网上都这么干，快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "流式就多发几次Postman呗。脱敏，我先把图存本地，跑通了再删？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "采集插件现在吐出来的是啥格式？一帧一帧的图片吗？延迟高不高？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "摄像头数据能不能先存原图调试？后面再脱敏？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说插件吐的是向量不是图，延迟80ms。不能存图，得先拿授权才能初始化插件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟就，加个loading转圈呗。掉帧断流，我找找有没有自动重连的npm包。测试的话，我坐电脑前晃晃脑袋，看锚点弹不弹就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "手动测试不行吗？断流了引擎会不会死锁怎么看？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "得用Puppeteer跑脚本压测，DevTools模拟断流，还要看冷却锁死循环。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在侦测延迟优化与脱敏校验背景下与导师围绕端侧推理延迟与脱敏开销平衡、量化精度损失及脱敏实现持续沟通（8轮），其中在推理瓶颈与量化测试部分与性能优化工程师沟通（2轮），在脱敏合规底线与哈希盐值部分与数据合规官沟通（2轮），并确定量化对照测试、动态盐值哈希脱敏及延迟<50ms三项硬约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "能不能找个现成的脱敏库套一下？延迟稍微多一点应该也没事吧，反正比原来快就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是不是可以直接把模型弄小点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧推理太慢有啥现成工具能压一压吗？有没有轻量级的脱敏算子直接用？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "合规那边有啥简单的包能过吗？直接调接口那种。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "性能说必须50ms以内，要量化。合规说不能用现成包，要自己加哈希。我能不能用WebAssembly跑个现成的哈希库？这样应该快吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我确实没测过。召回率下降应该就一点点吧？WASM内存我不懂底层，我看网上都这么搞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我我我确实不太会这些底层的。我今晚去搜两篇WASM优化和差分隐私的博客看一眼，照着改改参数。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备先把模型转成INT8格式跑一下，看看能不能进50ms。脱敏我就不套大包了，自己写个加盐哈希试试。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "好，我跑对照测试，哈希盐值动态生成，日志不打印原始的。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在心智游移侦测系统首跑验证背景下，用户与导师围绕部署验证、合规条件、数据验证及分析能力短板持续沟通（8轮），其中在环境部署部分与部署交付工程师沟通（1轮），在数据采集边界部分与数据合规官沟通（1轮），在看板指标部分与数据运营分析师沟通（1轮），并最终确认部署清单及补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Docker Compose一键拉起来呗，应该能跑通。合规不就是前面说的哈希脱敏嘛，代码里加了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在进班部署是不是直接跑脚本就行？不用管别的吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我改改配置文件，把日志关了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "首跑是不是就正常采数据就行？前面不是脱敏了吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我改成最小化模式。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组？效应量？看板上有这图吗？我只会看Grafana那个平均值的折线图啊。不太懂统计这些。我就看线往上走就觉得有效呗。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我统计不行。我明天开始，每天花1小时看效应量和置信区间的资料，下周五之前，能用Python算出首跑数据的置信区间，行了吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在系统首跑监控期背景下，与导师围绕游移召回率与专注度的监控口径及异常排查持续沟通（5轮），其中在指标口径与对齐方案部分与数据运营分析师沟通（2轮），并最终形成监控初跑期三条底线：召回率需人工抽检支撑、专注度看5分钟留存、召回率异常先查端侧断流。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Grafana呗，接Prometheus，网上现成模板一套就能看大盘了，不用自己写什么面板。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "召回率不就是模型报出来的游移数，除以总人数嘛。模板里都有算子吧，改改就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "游移召回率和专注度这俩指标，有没有现成的SQL算子？口径到底怎么定？我不想从头写，太麻烦了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "还得人工标？有没有自动打标签的工具？或者半自动的也行，人工标太慢了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模型挂了呗，重启一下推理服务。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那咋查？总不能让我一个个翻日志吧，几万条谁看得过来。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估复盘背景下与导师围绕锚点干预的负向反馈与迭代方向持续沟通（6轮），其中在师生体感反馈部分与教研督导沟通（1轮），在认知负荷分组数据部分与数据运营分析师沟通（1轮），并最终形成高负荷改弱提示、锚点关联知识点及复盘看分组留存率的三条迭代约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "师生那边到底嫌啥？是弹窗挡画面了？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "打断心流我加个防抖行不？延迟两秒弹？内容水我换个模板？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮我拉下踩的数据，是不是理科课踩得多？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "降15%那别弹了呗？高负荷课我直接关掉干预开关？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太懂负荷咋算。有没有现成的算负荷的库？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那高负荷课先降频，低负荷保持。锚点内容换成跟上下文相关的强提示。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 高负荷课停用硬弹提问改弱提示；2. 锚点内容禁用无意义模板，必须关联当前知识点；3. 复盘指标看分组留存率，不看大盘。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

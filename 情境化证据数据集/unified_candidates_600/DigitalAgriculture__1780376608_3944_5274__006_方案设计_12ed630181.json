@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在时序衰变推演模型选型背景下，用户与导师围绕模型选型取舍、冷启动风险与接口适配持续沟通（6轮），其中在模型特性对比与流式接口契合度部分与推演模型算法师沟通（3轮），并最终确定选Transformer并在流式层做窗口重组的接口适配方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，用那种时间序列的模型呗？LSTM大家都在用，应该不会出错吧。接口对齐的事，我后面让开发对一下字段就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "长程衰减？我不太懂这个。反正就是选个模型嘛，早点定下来我这边排期好排。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "中心那边输出的是频移特征，我们要做衰变推演，用LSTM行不行？不行的话用啥？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Mamba和Transformer，这俩哪个写起来快？我主要怕开发周期长。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "契合流式输入？那是不是就不用改接口格式了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "懂了，选Mamba，不用Transformer，这样接口最省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "没预训练吧？农业这块哪有现成的。风险的话，就，慢慢调呗。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Mamba对接爽但没预训练，Transformer有预训练但要攒窗口。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "模型选Transformer，不用Mamba。原因是没预训练数据冷启动太难。中心流式输出的特征，在流式层攒好窗口再给模型，模型侧接口不变。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳柱浓度遥测系统光谱采集固件开发背景下，用户与导师围绕固件选型、稳定性底线与验证方案持续沟通（7轮），其中在技术栈选型与架构约束部分与边缘开发工程师沟通（4轮），用户最终放弃C++裸写，接受C++套Zephyr混合架构及严格验证约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "光谱采集固件和边缘预处理这块，我打算直接C++裸奔，跑个裁剪版Debian，反正就是读ADC数据嘛，分分钟搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "实时性？加个优先级不就完了。C++性能无敌，框架都是给菜鸟用的，拖慢速度。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "光谱采集固件我用C++直接写行不行？别给我整什么复杂框架啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Rust？那玩意儿学习曲线多陡啊，Zephyr配环境都得搞半天。C++我熟，指针我还能管不住？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就算我防不住野指针，那我边缘侧加个看门狗总行了吧。但Rust我真不想碰，语法太反人类。要不这样，核心还是C++，但我把Zephyr引进来管调度？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成，就依你，C++套Zephyr。日志用它的。不过这Zephyr的设备树配置我还没搞明白，之前没怎么用过。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我今晚看Zephyr设备树和k_fifo API文档，明天写个Demo跑通。我拿之前项目的SPI驱动改改迁移过来，应该差不多能搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证？我接上示波器看波形不断不就行了，或者点个灯看闪不闪。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "标准信号源对照，低温冷启动，我记下了。就用C++套Zephyr，日志走框架，验证跑低温和差分测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

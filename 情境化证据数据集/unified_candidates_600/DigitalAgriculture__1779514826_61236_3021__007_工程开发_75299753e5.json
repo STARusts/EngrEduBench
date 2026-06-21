@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发阶段点云与视觉流变特征融合代码编写背景下，用户与导师围绕流变特征提取方案、CUDA实现补齐及量化验证口径持续沟通（9轮），其中在流场时序差分与视觉特征融合部分与点云算法工程师沟通（1轮），并最终确定采用SceneFlow与Mask融合方案及静态RMSE与风洞相关系数的验证指标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用Open3D做配准，视觉那边跑YOLO出框，把点云投影过去，在框里的就打上语义标签。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "流变？就两帧点云做差？我还没细想，感觉直接减一下坐标就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "点云流变特征提取代码怎么写？还有视觉特征怎么跟它融合？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "专家说算SceneFlow，视觉出Mask过滤点云。但我看PCL里有ICP配准，我能不能直接调ICP算帧间位姿差当流场？写起来快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对，延迟会炸。但我没写过SceneFlow的CUDA代码，只会调PCL现成接口。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去翻翻Open3D的Tutorials，看有没有GPU加速的流场示例，照着抄个推理部分。今天下班前把Demo跑通。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿两帧数据跑一下，肉眼看看向量箭头方向顺不顺。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "搞两组数据？一组没风的静态冠层，算出来速度应该全是0；另一组开风洞吹，看算出来的风速跟风速计比对？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "静态组RMSE小于0.05m/s，风洞组相关系数大于0.8。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

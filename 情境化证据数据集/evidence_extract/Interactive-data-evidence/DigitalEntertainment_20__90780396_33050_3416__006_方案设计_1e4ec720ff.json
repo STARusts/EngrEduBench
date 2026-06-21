@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在虚拟演出云台的事件编排与规则引擎方案设计背景下，用户与导师围绕编排裁决范围、规则表达、状态模型、窗口聚合、冲突裁决、版本灰度与回放审计持续沟通（9轮），其中在规则模型/版本化/回放存储与冲突幂等部分与规则编排工程师沟通（3轮），在审计留痕字段、数据最小化与保留期部分与法务与合规经理沟通（2轮），并确定可写入方案的小节要点框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "裁决就是把观众的投票、送特效这些事件，变成舞台侧能执行的指令？还有就是冲突时谁算数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入分组按roomId和玩法Id？输出就是下行的“聚合结果+轻量特效”。乱序重复就按去重key丢掉重复的，超时就走降级，可能直接给默认结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用类似条件-动作？比如“投票到达阈值就触发灯光”。版本就是schemaVersion跟着？回放就是存事件再跑一遍。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则编排工程师 我们这个互动玩法的编排，规则模型一般怎么定？规则版本化怎么做？回放要存事件还是存状态？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那冲突比如两条规则都触发同一个灯光，怎么办？是按优先级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回放存快照我有点不确定，快照是每个事件都存吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先用四层对象：Event/State/Rule/Command。然后ruleSetVersion单独搞，不跟schemaVersion混。room在一个round里固定版本。回放用“快照+增量”，高优事件全量存。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "规则表达就是条件-动作。状态模型有room/round/user三层。窗口聚合就是按roundId再加一个小窗口，比如1秒？冲突裁决靠规则priority和互斥组。版本就是ruleSetVersion，灰度按room。回放是快照+增量事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "正常SLO时小窗口，比如100到200ms；触发降级就把窗口拉大，变成1秒，输出只发聚合，不发细特效？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限我没想太细。是不是只有内容方后台能改，然后记录操作日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务与合规经理 规则引擎这块我们要做回放和审计。留痕应该记哪些字段？用户相关数据要怎么最小化，避免踩线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "保留期我记成14天可以吗？感觉够排查了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这六条我能照着写。窗口我就按你给的范围写，阈值我先写“编排耗时/积压/延迟估算触发”，具体数值先留空，等后面压测口径再补。合规那条我会写默认14天+审批。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

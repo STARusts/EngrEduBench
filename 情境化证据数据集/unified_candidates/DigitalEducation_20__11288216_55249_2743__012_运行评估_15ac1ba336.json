@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在试点课堂运行评估与验收回退约束背景下，用户与导师围绕课堂事件监控的关键路径拆分、指标告警阈值与归因走查清单持续沟通（6轮），其中在最小事件集与链路字段/阈值分层设计上与数据分析师沟通（4轮），在学生标识哈希、字段最小化与留存访问审计边界上与数据治理官沟通（2轮），并形成可执行监控面板、告警分级与合规口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先盯三类：一类是成功率，比如下发到达率、提交成功率；一类是耗时，比如每个环节从开始到收齐的时间；还有就是错误类型分布。问题是事件太多，我不确定哪些算“关键路径”。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "下发段我先用“环节开始”作为起点，然后到“学生端收到任务”算到达；学生动作就是“开始作答/提交”；聚合回收是“教师端看到汇总”。指标就：到达率、提交率、聚合完成率，各自 P95 耗时。告警我想按你上次说的 >5% 卡住就算严重。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 课堂事件监控要做关键路径的指标和归因。你这边建议最小事件集怎么定？每个事件需要哪些字段，才能把下发-提交-聚合串起来？另外告警阈值怎么更靠谱点，不想拍脑袋。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这些事件我能理解一半。比如 dispatch_created 和 dispatch_delivered 我怕打不全，因为学生端弱网可能收到了但不上报。那这会让“到达率”看起来很低，误报一堆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那如果投递成功率很高，但提交验收率掉了，是不是就说明学生端交互或权限问题更多？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 teacher_view_loaded 这个是为了监控教师端体验？还是归因用？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先定一版“最小监控面板”：按 run_id 展示三段：下发（created、pushed、delivered）、学生提交（submitted、accepted）、聚合（aggregation_ready、teacher_view_loaded）。指标优先用：提交验收率、聚合完成率、P95 耗时。到达率分成确认/投递两条，不用确认到达率直接触发 S1。\n\n告警我想做三层：  \n- S1：提交验收率或聚合完成率低于基线阈值并持续两个窗口  \n- S2：P95 耗时>基线2倍 或 某 error_code 占比突然升高  \n- S3：只打到看板上做观察，按版本/网络分组对比\n\n归因路径我准备写成“先看 accepted 失败还是 delivered 缺失”，再看 error_code 和分组。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "条款里说关键路径系统错误或限流导致 >5% 学生无法完成任务就回退。那我把“无法完成任务”定义成：到 step 结束时，work_submitted 没有形成 submission_accepted。用 accepted 的失败占比+缺失占比来算影响人数。然后把 S1 告警阈值里加一条：影响占比>5% 且 error_code 属于系统/限流类，就触发“回退候选”，同时要求登记原因字段。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理官 课堂事件监控里要串 run_id/step_id/user_id 才能算到达率和提交验收率。学生端 user_id 我们想用 hashed_id。你帮我定一下：哪些字段算必要、hash 怎么做才合规、留存多久、看板上要不要做脱敏/聚合，审计里谁能查到个人？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前还想着把设备型号也打上，方便定位兼容问题。现在看可能踩线？那是不是只留 client_version + OS 大类就够了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把合规部分收成：默认只看聚合，个人级只在 S1 排障且有审批审计；原始事件 14 天；hashed_id 用 tenant 内 HMAC。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我给一版可执行的：\n\n1）最小事件闭环：run_started、step_started、dispatch_created、dispatch_pushed（弱证据）、dispatch_delivered（强证据）、work_submitted、submission_accepted、aggregation_ready、teacher_view_loaded。链路主键 run_id+step_id，学生侧再加 hashed_id。  \n2）核心指标优先级：S1 只盯“提交验收率/聚合完成率”，到达率拆成“投递成功率/确认到达率”做诊断不做直接阻断。  \n3）阈值策略：先跑 3-5 节课学习期，按人数/课程分桶取基线；S1=成功率跌破阈值且持续2个窗口，S2=P95>2倍或错误码占比突增，S3=分组差异只上看板。  \n4）回退对齐验收条款：影响占比>5% 且 error_code 属于系统/限流类，标记为“回退候选”，必须带原因并写入审计。配置/权限类同样算阻断但归到“业务拒绝”类。  \n5）归因路径最短 5 分钟：先看 accepted 是否失败/缺失，再看 pushed vs delivered 是否分离，最后用 error_code、client_version、network_type 做分组定位。  \n6）合规：student_id 不入事件；hashed_id=HMAC(student_id, tenant_secret)；原始事件（含 hashed_id）14天自动清理，长期只留无个人标识的聚合指标；个人级查询需审批并落审计，看板默认不展示个人维度。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

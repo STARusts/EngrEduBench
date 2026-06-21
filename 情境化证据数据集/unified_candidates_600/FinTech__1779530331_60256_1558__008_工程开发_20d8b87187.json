@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发密态网络传输与联调测试背景下，用户与导师围绕联调方案、协议选型与容错机制持续沟通（6轮），其中在联调铺桩部分与测试与联调专家沟通（1轮），在传输协议选型部分与隐私计算专家沟通（1轮），并最终确定采用RSocket规范实现分片确认与主动拉取、分片带校验和且重试设上限，Mock环境依赖脚手架。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就写个RPC接口呗，两边把服务起起来，互相调一下，能跑通不就行了？密文不就是数据大点嘛，超时时间调长点应该没事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态联调是不是就测个连通性？还要铺啥桩啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "都没覆盖。我就想着先跑通。恶意节点Mock听起来好麻烦，还得专门写个假节点？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加个超时重试？Mock节点我确实不会写，太费事了。能不能只测正常流程，异常的先打日志？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "密态传输一般用啥协议？gRPC行不行？有没有自带容错？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "RSocket我没用过啊。这就更复杂了。gRPC我熟，能不能先用gRPC顶着？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端接口和分片逻辑我来写，RSocket我边看边写吧。Mock环境我真弄不来，得靠脚手架。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "分片带校验和，重试带上限。我先去看看RSocket的文档。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在“盐胁迫自适应营养膜控系统”方案设计背景下，用户与导师围绕策略如何可解释、特征选择合规边界、解释对象字段与策略形态取舍持续沟通（8轮），其中在敏感经营数据可用性、解释分权限与审计留痕部分与合规与数据治理官沟通（3轮），并确定以规则/状态机为主+评分辅助及结构化解释字段与数据最小化原则。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把分数弄成红黄绿，然后告诉他现在膜是保湿还是散湿，冲盐还是缓释。界面上放个原因列表，比如EC上升太快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就说阈值到了。比如EC超过上限，或者变化率超过。再加一句生育期不一样，所以阈值不一样。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是根域EC、温湿度、灌溉量……还有膜下的湿度。中间量就是风险分，然后输出就是冲盐/缓释/保持，膜模式就三档。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "产量可以吧，产量低就风险高？地块位置也可以用来判断是不是盐地。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 我们做风险评分和解释，用地块位置、产量这些行不行？不行的话能用到什么程度？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就不用位置和产量了，尽量只用EC这些。解释就写“EC太高”。审计就都记上。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "嗯，改成只用传感器数据做决策，位置产量都别进来。解释输出分层，普通人看红黄绿和建议，管理员看触发条件。还有不确定就提示不确定，可能要人工。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "risk_level，risk_score，reasons，action，膜模式，阈值，生育期。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加 uncertainty_flag，strategy_version，viewer_role？reasons 就放三条，比如“EC日变化率高”“膜下湿度低”“排水记录正常”。不要放原始数据点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选A吧。规则更直观，也好解释。评分就当提示，不当最终决定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "规则失效…可能不同品种不一样，或者传感器漂了。验证就是做对照，看EC变化率、膜下温湿、单位水耗这些。然后规则阈值就调。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "让种植员看解释后能复述？比如问他为啥冲盐，他能说出两条原因。算吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "能。我跟前端说要分角色显示，普通只看颜色和建议，管理员看阈值区间、data_quality、策略版本。后端就按字段给出来，审计也存这些摘要。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我去把解释字段和分角色显示规则跟前端后端说清楚；还有把不该用的数据先从特征清单里删掉，位置产量都不碰。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在荷储频域协同控制接口规约细化背景下，用户与导师围绕指令下发时延边界与云边端协议选型持续沟通（5轮），其中在控制指令协议选型与帧头校验部分与频域控制规约师沟通（2轮），在云边端分层部署架构部分与解耦系统架构师沟通（1轮），用户分析协议取舍并总结规约方向，形成云边gRPC与边端UDP组播的分层协同及帧头校验约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口规约不就是定个数据格式和通信协议吗？用gRPC加Protobuf，后端解析快，以前项目都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "控制指令下发用gRPC到底行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "DDS那玩意儿太重了吧，后端还得搭一套DDS服务端，解析起来也费劲。我们后端团队只熟悉gRPC和JSON。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "频域规约师说要用DDS，但端侧设备肯定跑不动，这架构怎么搭？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那后端这边只用管gRPC的接口定义就行了对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，云边走gRPC，传策略和参数。第二，边端走自定义UDP组播，帧头带时间戳和TTL。第三，过期指令边侧丢弃，本地闭环。第四，云侧Payload里要塞二进制模板。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在移动端轻量渲染集成与历史着色器代码重构背景下，用户与导师围绕布料撕裂排查、着色器精度降级与UBO拆分方案持续沟通（7轮），其中在移动端精度支持与渲染架构坑点部分与跨端适配工程师沟通（1轮），并最终形成混合精度策略与SnapshotVer驱动的UBO拆分更新方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先看看是不是物理数据传到端上的时候衰减了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "看着色器代码，这顶点偏移量计算全用的double高精度浮点。理论上双精度不会出现数值截断导致的撕裂啊，精度完全够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "旧代码里顶点着色器全用double算偏移，移动端跑出来布料碎一地，是不是精度没对上？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来double跑不动。那得全改成half，Uniform也不能每帧刷。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "位移计算保float，法线和UV用half？UBO就拆成两块？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "材质参数放一块不常更新，姿态矩阵放一块每帧更新。更新频率就判断物体有没有动吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，着色器精度降级，位移用FP32，法线UV用FP16；第二，UBO拆分，静态材质和动态姿态分离；第三，姿态UBO更新用SnapshotVer版本号驱动，不是每帧刷。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

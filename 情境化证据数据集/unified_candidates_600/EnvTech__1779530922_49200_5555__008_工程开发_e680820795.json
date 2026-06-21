@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在气象流数据接入与清洗设计背景下，用户与导师围绕架构选型、职责边界、清洗规则实现及验证设计持续沟通（6轮），其中在乱序容忍度与状态压力评估部分与流式数据处理工程师沟通（2轮），最终放弃CEP和Drools，形成基于Flink SQL+UDF+维表Join的清洗方案与验证思路，并明确补学Watermark机制。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算用Flink CEP搞一套动态时序对齐和异常模式检测引擎，再套个Drools做清洗规则热更新，这样后续推演就能直接拿干净的特征了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "但气象数据乱序很严重，站点上报延迟可能差好几分钟，CEP能更精准地匹配致灾前兆模式。如果不在这层做深度清洗，后面推演中枢拿到的数据时序就是乱的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "站点数据上报延迟分布大概是怎样的？如果我在接入层用Flink CEP开5分钟的乱序等待窗口，状态后端扛得住吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "那如果只靠Watermark，2分钟延迟的数据会被直接丢弃吗？这部分边缘站点的数据对微生境推演挺关键的，丢了会导致脆弱度评估漏算。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我把职责边界搞混了，想一步到位把数据特征全算好。我对Flink的迟到数据处理机制和RocksDB调优一直停留在理论层面，没实操过这种带状态的大吞吐场景。我得先去把Flink官方文档里Event Time和Watermark生成器那两章吃透，再跑一下本地Checkpoint的压测脚本，搞清楚状态TTL怎么配才不会OOM，然后再来写这块逻辑。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Flink SQL的DDL配上自定义UDF做过滤。把气象要素的阈值范围配在MySQL维表里，流表Join维表做校验，越界的打上脏数据标签侧路输出。这样规则好维护，也不算过度设计。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备造两批测试数据：一批是正常时序但包含极端越界值，验证UDF能过滤且不误杀正常波动；另一批是故意打乱时间戳的乱序报文，验证Watermark机制能正确触发窗口并输出修正结果，且迟到数据能更新侧路指标。对比清洗前后的数据条数和时序分布就能验证。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

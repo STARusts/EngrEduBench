@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在全链路压测与性能调优背景下，用户与导师围绕压测模型设计、算力黑洞定位与降级预案持续沟通（6轮），其中在突增场景算力黑洞定位部分与性能调优专家沟通（1轮），在编排CPU打满降级策略部分与拦截编排策略师沟通（1轮），并最终形成包含常态与突增链路的压测模型及降级保底方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我准备用Jmeter模拟微塑数据上报，测一下QPS上限就行了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分两组线程。一组发常态增量，一组发突增快照。突增那组加个定时器模拟突发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路压测的话，突增场景下哪个节点最耗资源？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "图谱IO和编排CPU。那我压测重点盯着这俩的占用率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图谱IO打满就先不写图了？那数据不就丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "压测时如果编排解算CPU打满，分流指令怎么降级？数据能丢吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "跳过解算用旧快照，数据缓存不丢。这算是一种轻量模式。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测模型分常态和突增两条链路，突增按策略师给的阈值注入。重点观测图谱侧时空溯源的IO和编排侧流体解算的CPU。降级触发时，编排用上一轮分流快照，图谱数据进消息队列缓存。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

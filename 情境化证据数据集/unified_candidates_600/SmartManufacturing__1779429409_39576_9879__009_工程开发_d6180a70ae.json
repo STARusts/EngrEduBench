@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在位姿自洽算法实现背景下，用户与导师围绕多目标冲突降级、补偿下发合规边界及熔断逻辑持续沟通（5轮），其中在冲突降级策略部分与合相寻优算法师沟通（1轮），在补偿安全红线部分与质量合规确权师沟通（1轮），并最终明确Pareto折中解与动态权重方案、熔断拦截位置及开发排期。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算照着方案设计里的伪代码，先把多目标寻优的类结构写出来，然后实现补偿值计算，最后接下发接口。排期大概3天写完，1天自测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "冲突的话，我本来想按固定权重优先保间隙。边界，我还没细看，是不是定个最大补偿值就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "位姿寻优目标冲突了怎么降级？我准备按权重硬选。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "位姿补偿下发有什么安全红线？我准备写死一个最大值常量。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法师说不能硬选，要走Pareto拿折中，评价函数要做可插拔。合规师说不能写死常量，得从配置表读，超限要熔断记日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Pareto输入就是解耦模块给的公差余量，输出是六个轴的补偿量。熔断，我放在下发接口调用前查表判断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "今天下午对齐Pareto输入维度和评价函数接口。明天写Pareto求解调用和动态权重加载。后天做熔断逻辑和配置表读取。大后天自测。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

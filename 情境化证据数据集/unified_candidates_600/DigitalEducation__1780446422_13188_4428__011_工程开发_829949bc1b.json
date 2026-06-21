@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在端侧实训联调与压测排障冲刺交付背景下，用户与导师围绕压测并发弱网要求、补偿重试机制与边界、压测瓶颈定位、数据脱敏合规及图库慢查缓存策略持续沟通（8轮），其中在压测指标与弱网模拟、重试次数建议、日志脱敏哈希化部分与测试保障工程师沟通（4轮），最终形成JMeter压测、5次指数退避重试、SHA256脱敏及1小时过期热键缓存方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "丢包加个sleep不就完了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "JMeter那玩意儿配置太麻烦，我直接写个Python多线程脚本模拟一下，效果一样的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我昨天刚好看了个指数退避重试的代码，直接搬过来，包好用的。超时就翻倍等，简单得很。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那设3次呗。3次不行就拉倒，反正不是我的锅，是网太差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不过我看的日志里一堆学生ID，这脱敏怎么搞？直接删了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "SHA256太慢了吧，影响性能。我就给ID加个前缀“test_”算了吧，反正压测环境没人看。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我跑完压测，发现匹配接口偶尔超时，日志显示是图数据库查询慢。这结论行了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边太多呗。技能图谱越往后越复杂，节点肯定多。我加个缓存，把热门技能的匹配结果存起来，不查图库了。这总行了吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "设1天。实训课一天一节，一天更新一次够了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "那就设1小时。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1小时过期，过期重查，加上指数退避重试，压测用JMeter加脱敏。搞完收工！"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

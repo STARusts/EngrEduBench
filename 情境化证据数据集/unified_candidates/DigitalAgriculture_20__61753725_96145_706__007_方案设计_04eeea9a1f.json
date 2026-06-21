@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在指数模型对外定价与触发类API方案设计背景下，用户与导师围绕计费口径、触发口径、审计留痕和接口契约持续沟通（7轮），其中在触发分层与原因码/充分性指标设计上与农业风控分析师沟通（5轮），在对外审计字段、权限分级与日志保留规则上与合规与隐私官沟通（5轮），并最终明确按调用量分档计费与同步三态触发API的最小返回字段集。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "他们就会问，凭啥这么贵。还有触发到底算不算触发。我也说不清。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按调用量吧，简单。触发就同步，直接回个true/false。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业风控分析师 触发这块，要不要分预警啥的？我现在只想回true/false。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "INCONCLUSIVE就直接不赔？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码要写多少个？我怕搞一堆记不住。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "触发阈值就用你们上次说的D/F分段吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那定价跟这个有关系吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂一点了。就是三态+原因码。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 对外API要带啥审计信息？能不能就给结果和版本号？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "要不要把地块ID传出来？感觉客户就要这个。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "保留多久？日志我不知道怎么弄。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原因码这种算敏感吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那计费字段也要审计吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定价就是，触发核验接口贵点，普通查询便宜点。然后每次要有request_id，能对账。触发API不能只true/false，要三态，还有原因码，像映射失败、样本不够这些。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选A吧。调用量好算。包年我怕算错面积扯皮。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同步。客户用着快。异步他们不一定接得住。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就status三态，reason_code。再给version。再给…drivers？就是降雨、温度这种。还有audit那个id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "price_metering也放返回里？我以为账单才有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按客户等级？大客户给多点？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "2秒会不会太快了，我不知道。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先找农业风控把三态、原因码、drivers要哪些定下来。再找合规把request_id、audit_trace_id、data_snapshot这些能不能对外和保留多久确认。最后找产品把计费档位、price_metering回传和超额降级写进验收。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,33 @@
+[
+  {
+    "domain": "柑橘园智能巡检与病虫害早期监测机器人系统",
+    "stages": [
+      {
+        "stageName": "第三章 实验实现与开发过程",
+        "microScenes": [
+          {
+            "microScene": "在「第三章 实验实现与开发过程」阶段，本段围绕「模型训练与部署实现」展开，依次说明深度学习环境配置、训练参数设置与过拟合调优策略，以及模型量化加速、边缘端部署与ROS导航对接的实现过程。",
+            "evidence": [
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "配置了基于Ubuntu 20.04的深度学习环境，使用PyTorch 1.10作为开发框架。训练过程中，我们设置初始学习率为0.001，采用Adam优化器，Batch Size设为16，并开启了Mosaic数据增强策略。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "在训练到第150个Epoch时，模型出现了过拟合现象。为此，我们引入了Label Smoothing和权重衰减机制，并重新调整了验证集比例。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "完成训练后，我们利用TensorRT对模型进行了量化加速处理（FP16量化），并将模型部署到Jetson Nano上。"
+              },
+              {
+                "behaviorLabel": "实验/实现",
+                "behaviorEvidence": "通过编写接口程序，实现了推理结果与ROS导航节点的实时对接，通过Actionlib协议发送预警坐标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

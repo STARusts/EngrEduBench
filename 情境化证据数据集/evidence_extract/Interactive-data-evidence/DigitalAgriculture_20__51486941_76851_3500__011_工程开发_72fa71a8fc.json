@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发收尾的异常回放与定位背景下，用户与导师围绕按plan_id做可解释回放、事件化埋点、事故触发扩展快照与离线回放接口持续沟通（11轮），其中在回放用例与可观测事件流设计上与测试工程师沟通（2轮），在回放数据最小化、权限留痕与保留策略上与合规与审计官沟通（1轮），在调度纯函数回放接口与最小输入快照字段上与调度优化工程师沟通（1轮），并明确后端需落库事件规范、触发条件与回放diff输出。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回放就把日志重新跑一遍吧。把当时的请求拿出来，再调一次接口，看是不是还能复现。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就把接口入参出参都存着？就是 JSON 全量落库。然后回放直接按顺序发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "plan_id、时间、分区 id、泵站 id、用水量…还有碳？电量？反正都记下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入快照：传感器水分、流量计读数、遥感 ET 值、天气？决策过程：算出来的需水量、选了哪个泵、生成的启停时间。外部副作用：下发指令内容、边缘回执、执行结果。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "缓存…我没想。要不缓存每次都打印一行 hit/miss？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 你们回放异常一般要啥？我这边就想存日志。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那你们是不是还要把传感器原始值全存？不然 hash 没用吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是按他说的事件表做五种事件。然后每个 plan_id 都写进去。hash 我也加上。cache_hit 也加。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "plan.generated 就处方生成接口返回那儿写一条。dedup 就我加的 LRU 那里写。payload_hash 就对 JSON 做个 md5？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与审计官 回放这块我就想把 payload 存起来方便查，可以吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不存 payload 了，只存 hash。查询也加权限。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "触发条件…水权超了算一个；泵站反复启停算一个；还有就是回执一直没来？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "N=3？T=60 秒？R=5？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "实现…我就按事件表加个表，然后写入。窗口聚合我可能直接查时序库按时间拉一段再存？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我负责事件落库、回放接口、还有触发 snapshot_request。后台 job 我也能写点，但别太复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不知道，有个 generatePlan 的方法吧？我可以直接调用。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@调度优化工程师 你们能给个回放用的接口不下发吗？我想传 plan_id 进去直接吐结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "他意思是我要把很多输入都存下来。那我还是全存 JSON 更快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就给 plan 和 decision_trace，还有和原来的差异。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "量差就是 water_m3_diff；时序差就是 start_time_diff、stop_time_diff？约束原因差就是 reason_code_diff。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我都能做吧。SHA-256 我去找个库用。查询留痕我可能先简单记 user_id+plan_id。扩展快照异步我按你说的用现有任务模块。就这样。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关联调适配背景下，用户与导师围绕网关RST重置包排查与协议适配持续沟通（5轮），其中在网关协议特征与排障切入点部分与边缘感知安全官沟通（1轮），并最终形成修改模拟器适配CoAP协议栈及使用eBPF追踪内核丢包的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "网关一直给我甩 RST 重置包，我本地模拟器跑得顺得很，完全不知道哪里没对上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就知道它收体征数据，底层用的啥完全没概念。我只看了 Java 报的 Connection Reset 异常，再往下就黑盒了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我本地模拟器是 HTTP 直连的，线上到底走什么协议？这 RST 怎么查？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我模拟器完全没写这块。那 Wireshark 抓包还得解密 DTLS 吧？我上哪去拿密钥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我可以写个脚本追踪 udp_recvmsg 的返回值，看是不是网关内核缓冲区溢出直接把包扔了，根本没走到 CoAP 解析层。这比去搞密钥抓包解密快多了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去把模拟器的 HTTP 接口改成 CoAP，然后写个 bpftrace 脚本挂上去看 UDP 丢包情况。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在超表面相控驱动与微码开发背景下，用户与导师围绕指令时序对齐、微码刷新与延时补偿持续沟通（7轮），其中在微码吞吐与时序对齐部分与嵌入式固件开发工程师沟通（3轮），在硬件响应与翻转抖动部分与超表面硬件架构师沟通（1轮），并形成双缓冲刷新、流水锁存与开机自检标定补偿方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "相控向量下发的理论模型我熟，就是根据信道估计结果算相位偏移，然后映射成PIN二极管的通断状态。微码固件直接按这个查表赋值就行了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "时序对齐这块我确实没细想，理论上只要计算完下发就行，但实际微码执行可能有延迟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "相控指令流下发到微码执行，时序上怎么保证重构窗口对齐？直接查表赋值行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "双缓冲预加载，原子刷新。这能消除刷新的毛刺吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "硬件侧对双缓冲原子刷新有支持吗？相控驱动引脚的驱动能力会不会导致状态翻转时间不一致？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "微码得用双缓冲预加载加原子刷新，硬件支持行级流水，但PIN管翻转有抖动，要在微码里加延时补偿。不然相控状态会乱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "出厂写死简单点吧，每次开机标定太慢了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "开机自检标定逻辑我没写过，只会调现成API。怎么测翻转延时并生成补偿表，这块我不懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "开机自检做PIN管翻转延时标定，具体怎么测？用定时器抓GPIO状态变化吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用输入捕获测时延，算偏差存Flash。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

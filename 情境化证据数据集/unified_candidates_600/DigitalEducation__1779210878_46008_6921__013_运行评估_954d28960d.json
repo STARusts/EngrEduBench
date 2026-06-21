@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在线上策略库匹配命中率突降排查与修复背景下，用户与导师围绕命中率跌坑原因、止损降级方案及低成本重训路径持续沟通（6轮），其中在命中失败Case共性分析部分与数据洞察分析师沟通（1轮），在特征表征优化与增量微调方案部分与算法架构师沟通（2轮），并最终形成网关拦截止损、构造困难负样本及LoRA增量微调的三步修复策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去看检索服务的日志，是不是ES或者Milvus挂了，或者超时了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "昨晚8点那波命中失败的Case，共性是啥？是不是都是某一类异常？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种特征挤一起怎么弄？是调大检索的温度系数，还是得重训蒸馏模型？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "缺困难负样本。那就加一批“纪律异常”的负样本进去，重跑蒸馏流程呗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力确实贵，之前跑一次要小半天。误伤这块，要不先在前端加个提示，说建议仅供参考？或者直接把纪律类的异常降级，不返回策略了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "在网关层加个规则，如果识别到输入日志包含“纪律”、“吵闹”这类实体，直接拦截，不走检索链路，返回空。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "增量微调？拿昨晚那些错误的Case构造一批困难负样本，只跑这部分数据的微调？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我改下蒸馏脚本，加上LoRA配置，把昨晚的错误Case洗成困难负样本集。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "网关拦截马上能上线，LoRA微调跑完大概一小时，跑完看命中率能不能回到80%以上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

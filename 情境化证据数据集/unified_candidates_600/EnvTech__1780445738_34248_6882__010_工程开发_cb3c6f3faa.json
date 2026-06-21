@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在结晶寻优算法实现面临实时性与精度冲突背景下，用户与导师围绕算法选型取舍与折中方案持续沟通（4轮），其中在实时性约束与查表可行性部分与算法工程实现主导沟通（3轮），在精度保障与离线相图生成部分与热力学相图建模师沟通（3轮），并形成离线生成相图包结合在线插值查表的折中实现方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "结晶寻优不就是算相图找析出点嘛，之前评审不是定好用Pitzer模型算吗，直接套开源库写进来呗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "一边要快，一边要准。能不能把Pitzer模型简化一下？少迭代两次？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "实现主，5%偏差真就全废了？建模师，3秒真就没一点优化空间？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "离线算好相图，在线查表？@算法工程实现主导 如果把Pitzer模型离线跑完，生成多维相图网格存下来，在线只做插值查表，边缘侧能跑不？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程实现主导 你测一下，边缘网关还剩多少内存能放这个相图库？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@热力学相图建模师 0.5%步长，离线生成这库要多久？精度能过吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "离线出相图包，在线插值查表。步长0.5%，占150MB，单次查询10毫秒，精度误差1%。就这么定了吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我这就去写插值查表的接口规约，让建模师出数据格式，实现主定查表入参。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

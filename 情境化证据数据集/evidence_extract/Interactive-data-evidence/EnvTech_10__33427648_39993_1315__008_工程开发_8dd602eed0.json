@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在碳污联防智能审计平台工程开发中，用户与导师围绕采集网关端到端设备接入、可靠投递、幂等对账与证据链落地持续沟通（10轮），其中在现场可用标识、cursor断点续传与时间规范化口径部分与IoT边缘工程师沟通（3轮），并收敛消息模型/回执策略/缓存降级与可编码验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我按三层拆：设备侧协议适配（Modbus/OPC UA/HTTP推送）、网关侧采集与缓冲、平台侧接入API。实现优先级我想先做“网关到平台”的可靠投递闭环：本地落盘队列、批量上送、平台回执；然后再做各协议的采集驱动。争议点主要是：消息格式要不要统一成一套“测点事件”模型，以及回执到底按条回还是按批回。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "事件模型我先草拟成：device_id、point_id、ts（设备采样时间）、recv_ts（网关接收时间）、value、quality、unit、seq（设备序号如果有）、gateway_id、batch_id。审计对账我想加payload_hash和prev_hash（网关侧链式），再加sign（网关私钥签名）——签名的细节我不展开，但字段预留。幂等键我倾向用(gateway_id, device_id, point_id, ts, seq)拼起来，再算一个event_id哈希。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@IoT边缘工程师 现场接入这块我需要落地：设备侧通常能拿到哪些“可用于幂等/对账”的字段？没seq、时间漂的情况下，你们一般怎么做断点续传和去重，才不会把审计对账搞乱？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "cursor是网关自己给每个点维护一个递增计数？那断电重启后cursor怎么保证连续？如果重置，平台端会不会把历史又当新数据？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那设备时间戳不可信时，平台核算用哪个时间？只用网关recv_ts会影响碳核算按小时汇总的边界。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 边缘工程师的反馈比较关键：Modbus基本没seq也没可靠设备时钟，幂等不能靠设备字段。建议网关为每个point维护落盘cursor单调递增；另外加sample_bucket（按采集周期对齐）做一致性检查。时间口径上区分raw_ts与norm_ts，平台核算用norm_ts。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向“按批回执 + 批内范围确认”。网关上送一个batch，包含batch_id、count、first_cursor、last_cursor、以及每条event的event_hash。平台处理完返回：batch_id、accepted_range（例如连续游标段）、rejected列表（cursor+错误码）。网关据此重传rejected或补洞。这样吞吐高，同时对账有游标段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "允许多个段，但上限要控，不然回执膨胀。策略：平台按cursor排序后，输出最多N个连续段（比如N=8），剩余的都归到rejected，迫使网关拆小批次重传，避免回执无限长。失败原因比如：schema错误、签名校验失败、point未注册、值越界、时间不在允许窗口等。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "链我打算先按“批次”串：batch_hash = hash(prev_batch_hash + concat(event_hashes) + batch_meta)。这样网关侧维护prev_batch_hash落盘。事件级链更细，但实现复杂、对存储压力也大。可测的点：同一网关连续两批，prev_batch_hash必须对得上；任何重排/篡改都会导致平台验不过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "hash输入只包含“审计必需字段”的规范化版本：gateway_id、point_id、norm_ts、value（数值本身没法不进，不然无法证明）、quality、cursor、unit、采集周期标识；不把raw_payload（比如Modbus整帧）纳入默认hash。raw_payload只在合规稽核触发时按开关采集，且单独走更短保留期。平台侧存储也区分：主链存规范字段，原始帧是可选证据附件。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "在网关侧先做“规范化序列化”：数值统一按point配置的scale与rounding（例如四舍五入到3位或按传感器分辨率），单位统一到平台标准单位；序列化用固定字段顺序、固定小数格式、UTF-8，避免JSON字段乱序带来的hash差异。这个规范我会写成一个小的库函数，网关和平台验签/验hash都用同一套规则。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "默认按“点位数量×采集周期×离线时长”估算缓存：比如5000点、1分钟一次、保7天，数据量会爆。我打算做三档：  \n- 标准档：保2天，超过后丢弃低优先级点（非监管点/非核算点），只保监管与关键能耗点；  \n- 监管优先档：监管点保7天，其他点保24小时；  \n- 极限保护：磁盘水位>85%只保监管点且批次变小，>95%停止新点位接入并告警。  \n这些阈值做成配置，现场能调。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验收点我先定六条：  \n1）幂等：平台按(gateway_id, point_id, cursor)幂等，同一cursor重复上送不产生重复入库与重复审计记录；  \n2）时间口径：事件同时携带raw_ts与norm_ts，汇总计算只用norm_ts，raw_ts仅展示与取证；  \n3）回执：批量上送返回accepted_segments（≤8段）+ rejected(cursor,code)，网关按回执补发；  \n4）离线：断网24小时后恢复，网关能按cursor连续补齐，平台对账能对到last_cursor；  \n5）证据链：批次hash链校验通过；任意改动字段导致平台验链失败并产生日志告警；  \n6）资源保护：磁盘水位触发降级策略（丢非关键点、缩批、暂停接入）且可观测到相应告警事件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

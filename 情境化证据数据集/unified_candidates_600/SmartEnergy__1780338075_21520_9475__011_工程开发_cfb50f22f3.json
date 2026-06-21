@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发极端工况注入测试背景下，用户与导师围绕软故障注入方法、容灾降级验收标准及测试脚本落地持续沟通（7轮），其中在软故障注入与结果判定部分与极端工况测试员沟通（3轮），在容灾降级验收标准部分与容灾策略师沟通（1轮），并最终形成三项测试项与验收红线。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "把氢气注入压力打到设计阈值的1.5倍，看看腔体形变报警能不能弹出来？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我只写过正常业务流的测试脚本，这种通信断开或者数据漂移的故障，我不知道怎么往系统里塞。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我只会加物理压力，软故障不知道怎么搞。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "传感器毒化具体是啥操作？就是喂假数据进去？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这种破坏性测试会不会把测试环境的数据库搞崩啊？我得提前备份数据。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "肯定不能。得看降级策略有没有在规定时间内触发。验收标准怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "3秒降级，注输锁零，快照恢复误差<5%。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我可以在测试脚本里加一个Mock服务，替代真实数据源，往里面灌带漂移的假数据。不用去改真实传感器的硬件，测起来方便多了。我等下就去改脚本加这个数据污染Mock模块。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跑一次如果在4.9%算过，5.1%算挂？这样感觉太随机了。但置信区间怎么算我不太会，得跑很多次取平均吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测试项有三个：网络撕裂（断开500ms）、传感器毒化（用Mock灌漂移数据）、泵阀卡死。验收红线：3秒内切降级模式，注输指令熔断锁零，快照恢复P95误差<5%，超出5%的必须有人工复核告警。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

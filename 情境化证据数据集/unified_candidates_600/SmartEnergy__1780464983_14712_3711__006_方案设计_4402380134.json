@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在云边端协同架构约束背景下，用户与导师围绕碳迹确权、绿证锚定、隐私保护与算力部署持续沟通（10轮），其中在链下预处理与ZKP隐私保护部分与链上确权设计师沟通（2轮），在绿证核发与锚定粒度部分与碳电市场分析师沟通（1轮），并最终形成碳迹确权与绿证锚定链路的架构约束及数据流排布。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "碳迹确权不就是上个链吗？用Fabric起个联盟链，把每个产消者的电量哈希上链，绿证跟着发就行了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这，TPS确实不够。那200ms内上不了链，这碳迹怎么确权？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "联盟链TPS太低，200ms红线内搞不定碳迹上链，而且细粒度负荷数据直接上链有隐私风险，这确权链路怎么设计？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "链下聚摘要，链上批量确权，用ZKP保隐私。这倒是可以绕开TPS瓶颈。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边侧聚合了碳迹摘要，这摘要对应的绿证怎么发？是按度发还是按聚合包发？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边侧网关提取频域特征，聚合成碳迹摘要，同时做电量-碳迹的预锚定锁定。然后摘要通过ZKP上链确权，不传原数据。云侧撮合引擎拿到链上的预锚定凭证做流转。月底再异步核发绿证解冻。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "凭证里要有摘要哈希、聚合时段、预锚定电量值、锁定期。接口走gRPC，因为时延红线在。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "ZKP生成算力开销大，边侧网关可能扛不住。放云侧生成？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "ZKP证明生成放哪边？边侧算力好像不够，放云侧又怕超时延红线。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "懂了，控制指令200ms同步，确权证明可以异步。云侧异步生成ZKP。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，确权链路走链下聚合摘要+链上批量确权，不用Fabric直连。第二，锚定分两阶段，边侧预锚定锁定，月底云侧正式核发解冻。第三，隐私保护用ZKP，边侧发摘要承诺，云侧异步生成证明上链。第四，预锚定凭证接口走gRPC，含摘要哈希、时段、电量、锁定期。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

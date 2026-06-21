@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在端侧课堂多模态助教方案设计背景下，用户与导师围绕干预策略与规则引擎的输入/输出、质量门禁、频控降级、冲突裁决、轻量状态与可审计回放持续沟通（6轮），其中在干预类型与越界边界部分与教学设计师沟通（3轮），在规则JSON版本化、状态TTL与审计日志字段部分与后端工程师沟通（2轮），并形成规则引擎最小可用设计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是 if-then。比如参与率低就提醒互动。坑的话，怕误报，还有就是别变成对学生点名那种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入就是 event_type集合+时间窗+count/rate。输出就是给教师一个卡片提示？强度可能分轻重。冲突裁决我不太会，可能按优先级。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@教学设计师 端侧课堂多模态助教这里，规则引擎要用实时摘要触发提示。输入只能是 event_type集合、aggregation_scope（class/group/device）、count/rate/bucket、时间窗，且不能涉及个体。你这边能给一套“干预类型-触发条件-不该做什么”的模板吗？另外晚到不回填实时摘要，这会影响触发吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“趋势/持续满足”是指连续两个窗口都低才触发？我怕这样又太慢。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值谁来定？我如果拍脑袋写 10min 之类的会不会不靠谱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主要三块：节奏类、设备保障类、频控降级。还有禁区清单。触发上用二段式：单窗先弱提示，连续再强提示。阈值先参数化，不写死。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "输入：event_type里有 teacher_talk_segment；aggregation_scope=class；time_window 10min；bucket 是连续时长；quality_flags 里如果有时钟不同步就不强提醒？输出：给教师提示“加互动”。频控：10分钟内不重复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "优先级我想：设备故障最高，然后是节奏，再是别的。设备故障出来了就先别弹节奏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "需要一点状态吧，不然怎么知道连续触发。就是记住上一个窗的结果。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 规则引擎这块我们要做二段式触发，需要记住最近N个窗口的触发位，但只能在 class/group/device 级。想问：规则怎么版本化和下发？状态存储怎么做、保留多久合适？审计日志要记哪些字段才能回放解释，同时不触碰个体数据边界？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态TTL=2小时这个挺直观。reason_codes 我容易漏。冲突 suppress 也算 reason。那回放是靠摘要日志重新跑规则？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我想定：  \n1）规则声明式：条件只读摘要字段，不碰个体。  \n2）每条规则带 gates，用 quality_flags 决定降级，比如 timing_unreliable 不出强提示。  \n3）二段式：单窗弱提示，连续N窗才强提示，需要class/group/device级轻量状态。  \n4）冲突裁决：设备保障类最高优先，同屏最多一个强提示，其余角标或队列；被压制要写 reason_codes。  \n5）频控：同类提示有冷却时间，避免刷屏。  \n6）版本化：rule_set_version 下发，审计日志带版本和决策原因，回放用摘要重跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

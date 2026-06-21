@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在预言机联调与端到端测试背景下，用户与导师围绕防重放校验与测试链路隔离方案持续沟通（4轮），其中在回调防重放与签名校验部分与跨域预言机对接师沟通（2轮），在测试可行性与环境替换部分与链端联调测试攻坚手沟通（2轮），并最终形成加Nonce校验、签名验证抽成Library并用Stub替换的联调测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Gas确实降了大概20%。联调的话，我打算直接用Hardhat跑个fork主网脚本，把预言机返回的data直接喂给trigger接口，看账本状态对不对就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我合约里只验了三个签名，顺序也没管，直接用bizId做幂等，这样联调会不会有问题？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "加Nonce和验权重，Gas又要飙了吧？而且测异常注入太麻烦了。测试那边是不是可以简化点？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "加后门确实爽，我写合约也省事。不过上线前得记得删。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "确实，后门容易忘。那如果不加后门，测试又很难搞。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Nonce我肯定得加，不然乱序没法弄。签名验证这块，能不能折中一下？测试环境用个MockOracle，它直接调trigger，绕过外部预言机签名；生产环境再换回真预言机。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约里加Nonce校验，这个不能省。签名验证我抽成一个独立的Library，测试的时候用个StubLibrary替换掉，返回True。这样合约主体没后门，测试也能跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

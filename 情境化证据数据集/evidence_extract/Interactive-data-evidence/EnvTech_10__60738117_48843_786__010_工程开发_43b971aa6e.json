@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在策略服务v0工程开发收尾需拉通链路并验证降级与性能的背景下，用户与导师围绕E2E用例、压测建模、验收阈值与CI分层持续沟通（9轮），其中在工业时序流E2E/压测设计与断言口径上与测试工程师沟通（3轮），在测试数据脱敏、日志留痕与保留审计边界上与合规与隐私官沟通（2轮），并形成可执行的用例集、负载三档与合规约束清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是搞一套“全链路数字孪生压测”，把装置、锅炉负荷、喷氨阀、引风机这些都建成仿真模块，然后做闭环。这样更像现场。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "E2E 我想分：\n1) 正常工况：点位齐全、数据平滑，策略 FULL 输出候选，检查约束不超标；\n2) 数据质量异常：比如 NOx 传感器跳变、CO2 缺失、单位错，把规则触发看是不是会走 RULE_ONLY；\n3) 边缘算力紧：策略超时自动降级，看 reason code 和 CPU 曲线。\n\n压测形态：\na) 稳态压测：固定并发；\nb) 突刺：瞬间 5 倍；\nc) 长稳：跑 6 小时看内存泄漏。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 端到端测试和压测如果要贴近工业尾气场景，你建议怎么设计？我现在想到的是模拟点位时序流+策略周期调用，但细节不稳，比如抖动、乱序、缺采样这些要怎么覆盖，性能指标也不知道该怎么定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "你说的“允许抖动范围”我有点想做成很严格的数值一致性校验，否则不好回归。或者干脆引入 property-based testing，把输入随机化一遍，自动找反例。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "压测工具你更偏哪种？我本来想上分布式压测平台，带 tracing、火焰图、自动扩缩容脚本，一次把体系补齐。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们想做端到端回放和压测，可能会用部分历史数据当输入。哪些字段在测试环境要去标识化？日志里哪些内容禁止打印？数据保留、访问权限有什么硬要求？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白。我之前还想把所有原始 payload 打进日志，方便排查，现在看得收敛。那“hash 后的点位标识”是不是就够了？如果出现映射错误，我可能定位不到具体点位。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把两边意见拼一下：E2E 要做异常覆盖+reason_code 校验；压测要按“点位流+周期计算”建负载；日志要只打内部 id、reason_code、compute_mode、耗时。这里我有点纠结：要不要把 E2E 直接做成“全链路金丝雀”，每次提交都跑一遍长稳，省得漏。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "PR 级别：跑最小 E2E 三条（正常、缺点位、stale/乱序各选一条），再加一个小压测（比如 5 装置、2 分钟）验证不会立刻超时、降级能触发。nightly：随机化 200~500 样本 + 混合压测（比如 50 装置、30 分钟）。版本候选：6 小时长稳 + 突刺。\n\n我这边能负责策略服务侧的判定和埋点：compute_mode、reason_code、耗时分位；接入侧 generator 可能得找边缘同事帮我确认点位速率。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "阈值我拍个保守的：\n- 策略计算：FULL p95 < 800ms，p99 < 1s；超 1s 进入 RULE_ONLY，RULE_ONLY p95 < 120ms。\n- 降级触发：在 CPU 限制或超时压测里，降级率能上去但不能把失败率带高，计算失败率 < 0.5%（只允许输入缺失导致的不可优化）。\n- 接入到可用特征：p95 < 2s，丢弃率（因质量规则）< 2%（异常场景单独算）。\n- E2E 输出：reason_code 覆盖率 100%（任何非 FULL 正常路径都必须带 code），幂等差异在一个步长内。\n\n我不确定“50 装置”的规模是不是太随意了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "口径我按：每装置 600 点位，1s 一次上报，等于 600 points/sec/装置。假设现场一台网关带 10 装置，就是 6000 points/sec。策略每装置 30s 算一次，10 装置就是每 30s 10 次计算。那压测我可以设三档：\n- 小档：2 装置（1200 points/sec），策略 2/30s；\n- 中档：10 装置（6000 points/sec），策略 10/30s；\n- 大档：30 装置（18000 points/sec），策略 30/30s。\n大档主要看边缘 CPU 和降级，不强求 FULL 都撑住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我能在策略服务里统计一段时间窗口内 compute_mode 切换次数。比如 10 分钟压测，切换不超过 2 次；一旦进入 RULE_ONLY，至少保持 5 分钟，除非 CPU 回落或超时率低于阈值再回 FULL。这个“保持”是不是要写进逻辑里？现在我只做了超时自动切 RULE_ONLY，没有回切策略。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我还想加一个“追踪全链路耗时”的分布式 tracing，把接入、质量规则、特征计算、策略、输出都串起来。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我把漂移也归到数据质量异常里：3s 允许插值，10s 直接 stale 或降级。reason_code 要区分是“TIMESTAMP_DRIFT”还是“STALE”。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

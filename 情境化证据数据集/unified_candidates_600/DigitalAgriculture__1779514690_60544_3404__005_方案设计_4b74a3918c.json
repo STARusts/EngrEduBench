@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在端云数据流规划背景下，用户与导师围绕弱网协议选型、QoS策略、断网兜底、时序对齐与并发流控持续沟通（7轮），其中在协议选型与QoS、断网缓存、时间戳处理及流控架构部分与数据流规划师沟通（5轮），并最终形成完整数据流主干方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思端侧算好特征，打个包发HTTP给云端，云端算完返回指令不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧到云端推特征向量，用HTTP是不是不行？网络差容易丢数据。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "MQTT我知道，物联网都用。那QoS怎么选？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "上行QoS1，下行QoS2。那断网的时候呢？刚才导师说断网要本地兜底。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用MQTT，上行特征QoS 1，下行指令QoS 2。断网时特征丢掉留最新的，本地增氧日志存着等网络好补传。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就在Payload里加个时间戳和设备ID？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "端侧时钟不准，特征流的时间戳怎么搞？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说用Broker的服务端时间戳做主时间，端侧只发相对时间算帧间隔。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就想着多加几个消费者就完事了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以完整流是：端侧MQTT推特征，QoS1，带设备ID和相对时间，云网关聚合进Kafka，模型消费预测，指令走MQTT下发，QoS2。断网本地兜底存日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

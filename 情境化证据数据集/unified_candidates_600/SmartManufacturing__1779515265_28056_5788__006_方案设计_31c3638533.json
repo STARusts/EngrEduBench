@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在动态调度算法选型背景下，用户与导师围绕算法选型及验证方案持续沟通（3轮），其中在算法实时性边界与选型部分与动态调度算法师沟通（2轮），在混合架构验证方案部分与动态调度算法师沟通（1轮），并最终形成放弃通用求解器、采用混合启发式架构及孪生体仿真验证的结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Google OR-Tools挺火的，Python接口多，社区例子也多，是不是直接拿它套一下比较快？毕竟咱们要赶进度，现成的轮子不造轮子嘛。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我倒是没细测过。不过OR-Tools可以设时间上限吧？超时给个次优解也行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高混小批量这种老有急单插队的情况，OR-Tools能不能抗住？要是抗不住，有没有更方便点的开源框架能顶上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那遗传算法的话，Python有个DEAP库，直接调包是不是也挺方便的？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得这个思路靠谱，急单来了用邻域搜索快速改局部计划，平时用遗传算法慢慢找最优。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "混合架构的效果怎么验证啊？总不能上了产线再试吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，放弃纯运筹求解器OR-Tools，因为动态扰动下全量重算耗时不可控；第二，采用混合启发式架构，GA负责周期性全局寻优，邻域搜索负责事件驱动的局部快速重调度；第三，验证方案用历史3个月产线日志做基准，在孪生体里注入扰动，对比重调度耗时和延期率指标。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

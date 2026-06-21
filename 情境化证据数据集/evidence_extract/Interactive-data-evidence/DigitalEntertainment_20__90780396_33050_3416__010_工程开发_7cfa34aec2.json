@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在互动网关事件分级落地到编排引擎任务开发背景下，用户与导师围绕A/B/C三类入口的任务模型、幂等并发与回放策略持续沟通（2轮），其中在任务定义、event-log与版本化回放要求上与规则编排工程师沟通（3轮），并形成EventRecord/IdemStore/事件日志与队列过期限深的实现清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "A就是要同步跑完才回，B是失败就给个安全态标记，C就直接入队回ACK。引擎这边我没想太细，就按三条路分开写处理器？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "任务对象…就是把event包一下，加roomId、userId、ts。幂等我先用eventId去Redis setnx？如果重复就丢。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则编排工程师 A/B/C三类入口落到编排引擎任务这块，你们一般怎么定义任务模型和幂等？回放要做到什么程度？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "回放得用当时版本…这块我之前没想。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那event-log是每类都写吗？C类不是已经ACK了，还写会不会慢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等返回同一个结果…那我是不是得把结果也存起来？存哪里合适，Redis？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我准备这么落：  \n1）引擎侧先统一成EventRecord：roomId、eventId、eventType、priority(A/B/C)、ruleVersion、assetVersion、ts、payloadHash。  \n2）A/B进来先查幂等缓存：key=roomId+eventId，命中就直接返回上次结果（A返回checkpoint，B返回safeMode/fallbackPreset）。不命中才执行。  \n3）A类执行完写IdemResult(A类)包含checkpoint和responseHash；B类执行失败也写IdemResult(B类)包含safeMode标记。  \n4）C类先写一条轻量event-log（可以异步），然后生成QueueTask丢队列，ACK立刻回。QueueTask执行时也记录ruleVersion，用来回放。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用setnx抢锁？key=lock:roomId+eventId，拿到锁的执行，另一个等一下再读结果。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我先等，比如轮询2次？每次50ms？读不到就返回一个重试错误？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就A类等到比如120ms上限，期间每30ms查一次结果；超过就返回50301？但50301不是上游服务不可用吗。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "A走安全态会不会破坏强校验？感觉不行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我加个原因字段。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能。就是B的返回可以先给默认safeMode=true，然后等真正结果落了再覆盖幂等记录？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "明白，我之前想错了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "QueueTask里带一个expireAt，比如事件ts+2s。消费时如果超过就丢掉。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就每个room一个最大队列长度？超过就只保留最新的，比如同类型合并？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "payload我本来想全存，方便回放。敏感信息…用户昵称头像这些？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这块我容易漏。我就按你说的字段集来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

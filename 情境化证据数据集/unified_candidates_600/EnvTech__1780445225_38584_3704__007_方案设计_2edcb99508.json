@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在诱导策略流控接口设计背景下，用户与导师围绕通信机制、合规拦截与流阻塞风险持续沟通（7轮），其中在流式接口规范部分与微服务接口工程师沟通（1轮），在策略下发拦截要求部分与政策合规审计员沟通（1轮），并最终形成包含gRPC双向流、背压、前置合规审计与异步非阻塞拦截的四项核心约束方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "接口设计我熟。就给个RESTful API，把推演出的廊道织合策略打包成JSON，GIS平台那边弄个定时任务轮询拉走就行了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规是啥意思？策略是算法算出来的，还能违法？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "诱导策略下发，用REST拉取行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "诱导策略下发前是不是要查合规？怎么查？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "接口改用gRPC双向流推，加背压防客户端崩。然后策略推出去前，得加个合规拦截器，过红线的策略直接掐断不让发。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "gRPC长连接性能比MQ好，双向流天然支持背压，客户端不用写复杂消费确认逻辑，代码我熟好写。拦截器就挂在服务端下发前，策略生成后先过红线校验，过了才进下发流。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "拦截逻辑不能在主推流链路上同步阻塞。把校验做成异步非阻塞的过滤器，过不了的就滤掉，过了的才放行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一，通信协议选gRPC双向流。第二，内置双向流控背压机制。第三，下发链路强前置合规审计，触碰红线一票否决。第四，合规拦截异步非阻塞，不能卡死推演下发主线程。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

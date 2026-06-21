@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧反演模型算力评估与量化裁剪背景下，用户与导师围绕模型量化、算力卸载及30ms时延窗口保障持续沟通（3轮），其中在算力卸载与模型拆分部分与边缘算力调度工程师沟通（2轮），在量化敏感度与精度劣化控制部分与热溃推演算法专家沟通（1轮），并最终形成混合量化与算力卸载兜底的开发口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看了下，全量FP32的时空图谱推演，在RK3588上单帧要跑120ms，确实超了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这反演模型主干是3D卷积加图注意力，全量参数2.1M。如果硬量化到INT8，梯度溢出和精度劣化怎么控？另外算力卸载到云端的话，上行带宽和抖动怎么兜底？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆模型太碎了，联调容易出bug。能不能全放边缘，用INT16混合精度保梯度？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果我把3D热蔓延卷积核INT8化，图注意力的边权重量化到4bit，反演出来的时空轨迹和靶向坐标漂移有多大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那也就是3D卷积走NNU INT8加速，图注意力回CPU FP16。单帧时延能卡进30ms吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "这样精度和时延都有底。我这就按这个口径改模型导出脚本，拆算子图。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "口径确认：1. 模型量化：3D卷积INT8走NNU，图注意力FP16回CPU；2. 算力卸载：边缘CPU超载时图注意力半拆上行云端，本地缓存插值补位；3. 验证：量化后反演轨迹误差<0.5K，单帧时延<30ms；4. 衔接：同步改导出脚本和算子拆分图。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

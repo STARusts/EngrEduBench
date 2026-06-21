@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在核心业务微服务开发与自测背景下，与导师围绕微服务拆分、并发一致性、预警降级、自测效能及合规审计日志持续沟通（6轮），其中在并发锁与预警防丢防积压部分与全栈开发骨干沟通（1轮），并最终形成核心微服务开发与自测的五项约束口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按领域拆，安监预警算一个，合规训导算一个，台账同步单独拎出来。卡点主要是并发和一致性。几十个实验室同时领用，库存扣减怎么防超卖？还有预警计算，视频流和物联数据上来，时延要求高，服务挂了数据不能丢。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "库存扣减我倾向用数据库行锁，简单可控；预警降级就让网关先把数据暂存本地，服务恢复了再推。但网关暂存量有限，积压太多可能内存溢出。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "并发领用危化品库存扣减，用DB行锁还是分布式锁？预警服务宕机时，物联数据流怎么防丢防积压？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "本地自测这种并发和MQ场景，我搭全套Redis和RocketMQ太耗时，有没有轻量级办法能跑通单元测？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳全栈骨干建议，库存扣减用Redis分布式锁+Lua，预警链路MQ削峰+死信重试。自测用Testcontainers拉起Redis和MQ容器做集成测。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计日志必须和业务操作同库同事务落盘，不能异步丢了。这块我也用Testcontainers覆盖。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "确认核心业务微服务开发与自测约束：1. 拆分侧按安监、训导、台账三域解耦；2. 并发侧库存扣减采用Redis分布式锁配合Lua脚本防超卖；3. 缓冲侧预警数据入RocketMQ削峰，消费失败进死信重试；4. 审计侧合规日志与业务操作同库同事务落盘；5. 自测侧采用Testcontainers拉起中间件容器进行集成测试。按此口径推进开发。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

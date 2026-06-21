@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的教师采纳率分析背景下，用户与导师围绕采纳率口径、最小漏斗、对照分组及区分引擎质量与产品摩擦持续沟通（8轮），其中在指标事件与版本串联定义上与数据分析师沟通（3轮）、在采纳落地路径与摩擦点界定上与产品经理沟通（2轮），并形成明日评审可用的最小分析框架与边界说明。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "采纳率我理解就是老师点了“一键采纳”占比？但我们现在也有“复制到讲义”这种，不知道算不算。拆因我没太思路，就按资源类型分一下，PPT、视频这种。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件大概有：提交检测、出结果、老师打开结果页、点采纳、下载替代稿、还有可能只是看了没动。还有“完成但无结果产出”之前我们抽了桶，这里也要算进去吗。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我先粗一点：任务创建 -> 任务完成 -> 有结果 -> 打开结果 -> 采纳。中间再加个“结果被编辑后采纳”我不确定现在有没有埋点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据分析师 采纳率这块我们现在到底按什么算？是点了采纳按钮就算，还是要看老师真把替代稿用进课件/讲义里？还有我们漏斗要用哪些事件，版本字段怎么拼？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们现在有 adopt_success 吗？我记得后端只记了“导出成功”，写回资源版本不一定。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分组对照这块咋做？直接比不同租户、不同资源类型就行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指标分两层：一个是进结果页后点采纳按钮的占比；另一个是导出成功再加24小时内资源被再打开，当成“实际用上了”的代理。分组就按资源类型、缺陷数/严重度、还有 engine_version+model_version。假设验证…我先猜两个：一是 NoOutput_rate 高导致落地采纳低；二是某些资源类型比如视频，结果出来但老师不看或者不下载。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "用抽检分数？把忠实度/教学表达/结构覆盖低的那批，跟采纳率做相关？但我不太会做因果，只能看相关。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 采纳这块，老师一般怎么把替代稿用进课件？我们现在“一键采纳/导出/复制”这些路径，哪个算真正用上？哪些地方最容易卡住？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "合规自查模式我们有标记吗？我没印象有开关。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我把拆法记一下：先分“只检查不改”的人群，不然采纳率会被稀释。视频的 adopt_effective 也会偏低，因为下载了不一定回传。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试试：  \n1）采纳分两层：结果页后的点击采纳（Adopt_click），以及导出成功+24h再打开作为代理落地（Adopt_proxy_success）。  \n2）漏斗按 task_create→task_finish→result_ready→result_view→adopt_click→adopt_proxy_success，额外看 NoOutput_rate。  \n3）人群先切：Compliance_check_only 单列，不和改造型混。  \n4）分组维度：资源类型、缺陷严重度/数量、engine_version+model_version；租户用低采纳2个+随机1个对照，再加高采纳反例。  \n5）把抽检总分(0-6)分桶，分别看在 result_view→adopt_click 和 adopt_click→adopt_proxy_success 哪段掉，粗分“质量问题”还是“流程/格式摩擦”。  \n6）所有事件/结果必须带版本字段和 input/output 指纹hash，保证能对比同输入在不同版本的趋势。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "明白，我在汇报里加：视频用代理落地会低估；P0拦截的任务从“可采纳漏斗”分母里剔掉，单列拦截率看。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

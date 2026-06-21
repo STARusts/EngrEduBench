@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在启径编排与分发链路设计背景下，用户与导师围绕链路搭建、防沉迷机制与可靠性验证持续沟通（5轮），其中在防沉迷熔断边界部分与诱导偏移审计员沟通（1轮），在分发链路架构选型部分与启径编排开发者沟通（1轮），并最终形成DAG编排、gRPC双向流下发、秒退熔断及梯度压测验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我寻思用规则引擎配个决策树？前端请求一次我们吐一次提示，弄个消息队列防阻塞。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防沉迷我前两天看个论文讲自适应衰减的，好像能用，就是越往后提示越模糊？但我没看懂衰减因子的算式，就大概想按时间衰减，超时就不推了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "防沉迷这块，按时间衰减行不行？比如超时就不再推提示。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "分发链路用规则引擎加消息队列行吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "审计员说连续秒退3次要熔断，不能用时间衰减。开发者说用DAG不用规则引擎，下发用gRPC双向流。我觉得DAG画起来顺手，gRPC我之前写过客户端，能搞定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Jmeter压一下呗，多并发发暗痕看看断不断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那这版方案就定：编排用DAG，下发gRPC双向流，防沉迷按秒退3次熔断，验证用Jmeter加抖动脚本分频率梯度压测，看重连耗时和丢失率。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

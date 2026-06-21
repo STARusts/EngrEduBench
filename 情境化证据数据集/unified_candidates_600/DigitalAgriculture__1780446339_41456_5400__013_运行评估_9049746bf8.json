@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在茶园风味推演模型基线验证背景下，用户与导师围绕统计口径与残差分布分析持续沟通（6轮），其中在残差明细采集部分与DevOps部署专家沟通（1轮），在统计显著性要求部分与农艺效果评估师沟通（1轮），并最终形成基于残差分布与置信区间的基线验证口径及补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接用K8s自带的监控看板，套个Prometheus模板看下推理接口的平均延迟和平均误差，只要没报错就算基线过了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看下MAE和RMSE，网上搜的基线验证代码都有这俩。只要这俩数比测试集小一点，应该就有效吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "部署这块有没有现成的Helm Chart能把推演残差直接导出来？我不想手写Exporter，太麻烦了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "农艺基线的统计要求是啥？我看别人都算MAE。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这些Python库里好像有，我调一下scipy.stats应该能算出来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "P值小于0.05我知道是不符合正态，但偏度大于0对采期的影响我确实没概念。我统计这块太弱了，只会看数大小，遇到分布就懵。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来两周每天抽1小时看scipy.stats的文档和统计学基础，把Shapiro-Wilk和置信区间的原理搞懂，然后在测试集上跑一个小样本验证脚本，把P值和偏度怎么影响采期判定的逻辑写进代码注释里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用VictoriaMetrics存推演残差明细，画直方图。统计上必须算95%置信区间的误差界限，做Shapiro-Wilk检验看正态性，如果P<0.05且偏度>0，判定为系统性高估风险，基线不通过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

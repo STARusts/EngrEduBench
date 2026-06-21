@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在共创引擎边生成边播的审核流水线集成背景下，用户与导师围绕同步/异步审核接入点、事件review字段最小化、超时降级、缓存与联调验收持续沟通（10轮），其中在合规字段红线与同步/异步划分上与合规经理沟通（3轮），在pending/limited可见性与block/replace体验策略上与产品经理沟通（1轮），并落实最小接口字段、replace兜底、日志审计最小化与300ms节流方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我理解就是，发布前先过一遍审核？但我们现在是边生成边播，有点卡。是不是要把每段事件都先丢审核，审核回来了才能 enqueue。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我比较能动的是事件队列那层。我可以在事件结构加个 `review` 字段？比如 `review.status` = pending/allow/block，然后 policy 决定怎么处理。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最少我想放：`review.status`、`review.ruleHit`、`review.traceId`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "内容送过去……我有点纠结，不带正文那审核看啥。只能传组件ID？比如剧情组件的模板ID、标签、镜头节奏标签。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规经理 审核流水线这块，我们要把生成内容接入审核，但播放端日志不能包含用户输入/生成正文。那审核请求最小应该传哪些字段？哪些字段绝对别传？还有同步/异步怎么分比较合规？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "同步超时就保守降级，是指直接 block？还是用替代剧情？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "审计要存 hash 我有点不懂，hash 也算泄露吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我先把“只传ID和标签”记住。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "请求我想是：`segmentId`、`contentId`、`scene`、`tagList`、`licenseIds`、`strategyId`、`traceId`。响应最少：`decision`(allow/block/replace)、`ruleHit`、`reviewId`、`ttlMs`？影响队列就是：pending 先按 mustRun 进队列播；如果回来是 block/replace，就在执行前替换成兜底事件。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ttl 我是想缓存，不要每次 seek 都重审。seek 重建队列会重复请求。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "key = `segmentId + strategyId + tagListHash`？版本就用 `segmentVersion`。命中就直接拿 decision。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向只对“新产生的segment首次可见”做同步。比如用户选了分支，生成了一段，首次入队前 call 一次同步。后续 seek 重放就用缓存，不再卡住。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "异步我没太想清。是不是同步 allow 了也还要异步再扫一遍？如果异步后来 block 了，那已经播过了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 审核流水线集成：同步审核会挡“首次可见”的segment，异步回写会改内容状态。开发阶段你希望默认策略怎么走？比如 pending/limited 时能不能播放给当前用户？block/replace 的体验你更倾向哪种？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以播放端只要识别 replace/block，然后把交互引导做出来。分享禁用我先不碰，留给发布服务。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我能改两块：  \n1）播放会话生成 segment 时，入队前打同步审核；把 decision 写进事件的 `review.status/decision`。  \n2）加个本地缓存，避免 seek 重建重复 call。  \n验收…我想用 mock 审核服务，造 allow/block/replace/timeout 四种返回，然后看队列执行是不是正确替换，不重复执行事件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我本来想全打出来方便查，但你这么说…我就记 `decision`、`ruleHit`、`reviewId`、`traceId`、`segmentId`，tag 不打，最多打 tag 数量。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "屏显我可以加一行 `reviewDecision` 和 `reviewLatencyMs`，还有 `reviewCacheHit`。日志里每次审核请求只打一条：`segmentId, decision, latency, cacheHit, errorCode`。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把审核调用放到生成线程里并行跑，然后入队等它回来…但等还是等。要不卡就只能先入队播兜底，等审核允许再切回原段？这会很怪。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "节流我能做，在交互事件入口加 debounce，前面生成的 pending segment 直接丢掉不入队。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先把入队前同步审核、缓存、replace 兜底段这三块连起来。节流我也加上，别让审核接口被点爆。要是我在 seek 重建时缓存命中还出现 decision 丢失，我再回来问。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

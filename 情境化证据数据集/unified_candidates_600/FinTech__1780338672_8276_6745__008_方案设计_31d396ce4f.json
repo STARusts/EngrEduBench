@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在高并发清算接口与流控设计背景下，与导师围绕清算轻量架构、流控机制与压测验证标准持续沟通（7轮），其中在清算链路轻量化设计部分与后端研发工程师沟通（1轮），最终放弃Flink与Sidecar，形成网关本地聚合、自适应背压与内嵌限流的清算方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "既然取消了分布式事务锁，接口的并发冲击肯定很大。我想引入一套完整的实时流计算引擎，比如用Kafka接Flink做清算流的实时聚合，流控方面搞个组合拳，令牌桶加滑动窗口限流，再配合Service Mesh的Sidecar做全链路熔断。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink处理吞吐量肯定强啊，维护的话，多配几个人盯着就行了呗。Sidecar也就是多一层代理，现在云原生架构都这么搞，扩展性最好。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "高并发清算接口如果不用Flink，怎么抗住冲击？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "本地聚合加批量上链确实比Flink轻。但全链路熔断我还是想保留，万一隐私计算那边卡住了，得有个兜底吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就写个脚本压测呗，一直加并发，看什么时候崩。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "最近刚补学了Resilience4j的源码分析，里面提到自适应限流算法可以根据系统负载动态调整阈值，比静态滑动窗口好得多。我把这套逻辑迁移过来，不用Sidecar了，在网关内嵌自适应限流就行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认放弃。清算接口方案收敛为：网关本地短时聚合、批量上链确认，流控采用自适应背压加内嵌自适应限流，压测验证P99延迟标准500ms内。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

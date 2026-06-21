@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在过程作业溯源与诚信评估系统进入SDK开发背景下，用户与导师围绕采集事件/字段定义、默认开关及端侧可靠上传与降级持续沟通（6轮），其中在事件拆分、离线缓冲与加密上传及耗电控制上与移动端工程师沟通（3轮），在最小采集边界与字段分级默认值上与合规与隐私官沟通（1轮），并明确按清单实现事件结构体、队列、加密上传与回执处理。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我现在要开始做数据采集SDK这块。先从哪下手？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就采学生写作的过程吧，比如键盘输入、复制粘贴，还有提交。大概这些就够了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件…就输入、粘贴、保存、提交。字段就时间、用户、作业id。默认不开的…截图？麦克风？反正敏感的都不开。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@移动端工程师 采集SDK一般要怎么拆事件？还有离线、加密这些要怎么做，别太耗电那种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "edit_delta是把改动都记下来吗？那不就还是很多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "明白，那我就只搞哈希和长度就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 SDK采集字段哪些容易踩线？默认开关怎么设才算最小采集？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "懂了，就是别采内容。那应用切换也别采具体app名。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "事件就session_start、session_end、edit_delta、paste、undo_redo、file_attach、submit，还有focus_change、network_state。字段有时间、作业id、学生的那个pseudo id，然后event_id、seq、hash_prev。默认开的是这些，默认关的就是应用切换细节和粘贴来源，禁止就是内容、截图、定位那些。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就…edit_delta多带个字数变化？还有粘贴就记粘贴的字数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把全文算个hash，每30秒算一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不会不会，我就传hash。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是登录拿个token，然后SDK拿它加密？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，那就做batch_id回执。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "降级就是少上传点？或者先不上传。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了，就按这三条降级。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就不打印日志。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，那我就只打前8位。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我按这六条做。下周我就把结构体和上传这块先弄出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在灰度交付与基线验证背景下与导师围绕灰度策略、流量权重冲突权衡及统计验证口径持续沟通（7轮），其中在稳定性与监控指标部分与部署与效能专家沟通（1轮），在统计功效与显著性检验部分与认知演进分析师沟通（2轮），并最终形成Flagger自动灰度折中方案与统计补学目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算直接用K8s的Canary发布，配个流量权重5%就行。监控的话，Prometheus那套现成的模板拉一下应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我准备用K8s原生Canary切5%流量，Prometheus看CPU和内存，这样行吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "1%起手，看discardRate。那样本量够吗？1%的流量能跑出认知干预的显著性差异吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这俩冲突了。效能专家要1%慢放保稳定，分析师要5%以上凑样本。K8s的Canary插件好像没法自动根据样本量调权重啊。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "能不能这样，我还是用K8s的Canary做底，但写个简单的脚本，盯着discardRate。如果这个率正常，我就让脚本自动把灰度权重从1%慢慢往上加，加到5%为止，同时满足样本积累时间要求。有没有更方便的开源组件干这事儿？Flagger行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看P值小于0.05呗？其他的我有点拿不准。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对统计检验这块确实没吃透，只会套用网上的代码算P值。刚才分析师说的Cohen's d和分桶，我都没自己实现过。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我接下来两周，每天花1小时学A/B测试的统计基础，重点是效应量计算和分桶策略，然后在项目里用Python写个验证脚本，把Cohen's d加进去，跑通一次完整的分析。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用Flagger做自动灰度，初始1%，指标达标自动扩到5%。监控指标加上discardRate和线程阻塞率。数据分析用分桶对照，看Cohen's d。先这样折中吧。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

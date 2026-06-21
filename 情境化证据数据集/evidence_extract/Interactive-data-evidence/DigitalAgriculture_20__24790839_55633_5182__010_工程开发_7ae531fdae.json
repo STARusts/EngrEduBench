@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在农机变量施用联调开发背景下，用户与导师围绕处方到可执行任务编译、单位坐标对齐、回传闭环对账与验收口径持续沟通（9轮），其中在设备控制粒度/字段/延迟与标定约束上与农机与施用接口工程师沟通（3轮），在验收用例与可观测字段、回放一致性与空间分布误差指标上与测试与质量工程师沟通（2轮），并形成任务包字段与编译参数、对账规则、状态码处理及两级验收清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我第一反应是“单位和坐标”。处方里可能是kg/亩、菌剂是L/亩，设备可能要g/㎡或者按每秒流量。还有地块边界坐标系，处方网格是WGS84还是地方投影，农机回传的轨迹如果偏了，就会对不上格网。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我想做两层：处方侧输出“目标剂量场”，农机侧接“控制指令序列”。中间做一个编译器，把网格转成沿作业路径的分段目标剂量。校验点我先定三类：1）单位换算可逆，2）空间匹配误差在阈值内，3）回传用量积分接近处方总量。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农机与施用接口工程师 处方到变量施用设备联调这块，你们设备侧的现实约束给我一版：可控的最小粒度（距离/时间）、剂量控制精度、回传频率、坐标系/时间戳要求。还有任务包你们必须要哪些字段才能跑起来？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rate_curve是按时间还是按里程？我用轨迹分段时，怕时间对不上，GNSS抖动会导致速度不稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那处方里“目标剂量”要怎么转流量？是不是要设备给我标定曲线？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向先走“设备侧换算”，处方侧只输出标准剂量（kg/ha、L/ha）。这样以后适配别家也不会重写。联调可控性我用两招补：一是任务包里带expected_swath_m和速度范围，超出就告警；二是回传拿actual_rate对比target_rate，允许±10%带宽。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "±10%是接口工程师说流量闭环常见范围，我就先拿这个当默认阈值，后面根据设备标定再收紧。延迟我放在“编译器”层：把目标序列按配置offset_ms提前。验收用同一段直线作业：对齐轨迹timestamp，把target_rate(t+offset)和actual_rate(t)做相关系数或MAE，选offset让误差最低。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我做两套口径：  \n- 设备口径：累计用量sum(actual_rate * dt)。  \n- 空间口径：把轨迹点落格网，按点所在格的处方target_rate积分，得到“应施总量”。  \n对账规则先放宽：在地块内有效作业段（状态正常、速度>阈值、在边界内buffer）上比较两者，偏差≤15%；同时记录边界外用量占比，超过2%就标红。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "状态码我先分三类：  \n1）致命：缺料、阀门故障 -> 任务直接failed，闭环里标注“未完成”，需要重派工。  \n2）可恢复：GNSS短丢、通信短断 -> 标记degraded，轨迹插值但不用于精确对账。  \n3）质量风险：堵塞、流量波动大 -> 任务completed但质量为warning，建议复测或补施。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试与质量工程师 变量施用联调的验收我初稿是：空间对齐误差阈值+用量对账偏差+状态码分类。你从测试视角觉得哪些必须严格，哪些可以先放宽？还有你需要哪些可观测字段才能写用例？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分布一致性要抽样多少网格才算？我怕联调期数据量小，做P90不稳定。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我折中成“两级验收”：  \n- 联调通过（MVP）：1）任务包能下发、设备能跑、回传能收；2）有效作业段总量偏差≤15%；3）致命状态码闭环能正确置failed并带审计事件；4）回放能复算总量对账一致。  \n- 质量通过（增强）：1）抽样点数≥100后才计算；2）直线段P90误差≤20%，掉头段只做监控不拦截；3）GNSS丢失段不纳入空间误差，但纳入“降级时长占比”。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）单位强校验：target_rate_unit只允许白名单（kg/ha、L/ha），否则拒绝编译。  \n2）幅宽/速度范围：expected_swath_m、min/max_speed_kph缺失就不给下发，避免换算全错。  \n3）offset_ms上限：比如限制在0到1500ms，超出直接报错；并且记录到task编译元数据里，回放一致性靠它。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能保证我们服务里：轨迹原始点只落在“作业回传表”里，按task_id访问控制；联调日志里只打印聚合指标（点数、时间范围、偏差统计），不吐经纬度明细。审计ID我沿用之前说的农事记录引用ID集合思路，把device_id、operator_id如果有就只存哈希或映射ID，具体脱敏规则我不太敢定，得后面合规官拍板。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三件事我按落地顺序排：  \n1）任务包编译器：输入处方目标剂量场+参数（幅宽/速度范围/offset_ms），输出task_id级的rate_curve（1Hz planned_timestamp序列）+必填字段（field_id、operation_type、material_id、unit、max/min_rate）。  \n2）闭环对账与状态机：按有效作业段算总量偏差≤15%做MVP门槛；致命状态码触发failed并写审计事件；GNSS/通信短断标degraded。  \n3）测试验收两级：联调通过看“能跑+总量对账+回放一致”；增强质量再加直线段P90空间误差阈值和最小有效点数≥100，掉头段只监控。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

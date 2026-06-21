@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在寻优算法与工控接口规约设计背景下，用户与导师围绕反演输出到工控指令的映射、接口规约选型及降级安全机制持续沟通（4轮），其中在寻优输出结构定义部分与相图反演架构师沟通（1轮），在接口协议选型与安全防误部分与工控接口设计师沟通（1轮），并最终形成寻优输出结构、接口规约及安全降级校验逻辑。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "反演模型输出的是多态相图上的最优稳态点，要下发到DCS，中间必须有一个转换层。我初步想法是定义一个标准的工况指令包，把相图坐标转成具体的温度、压力设定值。接口规约方面，如果是新产线可以用OPC UA，老产线走边缘网关转Modbus TCP。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演寻优计算出的多态相图稳态点，如果我们要封装成工况指令包下发给DCS，这个输出结构应该怎么定义，才能保证映射不失真且满足实时性？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DCS接收这种包含设定值和有效时间窗的指令包，协议选型怎么考虑？如果走边缘网关转换，延迟对实时寻优有多大影响？安全防误操作怎么控制？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "反演侧输出直接包含ControlVector，避免工控侧二次计算；工控接口首选OPC UA，老系统用边缘网关降级但增加合法性校验补偿延迟。安全上必须过SPS联锁和“只写允许区间”校验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "如果延迟抖动超过ValidWindow，指令就失效了，DCS应该维持上一拍的安全状态。降级切换机制可以在接口层做探活，OPC UA断线自动切网关，但网关侧必须加一个指令时间戳校验，过期的指令直接丢弃。这样即使抖动大，也不会执行过期指令导致工况失控。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "寻优输出结构：TargetPhaseCoord, Confidence, ValidWindow, ControlVector(温度/压力/进料速率设定值)。接口规约：主OPC UA，降级边缘网关(Modbus+合法性校验)。安全与降级：指令下发过SPS联锁与区间校验，携带时间戳，超ValidWindow或过期直接丢弃，DCS维持原态。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

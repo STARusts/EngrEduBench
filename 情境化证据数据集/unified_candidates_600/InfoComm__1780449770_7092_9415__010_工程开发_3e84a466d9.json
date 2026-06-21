@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在拥塞阻控微服务封装测试背景下与导师围绕解耦边界、降级策略与审计日志持续沟通（7轮），其中在阈值计算与执行拦截分离部分与拥塞阻控策略师沟通（1轮），在服务软降级与日志落盘部分与算力编排调度工程师沟通（1轮），并形成异步阈值下发、Nacos软降级与主核侧日志的封装及测试策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这代码太丑了，800写死了，还没任何抽象。我打算把这块逻辑整个挪到一个新服务里，对外暴露个 `/check_and_drop` 接口，主核每次调这个接口就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "同步确实会卡。但状态？阻控不就是看当前队列深度吗，哪有什么状态要隔离。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "原来写死在主核里的阻控逻辑，现在要拆成微服务，怎么拆才不会把主核拖死？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能同步调，阈值算好推给主核，主核自己比对。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "封装成两个，一个是阈值推演服务，一个是留在主核里的本地拦截执行器。测试重点就看阈值下发准不准。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "服务挂了全放行肯定不行，全阻断又太狠。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "日志我确实没想，原来都在主核打，拆出去了可能就丢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "阻控阈值推演服务挂了，主核怎么降级？服务注册发现怎么弄？还有日志在哪打？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用旧阈值兜底，Nacos监听下线。日志在主核打。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "封装方案：阈值推演独立成微服务，算好后通过Redis把阈值推给主核；主核本地拦截比对，不搞同步RPC。降级策略：Nacos监听推演服务下线，主核用旧阈值兜底。日志在主核拦截时打，推演服务只打计算日志。测试重点：一是验证Redis阈值下发和本地一致性；二是模拟推演服务宕机，看主核能不能软降级不卡死。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

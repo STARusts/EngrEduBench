@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在微域超低时延网络代码开发背景下，用户与导师围绕时隙调度与聚合转发的底层机制、开发缺口及验证方案持续沟通（8轮），其中在GCL门控配置部分与确定性调度架构师沟通（1轮），在硬件卸载重排部分与转发面实现工程师沟通（1轮），并最终明确硬件GCL调度、硬件时间戳重排及软硬对照验证等开发约束与口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "调度就按时隙分呗，转发用DPDK轮询查流表，速度肯定够。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "时隙对齐怎么搞？我想直接软件定时器切队列。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "DPDK做聚合转发行不行？包重排我写个内存队列排一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "硬件GCL得配，重排得用硬件时间戳，DPDK只能管控制面。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "写不了。GCL时隙计算我以前没碰过，硬件时间戳提取接口也不熟。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我这就去看802.1Qbv里GCL的计算公式，然后拿DPDK的testpmd改个时间戳提取的小程序先跑通。回头把GCL计算逻辑套到现在的流表下发里。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用打流仪打带时间戳的微秒周期流。一组走软调度软重排，一组走硬GCL硬重排。看收端时延抖动的CDF分布，99.9%的抖动得在5微秒以内。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 调度用硬件GCL，不搞软定时器；2. 聚合重排用硬件时间戳和流定序器，DPDK只下发流表；3. 验证要有软硬对照组，用微秒周期流测CDF，99.9%抖动卡5微秒。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

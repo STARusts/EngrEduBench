@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在共玩解谜房间内容审核流水线联调背景下，用户与导师围绕三类内容触发点、先发后审异步撤回、双流隔离与幂等乱序处理持续沟通（9轮），其中在回调字段、可见性层撤回/替换与低风险快速通道策略上与内容审核工程师沟通（2轮），并明确联调字段口径与服务端落地函数用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "创作者资产是发布前；玩家即时内容是发言前；系统生成的比如提示语就不用审。阻断就是不让过。异步的话…我觉得都同步，不然会漏。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不知道撤回怎么不乱序。审核回调回来再发一个 patch？那 seq 就变了。还有审计字段又不能下发客户端，我怕联调时看不到原因。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容审核工程师 我现在要接审核流水线。我们这边有三类内容：创作者谜题资产发布、玩家聊天/输入、可能还有图片。你们回调一般怎么给？需要我发哪些字段？撤回是给一个 action 还是直接删？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "回调形态呢？我这边是房间服务发事件还是审核服务拉？我怕我接错了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "撤回具体怎么做？我现在的房间状态是 patch 合并的，之前导师让我做白名单裁剪。我担心撤回要改历史。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我需要在客户端拿到 reject 原因吗？不然用户会一直问。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "字段白名单我记得上个微场景说要截断、hash。那 `subjectId`、`chatMessageId` 这些是可以明文存的吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "资产发布是同步审核，不过就不给发布版本。玩家聊天是先发后审，先显示 pending，回调 reject 就发个替换事件把它折叠掉，用同一个 messageId。玩家输入别直接进规则引擎，先当展示，过审再投喂。回调要带 auditTaskId，得幂等，回调不带原文，只带 decision 这些。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想在房间的 publicState 里加个 `chat.auditStatus`？但 publicState 白名单会卡。我有点分不清该放 publicState 还是单独的消息流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是审核回调不直接广播。服务端自己转成 messageUpdate 广播。那 `auditTaskId` 也不下发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用 messageId 做幂等更新？状态只能从 pending->pass/rejected 单向。重复回调就忽略。晚到 pass 覆盖 rejected 不行，得有优先级，rejected 一旦定了就不变。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我负责房间服务这边。我会做三个点：  \n1）`enqueueAudit(subjectType, subjectId, contentHash, actorId)`：只发 hash 不发原文；返回内部 taskId。  \n2）`onAuditCallback(taskId, decision)`：只更新服务端表，然后生成 `messageUpdate(chatMessageId, status)`。  \n3）状态机：`pending -> pass` 或 `pending -> rejected`，rejected 终态。  \n用例就是：发三条聊天，一条回调 reject，看客户端是不是折叠；再模拟回调重复两次看幂等；再模拟回调晚到 pass 覆盖 rejected 不发生。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "跳过…系统消息跳过。玩家聊天如果是纯表情？我不太会判。是不是用长度阈值，小于2个字就不审？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容审核工程师 低风险的快速通道你们一般怎么做？我这边想减少队列压力，但不敢乱放。有没有默认的跳过规则或降级规则？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "默认：系统/官方机器人免审；普通玩家聊天都入审，但“短 token”走轻审；如果积压>2s，就聊天继续 pending 展示，输入不进规则引擎直到 pass。回滚就是关掉轻审和免审开关，全走标准审。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对齐字段：我发 `subjectType、subjectId、actorId、contentHash、createdAt`，他们回 `auditTaskId、subjectType、subjectId、decision、evidenceRef、ts`。  \n我保证：回调只在服务端消费；客户端只看 `chatMessageId` 的 `pending/pass/rejected` 和折叠更新；状态单向、幂等、乱序不回滚；玩家输入过审前不进规则引擎。  \n红线：不把原文、auditEvents、以及任何 IP/设备明文下发或落日志。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

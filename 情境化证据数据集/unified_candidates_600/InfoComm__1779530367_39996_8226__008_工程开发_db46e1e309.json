@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在管控中枢工程开发背景下与导师围绕微服务拆解、开发依赖与算力度量实现持续沟通（5轮），其中在CQF调度与验证设计部分与确定性网络总设沟通（1轮），在异构算力度量指标部分与边缘算力路由架构师沟通（1轮），并形成微服务拆解、P0任务优先级及验证设计结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按功能域拆成三个主微服务：流控执行、高可用自愈、算网协同。流控执行负责5QI映射、令牌桶整形和CQF调度；高可用自愈跑OAM检测和FRR切换；算网协同做算力发现和随动路由。每个微服务再分数据面和控制面。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "CQF本地调度在数据面开发时，跟DPDK或XDP结合有什么坑？验证时延抖动的对照实验该怎么设计？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "CQF时隙必须用TSC或硬件时间戳驱动。验证得有基线组和背景流量注入。流控数据面单独拆出一个“CQF时隙定时器”子任务，这是开发优先级最高的P0任务。测试用例里加入基线对比和背景流量注入项。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "算力度量我确实没写过，之前只做过简单的CPU利用率采集，对于边缘异构算力（NPU/FPGA）的度量指标和采集接口不熟。这块我得现学。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去看KubeEdge和OpenEdge的算力上报机制，先把CPU/Mem/GPU的基础度量模型搞懂，迁移到我们的管控微服务里，先做一个轻量级的算力画像接口。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "异构算力度量除了常规的CPU/Mem，还有哪些关键指标不能漏？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "NPU利用率和片上Memory带宽加上，接口按Prometheus Exporter规范走。算力度量拆解为：1. 基础指标采集（CPU/Mem）；2. 异构指标采集（NPU/FPGA）；3. 画像聚合与Exporter暴露。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在就去写CQF时隙定时器的技术验证代码。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

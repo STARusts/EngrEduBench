@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在全息光场视点流化引擎灰度部署上线背景下，用户与导师围绕灰度流量切分策略、观测指标设计、统计功效分析能力短板及灰度验收口径持续沟通（6轮），其中在A/B测试观测埋点与度量口径部分与体验度量分析师沟通（2轮），并最终形成基于设备型号切分、锁定1%试探比例及包含VREF指标的灰度验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算先切5%的流量跑跑看。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按地域切吧，张江园区边缘节点多。放5%用户进去，只要P99延迟不超200ms，算力溢出率在5%以内，就算过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "局部视点跳变卡顿P99确实抓不到。我搞个A/B测试对照吧，灰度组用新引擎，基线组用旧系统。统计视点切换的帧间抖动率，灰度组均值比基线组低，且95%置信区间不重叠，就算体验提升。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这数据怎么采？前端SDK能上报帧间隔吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这指标怎么埋点？统计功效又该怎么算？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "Mann-Whitney U检验我书上看过，非参数检验。但样本量下限怎么算？功效分析这块我没实操过。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "VREF指标如果灰度组比基线组差一点，但没超P99红线，能继续放量吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "核心QoE指标得用VREF，帧间抖动率不行。统计检验用Mann-Whitney U，功效分析要保证80%检验力。但我不会算功效分析，只知道个名词。另外VREF均值下降超5%必须熔断。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "功效分析我确实落不了地。我今晚学一下G*Power软件，用旧系统的VREF历史日志估效应量，算出最小样本量再定灰度比例。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "灰度策略我改成按设备型号切，优先选算力冗余高的设备，避开混部干扰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拿旧系统VREF日志估效应量，算错了我找分析师复核。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "灰度验收口径我更新了：1. 核心指标VREF均值下降不超5%；2. 检验方法Mann-Whitney U，检验力>80%；3. 样本量基于功效分析定。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

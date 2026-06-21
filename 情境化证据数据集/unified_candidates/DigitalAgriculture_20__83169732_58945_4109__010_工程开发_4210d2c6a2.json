@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘网关采集事件上云写账本的联调背景下，用户与导师围绕最小化前提下的可定位联调方案、幂等对齐与可信闭环持续沟通（6轮），其中在替代定位信息与联调对照设计上与物联网架构师沟通（2轮）、在日志底线与审计留存要求上与合规与数据治理官沟通（2轮）、在边端签名验签最小闭环上与安全工程师沟通（1轮），并最终确定字段白名单、例外取证票据路径与三条联调验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "照片和精确坐标就不打了，手机号也不打。联调就看事件能不能上云就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "采集对不对就看设备值。传输就看有没有断。幂等就看 requestId 有没重复。对照就…比一下时间戳。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网架构师 联调时不让打照片和精确经纬度，那还怎么定位问题？边端要留啥信息才够用？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "这意思就是，用 geohash 前缀就行，不用经纬度。照片也只要 hash。高精度就先别传上去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与数据治理官 联调日志这块，我们能记哪些东西？边端想把照片、精确坐标、手机号都打出来方便排查，这样行不行？要留多久、要不要审计？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以照片和经纬度都不能写日志，最多 hash。例外取证要票据，还要写审计。留存就两周左右。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 我问完了。物联网那边说联调主要抓链路，不用原图和精确坐标，位置用 geoHashPrefix 或 plotId，再加 locHash，照片用 photoHash。网络上多记 rssi、重试次数、离线队列长度这些。合规那边说手机号/原图/经纬度都不能进日志，联调日志 7-14 天滚动，真要看原图得走 ticket，还要审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用 hash 就能证明吧。hash 对不上就说明改了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "链路…加签名？设备身份用 gatewayId？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全工程师 网关采集联调想做签名验签，但又不能把敏感数据打日志。最小闭环该怎么做？验签失败怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就是设备有证书，事件摘要签名，云端验签不通过就拒绝，还要审计。日志只打 hash 前缀这种。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 安全这边建议每台网关要有证书或公私钥，云端登记公钥。签名签的是事件摘要：schemaVersion、eventType、bizKey、requestId、ts、actorId、geoHashPrefix 或 plotId、locHash、photoHash、sensorSummary、seq、nonce。云端验签失败回 SIGN_INVALID，然后安全审计里记 gatewayId、seq、requestId、bizKey，不把 payload 打出来。还说 debug 也只能打 hash 前缀和长度。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "默认就按白名单字段上报和打日志：plotId/geoHashPrefix、locHash、photoHash、actorId、requestId、bizKey，还有网络指标。例外就是有 ticket 才能导出高精度定位和原图，但也先不直接上云？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "例外就本地加密导出吧，用 ticket 限定网关和时间窗。验收口径三条：1）云端能收到并返回 RECEIVED/COMMITTED；2）断网能缓存，恢复后 seq 不乱；3）验签都能过，过不了会被拒绝且有审计。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我先把断网和重复上报那俩跑起来，验签失败也会试一下。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

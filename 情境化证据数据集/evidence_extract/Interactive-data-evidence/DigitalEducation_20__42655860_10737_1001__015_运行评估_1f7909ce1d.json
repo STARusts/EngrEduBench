@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在运行评估的证据链完整性巡检设计背景下，用户与导师围绕巡检需落到字段口径、断链分级、看板指标与抽样复核闭环持续沟通（8轮），其中在巡检检查项与P0/P1/P2断链判定部分与数据治理经理沟通（4轮），在争议/审计可用证据最低要求与原件索引边界部分与法务合规负责人沟通（3轮），并汇总形成可对齐产品/数据/法务的巡检口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是能从内容一路追到授权和引用吧。链路大概是素材进来→算指纹→引用标注→触发规则→拦截/放行→审计。只要这些都有记录就算完整？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就……content_id、source_id、license_id、quote_graph_hash、decision_id、reason_code、snapshot_id、operator、timestamp、workorder_id？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据治理经理 证据链完整性巡检这块，你建议检查哪些项？能不能给个比较清晰的检查清单和断链怎么判？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "断链分级怎么搞？我怕一上来就全红，大家会说巡检没用。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我这边还有个问题，quote_graph_hash 只要有就行吗？快照内容很大，存全量会很占。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想就做个“断链率”大盘，然后按 P0/P1/P2 分桶，再按链路段分，比如授权快照缺失、引用图缺失、规则版本缺失。然后按业务线/租户排一下Top。法务可能关心 P0 和 scope 不一致这种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "抽样复核是不是随机抽一些 decision_id，然后让人去点开看证据？闭环就……出工单给数据/研发修字段？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@法务合规负责人 证据链巡检里，哪些证据缺失会让你们觉得“无法用于争议/审计”？最好按优先级说下。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你们说的“原件由谁保管”这个我有点慌。是不是就要把合同PDF都塞进平台里？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说，但可能不全：  \n- 检查项：每条 decision_event 必须能连到 content_version/hash、license_snapshot（即使无授权也要有状态快照）、quote_graph_hash/快照、rule_version、reason_code、decision_type。  \n- 分级：P0 缺快照/版本导致不可复现；P1 有但不一致比如 scope 和 channel 不匹配、rule_version 查不到；P2 是 trace_id/operator_role/retention 这种审计字段缺失。  \n- 指标：断链率=断链decision数/总decision数，分P0/P1/P2；按断链类型Top；按租户/渠道/规则版本Top。  \n- 闭环：P0/P1 进风险事件池并开工单，P2 周期性修复。  \n我说的“抽样复核”不太会写。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我就把“5分钟内能导出摘要”当成复核SLA？N 取多少我不知道，能不能先用固定 50？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "还有一个点：quote_graph 快照太大时，只留hash+节点边计数，法务会不会不认？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，我就按这几条去和产品、数据对齐口径。抽样那条我会说清楚是“能不能快速拿到摘要”，不是让大家去翻原件。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

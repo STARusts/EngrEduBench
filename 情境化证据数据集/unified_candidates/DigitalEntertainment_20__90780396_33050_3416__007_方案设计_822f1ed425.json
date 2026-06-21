@@ -1,0 +1,85 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在万人同场互动的多端渲染同步方案设计背景下，用户与导师围绕同步对象/精度、机制与降级及合规边界持续沟通（7轮），其中在时钟对齐、renderAt/round节拍、命令分级与state对齐及验收指标部分与互动链路架构师沟通（6轮），在多端能力/素材分档与语义一致降级及素材版本一致性部分与客户端负责人沟通（4轮），并形成可写入设计稿的要点骨架与验证方式。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我理解就是特效要同时出现。比如投票应援光效，大家别差太多。还有演员那边的舞台资产状态别乱跳。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对象可能是特效触发、素材版本、时间点。精度我不敢写太死，先写“秒级以内”行不行？不同端可能分辨率不一样，这个算允许不一样。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@互动链路架构师 多端渲染同步一般怎么做？我们有round边界和事件编排了，渲染怎么跟它对齐？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "端侧缓冲就是故意等一等？那不是更慢？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "统一时间怎么搞？我怕不同设备时间不准。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那掉包怎么办？丢了render命令就不同步了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "State快照就是上一环提的回放那套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "观感一致这块怎么验收？我写“差不多”肯定不行。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我记一下：同步目标分逻辑一致和观感一致。机制是服务端给渲染时间戳renderAt，端侧用跟网关校准的时间偏移去等到点播放；round开始发roundStartTs，后续发相对偏移；丢包就关键命令可重发，过期就靠下个round的state摘要对齐。降级是网络慢就少等，或者命令过期直接不补。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@客户端负责人 多端渲染同步这块，实际落地会有哪些差异？我方案里该怎么写映射和降级？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分档是指同一特效有多个版本？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "运行时切换会不会造成不同步？有人L2有人L0，看起来就不一样了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "素材热更新这块要写吗？我怕写多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "渲染命令里可能有用户昵称飘屏？如果有就算用户内容了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我在方案里写：渲染同步事件不包含UGC，用户标识用去标识化ID，仅用于命令去重和审计关联。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我试着说下：  \n1）同步目标：同round逻辑状态一致；关键特效观感时间差可测（先不写数值）。  \n2）时钟与节拍：端侧和网关做时间偏移校准；roundStartTs作为节拍，命令携带renderAt或相对偏移。  \n3）命令分级：关键渲染命令可重发且有ttl；过期不补，依赖下个round state摘要拉齐。  \n4）多端差异：同一effectId分L0/L1/L2档，能力探测选择；运行时允许降档但保持语义一致。  \n5）素材一致性：命令带assetVersion/hash；缺素材走fallback并上报。  \n6）合规边界：同步层不传UGC文本/头像；标识去标识化，仅用于去重、审计关联。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "加在第1条后面：通过同commandId的呈现打点，统计端间呈现时间差P95、错帧率；压测和录制回放对齐检查。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

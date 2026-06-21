@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多模态工业视觉平台工程开发背景下，用户与导师围绕代码规范与通信协议分歧、适配层代价、边缘侧延迟及折中方案持续沟通（7轮），其中在后端工程规范诉求部分与后端开发工程师沟通（1轮），并最终形成全链路Protobuf通信、契约库与任务拆分方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 你先说说，你们平时怎么搞的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "你们那套规范太死板了，算法那边迭代快，你就让他们随便写，最后你那边多写几个兼容适配层不就完了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看模型跑得通不跑得通。要是出错了，就让算法的人去改，我让他们搞个对照组比一下就行了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我刚看了个Protobuf和JSON的Benchmark，Protobuf在边缘端的反序列化速度比JSON快了快十倍。我打算定个规矩，大家统一用Protobuf定义契约文件。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "你们算法模块内部怎么写我不管，但是对外暴露的推理接口必须套上我们定死的Protobuf模板。我不搞什么后端适配层了，直接把验证口径定死：任何模型改动必须通过一个“静态维度校验脚本”才能提交。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我打算把任务拆成三块：算法侧负责核心算子实现，后端负责外层Pipeline封装，测试负责写那个校验工具。大家必须在同一个Git仓库里分模块开发，目录结构我定好了：/core放算法逻辑，/api放协议定义，/adapter放平台适配。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

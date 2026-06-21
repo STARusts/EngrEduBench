@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在剧透防护链路进入压测优化与灰度发布背景下，用户与导师围绕链路拆分压测、瓶颈定位、降级可观测与灰度护栏持续沟通（9轮），其中在压测场景集/爬坡方式/验收阈值与灰度最小闭环部分与测试工程师沟通（3轮），并形成S1/S2/S3压测计划、优化优先级与分步灰度验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我直觉是做个完整“端到端回放压测”，把播放器、策略引擎、风控、权益网关全串起来，然后上个压测平台把QPS一口气拉到峰值两倍，指标就看接口TP95、播放器首帧和卡顿率。然后灰度我想做多维度：按城市+设备+会员等级分层，再加上风险等级开关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "区分的话我想在每个服务加更细的span，或者把每个服务都加个新的埋点字段…不对你前面说先用trace_id串日志，不要先加字段。那我就按trace_id抽样，统计各服务耗时分布。灰度最小闭环我先按用户hash 1%放量，然后只开低风险策略，不开遮罩解锁。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块你给我个最小计划吧：场景、QPS爬坡、看哪些指标算OK，还有灰度验收怎么做比较不乱？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "阈值这块我有点纠结，risk_detect TP95 150ms感觉偏紧？我们模型推理有时候会抖。要不我加一层异步队列，把risk_detect变成最终一致：先返回默认低风险，后台再补判定，然后下次播放再生效。这样TP95就好看很多。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我换个思路：risk_detect做结果缓存，key用content_id+segment_id+版本号，TTL 10分钟；命中直接返回。未命中走推理但加超时，超时就降级为低干预并打标。这样链路不变，TP95能稳点。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把你这套带回去跟导师对齐一下，尤其是场景比例和降级验收。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我采纳“先单接口基线，再链路混压”这条，场景就按S1/S2/S3三类，比例70/25/5先跑。阈值我觉得可以先用你给的那组当第一版门槛，但risk_detect 150ms我不保证一定达标，所以我会把“缓存命中率两套压测”加进去，冷启动可能过不了就看是不是CPU或并发的问题。异步队列我先不搞，改语义太大。降级我会加policy_apply=degrade埋点和degrade_reason到后端日志里，用trace_id串。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我会先分三步：  \n1）先看单接口压测：如果risk_detect在目标QPS下CPU满或者TP95陡增，就优先看模型推理并发和线程池；如果policy_apply慢，就看策略引擎读写缓存/规则匹配耗时。  \n2）链路混压时用trace_id抽样，做按span汇总：risk_detect、policy_apply、unlock各自耗时占比和排队时间。  \n3）再对照错误类型：超时多还是5xx多。超时多就调超时/熔断阈值与下游依赖；5xx多可能是连接池/依赖限流。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "degrade_reason就枚举值：timeout、circuit_open、dependency_limited。用户标识用已有的user_hash，不打明文uid。trace_id抽样0.1%够了，压测环境我也不打全量debug日志，避免IO把指标搞歪。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "灰度第一步只放量低风险策略，确保不会触发遮罩，体验几乎不变，同时验证policy_apply稳定性和埋点序列正确。第二步再灰度高风险遮罩到0.2%，只针对新装用户或者非会员？我不确定按人群切会不会引入偏差。也许就纯hash分桶更干净。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "性能护栏：TP95、错误率、超时率超过阈值就自动回滚灰度开关。业务护栏：prompt_expose=mask出现率不能异常飙升，比如比基线高出50%以上；还有unlock失败率不能高，比如>1%就停。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测计划我按：  \n- 先单接口：risk_detect / policy_apply / unlock，测TP95、错误率、CPU/内存；  \n- 再链路混压：S1/S2/S3=70/25/5，爬坡到峰值*1.2，稳15分钟；  \n- 做两套命中率：冷启动0%和稳态80%；  \n- trace_id抽样0.1%做span汇总定位。  \n优化优先级：先risk_detect缓存+并发限速；再策略引擎热点规则和缓存；最后unlock链路连接池/超时。  \n灰度步骤：1%只开低风险策略不动交互；0.2%放高风险遮罩；护栏包含TP95/错误率、mask出现率、unlock失败率、degrade比例。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

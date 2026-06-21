@@ -1,0 +1,125 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在声纹记忆互动漫画工坊运行评估背景下，用户与导师围绕灰度发布与回滚演练、验证mock_audio开关与loading_end_ts携带request_id持续沟通（9轮），其中在灰度入口与回滚权限/指标部分与SRE运维工程师沟通（8轮），在灰度期埋点事件检索与采样提频验证部分与数据工程师沟通（4轮），并收口形成口头Runbook执行步骤。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我现在就怕上线一开就炸。要不先别灰度了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "比例吧，1%？反正小点。白名单我也行，但我不知道配哪里。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就关开关。可这开关我也记不住是在哪个系统里配的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@SRE运维工程师 灰度怎么弄？我只知道有个开关，回滚是不是点一下就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "header 是我加吗？我客户端不太会搞这些。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "路径就是读漫画然后说话？我也不确定啥算稳定。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我做的是 mock_audio，但我没想让它卡住。我就想跳过真音频。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "loading_end_ts 缺失率是啥？我只打了一个点，带 request_id。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我没做 start 点……那我是不是要再加？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那回滚就是把 mock_audio 关掉？我关了就恢复？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "谁能点？我能点吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我要给你账号列表。几个人？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "request_id 我有打，但我怕你们要更多字段，我没加。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 SRE说灰度用白名单，网关按 user_id 路由到 canary。回滚有两条：关 mock_audio 配置，或者直接清空白名单让全走 stable。还要搞个 mock_audio_delay_ms 之类让它变慢，演练出超时和 loading 不结束。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我没有 delay。我就开关。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我能控制 mock_audio=on/off。别的我不敢动。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不太会跟测试讲清楚。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "request_id 在哪里我也不知道能不能展示，我只打点，不显示在 UI。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我……我感觉能，但我不敢保证。埋点平台我也不会查。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 我现在要验证 loading_end_ts 里有 request_id。灰度里怎么最快查到？别让我写 SQL，我不会。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果看不到，是不是就是没打上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "采样率我也能改？会不会很贵？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 request_id 是个啥格式？我怕我乱传了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 数据那边说能用事件检索查 loading_end_ts，筛 request_id 不为空，再按白名单账号看。还能只给这几个账号把采样提到100%，不影响全量花钱。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "灰度就是白名单账号进 canary。回滚先关 mock_audio 开关，不行就清白名单全回 stable。验收信号…就是看 P95 250ms、超时率0.1%，还有 loading_end_ts 事件能查到 request_id，回滚后这些不再异常。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就……把 mock_audio 打开，然后走录音触发剧情那条链路，看它会不会卡。卡了就算触发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就照这6条走。章节我随便挑一个热门的行不行？"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

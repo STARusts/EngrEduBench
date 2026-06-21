@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边缘侧声纹推理模块开发背景下，用户与导师围绕模型轻量化选型、边缘算力与内存约束及量化部署工具链持续沟通（4轮），其中在模型轻量化与重构选型部分与声纹算法主程沟通（1轮），在唤醒后推理时间窗与内存约束部分与低耗微控专家沟通（1轮），并最终确定DS-CNN+INT8量化方案及工具链补学计划，明确精度与延迟验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算力肯定紧，但我打算直接把云端那个ResNet变体做剪枝，权重稀疏化一下，应该能压进几百KB。精度掉一点就掉一点吧，能出结果就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云端那个ResNet18直接剪枝到50%稀疏度，在边缘侧跑得动吗？还是必须换MobileNet这类轻量结构？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "QAT我懂，就是训练时插伪量化节点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "唤醒后全频采样期间，芯片留给推理的时间窗和内存到底多大？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "512KB，200ms。DS-CNN加INT8应该能进。我打算用DS-CNN重构加INT8量化。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "但现在卡在量化校准和部署这步，我以前只跑过Python仿真，真到边缘NPU上编译部署，工具链我不熟，怕精度对不齐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我确实没碰过这块NPU的NN Compiler。我得把原厂那套量化部署文档过一遍，重点是校准集配置和自定义算子注册。今天先在开发板上跑通官方的INT8分类Demo，把量化前后的中间层Tensor导出来比对，确认误差传导链路，再动手改咱们的模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "开发目标就是：DS-CNN结构，INT8量化，精度损失<2%，延迟<150ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

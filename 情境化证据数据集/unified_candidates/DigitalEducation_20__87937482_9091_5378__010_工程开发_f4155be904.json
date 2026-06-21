@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在纠错编排服务联调卡在“HTTP 200 但返回 {}”的背景下，用户与导师围绕定位接口空返回原因、补齐trace_id与evidence数组结构、设置最小验收标准持续沟通（4轮），其中在空返回语义、接口新旧路径、鉴权token与err_code排查上与后端工程师沟通（4轮），并明确用新版路径+带token+补字段按200+ok=true+回传trace验收。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就 200，但是啥也没。就一个大括号。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "trace_id 我没传。我以为系统自己会有。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用 Postman。然后我也用 curl 试过一次。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我写的是对象。`evidence: { content: \"...\" }` 这种。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 `{}` 到底啥意思？我这边 200 但啥也没。还有你们查日志用啥字段？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我可能就是打错了。你说的旧版本是啥地址？我现在就一个 base_url。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "校验失败不是应该报错吗 为啥吞了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "token 我也没带。我以为内网不用。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1 个是我路径可能打老的，老的就会 `{}`。还有 evidence 要数组，还要 modality。再就是要 trace_id 跟 token，不然查不到也会失败。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "ts_ms 我会乱填。还有 sample_id 我也经常对不上。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就用我自己编一个行不行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有 suggestions 就算吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记不住全部。就 200、ok=true、还有 trace_id 回来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是…检查 evidence 少字段。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

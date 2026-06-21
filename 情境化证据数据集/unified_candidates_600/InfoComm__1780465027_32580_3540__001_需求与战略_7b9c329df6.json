@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "用户在需求与战略背景下，与导师围绕动态重构的合规审查、功能安全与流隔离红线持续沟通（5轮），其中在动态流表合规红线与硬隔离部分与商业合规审计师沟通（2轮），并最终形成动态重构合规需求边界与刚性约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我们产线是物理隔离的，应该不用管网络安全吧。只要业务跑通不出错就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我加校验不行吗？算力够的话算两遍再下发。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态改流表在合规审查里具体卡在哪？是不是要补很多审批流程？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "变更快照我能做，就是打点日志存下来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但重构瞬间不降级怎么保证？混叠又是什么意思？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果新流刚进来一点点就被抢占了，确实可能混。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "硬隔离那就是要预留固定时隙给控制流，不管重不重构都不动这块。这跟动态重构的灵活性有点矛盾啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合规需求边界：1. 动态重构触发必须带快照和回滚路径；2. 控制流时隙硬隔离，感知流不可逾越时间墙；3. 重构过程不能导致已有控制流确定性降级。这几点记下来了，后面设计时我给控制流单独留死区。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

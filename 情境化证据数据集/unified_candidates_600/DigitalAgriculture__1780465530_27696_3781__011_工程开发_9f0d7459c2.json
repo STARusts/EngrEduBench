@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核心算法编码与规范落地背景下，用户与导师围绕WOFOST推演与边缘特征提取的接口对齐、合规留痕及防溢出持续沟通（4轮），其中在开源许可与接口Schema部分与农情推演算法研究员沟通（1轮），在边缘防溢出与归一化部分与云端推演服务工程师沟通（1轮），并最终形成WOFOST的RPC隔离、Protobuf强类型接口及MinMax归一化防溢出的编码方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我打算云端把WOFOST包成gRPC服务，边缘用Python写LSTM特征提取再转ONNX。接口按普通JSON传就行。合规留痕这块，把推演结果存数据库应该就够了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "WOFOST的GPL协议在我们SaaS里直接包进去是不是有合规风险？还有边云推演的输入输出接口，用什么格式能保证严格对齐？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "GPL风险挺大，我得隔离调用。接口换成强类型Schema加三要素。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "延迟我加个Sprint任务测一下。边缘端防溢出我找@云端推演服务工程师 确认下规范，毕竟他定云端输入，我这边缘输出得对上。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终确认：WOFOST用独立进程RPC隔离规避GPL；边云接口全换Protobuf强类型，带时间戳、网格ID和置信度；边缘输入强加MinMax归一化防溢出；我负责边缘C++落地，云端工程师出规范。Sprint补上RPC延迟测试。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

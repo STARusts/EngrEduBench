@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在5%灰度运行评估背景下，用户与导师围绕解析准确率、长尾延迟风险及扩量策略持续沟通（8轮），其中在准确率下界与异常分布部分与业务监控运营师沟通（1轮），在耗时拆解部分与质量与性能调优师沟通（1轮），并最终形成暂缓扩量、补充协议失败走人工复核及OCR超时走人工录入兜底的降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "麻烦拉一下解析准确率的95%置信区间下界，还有异常case的分布情况。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "帮忙拆解一下P99耗时，看看长尾延迟卡在哪了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "下界96.2%，有几份补充协议没解析出来要人工复核。P99没问题，但P99.9超3秒了，卡在OCR重试上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "补充协议应该不影响核心要素吧？重试占比我不太清楚，失败了估计就报错吧？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那先不扩量了？把这几个case修一下再扩？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "触发条件是解析出补充协议失败，还有OCR重试超时。这两种情况都不走自动入账，转人工处理。灰度比例暂时停在5%不动。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

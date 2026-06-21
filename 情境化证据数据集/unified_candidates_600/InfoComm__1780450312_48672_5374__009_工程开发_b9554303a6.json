@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在工程开发联邦聚合逻辑实现背景下，用户与导师围绕异构微模参数对齐、Mask编码压缩及弱电节点掉线处理持续沟通（6轮），其中在异构参数聚合与动态Mask压缩部分与联邦调度工程师沟通（2轮），在弱电节点降级与聚合适配部分与能算路由规划师沟通（1轮），并最终形成Mask对齐、RLE压缩及弱电降级的核心聚合方案，准备编写聚合接口框架。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接加权平均呗？按节点数据量做FedAvg，开源框架里都这么写。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这，我还没细想。是不是可以把剪掉的层补零？补齐维度再平均。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想补零被否了，服务端这逻辑怎么处理？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传参数还得传Mask。服务端只对有值位置做平均，没传的地方不动。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用BitMap？或者稀疏矩阵？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "动态Mask怎么压缩传输？BitMap太占地方，而且每次都变，服务端怎么更新？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "RLE压缩，还有传Delta Mask。端侧算出新旧Mask异或，RLE编码后传上去，服务端异或还原出最新Mask，再对齐参数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "掉线就踢掉，等重连再聚。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "弱电节点算力不够，聚合时怎么处理？直接踢掉会导致数据偏差吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "弱电节点减少本地迭代，或者做梯度截断只算部分层。聚合时给个衰减权重。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，Mask对齐、RLE压缩、弱电降级。我先去写聚合接口框架。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

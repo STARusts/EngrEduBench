@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在方案设计冗余与高可用机制背景下与导师围绕容错机制、冗余分级取舍、验证方案及审计留痕持续沟通（8轮），其中在TSN零丢包与日志补齐部分与高可用评估师沟通（2轮），在FRER带宽与合规审计部分与商业合规审计师沟通（1轮），并最终形成分级冗余及序列号间隙中断留痕方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我寻思着，既然是时间敏感网，是不是搞个快速重连？或者像后端服务那样做个心跳检测，发现挂了立刻切备用节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产线节点要是挂了，心跳太慢，TSN里怎么保证不丢包？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "FRER这种双发选收机制，带宽翻倍，审计能过吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这就卡死了。FRER保证零丢包但没日志还费钱，审计要日志要省钱。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我能不能把思路迁移过来：只有ST这种极关键流走FRER双发选收，普通CQF感知流就走传统主备，主备切换虽然慢一点但有日志。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "做个故障注入实验。变量就是冗余机制，控制组是全量FRER，实验组是分级冗余。注入链路断开故障，测量ST流的恢复时间是不是在微秒级零丢包，CQF流的切换有没有日志。每个工况打100次断流做统计，看功效分析结果。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "FRER底层转发太快，加日志肯定卡顿。是不是可以在消除模块上加个计数器？断流时计数器跳变就上报？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "序列号间隙中断，这招好，不插进数据面转发流程，走旁路控制面。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. ST流走FRER双发选收，保障零丢包；2. CQF流走主备链路切换，保留审计日志；3. FRER消除节点通过序列号间隙中断补齐审计留痕；4. 验证方案用故障注入，100次采样测恢复时间和日志完整性。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

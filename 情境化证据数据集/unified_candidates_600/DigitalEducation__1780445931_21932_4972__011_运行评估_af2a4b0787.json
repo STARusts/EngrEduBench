@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在心智护航系统灰度部署背景下，与导师围绕灰度边界、流量路由、有效性验证及实操短板复盘持续沟通（5轮），其中在流量路由与资源隔离部分与运维工程师沟通（1轮），在统计口径与效应量部分与数据分析师沟通（1轮），最终确定网关标签路由与分层A/B验证策略，并制定流量治理实操提升目标。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "对灰度策略怎么划、监控体系怎么建心里没底，特别是怕灰度期间影响现有用户。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "理论上灰度应该按用户ID尾号分桶。验证的话，我主要看日志里有没有明文泄露，再盯一下P99延迟是不是还在200ms内。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "多模态特征是端侧提取的，服务端没开的话，端侧发过来肯定会有问题。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我对K8s的流量控制和网关路由实操不太熟，不知道怎么把这部分请求摘出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关层怎么路由才能保证未灰度用户的请求不丢也不报错？另外灰度期间资源消耗怎么预估？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "灰度期间我要验证心智护航的有效性，排除安慰剂效应。统计口径怎么定？置信区间和效应量怎么看？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我准备按这个逻辑去配网关规则，实验设计也按分层来。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实对Istio和K8s的流量治理实操不行，只会写yaml但不会排错，刚才资源预留那块我也没考虑到。我接下来的目标是：2周内，每天花1小时在测试环境实操Istio的VirtualService和DestinationRule配置，独立完成一次模拟故障的流量切换，并把排错记录写到项目wiki里。这次灰度我先让运维帮配，但我必须看懂他的配置逻辑并复述一遍。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

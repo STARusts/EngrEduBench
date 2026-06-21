@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在温室数字农业平台方案设计的传感-执行数据流编排背景下，用户与导师围绕Telemetry/Command双流、命令状态机、幂等与断网闭环及证据留存持续沟通（8轮），其中在Telemetry分层与采样周期对齐部分与数据架构师沟通（3轮），在设备回执能力与协议/错误码限制部分与物联网集成工程师沟通（2轮），在审计留痕与断网缓存合规部分与合规与隐私官沟通（1轮），并形成编排约定与补充TTL过期和命令合并规则。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想把链路拆成两条：Telemetry 流和 Command/Action 流。Telemetry 走边缘先做标准化和质量打分，再上云做策略；Command 从云下发到边缘再到执行器，边缘必须回执、落库，然后回传云端做校验闭环。我更想做成强一致的闭环，不然策略很难验证。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态机我粗想是：命令创建->已下发->边缘已接收->设备已接收->执行中->执行成功/失败。超时就重试，下游要幂等。我担心的是执行器很多是继电器类，没法返回“执行中”，可能只能给一个最终状态。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等键用 commandId，边缘保存最近 N 条已执行 commandId。证据的话，至少要有：下发时间、边缘签名校验结果、到达设备的时间、执行器反馈或边缘推断的效果，比如阀门开之后流量有没有变化。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 Telemetry 这块我需要把采样周期、单位/量纲都带上；在数据流编排里，边缘预处理、上云实时/准实时怎么分层更合理？还有为了执行校验，哪些衍生指标要在边缘算，哪些放云算？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边缘“变化检测”如果误报会不会让策略误以为执行成功？我倾向于把 confidence 作为硬门槛，低于阈值就直接走告警或工单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那采样周期不一致，比如温湿度 10s、流量 1s、能耗 60s，这个在编排里怎么避免口径打架？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 执行链路我想做成命令状态机，但担心现场执行器没回执或回执很弱。温室里常见的控制器/执行器在回执、时间戳、错误码方面一般能做到什么程度？哪些限制要提前写进编排方案？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我更想统一成“所有设备都支持命令ID回传”，不然审计很难看。是不是可以在边缘代理层强制补上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那错误码我想做细一点，通讯失败、CRC错误、非法地址、设备忙、联锁拒绝之类。现场能拿到这么细吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我收敛一下：  \n1）Telemetry 先到边缘做标准化（unit、量纲、samplePeriod），打 qualityFlag（missing/outlier/stale），再按 1min 输出 FeatureFrame 上云；原始值边缘短存。  \n2）Command 由云创建 commandId，下发带 TTL、retries、幂等键；边缘按设备能力分级处理：能回读就回读，不行就只记录写入证据。  \n3）执行结果拆两段：deviceAckSuccess 和 effectVerified；effectVerified 在边缘做变化检测特征+confidence，云端做长周期一致性校验。  \n我还是想把 effectVerified 当成必须项，不然闭环不完整。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就三态：verified / unverified / failed。unverified 触发运营类告警到云，再自动建工单让人确认。边缘侧如果是危险动作，就算 unverified 也要执行联锁：比如加热连续开超过上限就强制关并报安全告警。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "断网时边缘只做两件事：一是继续采集+本地聚合+缓存上报；二是执行“最后一个已生效的 PolicyPackage”里的本地规则，主要是安全阈值和最小控制，比如温度上下限、泵最小停歇时间。新命令不接受云端实时指令，但允许本地手动操作也走同一命令状态机并留证。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们在传感-执行编排里会记录命令证据包、操作人ID、越权原因枚举、位置/棚区等。合规上哪些必须留、哪些要做最小化？边缘断网缓存会不会踩雷？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我之前想把所有原始数据都存边缘 30 天方便回放，看起来保留期要可配置，还要加密和导出审计。这个会增加边缘成本，但确实得做。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我补两点：  \n1）命令 TTL 过期要明确落到状态机里，比如 Dispatched 后超过 TTL 直接标记 Expired，并触发运营告警+工单，不再重试，避免重复开阀。  \n2）幂等规则：边缘以 commandId 做幂等，同时对“期望状态相同”的重复命令做合并，但只在同一设备点位+同一有效期窗口内，合并也要留一条 Audit，说是系统合并，不然审计看不懂。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

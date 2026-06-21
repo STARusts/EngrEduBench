@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在物联网感知层通信协议选型背景下，用户与导师围绕协议的功耗、干扰与带宽约束及混合架构方案持续沟通（7轮），其中在传输环境与带宽约束部分与边缘计算工程师沟通（2轮），在协议冲突与混合架构设计部分与首席架构师沟通（1轮），并最终形成混合通信架构选型标准及实测验证要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我之前看别的项目基本都用MQTT，咱们这个也直接用MQTT就行了吧？感觉挺通用的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要是信号实在不好，我们就多加几个中继器呗，反正先把数据连上再说。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "咱们在危废厂区这种干扰大的地方，用什么协议传数据比较稳？我本来想用MQTT，但导师担心电池撑不住或者信号断断续续的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "传感器走LoRaWAN，手持机走MQTT。这样是不是就解决电池和干扰的问题了？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "并发丢包这个我还真没细想。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "图像抓拍的话，那LoRaWAN肯定不行了，带宽太窄了。那干脆还是全回MQTT吧？大不了让现场实施的时候把基站装密一点。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现在选协议卡住了。传感器想省电用LoRa，但有些场景又要传图，MQTT又太费电。能不能搞个混合的或者在网关那儿折中一下？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就按这个混合模式来写方案了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "定位标签和温湿度传感器数据小，为了省电和穿透，我们选LoRaWAN，因为它功耗极低。智能视频监控因为要传大流量图片，选5G或Wi-Fi，走MQTT。所有设备在边缘网关处统一转码成MQTT发给后台。这样既保了续航，也保了带宽。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我把这几个选型标准和实测要求加进设计文档里。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在云—边—设备联调与仿真测试背景下，用户与导师围绕最小联调闭环范围、可自动判定的用例/断言、reasonCode与埋点及日志合规持续沟通（9轮），其中在联调用例拆分与故障注入指标上与测试工程师沟通（2轮），在设备模拟器贴近现场与点位模型对齐上与物联网集成工程师沟通（1轮），并最终收敛到组件范围与5类用例及观测字段清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想做一个比较完整的仿真环境：云端把命令发布到MQ，边缘订阅后写SQLite队列，设备模拟器用Modbus/TCP仿真阀门/泵的点位，然后回执也走一套完整协议。顺便把DAG也加上，这样一次把策略链路也测了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小集合：云端command服务、边缘executor、设备模拟器。接口就三类：云->边命令下发、边->设备写点位、边->云回执。判定的话，可能看命令最终能到达设备，设备状态回传，云端command能走到Succeeded或Failed。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 联调这块你一般怎么设计用例？我们云边命令有重试，边缘有本地队列，设备这边想用模拟器。故障注入你会打哪些点，验收怎么判？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "你说“最多一次重复执行”，我其实想做到严格exactly-once。比如设备侧加nonce，边缘写入设备前先读回校验，保证不重复动作。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我先按5类用例跑，重点验证：1）正常链路成功率=100%（在模拟器环境）；2）重复投递下设备侧执行次数=1（能做到的部分），云端状态不回退；3）乱序回执云端要拒绝并打原因；4）边缘重启SQLite不丢队列，最终能收敛到终态；5）设备无响应触发超时重试到上限后Failed。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "设备模拟器我想先做HTTP的“虚拟设备”，边缘把写点位抽象成driver接口，联调先用HTTP driver，后面再换Modbus driver。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网集成工程师 设备联调我们想先用模拟器，不上真PLC。你觉得怎么模拟最贴近现场？我们主要要测写点位、回读、超时、错误码这些。点位模型也想对齐真实温室的阀门/泵/EC阀。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "模拟器做得这么像，我就想顺手把能耗模型也加进去，计算风机功率，再把策略效果也一起回放。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "范围就三件：云端command状态机+重试、边缘出队锁+执行、Modbus/TCP模拟器（寄存器映射+故障注入）。不做DAG，不做能耗模型，不做真实策略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "必须通过的断言我想定成：\n- 端到端：每条commandId最终进入终态（Succeeded/Failed），且状态单调递增。\n- 重复：同commandId重复下发，云端终态一致，边缘不会无限执行；设备写次数尽量=1，但允许在“写后崩溃”场景出现1次重复（我们先记录为已知行为）。\n- 乱序：非法前序回执被拒绝，云端保留原因码。\n- 离线/重启：边缘重启后SQLite队列能继续出队，nextRetryAt不因为时间跳变导致狂刷。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "砍掉：策略回放、能耗/水肥仿真、以及所有配置化（commandId算法、前序集合继续写死）。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "原因码我先凑一版：\n1）INVALID_PREVIOUS_STATE（回执前序不允许）\n2）DUPLICATE_RECEIPT（重复回执）\n3）EDGE_TIMEOUT（边缘执行超时）\n4）DEVICE_TIMEOUT（设备无响应）\n5）DEVICE_ERROR_CODE（设备返回异常码）\n6）EDGE_RESTART_RECOVERED（重启恢复后继续执行的标记）\n7）SQLITE_LOCK_TIMEOUT（队列锁超时）\n8）RETRY_EXHAUSTED（重试耗尽）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "埋点字段：都带commandId、resourceKey、attemptNo、eventTime（边缘用单调时间+walltime都打）、cloudState/edgeState、deviceAddr+register、errorCode、latencyMs。云端再加nextRetryAt和prevState。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行吧，reasonCode改成：\n1）INVALID_PREVIOUS_STATE\n2）DUPLICATE_RECEIPT\n3）EDGE_TIMEOUT\n4）DEVICE_TIMEOUT\n5）DEVICE_EXCEPTION（带rawDeviceCode，比如Modbus 0x02/0x03）\n6）SQLITE_LOCK_TIMEOUT\n7）RETRY_EXHAUSTED\n8）PAYLOAD_HASH_MISMATCH\n“edgeRecoveredAfterRestart”我放到日志字段里，不当reasonCode。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实没太考虑这个。我会把模拟器的deviceId用固定假ID，点位也用虚拟地址；日志里把Authorization头、密钥字段都打码或直接不打，默认只打commandId和hash。要是要追查，就用本地debug开关临时加，但默认关闭。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在线上评分P95偏移报警导致信配额度异常背景下，与导师围绕根因定界方法、排查顺序、图谱穿透深度及排查计划持续沟通（8轮），其中在快速定界方法与图谱穿透配置部分与风控异常嗅探者沟通（2轮），并最终形成查Trace、拉2层图谱看控制权边、对比特征分箱的三步排查计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "P95偏移这么大，肯定是特征输入出了问题。书上写这种突变是数据分布偏移，我先用KS检验测一下线上特征的分布变化。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "不用KS的话，我不知道怎么定界。特征那么多，总不能一个个看吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上评分P95偏移报警，信配额度异常，怎么快速定界？我想算KS但好像不行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "图谱子图这个好，漂绿侦测本来就看关联实体，肯定是关联方暴雷连累的！"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "先看Trace，排空逻辑bug。然后再拉图谱子图验证关联方暴雷假设。如果图谱没异常，最后对比特征分箱。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "关联方暴雷的话，“关联风险传导得分”这个强特征会突增，穿越分箱边界，把整体评分拉低。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "穿透3层吧，股权关系一般3层能看透。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线上查图谱子图，3层穿透会不会太慢？默认配置是几层？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "只能查2层，重点看控制权边。如果2层没发现暴雷，就说明不是图谱连累的问题。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "排查计划：1. 抽异常单据查Trace排逻辑bug；2. 拉2层图谱子图，看控制权边，验证关联方暴雷假设；3. 若图谱正常，对比特征分箱找强特征偏移。按这顺序执行。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

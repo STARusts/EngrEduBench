@@ -1,0 +1,548 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在配网末端电压潜越反演项目需求背景下，用户与导师围绕末端电压越限的根本归因与验证思路持续沟通（5轮），其中在越限归因与边界条件部分与配网规划专家沟通（1轮），并最终确立越限主因是局部无功缺额的假设及基于真实量测数据对比的验证前提。",
+            "evidence": [
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "无功这块我确实有点懵。之前做仿真都是直接调接口，底层怎么影响电压的我不太会推。接下来两周我得把稳态潮流方程手推一遍，至少搞懂单支路阻抗比和无功损耗的关系，不然反演指标我定不出来。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "末端电压越限到底怎么归因啊？有没有算边界的快捷工具或者经验公式？我不想从头推公式。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "看数据。我得从台区拿一段时间的光发和无功量测，对比一下是不是无功不够的时候电压才越限。不能直接上代码。"
+              }
+            ]
+          },
+          {
+            "microScene": "在产消者无功资源画像分析背景下，用户与导师围绕画像构成要素持续沟通（4轮），其中在无功可调域约束部分与配网规划专家沟通（1轮），在响应意愿体现部分与商业架构师沟通（1轮），并形成画像需包含设备容量、动态P-Q边界、响应偏好与历史履约的认知，明确画像是技术可调域与商业可达域的交集。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我觉得就是把光伏和储能的设备参数归归类，跑个聚类算法分个档就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这无功可调域怎么算？我想直接拿铭牌容量减个损耗行不行？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "原来有功和无功是挤占关系。那我就加个公式，用视在容量平方减有功平方开根号，定时算一下刷新？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "意愿怎么搞进画像里？是不是给点钱他们就愿意了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以画像不能只看设备。得有设备容量、动态的P-Q边界，还有响应偏好和历史履约情况。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微群无功阻尼商业模式探索背景下，与导师围绕商业闭环构建、分润逻辑与资金池来源持续沟通（4轮），其中在现成规则适用性与分润逻辑部分与商业架构师沟通（1轮），在资金池来源与市场机制部分与电力市场分析师沟通（1轮），并最终形成资金池源于台区内部降损与过网费减免、分润依据为动态阻尼贡献度的商业底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "直接套用现在电网那种辅助服务规则呗？我看网上有开源的电力市场结算算子，把数据导进去跑一下不就出账单了嘛。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "现成的电力市场结算模板能直接拿来算微群无功阻尼的钱吗？有没有方便点的分润框架直接套？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "动态分润这词听着就复杂，有没有那种一键算贡献度的开源包？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "钱只能从台区内部省下来的钱里出，不能指望外面给。分钱的话，谁对电压平抑贡献大谁多拿。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微群无功阻尼调控合规准入与可行性评估背景下，与导师围绕合规红线、物理边界及验证方式持续沟通（7轮），其中在合规准入部分与电力市场分析师沟通（1轮），在物理可行性部分与配网规划专家沟通（1轮），并最终确定不扰主网、用户授权、量测延迟达标三条红线及3个典型台区实测验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我们这种微群调控，合规上具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "可行性呢？能搞不？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "不能往上搞，不能强控，还得数据快。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我找个合规评估框架套一下这些条件，应该能出个报告吧？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，记一下。看技术规定，摘无功条款。验证选3个台区实测。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "红线就是不越级调度，不强制控逆变器，量测得快延迟得低。验证找3个典型台区实测延迟和反演。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在配网末端电压潜越反演算法架构设计背景下，与导师围绕算法选型、物理可解释性、时延红线及对照组设计持续沟通（7轮），其中在反演数学基座与物理约束部分与算法设计师沟通（1轮），在边端部署时延与云边切分部分与系统架构师沟通（1轮），最终确认PINN约束反演与云边协同切分架构及3台区对照方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "找个现成的时空图框架，把台区拓扑和量测数据灌进去，应该就能出反演结果吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "框架文档说支持GPU加速，延迟应该还行。物理解释这块，加个梯度回传看看权重不就完了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电压越限溯源反演用现成GNN框架怎么搞？有没有更方便的算子能直接套？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果用那种开源的GNN框架，在边缘侧跑延迟能卡住吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "纯套GNN不行，物理意义不明还会爆延迟。得加物理约束，还要云边切分。有没有那种把物理方程封装好的库能调？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "PINN这块真不太懂，物理方程嵌入和雅可比求逆没自己写过，心里没底。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "短板就是不知道怎么把配网潮流方程嵌进神经网络损失函数里。我这周末去搜两篇PINN在配网状态估计的论文，把里头的代码demo跑通，看看人家怎么写雅可比那块的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "算法用PINN，不用纯GNN；部署云边切分；3个台区跑对照看延迟和误差。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在微群无功协同调控流注设计背景下，与导师围绕边端流注载体选型、时序因果链维护与轻量化约束持续沟通（5轮），其中在事件驱动状态机与事件粒度定义部分与系统架构师沟通（1轮），在产消者响应时延限制与可调度域过滤部分与配网规划专家沟通（1轮），并最终形成边端采用轻量时序库维护因果链且事件驱动流转的设计基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "流注设计是不是就是搭个消息队列？我之前看别人搞流计算都用Kafka，能不能直接套过来？或者用Flink？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "有没有轻量点的流式组件能平替？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "产消者响应是不是有什么硬性限制？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "原来有200ms卡着。还得过滤可调度域。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我琢磨着，用Redis做状态机是不是挺方便？读写快，还能存中间状态。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "边端资源不够啊那确实不能用Redis。用SQLite存状态行不行？我看有些边缘网关自带SQLite。或者用TDengine的边缘版？反正得有个现成的存时序数据的东西，自己写太容易出bug了。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "并发锁我确实没想过。时序因果链是不是得用那种专门的时序库？TDengine边端版好像能扛并发写入，而且自带边缘降级策略。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "边端轻量时序库维护因果链，事件驱动流转，不用Kafka。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在边端云通信与内生安全架构设计背景下，与导师围绕确定性通信协议选型、内生安全机制与验证方案持续沟通（5轮），其中在配网末端确定性传输与内生安全机制部分与通信安全工程师沟通（1轮），并最终形成轻量OPC UA栈裁剪加TSN通道、内生安全数据最小化及TAS隔离对照验证的架构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "通信直接上MQTT呗，都说轻量。安全的话，我看过有那种零信任网关开源项目，直接拉个镜像套进去行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那，加个加速？或者换gRPC？我看微服务都用这个。安全那块，我不太懂内生具体指啥，就那种验证身份的JWT算不算？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配网末端通信怎么搞确定性？还有内生安全到底咋回事，JWT够不够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有把OPC UA和零信任打包好的现成SDK？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证就拿Jmeter多并发发几个指令看丢不丢呗。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前两天刚看了篇讲TSN流量整形的论文，里面提到时间感知整形器，是不是可以把调控指令和普通数据隔离开？这算不算轻量化？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "对照实验，有隔离没隔离。轻量OPC UA加TAS隔离，内生安全只采关键度量值。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在配网末端电压潜越反演算子开发背景下，用户与导师围绕开发框架选择与验证方案设计持续沟通（6轮），其中在云上时序反演框架与数据切分部分与云端算子研发工程师沟通（1轮），并最终放弃开源图库硬套方案，确认基于Flink定制算子与录波回放测试基线，计划补充潮流机理知识。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看网上有挺多图计算的库，直接套一个应该挺快。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "GraphX或者Neo4j不是现成的吗。我之前做别的项目调包挺顺的，应该差不多吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云上跑时序反演，是不是直接上Flink套个图计算库就行？有没有更方便点的组件？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那验证呢？我跑个主函数打印一下结果不报错就行了呗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "弄几个节点输进去，看看出来的电压值在不在合理范围里。大概差不多就过关了吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这数据我上哪找啊，而且怎么回放我也不太会弄。之前都是用mock数据跑的。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我确实不太懂潮流方程推导，平时都是直接调接口。那我只能去看看有没有生成这种录波数据的开源工具了。我今晚查查有没有类似GridLAB-D的测试集生成器，学着把数据导进Flink的测试源里。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在边缘侧逆变器无功控制逻辑重构背景下，与导师围绕老旧硬切逻辑的问题与重构基线持续沟通（5轮），其中在微群无功阻尼重构部分与嵌入式开发工程师沟通（3轮），并最终确认基于RTOS重构、百毫秒步长、微分阻尼平滑及无功池动态计算的重构基线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "这代码看着挺乱的，格式都不统一。有没有那种一键格式化工具能先跑一下？还有这C代码，是不是可以直接用转译工具转成Python改？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上别人写控制一般都直接调PID库，这里手写逻辑肯定容易出问题。是不是换个现成的控制库就解决了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这段老代码里无功硬切的逻辑怎么改？是不是直接套个PID控制库就行了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "所以就是改个定时器参数，加个微分变量，再写个if判断限制一下上限呗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "有没有那种开源的微逆变器控制固件，带阻尼功能的，能直接拿来改改用的？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加个微分变量算阻尼，再加个if判断防过载。我就按这个把老代码的参数改改，加上这两个变量应该就行。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微群资源感知与协议联调背景下，用户与导师围绕协议选型、解析逻辑与联调验证持续沟通（4轮），其中在逆变器接入与状态字解析部分与嵌入式开发工程师沟通（2轮），在契约一致性与鲁棒性测试部分与联调测试工程师沟通（2轮），最终明确手写私有协议解析容错、TCP自定义帧头及Python模拟器测试的联调底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我看网上很多物联网项目都是直接上MQTT，有现成的SDK，是不是直接调包就行了？资源感知也就是订阅个主题。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "如果MQTT慢，有没有更轻量的框架？比如用CoAP？反正就是不想从底层写起。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "状态字解析，是不是就按文档一个个位移出来？有没有自动生成解析代码的工具？像Protobuf那样定义个IDL就搞定。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "手写就手写。那协议联调呢？两边只要能通上信不就行了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "验证一致性，我就打印出来看看数值对不对，不对再改呗。大不了我多盯一会。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "自动化测试桩，我用Postman之类的工具发请求测一下行不行？或者找个Mock服务器工具？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "还得自己写模拟器啊。那工作量有点大，能不能只测几个正常报文就算了？乱码什么的实际运行应该很少碰到吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在反演调控全链路集成测试背景下与导师围绕测试方法、异常注入逻辑与测试底线持续沟通（3轮），其中在全链路测试契约与注入方式部分与联调测试工程师沟通（1轮），在反演算法边界条件部分与算法设计师沟通（1轮），并最终放弃JMeter，确定手写Python注入脚本及验证边缘侧闭锁上报的测试方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用Postman发几个请求，看边缘那边收到指令没，收到了就算通吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这东西有没有自动化平台能一键搞定？我不想手写注入逻辑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "反演不收敛是啥情况？我不太清楚这算子啥时候会崩。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "算法边界是啥？我需要知道啥时候算子会算错，好用来做测试。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就写脚本发这两种错数据。不过用Python写多慢啊，用JMeter压测工具发不行吗，快一点。"
+              }
+            ]
+          },
+          {
+            "microScene": "在极端工况下性能消缺背景下，用户与导师围绕阻尼调控时延超标与指令下发抖动问题持续沟通（3轮），其中在抖动根因排查与验证指标部分与性能优化专家沟通（2轮），并最终明确修改互斥量属性、验证P99时延与相位差及超15度闭锁的消缺底线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时延超标啊，我看是不是Python那块GC卡了？要不要我找个APM工具挂上去扫一圈，或者把线程池核心数调大点？网上说加机器配置一般能解决抖动。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "优先级翻转？我不太懂这个。那我去问问@性能优化专家，看看这种抖动通常怎么一键排查。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "抢锁啊。那换个不加锁的库行不行？或者我直接把通信那块代码注释掉一半，先保证调控发得出来？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我确实没细看，以前都是拿现成的SDK直接跑。我今晚翻一下VxWorks手册里关于优先级继承那节，明天试着把互斥量属性改成优先级继承试试，应该能防阻塞吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就看日志里打的时间戳，如果没超时应该就行。或者再用JMeter压一下？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改互斥量属性，看P99时延和相位差，超15度闭锁。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在现场部署与反演精度校核背景下，用户与导师围绕部署验证方式、精度校核统计口径及自身分析能力短板持续沟通（7轮），其中在部署量测对齐部分与现场实施工程师沟通（1轮），在精度校核误差分布计算部分与运行数据分析师沟通（1轮），最终确认手工对齐时标并按光照负载分组跑脚本校核的方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "跑一下自动化测试工具，看报错率不就行了？工具里有现成的比对模块。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@现场实施工程师 现场部署是不是有那种一键对齐量测的工具？@运行数据分析师 精度校核网上说用RMSE就行，有没有现成算这个的包？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "分组算效应量，这词我没听过，有包能直接调吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就，就那种，去掉最大最小值剩下的范围？我不懂这底层怎么算的，我就想找个脚本跑出结果。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我统计太差了，看不懂分布图。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我去网上找找算效应量和误差分布的Python脚本，这周内跑通一个分组统计的demo。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "现在部署我就先手工对齐时标，精度校核我找个分组统计脚本跑一下误差范围。"
+              }
+            ]
+          },
+          {
+            "microScene": "在微群阻尼调控效能指标监测背景下，用户与导师围绕监测指标体系、计算口径与异常归因路径持续沟通（7轮），其中在核心监测指标选取部分与运行监控专员沟通（1轮），并最终确认包含指标定义、计算口径、异常阈值与归因动作的监测逻辑链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微群阻尼调控效能必须盯哪几个指标？我这边只会拉电压电流曲线，微群互济这块不知道看啥。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "60%成功率那肯定是网络不好吧？偏差大可能是逆变器坏了吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "成功率就是响应数除以下发数，偏差就是实际减目标。归因路径我记一下，找分析师查偏好，找算法查分配。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "指标定义就是那三个，计算口径按标幺值算偏差，成功率扣超时。异常阈值我待会问专家定。归因动作就是找人和查算法。我先按这个理。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段电压越限事件召回与定界背景下，用户与导师围绕越限事件召回方法、定界因子判定、承载力阈值获取及越限处置链路持续沟通（9轮），其中在召回窗口与定界因子部分与运行数据分析师沟通（1轮），在台区承载力约束值获取部分与配网规划专家沟通（1轮），并最终形成日志提取、边界比对、重调阻尼、切除兜底的四步归因动作链路。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "用时序数据库自带的异常检测函数？或者写SQL把超阈值的点捞出来画个图？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "电压越限召回定界怎么搞？有没有现成工具包能直接算出边界的？我看网上有人用DBSCAN聚类找异常群，能直接套不？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我找个图计算的库把灵敏度跑一下？还是直接调线上的反演接口？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "日志里有路径的话，我用Logstash配个正则抽出来？边界就取贡献度大于0.5的节点？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "台区承载力约束值在哪能查到？有没有现成的表可以直接导进来的？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "代入方程算。边界方程系数发我一下，我写个脚本批量算。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "召回抓反演日志链路，用Logstash抽。定界筛Top-K，还要拿无功注入量跟配置表里的边界系数比对，看是不是超了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "日志提取，边界比对，重调阻尼，切除兜底。四步。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在运行评估背景下与导师围绕产消者激励负反馈、设备寿命约束与补偿结构优化持续沟通（6轮），其中在响应偏好漂移与折损曲线拟合部分与运行数据分析师沟通（2轮），在客诉分析与折让补偿方案设计部分与迭代产品经理沟通（2轮），并形成根因标签梳理、寿命硬约束替代软权重及折让补偿结构闭环的迭代方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我看了控制台，响应率有个百分之八十多。应该还行吧？要不要发个问卷问问？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "响应率后面还有啥数据？我看大盘都是绿的。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "客服那边有人骂吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那简单啊，少调他们几次，或者多给点钱呗。我可以用脚本改补偿系数。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "预算卡死啊那不能乱改。寿命问题咋办？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "算法包里好像有个权重参数，我默认设的0.5。是不是要调大点？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我不会改算法源码。能不能在调用包之前，写个前置过滤器，把那些投诉过的节点先过滤掉？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "电费加折让这个得产品经理去搞吧？我只能做过滤器。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "折损曲线能直接跑出来吗？我没现成的模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我导数据给分析师拟合曲线，产品经理出补偿方案，我这边先加个寿命门槛过滤器兜底。"
+              }
+            ]
+          },
+          {
+            "microScene": "用户在阻尼参数自适应演进规划背景下与导师围绕演进安全边界、黑盒调参风险、审计留痕与因果推断持续沟通（7轮），其中在产品验收与安全机制部分与迭代产品经理沟通（1轮），在数据漂移规律与触发条件部分与运行数据分析师沟通（1轮），并最终形成分季节切片触发、灰度生效、差分验证与熔断回滚的演进规划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "演进就是自动调参呗。我看过网上有开源的自动调参框架，像Optuna那种，接进来让它自己跑贝叶斯优化，或者干脆在配置中心加个开关，人工感觉不对了就热更新一把。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "安全边界，就，加个阈值拦截？超出范围就不让调。具体怎么定我也没太想好。阈值设多少比较稳妥？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "参数演进这块，产品上怎么验收？能不能直接套个AutoML框架让它自己搜？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "历史数据里参数漂移大吗？直接拿全量数据喂给框架行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "产品经理说要灰度A/B和熔断，分析师说要分季节切片，不能跨季节外推。我感觉可以用AutoML按季节分开跑，每个季节一个模型。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "审计留痕确实没想过。那不用AutoML，手写规则又太慢。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "对照组，就，留几个节点不调参？具体怎么排除干扰我不太懂，统计学没学好。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那现在的演进规划就是：分季节切片触发，灰度生效，差分验证，熔断回滚。AutoML先不用了。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

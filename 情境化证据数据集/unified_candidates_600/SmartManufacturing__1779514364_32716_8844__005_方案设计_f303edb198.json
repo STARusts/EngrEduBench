@@ -1,0 +1,57 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在边侧耗态特征提取模型选型背景下与导师围绕轻量化替代、硬约束、主推与降级方案及特征裁剪持续沟通（6轮），其中在轻量级替代与特征裁剪部分与算法工程师沟通（2轮），在网关算力与硬约束部分与嵌入式开发工程师沟通（1轮），并最终形成主推LightGBM及降级为静态阈值规则的选型结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "耗态数据都是时序的嘛，我之前看别的项目用过LSTM，效果好像还行。简单点的话就用随机森林？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "边侧内存就那么点。但我也不清楚LSTM到底占多大内存，参数多不是肯定爆？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "耗态时序特征提取，如果LSTM边侧跑不动，有啥轻量级的替代方案？精度不能掉太多。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "边侧网关算力到底啥情况？跑TCN或者LightGBM行不行？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "LSTM不行，TCN和LightGBM可以，但要控制大小和延迟。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "主推LightGBM吧，嵌入式说树不深可以，而且算法说能做特征筛选，我后端对接特征工程也熟一点。TCN我不懂调参怕搞砸。降级的话，算力实在不够，就把特征提取放云端去跑，边侧只传原始数据。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哎呀忘了断网这事。那降级只能用更简单的规则了，不用模型，直接按阈值判断耗态。主推LightGBM，限制模型5MB以内，推理50ms内。降级走静态阈值规则。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "LightGBM输入特征维度怎么裁剪？我需要给个特征清单。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "三类特征，消耗斜率、差分超限频次、定额偏离度，一共15个。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "耗态特征提取主推LightGBM，输入特征3类15维，模型体积5MB以内，单次推理50ms内。算力不足降级为静态阈值规则判断。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

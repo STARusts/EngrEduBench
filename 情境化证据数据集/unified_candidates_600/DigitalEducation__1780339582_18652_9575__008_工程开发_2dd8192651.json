@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在泛在微学分凭证签发合约开发背景下，用户与导师围绕状态回滚、异常捕获与验证方案持续沟通（6轮），其中在事件溯源与回滚架构部分与分布式架构师沟通（1轮），在Fabric状态机实现与异常捕获部分与智能合约开发者沟通（1轮），并最终形成自定义状态流转、追加撤销事件、defer recover异常捕获及双组对照验证的合约开发方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "直接抛异常让交易失败就行，不用自己写回退。这样比较省事，不用管底层的回滚逻辑。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果凭证签发后又要撤销，这个事件怎么溯源？状态回滚在架构上怎么要求？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "在Fabric里写这种状态机，有没有现成的包能直接调？我不想从头写状态流转逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "架构师说撤销是追加事件，不是真删；开发者说Fabric没有现成的状态机包，得自己用PutState写，还要自己写defer recover捕获异常写日志。我之前想直接抛异常是不行的，拿不到业务语义。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块我不太熟，Go的error处理和Fabric的状态交互我有点糊。我现在的短板就是链码的错误处理机制。我待会会去查Fabric官方文档的“Chaincode error handling”那一节，再跑一个最小化的测试用例，故意触发一个panic看能不能正确写进日志。学完之后，我会在合约里加上自定义的ErrCode结构体，把错误码转成DID Log需要的格式。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算写两组测试。一组是正常签发，看VC和DID Log是不是都写成功了；另一组是模拟签发中途失败，比如写到一半故意抛错，看状态有没有回滚干净，日志里有没有记录失败原因。评价指标就看状态一致性的耗时，和异常回滚的成功率，要求100%。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约开发用Fabric Go链码，状态流转自己写，不用现成状态机包；撤销用追加Revocation事件；异常捕获用defer recover，错误码映射到DID Log；验证方案用双组对照，一组正常一组异常，指标是异常存证成功率>99.9%。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

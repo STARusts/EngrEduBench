@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在学件跨域流转合约设计背景下，用户与导师围绕链上链下逻辑划分与合规边界持续沟通（5轮），其中在链上溯源与防篡改部分与学件生态架构师沟通（3轮），在Gas成本与链下校验部分与智能合约研发员沟通（3轮），最终基于数据最小化确定ZKP折中方案并定义三大核心接口。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@学件生态架构师 @智能合约研发员 跨域流转的合约逻辑，链上链下怎么分？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "架构师要全上链，研发员要只上链结果。之前我们定了个数据最小化约束，是不是能用上？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "研发员说成本高肯定有问题。架构师说的防篡改溯源也是硬需求。能不能折中一下？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "网关在链下做完校验，然后把校验通过的凭证上链？合约只验凭证有效性，不重复跑校验逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "合约不管具体校验逻辑，只管三件事：验证网关传来的合规凭证哈希、更新流转许可状态、执行分账。复杂校验全归链下网关。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "合约接口：1. verifyCredential(hash, proof) 验证合规凭证；2. updateTransferStatus(assetId, targetDomain) 更新流转状态；3. executeSettlement(assetId, accounts) 执行分账。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

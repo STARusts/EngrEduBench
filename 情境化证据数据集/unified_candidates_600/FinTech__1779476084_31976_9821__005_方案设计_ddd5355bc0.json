@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在非结构化研报入图管道落地背景下，与导师围绕研报解析拆分、管道鲁棒性、算力成本与验证指标持续沟通（9轮），其中在版面感知清洗与表格解析部分与数据管道工程师沟通（1轮），在表格结构抽取与切片入模部分与大模型算法架构师沟通（1轮），并最终形成包含版面清洗、大模型抽取、Schema校验三步的管道骨架及死信队列与研报分级降级策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我查了些资料，管道可以搭在消息队列上，比如Kafka，然后大模型直接读文档做抽取，用Function Call或者Json Mode保证输出格式，再用Pydantic做Schema校验。理论上链路挺顺的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拆解？就是按字数切片？或者按段落？LangChain的RecursiveCharacterTextSplitter应该能搞定吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据管道工程师 研报里那些复杂表格怎么拆？按字数切好像不行。@大模型算法架构师 切完之后大模型怎么抽才能不把表格结构弄乱？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "如果版面分析切错了，后面不就全废了？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "拒绝入图的也不能丢，得存起来让人看吧？是不是得有个死信队列？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "抓100份不同格式的研报，跑一遍版面解析，看表格识别的F1分数。然后再跑大模型抽取，看Schema拒绝率。如果拒绝率超过20%，说明大模型抽取质量不行，得调Prompt或者换模型。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "管道分三步：第一步版面感知清洗，表格转结构化；第二步大模型按分块抽取，用Json Mode强约束；第三步Schema校验，通过的入图，拒绝的走死信队列旁路审核。验证指标看版面F1和Schema拒绝率。算力控制靠研报分级。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

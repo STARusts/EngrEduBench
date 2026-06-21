@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在套利环路图构建背景下，用户与导师围绕图构建选型、底层结构与跨账户穿透审计留痕持续沟通（5轮），其中在图构建选型与性能要求部分与图计算专家沟通（2轮），在底层结构选型与脱敏审计方案部分与核心算法工程师沟通（1轮），并最终确定采用CSR内存图结构与不可篡改审计边方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "图构建的话，是不是可以直接上那种现成的图数据库？我看网上好多人用Neo4j搞关系图谱，直接套过来应该挺快的吧？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我倒没细算。就是觉得现成的方便点，不用自己从头写结构。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我想直接用Neo4j存图然后做匹配，这样开发快一点，您看行不行？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "内存图结构。就是不用数据库了，全放内存里自己写？时序剪枝也得自己实现？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能用Neo4j，延迟不可控。得自己搞内存图，还要把时序因果绑在边权重上，节点还得能快速淘汰。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "邻接表我平时写算法偶尔用，CSR不太熟。审计留痕，是不是打日志就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "邻接表和CSR哪个更适合咱们这种高频套利环路？另外跨账户穿透的脱敏审计要怎么做？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家推荐用CSR，省内存缓存也好。审计的话，账户ID哈希脱敏，但留关联度量和时序指纹，加一条不可篡改的审计边记录推演路径。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "图结构用CSR，审计边在推演匹配成功时写入。我先把这俩结构体定义出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在空间光影渲染接口规约设计背景下，用户与导师围绕协议栈选型、工程可持续性与跨端兼容性持续沟通（7轮），其中在渲染端接入成本与WebGL兼容性部分与图形接口架构师沟通（2轮），并最终形成基于WebSocket与MsgPack的轻量扁平跨端接口契约及验证计划。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然是空间光影，数据结构肯定极度复杂，我准备用gRPC双向流做主链路，同时套一层GraphQL方便渲染端按需查询光阵状态，序列化用FlatBuffers保证零拷贝，再加一层Protobuf做信令兼容。这样不管未来渲染引擎怎么换，接口层都能兜底。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "主要是怕性能不够，又怕扩展性不足。FlatBuffers零拷贝能压延迟，GraphQL能解决过度获取问题，gRPC双向流天然支持流式跃迁。组合起来应该是最优解吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我这边设计的渲染接口架构是gRPC双向流打底，上面套GraphQL和FlatBuffers，你觉得渲染端接入成本怎么样？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我最近正好在补学DDIA（Designing Data-Intensive Applications）里关于流处理的章节，书里强调流式架构要解耦，我本来想把GraphQL作为解耦层，让渲染端按需拉取，避免流计算层改了字段就把渲染端搞崩。看来我理解偏了，把解耦搞成了过度封装。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我可以设计一个对比实验。变量控制就是协议和序列化方式：实验组A用我刚才提的gRPC+FlatBuffers组合，实验组B用架构师暗示的轻量方案，比如纯WebSocket+自定义二进制结构体。样本量取万级跃迁指令下发，观测指标设为端到端P99延迟和渲染端CPU占用率。这样就能用数据说话。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "如果用四层套娃，以后每升级一次渲染引擎版本，接口层都得跟着震。我放弃GraphQL和Protobuf兼容层。但gRPC双向流和FlatBuffers我还想保留，流式下发和零拷贝对光阵这种计算密集型场景收益应该很大。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "WebGL这个约束确实把gRPC堵死了。好，我彻底退一步。接口规约改为基础传输层走WebSocket，信令格式用MsgPack。字段设计上，只暴露必要的光阵ID、坐标向量和过渡插值因子，砍掉所有冗余状态查询字段。这样既满足低延迟，跨端兼容性也够，后期加字段MsgPack也能兼容。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "空间光影渲染接口规约确认如下：1. 传输协议选用WebSocket，放弃gRPC以兼容WebGL端；2. 序列化格式选用MsgPack，放弃FlatBuffers/Protobuf以降低编码复杂度与维护成本；3. 数据契约采用扁平结构，核心字段仅限光阵ID、跃迁坐标、插值因子，严禁泛化查询；4. 验证实验将对比WebSocket+MsgPack与原重型方案在万级并发下的P99延迟与CPU开销，以此作为最终选型依据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

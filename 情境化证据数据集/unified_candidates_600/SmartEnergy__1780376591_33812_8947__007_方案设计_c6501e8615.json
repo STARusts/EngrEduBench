@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在源荷互动协议设计背景下，用户与导师围绕异构设备协议选型、物模型属性定义、回执与隐私保护持续沟通（5轮），其中在物模型抽象与报文格式部分与协议定义者沟通（1轮），在边缘侧轻量选型与断网降级部分与边云架构师沟通（1轮），并最终确认MQTT+Protobuf协议及包含调节特性的物模型等五项方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "搞个RESTful接口，包一层JSON报文，把设备实时功率发上来不就完了。加个token鉴权，齐活。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分类呗，光伏type=1，储能type=2。前端不都是这么干的吗？JSON谁不会写，调试还方便呢，直接浏览器就能看。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@协议定义者 物模型咋弄？我加type区分设备行不行？@边云架构师 JSON嫌慢那用啥？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "Protobuf？还要写IDL文件编译，太费劲了。MQTT我熟。物模型就多加几个字段呗，能有多复杂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就用Protobuf行了吧。物模型就留设备ID、有功、无功、状态。回执肯定要啊，不然谁知道执没执行。隐私我不传户主名和电话行了吧。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "确认。MQTT加Protobuf，物模型七个属性，带偏差回执，断网快调，不传隐私。完事。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

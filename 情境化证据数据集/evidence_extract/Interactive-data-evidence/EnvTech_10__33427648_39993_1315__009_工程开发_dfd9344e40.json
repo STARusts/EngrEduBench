@@ -1,0 +1,69 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在核算引擎联调前协议收敛背景下，用户与导师围绕采集数据消息模型外层字段、回执结构与五类必选错误码定义持续沟通（12轮），其中在时间窗口非法与schema非法口径及旧schema兼容策略上与规则引擎工程师沟通（2轮），并形成字段必填约束、错误码命名及E_EVIDENCE_INVALID的reason枚举落地方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想先把回执当成平台到网关的统一反馈，不管是原始采集上送还是后续补传。消息模型我倾向分两层：外层是传输与证据字段，内层是业务payload。外层固定，内层按点位类型走schema版本。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "外层我先列一版最小集：\n- msg_id：网关生成，全局唯一，用于幂等\n- site_id / gateway_id：标识来源\n- point_id：点位\n- schema_id：payload schema标识\n- ts_event：数据发生时间\n- ts_ingest：网关打包时间\n- cursor：网关本地递增游标，用于断点续传对账\n- batch_id：批次号\n- prev_hash / batch_hash：hash链字段，prev指向上批\n- signature：网关签名\n- payload：业务数据\n回执里带 ack_cursor 和 last_cursor 两个指针：ack_cursor表示这批处理到的最大cursor，last_cursor是平台已持久化连续的最大cursor，方便网关判断是否需要补齐。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我倾向回执加一个ack_stage，只有两种：RECEIVED(验签验链+schema校验过) 和 COMMITTED(落库成功)。存储不可用就只能到RECEIVED之前就拒绝，或者进本地队列？但这会影响网关重试逻辑。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "回执我设成：\n- msg_id：对应请求\n- status：OK / ERROR\n- code：错误码（OK时为空）\n- message：人读描述（可选）\n- ack_stage：COMMITTED/REJECTED（我把RECEIVED去掉，避免平台半吞）\n- ack_cursor：本次请求覆盖的最大cursor（平台确认已持久化的）\n- last_cursor：平台当前连续最大cursor（用于对账）\n- server_time：平台时间戳\n- evidence：可选，包含平台生成的receipt_hash（把msg_id+code+last_cursor等再hash），用于审计留痕"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "部分接受我打算禁止，平台要么整批失败要么整批成功。缩批由网关做：网关收到“payload过大/批次过大”再拆分重传。平台侧不做部分落库，避免cursor出现洞导致对账复杂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@规则引擎工程师 时间窗口非法在你们核算里怎么判？比如迟到数据、跨日结算、月结锁账。还有schema非法：是schema_id不存在，还是payload字段不匹配也算？规则版本回溯时，旧schema怎么兼容？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "时间窗口的LOCKED/ALLOW_BACKFILL挺关键，那我回执里需要能表达“接收但不立刻计入核算”？不过我们刚刚决定不做RECEIVED中间态。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白。我回去跟导师对齐：回执只承诺落库，核算是否生效走异步审计。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "窗口非法我落成两条判定：\n- ts_event超出允许漂移（>server_time+drift）或早于可追溯最早时间：E_TIME_WINDOW_INVALID\n- 结算窗口已锁账且规则配置LOCKED：E_TIME_WINDOW_INVALID\ncursor不连续我不归窗口非法，我新增一个可选码E_CURSOR_GAP，但不列为必选；必选里仍保留窗口非法，联调时我们先不触发cursor缺口场景。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我按固定前缀，先给8个码，其中前5个是必选覆盖：\n- E_POINT_UNREGISTERED：point_id在平台未注册或已停用\n- E_SCHEMA_INVALID：schema_id不存在/废弃，或payload不符合schema（缺字段、类型错、枚举越界）\n- E_EVIDENCE_INVALID：签名验不过或hash链校验失败（prev_hash不匹配、batch_hash不匹配）\n- E_TIME_WINDOW_INVALID：ts_event漂移超限/早于最早可追溯；或落在已锁账窗口且LOCKED\n- E_STORAGE_UNAVAILABLE：持久化层不可用/超时，平台未接收，网关需重试\n可选补充：\n- E_DUPLICATE_MSG：msg_id已处理过（幂等返回OK并带原ack_cursor/last_cursor）\n- E_CURSOR_GAP：cursor不连续或回退，提示网关先补齐缺口\n- E_RATE_LIMITED：平台限流（非必需）"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "code保持E_EVIDENCE_INVALID不变，回执加reason字段枚举：SIGNATURE_FAIL / HASHCHAIN_FAIL / CERT_EXPIRED。reason不算新错误码，网关可以只看code，平台日志和审计看reason。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "回执的message只给简短中文，不包含原始payload片段、不包含密钥/证书详情、不包含内部库表名和异常栈。reason用枚举；需要细节靠平台审计日志里用安全权限查看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "请求必填：msg_id、gateway_id、site_id、point_id、schema_id、ts_event、cursor、batch_id、prev_hash、batch_hash、signature、payload。可选：ts_ingest（没有就用网关当前时间）、meta（如单位、采样频率）。  \n回执必填：msg_id、status、server_time、last_cursor；OK时必填ack_cursor、ack_stage=COMMITTED；ERROR时必填code，ack_cursor可空。evidence.receipt_hash可选。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

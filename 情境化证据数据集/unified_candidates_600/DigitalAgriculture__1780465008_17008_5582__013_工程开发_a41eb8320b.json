@@ -1,0 +1,41 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在端到端压测与性能调优背景下，与导师围绕告警风暴压测场景定义、核心指标、调优策略及数据规范持续沟通（9轮），其中在告警风暴场景构造与核心指标部分与全链路压测专家沟通（1轮），在服务端限流与背压结合配置部分与调度中枢开发工程师沟通（1轮），并最终形成压测场景、核心指标、调优策略及数据合规规范。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "断网恢复的告警风暴压测怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看P99延迟。调优的话，加机器？或者我最近看了点背压机制的文章，是不是能让网关慢点推？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是服务端处理不过来时，告诉网关慢点发，别一口气全涌进来。我觉得能缓解风暴冲击。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关侧背压加上服务端限流，怎么配能扛住500 TPS的告警风暴？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "这我不清楚，那就全用Mock造吧，按真实报文格式生成。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "压测场景：断网恢复越温告警风暴重传；核心指标：调度匹配P99延迟<200ms，存证成功率>99%，TPS>500；调优策略：网关gRPC背压流控+服务端Sentinel限流(QPS=600)，超限排队；数据合规：全Mock生成，禁止使用生产数据。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在海量终端并发联调背景下，用户与导师围绕压测工具选型与频响闭环验证策略持续沟通（6轮），其中在压测工具局限与脚手架提供部分与并发测试工程师沟通（2轮），在Gatling探底与Vert.x改造建议部分与性能调优专家沟通（2轮），并最终形成分步联调压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想直接用JMeter，装个MQTT插件，压网关接入层就行了。网上很多人压物联网都是这么搞的，插件现成，不用自己写代码。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "自研Netty桩我肯定写不出来，太复杂了。Gatling我倒是能写点Scala脚本，但那个实时ACK回调好像也难搞。能不能就先用JMeter压一下接入层，看网关不崩就行，回调先不测？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就听性能专家的，先用Gatling压吞吐？但Gatling的实时交互脚本我不会写，没弄过这种双向的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那Netty桩咋办？我Java水平一般，写不了Netty底层，有没有更方便一点的办法？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "emqx-benchmark我看过，是基于erlang的，我也不懂erlang语法啊，改不了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Vert.x我倒是用过，异步回调那套我勉强能改。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我最终方案就是：第一阶段用并发工程师提供的Gatling脚手架压网关连接上限；第二阶段用Vert.x开源压测客户端改造，模拟终端频响ACK闭环，验证OR-Tools的200ms分配耗时？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "联调方案：1. 吞吐探底：采用Gatling+脚手架验证网关十万级连接保活与接入吞吐；2. 闭环压测：基于Vert.x改造开源MQTT客户端，模拟频响ACK交互，验证位图唤醒与OR-Tools分配的200ms闭环耗时约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

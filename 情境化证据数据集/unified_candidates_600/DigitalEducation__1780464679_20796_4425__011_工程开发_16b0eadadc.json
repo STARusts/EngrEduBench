@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在桥接策略注入效能测试背景下，用户与导师围绕压测方案冲突协调与测试步骤融合持续沟通（5轮），其中在全链路造峰与延迟测试部分与效能调优师沟通（4轮），在显存OOM风险与单算子Profiling部分与对齐演算工程师沟通（4轮），并最终形成单算子摸底定阈值加全链路造峰测降级与延迟的分步压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "理论上干预策略是异步注入的，根据排队论，只要服务率大于到达率，应该不会阻塞主链路流式追踪。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@效能调优师 你们具体卡在哪？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@对齐演算工程师 你这边为啥不同意？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "算子融合确实没排进这期迭代。单算子测不出资源竞争，全链路又必定OOM。是不是可以先限制并发度，跑个轻量版全链路？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然二阶动量显存动态分配，能不能在算子外层加个显存硬限？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这算一种对照实验设计。降级触发率是自变量，P99延迟是因变量，同时还能观测精度损失。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "降级触发的阈值怎么定？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一步，单算子Profiling测二阶动量显存峰值，峰值乘0.8作硬限阈值；第二步，全链路造峰，开启显存硬限与一阶降级开关；验收指标是降级触发率、P99延迟和偏差收敛精度损失。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

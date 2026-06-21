@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在工程开发背景下与导师围绕权属上链与质量感知的落地边界及选型收敛持续沟通（5轮），其中在权属深链查询解法部分与链端协议码农沟通（2轮），在隐质衰减反演轻量模型部分与隐质反演建模师沟通（2轮），并最终形成复用联盟链加链下图库及基于RLS手写反演的开发路线。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "既然谱系演进这么核心，直接基于Substrate搭一条专用的Relay Chain来承载权属状态流转才原生吧？然后质量感知那边，我准备上Deep Reinforcement Learning做隐质衰减的动态反演，这样感知最准。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "可是通用链表达谱系关系不够原生啊。如果用EVM的Storage映射图谱，查询深度一上去，Gas就爆了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我如果在Fabric或者EVM里做权属谱系的深链查询，比如查5层穿透的最终受益人，是不是只能用事件监听加链下索引？链上合约跑不通吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "链下图库索引那谱系一致性怎么保证？如果链下图库和链上状态不同步，感知就全乱了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "强化学习如果不用，反演模型怎么体现动态演进？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "如果不用强化学习，只用传统数统模型，怎么反演数据资产的隐态衰减？我之前看论文有用卡尔曼滤波的，但工程上对观测噪声矩阵设置太敏感了，很难调。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "真写代码实现矩阵求逆的数值稳定性我没把握，特别是数据维度高的时候容易奇异。这块我得补一下，之前主要用PyTorch现成算子，手写底层线性代数容易出Bug。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我造一组带已知衰减系数的模拟数据流，把我的RLS实现喂进去，看辨识出的参数收敛轨迹是不是逼近真实系数。同时跑一个无遗忘因子的普通LS做对照组，看在数据分布发生突变时，带遗忘因子的跟踪延迟是不是显著更小。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "权属上链用联盟链标准合约加链下图数据库存谱系；质量感知用RLS做在线反演，底层用Eigen手写，对照实验验证收敛性。自建链和强化学习先砍掉。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

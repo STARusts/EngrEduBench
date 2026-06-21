@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在测装协同数据流定义背景下，用户与导师围绕数据流架构、延迟优化、数据契约与合规留痕持续沟通（6轮），其中在边缘侧微秒级同步部分与边端协同开发师沟通（1轮），在零拷贝数据合规留痕部分与质量合规确权师沟通（1轮），并最终形成主链零拷贝DDS同步、旁路异步转储归档及Protobuf契约的数据流定义结论。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "测量设备采完数据，发请求给解算模块，解算完再发指令给装配端？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那用Kafka？异步解耦一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "微秒级同步怎么做，Kafka是不是不行？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "DDS加共享内存，跳过内核。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "契约就定个统一JSON？合规我不太懂。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "测量数据走零拷贝，合规上有啥要求？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "主链测量端写共享内存，DDS广播给解算，解算写指令共享内存，装配端读。旁路从共享内存异步拉数据存时序库。契约用Protobuf，比JSON快。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "测装协同数据流定义结论：主链采用共享内存零拷贝与DDS发布订阅模式保障微秒级同步；旁路异步转储时序库满足审计留痕合规；数据契约采用Protobuf格式降低解析开销。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

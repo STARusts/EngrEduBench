@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在多模态情绪解析算法工程开发背景下，用户与导师围绕多模态融合、模型轻量化拆分、核心算法实现验证及测试集合规性持续沟通（10轮），其中在多模态融合与时序对齐部分与情绪计算科学家沟通（1轮），在边端推理与模型拆分部分与算法工程化专家沟通（1轮），在测试集数据脱敏部分与伦理合规审计师沟通（1轮），并最终形成基于跨模态注意力、边云拆分、KL散度验证及脱敏数据的算法落地策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我打算直接上PyTorch把ResNet50套进去跑一波，先出个能跑的版本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "视觉不就是摄像头抓帧嘛，音频我可以加个Mel频谱图拼一起。ResNet跑得慢的话，我换MobileNet不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "多模态融合是不是就把图和声音拼一起喂给网络？时序对齐是啥意思，我写个delay函数行不行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "这种带注意力的模型，边端推理怎么搞？能转ONNX直接跑吗？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "专家说不能拼，得用跨模态注意力，还要做滑动窗口同步。工程化这边说要把模型拆开，边端提特征，云端做融合，或者做蒸馏。注意力机制我以前没写过，这代码怎么起头啊？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我找MUNIT或者Perceiver那种开源实现，把跨模态注意力矩阵那块拎出来，写个单测跑通，确认输入输出的特征维度没变。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我拿全量模型做Baseline，然后用同样的测试集跑拆分后的模型，对比输出的情绪标签分布的KL散度。如果KL散度大于0.2，就说明特征损益不可接受，得调蒸馏参数或者重设切分点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我直接录几段现场视频当测试集，最真实。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "线下录的视频能直接拿来做算法测试集吗？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "测试集得先脱敏，只留表情区域，不能把原图放库里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "先去补跨模态注意力和时序对齐的代码，从Perceiver里拎出核心模块写单测验证。然后实现边端特征提取和云端融合的拆分。测试集用脱敏后的合成数据或者模糊过的现场数据，对照Baseline看KL散度是不是小于0.2。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

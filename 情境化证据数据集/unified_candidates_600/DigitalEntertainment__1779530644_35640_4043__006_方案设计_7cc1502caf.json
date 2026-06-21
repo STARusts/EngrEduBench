@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在方案设计阶段端云调度与降级背景下，用户与导师围绕演唱会瞬间并发扩容与视效平滑退化的联动逻辑持续沟通（5轮），其中在云上瞬间并发调度部分与云原生渲染规划师沟通（1轮），在端侧视效平滑降级部分与降级容灾开发工程师沟通（1轮），并最终形成云调度预热池、过载球谐降阶与端侧逐级剥离退化的闭环策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "云上直接拉满实例呗，K8s设置自动伸缩。端侧要是帧率掉得厉害，就直接把同胚映射关了，退回球谐。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "预热几台机器？硬切的话，加个Alpha淡入淡出遮一下？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "核心区同胚映射算力重，瞬间并发上来K8s扩容来不及咋整？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "云上要是超发拒了边缘区请求，端侧怎么平滑降级？直接关同胚太跳了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "云上用Serverless预热池加优先级队列，核心区P0边缘区P1。云吃紧就拒P1保P0。端侧降级不硬切，一层层剥细节，法线高光去了再回球谐，插值200ms。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "球谐不能拒。那就拒更外层的？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 云调度：Serverless预热池+优先级队列，核心区P0。2. 过载策略：不拒流，但云上算力不足时，把边缘区球谐从3阶降成1阶，省算力给核心区。3. 端侧降级：端侧帧率低于30时，核心区同胚映射逐级剥离细节，200ms插值退回球谐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

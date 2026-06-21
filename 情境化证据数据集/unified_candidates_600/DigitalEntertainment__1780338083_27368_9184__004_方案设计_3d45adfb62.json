@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在演艺声光视效时序编排系统方案设计背景下，用户与导师围绕时序驱动总体架构、Kafka与时间轮取舍及架构验证持续沟通（5轮），其中在信令分发延迟抖动与架构分层部分与时序架构设计师沟通（2轮），并最终形成云端编排加边缘时间轮预执行加PTP同步的架构方向及核心约束。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我就想直接上Kafka推信令，消费端按时间戳卡着执行就行。这块我熟，吞吐量绝对够，后端大流量的场景我都这么干。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "Kafka做演艺视效信令分发，延迟抖动大概什么量级？能不能靠加分区解决？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "提前下发到边缘，那现场临时改编排怎么办？全推一遍太慢了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "增量更新我明白，类似做diff嘛，只推变化的部分。但PTP时钟同步这块我确实没搞过，以前做的项目都是内网统一NTP凑合用。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我今晚去啃IEEE 1588的协议文档，再看两篇Linux内核PTP实现的博客，明早给答复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我搭两个对照组。一组Kafka推，一组边缘时间轮。发一万条信令，看P99延迟抖动。我假设Kafka的抖动肯定超5毫秒，时间轮能压到1毫秒内，只要压测结果符合这个假设，就推翻用Kafka的想法。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1. 场控信令禁用Kafka等高抖动MQ；2. 采用云端编排生成时间轴，边缘时间轮预加载执行；3. 时钟同步放弃NTP改PTP；4. 架构验证指标为P99抖动<1ms。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

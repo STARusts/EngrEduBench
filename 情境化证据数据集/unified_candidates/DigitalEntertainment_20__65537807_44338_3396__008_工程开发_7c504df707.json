@@ -1,0 +1,101 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在编舞参数引擎工程开发背景下，用户与导师围绕将情绪轨迹转成可推送的编舞参数序列、状态推进与可复现测试持续沟通（13轮），其中在时序粒度/抖动与媒体时间轴对齐上与实时音视频工程师沟通（3轮），在最小字段集及离散/连续参数取舍上与内容编导代表沟通（3轮），并敲定输出契约、推送策略与两条回放验收点。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是把情绪值换成舞蹈动作强一点、灯光快一点之类的参数。嗯，大概这样。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "emoteIntensity：情绪强度 0-1；tempo：节奏 0-1；moveScale：动作幅度 0-1；lightColor：灯光颜色，RGB？；subtitleSpeed：字幕速度 0-1；transition：转场时间，0-3秒。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "连续量就强度、节奏、幅度、字幕速度。灯光颜色可能离散点。输出频率…先 200ms？这样不会太密。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就是感觉 50ms 太多了，1s 又太慢了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实时音视频工程师 编舞参数引擎输出频率要怎么定？跟视频时间轴咋对齐，抖动能容忍多少？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那是不是我就固定 250ms 出一条，然后每条都带 event_time_ms，然后提前 300ms 发？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "灯光颜色这种就不要插值，直接切预设？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "第一要带 event_time_ms 这种时间戳对齐；第二默认 250ms 半拍粒度；第三下发要提前，比如 300ms，端上按时间戳调度，不是收到就生效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就存一个 lastEventTime，然后每次根据现在时间算下一拍？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "cursor 就是当前生成到的时间，生成一条就加 250ms；beat_index 也加 1；bpm 如果变了就改；timeline_id 传下去不变。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@内容编导代表 我们编舞参数引擎最小要输出哪些字段？哪些必须做成离散档位/预设，哪些可以连续值？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "energy_level 为啥不用 0-1 连续？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "锁段是比如一个 section 至少 8 拍不换？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小 5 类：section_id 离散；energy_level 离散 0-3 或 0-4；tempo_mul 连续 0.8-1.2；motion_scale 连续 0.7-1.3；light_preset_id 离散。可选 caption_density 离散 0-2。还有 min_hold_beats 控制段落别乱跳。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "energy_level 就用 intensity 分段，比如 <0.2 是 0，<0.5 是 1，<0.8 是 2，剩下 3。section_id 就跟着 energy_level 变？hold 就是计数没到就不换。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "后端房间态里？或者配置里？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就对 energy 做滞回吧。比如升档要超过阈值一段时间，降档也要低于阈值一段时间。然后再加 min_hold_beats。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "同意，先用驻留拍数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "第一个就 assert 输出序列每条的 event_time_ms 和 energy_level、tempo_mul 这些都一致。第二个就是给个抖动输入，然后 assert 在 8 拍内 energy_level 不变？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "懂了，就别把原始采集那些写进日志，只保留引擎输出和聚合值，时间也别太久。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）输出按 beat points，默认半拍 250ms，一条带 event_time_ms 和 timeline_id。  \n2）推送不是收到即生效，按时间戳调度，可以提前 300ms 发未来点，甚至批量发 1-2 秒窗口。  \n3）字段最小集：section_id（从 context 传入）、energy_level（离散档）、tempo_mul（0.8-1.2）、motion_scale（0.7-1.3）、light_preset_id（离散），可选 caption_density（0-2）。  \n4）连续值允许端侧插值，离散字段不插值。  \n5）energy_level 先用 EMA 后 intensity 分档，再加 min_hold_beats=8 控抖，不做复杂滞回。  \n6）两条回放测试：同输入同 timeline 输出完全一致；阈值附近抖动时 energy 变化次数受 min_hold_beats 限制（最多每 8 拍一次）。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

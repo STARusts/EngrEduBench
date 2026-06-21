@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在灌流参量下发通道架构冲突背景下，用户与导师围绕实时性与合规审计的取舍持续沟通（4轮），其中在合规审计与队列必要性部分与边云低延时架构师沟通（1轮），在微循临界态实时性部分与灌流舱智控网关极客沟通（1轮），并最终形成救命参量走直连RPC加校验、慢变参量走MQ持久化的分流策略。",
+            "evidence": [
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "网关极客非要直连，你为什么非要走队列啊？拿现成组件兜底不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "架构师说合规过不了，必须要走MQ查日志。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得能不能搞个混合模式？比如用那种支持优先级的消息队列，紧急指令插队？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "救命参量肯定不能晚，丢了也不行吧？慢变参量晚一点好像没事。要不救命参量走直连RPC，但我在指令头里加个CRC校验和流水号？慢变参量走MQ留底？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我去理约束。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

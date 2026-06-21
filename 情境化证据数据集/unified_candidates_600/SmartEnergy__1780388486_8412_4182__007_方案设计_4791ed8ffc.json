@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "智慧能源",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在聚合指令安全分发机制设计背景下，用户与导师围绕鉴权、防篡改、防重放及审计日志合规性持续沟通（7轮），其中在工控指令防篡改与防重放做法部分与安全控制专家沟通（1轮），并最终形成白名单鉴权、SM2签名、时间戳加Nonce、网关侧验签及强制异步审计日志的安全分发链路决策。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "鉴权就加个Token校验呗，白名单里的设备直接放行，非白名单走常规校验。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "防重放加个时间戳？防篡改我，我就不太懂了，后端一般就靠HTTPS。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "调频指令下发防篡改和防重放怎么搞？网关那边资源比较紧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "感觉有点费资源，写日志会影响下发性能吧？能不能先不搞？反正指令成功失败前端能看到。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "链路就是：先查白名单鉴权，然后对指令加时间戳和Nonce，用SM2签名，下发到网关，网关验签通过再执行，同时异步写审计日志。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "快速通道跳过缓冲，但签名不能跳。不然紧急指令被改了更危险。只是验签在网关侧做，速度应该够，SM2验签很快的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "鉴权白名单过滤，指令体SM2签名防篡改，时间戳加Nonce防重放，网关侧验签，强制异步审计日志。快速通道同样要验签，不能跳过。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

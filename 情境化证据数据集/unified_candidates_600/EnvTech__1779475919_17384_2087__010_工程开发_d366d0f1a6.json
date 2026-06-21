@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在全链路推演注入性能调优背景下，与导师围绕时延瓶颈定位与调优方案持续沟通（7轮），其中在压测分段隔离部分与链路联调测试工程师沟通（1轮），在反演时延波动分析部分与算网保态评估师沟通（1轮），并最终形成包含Mock隔离、P99置信区间评估、eBPF追踪及合规标签的调优方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按流程得做压测。之前控制面时延放异步流水线了，整体链路我准备先跑一遍联调，看耗时分布。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就想整体压一把，看哪里慢再改。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路压测怎么把反演和注入的耗时拆开？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "插挡板隔离压，日志打标签隔离。我回去改压测脚本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "波动大就多跑几次取平均呗。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反演时延波动很大，平均数没用，这波动怎么分析？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "非均质网格收敛性差异导致耗时突增，要看P99长尾和置信区间。我最近学了eBPF追踪工具，不用改反演代码就能拿到内核态的算力耗时分布，正好可以用来抓这种突增的耗时点，比打日志快。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1. 压测用Mock挡板隔离反演和注入，分别测吞吐。2. 反演时延不取平均，看P99置信区间，超300ms触发注入脉宽降级。3. 用eBPF追踪反演内核耗时定位突增点。4. 压测日志打`test_mode`标签防审计混淆。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

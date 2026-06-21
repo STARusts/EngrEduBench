@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在主链路性能调优背景下，用户与导师围绕流式计算时延毛刺、数据倾斜、两阶段聚合、窗口延迟阈值、Flink反压机制及Network Buffer配置持续沟通（9轮），其中在反压卡点与数据倾斜部分与流式计算工程师沟通（2轮），并最终形成两阶段聚合、P99延迟阈值、Buffer调优及监控部署的改动方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "时延毛刺大，我觉得可以调大滑动窗口的步长，或者增加算子的并行度。根据排队论，增加服务节点能降低平均等待时间。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "反压卡在哪了？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以不能直接按探针ID分区。那是不是要加个预聚合？或者两阶段聚合？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "流式专家说卡在KeyBy分区倾斜，建议用两阶段聚合，先局部再全局。还有窗口允许延迟要配好，不然丢事件。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我确实没算过。丢事件率如果超过1%，图卷积的特征提取就会产生偏差，推演轨迹的置信区间会变宽。误差来源主要是网络抖动和探针休眠唤醒延迟。所以允许延迟不能拍脑袋，得看探针回传延迟的P99分位数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "Flink底层反压机制我之前只看了个大概，Credit-based流控没细看。我昨晚刚查了资料，说是下游SubTask通过BacklogSize和Credit向上游申请Buffer，如果下游处理慢，Credit不发，上游就不发数据。局部聚合减少了向下游发送的数据量，所以Credit消耗慢，反压就缓解了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "既然局部聚合把数据量压下来了，Network Buffer的大小可以适当调小，比如从默认的32KB降到16KB，这样能减少内存占用，而且Buffer变小了，Flush得更频繁，端到端延迟也能降一点。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "改动点明确了：KeyBy改成两阶段聚合；窗口允许延迟取P99；Network Buffer调到16KB；加上反压和丢事件监控。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

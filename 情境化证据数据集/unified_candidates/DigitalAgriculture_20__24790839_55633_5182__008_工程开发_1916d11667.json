@@ -1,0 +1,89 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在土壤微生物处方闭环系统的样本链路追溯接口落地背景下，用户与导师围绕追溯ID串联、验收口径、离线幂等与冲突补救及字段脱敏持续沟通（3轮），其中在数据建模与事件/状态设计部分与数据架构师沟通（4轮），在实验室唯一标识与结果回传对账策略部分与实验室LIMS集成工程师沟通（3轮），并收敛关键字段、两条核心接口与端到端测试用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "现在我卡在追溯ID怎么串：采样袋码、地块、检测批次、处方、施用回传，这几段我怕串错导致后面追责对不上。@导师 你帮我把这个微场景的实现目标和验收口径钉一下？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我现在的想法是：直接用采样袋二维码当主键 `sample_id`，这样所有系统都用一个ID，应该最省事。离线就先把扫码记录攒着，回网再按二维码upsert。这样行不行？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我改成：`sample_id` 用UUID，二维码作为 `container_code` 唯一索引。创建样本时如果扫到同一个 `container_code`，就返回已有 `sample_id`，不允许新建。这样能挡住重复？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "冲突我倾向“后到的拒绝”，返回错误让人去改。合并我担心把不同地块的采样合到一起更危险。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "容器码更换这条我之前没想到。那实现上是不是得有个 `container_code_history`？不然审计对不上。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据架构师 追溯这块我打算把容器码和样本实体拆开，但不确定用事件流还是状态表。你建议怎么建模，字段到什么粒度够用？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "事件表我能理解。那离线幂等怎么做？我之前想简单用 `(container_code, collected_at)` 当幂等键，但感觉不稳。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白。那 `payload_hash` 是干嘛的？我担心存多了成本上去。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我再确认一嘴：处方要追溯到批次和方法，应该放在 `prescription` 里还是从 `result` 关联过去？我们现在有 `result_id` 但还没定。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@实验室LIMS集成工程师 实验室入库时到底以什么作为唯一：采样袋码、入库号、还是你们自己的样本号？如果袋码换了或贴错，你们流程怎么处理？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那我们系统要不要把 `lims_sample_id` 当作追溯主线？不然结果回传时怎么对上？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "结果回传如果只给了袋码，映射缺失，会不会造成“错绑”？我们能不能强制实验室必须回 `lims_sample_id`？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我理解的落地方案是：样本实体ID和容器码拆开；事件表记录关键动作；离线靠幂等key；LIMS回传优先用 `lims_sample_id` 映射，默认严格拒绝缺关键字段。你看还有明显漏洞吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我想做个 `result_inbox` 表，所有回传先落这里。严格校验不过就标 `status=NEED_FIX`，记录 `missing_fields`。然后给实验室一个“补传/更正”接口，用 `idempotency_key` 或 `lims_sample_id` 更新这条 inbox，再进入正式 `result` 表。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我本来想前端要什么我就给什么，但确实容易乱。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我准备后端做两个DTO：\n- 内部追溯DTO：给审计/管理员用，字段多；\n- 业务追溯DTO：给采样员/种植户看，只给必要字段，比如 `sample_id、container_code(部分脱敏)、plot_name(按geo_level)、lab_batch_id(可选)`。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "解释字段我会按“处方解释双层展示”拆开：一个 `explanation_public`，一个 `explanation_internal`，追溯接口默认不带 internal。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最小闭环我这样定：  \n1）关键字段：`sample_id`（系统生成）、`container_code`（唯一且可作废/更换）、`idempotency_key`（采样事件幂等）、`lims_sample_id`（映射）、`result_id`（结果快照）、`prescription_id`（引用sample+结果快照）。  \n2）关键接口两条：  \n- `POST /samples/{sample_id}/events`：提交采样相关事件（含幂等key），服务端落 `sample_event`，必要时写 `sample_container` 绑定或换码；冲突返回 `conflict_reason`。  \n- `POST /lab/results/inbox`：实验室结果回传先入 inbox；校验缺字段则 `NEED_FIX` 并返回 `missing_fields`，补齐后转正生成 `result_id`。  \n3）测试：我跟测试同学对齐做三组端到端用例：  \n- 弱网重试：同一采样动作重复提交10次，只产生1条 `COLLECTED` 事件；  \n- 双端冲突：两台手机离线用同一 `container_code` 建样本，回传时一条成功一条进冲突单，返回可解释原因；  \n- 结果错配防护：无 `lims_sample_id` 且袋码对应多激活样本时，结果不得自动入 `result`，必须停在 inbox 的 `NEED_FIX`。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

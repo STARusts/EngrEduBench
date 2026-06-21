@@ -1,0 +1,974 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "需求与战略",
+        "microScenes": [
+          {
+            "microScene": "在数字农业项目“虫情气味多模预警协同系统”需求与战略起步背景下，用户与导师围绕温室番茄虫害早预警的场景锁定、痛点拆解、误报/漏报与合规边界及调研提纲持续沟通（10轮），其中在用户与验收口径及最小闭环设计部分与产品经理沟通（3轮），在阈值/真值获取与处置建议边界部分与农业植保顾问沟通（3轮），并形成“风险等级+复查任务+回填证据”的阶段性痛点结论与可验证问题清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想搞个数字农业的项目，名字就叫“虫情气味多模预警协同系统”。我就想快点做个能报警的东西，别整太多花的。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那就温室番茄吧，听起来常见。主要就是白粉虱、蓟马那类。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差不多就是靠人看叶子吧，有时候懒得看。黄板也有，但没人天天数。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "提前两三天吧，能少打一次药就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "误报就误报呗，反正提醒一下。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 温室番茄虫害预警这块，用户到底痛在哪里？别整太理论，给我能用的点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就想做第1和第2，整合一下然后推个报警。闭环那些后面再说。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就对场长发消息就好了，别搞这么多人。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记住了，就是要有个“确认+派单+回填”，别写太大。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "采纳两点：一是别只报警，要能变成任务；二是主要用户可能是场长加工人。先不搞什么效果评估报表。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业植保顾问 你说白粉虱蓟马这些，预警到底问啥？我不想搞一堆学术词。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阈值我觉得就随便设个数，反正机器会学。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不给建议，只提示“有虫”。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "明白，就是别直接叫人打啥药，最多给等级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就这样：报警出来先变成“复查任务”，场长点一下确认不确认；确认后再派给工人去查，回填照片。至于打药不在系统里写死。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就找两三个温室问问，场长优先。问你刚说的那些点，尤其是他们到底什么时候才会真的去处理，还有误报能不能忍。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "优先级第一是别靠人工巡棚才能发现虫，第二是报警别变成一句废话，要能派成复查任务。用药建议先别碰，免得扯皮。"
+              }
+            ]
+          },
+          {
+            "microScene": "在温室番茄白粉虱/蓟马早发现与复查闭环的需求评估背景下，用户与导师围绕VOC/环境/表型三源数据可采性、干扰、真值与运维成本持续沟通（7轮），其中在VOC采样周期/漂移维护/干扰源上与传感硬件工程师沟通（2轮），在早期虫害真值定义与采集方式上与农业植保顾问沟通（2轮），并最终确定先做VOC+环境最小验证、表型降级为告警后证据采集及最小叶背抽检要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "卡点可能是网不稳定？反正数据先收着。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能吧，虫子来了味道就变了。用个阈值不就行了？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@传感硬件工程师 VOC传感器在温室装了就行吗？采样多快比较合适，麻不麻烦？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就加个温湿度传感器补偿一下就好了。校准我感觉可以不做，先跑起来。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是VOC会被喷药啥的影响，然后温湿度也影响。维护可能要换滤芯。提前量也会影响。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业植保顾问 早期白粉虱/蓟马怎么确认？我们得怎么采真值，别太复杂。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用黄板数就行了吧，拍照太慢。我们只要有虫就告警。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "表型就摄像头拍叶子，做识别。装个摄像头一直拍不就完了？成本也不高。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以吧，别全天录像就行。告警后拍两张也行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "摄像头只拍植株，不拍人，视频别留太久。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "就先做VOC+温湿度吧，表型先放着。真值就黄板计数，别搞太细。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，就固定几株看一下，别让我写一堆表。"
+              }
+            ]
+          },
+          {
+            "microScene": "在虫情预警系统需求与战略收尾的合规与商业模式定义背景下，用户与导师围绕订阅收费边界、误报漏报责任、数据授权与留痕及保留期限持续沟通（9轮），其中在数据敏感性与两段式授权/最小留痕部分与安全合规经理沟通（3轮），在定价套餐分档与SLA免责/试用规则部分与产品经理沟通（3轮），并确定首版卖A档与最低合规动作口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "还能怎么卖，就卖温室老板呗。按棚收钱，装上能报虫就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "订阅吧，省事。误报漏报就写个“仅供参考”。数据就默认我们拿走训练模型。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规经理 VOC也算隐私吗？我就采棚里味道和温湿度，还要搞授权吗？别搞太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "目的限定是啥意思？我就想拿来训练模型，顺便以后给别的棚也用。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就都勾上不就行了，合同里写一条“不同意就不能用”。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "留痕要咋留？我不想搞一堆审计系统。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是…数据不能随便拿去训练，要用户选；还有别把授权绑死；再就是改阈值、发告警要留记录，免得扯皮。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "最小版：VOC+温湿度，出个风险等级，推送到手机。再加黄板计数和叶背抽检就算了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@产品经理 直接说怎么收费最快。按棚按月？还是按设备？我就想简单点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那免责怎么写？我就怕他说我一报错他就来找我。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "感觉写这么多他也不看。能不能就做个“试用版”，先收钱再说。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "卖A档吧，先把预警跑起来。最低动作：合同里分开勾选训练授权；系统里记一下谁改阈值、告警记录保留。别的先不搞。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "第4条30天有点短吧，我还想攒数据训模型。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，反正特征能训就行。别让我去管删库这种事。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在虫情气味多模预警协同系统方案设计背景下，用户与导师围绕MVP气味传感采集架构的采样频率、端侧预处理、上报策略、断网补传与原始数据30天留存持续沟通（6轮），其中在采样周期/清洗段与风扇或泵、特征与异常原始窗、漂移自检与阈值初始化部分与传感硬件工程师沟通（4轮），并最终敲定端-云存储边界、最小字段与对时要求。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就传感器装温室里，然后数据一直发到云上。频率就…1秒一次？反正多点好。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "要曲线吧，不然模型怎么学。虫子味道应该是突然变重那种。阵列就…买个贵点的模块就行？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@传感硬件工程师 采样怎么搞？我就想知道要不要一直抽气、多久采一次、数据怎么吐出来。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "你说的“清洗段”是啥？还要泵？我以为直接露天放着闻就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我是不是就固定 2分钟采一次，然后算个平均值上报？别搞一堆。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "3σ听着就玄学。阈值能不能拍脑袋给个数字？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。那数据吐出来就是特征包+偶发原始窗。回去我跟导师说。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 硬件说别1秒全上云。端上1Hz采着算特征，每2分钟发一个特征包；异常才传10分钟原始。采样要有采样段+清洗段，不然基线回不去。还能先用风扇导流，别上泵。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端就存一下原始，云上都存。断网就…等有网再发？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "端侧原始就存…一天？特征存7天？网关我想不要，直接4G上云。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "可以，端上多存点无所谓。只要别让我写复杂逻辑。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "1）每2分钟发特征，触发才发原始窗。2）断网先堆着，先发特征。3）参数能远程改。4）加密、权限、留记录。差不多吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段…就时间、传感器id、数值？原始窗就是数组。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "UTC毫秒就UTC毫秒。对时每天一次，重启也对。可以了吧，别再加东西了。"
+              }
+            ]
+          },
+          {
+            "microScene": "在数字农业方案设计的多模融合预警流程设计背景下，用户与导师围绕端云分工、时间对齐、证据链、告警到工单闭环与降级策略持续沟通（5轮），其中在融合窗口与解释指标口径部分与算法工程师沟通（2轮），在事件-告警-工单链路与审计字段部分与后端工程师沟通（2轮），并最终确认规则先上线且接口预留模型字段、由后端先定事件与告警schema。",
+            "evidence": [
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "就把气味和温湿度啥的拼一起，算个分数，分数高就报警，然后派工单去打药，就完了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "端上就先算一下，省事。时间对齐就取最近一次呗。证据链就存个分数和阈值就行了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 你说说融合预警咋弄，越简单越好，别整一堆花活。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "规则+模型两条路还挺绕。我就想一条线，风险分数一个就行。10分钟窗口能不能 1 分钟，快点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就端上1分钟盯着，云上10分钟算最终。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "解释因子我就写“气味变了+湿度高”，够了吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 告警到工单咋串，给我一条最短链路，字段别太多。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "三段式太多了吧，我直接告警里带工单不行？省一个表。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那幂等你们自己搞定，我只要别让我填一堆字段。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我大概懂了：事件别动，告警能改状态，工单是执行。解释里加点数字就行。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不想搞双通道，能不能先只上规则？模型后面再说。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，这次就按“规则先跑、字段留着”。接口让后端先定事件和告警那套，我再去跟物联网平台说别乱改上报。"
+              }
+            ]
+          },
+          {
+            "microScene": "在温室虫情告警的“处置工单与用药闭环”方案设计背景下，用户与导师围绕工单去重/状态机、用药合规必填与审计留痕、效果回写与SLA优先级设定持续沟通（9轮），其中在工单实体拆分与去重键/回写字段设计上与后端工程师沟通（2轮），在IPM与禁限用校验、必填字段及“无需用药/误报”结论设置上与农业植保顾问沟通（1轮），并口头定稿MVP闭环要点用于写入设计说明。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就告警一来就发个工单呗，处理完点个完成。用药就填一下用了啥，别搞太细行不行，我想快点推进。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态就…新建、处理中、已完成。差不多吧。去重就按时间，五分钟内别再来？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 工单这块怎么设计比较省事？告警来了怎么生成工单，别重复，还有用药怎么记？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "两小时窗口也太久了吧？虫子爆发不就耽误了。还有这么多状态，做成三步不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，那我去问。@农业植保顾问 用药闭环最少要啥？别整太学术，我就想能过检查。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我大概懂了，就是先能选“没用药”也能关单。那禁限用清单能不能先不接外部，先做个输入框？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "审计就记个日志呗，谁点的就行。别整太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那前端就给个理由输入框？用户肯定嫌烦。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "按棚+虫就行吧。两小时也行，但我怕漏了紧急的。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "SLA我不太会算，能不能都写60分钟？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就先按这三个。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "第4条字段太多了，但算了先这样。界面别全露出来就行。其余没啥。"
+              }
+            ]
+          },
+          {
+            "microScene": "在虫情气味多模预警协同系统方案设计收尾的安全高可用与成本评估背景下，用户与导师围绕SLA口径、降级/缓存策略、成本上限与验收项持续沟通（9轮），其中在数据分级/最小权限/审计与原始数据留存条款上与安全合规经理沟通（2轮），在端-边-云高可用、告警风暴治理、容量估算与成本控制上与运维工程师沟通（2轮），并最终确认一组可写入方案的条款与验证动作。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "挂了就重启不行吗？成本就用便宜的云。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "99.9？大家都这么写。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "行，反正就写上去。≤5分钟也行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规经理 我们这系统安全要写啥？别整太多条。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "原始VOC不存会不会影响算法？我们就先全存着不行吗，省事。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "默认不存原始，只有排查才开，开了会记日志。差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运维工程师 你说下我们要怎么搞高可用，还要便宜点。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我们可以直接全上云托管不就行了？还搞什么缓存队列。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那缓存就用网关磁盘存一下，满了就覆盖。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…优先留最近的？老的删掉。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行，三档优先级。告警摘要最重要。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我不会算大小。就按每分钟一条？一条1KB？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "短信费，还有原始数据别乱存。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就远程看状态，不行再上门。设备坏了换新的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "测断网？拔网线看能不能补传。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "坚决不做的…短信预算上限别卡太死，用户会骂。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "验证动作就拔网线、再看看补传。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在虫情气味多模预警协同系统工程开发的设备接入与边缘计算实现背景下，用户与导师围绕网关鉴权注册、MQTT协议字段、断网落盘补传幂等、边缘初筛策略与验收测试持续沟通（8轮），其中在平台注册与topic/msgId/去重机制上与物联网平台工程师沟通（5轮），在边缘初筛门控与滑窗评分及阈值下行可配落盘上与边缘计算工程师沟通（4轮），并明确网关模块拆分与可测试验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "最小链路就是设备吐数据->网关转发->云端收？我直接MQTT上报就完事了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "要问一圈太慢了。我先随便搞个token写死不行吗？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "payload…就voc、温湿度、时间。再加个设备id。差不多了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这么多字段前端会炸吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@物联网平台工程师 设备怎么注册？topic怎么定？我就想赶紧能发数据到你们平台。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "token刷新我能不能先不做？24小时也太短了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "幂等你们怎么搞？我补传会不会重复。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，我就msgId用时间戳拼一下，够了吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "那我还得存seq，烦不烦啊。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 平台说要deviceSecret换token，topic三条，msgId用bootId-seq。我要在网关做缓存队列，还要401自动换token再重发。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "初筛就阈值呗，voc高就报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@边缘计算工程师 网关边缘初筛你给我个能直接落地的最简方案，别讲理论。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "p20我不会算，边缘上搞统计太重了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那就用最小值，简单。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值0.35是拍脑袋？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "远程可配我先写死常量，后面再说？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 边缘那边建议两层：先质量门控（预热、突变、泵故障），再滑窗均值m5减基线b算score，超0.35就发“疑似”。基线我用滚动最小值，不搞p20。阈值要能下行改，还得落盘。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "模块就三块：MQTT发、缓存、初筛。验收就能发出去。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我就随便跑几条看日志不行吗？写测试太慢。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我用docker起个本地mosquitto，再写个脚本发消息，算测试吧。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "日志别打原始值我有点不爽，我调试要看。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就默认info不打voc_raw，debug才打。那今天我就按你说的字段和三条测试弄完。"
+              }
+            ]
+          },
+          {
+            "microScene": "在V0初筛验收通过后推进V1特征工程与训练验证背景下，用户与导师围绕样本单位/标签代理真值、质量门控继承、特征维度约束与验证指标口径持续沟通（10轮），其中在特征集与基线模型/分组验证部分与算法工程师沟通（3轮），在诱捕器计数与虫情等级映射及事件时间戳口径部分与农业植保顾问沟通（2轮），并确定半日标签+5分钟特征窗、GroupKFold与Recall@FPR5%等可执行清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "就用边缘那5分钟滑窗的score当label不就行了？直接训练个二分类，赶紧出模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "有虫子就报警了啊，报警就是正样本。没报警就是负样本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "样本就一条消息吧，一条msg就是一条。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "差不多吧。那就T=6小时，窗口5分钟。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 现在要做V1，特征怎么搞？给个快的方案，别太复杂。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "分位数、相关系数这些都要？我感觉直接把VOC均值喂进去就行了，越快越好。还有GroupKFold我没用过。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就最小集合。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "阈值计数我随便定个5行不行？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "加权我会，直接class_weight。对照表我去催一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 他说用树模型快，特征做VOC均值+斜率+标准差，再加温湿均值，别的先不管。验证要按棚分组，不要乱切。标签用未来6小时诱捕器计数超过阈值当正。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "指标就AUC吧，AUC高就行。0.9够了吧？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "Recall@FPR5%我没算过。PR-AUC我知道。提前量怎么搞？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "差不多。阈值扫描就for循环一遍分数。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "40维够了。我就做每通道3个统计量，再加温湿两三个。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "直接把门控不过的样本删了不就行了。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "计数我加个counter就行。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@农业植保顾问 诱捕器计数多少算有虫情？事件时间戳按啥算，快说个能用的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "半日标签也太粗了吧，我还想分钟级。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，半日就半日。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "@导师 他说用半日累计计数，>=10再加虫情等级>=2算正；<3且等级<=1算负，中间都丢。事件时间戳用半日结束时间。还说先别混作物虫种。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我就先把半日label映射上，然后训个LightGBM把指标算出来。要是Recall上不去我再加特征。"
+              }
+            ]
+          },
+          {
+            "microScene": "在虫情预警告警服务联调与压测背景下，用户与导师围绕预警事件到工单流转的幂等键、状态机对齐、压测验收阈值与日志合规持续沟通（9轮），其中在告警去重键/返回码/重试与查询接口部分与后端工程师沟通（2轮），在压测用例设计与指标口径部分与测试工程师沟通（1轮），并明确联调三组用例与验收口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就直接把模型输出往告警接口一丢，告警那边建工单就完了。压测我用脚本打一波QPS，看挂不挂。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "事件ID就用时间戳吧，同一分钟算同一个？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 现在告警打到你们那边，重复告警怎么避免重复建工单？直接说你们怎么做。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "那我就照你这个dedup_key拼一下。异步就异步吧，反正我只要看到有工单。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "状态就两种：成功和失败？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 压测这块你给个最省事的方案，我就想快点跑完。要测啥指标？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "幂等那组我懂，就是同一个key狂打。乱序补报我懒得搞，感觉没必要。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端工程师 查事件状态和工单号有接口没？我需要测创建是不是成功。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "权限我先用我自己的token测下不就行了，省事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "知道了。我就不打印payload了，返回码记一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "P95小于1秒？错误率小于1%？幂等就不重复建单。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "5万行这也要管？我感觉有点多余。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）按你们说的拼dedup_key发告警；2）压测脚本打并发；3）用接口查event状态和工单号。"
+              }
+            ]
+          },
+          {
+            "microScene": "在工程开发收尾的数据质量与可观测建设背景下，用户与导师围绕字段级质量闸门、400/422区分、结构化日志与最小指标聚合方案持续沟通（6轮），其中在质量事件记录口径与血缘字段部分与数据工程师沟通（3轮），在日志脱敏与禁记VOC/表型红线部分与安全合规经理沟通（2轮），并确认优先落地入口校验与质量记录及用日志查询实现最小聚合验收。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "能不能先别搞太复杂？我就加点日志吧，能看见就行。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就…device_id 这些不能为空？然后 confidence 在0到1？差不多了吧。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "400不就是错了嘛，422也算错了，有区别吗？我就都400行不行，省事。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "指标我不懂，就把P95和5xx抄过来？再加个成功率。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我就怕埋点也要改一堆地方。我能不能只在入口打一条日志，里面放event_id和dedup_key？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 质量盘要看啥？我这边只想快点过，给我最简单的字段和统计就行。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "rule_id这么多我容易写错，能不能就写一条fail_reason字符串？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "schema_ver要不要啊？我感觉多余。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我记住：reject_code枚举，reject_detail随便写点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我就加个质量记录吧，带reject_code，还有trace_id。schema_ver也塞个1。别的统计我先不做行不行？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就用现成的日志检索里做个查询？不写代码聚合了。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规经理 日志里我能放啥不能放啥？别整长的，我就想知道红线。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "plot_id还要哈希？太折腾了吧，我们内部用的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "好吧，那我就只打plot hash前8位，device_id也前8位。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我把A和B先弄了。C我用日志查询凑一个，别让我写啥dashboard。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行吧，我先按这三条来，别再加了。"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "在虫情气味多模预警协同系统上线验收与灰度发布背景下，用户与导师围绕验收闭环、稳定性联调、灰度分组/指标/止损回滚口径持续沟通（8轮），其中在验收最小集与可观测证据点定义部分与测试工程师沟通（3轮），并最终敲定验收用例清单与分批灰度步骤及回滚阈值。",
+            "evidence": [
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "虫情气味多模预警协同系统这边代码都跑着了，现在要搞上线验收和灰度发布吧？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就先放到一个棚里试试，没炸就全放开。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分组就按棚号。指标就看告警数量别太多。回滚就是关掉服务？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "验收用例要写很细吗？我不太想弄一堆表。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@测试工程师 上线验收最小集到底要跑啥？我就想快点发。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "对照回放我这边没现成数据回放工具，能不做吗？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "行，那就抽一天数据跑一下。回滚演练能不能省？我们又不真回。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "@导师 测试那边说要三类：三组联调、回滚演练、还有新旧对照回放。是不是我把三组联调跑完就能过？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "先5%站点，观察一小时；一小时没报错就50%，再一小时就全量。阈值就工单失败多了回滚。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "观察窗口2小时也太久了吧，我们棚里人等不了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那就1小时，但加个补传。怎么造补传我不太会。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那我就定：5%一小时+断网补传一次，然后20%再看一小时。后面再说。"
+              }
+            ]
+          },
+          {
+            "microScene": "在灰度发布后的运行评估背景下，用户与导师围绕预警命中率与时效的线上评估口径、真值来源、脏数据剔除与证据链对齐持续沟通（7轮），其中在指标定义与分组及排除规则上与运营分析师沟通（3轮），在命中率退化排查优先级上与算法工程师沟通（1轮），并形成可发群的最小评估口径与排查清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "命中率不就报警了就算中？时效就看报警时间早不早。能不能直接拉个平均值完事，我还得赶别的。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "真值就现场说有虫不就行了？基准点就是用户看到虫的时间？反正差不多吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@运营分析师 命中率和时效到底怎么算？给个能直接用的口径，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "48小时窗口也太长了吧，会不会看起来都命中？我就想给个数交差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那时效就直接用真值-预警，负的就是晚了，对吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "命中率=48小时内有真值就算中；时效用P50/P95；补传单独算。然后分组按设备批次和网络。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@算法工程师 命中率、时效如果掉了，一般先查啥？给个先后顺序，我照着跑。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "特征缺失率我可以直接从时序库拉？反正我能写个脚本扫一下。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "字段就……VOC一组、温湿度、表型有没上报。分桶就按站点、按天。然后算缺失比例。够了吧？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "那就：  \n1）命中率：预警后48小时内有真值算中，24小时也算一份；  \n2）时效：真值-首次预警，报P50/P95；  \n3）排除reject的；  \n4）分组按设备批次、网络离线时长；  \n5）再加缺失率：三路数据缺就记缺失。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是按这套口径跑线上，出命中率/覆盖率/时效的P50P95，还要分实时和补传，再按设备批次和离线分桶看有没有退化。行吧。"
+              }
+            ]
+          },
+          {
+            "microScene": "在运行评估阶段线上告警误报/漏报复盘背景下，用户与导师围绕真值口径、告警链路取证、分桶对比与最小闭环分析步骤持续沟通（7轮），其中在传感/采样与温湿冷凝判据部分与传感硬件工程师沟通（2轮），在补传对齐偏移与缺失填充证据字段部分与数据工程师沟通（2轮），在取数最小化、脱敏审计与用药误伤解释边界部分与安全合规经理沟通（1轮），并形成可发布的6条根因分析复盘要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "不就是看误报多的那几天，把阈值调高点，漏报就调低点？先让指标好看点不行吗。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就看告警日志呗。还有设备在线不在线。反正离线那桶肯定最差。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "真值就看工单里写的处理结果？他们点了“已处理”就算有虫？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@传感硬件工程师 误报漏报要怎么看是传感器的问题？给我几个能直接判的点。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "所以就是湿度一高就不信VOC？那我直接加个规则，湿度>90就不报警。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@数据工程师 补传和对齐会搞出误报漏报？我只知道有实时和补传两种。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "听着就很多字段。能不能只看event_time和ingest_time差，差太多就算补传坏了？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我把你俩说的记一下：湿度分桶、泵自检、event和ingest差值。差不多了吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "步骤就……先筛出误报最多的设备和日期，再看湿度>90是不是多，再看是不是补传。然后就知道是谁的问题了。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "就是先定哪些算误报漏报，别拿工单状态乱当真。然后把一条告警的输入到输出串起来。再按实时/补传、湿度、批次、自检这些分桶看哪里爆。最后就写三条猜测，能用数据证明的就算根因，然后给几个改动建议。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@安全合规经理 误报漏报复盘我要拉VOC和工单数据，有啥不能碰的？直接说禁区。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我就不拉人员信息了，位置也模糊点。VOC我就拿特征，不拿原始，省事。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "1）先按真值优先级定误报漏报样本，工单只点状态的不算真值；  \n2）每条告警串链路字段：VOC特征/环境/表型缺失、event_time/ingest_time、对齐偏移、模型分数、规则命中、告警级别、工单确认时间；  \n3）分桶对比：实时vs补传、设备批次、湿度区间、缺失率、自检异常（泵/补偿）；  \n4）重点假设先测三个：高湿冷凝尖峰→误报，补传对齐偏移大→漏报，泵衰幅值下降→漏报；  \n5）行动项先不改模型：高湿改复核级、对齐偏移超阈值不进实时告警、自检异常自动出维护工单；  \n6）找人：植保顾问对真值口径，硬件工程师给自检/冷凝判据，数据工程师给对齐/缺失标记字段，合规经理给脱敏与审计要求。"
+              }
+            ]
+          },
+          {
+            "microScene": "在虫情告警系统运行评估的迭代路标与版本复盘背景下，用户与导师围绕两周/一月版本改动边界、分桶验证与灰度回滚持续沟通（8轮），其中在复盘指标与最小三维分桶落字段部分与运营分析师沟通（2轮），在版本标记、灰度发布与回滚触发及可复现日志字段部分与MLOps工程师沟通（2轮），并确认v1.0.1/1.0.2路标、看板字段与合规审计要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "就直接发个v1.0.1修bug呗。误报漏报先压下去，别折腾太多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "分桶就按温度湿度？再按虫子种类？差不多吧。指标就看告警少了没。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "行，那我问下。@运营分析师 分桶和指标怎么搞，给个能直接用的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "这不就一堆表么。能不能就两个桶：湿度高/低？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@MLOps工程师 版本这块别复杂，给个最省事的，能回滚就行。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "字段这么多都要带？我怕后端说加字段要改很多。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "两周内：把高湿的告警都改成复核级；对齐偏移大的就不告警；泵坏了就出工单。一个月内：再看要不要调模型。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "v1.0.1看“冷凝判据=1”桶里误报下降；“偏移>阈值”桶里漏报别算？反正不告警了；泵异常桶里维护工单多点也行。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "行行，那就加个“拦截量”和“拦截里真虫情比例”。但真虫情谁来标？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "审计我不太会，先不管？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那就写“站点ID脱敏”“策略命中原因留日志”。差不多了吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "X/Y/Z你们定个数给我，我不想来回扯。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

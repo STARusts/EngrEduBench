@@ -1,0 +1,81 @@
+[
+  {
+    "domain": "数字文娱",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在直播播放器互动联调修复“丢/乱/重”问题背景下，用户与导师围绕协议最小改动、补发策略、可定位日志与验收用例持续沟通（8轮），其中在端上去重/顺序与状态机字段设计部分与播放器与直播工程师沟通（3轮），在补发实现与缓存/状态服务拉取方案部分与后端负责人沟通（2轮），并确定event_id/round_version等字段、active拉取补发与三项联调用例。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我猜是 WebSocket 那边没对齐？我这边服务是发互动指令事件的。现在我能做的就是把发送、回执都打日志，然后抓包对一下。顺序乱我不太确定是不是播放器自己重排。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "看过一点。文档写的是 cmd=INTERACT，body 里有 content_id、action、ts。ack 写的是 cmd=ACK，带一个 msg_id。request_id 没写进去，我是想复用上一步风控的 request_id，但不知道播放器端收不收。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@播放器与直播工程师 互动联调这块，端上现在按什么字段做去重和顺序？重连/弱网时 ack 机制是怎样的，最少要补哪些字段？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那要不服务端别补发？只发最新一条？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "round_id 端上现在有吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "version 是指啥，端上要自己加？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "大概就是把 msg_id 换成稳定的 event_id，然后加 round_id 和 round_version。点击回传要带 round_version，服务端如果不对就拒绝。联调过关…我觉得能在重连补发时不重复弹两次，然后点旧的不会生效。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "发送侧我会打：request_id、content_id、event_id、round_id、round_version、发送时间、ws_conn_id。ack 收到打：event_id、client_recv_ts、ack_delay。点击回传打：event_id、round_version、user_action、server_decision。然后把风控那套 request_id 串起来。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "补发我想简单点：端上发“resume”时带 last_event_id？服务端从缓存里把后面 5 条发出去。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端负责人 互动联调这块，补发事件你建议怎么做？现在事件缓存位置/可用性怎样，按 viewer 维度会不会很重？窗口和 expire_at 怎么对齐比较稳？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "按 round_id+round_version hash 当 event_id，我能实现。resume 参数端上得配合。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "选 active 拉取。因为不用存 viewer 维度，也不会把过期的发出去。最近 N 条我这边要再加缓存，还要处理过期，感觉更容易出 bug。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "1）INTERACT 下行加 event_id、round_id、round_version、expire_at。  \n2）ACK 上行带 event_id、client_recv_ts。  \n3）CLICK 上行带 round_id、round_version、choice_id。  \n4）服务端 event_id 用 round_id+round_version 做 hash，补发保持不变。  \n5）重连 resume：端上发 content_id、last_round_id、last_round_version；没带版本就当 0。  \n6）服务端只补发 active 且未过期的互动。"
+              },
+              {
+                "behaviorLabel": "设计/开发解决方案",
+                "behaviorEvidence": "服务端返回一个 reject_code？比如 EXPIRED 或 VERSION_MISMATCH。端上收到就提示“该选项已结束”，然后把按钮置灰。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "用例我能列：  \n- 断网 5 秒重连：只会再弹一次当前 active，不会连弹两次。  \n- 服务端推 round_version=2 后，用户点 version=1：服务端拒绝，端上提示过期。  \n- 弱网高延迟：ACK 延迟高但不影响展示，且服务端日志里能看到 event_id 对上、ack_delay 可计算。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把协议字段补齐，再把 resume 和 active 拉取接上，日志只落 id/hash + request_id 串起来。三个用例我按你说的跑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "domain": "数字教育",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "在认知负荷感知学习节奏优化系统方案设计背景下，用户与导师围绕多源行为数据建模的数据源边界、事件字典/字段最小化、特征体系与采集关闭降级持续沟通（6轮），其中在未成年人隐私与字段合规底线部分与合规与隐私官沟通（2轮），并形成可执行的数据源分层、10类核心事件与特征族及权限/保留策略要点。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我先按“低侵入”来：强制的只用学习平台内行为，比如播放/暂停、倍速、拖拽、停留时长、题目作答、提交、对错、重做次数、跳转章节。可选的我在想要不要加键盘鼠标节律、窗口切换这种注意力信号，但感觉容易踩隐私线。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "建模上我偏向两条线：一条是窗口统计特征（每30秒/1分钟一个窗口），另一条是序列特征（最近N个事件做embedding）——后面看落地成本。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "停留我想先做到内容块级，比如一个知识点卡片/一个题组/一个视频片段。系统级切换我先不做，顶多做站内tab切换。统一的话，先抽象成事件：enter/exit、play/pause/seek、answer/submit、nav_jump，然后都带timestamp和content_id。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "核心事件我先列：\n1）content_enter（进入内容块）\n2）content_exit（离开内容块）\n3）video_play / video_pause\n4）video_seek（拖拽，带from/to）\n5）video_speed_change（倍速变化）\n6）item_view（题目曝光）\n7）item_answer（作答，带选项/输入长度）\n8）item_submit（提交，带对错）\n9）hint_view（看解析/提示）\n10）nav_jump（章节跳转，带from/to）"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@合规与隐私官 我们在认知负荷感知学习节奏优化系统里做多源行为数据建模。事件上想采 item_answer（可能包含选项id/输入长度）和 hint_view 之类。你给我一个合规底线：哪些字段不该采？哪些可以采但要脱敏？撤回/关闭采集时，我们还能保留哪些最基本能力？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "那我这边就把 item_answer 里“选项/文本/输入长度”都砍掉，只留：是否作答、耗时、是否改答、是否正确、是否看解析。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "但我有个疑问：我们要做“多源行为数据建模”，字段砍太狠会不会推不出负荷？至少“改答次数+耗时+seek频率”能用吗？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "好，我回去跟导师把字段改掉，顺便把“站内tab切换”改成可选且默认关闭。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "@导师 合规那边把底线说得挺硬：主观题输入内容不能采；输入长度也建议别回传原值，选择题选项ID也尽量别收。系统级切换/键盘剪贴板这些直接禁。建议只保留过程信号：耗时、对错、改答次数、解析查看、播放/暂停/拖拽/倍速、章节跳转。学生ID用机构匿名ID映射。撤回后要能删个体事件和衍生特征；关闭采集只能靠“交互必需日志”保留最基础节奏预警。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我试着压一下：\n- 事件统一字段必填：anon_user_id、course_id、content_id、event_ts、client_type（web/app）、session_id。\n- content_enter/exit：加duration_ms（exit时填）。\n- video_*：play/pause只要position_sec；seek要from_sec/to_sec；speed_change要from/to倍速。\n- item_view：item_id、item_type（客观/主观但不传内容）。\n- item_submit：is_correct、latency_ms、change_count、attempt_no。\n- hint_view：hint_type（解析/提示）和view_time_ms。\n- nav_jump：from_content_id/to_content_id。\n可选字段我暂时只留scroll_depth_bucket和in_app_tab（站内）且默认关。\n多源里“内容元数据”我想接课程侧：题目难度、知识点层级、预计时长；“教学编排”接：老师设置的周计划/作业截止。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我倾向建模侧保留 item_id 但做权限隔离：\n- 在线推断只需要实时特征，不回传 item_id；\n- 离线训练用 item_id，但只在受控环境，90天滚动；\n- 教师面板只给聚合到章节/知识点的解释，不给单题轨迹，除非老师本来就有题目分析权限。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我按1分钟窗口 + 最近10分钟滑窗：\n- 节奏类：单位时间有效学习动作数（submit+seek+pause等）、平均播放倍速、内容块停留与预计时长比值。\n- 卡点类：同一content内重复seek次数、连续错误次数、解析查看后再次提交的比例。\n- 波动类：窗口间动作数方差、倍速变化次数、暂停间隔的变异系数。\n然后把内容元数据的“难度/预计时长”作为归一化项。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "最小集合我猜是：video_play/pause/seek/speed_change + item_submit（只要耗时和对错）+ content_enter/exit。\n关闭后还能做：节奏预警（学太快/太慢）、章节级卡点提醒、节奏稳定性趋势。\n做不了的：细粒度到题型/题目级解释、也做不了跨设备注意力推断。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我确认：可选字段默认关闭，先别碰系统级行为；item层只给建模侧用，展示侧聚合。唯一我还想保留的是“scroll_depth_bucket”，但默认关就行，后面看试点数据再决定开不开。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

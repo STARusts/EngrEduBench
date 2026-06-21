@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "数字农业",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在边端资源占用与推理时延调优背景下，用户与导师围绕硬件约束下的时延优化方案与验证口径持续沟通（5轮），其中在混合精度与内存排布优化部分与性能优化攻坚手沟通（1轮），并最终形成混合精度量化结合内存排布与底层对齐的调优组合及P99尾延迟验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "目前原生模型FP16跑下来单帧推理大概800毫秒，内存峰值快触顶了。我打算全模型做INT8量化，再把核心卷积算子替换成我手写的汇编版本，彻底压榨算力。如果还不行，我觉得应该直接换那款带4TOPS NPU的新芯片，物料成本多两百块但能一劳永逸。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "汇编确实耗时太久。那我退一步，只用官方量化工具跑全INT8，这总不需要改底层了吧？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "当前模型FP16推理800毫秒，内存峰值220MB（总256MB）。我如果全转INT8，多谱特征对微小色差的敏感度会不会崩？另外内存峰值怎么压？有没有快速出效果的优化路径？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "混合精度这思路比我一刀切INT8靠谱，注意力层保精度是关键，这点我认可。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "关于Cache Miss的问题，我之前确实只盯着算法层面的裁剪，对底层内存对齐缺乏体感。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "昨晚刚补了ARM Cache一致性协议的文档，发现如果我们把多谱输入的Padding策略从默认的零填充改成对齐到Cache Line（64字节）的填充，推理时延还能再降，因为DMA搬运和CPU计算不会反复冲刷Cache。我准备把这个Padding策略迁移到当前的预处理模块里。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "最终方案定在：混合精度量化加NCHW转NHWC加Cache Line对齐Padding加算子融合释放中间张量。验证口径上，我不仅看平均时延，重点盯P99尾延迟，必须压在200毫秒以内。适用边界上有个风险：当连续丢包触发插值降级时，输入数据分布会偏移，可能导致NPU某些算子执行异常耗时，这块我准备用昨天定的插桩脚本构造极端流来测，看P99会不会恶化。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "今天先出混合精度的分界配置和Padding改造，Profile数据跑出来直接拉群对齐。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

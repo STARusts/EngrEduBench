@@ -1,0 +1,49 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "方案设计",
+        "microScenes": [
+          {
+            "microScene": "用户在涉诈资金混洗图径剥离与阻截系统方案设计背景下，与导师围绕流式图计算架构选型与假设验证持续沟通（5轮），其中在图存储写放大与内存图对照组设计部分与图数据架构师沟通（1轮），并最终形成包含写延迟、遍历延迟与故障恢复时间的架构选型验证方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着直接用 Flink 消费 Kafka 接数据，然后写进 Neo4j，这套东西网上的现成案例多，应该比较快吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这块具体原理我确实没深究过，我就看它API好用。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我的假设是，Flink加Neo4j 的组合能扛住每秒万笔转账的边插入和属性更新。关键变量是写入延迟。如果延迟爆了，就说明这套不行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我真不太懂底层怎么判断，我这就去补学图存储的写放大机制，今天必须搞懂 Neo4j 和 RocksDB 在写路径上的差别，不然没法评估。我去问问图数据架构师吧。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我现在设想用 Flink加Neo4j 做流式图计算，假设它能抗住万TPS写入，反驳标准是写入P99延迟超50ms。但我怕写放大把延迟拖垮，有没有更方便一点的办法？或者怎么验证这个假设？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "我觉得 Raphtory 听起来更方便，直接内存操作肯定快，但断电丢数据怎么办？"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我调整一下假设和验证方案：假设 Raphtory 内存图能通过增量快照实现秒级恢复。验证动作是：压测万TPS写入，对比 Neo4j 和 Raphtory 的写延迟P99，并且强制杀进程，测恢复到可用状态的时间。如果恢复时间超过5秒，就推翻 Raphtory 可用的假设。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "我今晚先去啃 Raphtory 的快照机制源码，把这块补上。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

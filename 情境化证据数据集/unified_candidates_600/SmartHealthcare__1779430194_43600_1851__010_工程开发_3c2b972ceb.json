@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "智慧医疗",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "用户在器官配型引擎代码落地背景下与导师围绕微服务拆分、通信方式、幂等防重与性能验证持续沟通（7轮），其中在混合计算流拆分与通信部分与微服务后端研发沟通（1轮），并最终确定并行计算与MQ异步通信架构及分布式锁防重验证方向。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就按算法步骤拆呗，先算医学指标匹配度，再算时空权重衰减，最后做Pareto寻优。理论上映射到微服务挺顺的。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "拆开肯定更好，解耦嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "服务间通信我有点拿不准，用同步RPC还是异步消息队列？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "配型引擎要落地，我拆成了指标计算、权重衰减和寻优三个服务，它们之间用同步RPC还是异步消息队列比较好？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "用MQ解耦，并行算指标和权重，寻优服务做消费者。幂等性我加个请求ID判重就行。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "并发漏洞确实没细想。分布式锁可能得加上。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我回去看看Redis分布式锁的RedLock算法文档，再写个单测模拟并发重复消费。改代码的时候把防重逻辑加进去。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写个基准测试。先跑原来单体算法的单线程版本，记录TPS和平均配型耗时；再跑微服务版本，对比TPS提升和耗时增加比例。误配验证就构造并发重复消息，看结果集里有没有重复的配型记录。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我先把这几个服务的接口和锁逻辑敲出来。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

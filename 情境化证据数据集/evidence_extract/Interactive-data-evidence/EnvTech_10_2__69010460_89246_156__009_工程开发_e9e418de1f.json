@@ -1,0 +1,93 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在声纹识别服务工程落地背景下，用户与导师围绕接口可测可调可定位、云端推理与边缘后处理两种模式、阈值与unknown规则及测试日志闭环持续沟通（9轮），其中在模型输出与置信度/unknown判定上与声学算法负责人沟通（4轮），在接口字段/错误码/幂等与结构化日志上与后端开发工程师沟通（3轮），在阈值策略配置版本化与热更新回滚上与MLOps工程师沟通（2轮），并明确以统一/v1/recognize接口与最小测试集完成实现闭环。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "不就是把音频丢进去，出来个物种名字？差不多吧。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "输入…wav？mp3也行吧。输出就…名字。失败就返回空。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@声学算法负责人 模型输出是啥？直接给物种名吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "阈值就设个0.5？越高越准吧。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "嵌入向量是必须吗？听着很占地方。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "那 unknown 就是分低就算，不低就算有？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "就是输出要带topK分数，然后分数低就unknown。还有…两个分差太小也unknown。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "服务端…跑模型吧？不然边缘跑了干嘛。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我不太会拆接口。就一个接口不行吗？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@后端开发工程师 这个识别服务接口怎么弄，别太复杂。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "trace_id 是啥，随便填个数字？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "音频就用 base64 直接塞进来不就行了，省得 uri。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "写死0.5最省事。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@MLOps工程师 阈值这玩意放哪？我不想每次改代码。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "热更新就是不用重启？"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我就按你们说的做一个 /v1/recognize，然后能两种mode。阈值从配置里读，不写死。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "单测…就测能返回就行？unknown 就把分数弄低点。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "记住了，三组分数，音频校验，日志能用request_id查。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "那我就照这几条抄进去。要是跑不起来再说。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

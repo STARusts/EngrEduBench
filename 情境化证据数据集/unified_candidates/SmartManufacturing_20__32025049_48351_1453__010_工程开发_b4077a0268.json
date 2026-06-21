@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "智能制造",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在开发阶段收尾需将Status/ErrorCode实时上看板并保障告警时效的背景下，用户与导师围绕前端高频刷新渲染与告警链路性能优化持续沟通（7轮），其中在看板渲染与节流方案上与前端交互设计师沟通（1轮），在并发解析延迟与数据库连接池瓶颈及Redis缓存思路上与后端开发工程师沟通（2轮），并汇总节流刷新、缓存与延迟指标及超时设置后准备改代码。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "打算写个列表，把UID还有状态都列出来，有报警的行就加个背景颜色。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "@前端交互设计师 老师让我问下，如果数据一秒钟传几十次，网页会卡吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "聚合刷新我没弄过，我直接把刷新间隔写死成1秒可以吗？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "三秒多也还好吧，反正工人也不是一秒钟就能跑到设备跟前。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我看那个监控图，好像是到420个并发左右线就突然变陡了。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "是因为内存不够了吗？"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "我前天刚在B站学了Redis缓存，这种场景能把ErrorCode对应的报警信息直接存缓存里吗？这样是不是就不用查库了。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我想的是直接把所有错误码都塞进去，反正也没多少。同步的话，我没想那么远，大不了重启一下。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行。我记一下：1. 看板采用500ms节流刷新；2. 引入Redis缓存错误描述，并发支持到1000个UID；3. 告警解析延迟控制在200ms以内。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "超时时间我设成1秒。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "我现在去改告警模块的代码逻辑。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

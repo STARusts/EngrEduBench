@@ -1,0 +1,61 @@
+[
+  {
+    "domain": "信息通信",
+    "stages": [
+      {
+        "stageName": "运行评估",
+        "microScenes": [
+          {
+            "microScene": "用户在星地软切换部署验证背景下与导师围绕现网降级逻辑验证口径持续沟通（6轮），其中在eBPF条件触发采样与CPU熔断配置部分与部署验证工程师沟通（2轮），在统计显著性算子与灰度A/B对照基线部分与频谱质量监控师沟通（2轮），并最终形成包含条件采样、置信区间统计、灰度A/B对照及CPU熔断的4点验证口径。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "按我推演的理论模型，跨域软切换时延均摊下来应该能压到5ms以内，这轮验证得把实测数据捞出来对齐一下。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我想着只要把现网切换日志拉出来，算一下平均误码率和平均重传耗时，跟阈值比对一下就行了吧？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这确实是个问题，只看均值肯定掩盖长尾。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "eBPF挂载点打出来的trace日志，具体要怎么采样才能抓到那1%的降级触发事件？"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "我需要算P99时延和降级触发率的置信区间，大盘里有现成的算子吗？我只会用离线的t检验，现网流式数据不太一样。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "怎么在现网制造误码率>10^-3的场景，来主动验证降级逻辑？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我下意识想用tc netem加丢包率，实验室一直这么干的。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "我总结下验证口径：1. 采样方式：eBPF条件触发抓降级上下文；2. 统计方法：大盘Bootstrap算置信区间，分母限定极端信道候选流；3. 验证手段：5%灰度流量走劣化波束做A/B对照，看降级触发率效应量。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "哎呀，忘了这茬。如果降级没生效，eBPF包分类频率会打满CPU。得加个资源熔断开关。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "补上第4点：大盘CPU超50%触发自动熔断关闭eBPF分类器。"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "说实话，我这方面确实短板明显，一提到现网验证就只想着tc netem暴力注入，对灰度规约和线上熔断规范完全没概念。接下来一周我得把生产环境变更SOP和灰度发布规范啃一遍，特别是故障演练的红蓝对抗流程，下次评审我要能自己写出合规的演练剧本。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

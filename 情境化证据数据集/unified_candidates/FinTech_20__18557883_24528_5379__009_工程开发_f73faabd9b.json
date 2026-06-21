@@ -1,0 +1,53 @@
+[
+  {
+    "domain": "金融科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在清算引擎五万TPS压测下跨链资产锁定延迟毛刺过高的性能优化背景下，用户与导师围绕并发瓶颈定位与优化路线持续沟通（8轮），其中在CAS自旋与等待策略取舍上与后端开发主管沟通（4轮），在BusySpin绑核测试可行性与成本影响上与性能测试工程师沟通（1轮），并梳理形成含Disruptor、绑核、预读取与批量刷盘的原型优化清单。",
+            "evidence": [
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "刚才我也看了一眼监控大屏，延迟确实波动很大。我打算先把核心清算逻辑的线程池给扩容一倍，这样处理能力应该就能上去了。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "线程多了锁竞争确实会更严重。那我就把锁的粒度拆细一点，或者换成读写锁试试，这样并发性能肯定有提升。"
+              },
+              {
+                "behaviorLabel": "提问",
+                "behaviorEvidence": "明白了，原来是CAS自旋太离谱了。那咱们是不是直接把这块逻辑改成异步处理，等合约校验完了再回调清算引擎？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "这也是个麻烦事。那要不我们加个中间缓存层，先把请求抗住，再慢慢写库？"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我记得YieldingWaitStrategy性能挺平衡的，要不就选这个？"
+              },
+              {
+                "behaviorLabel": "反思",
+                "behaviorEvidence": "这我倒没细想。既然这样，那还是听您的，用最稳妥的BlockingWaitStrategy？"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "只要性能指标能达标，成本这块我后面再想办法写个降级逻辑。"
+              },
+              {
+                "behaviorLabel": "总结",
+                "behaviorEvidence": "行，我理了一下，目前的初步方案是：1. 引入Disruptor架构，采用单线程顺序消费替代全局加锁；2. 选用BusySpin等待策略，并实现核心线程与物理核的强绑定；3. 针对跨链状态校验，增加预读取机制，减少对状态机的实时读写频率。"
+              },
+              {
+                "behaviorLabel": "生成/修订文档",
+                "behaviorEvidence": "对，漏了IO。那我再加一条：4. 实现自适应批量刷盘机制，当队列积压超过500条或等待时间超过5ms时自动触发批量写入。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

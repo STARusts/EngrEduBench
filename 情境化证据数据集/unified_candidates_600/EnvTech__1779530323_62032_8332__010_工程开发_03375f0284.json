@@ -1,0 +1,45 @@
+[
+  {
+    "domain": "环境科技",
+    "stages": [
+      {
+        "stageName": "工程开发",
+        "microScenes": [
+          {
+            "microScene": "在溯源中枢全链路压测与异常排查背景下，用户与导师围绕压测方式、P99延迟分析、图查询内存控制及OOM排查持续沟通（6轮），其中在真实流量构造与未知异常捕捉部分与测试与性能调优专家沟通（1轮），并最终形成脱敏数据回放、Arthas排查及图查询限跳数的压测方案。",
+            "evidence": [
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "我准备用JMeter直接往Kafka里灌数据，并发线程开到5000，把CPU打满看会不会崩。异常捕捉我就在每个微服务接口加Try-Catch，把错误码写进日志。"
+              },
+              {
+                "behaviorLabel": "多元咨询",
+                "behaviorEvidence": "全链路压测怎么造真实流量？Try-Catch抓不到的OOM和长尾延迟咋抓？"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "Arthas我之前没用过，但听他说好像是直接挂到Java进程上。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "TPS达标P99高，说明大部分请求快，但有个别请求卡住了。"
+              },
+              {
+                "behaviorLabel": "思考",
+                "behaviorEvidence": "我下午先看Arthas的官方Demo，把`trace`命令搞懂，直接用它看我们归因引擎的耗时链路。这比打日志快多了，不用重启服务。"
+              },
+              {
+                "behaviorLabel": "回答",
+                "behaviorEvidence": "图查询深度我可以在Cypher语句里加limit，或者在代码里限制最大跳数。如果不限制，深度遍历确实容易死循环把内存撑爆。"
+              },
+              {
+                "behaviorLabel": "分析取舍",
+                "behaviorEvidence": "用Arthas的`heapdump`导出堆内存？不过导出可能会卡住服务。我我我先看`dashboard`观察老年代增长趋势吧，真要OOM了再dump。"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
