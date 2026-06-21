@@ -11,7 +11,7 @@
 
 <p align="center">
   <img alt="samples" src="https://img.shields.io/badge/samples-3%2C173-blue"/>
-  <img alt="domains" src="https://img.shields.io/badge/domains-11-orange"/>
+  <img alt="domains" src="https://img.shields.io/badge/domains-10-orange"/>
   <img alt="dimensions" src="https://img.shields.io/badge/capability%20dimensions-11-brightgreen"/>
   <img alt="language" src="https://img.shields.io/badge/language-Chinese-red"/>
   <img alt="license" src="https://img.shields.io/badge/license-CC--BY--NC--SA%204.0-lightgrey"/>
@@ -93,7 +93,7 @@ EngrEduBench/
 | #   | 数据集                               | 体量                                 | 角色           |
 | --- | --------------------------------- | ---------------------------------- | ------------ |
 | ①   | `工程报告数据集`                         | 100 份报告（立项 40 + 结项 50 + 定向 10）     | 静态分支原始语料     |
-| ②   | `工程行为数据集`                         | 226 份多轮协作日志，覆盖 11 个工程领域            | 动态分支原始语料     |
+| ②   | `工程行为数据集`                         | 226 份多轮协作日志，覆盖 10 个工程领域            | 动态分支原始语料     |
 | ③   | `情境化证据数据集`                        | 12,419 条候选 + 4,866 条原子证据           | 证据抽取与候选构造    |
 | ④   | `工程能力评价体系数据集`                     | **3,173** 条（kept） + 827 条（dropped） | **最终评测集**    |
 | ⑤   | `golden-base-data-480-evaluation` | **480** 条                          | **人工校验黄金基准** |
