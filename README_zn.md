@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="logo/北京邮电大学-logo-2048px.png" alt="北京邮电大学" height="130"/>
+  <img src="logo/北京邮电大学-logo-2048px.png" alt="北京邮电大学" height="100"/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="logo/邮百工logo.png" alt="邮百工" height="130"/>
+  <img src="logo/邮百工logo.png" alt="邮百工" height="100"/>
 </p>
 
 <h1 align="center">EngrEduBench</h1>
 
-<p align="center"><b>工程教育能力评价标尺数据集</b></p>
+<p align="center"><b>工程教育能力评价基准数据集</b></p>
 <p align="center"><i>Engineering Education Competency Assessment Benchmark Dataset</i></p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <b>简体中文</b> | <a href="README.en.md">English</a>
+  <b>简体中文</b> | <a href="README.md">English</a>
 </p>
 
 ---
