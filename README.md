@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="logo/北京邮电大学-logo-2048px.png" alt="Beijing University of Posts and Telecommunications" height="130"/>
+  <img src="logo/北京邮电大学-logo-2048px.png" alt="Beijing University of Posts and Telecommunications" height="100"/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="logo/邮百工logo.png" alt="YouBaigong" height="130"/>
+  <img src="logo/邮百工logo.png" alt="YouBaigong" height="100"/>
 </p>
 
 <h1 align="center">EngrEduBench</h1>
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">简体中文</a> | <b>English</b>
+  <a href="README_zn.md">简体中文</a> | <b>English</b>
 </p>
 
 ---
