@@ -123,6 +123,7 @@ EngrEduBench/
 | Lifelong Learning | 终身学习 |
 
 Each dimension contains 3 observable indicators, resulting in 33 scoring points. Scores are assigned on a **0–5** continuous ordinal scale (five bands: 0–1 poor / 1–2 weak / 2–3 adequate / 3–4 good / 4–5 excellent). The total score of each dimension is computed using a `0.3 / 0.3 / 0.4` weighted aggregation over the three indicators.
+
 ---
 
 ## 🧬 Data Format
